@@ -29,8 +29,8 @@ public class ZEAdminConstants
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
   public static final String GET_QUOTA_USAGE_REQUEST = AdminConstants.E_GET_QUOTA_USAGE_REQUEST;
-  /* $else $
-  public static final QName  GET_QUOTA_USAGE_REQUEST = AdminConstants.GET_QUOTA_USAGE_REQUEST;
+  /* $else$
+  public static final String GET_QUOTA_USAGE_REQUEST = AdminConstants.GET_QUOTA_USAGE_REQUEST.getName();
   /* $endif $ */
   public static final String A_OFFSET                = AdminConstants.A_OFFSET;
   public static final String A_LIMIT                 = AdminConstants.A_LIMIT;

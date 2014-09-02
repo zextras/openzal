@@ -22,19 +22,12 @@ package org.openzal.zal;
 
 import com.zimbra.common.soap.Element;
 import org.jetbrains.annotations.NotNull;
-/* $if ZimbraVersion < 8.0.0 $
-import org.dom4j.QName;
-/* $endif $ */
 
 public class ZEXMLElement
 {
   private final Element.XMLElement mXMLElement;
 
-  /* $if ZimbraVersion < 8.0.0 $ */
   public ZEXMLElement(String name)
-  /* $else $
-  public ZEXMLElement(QName name)
-  /* $endif $ */
   {
     mXMLElement = new Element.XMLElement(name);
   }
