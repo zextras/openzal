@@ -15,7 +15,7 @@
   <description>Zimbra Abstraction Layer</description>
 
   <property name="src" location="src/java"/>
-  <property name="itbase" location="tests/it-java/"/>
+  <property name="itbase" location="tests/java/"/>
 
   <property name="COMPILER_ARGS" value="-Xlint"/>
 

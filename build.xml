@@ -15,7 +15,7 @@
   <description>Zimbra Abstraction Layer</description>
 
   <property name="src" location="src/java"/>
-  <property name="itbase" location="tests/it-java/"/>
+  <property name="itbase" location="tests/java/"/>
 
   <property name="COMPILER_ARGS" value="-Xlint"/>
 
@@ -119,8 +119,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.7" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -222,8 +222,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.8" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -325,8 +325,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.9" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -428,8 +428,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.10" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -531,8 +531,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.12" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -634,8 +634,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.13" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -737,8 +737,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.14" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -840,8 +840,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.15" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -943,8 +943,8 @@
     <classpath>
       <path refid="zimbra-jars-6.0.16" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1046,8 +1046,8 @@
     <classpath>
       <path refid="zimbra-jars-7.0.0" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1149,8 +1149,8 @@
     <classpath>
       <path refid="zimbra-jars-7.0.1" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1252,8 +1252,8 @@
     <classpath>
       <path refid="zimbra-jars-7.1.0" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1355,8 +1355,8 @@
     <classpath>
       <path refid="zimbra-jars-7.1.1" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1458,8 +1458,8 @@
     <classpath>
       <path refid="zimbra-jars-7.1.2" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1561,8 +1561,8 @@
     <classpath>
       <path refid="zimbra-jars-7.1.3" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1664,8 +1664,8 @@
     <classpath>
       <path refid="zimbra-jars-7.1.4" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1767,8 +1767,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.0" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1870,8 +1870,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.1" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -1973,8 +1973,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.2" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2076,8 +2076,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.3" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2179,8 +2179,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.4" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2282,8 +2282,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.5" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2385,8 +2385,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.6" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2488,8 +2488,8 @@
     <classpath>
       <path refid="zimbra-jars-7.2.7" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2591,8 +2591,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.0" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2694,8 +2694,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.1" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2797,8 +2797,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.2" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -2900,8 +2900,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.3" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3003,8 +3003,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.4" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3106,8 +3106,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.5" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3209,8 +3209,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.6" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3312,8 +3312,8 @@
     <classpath>
       <path refid="zimbra-jars-8.0.7" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3415,8 +3415,8 @@
     <classpath>
       <path refid="zimbra-jars-8.5.0" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
@@ -3463,7 +3463,6 @@
       </else>
     </if>
 
-<echo> ciao: ${lastZalPath}</echo>
     <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.5.0" param="currentZimbraVersion">
       <sequential>
         <if>

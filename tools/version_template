@@ -81,8 +81,8 @@
     <classpath>
       <path refid="zimbra-jars-${ZimbraVersion}" />
       <path refid="libraries" />
-      <path refid="${dist}/zal.jar" />
-      <path refid="../dist/zextras.jar" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
     </classpath>
    <compilerarg value="${COMPILER_ARGS}" />
   </javac>
