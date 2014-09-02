@@ -41,4 +41,9 @@ public class ZELocalConfig
   {
     return Integer.valueOf(LC.get(key));
   }
+
+  public static void setDefaultTimeZonesFile(String path)
+  {
+    LC.timezone_file.setDefault(path);
+  }
 }

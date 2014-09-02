@@ -31,8 +31,10 @@ import org.openzal.zal.calendar.ZEWindowsSystemTime;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.common.calendar.WellKnownTimeZones;
 import com.zimbra.common.calendar.ZCalendar;
 /* $else $
+import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
 import com.zimbra.cs.mailbox.calendar.ZCalendar;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 /* $endif $ */
@@ -278,5 +280,17 @@ public abstract class Utils
     }
 
     return new ZEWindowsSystemTime(WindowsSystemTime.fromSimpleOnset(zimbraSimpleOnSet));
+  }
+
+  public static void loadTimeZonesFromFile(File tzFile) throws IOException
+  {
+    try
+    {
+      WellKnownTimeZones.loadFromFile(tzFile);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
