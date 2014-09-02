@@ -1,11 +1,39 @@
-#projectlogo
-{
+#projectlogo {
   position: absolute;
-  top: 0;
-  right: 30px;
+  top: 0px;
+  z-index: -1;
+  left: 30px;
 }
 
-#projectname
+#projectnumber
 {
+  font: 40% Tahoma, Arial,sans-serif;
+  margin: 0px;
+  padding: 0px;
+  visibility: visible;
+  margin-left: -50px;
+}
+
+#titlearea {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  border-bottom: 1px solid #707979;
+  height: 72px;
+}
+
+#projectname {
   color: #008bc5;
+  visibility: hidden;
+  padding-top: 7px;
+  padding-bottom: 0;
+  height: 45px;
+}
+
+#projectbrief {
+  font: 120% Tahoma, Arial, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  margin-left: 95px;
+  font-style: italic;
 }
