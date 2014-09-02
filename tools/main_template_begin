@@ -6,7 +6,7 @@
       <pathelement location="../build-commons/prebop/preprocessor.jar"/>
     </classpath>
   </taskdef>
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
       <pathelement location="../build-commons/ant-contrib/ant-contrib-1.0b3.jar"/>
     </classpath>
