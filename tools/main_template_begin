@@ -1,0 +1,37 @@
+<project name="ZAL" basedir="." default="zal-all">
+
+
+  <taskdef name="preprocess" classname="com.objfac.prebop.ant.PreprocessorTask">
+    <classpath>
+      <pathelement location="../build-commons/prebop/preprocessor.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="../build-commons/ant-contrib/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
+
+  <description>Zimbra Abstraction Layer</description>
+
+  <property name="src" location="src/java"/>
+  <property name="itbase" location="tests/it-java/"/>
+
+  <property name="COMPILER_ARGS" value="-Xlint"/>
+
+  <path id="libraries">
+      <fileset dir="../build-commons/lib" >
+          <include name="*.jar"/>
+      </fileset>
+      <fileset dir="../build-commons/guice" >
+          <include name="*.jar"/>
+      </fileset>
+  </path>
+
+  <target name="init">
+    <tstamp />
+    <echo> Building ZAL version ${VERSION} </echo>
+    <exec executable="./gen_buildinfo.sh" failonerror="true" />
+  </target>
+
+
