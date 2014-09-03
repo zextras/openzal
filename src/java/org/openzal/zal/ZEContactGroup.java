@@ -109,7 +109,7 @@ public class ZEContactGroup
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
-  public ContactGroup init()
+  ContactGroup init()
   {
     try
     {
@@ -121,7 +121,7 @@ public class ZEContactGroup
     }
   }
   /* $else $
-  public Object init()
+  Object init()
   {
     throw new UnsupportedOperationException();
   }

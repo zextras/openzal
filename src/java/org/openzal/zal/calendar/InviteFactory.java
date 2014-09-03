@@ -20,7 +20,9 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.cs.mailbox.MailItem;
 import org.openzal.zal.ZEItem;
+import org.openzal.zal.ZEMailItemType;
 import org.openzal.zal.ZEMailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.lib.ActualClock;
@@ -332,7 +334,11 @@ public class InviteFactory
 
     Invite invite = Invite.createInvite(
       mbox.getId(),
-      ZEItem.convertType(type),
+  /* $if MajorZimbraVersion >= 8 $ */
+      ZEItem.convertType(MailItem.Type.class, type),
+  /* $else$
+      ZEItem.convertType(Byte.class, type),
+  /* $endif$ */
       mMethod,
       mTimeZoneMap.toZimbra(TimeZoneMap.class),
       mUid,

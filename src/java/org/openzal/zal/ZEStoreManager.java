@@ -26,11 +26,6 @@ import org.openzal.zal.exceptions.ZimbraException;
 
 public interface ZEStoreManager
 {
-  /* $if MajorZimbraVersion <= 7 $
-  public final static String VOLUME_FIELD = "volume_id";
-  $else$ */
-  public final static String VOLUME_FIELD = "locator";
-  /* $endif$ */
   ZEMailboxBlob getMailboxBlob(ZEMailbox mbox, int msgId, int revision, String locator)
     throws ZimbraException;
 

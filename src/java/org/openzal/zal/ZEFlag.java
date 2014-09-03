@@ -27,34 +27,51 @@ import org.openzal.zal.log.ZimbraLog;
 import com.zimbra.cs.mailbox.MailItem;
 import org.jetbrains.annotations.NotNull;
 
-public class ZEFlag extends ZEItem
+public final class ZEFlag extends ZEItem
 {
-  /* $if MajorZimbraVersion <= 7 $
-      public static final int ID_FROM_ME = Flag.ID_FLAG_FROM_ME;
-      public static final int ID_ATTACHED = Flag.ID_FLAG_ATTACHED;
-      public static final int ID_REPLIED = Flag.ID_FLAG_REPLIED;
-      public static final int ID_FORWARDED = Flag.ID_FLAG_FORWARDED;
-      public static final int ID_COPIED = Flag.ID_FLAG_COPIED;
-      public static final int ID_FLAGGED = Flag.ID_FLAG_FLAGGED;
-      public static final int ID_DRAFT = Flag.ID_FLAG_DRAFT;
-      public static final int ID_DELETED = Flag.ID_FLAG_DELETED;
-      public static final int ID_NOTIFIED = Flag.ID_FLAG_NOTIFIED;
-      public static final int ID_UNREAD = Flag.ID_FLAG_UNREAD;
-      public static final int ID_HIGH_PRIORITY = Flag.ID_FLAG_HIGH_PRIORITY;
-      public static final int ID_LOW_PRIORITY = Flag.ID_FLAG_LOW_PRIORITY;
-      public static final int ID_VERSIONED = Flag.ID_FLAG_VERSIONED;
-      public static final int ID_INDEXING_DEFERRED = Flag.ID_FLAG_INDEXING_DEFERRED;
-      public static final int ID_SUBSCRIBED = Flag.ID_FLAG_SUBSCRIBED;
-      public static final int ID_EXCLUDE_FREEBUSY = Flag.ID_FLAG_EXCLUDE_FREEBUSY;
-      public static final int ID_CHECKED = Flag.ID_FLAG_CHECKED;
-      public static final int ID_NO_INHERIT = Flag.ID_FLAG_NO_INHERIT;
-      public static final int ID_INVITE = Flag.ID_FLAG_INVITE;
-      public static final int ID_SYNCFOLDER = Flag.ID_FLAG_SYNCFOLDER;
-      public static final int ID_SYNC = Flag.ID_FLAG_SYNC;
-      public static final int ID_NO_INFERIORS = Flag.ID_FLAG_NO_INFERIORS;
-      public static final int ID_GLOBAL = Flag.ID_FLAG_GLOBAL;
-      public static final int ID_UNCACHED = Flag.ID_FLAG_UNCACHED;
-     $else$ */
+/* $if ZimbraVersion < 8.0.0 $
+  public static final int ID_FROM_ME = Flag.ID_FLAG_FROM_ME;
+  public static final int ID_ATTACHED = Flag.ID_FLAG_ATTACHED;
+  public static final int ID_REPLIED = Flag.ID_FLAG_REPLIED;
+  public static final int ID_FORWARDED = Flag.ID_FLAG_FORWARDED;
+  public static final int ID_COPIED = Flag.ID_FLAG_COPIED;
+  public static final int ID_FLAGGED = Flag.ID_FLAG_FLAGGED;
+  public static final int ID_DRAFT = Flag.ID_FLAG_DRAFT;
+  public static final int ID_DELETED = Flag.ID_FLAG_DELETED;
+  public static final int ID_NOTIFIED = Flag.ID_FLAG_NOTIFIED;
+  public static final int ID_UNREAD = Flag.ID_FLAG_UNREAD;
+  public static final int ID_HIGH_PRIORITY = Flag.ID_FLAG_HIGH_PRIORITY;
+  public static final int ID_LOW_PRIORITY = Flag.ID_FLAG_LOW_PRIORITY;
+  public static final int ID_VERSIONED = Flag.ID_FLAG_VERSIONED;
+  public static final int ID_INDEXING_DEFERRED = Flag.ID_FLAG_INDEXING_DEFERRED;
+  public static final int ID_SUBSCRIBED = Flag.ID_FLAG_SUBSCRIBED;
+  public static final int ID_EXCLUDE_FREEBUSY = Flag.ID_FLAG_EXCLUDE_FREEBUSY;
+  public static final int ID_CHECKED = Flag.ID_FLAG_CHECKED;
+  public static final int ID_NO_INHERIT = Flag.ID_FLAG_NO_INHERIT;
+  public static final int ID_INVITE = Flag.ID_FLAG_INVITE;
+  public static final int ID_SYNCFOLDER = Flag.ID_FLAG_SYNCFOLDER;
+  public static final int ID_SYNC = Flag.ID_FLAG_SYNC;
+  public static final int ID_NO_INFERIORS = Flag.ID_FLAG_NO_INFERIORS;
+  public static final int ID_GLOBAL = Flag.ID_FLAG_GLOBAL;
+  public static final int ID_UNCACHED = Flag.ID_FLAG_UNCACHED;
+
+  public static final int ID_ARCHIVED         = 0;
+  public static final int ID_IN_DUMPSTER      = 0;
+  public static final int ID_MUTED            = 0;
+  public static final int ID_NOTE             = 0;
+  public static final int ID_POPPED           = 0;
+  public static final int ID_POST             = 0;
+  public static final int ID_PRIORITY         = 0;
+
+  public static final int BITMASK_POPPED      = 0;
+  public static final int BITMASK_NOTE        = 0;
+  public static final int BITMASK_PRIORITY    = 0;
+  public static final int BITMASK_POST        = 0;
+  public static final int BITMASK_MUTED       = 0;
+  public static final int BITMASK_ARCHIVED    = 0;
+  public static final int BITMASK_IN_DUMPSTER = 0;
+
+ $else$ */
   public static final int ID_FROM_ME           = Flag.ID_FROM_ME;
   public static final int ID_ATTACHED          = Flag.ID_ATTACHED;
   public static final int ID_REPLIED           = Flag.ID_REPLIED;
@@ -114,7 +131,7 @@ public class ZEFlag extends ZEItem
   }
 
 
-  public static Flag.FlagInfo of(int id)
+  static Flag.FlagInfo of(int id)
   {
     try
     {

@@ -21,8 +21,6 @@
 package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ZimbraException;
-import com.zimbra.cs.db.DbPool;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,11 +34,7 @@ public interface Connection
   void close()
     throws ZimbraException;
 
-  /* $if MajorZimbraVersion >= 8 $ */
-  public DbPool.DbConnection getProxiedConnection();
-  /* $else$
-  public DbPool.Connection getProxiedConnection();
-  $endif$ */
+  <T> T toZimbra(Class<T> cls);
 
   void commit()
     throws ZimbraException;

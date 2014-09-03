@@ -459,7 +459,7 @@ public class ZEInvite
     return new ZETimeZoneMap(mInvite.getTimeZoneMap());
   }
 
-  public static List<ZEInvite> createFromCalendar(ZEAccount account, ZCalendar.ZVCalendar cal, boolean sentByMe)
+  static List<ZEInvite> createFromCalendar(ZEAccount account, ZCalendar.ZVCalendar cal, boolean sentByMe)
     throws ZimbraException
   {
     try
@@ -484,7 +484,7 @@ public class ZEInvite
     return cls.cast(mInvite);
   }
 
-  public ZCalendar.ZVCalendar newToICalendar(boolean includePrivateData)
+  ZCalendar.ZVCalendar newToICalendar(boolean includePrivateData)
   {
     try
     {

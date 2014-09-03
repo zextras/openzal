@@ -15,7 +15,7 @@ public class ZimbraDatabaseTest
   @Test
   public void qualify_zimbra_table_name_doesnt_change()
   {
-    String result = DbMailbox.qualifyZimbraTableName(ZEMailbox.mailboxId(32), "mailbox_metadata");
+    String result = DbMailbox.qualifyZimbraTableName(32, "mailbox_metadata");
     assertEquals("mailbox_metadata",result);
   }
 
@@ -25,23 +25,23 @@ public class ZimbraDatabaseTest
     final String zimbraTableName;
 /*$if ZimbraVersion >= 8.0.2 $*/
     zimbraTableName = DbMailItem.getMailItemTableName(
-      ZEMailbox.mailboxId(32),
+      32,
       false
     );
 /*$endif $*/
 
 /*$if ZimbraVersion >= 7.0.0 && ZimbraVersion < 8.0.2 $
     zimbraTableName = DbMailItem.getMailItemTableName(
-      ZEMailbox.mailboxId(32),
-      ZEMailbox.mailboxId(32),
+      32,
+      32,
       false
     );
 /*$endif $*/
 
 /*$if ZimbraVersion < 7.0.0 $
     zimbraTableName = DbMailItem.getMailItemTableName(
-      ZEMailbox.mailboxId(32),
-      ZEMailbox.mailboxId(32)
+      32,
+      32
     );
 /*$endif $*/
 
@@ -58,8 +58,8 @@ public class ZimbraDatabaseTest
     final String zimbraTableName;
 
     zimbraTableName = DbMailItem.getTombstoneTableName(
-      ZEMailbox.mailboxId(32),
-      ZEMailbox.mailboxId(32)
+      32,
+      32
     );
 
 
@@ -77,23 +77,23 @@ public class ZimbraDatabaseTest
 
 /*$if ZimbraVersion >= 8.0.2 $*/
     zimbraTableName = DbMailItem.getRevisionTableName(
-      ZEMailbox.mailboxId(32),
+      32,
       false
     );
 /*$endif $*/
 
 /*$if ZimbraVersion >= 7.0.0 && ZimbraVersion < 8.0.2 $
     zimbraTableName = DbMailItem.getRevisionTableName(
-      ZEMailbox.mailboxId(32),
-      ZEMailbox.mailboxId(32),
+      32,
+      32,
       false
     );
 /*$endif $*/
 
 /*$if ZimbraVersion < 7.0.0 $
     zimbraTableName = DbMailItem.getRevisionTableName(
-      ZEMailbox.mailboxId(32),
-      ZEMailbox.mailboxId(32)
+      32,
+      32
     );
 /*$endif $*/
 

@@ -125,7 +125,7 @@ public class ZEKey
     public static ZEIdentityBy id   = new ZEIdentityBy(IdentityBy.id);
     public static ZEIdentityBy name = new ZEIdentityBy(IdentityBy.name);
 
-    protected ZEIdentityBy(IdentityBy identityBy)
+    ZEIdentityBy(IdentityBy identityBy)
     {
       mIdentityBy = identityBy;
     }
@@ -158,6 +158,8 @@ public class ZEKey
     public static ZEDomainBy krb5Realm       = new ZEDomainBy(DomainBy.krb5Realm);
     /* $if ZimbraVersion >= 8.0.0 $ */
     public static ZEDomainBy foreignName     = new ZEDomainBy(DomainBy.foreignName);
+    /* $else$
+    public static ZEDomainBy foreignName     = new ZEDomainBy(DomainBy.name);
     /* $endif $ */
 
     ZEDomainBy(DomainBy domainBy)
@@ -428,7 +430,7 @@ public class ZEKey
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
-  public static class ZEUCServiceBy
+  static class ZEUCServiceBy
   {
     private final UCServiceBy mUCServiceBy;
 
@@ -458,7 +460,7 @@ public class ZEKey
     }
   }
 
-  public static class ZEShareLocatorBy
+  static class ZEShareLocatorBy
   {
     private final ShareLocatorBy mShareLocatorBy;
 
@@ -486,5 +488,5 @@ public class ZEKey
       }
     }
   }
-    /* $endif $ */
+  /* $endif $ */
 }

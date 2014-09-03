@@ -162,7 +162,7 @@ public class ZECos extends ZEEntry
     return result;
   }
 
-  public com.zimbra.cs.account.Cos getProxiedEntry()
+  com.zimbra.cs.account.Cos toZimbra()
   {
     return mCos;
   }

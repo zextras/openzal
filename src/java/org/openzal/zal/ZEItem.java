@@ -95,25 +95,31 @@ public class ZEItem implements Comparable<ZEItem>
     return byteType(mMailItem.getType());
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
-  static byte byteType(MailItem.Type type)
+  static byte byteType(Object type)
   {
-    return type.toByte();
-  }
+/* $if MajorZimbraVersion >= 8 $ */
+    return ((MailItem.Type)type).toByte();
 /* $else$
-  static byte byteType( byte type )
-  {
-    return type;
+    return (Byte)type;
+/* $endif$ */
   }
-  $endif$ */
+
+  public static <T> T convertType(Class<T> cls, byte type)
+  {
+/* $if MajorZimbraVersion >= 8 $ */
+    return cls.cast(MailItem.Type.of(type));
+/* $else$
+    return cls.cast(type);
+/* $endif$ */
+  }
 
   /* $if MajorZimbraVersion >= 8 $ */
-  public static MailItem.Type convertType(byte type)
+  static MailItem.Type convertType(byte type)
   {
     return MailItem.Type.of(type);
   }
 /* $else$
-  public static byte convertType(byte type)
+  static byte convertType(byte type)
   {
     return type;
   }

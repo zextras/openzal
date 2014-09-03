@@ -36,6 +36,7 @@ import org.openzal.zal.calendar.ZERecurId;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.NoSuchItemException;
 import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
@@ -50,7 +51,6 @@ import org.openzal.zal.ZEItem.ZECustomMetadata;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
 import com.zimbra.cs.service.util.ItemId;
-import com.zimbra.cs.account.Identity;
 
 import javax.mail.internet.MimeMessage;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -108,12 +108,17 @@ public class ZEMailbox
   public static final int ID_FOLDER_COMMENTS      = 17;
   public static final int ID_FOLDER_PROFILE       = 18;
 
-  public static final int HIGHEST_SYSTEM_ID = Mailbox.HIGHEST_SYSTEM_ID;
+  private static final int HIGHEST_SYSTEM_ID = Mailbox.HIGHEST_SYSTEM_ID;
   public static final int FIRST_USER_ID     = Mailbox.FIRST_USER_ID;
 
   public long getSize()
   {
     return mMbox.getSize();
+  }
+
+  public static int getHighestSystemId()
+  {
+    return HIGHEST_SYSTEM_ID;
   }
 
   public void emptyFolder(ZEOperationContext zContext, int folderId, boolean withDeleteSubFolders)
@@ -280,11 +285,11 @@ public class ZEMailbox
   }
 
   /* $if MajorZimbraVersion < 8 $
-  public static final String sCurrentChangeName = "mCurrentChange";
+  static final String sCurrentChangeName = "mCurrentChange";
 
-  public static Field sMailboxChange = null;
-  public static Field sMailboxChangeSync = null;
-  public static Field sMailboxData = null;
+  private static Field sMailboxChange = null;
+  private static Field sMailboxChangeSync = null;
+  private static Field sMailboxData = null;
   static
   {
     try
@@ -312,7 +317,7 @@ public class ZEMailbox
     }
   }
 
-  public final static int getMailboxSyncCutoff( Mailbox mMbox )
+  private static int getMailboxSyncCutoff( Mailbox mMbox )
   {
     try
     {
@@ -334,18 +339,16 @@ public class ZEMailbox
       return 0;
     }
   }
-  $endif$ */
+  $else$ */
+    private static int getMailboxSyncCutoff( Mailbox mMbox )
+    {
+      return mMbox.getSyncCutoff();
+    }
+/*  $endif$ */
 
   public boolean isTombstoneValid( int sequence )
   {
-    int mboxSequence;
-
-  /* $if MajorZimbraVersion >= 8 $*/
-    mboxSequence = mMbox.getSyncCutoff();
-  /* $else$
-    mboxSequence = getMailboxSyncCutoff(mMbox);
-  $endif$ */
-
+    int mboxSequence = getMailboxSyncCutoff(mMbox);
     return mboxSequence > 0 && sequence >= mboxSequence;
   }
 
@@ -2212,19 +2215,6 @@ public class ZEMailbox
   }
 
   @Deprecated
-/* $if MajorZimbraVersion < 7 $
-  public static long mailboxId( int mboxId )
-  {
-    return (long)mboxId;
-  }
-$else$ */
-  public static int mailboxId( int mboxId )
-  {
-    return mboxId;
-  }
-/* $endif$ */
-
-  @Deprecated
   public static ZEMailbox getByItem( ZEItem item )
   {
     return item.getMailbox();
@@ -2236,15 +2226,19 @@ $else$ */
     Map<String, Integer> accountsAndMailboxes = new HashMap<String, Integer>();
     try
     {
-      /* $if MajorZimbraVersion < 7 $
-      Map<String, Long> result = DbMailbox.listMailboxes(conn.getProxiedConnection());
+  /* $if ZimbraVersion >= 8.0.0 $*/
+      accountsAndMailboxes = DbMailbox.listMailboxes(conn.toZimbra(DbPool.DbConnection.class));
+  /* $else $
+    /* $if ZimbraVersion >= 7.0.0 $
+          accountsAndMailboxes = DbMailbox.listMailboxes(conn.toZimbra(DbPool.Connection.class));
+    /* $else$
+      Map<String, Long> result = DbMailbox.listMailboxes(conn.toZimbra(DbPool.Connection.class));
       for (Map.Entry<String, Long> entry : result.entrySet())
       {
         accountsAndMailboxes.put(entry.getKey(), entry.getValue().intValue());
       }
-      /* $else $ */
-      accountsAndMailboxes = DbMailbox.listMailboxes(conn.getProxiedConnection());
       /* $endif $ */
+  /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

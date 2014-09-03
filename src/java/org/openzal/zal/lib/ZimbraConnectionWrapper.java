@@ -18,8 +18,9 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.lib;
 
+import org.openzal.zal.Connection;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.db.DbPool;
@@ -72,15 +73,10 @@ public class ZimbraConnectionWrapper implements Connection
     }
   }
 
-
-  /* $if MajorZimbraVersion >= 8 $ */
   @Override
-  public DbPool.DbConnection getProxiedConnection()
-  /* $else$
-  public DbPool.Connection getProxiedConnection()
-  $endif$ */
+  public <T> T toZimbra(Class<T> cls)
   {
-    return mConnection;
+    return cls.cast(mConnection);
   }
 
   @Override
