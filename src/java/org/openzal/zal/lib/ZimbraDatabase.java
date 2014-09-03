@@ -25,7 +25,6 @@ import org.openzal.zal.Connection;
 import org.openzal.zal.ZEItem;
 import org.openzal.zal.ZEMailbox;
 import org.openzal.zal.ZEVolume;
-import org.openzal.zal.ZimbraConnectionWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.exceptions.UnableToObtainDBConnectionException;
@@ -57,7 +56,15 @@ public class ZimbraDatabase
     List<MailItem.UnderlyingData> list;
     try
     {
-      list = DbMailItem.getByType(mbox.toZimbra(Mailbox.class), ZEItem.convertType(type), sort);
+      list = DbMailItem.getByType(
+        mbox.toZimbra(Mailbox.class),
+  /* $if MajorZimbraVersion >= 8 $ */
+        ZEItem.convertType(MailItem.Type.class, type),
+  /* $else$
+        ZEItem.convertType(Byte.class, type),
+  /* $endif$ */
+        sort
+      );
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -141,7 +148,11 @@ public class ZimbraDatabase
   {
     try
     {
-      return DbMailbox.listAccountIds(conn.getProxiedConnection());
+    /* $if ZimbraVersion >= 8 $ */
+      return DbMailbox.listAccountIds(conn.toZimbra(DbPool.DbConnection.class));
+    /* $else $
+      return DbMailbox.listAccountIds(conn.toZimbra(DbPool.Connection.class));
+    /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -193,7 +204,11 @@ public class ZimbraDatabase
     DbVolume.CurrentVolumes cv;
     try
     {
-      cv = DbVolume.getCurrentVolumes(conn.getProxiedConnection());
+      /* $if ZimbraVersion >= 8 $ */
+      cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.DbConnection.class));
+      /* $else $
+      cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.Connection.class));
+      /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

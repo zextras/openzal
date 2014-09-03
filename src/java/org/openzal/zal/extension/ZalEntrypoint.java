@@ -48,19 +48,10 @@ public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
 
   @Override
   public void init()
-    /* $if ZimbraVersion >= 7.1.3 $ */
-    throws ExtensionException, ServiceException
-    /* $else $
-    throws ServiceException
-    /* $endif $ */
   {
     if( !ZimbraVersion.current.equals(ZalVersion.target) )
     {
-      /* $if ZimbraVersion >= 7.1.3 $ */
-      throw new ExtensionException("Zimbra version mismatch - ZAL built for Zimbra: " +ZalVersion.target.toString());
-      /* $else $
       throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " +ZalVersion.target.toString());
-      /* $endif $ */
     }
 
     try
@@ -69,11 +60,7 @@ public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
     }
     catch (IOException e)
     {
-      /* $if ZimbraVersion >= 7.1.3 $ */
-      throw new ExtensionException("Unable to load extension", e);
-      /* $else $
       throw new RuntimeException("Unable to load extension", e);
-      /* $endif $ */
     }
   }
 

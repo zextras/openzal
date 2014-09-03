@@ -604,7 +604,7 @@ public class ZEProvisioning
   {
     try
     {
-      mProvisioning.modifyAttrs(entry.getProxiedEntry(), attrs);
+      mProvisioning.modifyAttrs(entry.toZimbra(), attrs);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

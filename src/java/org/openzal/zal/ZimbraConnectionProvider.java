@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.UnableToObtainDBConnectionException;
+import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
 import com.zimbra.cs.db.DbPool;
 

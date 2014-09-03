@@ -50,11 +50,15 @@ public class MailSession
   }
 
   public static Session getSession()
-    /* $if ZimbraVersion < 8.0.0 $
-    throws MessagingException
-    /* $endif $ */
   {
-    return JMSession.getSession();
+    try
+    {
+      return JMSession.getSession();
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
   }
 
   public static List<String> getSmtpHosts(@Nullable ZEDomain domain)

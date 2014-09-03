@@ -241,14 +241,6 @@ public abstract class Utils
     }
   }
 
-  public static Session getSession()
-    /* $if ZimbraVersion < 8.0.0 $
-    throws MessagingException
-    /* $endif $ */
-  {
-    return JMSession.getSession();
-  }
-
   public static void setDefaultAlarm(ZEInvite invite, ZEAccount account)
   {
     try

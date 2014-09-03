@@ -224,22 +224,26 @@ public class ZimbraListWrapper
     return list;
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
-  public static List<ZEUCService> wrapUCServices(List<UCService> ucServices)
+  public static List<ZEUCService> wrapUCServices(List ucServices)
   {
+/* $if ZimbraVersion >= 8.0.0 $ */
     if (ucServices == null || ucServices.size() == 0)
     {
       return Collections.emptyList();
     }
+
     List<ZEUCService> list = new ArrayList<ZEUCService>(ucServices.size());
-    for (UCService ucService : ucServices)
+    for (Object ucService : ucServices)
     {
       list.add(new ZEUCService(ucService));
     }
 
     return list;
+/* $else$
+    throw new UnsupportedOperationException();
+/* $endif $ */
   }
-  /* $endif $ */
+
 
   public static List<ZEMPartInfo> wrapMPartInfos(List<MPartInfo> mPartInfos)
   {
@@ -296,11 +300,12 @@ public class ZimbraListWrapper
   public static List<ZEAccountQuotaInfo> wrapAccountQuotaInfos(List<Object> accountQuotas)
   /* $endif $ */
   {
+/* $if ZimbraVersion >= 8.0.0 $ */
     if (accountQuotas == null || accountQuotas.size() == 0)
     {
       return Collections.emptyList();
     }
-    /* $if ZimbraVersion >= 8.0.0 $ */
+
     List<ZEAccountQuotaInfo> list =
       new ArrayList<ZEAccountQuotaInfo>(accountQuotas.size());
 

@@ -37,7 +37,7 @@ public class ZEEntry
     mEntry = (Entry)entry;
   }
 
-  protected com.zimbra.cs.account.Entry getProxiedEntry()
+  com.zimbra.cs.account.Entry toZimbra()
   {
     return mEntry;
   }
@@ -92,26 +92,26 @@ public class ZEEntry
   public class ZEEntryType
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    public ZEEntryType ENTRY                     = new ZEEntryType(Entry.EntryType.ENTRY);
-    public ZEEntryType ACCOUNT                   = new ZEEntryType(Entry.EntryType.ACCOUNT);
-    public ZEEntryType ALIAS                     = new ZEEntryType(Entry.EntryType.ALIAS);
-    public ZEEntryType CALRESOURCE               = new ZEEntryType(Entry.EntryType.CALRESOURCE);
-    public ZEEntryType COS                       = new ZEEntryType(Entry.EntryType.COS);
-    public ZEEntryType DATASOURCE                = new ZEEntryType(Entry.EntryType.DATASOURCE);
-    public ZEEntryType DISTRIBUTIONLIST          = new ZEEntryType(Entry.EntryType.DISTRIBUTIONLIST);
-    public ZEEntryType DOMAIN                    = new ZEEntryType(Entry.EntryType.DOMAIN);
-    public ZEEntryType DYNAMICGROUP              = new ZEEntryType(Entry.EntryType.DYNAMICGROUP);
-    public ZEEntryType DYNAMICGROUP_DYNAMIC_UNIT = new ZEEntryType(Entry.EntryType.DYNAMICGROUP_DYNAMIC_UNIT);
-    public ZEEntryType DYNAMICGROUP_STATIC_UNIT  = new ZEEntryType(Entry.EntryType.DYNAMICGROUP_STATIC_UNIT);
-    public ZEEntryType GLOBALCONFIG              = new ZEEntryType(Entry.EntryType.GLOBALCONFIG);
-    public ZEEntryType GLOBALGRANT               = new ZEEntryType(Entry.EntryType.GLOBALGRANT);
-    public ZEEntryType IDENTITY                  = new ZEEntryType(Entry.EntryType.IDENTITY);
-    public ZEEntryType MIMETYPE                  = new ZEEntryType(Entry.EntryType.MIMETYPE);
-    public ZEEntryType SERVER                    = new ZEEntryType(Entry.EntryType.SERVER);
-    public ZEEntryType UCSERVICE                 = new ZEEntryType(Entry.EntryType.UCSERVICE);
-    public ZEEntryType SIGNATURE                 = new ZEEntryType(Entry.EntryType.SIGNATURE);
-    public ZEEntryType XMPPCOMPONENT             = new ZEEntryType(Entry.EntryType.XMPPCOMPONENT);
-    public ZEEntryType ZIMLET                    = new ZEEntryType(Entry.EntryType.ZIMLET);
+    ZEEntryType ENTRY                     = new ZEEntryType(Entry.EntryType.ENTRY);
+    ZEEntryType ACCOUNT                   = new ZEEntryType(Entry.EntryType.ACCOUNT);
+    ZEEntryType ALIAS                     = new ZEEntryType(Entry.EntryType.ALIAS);
+    ZEEntryType CALRESOURCE               = new ZEEntryType(Entry.EntryType.CALRESOURCE);
+    ZEEntryType COS                       = new ZEEntryType(Entry.EntryType.COS);
+    ZEEntryType DATASOURCE                = new ZEEntryType(Entry.EntryType.DATASOURCE);
+    ZEEntryType DISTRIBUTIONLIST          = new ZEEntryType(Entry.EntryType.DISTRIBUTIONLIST);
+    ZEEntryType DOMAIN                    = new ZEEntryType(Entry.EntryType.DOMAIN);
+    ZEEntryType DYNAMICGROUP              = new ZEEntryType(Entry.EntryType.DYNAMICGROUP);
+    ZEEntryType DYNAMICGROUP_DYNAMIC_UNIT = new ZEEntryType(Entry.EntryType.DYNAMICGROUP_DYNAMIC_UNIT);
+    ZEEntryType DYNAMICGROUP_STATIC_UNIT  = new ZEEntryType(Entry.EntryType.DYNAMICGROUP_STATIC_UNIT);
+    ZEEntryType GLOBALCONFIG              = new ZEEntryType(Entry.EntryType.GLOBALCONFIG);
+    ZEEntryType GLOBALGRANT               = new ZEEntryType(Entry.EntryType.GLOBALGRANT);
+    ZEEntryType IDENTITY                  = new ZEEntryType(Entry.EntryType.IDENTITY);
+    ZEEntryType MIMETYPE                  = new ZEEntryType(Entry.EntryType.MIMETYPE);
+    ZEEntryType SERVER                    = new ZEEntryType(Entry.EntryType.SERVER);
+    ZEEntryType UCSERVICE                 = new ZEEntryType(Entry.EntryType.UCSERVICE);
+    ZEEntryType SIGNATURE                 = new ZEEntryType(Entry.EntryType.SIGNATURE);
+    ZEEntryType XMPPCOMPONENT             = new ZEEntryType(Entry.EntryType.XMPPCOMPONENT);
+    ZEEntryType ZIMLET                    = new ZEEntryType(Entry.EntryType.ZIMLET);
 
     private final Entry.EntryType mEntryType;
 
@@ -129,6 +129,12 @@ public class ZEEntry
     {
       return mEntryType.getName();
     }
+    /* $else$
+    public String getName()
+    {
+      throw new UnsupportedOperationException();
+    }
+    private ZEEntryType(){}
     /* $endif $ */
   }
 }
