@@ -446,7 +446,15 @@ public class ZEInvite
 
   public int getTaskPercentComplete()
   {
-    return Integer.valueOf(mInvite.getPercentComplete());
+    if( mInvite != null )
+    {
+      String percent = mInvite.getPercentComplete();
+      if( percent != null )
+      {
+        return Integer.valueOf(percent);
+      }
+    }
+    return 0;
   }
 
   public ZEIcalTimezone getTimezone()

@@ -353,7 +353,7 @@ public class InviteFactory
       dateStart,
       dateEnd,
       null,
-      recurId,
+      null,
       mainRecurrenceRule,
       isOrganizer,
       organizer,

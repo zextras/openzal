@@ -1706,8 +1706,13 @@ public class ZEMailbox
   {
     try
     {
+      ParsedMessage parsedMessage = null;
+      if( pm != null )
+      {
+        parsedMessage = pm.toZimbra(ParsedMessage.class);
+      }
       return mMbox.addInvite(octxt.getOperationContext(), inv.toZimbra(Invite.class),
-                            folderId, pm.toZimbra(ParsedMessage.class),
+                            folderId, parsedMessage,
                             preserveExistingAlarms,
                             discardExistingInvites,
                             addRevision

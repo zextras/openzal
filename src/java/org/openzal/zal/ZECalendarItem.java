@@ -112,6 +112,10 @@ public class ZECalendarItem extends ZEItem
   @Nullable
   public ZEInvite getInvite(ZERecurId recurId)
   {
+    if(recurId == null)
+    {
+      return wrap(mCalendarItem.getDefaultInviteOrNull());
+    }
     return wrap(mCalendarItem.getInvite(recurId.toZimbra(RecurId.class)));
   }
 
