@@ -34,37 +34,38 @@ public class ZECacheEntryType
   /* $if MajorZimbraVersion >= 8 $ */
   private final com.zimbra.soap.admin.type.CacheEntryType mCacheEntryType;
 
+  public static ZECacheEntryType locale      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.locale);
+  public static ZECacheEntryType skin        = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.skin);
+  public static ZECacheEntryType license     = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.license);
+  public static ZECacheEntryType account     = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.account);
+  public static ZECacheEntryType config      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.config);
+  public static ZECacheEntryType cos         = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.cos);
+  public static ZECacheEntryType domain      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.domain);
+  public static ZECacheEntryType group       = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.group);
+  public static ZECacheEntryType server      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.server);
+  public static ZECacheEntryType zimlet      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.zimlet);
+
   static ZECacheEntryType acl         = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.acl);
-  static ZECacheEntryType locale      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.locale);
-  static ZECacheEntryType skin        = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.skin);
   static ZECacheEntryType uistrings   = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.uistrings);
-  static ZECacheEntryType license     = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.license);
   static ZECacheEntryType all         = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.all);
-  static ZECacheEntryType account     = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.account);
-  static ZECacheEntryType config      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.config);
   static ZECacheEntryType globalgrant = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.globalgrant);
-  static ZECacheEntryType cos         = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.cos);
-  static ZECacheEntryType domain      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.domain);
-  static ZECacheEntryType galgroup    = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.galgroup);
-  static ZECacheEntryType group       = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.group);
   static ZECacheEntryType mime        = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.mime);
-  static ZECacheEntryType server      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.server);
-  static ZECacheEntryType zimlet      = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.zimlet);
+  static ZECacheEntryType galgroup    = new ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.galgroup);
 
   ZECacheEntryType(com.zimbra.soap.admin.type.CacheEntryType cacheEntryType)
   /* $else $
   private final com.zimbra.cs.account.Provisioning.CacheEntryType mCacheEntryType;
 
-  static ZECacheEntryType locale      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.locale);
-  static ZECacheEntryType skin        = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.skin);
-  static ZECacheEntryType license     = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.license);
-  static ZECacheEntryType account     = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.account);
-  static ZECacheEntryType config      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.config);
-  static ZECacheEntryType cos         = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.cos);
-  static ZECacheEntryType domain      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.domain);
-  static ZECacheEntryType group       = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.group);
-  static ZECacheEntryType server      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.server);
-  static ZECacheEntryType zimlet      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.zimlet);
+  public static ZECacheEntryType locale      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.locale);
+  public static ZECacheEntryType skin        = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.skin);
+  public static ZECacheEntryType license     = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.license);
+  public static ZECacheEntryType account     = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.account);
+  public static ZECacheEntryType config      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.config);
+  public static ZECacheEntryType cos         = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.cos);
+  public static ZECacheEntryType domain      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.domain);
+  public static ZECacheEntryType group       = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.group);
+  public static ZECacheEntryType server      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.server);
+  public static ZECacheEntryType zimlet      = new ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.zimlet);
 
   ZECacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType cacheEntryType)
   /* $endif $ */
