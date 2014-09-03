@@ -1739,17 +1739,33 @@ public class ZEProvisioning
       return null;
     }
 
-    public void handleElement(Element node) throws ServiceException
+    public void handleElement(Element node)
     {
       if (mCounter >= mSkip)
       {
         Map<String, Object> galAttrs = new HashMap<String, Object>();
-        String tag_id = node.getAttribute("id");
+        String tag_id;
+        try
+        {
+          tag_id = node.getAttribute("id");
+        }
+        catch (ServiceException e)
+        {
+          throw ExceptionWrapper.wrap(e);
+        }
         List<Element> tagList = node.listElements("a");
 
         for (Element tag : tagList)
         {
-          String tag_n = tag.getAttribute("n");
+          String tag_n;
+          try
+          {
+            tag_n = tag.getAttribute("n");
+          }
+          catch (ServiceException e)
+          {
+            throw ExceptionWrapper.wrap(e);
+          }
           galAttrs.put(tag_n, tag.getText());
         }
 
