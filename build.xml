@@ -3451,7 +3451,7 @@
     <exec executable="doxygen" />
   </target>
 
-  <target name="check" description="check compatibility of zal jars">
+  <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
       <equals arg1="0" arg2="0" />
@@ -3493,7 +3493,7 @@
       zal-all
       zal-common
       zal-{zimbra-version}
-      check
+      compatibility-check
       clean
       doxygen
       help
