@@ -303,7 +303,7 @@ public class ZEInvite
       {
         return new ZERecurId(mInvite.getRecurId().getDt().getUtcTime());
       }
-      return new ZERecurId( mInvite.getDTStamp() );
+      return new ZERecurId( mInvite.getStartTime().getUtcTime() );
     }
     return null;
   }

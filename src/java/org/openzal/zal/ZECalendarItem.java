@@ -116,7 +116,7 @@ public class ZECalendarItem extends ZEItem
     {
       return wrap(mCalendarItem.getDefaultInviteOrNull());
     }
-    return wrap(mCalendarItem.getInvite(recurId.toZimbra(RecurId.class)));
+    return wrap(mCalendarItem.getInviteForRecurId(recurId.getExceptionStartTimeUtc()));
   }
 
   public Recurrence.IRecurrence getRecurrence()
