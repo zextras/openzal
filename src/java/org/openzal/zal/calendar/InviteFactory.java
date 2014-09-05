@@ -243,6 +243,7 @@ public class InviteFactory
     mFreeBusyStatus = invite.getFreeBusy();
     mLocation = invite.getLocation();
     mPriority = invite.getPriority();
+    mSensitivity = invite.getSensitivity();
     mMethod = invite.getMethod();
 
     mAlarmSet = invite.hasAlarm();
