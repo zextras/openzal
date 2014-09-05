@@ -27,8 +27,8 @@ public class ItemStatus implements Serializable
 {
   private static final long serialVersionUID = 1522734297886684519L;
 
-  public final int sequence;
-  public final long date;
+  public int sequence;
+  public long date;
 
   public ItemStatus(int sequence, long date)
   {
