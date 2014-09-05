@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.openzal.zal.ZalBuildInfo;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.ZimbraVersion;
 import com.zimbra.common.service.ServiceException;
@@ -28,6 +29,7 @@ import com.zimbra.cs.extension.ExtensionException;
 /* $endif $ */
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.extension.ZimbraExtensionPostInit;
+import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
 
 import java.io.IOException;
@@ -52,6 +54,12 @@ public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
   @Override
   public void init()
   {
+    ZimbraLog.mailbox.info(
+      "Starting ZAL version " +
+        ZalVersion.current +
+        " commit " +
+        ZalBuildInfo.COMMIT
+    );
     if (!ZimbraVersion.current.equals(ZalVersion.target))
     {
       throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
