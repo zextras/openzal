@@ -1,7 +1,9 @@
-package org.openzal.zal;
+package java.org.openzal.zal;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.openzal.zal.ZEMailboxManagerListener;
+import org.openzal.zal.ZEMailboxManagerListenerWrapper;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

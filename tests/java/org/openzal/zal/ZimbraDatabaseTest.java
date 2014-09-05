@@ -1,10 +1,11 @@
-package org.openzal.zal.lib;
+package java.org.openzal.zal;
 
 import org.openzal.zal.ZEMailbox;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.openzal.zal.lib.ZimbraDatabase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
