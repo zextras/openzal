@@ -6,7 +6,7 @@ VERSION=$(cat version)
 
 mkdir -p tmp/
 mkdir -p release/
-echo rm -rf tmp/*
+rm -rf tmp/*
 
 cd dist/
 for zimbraVersion in *;
