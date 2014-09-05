@@ -28,30 +28,33 @@ import com.zimbra.cs.extension.ExtensionException;
 /* $endif $ */
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.extension.ZimbraExtensionPostInit;
+import org.openzal.zal.tools.JarUtils;
 
 import java.io.IOException;
 
 public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
 {
   private final ExtensionManager mExtensionManager;
+  private final String           mDirectoryName;
 
   public ZalEntrypoint()
   {
     mExtensionManager = new ExtensionManager();
+    mDirectoryName = JarUtils.getCurrentJar().getParentFile().getName();
   }
 
   @Override
   public String getName()
   {
-    return "Zimbra Abstraction Layer";
+    return "Zimbra Abstraction Layer for: "+mDirectoryName;
   }
 
   @Override
   public void init()
   {
-    if( !ZimbraVersion.current.equals(ZalVersion.target) )
+    if (!ZimbraVersion.current.equals(ZalVersion.target))
     {
-      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " +ZalVersion.target.toString());
+      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
     }
 
     try
