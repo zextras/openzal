@@ -459,7 +459,7 @@ public class ZEInvite
 
   public ZEIcalTimezone getTimezone()
   {
-    return new ZEIcalTimezone(mInvite.getStartTime().getTimeZone());
+    return new ZEIcalTimezone(mInvite.getTimeZoneMap().getLocalTimeZone());
   }
 
   public ZETimeZoneMap getTimezoneMap()
