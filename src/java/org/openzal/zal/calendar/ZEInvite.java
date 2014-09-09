@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.Account;
 import org.openzal.zal.ZEAccount;
 import org.openzal.zal.ZimbraListWrapper;
@@ -113,7 +115,48 @@ public class ZEInvite
 
   public boolean hasAlarm()
   {
-    return getDisplayAlarm() != null;
+    if (mInvite.hasAlarm())
+    {
+      Alarm alarm = getDisplayAlarm();
+
+      if (alarm != null)
+      {
+        Element trigger = alarm.toXml(new Element.XMLElement("AlarmInfo"))
+                               .getOptionalElement(MailConstants.E_CAL_ALARM_TRIGGER);
+        if (trigger != null)
+        {
+          Element triggerRelativeElement = trigger.getOptionalElement(MailConstants.E_CAL_ALARM_RELATIVE);
+          if (triggerRelativeElement != null)
+          {
+            String related = triggerRelativeElement.getAttribute(MailConstants.A_CAL_ALARM_RELATED, null);
+            if (related != null)
+            {
+              Alarm.TriggerRelated triggerRelated = Alarm.TriggerRelated.lookup(related);
+              if (triggerRelated != null)
+              {
+                if (triggerRelated.equals(Alarm.TriggerRelated.START))
+                {
+                  return hasStartTime();
+                }
+
+                if (triggerRelated.equals(Alarm.TriggerRelated.END))
+                {
+                  return hasEndDate();
+                }
+              }
+            }
+          }
+
+          Element triggerAbsoluteElement = trigger.getOptionalElement(MailConstants.E_CAL_ALARM_ABSOLUTE);
+          if (triggerAbsoluteElement != null)
+          {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   private Alarm getDisplayAlarm()
@@ -517,6 +560,11 @@ public class ZEInvite
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public boolean hasEndDate()
+  {
+    return mInvite.getEndTime() != null;
   }
 
   public boolean hasEffectiveEndDate()
