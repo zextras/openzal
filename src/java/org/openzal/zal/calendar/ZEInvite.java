@@ -20,8 +20,6 @@
 
 package org.openzal.zal.calendar;
 
-import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.account.Account;
 import org.openzal.zal.ZEAccount;
 import org.openzal.zal.ZimbraListWrapper;
@@ -30,6 +28,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.service.ServiceException;
 
 import javax.mail.internet.MimeMessage;
+import java.lang.reflect.Field;
 import java.util.*;
 
 import com.zimbra.cs.mailbox.calendar.*;
@@ -45,6 +44,9 @@ import com.zimbra.common.calendar.*;
 
 public class ZEInvite
 {
+  private static String TRIGGER_TYPE_FIELD = "mTriggerType";
+  private static String TRIGGER_RELATED_FIELD = "mTriggerRelated";
+
   public MimeMessage getAttachment()
   {
     return mMimeMessage;
@@ -121,42 +123,67 @@ public class ZEInvite
 
       if (alarm != null)
       {
-        Element trigger = alarm.toXml(new Element.XMLElement("AlarmInfo"))
-                               .getOptionalElement(MailConstants.E_CAL_ALARM_TRIGGER);
-        if (trigger != null)
+        Alarm.TriggerType triggerType = getTriggerType(alarm);
+        if (Alarm.TriggerType.ABSOLUTE.equals(triggerType))
         {
-          Element triggerRelativeElement = trigger.getOptionalElement(MailConstants.E_CAL_ALARM_RELATIVE);
-          if (triggerRelativeElement != null)
-          {
-            String related = triggerRelativeElement.getAttribute(MailConstants.A_CAL_ALARM_RELATED, null);
-            if (related != null)
-            {
-              Alarm.TriggerRelated triggerRelated = Alarm.TriggerRelated.lookup(related);
-              if (triggerRelated != null)
-              {
-                if (triggerRelated.equals(Alarm.TriggerRelated.START))
-                {
-                  return hasStartTime();
-                }
+          return true;
+        }
 
-                if (triggerRelated.equals(Alarm.TriggerRelated.END))
-                {
-                  return hasEndDate();
-                }
-              }
-            }
+        Alarm.TriggerRelated triggerRelated = getTriggerRelated(alarm);
+        if (Alarm.TriggerType.RELATIVE.equals(triggerType))
+        {
+          if (Alarm.TriggerRelated.START.equals(triggerRelated))
+          {
+            return hasStartTime();
           }
 
-          Element triggerAbsoluteElement = trigger.getOptionalElement(MailConstants.E_CAL_ALARM_ABSOLUTE);
-          if (triggerAbsoluteElement != null)
+          if (Alarm.TriggerRelated.END.equals(triggerRelated))
           {
-            return true;
+            return hasEndDate();
           }
         }
       }
     }
 
     return false;
+  }
+
+  private Alarm.TriggerType getTriggerType(Alarm alarm)
+  {
+    try
+    {
+      return (Alarm.TriggerType) getPrivateField(TRIGGER_TYPE_FIELD).get(alarm);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private Alarm.TriggerRelated getTriggerRelated(Alarm alarm)
+  {
+    try
+    {
+      return (Alarm.TriggerRelated) getPrivateField(TRIGGER_RELATED_FIELD).get(alarm);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private Field getPrivateField(String field)
+  {
+    try
+    {
+      Field triggerRelatedField = Alarm.class.getDeclaredField(field);
+      triggerRelatedField.setAccessible(true);
+      return triggerRelatedField;
+    }
+    catch (NoSuchFieldException noSuchField)
+    {
+      throw new RuntimeException(noSuchField);
+    }
   }
 
   private Alarm getDisplayAlarm()
