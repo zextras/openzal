@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.MailItem;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Contact;
@@ -57,7 +58,7 @@ public class ZEParsedContact
     }
   }
 
-  public ZEParsedContact(Map<String, String> map, List<ZEContact.ContactAttachment> list)
+  public ZEParsedContact(Map<String, String> map, @NotNull List<ZEContact.ContactAttachment> list)
   {
     List<Contact.Attachment> attachments = new ArrayList<Contact.Attachment>();
     for (ZEContact.ContactAttachment attachment : list)
