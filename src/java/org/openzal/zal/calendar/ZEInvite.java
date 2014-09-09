@@ -459,6 +459,18 @@ public class ZEInvite
 
   public ZEIcalTimezone getTimezone()
   {
+    ParsedDateTime startTime = mInvite.getStartTime();
+    if (startTime != null)
+    {
+      return new ZEIcalTimezone(startTime.getTimeZone());
+    }
+
+    ParsedDateTime endTime = mInvite.getEndTime();
+    if (endTime != null)
+    {
+      return new ZEIcalTimezone(endTime.getTimeZone());
+    }
+
     return new ZEIcalTimezone(mInvite.getTimeZoneMap().getLocalTimeZone());
   }
 
