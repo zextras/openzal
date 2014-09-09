@@ -872,38 +872,48 @@ public class ZEMailbox
     throws ZimbraException
   {
 
+    ItemId itemId = null;
+    ItemId newItemId;
+
     if( origMsgId != null )
     {
-      ItemId itemId = new ItemId(origMsgId.getAccountId().toString(), origMsgId.getItemId());
-      ItemId newItemId;
-      try
-      {
+      itemId = new ItemId(origMsgId.getAccountId().toString(), origMsgId.getItemId());
+    }
+
+    try
+    {
   /* $if MajorZimbraVersion == 6 $
-        newItemId = mMbox.getMailSender().sendMimeMessage( octxt.getOperationContext(), mMbox, saveToSent, mm,
-                                                   (List<InternetAddress>)null,
-                                                   uploads, itemId, replyType,
-                                                   null, true, replyToSender );
+      newItemId = mMbox.getMailSender().sendMimeMessage(
+        octxt.getOperationContext(), mMbox,
+        saveToSent, mm,
+        (List<InternetAddress>)null,
+        uploads, itemId, replyType,
+        null, true, replyToSender
+      );
     $endif$ */
 
   /* $if MajorZimbraVersion == 7 $
-        newItemId = mMbox.getMailSender().sendMimeMessage( octxt.getOperationContext(), mMbox, saveToSent, mm,
-                                                   (List<InternetAddress>)null,
-                                                   uploads, itemId, replyType,
-                                                   null, replyToSender );
+      newItemId = mMbox.getMailSender().sendMimeMessage(
+        octxt.getOperationContext(), mMbox, saveToSent, mm,
+        (List<InternetAddress>)null,
+        uploads, itemId, replyType,
+        null, replyToSender
+      );
     $endif$ */
 
   /* $if MajorZimbraVersion == 8 $ */
-        newItemId = mMbox.getMailSender().sendMimeMessage(octxt.getOperationContext(), mMbox, saveToSent, mm,
-                                                    uploads, itemId, replyType, null, replyToSender);
+      newItemId = mMbox.getMailSender().sendMimeMessage(
+        octxt.getOperationContext(), mMbox, saveToSent, mm,
+        uploads, itemId, replyType,
+        null, replyToSender
+      );
   /* $endif$ */
-        return new ZimbraItemId(newItemId.getAccountId(), newItemId.getId());
-      }
-      catch(com.zimbra.common.service.ServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      return new ZimbraItemId(newItemId.getAccountId(), newItemId.getId());
     }
-    return null;
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public boolean attachmentsIndexingEnabled() throws ZimbraException
