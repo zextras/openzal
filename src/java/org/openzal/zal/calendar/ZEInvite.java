@@ -201,7 +201,12 @@ public class ZEInvite
   public long getUtcStartTime()
   {
     //TODO is mInvite null?
-    return mInvite.getStartTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getStartTime();
+    if (parsedDateTime == null)
+    {
+      return 0L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   public ZERecurrenceRule getRecurrenceRule()
@@ -270,7 +275,12 @@ public class ZEInvite
 
   public long getUtcEndTime()
   {
-    return mInvite.getEndTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getEndTime();
+    if (parsedDateTime == null)
+    {
+      return getUtcStartTime() + 2L*60L*60L*1000L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   /*
@@ -359,7 +369,12 @@ public class ZEInvite
 
   public long getEffectiveEndTime()
   {
-    return mInvite.getEffectiveEndTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getEffectiveEndTime();
+    if (parsedDateTime == null)
+    {
+      return getUtcStartTime() + 2L*60L*60L*1000L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   public boolean isAllDayEvent()
