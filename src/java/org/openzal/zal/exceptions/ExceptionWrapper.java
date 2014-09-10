@@ -150,20 +150,20 @@ public class ExceptionWrapper
         return new AlreadyInProgressException(exception);
       }
     });
-    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_FOLDER, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
-      {
-        return new NoSuchFolderException(exception);
-      }
-    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_ITEM, new ExceptionWrapperCreator()
     {
       @Override
       public ZimbraException create(Exception exception)
       {
         return new NoSuchItemException(exception);
+      }
+    });
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_FOLDER, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchFolderException(exception);
       }
     });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_MSG, new ExceptionWrapperCreator()

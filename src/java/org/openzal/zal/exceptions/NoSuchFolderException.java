@@ -20,7 +20,7 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchFolderException extends MailServiceException
+public class NoSuchFolderException extends NoSuchItemException
 {
   protected NoSuchFolderException(Exception exception)
   {

@@ -20,7 +20,7 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchConversationException extends MailServiceException
+public class NoSuchConversationException extends NoSuchItemException
 {
   protected NoSuchConversationException(Exception exception)
   {

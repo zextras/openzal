@@ -20,7 +20,7 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchMessageException extends MailServiceException
+public class NoSuchMessageException extends NoSuchItemException
 {
   protected NoSuchMessageException(Exception exception)
   {
