@@ -697,10 +697,14 @@ public class ZEMailbox
     throws ZimbraException
   {
     /* $if MajorZimbraVersion >= 8 $ */
-    Mailbox.SetCalendarItemData[] zimbraExceptions = new Mailbox.SetCalendarItemData[exceptions.size()];
-    for (int i=0; i<exceptions.size(); i++)
+    Mailbox.SetCalendarItemData[] zimbraExceptions = null;
+    if( exceptions.size() > 0 )
     {
-      zimbraExceptions[i] = exceptions.get(i).toZimbra(Mailbox.SetCalendarItemData.class);
+      zimbraExceptions = new Mailbox.SetCalendarItemData[exceptions.size()];
+      for (int i = 0; i < exceptions.size(); i++)
+      {
+        zimbraExceptions[i] = exceptions.get(i).toZimbra(Mailbox.SetCalendarItemData.class);
+      }
     }
 
     try
