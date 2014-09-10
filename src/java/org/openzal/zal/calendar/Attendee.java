@@ -50,7 +50,7 @@ public class Attendee
     mStatus = status;
   }
 
-  public ZOrganizer toZOrganizer()
+  ZOrganizer toZOrganizer()
   {
     return new ZOrganizer(mAddress, mName);
   }
