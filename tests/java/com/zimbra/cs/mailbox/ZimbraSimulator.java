@@ -3,23 +3,19 @@ package com.zimbra.cs.mailbox;
 import com.zextras.lib.Error.UnableToRegisterDatabaseDriverError;
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
+import org.openzal.zal.*;
 import org.openzal.zal.lib.ZimbraVersion;
-import org.openzal.zal.Utils;
-import org.openzal.zal.ZEMailboxManager;
-import org.openzal.zal.ZEProvisioning;
-import org.openzal.zal.ZEStoreManager;
-import org.openzal.zal.ZEStoreManagerImp;
+import org.openzal.zal.Provisioning;
+
 import com.zimbra.common.localconfig.ConfigException;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.MockProvisioning;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import com.zimbra.cs.store.StoreManagerSimulator;
-import com.zimbra.cs.store.StoreManager;
 import org.dom4j.DocumentException;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -38,7 +34,7 @@ $else$ */
 // for testing purpose only
 public class ZimbraSimulator
 {
-  private final ZEStoreManagerImp mStoreManager;
+  private final StoreManagerImp mStoreManager;
 
   public RamFS getStoreRoot()
   {
@@ -47,7 +43,8 @@ public class ZimbraSimulator
 
   private RamFS mStoreRoot;
 
-  public ZimbraSimulator() throws UnableToRegisterDatabaseDriverError
+  public ZimbraSimulator()
+    throws UnableToRegisterDatabaseDriverError
   {
     try
     {
@@ -63,8 +60,8 @@ public class ZimbraSimulator
 
     init();
 
-    mStoreManager = new ZEStoreManagerImp(
-      StoreManager.getInstance()
+    mStoreManager = new StoreManagerImp(
+      com.zimbra.cs.store.StoreManager.getInstance()
     );
   }
 
@@ -89,7 +86,8 @@ public class ZimbraSimulator
     }
   }
 
-  private void initProperties() throws ConfigException, DocumentException
+  private void initProperties()
+    throws ConfigException, DocumentException
   {
     System.setProperty("zimbra.native.required", "false");
     System.setProperty("log4j.configuration", "it/data/zimbra-config/log4j-test.properties");
@@ -112,13 +110,13 @@ public class ZimbraSimulator
   private void initStorageManager() throws Exception
   {
     LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
-    StoreManager.getInstance().startup();
-    mStoreRoot = ((StoreManagerSimulator)StoreManager.getInstance()).getStoreRoot();
+    com.zimbra.cs.store.StoreManager.getInstance().startup();
+    mStoreRoot = ((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).getStoreRoot();
   }
 
   private void initProvisioning() throws Exception
   {
-    Provisioning.setInstance(new MockProvisioning());
+    com.zimbra.cs.account.Provisioning.setInstance(new MockProvisioning());
 /* $if ZimbraVersion >= 8.0.0 $*/
     ZLdapFilterFactorySimulator.setInstance();
 /* $endif $*/
@@ -136,17 +134,17 @@ public class ZimbraSimulator
     HSQLZimbraDatabase.clearDatabase();
   }
 
-  public ZEProvisioning getProvisioning() throws Exception
+  public Provisioning getProvisioning() throws Exception
   {
-    return new ZEProvisioning(Provisioning.getInstance());
+    return new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
   }
 
-  public ZEMailboxManager getMailboxManager() throws Exception
+  public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
   {
-    return new ZEMailboxManager(MailboxManager.getInstance());
+    return new org.openzal.zal.MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
   }
 
-  public ZEStoreManager getStoreManager()
+  public StoreManager getStoreManager()
   {
     return mStoreManager;
   }

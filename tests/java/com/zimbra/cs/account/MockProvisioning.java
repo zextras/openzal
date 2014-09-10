@@ -2,10 +2,9 @@ package com.zimbra.cs.account;
 
 import java.util.UUID;
 
-import org.openzal.zal.ZEProvisioning;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 /**
- * Mock implementation of {@link org.openzal.zal.ZEProvisioning} for testing.
+ * Mock implementation of {@link org.openzal.zal.Provisioning} for testing.
  *
  * @author ysasaki
  * Zimbra Collaboration Suite Server
@@ -44,7 +43,7 @@ import com.zimbra.cs.account.auth.AuthContext;
 /* $endif $ */
 /* $endif $ */
 
-public final class MockProvisioning extends Provisioning
+public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 {
   public static final String DEFAULT_ACCOUNT_ID = new UUID(0L, 0L).toString();
 
@@ -87,7 +86,7 @@ public final class MockProvisioning extends Provisioning
     addMimeType("all", mime);
 
     HashMap<String, Object> zimbraAttrs = new HashMap<String, Object>();
-    zimbraAttrs.put(A_zimbraId, ZEProvisioning.ZIMBRA_USER_ID);
+    zimbraAttrs.put(A_zimbraId, org.openzal.zal.Provisioning.ZIMBRA_USER_ID);
     createAccount("zimbra", "", zimbraAttrs);
   }
 
@@ -999,7 +998,7 @@ $endif $
   {
     for( Account account : getAllAccounts(null))
     {
-      String serverName = account.getAttr(Provisioning.A_zimbraMailHost);
+      String serverName = account.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraMailHost);
       if (serverName != null && ! serverName.equals("localhost"))
       {
         continue;

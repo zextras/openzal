@@ -20,11 +20,10 @@
 
 package org.openzal.zal.lib;
 
-import com.zimbra.cs.mailbox.Mailbox;
 import org.openzal.zal.Connection;
-import org.openzal.zal.ZEItem;
-import org.openzal.zal.ZEMailbox;
-import org.openzal.zal.ZEVolume;
+import org.openzal.zal.Item;
+import org.openzal.zal.Mailbox;
+import org.openzal.zal.StoreVolume;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.exceptions.UnableToObtainDBConnectionException;
@@ -51,15 +50,15 @@ $endif$ */
 
 public class ZimbraDatabase
 {
-  public static List<ZEItem.ZEUnderlyingData> getByType(ZEMailbox mbox, byte type, SortBy sort) throws ZimbraException
+  public static List<Item.ZEUnderlyingData> getByType(Mailbox mbox, byte type, SortBy sort) throws ZimbraException
   {
     List<MailItem.UnderlyingData> list;
     try
     {
       list = DbMailItem.getByType(
-        mbox.toZimbra(Mailbox.class),
+        mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
   /* $if MajorZimbraVersion >= 8 $ */
-        ZEItem.convertType(MailItem.Type.class, type),
+        Item.convertType(MailItem.Type.class, type),
   /* $else$
         ZEItem.convertType(Byte.class, type),
   /* $endif$ */
@@ -73,10 +72,10 @@ public class ZimbraDatabase
 
     if( list != null )
     {
-      List<ZEItem.ZEUnderlyingData> newList = new ArrayList<ZEItem.ZEUnderlyingData>(list.size());
+      List<Item.ZEUnderlyingData> newList = new ArrayList<Item.ZEUnderlyingData>(list.size());
 
       for( MailItem.UnderlyingData item : list ){
-        newList.add( new ZEItem.ZEUnderlyingData(item) );
+        newList.add( new Item.ZEUnderlyingData(item) );
       }
       return newList;
     }
@@ -114,7 +113,7 @@ public class ZimbraDatabase
     }
   }
 
-  public static Object getSynchronizer( ZEMailbox mbox )
+  public static Object getSynchronizer( Mailbox mbox )
   {
 /* $if MajorZimbraVersion >= 8 $ */
     return new Object();
@@ -137,10 +136,10 @@ public class ZimbraDatabase
    $endif$ $ */
   }
 
-  public static int setMailboxId(PreparedStatement stmt, ZEMailbox mbox, int pos) throws SQLException
+  public static int setMailboxId(PreparedStatement stmt, Mailbox mbox, int pos) throws SQLException
   {
     return DbMailItem.setMailboxId(stmt,
-                                   mbox.toZimbra(Mailbox.class),
+                                   mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
                                    pos);
   }
 
@@ -229,27 +228,27 @@ public class ZimbraDatabase
   }
 
   public static class CurrentVolumes {
-    public short msgVolId          = ZEVolume.ID_NONE;
-    public short secondaryMsgVolId = ZEVolume.ID_NONE;
-    public short indexVolId        = ZEVolume.ID_NONE;
+    public short msgVolId          = StoreVolume.ID_NONE;
+    public short secondaryMsgVolId = StoreVolume.ID_NONE;
+    public short indexVolId        = StoreVolume.ID_NONE;
   }
 
-  public static String getItemTableName(ZEMailbox mbox)
+  public static String getItemTableName(Mailbox mbox)
   {
     return "mboxgroup" + mbox.getSchemaGroupId() + ".mail_item";
   }
 
-  public static String getCalendarTableName(ZEMailbox mbox)
+  public static String getCalendarTableName(Mailbox mbox)
   {
     return "mboxgroup" + mbox.getSchemaGroupId() + ".appointment";
   }
 
-  public static String getTombstoneTable(ZEMailbox mbox)
+  public static String getTombstoneTable(Mailbox mbox)
   {
     return "mboxgroup" + mbox.getSchemaGroupId() + ".tombstone";
   }
 
-  public static String getRevisionTableName(ZEMailbox mbox)
+  public static String getRevisionTableName(Mailbox mbox)
   {
     return "mboxgroup" + mbox.getSchemaGroupId() + ".revision";
   }

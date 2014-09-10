@@ -37,7 +37,7 @@ public class ZimbraItemId
     this(new ZimbraId(accountId), itemId);
   }
 
-  public ZimbraItemId(ZEMailbox mbox, int itemId)
+  public ZimbraItemId(Mailbox mbox, int itemId)
   {
     this(new ZimbraId(mbox.getAccountId()), itemId);
   }

@@ -20,32 +20,14 @@
 
 package org.openzal.zal;
 
-import org.openzal.zal.calendar.ZEInvite;
-import org.openzal.zal.soap.ZEElement;
+import org.openzal.zal.calendar.Invite;
+import org.openzal.zal.soap.SoapElement;
 import com.zimbra.common.soap.Element;
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.CalendarResource;
-import com.zimbra.cs.account.Cos;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DistributionList;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Identity;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Signature;
-import com.zimbra.cs.account.XMPPComponent;
-import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.mailbox.ACL;
-import com.zimbra.cs.mailbox.CalendarItem;
-import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.calendar.Invite;
-import com.zimbra.cs.mime.MPartInfo;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
-import com.zimbra.soap.admin.type.AccountQuotaInfo;
-import com.zimbra.cs.account.UCService;
 /* $else $
 import com.zimbra.cs.store.file.Volume;
 /* $endif $ */
@@ -59,172 +41,172 @@ import java.util.Set;
 
 public class ZimbraListWrapper
 {
-  protected static List<ZECos> wrapCoses(List<Cos> coses)
+  protected static List<Cos> wrapCoses(List<com.zimbra.cs.account.Cos> coses)
   {
     if (coses == null || coses.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZECos> list = new ArrayList<ZECos>(coses.size());
-    for (Cos cos : coses)
+    List<Cos> list = new ArrayList<Cos>(coses.size());
+    for (com.zimbra.cs.account.Cos cos : coses)
     {
-      list.add(new ZECos(cos));
+      list.add(new Cos(cos));
     }
 
     return list;
   }
 
-  protected static List<ZEDataSource> wrapDataSources(List<DataSource> dataSources)
+  protected static List<DataSource> wrapDataSources(List<com.zimbra.cs.account.DataSource> dataSources)
   {
     if (dataSources == null || dataSources.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEDataSource> list = new ArrayList<ZEDataSource>(dataSources.size());
-    for (DataSource dataSource : dataSources)
+    List<DataSource> list = new ArrayList<DataSource>(dataSources.size());
+    for (com.zimbra.cs.account.DataSource dataSource : dataSources)
     {
-      list.add(new ZEDataSource(dataSource));
+      list.add(new DataSource(dataSource));
     }
 
     return list;
   }
 
-  public static List<ZEIdentity> wrapIdentities(List<Identity> identities)
+  public static List<Identity> wrapIdentities(List<com.zimbra.cs.account.Identity> identities)
   {
     if (identities == null || identities.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEIdentity> list = new ArrayList<ZEIdentity>(identities.size());
-    for (Identity identity : identities)
+    List<Identity> list = new ArrayList<Identity>(identities.size());
+    for (com.zimbra.cs.account.Identity identity : identities)
     {
-      list.add(new ZEIdentity(identity));
+      list.add(new Identity(identity));
     }
 
     return list;
   }
 
-  public static List<ZEDistributionList> wrapDistributionLists(List<DistributionList> distributionLists)
+  public static List<DistributionList> wrapDistributionLists(List<com.zimbra.cs.account.DistributionList> distributionLists)
   {
     if (distributionLists == null || distributionLists.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEDistributionList> list = new ArrayList<ZEDistributionList>(distributionLists.size());
-    for (DistributionList distributionList : distributionLists)
+    List<DistributionList> list = new ArrayList<DistributionList>(distributionLists.size());
+    for (com.zimbra.cs.account.DistributionList distributionList : distributionLists)
     {
-      list.add(new ZEDistributionList(distributionList));
+      list.add(new DistributionList(distributionList));
     }
 
     return list;
   }
 
-  public static List<ZESignature> wrapSignatures(List<Signature> signatures)
+  public static List<Signature> wrapSignatures(List<com.zimbra.cs.account.Signature> signatures)
   {
     if (signatures == null || signatures.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZESignature> list = new ArrayList<ZESignature>(signatures.size());
-    for (Signature signature : signatures)
+    List<Signature> list = new ArrayList<Signature>(signatures.size());
+    for (com.zimbra.cs.account.Signature signature : signatures)
     {
-      list.add(new ZESignature(signature));
+      list.add(new Signature(signature));
     }
 
     return list;
   }
 
-  public static List<ZEAccount> wrapAccounts(List accounts)
+  public static List<Account> wrapAccounts(List accounts)
   {
     if (accounts == null || accounts.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEAccount> list = new ArrayList<ZEAccount>(accounts.size());
+    List<Account> list = new ArrayList<Account>(accounts.size());
     for (Object account : accounts)
     {
-      list.add(new ZEAccount((Account) account));
+      list.add(new Account((com.zimbra.cs.account.Account) account));
     }
 
     return list;
   }
 
-  public static List<ZEDomain> wrapDomain(List<Domain> domains)
+  public static List<Domain> wrapDomain(List<com.zimbra.cs.account.Domain> domains)
   {
     if (domains == null || domains.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEDomain> list = new ArrayList<ZEDomain>(domains.size());
-    for (Domain signature : domains)
+    List<Domain> list = new ArrayList<Domain>(domains.size());
+    for (com.zimbra.cs.account.Domain signature : domains)
     {
-      list.add(new ZEDomain(signature));
+      list.add(new Domain(signature));
     }
 
     return list;
   }
 
-  public static List<ZEServer> wrapServers(List<Server> servers)
+  public static List<Server> wrapServers(List<com.zimbra.cs.account.Server> servers)
   {
     if (servers == null || servers.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEServer> list = new ArrayList<ZEServer>(servers.size());
-    for (Server signature : servers)
+    List<Server> list = new ArrayList<Server>(servers.size());
+    for (com.zimbra.cs.account.Server signature : servers)
     {
-      list.add(new ZEServer(signature));
+      list.add(new Server(signature));
     }
 
     return list;
   }
 
-  public static List<ZECalendarResource> wrapCalendarResources(List calendarResources)
+  public static List<CalendarResource> wrapCalendarResources(List calendarResources)
   {
     if (calendarResources == null || calendarResources.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZECalendarResource> list = new ArrayList<ZECalendarResource>(calendarResources.size());
+    List<CalendarResource> list = new ArrayList<CalendarResource>(calendarResources.size());
     for (Object calendarResource : calendarResources)
     {
-      list.add(new ZECalendarResource((CalendarResource) calendarResource));
+      list.add(new CalendarResource((com.zimbra.cs.account.CalendarResource) calendarResource));
     }
 
     return list;
   }
 
-  public static List<ZEZimlet> wrapZimlets(List zimlets)
+  public static List<Zimlet> wrapZimlets(List zimlets)
   {
     if (zimlets == null || zimlets.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEZimlet> list = new ArrayList<ZEZimlet>(zimlets.size());
+    List<Zimlet> list = new ArrayList<Zimlet>(zimlets.size());
     for (Object calendarResource : zimlets)
     {
-      list.add(new ZEZimlet((Zimlet) calendarResource));
+      list.add(new Zimlet((com.zimbra.cs.account.Zimlet) calendarResource));
     }
 
     return list;
   }
 
-  public static List<ZEXMPPComponent> wrapXmppComponents(List<XMPPComponent> xmppComponents)
+  public static List<XMPPComponent> wrapXmppComponents(List<com.zimbra.cs.account.XMPPComponent> xmppComponents)
   {
     if (xmppComponents == null || xmppComponents.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEXMPPComponent> list = new ArrayList<ZEXMPPComponent>(xmppComponents.size());
-    for (XMPPComponent xmppComponent : xmppComponents)
+    List<XMPPComponent> list = new ArrayList<XMPPComponent>(xmppComponents.size());
+    for (com.zimbra.cs.account.XMPPComponent xmppComponent : xmppComponents)
     {
-      list.add(new ZEXMPPComponent(xmppComponent));
+      list.add(new XMPPComponent(xmppComponent));
     }
 
     return list;
   }
 
-  public static List<ZEUCService> wrapUCServices(List ucServices)
+  public static List<UCService> wrapUCServices(List ucServices)
   {
 /* $if ZimbraVersion >= 8.0.0 $ */
     if (ucServices == null || ucServices.size() == 0)
@@ -232,10 +214,10 @@ public class ZimbraListWrapper
       return Collections.emptyList();
     }
 
-    List<ZEUCService> list = new ArrayList<ZEUCService>(ucServices.size());
+    List<UCService> list = new ArrayList<UCService>(ucServices.size());
     for (Object ucService : ucServices)
     {
-      list.add(new ZEUCService(ucService));
+      list.add(new UCService(ucService));
     }
 
     return list;
@@ -245,59 +227,59 @@ public class ZimbraListWrapper
   }
 
 
-  public static List<ZEMPartInfo> wrapMPartInfos(List<MPartInfo> mPartInfos)
+  public static List<MPartInfo> wrapMPartInfos(List<com.zimbra.cs.mime.MPartInfo> mPartInfos)
   {
     if (mPartInfos == null || mPartInfos.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEMPartInfo> list = new ArrayList<ZEMPartInfo>(mPartInfos.size());
-    for (MPartInfo mPartInfo : mPartInfos)
+    List<MPartInfo> list = new ArrayList<MPartInfo>(mPartInfos.size());
+    for (com.zimbra.cs.mime.MPartInfo mPartInfo : mPartInfos)
     {
-      list.add(new ZEMPartInfo(mPartInfo));
+      list.add(new MPartInfo(mPartInfo));
     }
 
     return list;
   }
 
-  public static List<ZEContact.ContactAttachment> wrapAttachments(List<Contact.Attachment> attachments)
+  public static List<Contact.ContactAttachment> wrapAttachments(List<com.zimbra.cs.mailbox.Contact.Attachment> attachments)
   {
     if (attachments == null || attachments.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEContact.ContactAttachment> list = new ArrayList<ZEContact.ContactAttachment>();
+    List<Contact.ContactAttachment> list = new ArrayList<Contact.ContactAttachment>();
 
-    for (Contact.Attachment attachment : attachments)
+    for (com.zimbra.cs.mailbox.Contact.Attachment attachment : attachments)
     {
-      list.add(new ZEContact.ContactAttachment(attachment));
+      list.add(new Contact.ContactAttachment(attachment));
     }
     return list;
   }
 
-  public static List<ZEProvisioning.ZECountAccountByCos> wrapCountAccountByCosList(
-    List<Provisioning.CountAccountResult.CountAccountByCos> countAccountByCosList
+  public static List<Provisioning.CountAccountByCos> wrapCountAccountByCosList(
+    List<com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos> countAccountByCosList
   )
   {
     if (countAccountByCosList == null || countAccountByCosList.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEProvisioning.ZECountAccountByCos> list =
-      new ArrayList<ZEProvisioning.ZECountAccountByCos>(countAccountByCosList.size());
+    List<Provisioning.CountAccountByCos> list =
+      new ArrayList<Provisioning.CountAccountByCos>(countAccountByCosList.size());
 
-    for (Provisioning.CountAccountResult.CountAccountByCos countAccountByCos : countAccountByCosList)
+    for (com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos countAccountByCos : countAccountByCosList)
     {
-      list.add(new ZEProvisioning.ZECountAccountByCos(countAccountByCos));
+      list.add(new Provisioning.CountAccountByCos(countAccountByCos));
     }
 
     return list;
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
-  public static List<ZEAccountQuotaInfo> wrapAccountQuotaInfos(List<AccountQuotaInfo> accountQuotas)
+  public static List<AccountQuotaInfo> wrapAccountQuotaInfos(List<com.zimbra.soap.admin.type.AccountQuotaInfo> accountQuotas)
   /* $else $
-  public static List<ZEAccountQuotaInfo> wrapAccountQuotaInfos(List<Object> accountQuotas)
+  public static List<AccountQuotaInfo> wrapAccountQuotaInfos(List<Object> accountQuotas)
   /* $endif $ */
   {
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -306,12 +288,12 @@ public class ZimbraListWrapper
       return Collections.emptyList();
     }
 
-    List<ZEAccountQuotaInfo> list =
-      new ArrayList<ZEAccountQuotaInfo>(accountQuotas.size());
+    List<AccountQuotaInfo> list =
+      new ArrayList<AccountQuotaInfo>(accountQuotas.size());
 
-    for (AccountQuotaInfo accountQuota : accountQuotas)
+    for (com.zimbra.soap.admin.type.AccountQuotaInfo accountQuota : accountQuotas)
     {
-      list.add(new ZEAccountQuotaInfo(
+      list.add(new AccountQuotaInfo(
         accountQuota.getId(),
         accountQuota.getName(),
         accountQuota.getQuotaLimit(),
@@ -325,113 +307,113 @@ public class ZimbraListWrapper
     /* $endif $ */
   }
 
-  public static List<ZEElement> wrapElements(List<Element> elements)
+  public static List<SoapElement> wrapElements(List<Element> elements)
   {
     if (elements == null || elements.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEElement> list =
-      new ArrayList<ZEElement>(elements.size());
+    List<SoapElement> list =
+      new ArrayList<SoapElement>(elements.size());
 
     for (Element element : elements)
     {
-      list.add(new ZEElement(element));
+      list.add(new SoapElement(element));
     }
 
     return list;
   }
 
-  public static Collection<ZEQuotaUsage> wrapQuotaUsages(List<SoapProvisioning.QuotaUsage> quotaUsages)
+  public static Collection<QuotaUsage> wrapQuotaUsages(List<SoapProvisioning.QuotaUsage> quotaUsages)
   {
     if (quotaUsages == null || quotaUsages.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZEQuotaUsage> list =
-      new ArrayList<ZEQuotaUsage>(quotaUsages.size());
+    List<QuotaUsage> list =
+      new ArrayList<QuotaUsage>(quotaUsages.size());
 
     for (SoapProvisioning.QuotaUsage quotaUsage : quotaUsages)
     {
-      list.add(new ZEQuotaUsage(quotaUsage));
+      list.add(new QuotaUsage(quotaUsage));
     }
 
     return list;
   }
 
-  public static Set<ZEACE> wrapACEs(Set<RightCommand.ACE> aces)
+  public static Set<ACE> wrapACEs(Set<RightCommand.ACE> aces)
   {
     if (aces == null || aces.size() == 0)
     {
       return Collections.emptySet();
     }
-    Set<ZEACE> set = new HashSet<ZEACE>();
+    Set<ACE> set = new HashSet<ACE>();
 
     for (RightCommand.ACE ace : aces)
     {
-      set.add(new ZEACE(ace));
+      set.add(new ACE(ace));
     }
 
     return set;
   }
 
-  public static List<ZECalendarItem> wrapCalendarItems(List<CalendarItem> zimbraCalendarItems)
+  public static List<CalendarItem> wrapCalendarItems(List<com.zimbra.cs.mailbox.CalendarItem> zimbraCalendarItems)
   {
     if (zimbraCalendarItems == null || zimbraCalendarItems.size() == 0)
     {
       return Collections.emptyList();
     }
-    List<ZECalendarItem> list = new ArrayList<ZECalendarItem>();
+    List<CalendarItem> list = new ArrayList<CalendarItem>();
 
-    for (CalendarItem calendarItem : zimbraCalendarItems)
+    for (com.zimbra.cs.mailbox.CalendarItem calendarItem : zimbraCalendarItems)
     {
-      list.add(new ZECalendarItem(calendarItem));
+      list.add(new CalendarItem(calendarItem));
     }
 
     return list;
   }
 
-  public static List<ZEGrant> wrapGrants(List<ACL.Grant> grants)
+  public static List<Grant> wrapGrants(List<ACL.Grant> grants)
   {
     if (grants == null || grants.size() == 0)
     {
       return Collections.emptyList();
     }
 
-    List<ZEGrant> grantList = new ArrayList<ZEGrant>();
+    List<Grant> grantList = new ArrayList<Grant>();
     for (ACL.Grant grant : grants)
     {
-      grantList.add(new ZEGrant(grant));
+      grantList.add(new Grant(grant));
     }
     return grantList;
   }
 
-  public static List<ZEVolume> wrapVolumes(List<Volume> list)
+  public static List<StoreVolume> wrapVolumes(List<Volume> list)
   {
     if (list == null || list.size() == 0)
     {
       return Collections.emptyList();
     }
 
-    List<ZEVolume> newList = new ArrayList<ZEVolume>(list.size());
+    List<StoreVolume> newList = new ArrayList<StoreVolume>(list.size());
     for( Volume vol : list )
     {
-      newList.add(new ZEVolume(vol));
+      newList.add(new StoreVolume(vol));
     }
     return newList;
   }
 
-  public static List<ZEInvite> wrapInvites(List<Invite> inviteList)
+  public static List<Invite> wrapInvites(List<com.zimbra.cs.mailbox.calendar.Invite> inviteList)
   {
     if (inviteList == null || inviteList.size() == 0)
     {
       return Collections.emptyList();
     }
 
-    List<ZEInvite> newList = new ArrayList<ZEInvite>(inviteList.size());
-    for( Invite invite : inviteList )
+    List<Invite> newList = new ArrayList<Invite>(inviteList.size());
+    for( com.zimbra.cs.mailbox.calendar.Invite invite : inviteList )
     {
-      newList.add(new ZEInvite(invite));
+      newList.add(new Invite(invite));
     }
     return newList;
   }

@@ -1,6 +1,6 @@
 package java.org.openzal.zal;
 
-import org.openzal.zal.ZEMailbox;
+import org.openzal.zal.Mailbox;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class ZimbraDatabaseTest
     );
 /*$endif $*/
 
-    ZEMailbox mbox = Mockito.mock(ZEMailbox.class);
+    Mailbox mbox = Mockito.mock(Mailbox.class);
     when( mbox.getSchemaGroupId() ).thenReturn(32);
     String zextrasTableName = ZimbraDatabase.getItemTableName(mbox);
 
@@ -64,7 +64,7 @@ public class ZimbraDatabaseTest
     );
 
 
-    ZEMailbox mbox = Mockito.mock(ZEMailbox.class);
+    Mailbox mbox = Mockito.mock(Mailbox.class);
     when( mbox.getSchemaGroupId() ).thenReturn(32);
     String zextrasTableName = ZimbraDatabase.getTombstoneTable(mbox);
 
@@ -98,7 +98,7 @@ public class ZimbraDatabaseTest
     );
 /*$endif $*/
 
-    ZEMailbox mbox = Mockito.mock(ZEMailbox.class);
+    Mailbox mbox = Mockito.mock(Mailbox.class);
     when( mbox.getSchemaGroupId() ).thenReturn(32);
     String zextrasTableName = ZimbraDatabase.getRevisionTableName(mbox);
 

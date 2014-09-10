@@ -21,9 +21,8 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
-import org.openzal.zal.ZEItem;
-import org.openzal.zal.ZEMailItemType;
-import org.openzal.zal.ZEMailbox;
+import org.openzal.zal.Item;
+import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.lib.ActualClock;
 import org.openzal.zal.lib.Clock;
@@ -45,7 +44,7 @@ import java.util.*;
 public class InviteFactory
 {
   private       String             mMethod;
-  private       ZETimeZoneMap      mTimeZoneMap;
+  private       MapTimeZone        mTimeZoneMap;
   private       String             mUid;
   private       GlobalInviteStatus mStatus;
   private       Priority           mPriority;
@@ -66,14 +65,14 @@ public class InviteFactory
   private       String             mDescriptionHtml;
   private       long               mLastModifyTimeUtc;
   private       int                mSequence;
-  private       ZEIcalTimezone     mTimezone;
+  private       ICalendarTimezone  mTimezone;
   private       boolean            mAlarmSet;
   private       int                mAlarmTime;
   private       long               mReminderTime;
   private       MimeMessage        mMimeMessage;
   private       boolean            mHasAttachment;
   private final Clock              mClock;
-  private       ZERecurrenceRule   mRecurrenceRule;
+  private       RecurrenceRule     mRecurrenceRule;
 
   public InviteFactory()
   {
@@ -82,12 +81,12 @@ public class InviteFactory
     mClock = new ActualClock();
   }
 
-  public ZEInvite createTask(ZEMailbox mbox)
+  public Invite createTask(Mailbox mbox)
   {
     return createInvite(mbox, true);
   }
 
-  public ZEInvite createAppointment(ZEMailbox mbox)
+  public Invite createAppointment(Mailbox mbox)
   {
     return createInvite(mbox, false);
   }
@@ -102,12 +101,12 @@ public class InviteFactory
     mMethod = ZCalendar.ICalTok.CANCEL.toString();
   }
 
-  public void setTimezoneMap(ZETimeZoneMap timeZoneMap)
+  public void setTimezoneMap(MapTimeZone timeZoneMap)
   {
     mTimeZoneMap = timeZoneMap;
   }
 
-  public void setTimezone(ZEIcalTimezone timezone)
+  public void setTimezone(ICalendarTimezone timezone)
   {
     mTimezone = timezone;
   }
@@ -147,7 +146,7 @@ public class InviteFactory
     mSensitivity = sensitivity;
   }
 
-  public void setAllDayEvent( boolean allDayEvent )
+  public void setAllDayEvent(boolean allDayEvent)
   {
     mAllDayEvent = allDayEvent;
   }
@@ -226,7 +225,7 @@ public class InviteFactory
     mMimeMessage = mimeMessage;
   }
 
-  public void populateFactoryFromExistingInvite( ZEInvite invite )
+  public void populateFactoryFromExistingInvite( Invite invite )
   {
     mStatus = invite.getStatus();
     mHasAttachment = invite.hasAttachment();
@@ -273,9 +272,9 @@ public class InviteFactory
   }
 
 
-  private ZEInvite createInvite(ZEMailbox mbox, boolean task)
+  private Invite createInvite(Mailbox mbox, boolean task)
   {
-    byte type = (task ? ZEItem.TYPE_TASK : ZEItem.TYPE_APPOINTMENT);
+    byte type = (task ? Item.TYPE_TASK : Item.TYPE_APPOINTMENT);
 
     RecurId recurId = null;
     if(mExceptionStartTime != 0L)
@@ -333,52 +332,52 @@ public class InviteFactory
 
     setTypeRequest();
 
-    Invite invite = Invite.createInvite(
+    com.zimbra.cs.mailbox.calendar.Invite invite = com.zimbra.cs.mailbox.calendar.Invite.createInvite(
       mbox.getId(),
   /* $if MajorZimbraVersion >= 8 $ */
-      ZEItem.convertType(MailItem.Type.class, type),
+  Item.convertType(MailItem.Type.class, type),
   /* $else$
       ZEItem.convertType(Byte.class, type),
   /* $endif$ */
-      mMethod,
-      mTimeZoneMap.toZimbra(TimeZoneMap.class),
-      mUid,
-      mStatus.getRawStatus(),
-      mPriority.getRawPriority(),
-      String.valueOf(mPercentage),
-      mCompletedTime,
-      mFreeBusyStatus.getRawFreeBusyStatus(),
-      IcalXmlStrMap.TRANSP_OPAQUE,
-      mSensitivity.getRawSensitivity(),
-      mAllDayEvent,
-      dateStart,
-      dateEnd,
-      null,
-      null,
-      mainRecurrenceRule,
-      isOrganizer,
-      organizer,
-      zAttendeeList,
-      mSubject,
-      mLocation,
-      mDescription,
-      mDescriptionHtml,
-      null,
-      null,
-      null,
-      null,
-      null,
-      mLastModifyTimeUtc,
+  mMethod,
+  mTimeZoneMap.toZimbra(TimeZoneMap.class),
+  mUid,
+  mStatus.getRawStatus(),
+  mPriority.getRawPriority(),
+  String.valueOf(mPercentage),
+  mCompletedTime,
+  mFreeBusyStatus.getRawFreeBusyStatus(),
+  IcalXmlStrMap.TRANSP_OPAQUE,
+  mSensitivity.getRawSensitivity(),
+  mAllDayEvent,
+  dateStart,
+  dateEnd,
+  null,
+  null,
+  mainRecurrenceRule,
+  isOrganizer,
+  organizer,
+  zAttendeeList,
+  mSubject,
+  mLocation,
+  mDescription,
+  mDescriptionHtml,
+  null,
+  null,
+  null,
+  null,
+  null,
+  mLastModifyTimeUtc,
 /* $if ZimbraVersion >= 7.0.1 $ */
-      mLastModifyTimeUtc,
+mLastModifyTimeUtc,
 /* $endif$ */
-      mSequence,
+mSequence,
 /* $if ZimbraVersion > 8.0.1 |! ZimbraVersion > 7.2.3  && ZimbraVersion != 8.0.0 && ZimbraVersion != 8.0.1 $ */
-      mSequence,
+mSequence,
 /* $endif$ */
-      AttendeeInviteStatus.TENTATIVE.getRawStatus(),
-      true,
-      true
+AttendeeInviteStatus.TENTATIVE.getRawStatus(),
+true,
+true
     );
 
 
@@ -407,15 +406,15 @@ public class InviteFactory
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
-      return new ZEInvite(invite, mMimeMessage);
+      return new Invite(invite, mMimeMessage);
     }
     else
     {
-      return new ZEInvite(invite);
+      return new Invite(invite);
     }
   }
 
-  public void setRecurrenceRule(ZERecurrenceRule recurrenceRule)
+  public void setRecurrenceRule(RecurrenceRule recurrenceRule)
   {
     mRecurrenceRule = recurrenceRule;
   }
