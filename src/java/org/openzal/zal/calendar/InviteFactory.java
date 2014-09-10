@@ -278,7 +278,7 @@ public class InviteFactory
   {
     byte type = (task ? ZEItem.TYPE_TASK : ZEItem.TYPE_APPOINTMENT);
 
-    RecurId recurId = null;
+    RecurId recurId;
     if(mExceptionStartTime != 0L)
     {
       recurId = new RecurId(
@@ -288,10 +288,7 @@ public class InviteFactory
     }
     else
     {
-      recurId = new RecurId(
-          ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class)),
-          RecurId.RANGE_NONE
-      );
+      recurId = null;
     }
 
     boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
@@ -362,7 +359,7 @@ public class InviteFactory
       dateStart,
       dateEnd,
       null,
-      null,
+      recurId,
       mainRecurrenceRule,
       isOrganizer,
       organizer,
