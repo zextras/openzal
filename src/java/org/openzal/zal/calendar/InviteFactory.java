@@ -279,6 +279,22 @@ public class InviteFactory
   {
     byte type = (task ? ZEItem.TYPE_TASK : ZEItem.TYPE_APPOINTMENT);
 
+<<<<<<< HEAD
+=======
+    RecurId recurId;
+    if(mExceptionStartTime != 0L)
+    {
+      recurId = new RecurId(
+        ParsedDateTime.fromUTCTime(mExceptionStartTime, mTimezone.toZimbra(ICalTimeZone.class)),
+        RecurId.RANGE_NONE
+      );
+    }
+    else
+    {
+      recurId = null;
+    }
+
+>>>>>>> release/1.9.0
     boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
     ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
 
@@ -347,7 +363,7 @@ public class InviteFactory
       dateStart,
       dateEnd,
       null,
-      null,
+      recurId,
       mainRecurrenceRule,
       isOrganizer,
       organizer,
