@@ -8,15 +8,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.*;
 
-public class ZEMailboxSessionProxyTest
+public class MailboxSessionProxyTest
 {
   @Test
   public void add_listener_to_map()
   {
     CopyOnWriteArrayList<Session> listeners = new CopyOnWriteArrayList<Session>();
 
-    ZEListener listener = Mockito.mock(ZEListener.class);
-    ZEMailboxSessionProxy sessionProxy = new ZEMailboxSessionProxy(1, "listener", "accountId", listener);
+    Listener listener = Mockito.mock(Listener.class);
+    MailboxSessionProxy sessionProxy = new MailboxSessionProxy(1, "listener", "accountId", listener);
 
     listeners.add(sessionProxy.toZimbra(Session.class));
 
@@ -29,8 +29,8 @@ public class ZEMailboxSessionProxyTest
   {
     CopyOnWriteArrayList<Session> listeners = new CopyOnWriteArrayList<Session>();
 
-    ZEListener listener = Mockito.mock(ZEListener.class);
-    ZEMailboxSessionProxy sessionProxy = new ZEMailboxSessionProxy(1, "listener", "accountId", listener);
+    Listener listener = Mockito.mock(Listener.class);
+    MailboxSessionProxy sessionProxy = new MailboxSessionProxy(1, "listener", "accountId", listener);
 
     listeners.add(sessionProxy.toZimbra(Session.class));
 
@@ -44,7 +44,7 @@ public class ZEMailboxSessionProxyTest
     }
     assertNotNull("Map should contain a Session with getSessionId() = \"listener\"", listenerObject);
 
-    listeners.remove(new ZEMailboxSessionProxy(listenerObject).toZimbra(Session.class));
+    listeners.remove(new MailboxSessionProxy(listenerObject).toZimbra(Session.class));
 
     assertEquals(0, listeners.size());
   }
