@@ -20,35 +20,30 @@
 
 package org.openzal.zal.extension;
 
-import org.openzal.zal.Utils;
-import org.openzal.zal.ZEMailboxManager;
-import org.openzal.zal.ZEProvisioning;
-import org.openzal.zal.ZEStoreManager;
-import org.openzal.zal.ZEStoreManagerImp;
+import org.openzal.zal.*;
+import org.openzal.zal.MailboxManager;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.extension.ExtensionUtil;
 import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.mailbox.MailboxManager;
 
 import java.lang.reflect.Field;
 
 public class Zimbra
 {
-  private final ZEProvisioning   mProvisioning;
-  private final ZEMailboxManager mMailboxManager;
-  private final ZimbraDatabase   mZimbraDatabase;
-  private final ZEStoreManager   mStoreManager;
+  private final Provisioning   mProvisioning;
+  private final MailboxManager mMailboxManager;
+  private final ZimbraDatabase mZimbraDatabase;
+  private final StoreManager   mStoreManager;
 
   Zimbra()
   {
     try
     {
-      mProvisioning = new ZEProvisioning(Provisioning.getInstance());
-      mMailboxManager = new ZEMailboxManager(MailboxManager.getInstance());
+      mProvisioning = new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
+      mMailboxManager = new MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
-      mStoreManager = new ZEStoreManagerImp();
+      mStoreManager = new StoreManagerImp();
     }
     catch (Exception ex)
     {
@@ -67,17 +62,17 @@ public class Zimbra
     }
     catch (Throwable ex)
     {
-      ZimbraLog.extensions.fatal("ZeXtras Reflection Initialization Exception: "+ Utils.exceptionToString(ex));
+      ZimbraLog.extensions.fatal("ZeXtras Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       return false;
     }
   }
 
-  public ZEProvisioning getProvisioning()
+  public Provisioning getProvisioning()
   {
     return mProvisioning;
   }
 
-  public ZEMailboxManager getMailboxManager()
+  public MailboxManager getMailboxManager()
   {
     return mMailboxManager;
   }
@@ -87,7 +82,7 @@ public class Zimbra
     return mZimbraDatabase;
   }
 
-  public ZEStoreManager getStoreManager()
+  public StoreManager getStoreManager()
   {
     return mStoreManager;
   }

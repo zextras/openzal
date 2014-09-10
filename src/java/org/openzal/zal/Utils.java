@@ -20,19 +20,13 @@
 
 package org.openzal.zal;
 
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Zimlet;
-import com.zimbra.cs.zimlet.ZimletFile;
-import org.openzal.zal.calendar.ZEIcalTimezone;
-import org.openzal.zal.calendar.ZEInvite;
-import org.openzal.zal.calendar.ZEWindowsSystemTime;
+import org.openzal.zal.calendar.ICalendarTimezone;
+import org.openzal.zal.calendar.Invite;
+import org.openzal.zal.calendar.WinSystemTime;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.common.calendar.WellKnownTimeZones;
-import com.zimbra.common.calendar.ZCalendar;
 /* $else $
 import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
 import com.zimbra.cs.mailbox.calendar.ZCalendar;
@@ -49,7 +43,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MessageCache;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
-import com.zimbra.cs.mailbox.calendar.Invite;
 import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
@@ -57,7 +50,6 @@ import com.zimbra.cs.zimlet.ZimletUtil;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.MimeBodyPart;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -121,22 +113,22 @@ public abstract class Utils
     return BEncoding.encode(attrs);
   }
 
-  public static List<ZEZimlet> orderZimletsByPriority(List<ZEZimlet> zimlets)
+  public static List<Zimlet> orderZimletsByPriority(List<Zimlet> zimlets)
   {
-    for (ZEZimlet zimlet : zimlets)
+    for (Zimlet zimlet : zimlets)
     {
       zimlet.getPriority();
     }
     return null;
   }
 
-  public static String getPublicURLForDomain(ZEServer server, ZEDomain domain, String path)
+  public static String getPublicURLForDomain(Server server, Domain domain, String path)
   {
     try
     {
       return URLUtil.getPublicURLForDomain(
-        server.toZimbra(Server.class),
-        domain.toZimbra(Domain.class),
+        server.toZimbra(com.zimbra.cs.account.Server.class),
+        domain.toZimbra(com.zimbra.cs.account.Domain.class),
         path,
         true
       );
@@ -166,7 +158,7 @@ public abstract class Utils
     StringUtil.addToMultiMap(result, name, value);
   }
 
-  public static void deployZimlet(ZEProvisioning provisioning, ZEZimletFile zimlet) throws IOException
+  public static void deployZimlet(Provisioning provisioning, ZimletFile zimlet) throws IOException
   {
     try
     {
@@ -179,15 +171,15 @@ public abstract class Utils
    $endif$ */
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-      provisioning.flushCache(ZECacheEntryType.zimlet, null);
-      ZimletUtil.deployZimletLocally(zimlet.toZimbra(ZimletFile.class));
+      provisioning.flushCache(CacheEntryType.zimlet, null);
+      ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
 
       ZimletUtil.ZimletSoapUtil zimletSoapUtil = new ZimletUtil.ZimletSoapUtil();
-      for (ZEServer server : provisioning.getAllServers())
+      for (Server server : provisioning.getAllServers())
       {
-          if (!server.toZimbra(Server.class).isLocalServer()) {
+          if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer()) {
             zimletSoapUtil.deployZimletRemotely(
-              server.toZimbra(Server.class),
+              server.toZimbra(com.zimbra.cs.account.Server.class),
               zimlet.getName(),
               zimlet.getZimletContent(),
               null,
@@ -241,11 +233,12 @@ public abstract class Utils
     }
   }
 
-  public static void setDefaultAlarm(ZEInvite invite, ZEAccount account)
+  public static void setDefaultAlarm(Invite invite, Account account)
   {
     try
     {
-      Invite.setDefaultAlarm(invite.toZimbra(Invite.class), account.toZimbra(Account.class));
+      com.zimbra.cs.mailbox.calendar.Invite.setDefaultAlarm(invite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class),
+                                                            account.toZimbra(com.zimbra.cs.account.Account.class));
     }
     catch (ServiceException e)
     {
@@ -253,7 +246,7 @@ public abstract class Utils
     }
   }
 
-  public static ZEWindowsSystemTime windowsSystemTimeFromSimpleOnset(ZEIcalTimezone.ZESimpleOnset simpleOnset)
+  public static WinSystemTime windowsSystemTimeFromSimpleOnset(ICalendarTimezone.SimpleOnset simpleOnset)
   {
     ICalTimeZone.SimpleOnset zimbraSimpleOnSet;
     if (simpleOnset == null)
@@ -271,7 +264,7 @@ public abstract class Utils
       return null;
     }
 
-    return new ZEWindowsSystemTime(WindowsSystemTime.fromSimpleOnset(zimbraSimpleOnSet));
+    return new WinSystemTime(WindowsSystemTime.fromSimpleOnset(zimbraSimpleOnSet));
   }
 
   public static void loadTimeZonesFromFile(File tzFile) throws IOException

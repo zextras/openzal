@@ -20,8 +20,6 @@
 
 package org.openzal.zal;
 
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Domain;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.util.JMSession;
@@ -37,11 +35,11 @@ import java.util.Set;
 
 public class MailSession
 {
-  public static Session getSmtpSession(@Nullable ZEAccount account) throws MessagingException
+  public static Session getSmtpSession(@Nullable Account account) throws MessagingException
   {
     if (account != null)
     {
-      return JMSession.getSmtpSession(account.toZimbra(Account.class));
+      return JMSession.getSmtpSession(account.toZimbra(com.zimbra.cs.account.Account.class));
     }
     else
     {
@@ -61,16 +59,16 @@ public class MailSession
     }
   }
 
-  public static List<String> getSmtpHosts(@Nullable ZEDomain domain)
+  public static List<String> getSmtpHosts(@Nullable Domain domain)
   {
     try
     {
       if (domain != null)
       {
         /* $if ZimbraVersion >= 8.0.0 $ */
-        return JMSession.getSmtpHosts(domain.toZimbra(Domain.class));
+        return JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class));
         /* $else $
-        return new ArrayList<String>(JMSession.getSmtpHosts(domain.toZimbra(Domain.class)));
+        return new ArrayList<String>(JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class)));
         /* $endif $ */
       }
       else

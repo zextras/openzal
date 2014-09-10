@@ -1,8 +1,6 @@
 package org.openzal.zal.soap;
 
 import org.openzal.zal.Continuation;
-import org.junit.Ignore;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;

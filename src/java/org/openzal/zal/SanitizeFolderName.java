@@ -28,36 +28,41 @@ import java.util.List;
 
 public class SanitizeFolderName
 {
-  private final ZEMailbox mMbox;
-  private final int mParentId;
-  private final String mName;
-  private final String DEFAULT_FOLDER_NAME = "New Folder";
-  private final List<String> RESERVED_NAMES = Arrays.asList(".", "..");
-  private final String INVALID_CHARS = "[:/\"]";
-  private final int MAX_LENGHT = 255;
+  private final Mailbox mMbox;
+  private final int     mParentId;
+  private final String  mName;
+  private final String       DEFAULT_FOLDER_NAME = "New Folder";
+  private final List<String> RESERVED_NAMES      = Arrays.asList(".", "..");
+  private final String       INVALID_CHARS       = "[:/\"]";
+  private final int          MAX_LENGHT          = 255;
 
-  public SanitizeFolderName(ZEMailbox mbox, String name, int parentId) {
+  public SanitizeFolderName(Mailbox mbox, String name, int parentId)
+  {
     mName = name;
     mMbox = mbox;
     mParentId = parentId;
   }
 
-  public String getOriginalName() {
+  public String getOriginalName()
+  {
     return mName;
   }
 
-  public String sanitizeName(ZEOperationContext zcontext) throws InternalServerException
+  public String sanitizeName(OperationContext zcontext)
+    throws InternalServerException
   {
     String sanitize = trimControlChars(mName);
     sanitize = sanitize.replaceAll(INVALID_CHARS, "");
 
     // Check length after sanitization
-    if (sanitize.length() > MAX_LENGHT) {
+    if (sanitize.length() > MAX_LENGHT)
+    {
       sanitize = sanitize.substring(0, MAX_LENGHT);
     }
 
     // Check if is empty or is a reserved name
-    if (sanitize.isEmpty() || RESERVED_NAMES.contains(sanitize)) {
+    if (sanitize.isEmpty() || RESERVED_NAMES.contains(sanitize))
+    {
       sanitize = DEFAULT_FOLDER_NAME;
     }
 
@@ -66,7 +71,7 @@ public class SanitizeFolderName
     return sanitize;
   }
 
-  private String checkExistanceInMailbox(ZEOperationContext zcontext, String folderName, int start)
+  private String checkExistanceInMailbox(OperationContext zcontext, String folderName, int start)
     throws UnableToSanitizeFolderNameException
   {
     String tmpFolderName = folderName;
