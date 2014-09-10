@@ -1,7 +1,5 @@
 package org.openzal.zal.soap;
 
-import org.junit.Ignore;
-
 import java.util.HashMap;
 
 public class SoapResponseSimple implements SoapResponse

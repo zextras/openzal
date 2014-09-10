@@ -63,7 +63,12 @@ public class ZEAttributeInfo
   {
     try
     {
-      return new ZEAttributeInfo(AttributeManager.getInstance().getAttributeInfo(key));
+      AttributeInfo attributeInfo = AttributeManager.getInstance().getAttributeInfo(key);
+      if (attributeInfo == null)
+      {
+        return null;
+      }
+      return new ZEAttributeInfo(attributeInfo);
     }
     catch (ServiceException e)
     {

@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,12 @@ public class ZEFolder extends ZEItem
 
   public ZEAcl getACL()
   {
-    return new ZEAcl(((Folder) mMailItem).getACL());
+    ACL acl = ((Folder) mMailItem).getACL();
+    if (acl == null)
+    {
+      return null;
+    }
+    return new ZEAcl(acl);
   }
 
   public String getUrl()

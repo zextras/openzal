@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.account.Account;
+import org.openzal.zal.Utils;
 import org.openzal.zal.ZEAccount;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -28,7 +29,9 @@ import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.service.ServiceException;
 
 import javax.mail.internet.MimeMessage;
+import java.lang.reflect.Field;
 import java.util.*;
+import org.openzal.zal.log.ZimbraLog;
 
 import com.zimbra.cs.mailbox.calendar.*;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +46,9 @@ import com.zimbra.common.calendar.*;
 
 public class ZEInvite
 {
+  private static String TRIGGER_TYPE_FIELD = "mTriggerType";
+  private static String TRIGGER_RELATED_FIELD = "mTriggerRelated";
+
   public MimeMessage getAttachment()
   {
     return mMimeMessage;
@@ -50,6 +56,23 @@ public class ZEInvite
 
   private final MimeMessage mMimeMessage;
   private final Invite      mInvite;
+
+  private static Field sTriggerTypeField = null;
+  private static Field sTriggerRelatedField = null;
+  static
+  {
+    try
+    {
+      sTriggerTypeField = Alarm.class.getDeclaredField(TRIGGER_TYPE_FIELD);
+      sTriggerRelatedField = Alarm.class.getDeclaredField(TRIGGER_RELATED_FIELD);
+
+      sTriggerTypeField.setAccessible(true);
+      sTriggerRelatedField.setAccessible(true);
+    }
+    catch( Throwable ex ){
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+    }
+  }
 
   public ZEInvite(Object invite)
   {
@@ -113,7 +136,59 @@ public class ZEInvite
 
   public boolean hasAlarm()
   {
-    return getDisplayAlarm() != null;
+    if (mInvite.hasAlarm())
+    {
+      Alarm alarm = getDisplayAlarm();
+
+      if (alarm != null)
+      {
+        Alarm.TriggerType triggerType = getTriggerType(alarm);
+        if (Alarm.TriggerType.ABSOLUTE.equals(triggerType))
+        {
+          return true;
+        }
+
+        Alarm.TriggerRelated triggerRelated = getTriggerRelated(alarm);
+        if (Alarm.TriggerType.RELATIVE.equals(triggerType))
+        {
+          if (Alarm.TriggerRelated.START.equals(triggerRelated))
+          {
+            return hasStartTime();
+          }
+
+          if (Alarm.TriggerRelated.END.equals(triggerRelated))
+          {
+            return hasEndDate();
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private Alarm.TriggerType getTriggerType(Alarm alarm)
+  {
+    try
+    {
+      return (Alarm.TriggerType) sTriggerTypeField.get(alarm);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private Alarm.TriggerRelated getTriggerRelated(Alarm alarm)
+  {
+    try
+    {
+      return (Alarm.TriggerRelated) sTriggerRelatedField.get(alarm);
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   private Alarm getDisplayAlarm()
@@ -201,7 +276,12 @@ public class ZEInvite
   public long getUtcStartTime()
   {
     //TODO is mInvite null?
-    return mInvite.getStartTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getStartTime();
+    if (parsedDateTime == null)
+    {
+      return 0L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   public ZERecurrenceRule getRecurrenceRule()
@@ -270,7 +350,12 @@ public class ZEInvite
 
   public long getUtcEndTime()
   {
-    return mInvite.getEndTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getEndTime();
+    if (parsedDateTime == null)
+    {
+      return getUtcStartTime() + 2L*60L*60L*1000L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   /*
@@ -359,7 +444,12 @@ public class ZEInvite
 
   public long getEffectiveEndTime()
   {
-    return mInvite.getEffectiveEndTime().getDate().getTime();
+    ParsedDateTime parsedDateTime = mInvite.getEffectiveEndTime();
+    if (parsedDateTime == null)
+    {
+      return getUtcStartTime() + 2L*60L*60L*1000L;
+    }
+    return parsedDateTime.getDate().getTime();
   }
 
   public boolean isAllDayEvent()
@@ -459,7 +549,19 @@ public class ZEInvite
 
   public ZEIcalTimezone getTimezone()
   {
-    return new ZEIcalTimezone(mInvite.getStartTime().getTimeZone());
+    ParsedDateTime startTime = mInvite.getStartTime();
+    if (startTime != null)
+    {
+      return new ZEIcalTimezone(startTime.getTimeZone());
+    }
+
+    ParsedDateTime endTime = mInvite.getEndTime();
+    if (endTime != null)
+    {
+      return new ZEIcalTimezone(endTime.getTimeZone());
+    }
+
+    return new ZEIcalTimezone(mInvite.getTimeZoneMap().getLocalTimeZone());
   }
 
   public ZETimeZoneMap getTimezoneMap()
@@ -502,6 +604,11 @@ public class ZEInvite
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public boolean hasEndDate()
+  {
+    return mInvite.getEndTime() != null;
   }
 
   public boolean hasEffectiveEndDate()
