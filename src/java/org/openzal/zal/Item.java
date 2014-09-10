@@ -612,7 +612,7 @@ $endif$ */
     try
     {
       Class partypes[] = new Class[1];
-      partypes[0] = Metadata.class;
+      partypes[0] = com.zimbra.cs.mailbox.Metadata.class;
 
       sDeserializeMethod = MailItem.UnderlyingData.class.getDeclaredMethod("deserialize", partypes);
       sDeserializeMethod.setAccessible(true);
