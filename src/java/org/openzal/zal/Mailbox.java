@@ -702,11 +702,14 @@ public class Mailbox
     throws ZimbraException
   {
     /* $if MajorZimbraVersion >= 8 $ */
-    com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[] zimbraExceptions
-      = new com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[exceptions.size()];
-    for (int i = 0; i < exceptions.size(); i++)
+    com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[] zimbraExceptions = null;
+    if( exceptions.size() > 0 )
     {
-      zimbraExceptions[i] = exceptions.get(i).toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      zimbraExceptions = new com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[exceptions.size()];
+      for (int i = 0; i < exceptions.size(); i++)
+      {
+        zimbraExceptions[i] = exceptions.get(i).toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      }
     }
 
     try
