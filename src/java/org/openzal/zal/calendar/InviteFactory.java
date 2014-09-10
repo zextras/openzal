@@ -228,6 +228,7 @@ public class InviteFactory
 
   public void populateFactoryFromExistingInvite( ZEInvite invite )
   {
+    mUid = invite.getUid();
     mStatus = invite.getStatus();
     mHasAttachment = invite.hasAttachment();
     if( mHasAttachment )
@@ -276,22 +277,6 @@ public class InviteFactory
   private ZEInvite createInvite(ZEMailbox mbox, boolean task)
   {
     byte type = (task ? ZEItem.TYPE_TASK : ZEItem.TYPE_APPOINTMENT);
-
-    RecurId recurId = null;
-    if(mExceptionStartTime != 0L)
-    {
-      recurId = new RecurId(
-        ParsedDateTime.fromUTCTime(mExceptionStartTime, mTimezone.toZimbra(ICalTimeZone.class)),
-        RecurId.RANGE_NONE
-      );
-    }
-    else
-    {
-      recurId = new RecurId(
-          ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class)),
-          RecurId.RANGE_NONE
-      );
-    }
 
     boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
     ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
