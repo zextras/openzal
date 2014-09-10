@@ -277,7 +277,7 @@ public class InviteFactory
   {
     byte type = (task ? Item.TYPE_TASK : Item.TYPE_APPOINTMENT);
 
-    RecurId recurId = null;
+    RecurId recurId;
     if(mExceptionStartTime != 0L)
     {
       recurId = new RecurId(
@@ -287,10 +287,7 @@ public class InviteFactory
     }
     else
     {
-      recurId = new RecurId(
-          ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class)),
-          RecurId.RANGE_NONE
-      );
+      recurId = null;
     }
 
     boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
@@ -343,49 +340,49 @@ public class InviteFactory
     com.zimbra.cs.mailbox.calendar.Invite invite = com.zimbra.cs.mailbox.calendar.Invite.createInvite(
       mbox.getId(),
   /* $if MajorZimbraVersion >= 8 $ */
-  Item.convertType(MailItem.Type.class, type),
+      Item.convertType(MailItem.Type.class, type),
   /* $else$
-  Item.convertType(Byte.class, type),
+      Item.convertType(Byte.class, type),
   /* $endif$ */
-  mMethod,
-  mTimeZoneMap.toZimbra(TimeZoneMap.class),
-  mUid,
-  mStatus.getRawStatus(),
-  mPriority.getRawPriority(),
-  String.valueOf(mPercentage),
-  mCompletedTime,
-  mFreeBusyStatus.getRawFreeBusyStatus(),
-  IcalXmlStrMap.TRANSP_OPAQUE,
-  mSensitivity.getRawSensitivity(),
-  mAllDayEvent,
-  dateStart,
-  dateEnd,
-  null,
-  null,
-  mainRecurrenceRule,
-  isOrganizer,
-  organizer,
-  zAttendeeList,
-  mSubject,
-  mLocation,
-  mDescription,
-  mDescriptionHtml,
-  null,
-  null,
-  null,
-  null,
-  null,
-  mLastModifyTimeUtc,
+      mMethod,
+      mTimeZoneMap.toZimbra(TimeZoneMap.class),
+      mUid,
+      mStatus.getRawStatus(),
+      mPriority.getRawPriority(),
+      String.valueOf(mPercentage),
+      mCompletedTime,
+      mFreeBusyStatus.getRawFreeBusyStatus(),
+      IcalXmlStrMap.TRANSP_OPAQUE,
+      mSensitivity.getRawSensitivity(),
+      mAllDayEvent,
+      dateStart,
+      dateEnd,
+      null,
+      recurId,
+      mainRecurrenceRule,
+      isOrganizer,
+      organizer,
+      zAttendeeList,
+      mSubject,
+      mLocation,
+      mDescription,
+      mDescriptionHtml,
+      null,
+      null,
+      null,
+      null,
+      null,
+      mLastModifyTimeUtc,
 /* $if ZimbraVersion >= 7.0.1 $ */
-mLastModifyTimeUtc,
+      mLastModifyTimeUtc,
 /* $endif$ */
-mSequence,
+      mSequence,
 /* $if ZimbraVersion > 8.0.1 |! ZimbraVersion > 7.2.3  && ZimbraVersion != 8.0.0 && ZimbraVersion != 8.0.1 $ */
-mSequence,
+      mSequence,
 /* $endif$ */
-AttendeeInviteStatus.TENTATIVE.getRawStatus(),
-true,
-true
+      AttendeeInviteStatus.TENTATIVE.getRawStatus(),
+      true,
+      true
     );
 
     try
