@@ -24,7 +24,7 @@ public class ZEInviteTest
   public void alarm_with_absolute_trigger() throws ServiceException, ParseException
   {
     Invite invite = Mockito.mock(Invite.class);
-    ParsedDateTime parsedDateTime = ParsedDateTime.parseUtcOnly("");
+    ParsedDateTime parsedDateTime = ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z");
     Alarm alarm = new Alarm(
       Alarm.Action.DISPLAY, Alarm.TriggerType.ABSOLUTE, null,
       null, parsedDateTime, null, 0, null, null, null, null
@@ -47,7 +47,7 @@ public class ZEInviteTest
     Invite invite = Mockito.mock(Invite.class);
     Alarm alarm = new Alarm(
       Alarm.Action.DISPLAY, Alarm.TriggerType.RELATIVE, Alarm.TriggerRelated.START,
-      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly(""), null, 0, null, null, null, null
+      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"), null, 0, null, null, null, null
       /* $if ZimbraVersion >= 8.0.4 $ */
       , null
       /* $endif $ */
@@ -55,7 +55,7 @@ public class ZEInviteTest
 
     Mockito.when(invite.hasAlarm()).thenReturn(true);
     Mockito.when(invite.getAlarms()).thenReturn(Collections.singletonList(alarm));
-    Mockito.when(invite.getStartTime()).thenReturn(ParsedDateTime.parseUtcOnly(""));
+    Mockito.when(invite.getStartTime()).thenReturn(ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"));
 
     ZEInvite zeInvite = new ZEInvite(invite);
 
@@ -68,7 +68,7 @@ public class ZEInviteTest
     Invite invite = Mockito.mock(Invite.class);
     Alarm alarm = new Alarm(
       Alarm.Action.DISPLAY, Alarm.TriggerType.RELATIVE, Alarm.TriggerRelated.START,
-      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly(""), null, 0, null, null, null, null
+      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"), null, 0, null, null, null, null
       /* $if ZimbraVersion >= 8.0.4 $ */
       , null
       /* $endif $ */
@@ -88,7 +88,7 @@ public class ZEInviteTest
     Invite invite = Mockito.mock(Invite.class);
     Alarm alarm = new Alarm(
       Alarm.Action.DISPLAY, Alarm.TriggerType.RELATIVE, Alarm.TriggerRelated.END,
-      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly(""), null, 0, null, null, null, null
+      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"), null, 0, null, null, null, null
       /* $if ZimbraVersion >= 8.0.4 $ */
       , null
       /* $endif $ */
@@ -96,7 +96,7 @@ public class ZEInviteTest
 
     Mockito.when(invite.hasAlarm()).thenReturn(true);
     Mockito.when(invite.getAlarms()).thenReturn(Collections.singletonList(alarm));
-    Mockito.when(invite.getEndTime()).thenReturn(ParsedDateTime.parseUtcOnly(""));
+    Mockito.when(invite.getEndTime()).thenReturn(ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"));
 
     ZEInvite zeInvite = new ZEInvite(invite);
 
@@ -109,7 +109,7 @@ public class ZEInviteTest
     Invite invite = Mockito.mock(Invite.class);
     Alarm alarm = new Alarm(
       Alarm.Action.DISPLAY, Alarm.TriggerType.RELATIVE, Alarm.TriggerRelated.END,
-      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly(""), null, 0, null, null, null, null
+      ParsedDuration.parse(true, 1, 1, 1, 1, 1), ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"), null, 0, null, null, null, null
       /* $if ZimbraVersion >= 8.0.4 $ */
       , null
       /* $endif $ */
@@ -127,7 +127,7 @@ public class ZEInviteTest
   public void no_alarm() throws ServiceException, ParseException
   {
     Invite invite = Mockito.mock(Invite.class);
-    ParsedDateTime parsedDateTime = ParsedDateTime.parseUtcOnly("");
+    ParsedDateTime parsedDateTime = ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z");
     Alarm alarm = new Alarm(Alarm.Action.DISPLAY, Alarm.TriggerType.ABSOLUTE, null, null, parsedDateTime, null, 0, null, null, null, null
       /* $if ZimbraVersion >= 8.0.4 $ */
     , null

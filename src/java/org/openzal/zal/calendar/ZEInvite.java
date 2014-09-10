@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.account.Account;
+import org.openzal.zal.Utils;
 import org.openzal.zal.ZEAccount;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -40,6 +41,7 @@ import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
 import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
    $else$ */
 import com.zimbra.common.calendar.*;
+import org.openzal.zal.log.ZimbraLog;
 /* $endif$ */
 
 public class ZEInvite
@@ -54,6 +56,23 @@ public class ZEInvite
 
   private final MimeMessage mMimeMessage;
   private final Invite      mInvite;
+
+  private static Field sTriggerTypeField = null;
+  private static Field sTriggerRelatedField = null;
+  static
+  {
+    try
+    {
+      sTriggerTypeField = Alarm.class.getDeclaredField(TRIGGER_TYPE_FIELD);
+      sTriggerRelatedField = Alarm.class.getDeclaredField(TRIGGER_RELATED_FIELD);
+
+      sTriggerTypeField.setAccessible(true);
+      sTriggerRelatedField.setAccessible(true);
+    }
+    catch( Throwable ex ){
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+    }
+  }
 
   public ZEInvite(Object invite)
   {
@@ -152,7 +171,7 @@ public class ZEInvite
   {
     try
     {
-      return (Alarm.TriggerType) getPrivateField(TRIGGER_TYPE_FIELD).get(alarm);
+      return (Alarm.TriggerType) sTriggerTypeField.get(alarm);
     }
     catch (Throwable e)
     {
@@ -164,25 +183,11 @@ public class ZEInvite
   {
     try
     {
-      return (Alarm.TriggerRelated) getPrivateField(TRIGGER_RELATED_FIELD).get(alarm);
+      return (Alarm.TriggerRelated) sTriggerRelatedField.get(alarm);
     }
     catch (Throwable e)
     {
       throw new RuntimeException(e);
-    }
-  }
-
-  private Field getPrivateField(String field)
-  {
-    try
-    {
-      Field triggerRelatedField = Alarm.class.getDeclaredField(field);
-      triggerRelatedField.setAccessible(true);
-      return triggerRelatedField;
-    }
-    catch (NoSuchFieldException noSuchField)
-    {
-      throw new RuntimeException(noSuchField);
     }
   }
 
