@@ -678,7 +678,7 @@ $endif$ */
     {
       UnderlyingData underlyingData = getUnderlyingData();
       Object parameters[] = new Object[0];
-      Metadata meta = (Metadata) sSerializeMethod.invoke(
+      com.zimbra.cs.mailbox.Metadata meta = (com.zimbra.cs.mailbox.Metadata) sSerializeMethod.invoke(
         underlyingData.toZimbra(MailItem.UnderlyingData.class),
         parameters
       );
