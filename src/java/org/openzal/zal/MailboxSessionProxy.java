@@ -46,7 +46,7 @@ public class MailboxSessionProxy
     mClock = new ActualClock();
   }
 
-  public ZEMailboxSessionProxy(Object session)
+  public MailboxSessionProxy(Object session)
   {
     mSession = (SessionImpl) session;
   }
