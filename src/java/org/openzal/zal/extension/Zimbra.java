@@ -1,5 +1,5 @@
 /*
- * ZAL - An abstraction layer for Zimbra.
+ * ZAL - The abstraction layer for Zimbra.
  * Copyright (C) 2014 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
@@ -62,7 +62,7 @@ public class Zimbra
     }
     catch (Throwable ex)
     {
-      ZimbraLog.extensions.fatal("ZeXtras Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       return false;
     }
   }
