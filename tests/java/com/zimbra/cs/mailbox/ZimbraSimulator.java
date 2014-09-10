@@ -21,13 +21,8 @@ import org.dom4j.DocumentException;
 /* $if ZimbraVersion >= 8.0.0 $ */
 /* $else$
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.store.*;
-import com.zimbra.cs.store.file.*;
- $endif$ */
-
-/* $if ZimbraVersion < 8.0.0$
+import com.zimbra.cs.store.file.Volume;
 import com.zimbra.cs.index.MailboxIndex;
-$else$ */
 /* $endif$ */
 
 
