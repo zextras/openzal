@@ -21,27 +21,25 @@
 package org.openzal.zal.redolog;
 
 
-import com.zimbra.cs.redolog.RedoLogManager;
-
 import java.io.File;
 
 
-public class ZERedoLogManager
+public class RedoLogManager
 {
-  private final RedoLogManager mRedoLogManager;
+  private final com.zimbra.cs.redolog.RedoLogManager mRedoLogManager;
 
-  public ZERedoLogManager(File redolog, File archdir, boolean supportsCrashRecovery)
+  public RedoLogManager(File redolog, File archdir, boolean supportsCrashRecovery)
   {
-    this(new RedoLogManager(redolog, archdir, supportsCrashRecovery));
+    this(new com.zimbra.cs.redolog.RedoLogManager(redolog, archdir, supportsCrashRecovery));
   }
 
-  public ZERedoLogManager(Object redoLogManager)
+  public RedoLogManager(Object redoLogManager)
   {
-    if (redoLogManager == null )
+    if (redoLogManager == null)
     {
       throw new NullPointerException("RedoLogManager is null");
     }
-    mRedoLogManager = (RedoLogManager)redoLogManager;
+    mRedoLogManager = (com.zimbra.cs.redolog.RedoLogManager) redoLogManager;
   }
 
   public <T> T toZimbra(Class<T> cls)
@@ -49,9 +47,9 @@ public class ZERedoLogManager
     return cls.cast(mRedoLogManager);
   }
 
-  public ZERedologLogWriter getCurrentLogWriter()
+  public RedologLogWriter getCurrentLogWriter()
   {
-    return new ZERedologLogWriter(mRedoLogManager.getCurrentLogWriter());
+    return new RedologLogWriter(mRedoLogManager.getCurrentLogWriter());
   }
 
   public long getCurrentLogSequence()

@@ -45,10 +45,10 @@ public class CalendarItemData
       calendarItemData.message = mMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class);
     }
     /* $else $
-    calendarItemData.mInv = mInvite.toZimbra(Invite.class);
+    calendarItemData.mInv = mInvite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class);
     if(mMessage != null)
     {
-      calendarItemData.mPm = mMessage.toZimbra(ParsedMessage.class);
+      calendarItemData.mPm = mMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class);
     }
     /* $endif $ */
 

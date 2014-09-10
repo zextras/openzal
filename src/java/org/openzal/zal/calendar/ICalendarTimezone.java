@@ -23,6 +23,7 @@ package org.openzal.zal.calendar;
 import org.openzal.zal.Account;
 import org.jetbrains.annotations.NotNull;
 import java.util.TimeZone;
+
 /* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
@@ -52,9 +53,13 @@ public class ICalendarTimezone
   public static ICalendarTimezone getAccountTimeZone(@NotNull Account account)
   {
 /* $if MajorZimbraVersion <= 7 $
-    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(account.toZimbra(Account.class));
+    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(
+      account.toZimbra(com.zimbra.cs.account.Account.class)
+    );
   $else$ */
-    ICalTimeZone accountTimeZone = Util.getAccountTimeZone(account.toZimbra(com.zimbra.cs.account.Account.class));
+    ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
+      account.toZimbra(com.zimbra.cs.account.Account.class)
+    );
 /* $endif$ */
     return new ICalendarTimezone(accountTimeZone);
   }
@@ -68,7 +73,7 @@ public class ICalendarTimezone
     );
   }
 
-  public static class ZESimpleOnset implements Comparable<ZESimpleOnset>
+  public static class SimpleOnset implements Comparable<SimpleOnset>
   {
     private final ICalTimeZone.SimpleOnset mSimpleOnset;
 
@@ -81,7 +86,7 @@ public class ICalendarTimezone
       return mSimpleOnset.getDayOfMonth();
     }
 
-    public ZESimpleOnset(
+    public SimpleOnset(
       int week, int dayOfWeek, int month, int dayOfMonth,
       int hour, int minute, int second, boolean skipBYMONTHDAYFixup
     )
@@ -89,7 +94,7 @@ public class ICalendarTimezone
       this(new ICalTimeZone.SimpleOnset(week, dayOfWeek, month, dayOfMonth, hour, minute, second, skipBYMONTHDAYFixup));
     }
 
-    ZESimpleOnset(ICalTimeZone.SimpleOnset simpleOnset)
+    SimpleOnset(ICalTimeZone.SimpleOnset simpleOnset)
     {
       mSimpleOnset = simpleOnset;
     }
@@ -127,7 +132,7 @@ public class ICalendarTimezone
     }
 
     @Override
-    public int compareTo(ZESimpleOnset o)
+    public int compareTo(SimpleOnset o)
     {
       return mSimpleOnset.compareTo(o.toZimbra(ICalTimeZone.SimpleOnset.class));
     }
@@ -163,7 +168,7 @@ public class ICalendarTimezone
     return mICalTimeZone.getStandardOffset();
   }
 
-  public ZESimpleOnset getDaylightOnset()
+  public SimpleOnset getDaylightOnset()
   {
     ICalTimeZone.SimpleOnset daylight = mICalTimeZone.getDaylightOnset();
     if (daylight == null)
@@ -172,7 +177,7 @@ public class ICalendarTimezone
     }
     else
     {
-      return new ZESimpleOnset(daylight);
+      return new SimpleOnset(daylight);
     }
   }
 
@@ -186,7 +191,7 @@ public class ICalendarTimezone
     return mICalTimeZone.getDaylightOffset();
   }
 
-  public ZESimpleOnset getStandardOnset()
+  public SimpleOnset getStandardOnset()
   {
     ICalTimeZone.SimpleOnset daylight = mICalTimeZone.getStandardOnset();
     if (daylight == null)
@@ -195,7 +200,7 @@ public class ICalendarTimezone
     }
     else
     {
-      return new ZESimpleOnset(daylight);
+      return new SimpleOnset(daylight);
     }
   }
 

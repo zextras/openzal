@@ -41,10 +41,10 @@ public class Entry
     return mEntry;
   }
 
-  public ZEEntryType getEntryType()
+  public EntryType getEntryType()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    return new ZEEntryType(mEntry.getEntryType());
+    return new EntryType(mEntry.getEntryType());
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -88,33 +88,33 @@ public class Entry
     return mEntry != null ? mEntry.hashCode() : 0;
   }
 
-  public class ZEEntryType
+  public class EntryType
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    ZEEntryType ENTRY                     = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.ENTRY);
-    ZEEntryType ACCOUNT                   = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.ACCOUNT);
-    ZEEntryType ALIAS                     = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.ALIAS);
-    ZEEntryType CALRESOURCE               = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.CALRESOURCE);
-    ZEEntryType COS                       = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.COS);
-    ZEEntryType DATASOURCE                = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DATASOURCE);
-    ZEEntryType DISTRIBUTIONLIST          = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DISTRIBUTIONLIST);
-    ZEEntryType DOMAIN                    = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DOMAIN);
-    ZEEntryType DYNAMICGROUP              = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP);
-    ZEEntryType DYNAMICGROUP_DYNAMIC_UNIT = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP_DYNAMIC_UNIT);
-    ZEEntryType DYNAMICGROUP_STATIC_UNIT  = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP_STATIC_UNIT);
-    ZEEntryType GLOBALCONFIG              = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.GLOBALCONFIG);
-    ZEEntryType GLOBALGRANT               = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.GLOBALGRANT);
-    ZEEntryType IDENTITY                  = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.IDENTITY);
-    ZEEntryType MIMETYPE                  = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.MIMETYPE);
-    ZEEntryType SERVER                    = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.SERVER);
-    ZEEntryType UCSERVICE                 = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.UCSERVICE);
-    ZEEntryType SIGNATURE                 = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.SIGNATURE);
-    ZEEntryType XMPPCOMPONENT             = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.XMPPCOMPONENT);
-    ZEEntryType ZIMLET                    = new ZEEntryType(com.zimbra.cs.account.Entry.EntryType.ZIMLET);
+    EntryType ENTRY                     = new EntryType(com.zimbra.cs.account.Entry.EntryType.ENTRY);
+    EntryType ACCOUNT                   = new EntryType(com.zimbra.cs.account.Entry.EntryType.ACCOUNT);
+    EntryType ALIAS                     = new EntryType(com.zimbra.cs.account.Entry.EntryType.ALIAS);
+    EntryType CALRESOURCE               = new EntryType(com.zimbra.cs.account.Entry.EntryType.CALRESOURCE);
+    EntryType COS                       = new EntryType(com.zimbra.cs.account.Entry.EntryType.COS);
+    EntryType DATASOURCE                = new EntryType(com.zimbra.cs.account.Entry.EntryType.DATASOURCE);
+    EntryType DISTRIBUTIONLIST          = new EntryType(com.zimbra.cs.account.Entry.EntryType.DISTRIBUTIONLIST);
+    EntryType DOMAIN                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.DOMAIN);
+    EntryType DYNAMICGROUP              = new EntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP);
+    EntryType DYNAMICGROUP_DYNAMIC_UNIT = new EntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP_DYNAMIC_UNIT);
+    EntryType DYNAMICGROUP_STATIC_UNIT  = new EntryType(com.zimbra.cs.account.Entry.EntryType.DYNAMICGROUP_STATIC_UNIT);
+    EntryType GLOBALCONFIG              = new EntryType(com.zimbra.cs.account.Entry.EntryType.GLOBALCONFIG);
+    EntryType GLOBALGRANT               = new EntryType(com.zimbra.cs.account.Entry.EntryType.GLOBALGRANT);
+    EntryType IDENTITY                  = new EntryType(com.zimbra.cs.account.Entry.EntryType.IDENTITY);
+    EntryType MIMETYPE                  = new EntryType(com.zimbra.cs.account.Entry.EntryType.MIMETYPE);
+    EntryType SERVER                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.SERVER);
+    EntryType UCSERVICE                 = new EntryType(com.zimbra.cs.account.Entry.EntryType.UCSERVICE);
+    EntryType SIGNATURE                 = new EntryType(com.zimbra.cs.account.Entry.EntryType.SIGNATURE);
+    EntryType XMPPCOMPONENT             = new EntryType(com.zimbra.cs.account.Entry.EntryType.XMPPCOMPONENT);
+    EntryType ZIMLET                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.ZIMLET);
 
     private final com.zimbra.cs.account.Entry.EntryType mEntryType;
 
-    private ZEEntryType(com.zimbra.cs.account.Entry.EntryType entryType)
+    private EntryType(com.zimbra.cs.account.Entry.EntryType entryType)
     {
       mEntryType = entryType;
     }
@@ -133,7 +133,7 @@ public class Entry
     {
       throw new UnsupportedOperationException();
     }
-    private ZEEntryType(){}
+    private EntryType(){}
     /* $endif $ */
   }
 }

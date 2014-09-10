@@ -26,11 +26,11 @@ public class Note extends Item
 {
   private final com.zimbra.cs.mailbox.Note mNote;
 
-  class ZERectangle
+  class Rectangle
   {
     final com.zimbra.cs.mailbox.Note.Rectangle mRectangle;
 
-    public ZERectangle(@NotNull com.zimbra.cs.mailbox.Note.Rectangle rectangle)
+    public Rectangle(@NotNull com.zimbra.cs.mailbox.Note.Rectangle rectangle)
     {
       mRectangle = rectangle;
     }
@@ -62,9 +62,9 @@ public class Note extends Item
     return mNote.getName();
   }
 
-  public ZERectangle getBounds()
+  public Rectangle getBounds()
   {
-    return new ZERectangle(mNote.getBounds());
+    return new Rectangle(mNote.getBounds());
   }
 
 }

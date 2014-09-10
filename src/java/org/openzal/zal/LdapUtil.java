@@ -27,7 +27,6 @@ import java.util.Map;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.LdapEntry;
-import com.zimbra.cs.account.Account;
 /* $endif $ */
 
 public class LdapUtil
@@ -38,7 +37,7 @@ public class LdapUtil
     try
     {
       ZimbraLdapContext zlc = new ZimbraLdapContext(true);
-      Account zimbraAccount = account.toZimbra(Account.class);
+      com.zimbra.cs.account.Account zimbraAccount = account.toZimbra(com.zimbra.cs.account.Account.class);
       com.zimbra.cs.account.ldap.LdapUtil.modifyAttrs(zlc, ((LdapEntry) zimbraAccount).getDN(), attrs, zimbraAccount);
     }
     catch (Exception t)

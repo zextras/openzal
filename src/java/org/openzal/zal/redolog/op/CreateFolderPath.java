@@ -18,26 +18,20 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.redolog;
-
-import com.zimbra.cs.redolog.logger.LogWriter;
+package org.openzal.zal.redolog.op;
 
 
-public class ZERedologLogWriter
+public class CreateFolderPath
 {
-  private final LogWriter mLogWriter;
+  private final RedoableOp mOp;
 
-  public ZERedologLogWriter(Object logWriter)
+  public CreateFolderPath(RedoableOp op)
   {
-    if (logWriter == null )
-    {
-      throw new NullPointerException("Volume is null");
-    }
-    mLogWriter = (LogWriter)logWriter;
+    mOp = op;
   }
 
-  public long getLastLogTime()
+  public int[] getFolderIds()
   {
-    return mLogWriter.getLastLogTime();
+    return ((com.zimbra.cs.redolog.op.CreateFolderPath) mOp.getProxiedObject()).getFolderIds();
   }
 }

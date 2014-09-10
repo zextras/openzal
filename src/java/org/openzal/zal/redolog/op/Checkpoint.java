@@ -20,20 +20,21 @@
 
 package org.openzal.zal.redolog.op;
 
-import com.zimbra.cs.redolog.op.CreateTag;
+
+import java.util.Set;
 
 
-public class ZECreateTag
+public class Checkpoint
 {
-  private final ZERedoableOp mOp;
+  private final RedoableOp mOp;
 
-  public ZECreateTag(ZERedoableOp op)
+  public Checkpoint(RedoableOp op)
   {
     mOp = op;
   }
 
-  public int getTagId()
+  public Set getActiveTxns()
   {
-    return ((CreateTag)mOp.getProxiedObject()).getTagId();
+    return ((com.zimbra.cs.redolog.op.Checkpoint) mOp.getProxiedObject()).getActiveTxns();
   }
 }

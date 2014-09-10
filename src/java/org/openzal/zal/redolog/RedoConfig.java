@@ -20,22 +20,11 @@
 
 package org.openzal.zal.redolog;
 
-import com.zimbra.cs.redolog.RedoLogProvider;
 
-
-public class ZERedoLogProvider
+public class RedoConfig
 {
-  private final RedoLogProvider mRedologProvider;
-
-  public ZERedoLogProvider()
+  public String redoLogPath()
   {
-    mRedologProvider = RedoLogProvider.getInstance();
-  }
-
-  public ZERedoLogManager getRedoLogManager()
-  {
-    return new ZERedoLogManager(
-      mRedologProvider.getRedoLogManager()
-    );
+    return com.zimbra.cs.redolog.RedoConfig.redoLogPath();
   }
 }

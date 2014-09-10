@@ -68,7 +68,7 @@ public class MailSession
         /* $if ZimbraVersion >= 8.0.0 $ */
         return JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class));
         /* $else $
-        return new ArrayList<String>(JMSession.getSmtpHosts(domain.toZimbra(Domain.class)));
+        return new ArrayList<String>(JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class)));
         /* $endif $ */
       }
       else

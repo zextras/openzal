@@ -20,25 +20,23 @@
 
 package org.openzal.zal.redolog.op;
 
-import com.zimbra.cs.redolog.RedoLogInput;
 import org.openzal.zal.Utils;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.redolog.*;
-import com.zimbra.cs.redolog.op.Checkpoint;
-import com.zimbra.cs.redolog.op.RedoableOp;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 
-public class ZERedoableOp
+public class RedoableOp
 {
 
-  public static final String REDO_MAGIC     = RedoableOp.REDO_MAGIC;
-  public static final int    UNKNOWN_ID     = RedoableOp.UNKNOWN_ID;
-  public static final int    MAILBOX_ID_ALL = RedoableOp.MAILBOX_ID_ALL;
+  public static final String REDO_MAGIC     = com.zimbra.cs.redolog.op.RedoableOp.REDO_MAGIC;
+  public static final int    UNKNOWN_ID     = com.zimbra.cs.redolog.op.RedoableOp.UNKNOWN_ID;
+  public static final int    MAILBOX_ID_ALL = com.zimbra.cs.redolog.op.RedoableOp.MAILBOX_ID_ALL;
 
-  private final RedoableOp mRedoableOp;
+  private final com.zimbra.cs.redolog.op.RedoableOp mRedoableOp;
 
 
   private static Method sGetVersionMethod = null;
@@ -47,7 +45,7 @@ public class ZERedoableOp
   {
     try
     {
-      sGetVersionMethod = RedoableOp.class.getDeclaredMethod("getVersion");
+      sGetVersionMethod = com.zimbra.cs.redolog.op.RedoableOp.class.getDeclaredMethod("getVersion");
       sGetVersionMethod.setAccessible(true);
     }
     catch (Throwable ex)
@@ -56,9 +54,9 @@ public class ZERedoableOp
     }
   }
 
-  public ZERedoableOp(Object redoableOp)
+  public RedoableOp(Object redoableOp)
   {
-    mRedoableOp = (RedoableOp)redoableOp;
+    mRedoableOp = (com.zimbra.cs.redolog.op.RedoableOp) redoableOp;
   }
 
   public boolean isStartMarker()
@@ -77,9 +75,9 @@ public class ZERedoableOp
     return mRedoableOp.getTimestamp();
   }
 
-  public ZETransactionId getTransactionId()
+  public TransactionId getTransactionId()
   {
-    return new ZETransactionId(mRedoableOp.getTransactionId());
+    return new TransactionId(mRedoableOp.getTransactionId());
   }
 
   public Version getVersion()
@@ -102,44 +100,44 @@ public class ZERedoableOp
     /* $endif $ */
   }
 
-  public static ZERedoableOp deserializeOp(ZERedoLogInput redoLogInput)
+  public static RedoableOp deserializeOp(RedoLogInput redoLogInput)
     throws IOException
   {
-    return new ZERedoableOp(
-      RedoableOp.deserializeOp(
-        redoLogInput.toZimbra(RedoLogInput.class)
+    return new RedoableOp(
+      com.zimbra.cs.redolog.op.RedoableOp.deserializeOp(
+        redoLogInput.toZimbra(com.zimbra.cs.redolog.RedoLogInput.class)
       )
     );
   }
 
-  public RedoableOp getProxiedObject()
+  public com.zimbra.cs.redolog.op.RedoableOp getProxiedObject()
   {
     return mRedoableOp;
   }
 
-  public ZECreateFolderPath toCreateFolderPath()
+  public CreateFolderPath toCreateFolderPath()
   {
-    return new ZECreateFolderPath(this);
+    return new CreateFolderPath(this);
   }
 
-  public ZECreateMessage toCreateMessage()
+  public CreateMessage toCreateMessage()
   {
-    return new ZECreateMessage(this);
+    return new CreateMessage(this);
   }
 
-  public ZECreateTag toCreateTag()
+  public CreateTag toCreateTag()
   {
-    return new ZECreateTag(this);
+    return new CreateTag(this);
   }
 
-  public ZECheckpoint toCheckpoint()
+  public Checkpoint toCheckpoint()
   {
-    return new ZECheckpoint(this);
+    return new Checkpoint(this);
   }
 
   public boolean isCheckPointOp()
   {
-    return mRedoableOp instanceof Checkpoint;
+    return mRedoableOp instanceof com.zimbra.cs.redolog.op.Checkpoint;
   }
 
   public int getOpCode()

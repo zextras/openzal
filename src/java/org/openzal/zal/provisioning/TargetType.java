@@ -23,7 +23,7 @@ package org.openzal.zal.provisioning;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ZETargetType
+public enum TargetType
 {
   account("Account"),
   calresource("CalendarResource"),
@@ -37,24 +37,24 @@ public enum ZETargetType
   group("DynamicGroup"),
   global("GlobalGrant");
 
-  private static Map<String, ZETargetType> TARGET_TYPES = new HashMap<String, ZETargetType>()
+  private static Map<String, TargetType> TARGET_TYPES = new HashMap<String, TargetType>()
   {{
-    put("account", account);
-    put("CalendarResource", calresource);
-    put("Cos", cos);
-    put("DistributionList", dl);
-    put("Domain", domain);
-    put("Server", server);
-    put("XMPPComponent", xmppcomponent);
-    put("Zimlet", zimlet);
-    put("GlobalConfig", config);
-    put("DynamicGroup", group);
-    put("GlobalGrant", global);
-  }};
+      put("account", account);
+      put("CalendarResource", calresource);
+      put("Cos", cos);
+      put("DistributionList", dl);
+      put("Domain", domain);
+      put("Server", server);
+      put("XMPPComponent", xmppcomponent);
+      put("Zimlet", zimlet);
+      put("GlobalConfig", config);
+      put("DynamicGroup", group);
+      put("GlobalGrant", global);
+    }};
 
   private final String mType;
 
-  ZETargetType(String type)
+  TargetType(String type)
   {
     mType = type;
   }
@@ -64,7 +64,7 @@ public enum ZETargetType
     return mType;
   }
 
-  public static ZETargetType fromString(String type)
+  public static TargetType fromString(String type)
   {
     return TARGET_TYPES.get(type);
   }

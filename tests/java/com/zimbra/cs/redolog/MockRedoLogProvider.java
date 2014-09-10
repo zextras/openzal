@@ -10,17 +10,16 @@ package org.openzal.zal.redolog;
 
 import java.io.File;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.redolog.RedoLogManager;
 import com.zimbra.cs.redolog.RedoLogProvider;
 
 public class MockRedoLogProvider extends RedoLogProvider
 {
 
-  private final ZERedoLogManager mRedoLogManager;
+  private final RedoLogManager mRedoLogManager;
 
   public MockRedoLogProvider()
   {
-    mRedoLogManager = new ZERedoLogManager(new File("build/test/redo/redo.log"), new File("build/test/redo"), false);
+    mRedoLogManager = new RedoLogManager(new File("build/test/redo/redo.log"), new File("build/test/redo"), false);
   }
 
   public boolean isMaster()
@@ -33,7 +32,9 @@ public class MockRedoLogProvider extends RedoLogProvider
     return false;
   }
 
-  public void startup() throws ServiceException {
+  public void startup()
+    throws ServiceException
+  {
   }
 
   public void shutdown() throws ServiceException {
@@ -43,9 +44,9 @@ public class MockRedoLogProvider extends RedoLogProvider
   }
 
   @Override
-  public RedoLogManager getRedoLogManager()
+  public com.zimbra.cs.redolog.RedoLogManager getRedoLogManager()
   {
-    return mRedoLogManager.toZimbra(RedoLogManager.class);
+    return mRedoLogManager.toZimbra(com.zimbra.cs.redolog.RedoLogManager.class);
   }
 
 }

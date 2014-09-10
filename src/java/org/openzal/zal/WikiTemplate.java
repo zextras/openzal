@@ -43,11 +43,11 @@ public class WikiTemplate implements Comparable<WikiTemplate>
     return mWikiTemplate.compareTo(o.toZimbra(com.zimbra.cs.wiki.WikiTemplate.class));
   }
 
-  public static class ZEContext
+  public static class Context
   {
     private final com.zimbra.cs.wiki.WikiTemplate.Context mContext;
 
-    public ZEContext(WikiPage.WikiContext wikiPageContext, Item item, WikiTemplate wikiTemplate)
+    public Context(WikiPage.WikiContext wikiPageContext, Item item, WikiTemplate wikiTemplate)
     {
       mContext = new com.zimbra.cs.wiki.WikiTemplate.Context(
         wikiPageContext.toZimbra(),
@@ -67,7 +67,7 @@ public class WikiTemplate implements Comparable<WikiTemplate>
     return cls.cast(mWikiTemplate);
   }
 
-  public String toString(ZEContext context)
+  public String toString(Context context)
     throws IOException
   {
     try

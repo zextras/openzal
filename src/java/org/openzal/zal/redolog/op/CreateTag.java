@@ -18,16 +18,20 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.redolog;
+package org.openzal.zal.redolog.op;
 
 
-import com.zimbra.cs.redolog.RedoConfig;
-
-
-public class ZERedoConfig
+public class CreateTag
 {
-  public String redoLogPath()
+  private final RedoableOp mOp;
+
+  public CreateTag(RedoableOp op)
   {
-    return RedoConfig.redoLogPath();
+    mOp = op;
+  }
+
+  public int getTagId()
+  {
+    return ((com.zimbra.cs.redolog.op.CreateTag) mOp.getProxiedObject()).getTagId();
   }
 }

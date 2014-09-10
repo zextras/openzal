@@ -50,7 +50,7 @@ $endif$ */
 
 public class ZimbraDatabase
 {
-  public static List<Item.ZEUnderlyingData> getByType(Mailbox mbox, byte type, SortBy sort) throws ZimbraException
+  public static List<Item.UnderlyingData> getByType(Mailbox mbox, byte type, SortBy sort) throws ZimbraException
   {
     List<MailItem.UnderlyingData> list;
     try
@@ -60,7 +60,7 @@ public class ZimbraDatabase
   /* $if MajorZimbraVersion >= 8 $ */
         Item.convertType(MailItem.Type.class, type),
   /* $else$
-        ZEItem.convertType(Byte.class, type),
+        Item.convertType(Byte.class, type),
   /* $endif$ */
         sort
       );
@@ -72,10 +72,10 @@ public class ZimbraDatabase
 
     if( list != null )
     {
-      List<Item.ZEUnderlyingData> newList = new ArrayList<Item.ZEUnderlyingData>(list.size());
+      List<Item.UnderlyingData> newList = new ArrayList<Item.UnderlyingData>(list.size());
 
       for( MailItem.UnderlyingData item : list ){
-        newList.add( new Item.ZEUnderlyingData(item) );
+        newList.add( new Item.UnderlyingData(item) );
       }
       return newList;
     }

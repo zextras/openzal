@@ -37,11 +37,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /* $if MajorZimbraVersion <= 7 $
-import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
-import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
+import com.zimbra.cs.mailbox.calendar.*;
    $else$ */
 import com.zimbra.common.calendar.*;
 /* $endif$ */
+
+import org.openzal.zal.log.ZimbraLog;
 
 public class Invite
 {
@@ -616,7 +617,7 @@ public class Invite
     /* $if ZimbraVersion >= 6.0.13 && ZimbraVersion != 7.0.0 && ZimbraVersion < 8.0.0 $
     try
     {
-      return new ZEInvite(mInvite.newCopy());
+      return new Invite(mInvite.newCopy());
     }
     catch (ServiceException e)
     {

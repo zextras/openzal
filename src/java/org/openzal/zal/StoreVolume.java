@@ -292,7 +292,7 @@ public class StoreVolume
       try
       {
 /* $if MajorZimbraVersion <= 7 $
-        return new ZEVolume(Volume.getById(vid));
+        return new StoreVolume(Volume.getById(vid));
    $else$ */
         return new StoreVolume(VolumeManager.getInstance().getVolume(vid));
 /* $endif$ */
@@ -336,7 +336,7 @@ public class StoreVolume
     public static StoreVolume getCurrentMessageVolume()
     {
 /* $if MajorZimbraVersion <= 7 $
-      return new ZEVolume(Volume.getCurrentMessageVolume());
+      return new StoreVolume(Volume.getCurrentMessageVolume());
    $else$ */
       return new StoreVolume(VolumeManager.getInstance().getCurrentMessageVolume());
 /* $endif$ */

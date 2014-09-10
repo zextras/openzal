@@ -345,7 +345,7 @@ public class InviteFactory
   /* $if MajorZimbraVersion >= 8 $ */
   Item.convertType(MailItem.Type.class, type),
   /* $else$
-      ZEItem.convertType(Byte.class, type),
+  Item.convertType(Byte.class, type),
   /* $endif$ */
   mMethod,
   mTimeZoneMap.toZimbra(TimeZoneMap.class),
@@ -387,7 +387,6 @@ AttendeeInviteStatus.TENTATIVE.getRawStatus(),
 true,
 true
     );
-
 
     try
     {

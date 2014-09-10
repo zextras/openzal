@@ -246,7 +246,7 @@ public abstract class Utils
     }
   }
 
-  public static WinSystemTime windowsSystemTimeFromSimpleOnset(ICalendarTimezone.ZESimpleOnset simpleOnset)
+  public static WinSystemTime windowsSystemTimeFromSimpleOnset(ICalendarTimezone.SimpleOnset simpleOnset)
   {
     ICalTimeZone.SimpleOnset zimbraSimpleOnSet;
     if (simpleOnset == null)

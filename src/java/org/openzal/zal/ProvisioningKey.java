@@ -54,27 +54,31 @@ import com.zimbra.cs.account.Provisioning.ZimletBy;
 
 public class ProvisioningKey
 {
-  public static class ZEAccountBy
+  public static class ByAccount
   {
     private final AccountBy mAccountBy;
 
-    public static ZEAccountBy adminName        = new ZEAccountBy(AccountBy.adminName);
-    public static ZEAccountBy appAdminName     = new ZEAccountBy(AccountBy.appAdminName);
-    public static ZEAccountBy id               = new ZEAccountBy(AccountBy.id);
-    public static ZEAccountBy foreignPrincipal = new ZEAccountBy(AccountBy.foreignPrincipal);
-    public static ZEAccountBy name             = new ZEAccountBy(AccountBy.name);
-    public static ZEAccountBy krb5Principal    = new ZEAccountBy(AccountBy.krb5Principal);
+    public static ByAccount adminName        = new ByAccount(AccountBy.adminName);
+    public static ByAccount appAdminName     = new ByAccount(AccountBy.appAdminName);
+    public static ByAccount id               = new ByAccount(AccountBy.id);
+    public static ByAccount foreignPrincipal = new ByAccount(AccountBy.foreignPrincipal);
+    public static ByAccount name             = new ByAccount(AccountBy.name);
+    public static ByAccount krb5Principal    = new ByAccount(AccountBy.krb5Principal);
 
-    ZEAccountBy(AccountBy accountBy)
+    ByAccount(AccountBy accountBy)
     {
       mAccountBy = accountBy;
     }
 
-    public static ZEAccountBy fromString(String s) throws ServiceException
+    public static ByAccount fromString(String s)
+      throws ServiceException
     {
-      try {
-        return new ZEAccountBy(AccountBy.valueOf(s));
-      } catch (IllegalArgumentException e) {
+      try
+      {
+        return new ByAccount(AccountBy.valueOf(s));
+      }
+      catch (IllegalArgumentException e)
+      {
         throw ExceptionWrapper.wrap(ServiceException.INVALID_REQUEST("unknown key: " + s, e));
       }
     }
@@ -86,15 +90,15 @@ public class ProvisioningKey
   }
 
   // data sources
-  public static class ZEDataSourceBy
+  public static class ByDataSource
   {
 
     private final DataSourceBy mDataSourceBy;
 
-    public static ZEDataSourceBy id   = new ZEDataSourceBy(DataSourceBy.id);
-    public static ZEDataSourceBy name = new ZEDataSourceBy(DataSourceBy.name);
+    public static ByDataSource id   = new ByDataSource(DataSourceBy.id);
+    public static ByDataSource name = new ByDataSource(DataSourceBy.name);
 
-    ZEDataSourceBy(DataSourceBy dataSourceBy)
+    ByDataSource(DataSourceBy dataSourceBy)
     {
       mDataSourceBy = dataSourceBy;
     }
@@ -104,11 +108,12 @@ public class ProvisioningKey
       return mDataSourceBy;
     }
 
-    public static ZEDataSourceBy fromString(String s) throws ServiceException
+    public static ByDataSource fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEDataSourceBy(DataSourceBy.valueOf(s));
+        return new ByDataSource(DataSourceBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -118,14 +123,14 @@ public class ProvisioningKey
   }
 
   // identities
-  public static class ZEIdentityBy
+  public static class ByIdentity
   {
     private final IdentityBy mIdentityBy;
 
-    public static ZEIdentityBy id   = new ZEIdentityBy(IdentityBy.id);
-    public static ZEIdentityBy name = new ZEIdentityBy(IdentityBy.name);
+    public static ByIdentity id   = new ByIdentity(IdentityBy.id);
+    public static ByIdentity name = new ByIdentity(IdentityBy.name);
 
-    ZEIdentityBy(IdentityBy identityBy)
+    ByIdentity(IdentityBy identityBy)
     {
       mIdentityBy = identityBy;
     }
@@ -135,11 +140,12 @@ public class ProvisioningKey
       return mIdentityBy;
     }
 
-    public static ZEIdentityBy fromString(String s) throws ServiceException
+    public static ByIdentity fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEIdentityBy(IdentityBy.valueOf(s));
+        return new ByIdentity(IdentityBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -148,21 +154,21 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZEDomainBy
+  public static class ByDomain
   {
     private DomainBy mDomainBy;
 
-    public static ZEDomainBy id              = new ZEDomainBy(DomainBy.id);
-    public static ZEDomainBy name            = new ZEDomainBy(DomainBy.name);
-    public static ZEDomainBy virtualHostname = new ZEDomainBy(DomainBy.virtualHostname);
-    public static ZEDomainBy krb5Realm       = new ZEDomainBy(DomainBy.krb5Realm);
+    public static ByDomain id              = new ByDomain(DomainBy.id);
+    public static ByDomain name            = new ByDomain(DomainBy.name);
+    public static ByDomain virtualHostname = new ByDomain(DomainBy.virtualHostname);
+    public static ByDomain krb5Realm       = new ByDomain(DomainBy.krb5Realm);
     /* $if ZimbraVersion >= 8.0.0 $ */
-    public static ZEDomainBy foreignName     = new ZEDomainBy(DomainBy.foreignName);
+    public static ByDomain foreignName     = new ByDomain(DomainBy.foreignName);
     /* $else$
-    public static ZEDomainBy foreignName     = new ZEDomainBy(DomainBy.name);
+    public static ByDomain foreignName     = new ByDomain(DomainBy.name);
     /* $endif $ */
 
-    ZEDomainBy(DomainBy domainBy)
+    ByDomain(DomainBy domainBy)
     {
       mDomainBy = domainBy;
     }
@@ -172,11 +178,12 @@ public class ProvisioningKey
       return mDomainBy;
     }
 
-    public static ZEDomainBy fromString(String s) throws ServiceException
+    public static ByDomain fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEDomainBy(DomainBy.valueOf(s));
+        return new ByDomain(DomainBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -185,15 +192,15 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZEServerBy
+  public static class ByServer
   {
     private ServerBy mServerBy;
 
-    public static ZEServerBy id              = new ZEServerBy(ServerBy.id);
-    public static ZEServerBy name            = new ZEServerBy(ServerBy.name);
-    public static ZEServerBy serviceHostname = new ZEServerBy(ServerBy.serviceHostname);
+    public static ByServer id              = new ByServer(ServerBy.id);
+    public static ByServer name            = new ByServer(ServerBy.name);
+    public static ByServer serviceHostname = new ByServer(ServerBy.serviceHostname);
 
-    ZEServerBy(ServerBy serverBy)
+    ByServer(ServerBy serverBy)
     {
       mServerBy = serverBy;
     }
@@ -203,11 +210,12 @@ public class ProvisioningKey
       return mServerBy;
     }
 
-    public static ZEServerBy fromString(String s) throws ServiceException
+    public static ByServer fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEServerBy(ServerBy.valueOf(s));
+        return new ByServer(ServerBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -216,14 +224,14 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZEZimletBy
+  public static class ByZimlet
   {
     private final ZimletBy mZimletBy;
 
-    public static ZEZimletBy id   = new ZEZimletBy(ZimletBy.id);
-    public static ZEZimletBy name = new ZEZimletBy(ZimletBy.name);
+    public static ByZimlet id   = new ByZimlet(ZimletBy.id);
+    public static ByZimlet name = new ByZimlet(ZimletBy.name);
 
-    ZEZimletBy(ZimletBy identityBy)
+    ByZimlet(ZimletBy identityBy)
     {
       mZimletBy = identityBy;
     }
@@ -233,11 +241,12 @@ public class ProvisioningKey
       return mZimletBy;
     }
 
-    public static ZEZimletBy fromString(String s) throws ServiceException
+    public static ByZimlet fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEZimletBy(ZimletBy.valueOf(s));
+        return new ByZimlet(ZimletBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -247,14 +256,14 @@ public class ProvisioningKey
   }
 
   // signatures
-  public static class ZESignatureBy
+  public static class BySignature
   {
     private final SignatureBy mSignatureBy;
 
-    public static ZESignatureBy id   = new ZESignatureBy(SignatureBy.id);
-    public static ZESignatureBy name = new ZESignatureBy(SignatureBy.name);
+    public static BySignature id   = new BySignature(SignatureBy.id);
+    public static BySignature name = new BySignature(SignatureBy.name);
 
-    ZESignatureBy(SignatureBy identityBy)
+    BySignature(SignatureBy identityBy)
     {
       mSignatureBy = identityBy;
     }
@@ -264,11 +273,12 @@ public class ProvisioningKey
       return mSignatureBy;
     }
 
-    public static ZESignatureBy fromString(String s) throws ServiceException
+    public static BySignature fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZESignatureBy(SignatureBy.valueOf(s));
+        return new BySignature(SignatureBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -277,14 +287,14 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZECacheEntryBy
+  public static class ByCacheEntry
   {
     private final CacheEntryBy mCacheEntryBy;
 
-    public static ZECacheEntryBy id   = new ZECacheEntryBy(CacheEntryBy.id);
-    public static ZECacheEntryBy name = new ZECacheEntryBy(CacheEntryBy.name);
+    public static ByCacheEntry id   = new ByCacheEntry(CacheEntryBy.id);
+    public static ByCacheEntry name = new ByCacheEntry(CacheEntryBy.name);
 
-    ZECacheEntryBy(CacheEntryBy identityBy)
+    ByCacheEntry(CacheEntryBy identityBy)
     {
       mCacheEntryBy = identityBy;
     }
@@ -294,11 +304,12 @@ public class ProvisioningKey
       return mCacheEntryBy;
     }
 
-    public static ZECacheEntryBy fromString(String s) throws ServiceException
+    public static ByCacheEntry fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZECacheEntryBy(CacheEntryBy.valueOf(s));
+        return new ByCacheEntry(CacheEntryBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -307,14 +318,14 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZECosBy
+  public static class ByCos
   {
     private final CosBy mCosBy;
 
-    public static ZECosBy id   = new ZECosBy(CosBy.id);
-    public static ZECosBy name = new ZECosBy(CosBy.name);
+    public static ByCos id   = new ByCos(CosBy.id);
+    public static ByCos name = new ByCos(CosBy.name);
 
-    ZECosBy(CosBy identityBy)
+    ByCos(CosBy identityBy)
     {
       mCosBy = identityBy;
     }
@@ -324,11 +335,12 @@ public class ProvisioningKey
       return mCosBy;
     }
 
-    public static ZECosBy fromString(String s) throws ServiceException
+    public static ByCos fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZECosBy(CosBy.valueOf(s));
+        return new ByCos(CosBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -337,15 +349,15 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZECalendarResourceBy
+  public static class ByCalendarResource
   {
     private final CalendarResourceBy mCalendarResourceBy;
 
-    public static ZECalendarResourceBy id               = new ZECalendarResourceBy(CalendarResourceBy.id);
-    public static ZECalendarResourceBy foreignPrincipal = new ZECalendarResourceBy(CalendarResourceBy.foreignPrincipal);
-    public static ZECalendarResourceBy name             = new ZECalendarResourceBy(CalendarResourceBy.name);
+    public static ByCalendarResource id               = new ByCalendarResource(CalendarResourceBy.id);
+    public static ByCalendarResource foreignPrincipal = new ByCalendarResource(CalendarResourceBy.foreignPrincipal);
+    public static ByCalendarResource name             = new ByCalendarResource(CalendarResourceBy.name);
 
-    ZECalendarResourceBy(CalendarResourceBy identityBy)
+    ByCalendarResource(CalendarResourceBy identityBy)
     {
       mCalendarResourceBy = identityBy;
     }
@@ -355,11 +367,12 @@ public class ProvisioningKey
       return mCalendarResourceBy;
     }
 
-    public static ZECalendarResourceBy fromString(String s) throws ServiceException
+    public static ByCalendarResource fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZECalendarResourceBy(CalendarResourceBy.valueOf(s));
+        return new ByCalendarResource(CalendarResourceBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -368,15 +381,15 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZEXMPPComponentBy
+  public static class ByXMPPComponent
   {
     private final XMPPComponentBy mXMPPComponentBy;
 
-    public static ZEXMPPComponentBy id = new ZEXMPPComponentBy(XMPPComponentBy.id);
-    public static ZEXMPPComponentBy serviceHostname = new ZEXMPPComponentBy(XMPPComponentBy.serviceHostname);
-    public static ZEXMPPComponentBy name            = new ZEXMPPComponentBy(XMPPComponentBy.name);
+    public static ByXMPPComponent id              = new ByXMPPComponent(XMPPComponentBy.id);
+    public static ByXMPPComponent serviceHostname = new ByXMPPComponent(XMPPComponentBy.serviceHostname);
+    public static ByXMPPComponent name            = new ByXMPPComponent(XMPPComponentBy.name);
 
-    ZEXMPPComponentBy(XMPPComponentBy identityBy)
+    ByXMPPComponent(XMPPComponentBy identityBy)
     {
       mXMPPComponentBy = identityBy;
     }
@@ -386,11 +399,12 @@ public class ProvisioningKey
       return mXMPPComponentBy;
     }
 
-    public static ZEXMPPComponentBy fromString(String s) throws ServiceException
+    public static ByXMPPComponent fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEXMPPComponentBy(XMPPComponentBy.valueOf(s));
+        return new ByXMPPComponent(XMPPComponentBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -399,14 +413,14 @@ public class ProvisioningKey
     }
   }
 
-  public static class ZEDistributionListBy
+  public static class ByDistributionList
   {
     private final DistributionListBy mDistributionListBy;
 
-    public static ZEDistributionListBy id   = new ZEDistributionListBy(DistributionListBy.id);
-    public static ZEDistributionListBy name = new ZEDistributionListBy(DistributionListBy.name);
+    public static ByDistributionList id   = new ByDistributionList(DistributionListBy.id);
+    public static ByDistributionList name = new ByDistributionList(DistributionListBy.name);
 
-    ZEDistributionListBy(DistributionListBy identityBy)
+    ByDistributionList(DistributionListBy identityBy)
     {
       mDistributionListBy = identityBy;
     }
@@ -416,11 +430,12 @@ public class ProvisioningKey
       return mDistributionListBy;
     }
 
-    public static ZEDistributionListBy fromString(String s) throws ServiceException
+    public static ByDistributionList fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEDistributionListBy(DistributionListBy.valueOf(s));
+        return new ByDistributionList(DistributionListBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -430,14 +445,14 @@ public class ProvisioningKey
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
-  static class ZEUCServiceBy
+  static class ByUCService
   {
     private final UCServiceBy mUCServiceBy;
 
-    public static ZEUCServiceBy id   = new ZEUCServiceBy(UCServiceBy.id);
-    public static ZEUCServiceBy name = new ZEUCServiceBy(UCServiceBy.name);
+    public static ByUCService id   = new ByUCService(UCServiceBy.id);
+    public static ByUCService name = new ByUCService(UCServiceBy.name);
 
-    ZEUCServiceBy(UCServiceBy identityBy)
+    ByUCService(UCServiceBy identityBy)
     {
       mUCServiceBy = identityBy;
     }
@@ -447,11 +462,12 @@ public class ProvisioningKey
       return mUCServiceBy;
     }
 
-    public static ZEUCServiceBy fromString(String s) throws ServiceException
+    public static ByUCService fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEUCServiceBy(UCServiceBy.valueOf(s));
+        return new ByUCService(UCServiceBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {
@@ -460,13 +476,13 @@ public class ProvisioningKey
     }
   }
 
-  static class ZEShareLocatorBy
+  static class ByShareLocator
   {
     private final ShareLocatorBy mShareLocatorBy;
 
-    public static ZEShareLocatorBy id = new ZEShareLocatorBy(ShareLocatorBy.id);
+    public static ByShareLocator id = new ByShareLocator(ShareLocatorBy.id);
 
-    ZEShareLocatorBy(ShareLocatorBy identityBy)
+    ByShareLocator(ShareLocatorBy identityBy)
     {
       mShareLocatorBy = identityBy;
     }
@@ -476,11 +492,12 @@ public class ProvisioningKey
       return mShareLocatorBy;
     }
 
-    public static ZEShareLocatorBy fromString(String s) throws ServiceException
+    public static ByShareLocator fromString(String s)
+      throws ServiceException
     {
       try
       {
-        return new ZEShareLocatorBy(ShareLocatorBy.valueOf(s));
+        return new ByShareLocator(ShareLocatorBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {

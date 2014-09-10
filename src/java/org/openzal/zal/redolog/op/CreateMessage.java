@@ -20,20 +20,18 @@
 
 package org.openzal.zal.redolog.op;
 
-import com.zimbra.cs.redolog.op.CreateMessage;
 
-
-public class ZECreateMessage
+public class CreateMessage
 {
-  private final ZERedoableOp mOp;
+  private final RedoableOp mOp;
 
-  public ZECreateMessage(ZERedoableOp op)
+  public CreateMessage(RedoableOp op)
   {
     mOp = op;
   }
 
   public int getMessageId()
   {
-    return ((CreateMessage)mOp.getProxiedObject()).getMessageId();
+    return ((com.zimbra.cs.redolog.op.CreateMessage) mOp.getProxiedObject()).getMessageId();
   }
 }

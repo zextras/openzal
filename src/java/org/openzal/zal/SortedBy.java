@@ -30,7 +30,7 @@ public class SortedBy
   /* $if ZimbraVersion >= 8.0.0 $ */
   public static SortedBy DATE_DESC = new SortedBy(SortBy.DATE_DESC);
   /* $else $
-  public static SortBy DATE_DESC = new SortBy(SortBy.DATE_DESCENDING);
+  public static SortedBy DATE_DESC = new SortedBy(SortBy.DATE_DESCENDING);
   /* $endif $ */
 
   protected SortedBy(SortBy sortBy)

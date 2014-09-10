@@ -21,19 +21,17 @@
 package org.openzal.zal.redolog;
 
 
-import com.zimbra.cs.redolog.RedoLogInput;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 
-public class ZERedoLogInput
+public class RedoLogInput
 {
-  private final RedoLogInput mRedoLogInput;
+  private final com.zimbra.cs.redolog.RedoLogInput mRedoLogInput;
 
-  public ZERedoLogInput(RandomAccessFile fileHandler, String currentRedoPath)
+  public RedoLogInput(RandomAccessFile fileHandler, String currentRedoPath)
   {
-    mRedoLogInput = new RedoLogInput(fileHandler, currentRedoPath);
+    mRedoLogInput = new com.zimbra.cs.redolog.RedoLogInput(fileHandler, currentRedoPath);
   }
 
   public void readFully(byte[] byte1, int int1, int int2)

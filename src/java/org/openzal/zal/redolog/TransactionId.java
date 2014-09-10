@@ -21,36 +21,33 @@
 package org.openzal.zal.redolog;
 
 
-import com.zimbra.cs.redolog.RedoLogInput;
-import com.zimbra.cs.redolog.TransactionId;
-
 import java.io.IOException;
 
 
-public class ZETransactionId
+public class TransactionId
 {
-  private final TransactionId mTransactionId;
+  private final com.zimbra.cs.redolog.TransactionId mTransactionId;
 
-  public ZETransactionId()
+  public TransactionId()
   {
-    this(new TransactionId());
+    this(new com.zimbra.cs.redolog.TransactionId());
   }
 
-  public ZETransactionId(Object transactionId)
+  public TransactionId(Object transactionId)
   {
-    mTransactionId = (TransactionId)transactionId;
+    mTransactionId = (com.zimbra.cs.redolog.TransactionId) transactionId;
   }
 
-  public void deserialize(ZERedoLogInput redologInput)
+  public void deserialize(RedoLogInput redologInput)
     throws IOException
   {
-    mTransactionId.deserialize(redologInput.toZimbra(RedoLogInput.class));
+    mTransactionId.deserialize(redologInput.toZimbra(com.zimbra.cs.redolog.RedoLogInput.class));
   }
 
   @Override
   public boolean equals(Object o)
   {
-    if (o instanceof TransactionId)
+    if (o instanceof com.zimbra.cs.redolog.TransactionId)
     {
       return mTransactionId.equals(o);
     }
@@ -58,7 +55,7 @@ public class ZETransactionId
     if (this == o) { return true; }
     if (o == null || getClass() != o.getClass()) { return false; }
 
-    ZETransactionId that = (ZETransactionId) o;
+    TransactionId that = (TransactionId) o;
 
     if (mTransactionId != null ? !mTransactionId.equals(that.mTransactionId) : that.mTransactionId != null)
     {

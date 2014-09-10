@@ -25,8 +25,6 @@ import java.util.*;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
-import org.openzal.zal.provisioning.ZEGroup;
-import org.openzal.zal.provisioning.ZETargetType;
 
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.accesscontrol.*;
@@ -65,6 +63,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.provisioning.Group;
 
 /* $if MajorZimbraVersion >= 8 $ */
 
@@ -292,7 +291,7 @@ public class Provisioning
     {
       com.zimbra.cs.account.DistributionList distributionList = null;
 /* $if MajorZimbraVersion >= 8 $ */
-      distributionList = mProvisioning.get(ProvisioningKey.ZEDistributionListBy.id.toZimbra(), id);
+      distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.id.toZimbra(), id);
 /* $else$
       distributionList = mProvisioning.getDistributionListById(id);
    $endif$ */
@@ -319,7 +318,7 @@ public class Provisioning
     {
       com.zimbra.cs.account.DistributionList distributionList = null;
 /* $if MajorZimbraVersion >= 8 $ */
-      distributionList = mProvisioning.get(ProvisioningKey.ZEDistributionListBy.name.toZimbra(), name);
+      distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.name.toZimbra(), name);
 /* $else$
       distributionList = mProvisioning.getDistributionListByName(name);
    $endif$ */
@@ -464,7 +463,7 @@ public class Provisioning
     try
     {
       com.zimbra.cs.account.Group distributionList =
-        mProvisioning.getGroup(ProvisioningKey.ZEDistributionListBy.name.toZimbra(), list);
+        mProvisioning.getGroup(ProvisioningKey.ByDistributionList.name.toZimbra(), list);
       if (distributionList == null)
       {
         throw ExceptionWrapper.createUnableToFindDistributionList(list);
@@ -707,7 +706,7 @@ public class Provisioning
   }
 
   @Nullable
-  public DistributionList get(ProvisioningKey.ZEDistributionListBy id, String dlStr)
+  public DistributionList get(ProvisioningKey.ByDistributionList id, String dlStr)
     throws ZimbraException
   {
     try
@@ -729,7 +728,7 @@ public class Provisioning
   }
 
   @Nullable
-  public Account get(ProvisioningKey.ZEAccountBy by, String target)
+  public Account get(ProvisioningKey.ByAccount by, String target)
     throws ZimbraException
   {
     try
@@ -1384,20 +1383,20 @@ public class Provisioning
   }
 
   @Nullable
-  public ZEGroup getGroupById(String dlStr)
+  public Group getGroupById(String dlStr)
     throws ZimbraException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
-      Group group = mProvisioning.getGroup(Key.DistributionListBy.id, dlStr);
+      com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.id, dlStr);
       if (group == null)
       {
         return null;
       }
       else
       {
-        return new ZEGroup(group);
+        return new Group(group);
       }
     }
     catch (ServiceException e)
@@ -1410,20 +1409,20 @@ public class Provisioning
   }
 
   @Nullable
-  public ZEGroup getGroupByName(String dlStr)
+  public Group getGroupByName(String dlStr)
     throws ZimbraException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
-      Group group = mProvisioning.getGroup(Key.DistributionListBy.name, dlStr);
+      com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.name, dlStr);
       if (group == null)
       {
         return null;
       }
       else
       {
-        return new ZEGroup(group);
+        return new Group(group);
       }
     }
     catch (ServiceException e)
@@ -1446,9 +1445,9 @@ public class Provisioning
     try
     {
       // target
-      com.zimbra.cs.account.Entry targetEntry = TargetType.lookupTarget(
+      com.zimbra.cs.account.Entry targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
         mProvisioning,
-        TargetType.dl,
+        com.zimbra.cs.account.accesscontrol.TargetType.dl,
         com.zimbra.soap.type.TargetBy.name,
         target
       );
@@ -1485,7 +1484,7 @@ public class Provisioning
   }
 
   public Grants getGrants(
-    ZETargetType targetType,
+    org.openzal.zal.provisioning.TargetType targetType,
     TargetBy name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
@@ -1588,9 +1587,9 @@ public class Provisioning
 
   public static class GalSearchResult
   {
-    private final LinkedList<ZEGalContact> mContactList;
-    private       int                      mTotal;
-    private boolean mHasMore;
+    private final LinkedList<GalContact> mContactList;
+    private       int                    mTotal;
+    private       boolean                mHasMore;
 
     void setTotal(int total)
     {
@@ -1602,11 +1601,11 @@ public class Provisioning
       mHasMore = hasMore;
     }
 
-    public static class ZEGalContact
+    public static class GalContact
     {
       private final com.zimbra.cs.account.GalContact mGalContact;
 
-      ZEGalContact(GalContact galContact)
+      GalContact(com.zimbra.cs.account.GalContact galContact)
       {
         mGalContact = galContact;
       }
@@ -1624,10 +1623,10 @@ public class Provisioning
 
     GalSearchResult()
     {
-      mContactList = new LinkedList<ZEGalContact>();
+      mContactList = new LinkedList<GalContact>();
     }
 
-    public List<ZEGalContact> getContactList()
+    public List<GalContact> getContactList()
     {
       return mContactList;
     }
@@ -1642,7 +1641,7 @@ public class Provisioning
       return mTotal;
     }
 
-    void addContact(ZEGalContact galContact)
+    void addContact(GalContact galContact)
     {
       mContactList.add(galContact);
     }
@@ -1701,11 +1700,12 @@ public class Provisioning
       mSearchResult = result;
     }
 
-    public void handleContact(GalContact galContact) throws ZimbraException
+    public void handleContact(GalContact galContact)
+      throws ZimbraException
     {
       if (mCounter >= mSkip)
       {
-        mSearchResult.addContact(new GalSearchResult.ZEGalContact(galContact));
+        mSearchResult.addContact(new GalSearchResult.GalContact(galContact));
       }
 
       mCounter += 1;
@@ -1717,7 +1717,8 @@ public class Provisioning
       mSearchResult.setHasMore(hasMore);
     }
 
-    public Element handleContact(Contact contact) throws ZimbraException
+    public Element handleContact(Contact contact)
+      throws ZimbraException
     {
       if (mCounter >= mSkip)
       {
@@ -1731,7 +1732,7 @@ public class Provisioning
         }
 
         GalContact galContact = new GalContact(tag_id, galAttrs);
-        mSearchResult.addContact(new GalSearchResult.ZEGalContact(galContact));
+        mSearchResult.addContact(new GalSearchResult.GalContact(galContact));
       }
       mCounter += 1;
       mSearchResult.setTotal(mCounter);
@@ -1769,7 +1770,7 @@ public class Provisioning
         }
 
         GalContact galContact = new GalContact(tag_id, galAttrs);
-        mSearchResult.addContact(new GalSearchResult.ZEGalContact(galContact));
+        mSearchResult.addContact(new GalSearchResult.GalContact(galContact));
       }
       mCounter += 1;
       mSearchResult.setTotal(mCounter);

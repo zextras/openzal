@@ -43,7 +43,7 @@ public class Tags
   public static Tags extractFromItem( Item item )
   {
     /* $if ZimbraVersion < 8.0.0 $
-    return new ZETags(item.getBitmask());
+    return new Tags(item.getBitmask());
     $else$ */
     return new Tags(item.getTags());
     /* $endif$ */

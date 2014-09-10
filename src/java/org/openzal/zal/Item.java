@@ -119,7 +119,7 @@ public class Item implements Comparable<Item>
   }
  $endif$ */
 
-  public static Item constructItem(Mailbox mbox, ZEUnderlyingData data) throws ZimbraException
+  public static Item constructItem(Mailbox mbox, UnderlyingData data) throws ZimbraException
   {
     try
     {
@@ -276,16 +276,16 @@ $endif$ */
 $endif$ */
   }
 
-  public static class ZECustomMetadata
+  public static class CustomMetadata
   {
     private MailItem.CustomMetadata mCustomMetadata;
 
-    public ZECustomMetadata(Object meta)
+    public CustomMetadata(Object meta)
     {
       mCustomMetadata = (MailItem.CustomMetadata)meta;
     }
 
-    public ZECustomMetadata(String key)
+    public CustomMetadata(String key)
     {
       mCustomMetadata = new MailItem.CustomMetadata(key);
     }
@@ -307,11 +307,11 @@ $endif$ */
 
   }
 
-  public ZECustomMetadata getCustomData(String section) throws ZimbraException
+  public CustomMetadata getCustomData(String section) throws ZimbraException
   {
     try
     {
-      return new ZECustomMetadata(mMailItem.getCustomData(section));
+      return new CustomMetadata(mMailItem.getCustomData(section));
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -319,16 +319,16 @@ $endif$ */
     }
   }
 
-  public static class ZEUnderlyingData
+  public static class UnderlyingData
   {
     private MailItem.UnderlyingData mUnderlyingData;
 
-    public ZEUnderlyingData()
+    public UnderlyingData()
     {
       mUnderlyingData = new MailItem.UnderlyingData();
     }
 
-    public ZEUnderlyingData(Object data)
+    public UnderlyingData(Object data)
     {
       mUnderlyingData = (MailItem.UnderlyingData)data;
     }
@@ -391,9 +391,9 @@ $endif$ */
     }
   }
 
-  public ZEUnderlyingData getUnderlyingData()
+  public UnderlyingData getUnderlyingData()
   {
-    return new ZEUnderlyingData(mMailItem.getUnderlyingData());
+    return new UnderlyingData(mMailItem.getUnderlyingData());
   }
 
   public static class Color
@@ -623,7 +623,7 @@ $endif$ */
     }
   }
 
-  public static Item.ZEUnderlyingData decodeZimbraMetadata(ZimbraVersion originVersion, final String encodedString)
+  public static UnderlyingData decodeZimbraMetadata(ZimbraVersion originVersion, final String encodedString)
     throws ZimbraException
   {
     try
@@ -640,7 +640,7 @@ $endif$ */
         }
       }
 
-      Item.ZEUnderlyingData underlyingData = new Item.ZEUnderlyingData();
+      UnderlyingData underlyingData = new UnderlyingData();
       Object parameters[] = new Object[1];
       parameters[0] = meta;
 
@@ -676,7 +676,7 @@ $endif$ */
   {
     try
     {
-      Item.ZEUnderlyingData underlyingData = getUnderlyingData();
+      UnderlyingData underlyingData = getUnderlyingData();
       Object parameters[] = new Object[0];
       Metadata meta = (Metadata) sSerializeMethod.invoke(
         underlyingData.toZimbra(MailItem.UnderlyingData.class),

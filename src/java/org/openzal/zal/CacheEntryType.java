@@ -86,7 +86,12 @@ public class CacheEntryType
   {
     try
     {
+  /* $if ZimbraVersion >= 8.0.0 $ */
       return new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.fromString(s));
+  /* $else $
+      return new CacheEntryType(com.zimbra.cs.account.Provisioning.CacheEntryType.fromString(s));
+  /* $endif $ */
+
     }
     catch (ServiceException e)
     {

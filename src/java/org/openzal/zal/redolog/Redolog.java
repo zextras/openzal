@@ -20,34 +20,32 @@
 
 package org.openzal.zal.redolog;
 
-import org.openzal.zal.redolog.op.ZERedoableOp;
+import org.openzal.zal.redolog.op.RedoableOp;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.mailbox.MailboxOperation;
-/* $else $
-import com.zimbra.cs.redolog.op.RedoableOp;
 /* $endif $ */
 
-public class ZERedolog
+public class Redolog
 {
-  public static int getOpCode( ZERedoableOp op )
+  public static int getOpCode( RedoableOp op )
   {
     return op.getOpCode();
   }
 
-  public static String getOpClassName( ZERedoableOp op )
+  public static String getOpClassName( RedoableOp op )
   {
 /* $if ZimbraVersion >= 8.0.0 $ */
     MailboxOperation mop = MailboxOperation.fromInt(getOpCode(op));
     return mop.name();
    /* $else $
-    return RedoableOp.getOpClassName(getOpCode(op));
+    return com.zimbra.cs.redolog.op.RedoableOp.getOpClassName(getOpCode(op));
 /* $endif$ */
   }
 
-  public static String toString( ZERedoableOp op )
+  public static String toString( RedoableOp op )
   {
-    return ZERedolog.getOpClassName(op)+" " +op.getTransactionId().toString();
+    return Redolog.getOpClassName(op)+" " +op.getTransactionId().toString();
   }
 
   public static final int OP_CHECKPOINT = 1;

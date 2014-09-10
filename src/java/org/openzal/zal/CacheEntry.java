@@ -27,7 +27,7 @@ public class CacheEntry
 {
   private final Provisioning.CacheEntry mCacheEntry;
 
-  public CacheEntry(ProvisioningKey.ZECacheEntryBy id, String string)
+  public CacheEntry(ProvisioningKey.ByCacheEntry id, String string)
   {
     this(new Provisioning.CacheEntry(id.toZimbra(), string));
   }

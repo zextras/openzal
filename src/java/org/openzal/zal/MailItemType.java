@@ -51,22 +51,22 @@ public class MailItemType
   public static MailItemType COMMENT              = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.COMMENT);
   public static MailItemType LINK                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.LINK);
   /* $else $
-  public static MailItemType CONTACT              = new MailItemType(MailItem.TYPE_CONTACT);
-  public static MailItemType UNKNOWN              = new MailItemType(MailItem.TYPE_UNKNOWN);
-  public static MailItemType FOLDER               = new MailItemType(MailItem.TYPE_FOLDER);
-  public static MailItemType SEARCHFOLDER         = new MailItemType(MailItem.TYPE_SEARCHFOLDER);
-  public static MailItemType TAG                  = new MailItemType(MailItem.TYPE_TAG);
-  public static MailItemType CONVERSATION         = new MailItemType(MailItem.TYPE_CONVERSATION);
-  public static MailItemType MESSAGE              = new MailItemType(MailItem.TYPE_MESSAGE);
-  public static MailItemType DOCUMENT             = new MailItemType(MailItem.TYPE_DOCUMENT);
-  public static MailItemType NOTE                 = new MailItemType(MailItem.TYPE_NOTE);
-  public static MailItemType FLAG                 = new MailItemType(MailItem.TYPE_FLAG);
-  public static MailItemType APPOINTMENT          = new MailItemType(MailItem.TYPE_APPOINTMENT);
-  public static MailItemType VIRTUAL_CONVERSATION = new MailItemType(MailItem.TYPE_VIRTUAL_CONVERSATION);
-  public static MailItemType MOUNTPOINT           = new MailItemType(MailItem.TYPE_MOUNTPOINT);
-  @Deprecated public static MailItemType WIKI     = new MailItemType(MailItem.TYPE_WIKI);
-  public static MailItemType TASK                 = new MailItemType(MailItem.TYPE_TASK);
-  public static MailItemType CHAT                 = new MailItemType(MailItem.TYPE_CHAT);
+  public static MailItemType CONTACT              = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_CONTACT);
+  public static MailItemType UNKNOWN              = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
+  public static MailItemType FOLDER               = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_FOLDER);
+  public static MailItemType SEARCHFOLDER         = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_SEARCHFOLDER);
+  public static MailItemType TAG                  = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_TAG);
+  public static MailItemType CONVERSATION         = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_CONVERSATION);
+  public static MailItemType MESSAGE              = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_MESSAGE);
+  public static MailItemType DOCUMENT             = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_DOCUMENT);
+  public static MailItemType NOTE                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_NOTE);
+  public static MailItemType FLAG                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_FLAG);
+  public static MailItemType APPOINTMENT          = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_APPOINTMENT);
+  public static MailItemType VIRTUAL_CONVERSATION = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_VIRTUAL_CONVERSATION);
+  public static MailItemType MOUNTPOINT           = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_MOUNTPOINT);
+  @Deprecated public static MailItemType WIKI     = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_WIKI);
+  public static MailItemType TASK                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_TASK);
+  public static MailItemType CHAT                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.TYPE_CHAT);
   public static MailItemType COMMENT              = null;
   public static MailItemType LINK                 = null;
   /* $endif $ */
@@ -153,7 +153,7 @@ public class MailItemType
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mType.toString();
     /* $else $
-    return MailItem.getNameForType(mType);
+    return com.zimbra.cs.mailbox.MailItem.getNameForType(mType);
     /* $endif $ */
   }
 

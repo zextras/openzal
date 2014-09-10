@@ -18,22 +18,22 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.redolog.op;
-
-import com.zimbra.cs.redolog.op.CreateFolderPath;
+package org.openzal.zal.redolog;
 
 
-public class ZECreateFolderPath
+public class RedoLogProvider
 {
-  private final ZERedoableOp mOp;
+  private final com.zimbra.cs.redolog.RedoLogProvider mRedologProvider;
 
-  public ZECreateFolderPath(ZERedoableOp op)
+  public RedoLogProvider()
   {
-    mOp = op;
+    mRedologProvider = com.zimbra.cs.redolog.RedoLogProvider.getInstance();
   }
 
-  public int[] getFolderIds()
+  public RedoLogManager getRedoLogManager()
   {
-    return ((CreateFolderPath)mOp.getProxiedObject()).getFolderIds();
+    return new RedoLogManager(
+      mRedologProvider.getRedoLogManager()
+    );
   }
 }

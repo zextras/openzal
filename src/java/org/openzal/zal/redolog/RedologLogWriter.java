@@ -18,24 +18,26 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.redolog.op;
+package org.openzal.zal.redolog;
 
-import com.zimbra.cs.redolog.op.Checkpoint;
-
-import java.util.Set;
+import com.zimbra.cs.redolog.logger.LogWriter;
 
 
-public class ZECheckpoint
+public class RedologLogWriter
 {
-  private final ZERedoableOp mOp;
+  private final LogWriter mLogWriter;
 
-  public ZECheckpoint(ZERedoableOp op)
+  public RedologLogWriter(Object logWriter)
   {
-    mOp = op;
+    if (logWriter == null )
+    {
+      throw new NullPointerException("Volume is null");
+    }
+    mLogWriter = (LogWriter)logWriter;
   }
 
-  public Set getActiveTxns()
+  public long getLastLogTime()
   {
-    return ((Checkpoint) mOp.getProxiedObject()).getActiveTxns();
+    return mLogWriter.getLastLogTime();
   }
 }

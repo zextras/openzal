@@ -40,11 +40,11 @@ public class Message extends Item
     mMessage = (com.zimbra.cs.mailbox.Message) mailItem;
   }
 
-  public class ZECalendarInfo
+  public class CalendarInfo
   {
     private final com.zimbra.cs.mailbox.Message.CalendarItemInfo mCalendarItemInfo;
 
-    public ZECalendarInfo(com.zimbra.cs.mailbox.Message.CalendarItemInfo calendarItemInfo)
+    public CalendarInfo(com.zimbra.cs.mailbox.Message.CalendarItemInfo calendarItemInfo)
     {
       mCalendarItemInfo = calendarItemInfo;
     }
@@ -108,11 +108,11 @@ $endif$ */
     return mMessage.hasCalendarItemInfos();
   }
 
-  public Iterator<ZECalendarInfo> getCalendarItemInfoIterator()
+  public Iterator<CalendarInfo> getCalendarItemInfoIterator()
   {
     final Iterator<com.zimbra.cs.mailbox.Message.CalendarItemInfo> calendarItemInfoIterator = mMessage.getCalendarItemInfoIterator();
 
-    return new Iterator<ZECalendarInfo>(
+    return new Iterator<CalendarInfo>(
     )
     {
       @Override
@@ -122,9 +122,9 @@ $endif$ */
       }
 
       @Override
-      public ZECalendarInfo next()
+      public CalendarInfo next()
       {
-        return new ZECalendarInfo(
+        return new CalendarInfo(
           calendarItemInfoIterator.next()
         );
       }

@@ -23,26 +23,23 @@ package org.openzal.zal.provisioning;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
-/* $if ZimbraVersion >= 8.0.0 $ */
-import com.zimbra.cs.account.Group;
-/* $endif $ */
 
 import java.util.Set;
 
-public class ZEGroup
+public class Group
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final Group mGroup;
+  private final com.zimbra.cs.account.Group mGroup;
   /* $endif $ */
 
-  public ZEGroup( @NotNull Object group )
+  public Group(@NotNull Object group)
   {
     if ( group == null )
     {
       throw new NullPointerException();
     }
   /* $if ZimbraVersion >= 8.0.0 $ */
-    mGroup = (Group)group;
+    mGroup = (com.zimbra.cs.account.Group) group;
   /* $else $
     throw new UnsupportedOperationException();
    $endif $ */
