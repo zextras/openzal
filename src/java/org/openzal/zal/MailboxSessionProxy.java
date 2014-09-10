@@ -46,6 +46,11 @@ public class MailboxSessionProxy
     mClock = new ActualClock();
   }
 
+  public MailboxSessionProxy(Object session)
+  {
+    mSession = (SessionImpl) session;
+  }
+
   private boolean areChangesForMobile(Object what)
   {
     byte type = Item.TYPE_UNKNOWN;
