@@ -21,9 +21,9 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.common.service.ServiceException;
+import org.openzal.zal.Mime;
+import org.openzal.zal.MimeConstants;
 import org.openzal.zal.Utils;
-import org.openzal.zal.ZEMime;
-import org.openzal.zal.ZEMimeConstants;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -67,7 +67,7 @@ public class CalendarMime
    * possibile SERVER LOCK due to an internal zimbra mechanism, BE CAREFUL
    */
   public MimeMessage createCalendarMessage(
-    ZEInvite inv,
+    Invite inv,
     MimeMessage previousMimeMessage
   )
     throws ZimbraException, IOException, MessagingException
@@ -124,7 +124,7 @@ public class CalendarMime
   {
     try
     {
-      MimeMessage mimeMessage = ZEMime.buildFixedMimeMessage(Utils.getSmtpSession());
+      MimeMessage mimeMessage = Mime.buildFixedMimeMessage(Utils.getSmtpSession());
       MimeMultipart alternativeMultipart = createAlternativePart(cal, desc, descHtml);
       MimeMultipart mixedMultipart = createMixedPart(alternativeMultipart, bodyPartList);
 
@@ -132,7 +132,7 @@ public class CalendarMime
 
       if (subject != null && !subject.isEmpty())
       {
-        mimeMessage.setSubject(subject, ZEMimeConstants.P_CHARSET_UTF8);
+        mimeMessage.setSubject(subject, MimeConstants.P_CHARSET_UTF8);
       }
 
       mimeMessage.setSentDate(new Date());
@@ -176,7 +176,7 @@ public class CalendarMime
     cal.addDescription(desc, null);
 
     MimeBodyPart textPart = new MimeBodyPart();
-    textPart.setText(desc, ZEMimeConstants.P_CHARSET_UTF8);
+    textPart.setText(desc, MimeConstants.P_CHARSET_UTF8);
     multipart.addBodyPart(textPart);
 
     MimeBodyPart htmlPart = new MimeBodyPart();
@@ -185,9 +185,9 @@ public class CalendarMime
       descHtml = mPlainTextToHtmlConverter.plainText2HTML(desc);
     }
 
-    ContentType ct = new ContentType(ZEMimeConstants.CT_TEXT_HTML);
-    ct.setParameter(ZEMimeConstants.P_CHARSET, ZEMimeConstants.P_CHARSET_UTF8);
-    htmlPart.setText(descHtml, ZEMimeConstants.P_CHARSET_UTF8);
+    ContentType ct = new ContentType(MimeConstants.CT_TEXT_HTML);
+    ct.setParameter(MimeConstants.P_CHARSET, MimeConstants.P_CHARSET_UTF8);
+    htmlPart.setText(descHtml, MimeConstants.P_CHARSET_UTF8);
     htmlPart.setHeader("Content-Type", ct.toString());
 
     multipart.addBodyPart(htmlPart);

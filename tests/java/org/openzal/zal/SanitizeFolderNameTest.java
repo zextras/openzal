@@ -12,19 +12,20 @@ import static org.mockito.Mockito.*;
 
 public class SanitizeFolderNameTest
 {
-  private ZEMailbox mailbox;
-  private ZEOperationContext zcontext;
+  private Mailbox          mailbox;
+  private OperationContext zcontext;
   private final String DEFAULT_FOLDER_NAME = "New Folder";
 
   @Before
-  public void setUp() throws Exception
+  public void setUp()
+    throws Exception
   {
     NoSuchItemException noShuchFolderException = mock(NoSuchItemException.class);
-    mailbox = mock(ZEMailbox.class);
-    when(mailbox.getFolderByName(any(ZEOperationContext.class),
+    mailbox = mock(Mailbox.class);
+    when(mailbox.getFolderByName(any(OperationContext.class),
                                  anyString(),
                                  anyInt())).thenThrow(noShuchFolderException);
-    zcontext = mock(ZEOperationContext.class);
+    zcontext = mock(OperationContext.class);
   }
 
   @Test
@@ -90,14 +91,14 @@ public class SanitizeFolderNameTest
   public void sanitize_nameOfAnExistingFolder_returnNextAvailableFolderName() throws Exception
   {
     String name = "Folder";
-    ZEFolder existingFolder = mock(ZEFolder.class);
-    ZEMailbox mailbox = mock(ZEMailbox.class);
+    Folder existingFolder = mock(Folder.class);
+    Mailbox mailbox = mock(Mailbox.class);
 
-    when(mailbox.getFolderByName(any(ZEOperationContext.class),
+    when(mailbox.getFolderByName(any(OperationContext.class),
                                          eq(name),
                                          anyInt())).thenReturn(existingFolder);
 
-    when(mailbox.getFolderByName(any(ZEOperationContext.class),
+    when(mailbox.getFolderByName(any(OperationContext.class),
                                          eq("Folder 1"),
                                          anyInt())).thenThrow(NoSuchItemException.class);
 
@@ -105,17 +106,17 @@ public class SanitizeFolderNameTest
 
     assertEquals(sfn.sanitizeName(zcontext), "Folder 1");
 
-    verify(mailbox, times(1)).getFolderByName(any(ZEOperationContext.class), eq("Folder"), anyInt());
-    verify(mailbox, times(1)).getFolderByName(any(ZEOperationContext.class), eq("Folder 1"), anyInt());
+    verify(mailbox, times(1)).getFolderByName(any(OperationContext.class), eq("Folder"), anyInt());
+    verify(mailbox, times(1)).getFolderByName(any(OperationContext.class), eq("Folder 1"), anyInt());
   }
 
   @Test
   public void sanitize_nameOfAnExistingFolder_throwsExceptionOnOverflow() throws Exception
   {
-    ZEFolder existingFolder = mock(ZEFolder.class);
-    ZEMailbox mailbox = mock(ZEMailbox.class);
+    Folder existingFolder = mock(Folder.class);
+    Mailbox mailbox = mock(Mailbox.class);
 
-    when(mailbox.getFolderByName(any(ZEOperationContext.class),
+    when(mailbox.getFolderByName(any(OperationContext.class),
                                  anyString(),
                                  anyInt())).thenReturn(existingFolder);
 
@@ -127,7 +128,7 @@ public class SanitizeFolderNameTest
       fail();
     } catch (UnableToSanitizeFolderNameException ignored) {}
 
-    verify(mailbox, times(1000)).getFolderByName(any(ZEOperationContext.class), anyString(), anyInt());
+    verify(mailbox, times(1000)).getFolderByName(any(OperationContext.class), anyString(), anyInt());
   }
 
 }
