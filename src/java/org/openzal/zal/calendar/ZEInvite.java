@@ -101,12 +101,7 @@ public class ZEInvite
 
   public int getSequence()
   {
-    if(mInvite != null)
-    {
-      return mInvite.getSeqNo();
-    }
-
-    return 0;
+    return mInvite.getSeqNo();
   }
 
   public boolean isRecurrence()
@@ -212,6 +207,12 @@ public class ZEInvite
     return alarmMins;
   }
 
+  public long getUTCAlarmAbsoluteTime()
+  {
+    Alarm alarm = getDisplayAlarm();
+    return alarm.getTriggerTime(getUtcStartTime(), getUtcEndTime());
+  }
+
   public FreeBusyStatus getFreeBusy()
   {
     return FreeBusyStatus.fromZimbra(mInvite.getFreeBusy());
@@ -226,11 +227,6 @@ public class ZEInvite
   {
     try
     {
-      if(mInvite == null)
-      {
-        return "";
-      }
-
       String InviteDescription = mInvite.getDescription();
       if( InviteDescription != null )
       {
@@ -275,7 +271,6 @@ public class ZEInvite
 
   public long getUtcStartTime()
   {
-    //TODO is mInvite null?
     ParsedDateTime parsedDateTime = mInvite.getStartTime();
     if (parsedDateTime == null)
     {
@@ -379,32 +374,23 @@ public class ZEInvite
     return mInvite.getMethod();
   }
 
-  @Nullable
   public ZERecurId getRecurId()
   {
-    if( mInvite != null )
+    if (mInvite.hasRecurId())
     {
-      if (mInvite.hasRecurId())
-      {
-        return new ZERecurId(mInvite.getRecurId().getDt().getUtcTime());
-      }
-      return new ZERecurId( mInvite.getStartTime().getUtcTime() );
+      return new ZERecurId(mInvite.getRecurId().getDt().getUtcTime());
     }
-    return null;
+    throw new RuntimeException("Invalid RecursionId access");
   }
 
   public boolean hasRecurId()
   {
-    if( mInvite != null)
-    {
-      return mInvite.hasRecurId();
-    }
-    return false;
+    return mInvite.hasRecurId();
   }
 
   public String getSubject()
   {
-    if( mInvite != null )
+    if( mInvite.getName() != null )
     {
       return mInvite.getName();
     }
@@ -418,7 +404,7 @@ public class ZEInvite
   {
     try
     {
-      if( mInvite != null )
+      if( mInvite.getDescriptionHtml() != null )
       {
         return mInvite.getDescriptionHtml();
       }
@@ -435,11 +421,7 @@ public class ZEInvite
 
   public Priority getPriority()
   {
-    if( mInvite != null )
-    {
-      return Priority.fromZimbra(mInvite.getPriority());
-    }
-    return null;
+    return Priority.fromZimbra(mInvite.getPriority());
   }
 
   public long getEffectiveEndTime()
@@ -500,22 +482,18 @@ public class ZEInvite
 
   public List<Attendee> getAttendees()
   {
-    if( mInvite != null )
+    List<ZAttendee> zAttendeeList = mInvite.getAttendees();
+    List<Attendee> attendeeList = new ArrayList<Attendee>();
+    if( zAttendeeList == null )
     {
-      List<ZAttendee> zAttendeeList = mInvite.getAttendees();
-      List<Attendee> attendeeList = new ArrayList<Attendee>();
-      if( zAttendeeList == null )
-      {
-        return attendeeList;
-      }
-
-      for (ZAttendee attendee : zAttendeeList)
-      {
-        attendeeList.add(convertAttendee(attendee));
-      }
       return attendeeList;
     }
-    return new ArrayList<Attendee>();
+
+    for (ZAttendee attendee : zAttendeeList)
+    {
+      attendeeList.add(convertAttendee(attendee));
+    }
+    return attendeeList;
   }
 
   public Sensitivity getSensitivity()
@@ -536,13 +514,10 @@ public class ZEInvite
 
   public int getTaskPercentComplete()
   {
-    if( mInvite != null )
+    String percent = mInvite.getPercentComplete();
+    if( percent != null )
     {
-      String percent = mInvite.getPercentComplete();
-      if( percent != null )
-      {
-        return Integer.valueOf(percent);
-      }
+      return Integer.valueOf(percent);
     }
     return 0;
   }

@@ -217,6 +217,7 @@ public class InviteFactory
 
   public void setReminderTime(long time)
   {
+    mAlarmSet = true;
     mReminderTime = time;
   }
 
@@ -292,8 +293,15 @@ public class InviteFactory
       zAttendeeList.add(zAttendee);
     }
 
-    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    ParsedDateTime dateStart = null;
+    if( mUtcDateStart != 0 ) {
+      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
+    }
+
+    ParsedDateTime dateEnd = null;
+    if( mUtcDateEnd != 0 ) {
+      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    }
 
     if (mAllDayEvent)
     {
