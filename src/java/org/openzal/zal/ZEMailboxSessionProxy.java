@@ -46,6 +46,11 @@ public class ZEMailboxSessionProxy
     mClock = new ActualClock();
   }
 
+  public ZEMailboxSessionProxy(Object session)
+  {
+    mSession = (SessionImpl) session;
+  }
+
   private boolean areChangesForMobile(Object what)
   {
     byte type = ZEItem.TYPE_UNKNOWN;
