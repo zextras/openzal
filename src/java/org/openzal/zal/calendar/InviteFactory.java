@@ -279,8 +279,6 @@ public class InviteFactory
   {
     byte type = (task ? ZEItem.TYPE_TASK : ZEItem.TYPE_APPOINTMENT);
 
-<<<<<<< HEAD
-=======
     RecurId recurId;
     if(mExceptionStartTime != 0L)
     {
@@ -294,7 +292,6 @@ public class InviteFactory
       recurId = null;
     }
 
->>>>>>> release/1.9.0
     boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
     ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
 
