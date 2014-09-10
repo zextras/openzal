@@ -31,6 +31,7 @@ import com.zimbra.common.service.ServiceException;
 import javax.mail.internet.MimeMessage;
 import java.lang.reflect.Field;
 import java.util.*;
+import org.openzal.zal.log.ZimbraLog;
 
 import com.zimbra.cs.mailbox.calendar.*;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,6 @@ import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
 import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
    $else$ */
 import com.zimbra.common.calendar.*;
-import org.openzal.zal.log.ZimbraLog;
 /* $endif$ */
 
 public class ZEInvite
