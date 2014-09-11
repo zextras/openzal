@@ -21,6 +21,8 @@
 package org.openzal.zal.redolog;
 
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 
 
@@ -33,7 +35,7 @@ public class RedoLogManager
     this(new com.zimbra.cs.redolog.RedoLogManager(redolog, archdir, supportsCrashRecovery));
   }
 
-  public RedoLogManager(Object redoLogManager)
+  public RedoLogManager(@Nullable Object redoLogManager)
   {
     if (redoLogManager == null)
     {

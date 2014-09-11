@@ -21,6 +21,7 @@
 package org.openzal.zal.log;
 
 import com.zimbra.common.util.Log;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -129,7 +130,7 @@ public class ZimbraLog
     com.zimbra.common.util.ZimbraLog.addUserAgentToContext(userAgent);
   }
 
-  public static String encodeAttrs(Map<String, String> attrs)
+  public static String encodeAttrs(@NotNull Map<String, String> attrs)
   {
     String[] attrsList = new String[attrs.size()*2];
     int i = 0;

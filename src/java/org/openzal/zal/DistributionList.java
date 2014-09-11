@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.AlreadyExistsException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -30,14 +31,15 @@ import java.util.*;
 
 public class DistributionList extends Entry
 {
-  private final com.zimbra.cs.account.DistributionList mDistributionList;
+  @NotNull private final com.zimbra.cs.account.DistributionList mDistributionList;
 
   DistributionList(@NotNull Object distributionList)
   {
     super(distributionList);
-    mDistributionList = (com.zimbra.cs.account.DistributionList)distributionList;
+    mDistributionList = (com.zimbra.cs.account.DistributionList) distributionList;
   }
 
+  @NotNull
   public Collection<String> getAliases()
   {
     try
@@ -50,12 +52,13 @@ public class DistributionList extends Entry
     }
   }
 
+  @NotNull
   public Set<String> getAllMembersSet()
   {
     Set<String> set;
     try
     {
-       set = new HashSet<String>(mDistributionList.getAllMembersSet());
+      set = new HashSet<String>(mDistributionList.getAllMembersSet());
     }
     catch (ServiceException e)
     {
@@ -65,7 +68,7 @@ public class DistributionList extends Entry
     return set;
   }
 
-  public void addMembers(Collection<String> members)
+  public void addMembers(@Nullable Collection<String> members)
   {
     if (members != null)
     {
@@ -80,7 +83,7 @@ public class DistributionList extends Entry
     }
   }
 
-  public void setPrefAllowAddressForDelegatedSender(Collection<String> zimbraPrefAllowAddressForDelegatedSender)
+  public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> zimbraPrefAllowAddressForDelegatedSender)
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
     try
@@ -96,11 +99,13 @@ public class DistributionList extends Entry
     /* $endif $ */
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mDistributionList.getMultiAttrSet(name));
   }
 
+  @NotNull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -144,11 +149,13 @@ public class DistributionList extends Entry
     }
   }
 
+  @NotNull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mDistributionList.getAttrs(applyDefaults));
   }
 
+  @NotNull
   com.zimbra.cs.account.DistributionList toZimbra()
   {
     return mDistributionList;

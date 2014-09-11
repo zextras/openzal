@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZalBuildInfo;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -36,8 +37,8 @@ import java.io.IOException;
 
 public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
 {
-  private final ExtensionManager mExtensionManager;
-  private final String           mDirectoryName;
+  @NotNull private final ExtensionManager mExtensionManager;
+  private final          String           mDirectoryName;
 
   public ZalEntrypoint()
   {
@@ -48,7 +49,7 @@ public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
   @Override
   public String getName()
   {
-    return "Zimbra Abstraction Layer for: "+mDirectoryName;
+    return "Zimbra Abstraction Layer for: " + mDirectoryName;
   }
 
   @Override

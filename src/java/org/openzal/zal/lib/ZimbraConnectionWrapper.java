@@ -74,7 +74,7 @@ public class ZimbraConnectionWrapper implements Connection
   }
 
   @Override
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mConnection);
   }

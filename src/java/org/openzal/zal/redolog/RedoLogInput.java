@@ -21,15 +21,17 @@
 package org.openzal.zal.redolog;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 
 public class RedoLogInput
 {
-  private final com.zimbra.cs.redolog.RedoLogInput mRedoLogInput;
+  @NotNull private final com.zimbra.cs.redolog.RedoLogInput mRedoLogInput;
 
-  public RedoLogInput(RandomAccessFile fileHandler, String currentRedoPath)
+  public RedoLogInput(RandomAccessFile fileHandler, @NotNull String currentRedoPath)
   {
     mRedoLogInput = new com.zimbra.cs.redolog.RedoLogInput(fileHandler, currentRedoPath);
   }
@@ -69,7 +71,7 @@ public class RedoLogInput
   }
 
   public int skipBytes(int int1)
-    throws IOException
+  throws IOException
   {
     return mRedoLogInput.skipBytes(int1);
   }

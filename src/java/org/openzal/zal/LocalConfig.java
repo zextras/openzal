@@ -21,12 +21,14 @@
 package org.openzal.zal;
 
 import com.zimbra.common.localconfig.LC;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class LocalConfig
 {
+  @NotNull
   public static List<String> getAllKeys()
   {
     return Arrays.asList(LC.getAllKeys());

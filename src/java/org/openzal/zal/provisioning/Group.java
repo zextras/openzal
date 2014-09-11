@@ -29,12 +29,12 @@ import java.util.Set;
 public class Group
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final com.zimbra.cs.account.Group mGroup;
+  @NotNull private final com.zimbra.cs.account.Group mGroup;
   /* $endif $ */
 
   public Group(@NotNull Object group)
   {
-    if ( group == null )
+    if (group == null)
     {
       throw new NullPointerException();
     }
@@ -46,6 +46,7 @@ public class Group
 
   }
 
+  @NotNull
   public Set<String> getAllMembersSet()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */

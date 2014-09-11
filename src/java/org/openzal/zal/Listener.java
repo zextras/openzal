@@ -22,7 +22,8 @@ package org.openzal.zal;
 
 public interface Listener
 {
-  public void setStoreContext(MailboxSessionProxy sessionProxy);
-  public MailboxSessionProxy getStoreContext();
+  void setStoreContext(MailboxSessionProxy sessionProxy);
+  MailboxSessionProxy getStoreContext();
   void notifyChanges(long mboxId, ItemChange itemInfo);
+  void sessionClosed();
 }

@@ -27,11 +27,11 @@ import com.zimbra.cs.index.ZimbraHit;
 
 public class SearchHit
 {
-  private final ZimbraHit mZimbraHit;
+  @NotNull private final ZimbraHit mZimbraHit;
 
   protected SearchHit(@NotNull Object zimbraHit)
   {
-    mZimbraHit = (ZimbraHit)zimbraHit;
+    mZimbraHit = (ZimbraHit) zimbraHit;
   }
 
   public Item getMailItem()

@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Utils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
@@ -98,11 +99,11 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
     return mOriginalDocumentHandler.isReadOnly();
   }
 
-  private static Method sMethod = null;
+  @Nullable private static Method sMethod = null;
 
-/*
-  protected Element proxyIfNecessary(Element request, Map<String, Object> context) throws ServiceException {
-*/
+  /*
+    protected Element proxyIfNecessary(Element request, Map<String, Object> context) throws ServiceException {
+  */
   static
   {
     try
@@ -116,7 +117,7 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
     }
     catch (NoSuchMethodException e)
     {
-      ZimbraLog.extensions.fatal("Reflection initialization failed: "+ Utils.exceptionToString(e));
+      ZimbraLog.extensions.fatal("Reflection initialization failed: " + Utils.exceptionToString(e));
     }
   }
 
@@ -125,7 +126,7 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
   {
     try
     {
-      return (Element)sMethod.invoke(mOriginalDocumentHandler, request, context);
+      return (Element) sMethod.invoke(mOriginalDocumentHandler, request, context);
     }
     catch (IllegalAccessException e)
     {
@@ -133,7 +134,7 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
     }
     catch (InvocationTargetException e)
     {
-      throw (ServiceException)e.getCause();
+      throw (ServiceException) e.getCause();
     }
   }
 

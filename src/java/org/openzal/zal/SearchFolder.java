@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SearchFolder extends Folder
 {
-  private final com.zimbra.cs.mailbox.SearchFolder mSearchFolder;
+  @NotNull private final com.zimbra.cs.mailbox.SearchFolder mSearchFolder;
 
   public SearchFolder(@NotNull Object item)
   {

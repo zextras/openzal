@@ -20,6 +20,8 @@
 
 package org.openzal.zal.tools;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +42,7 @@ public abstract class JarUtils
 {
   private static final String MANIFEST = "META-INF/MANIFEST.MF";
 
+  @NotNull
   public static File getCurrentJar()
   {
     String classResourceName = ChecksumChecker.class.getName().replace(".", "/") + ".class";

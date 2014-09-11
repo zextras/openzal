@@ -23,6 +23,7 @@ package org.openzal.zal;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.MailItem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class Folder extends Item
@@ -37,6 +38,7 @@ public class Folder extends Item
     super(item);
   }
 
+  @Nullable
   public Acl getACL()
   {
     ACL acl = ((com.zimbra.cs.mailbox.Folder) mMailItem).getACL();
@@ -47,6 +49,7 @@ public class Folder extends Item
     return new Acl(acl);
   }
 
+  @NotNull
   public String getUrl()
   {
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getUrl();

@@ -34,7 +34,7 @@ public class ZimbraExceptionContainer
     mException = exception;
   }
 
-  private Throwable mException;
+  @Nullable private Throwable mException;
 
   public ZimbraExceptionContainer()
   {

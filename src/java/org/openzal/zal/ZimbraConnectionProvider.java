@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.UnableToObtainDBConnectionException;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
@@ -29,6 +30,7 @@ import com.zimbra.cs.db.DbPool;
 
 public class ZimbraConnectionProvider implements ZimbraDatabase.ConnectionProvider
 {
+  @NotNull
   @Override
   public Connection getConnection() throws UnableToObtainDBConnectionException {
     try {

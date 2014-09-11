@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Note extends Item
 {
-  private final com.zimbra.cs.mailbox.Note mNote;
+  @NotNull private final com.zimbra.cs.mailbox.Note mNote;
 
   class Rectangle
   {

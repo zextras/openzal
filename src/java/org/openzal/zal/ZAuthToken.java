@@ -24,15 +24,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class ZAuthToken
 {
-  private final com.zimbra.common.auth.ZAuthToken mZAuthToken;
+  @NotNull private final com.zimbra.common.auth.ZAuthToken mZAuthToken;
 
   protected ZAuthToken(@NotNull Object zAuthToken)
   {
-    if ( zAuthToken == null )
+    if (zAuthToken == null)
     {
       throw new NullPointerException();
     }
-    mZAuthToken = (com.zimbra.common.auth.ZAuthToken)zAuthToken;
+    mZAuthToken = (com.zimbra.common.auth.ZAuthToken) zAuthToken;
   }
 
   public <T> T toZimbra(Class<T> cls)

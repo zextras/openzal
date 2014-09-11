@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AuthProvider
 {
+  @NotNull
   public static ZAuthToken getAuthToken(@NotNull Account requester)
   {
     try

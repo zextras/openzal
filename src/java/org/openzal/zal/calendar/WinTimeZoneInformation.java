@@ -23,14 +23,15 @@ package org.openzal.zal.calendar;
 import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.mailbox.calendar.WindowsTimeZoneInformation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WinTimeZoneInformation
 {
   private final WindowsTimeZoneInformation mWindowsTimeZoneInformation;
 
   public WinTimeZoneInformation(
-    String id, int i, WinSystemTime standardDate, int standardBiasMins,
-    String standardTzname, WinSystemTime daylightDate, int daylightBiasMins, String daylightTzname
+    String id, int i, @Nullable WinSystemTime standardDate, int standardBiasMins,
+    String standardTzname, @Nullable WinSystemTime daylightDate, int daylightBiasMins, String daylightTzname
   )
   {
     this(new WindowsTimeZoneInformation(

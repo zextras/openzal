@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class Comment extends Item
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final com.zimbra.cs.mailbox.Comment mComment;
+  @NotNull private final com.zimbra.cs.mailbox.Comment mComment;
 
   public Comment(@NotNull Object item)
   {

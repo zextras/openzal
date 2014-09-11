@@ -20,17 +20,18 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.Version;
 
 public class ZalVersion
 {
-  public static final Version current = new Version(ZalBuildInfo.VERSION);
-  public static       Version target = new Version(8, 0, 7);
+  public static final    Version current = new Version(ZalBuildInfo.VERSION);
+  @NotNull public static Version target  = new Version(8, 0, 7);
 
   static
   {
     String implementationVersion = ZalVersion.class.getPackage().getImplementationVersion();
-    if( implementationVersion != null && !implementationVersion.isEmpty())
+    if (implementationVersion != null && !implementationVersion.isEmpty())
     {
       target = new Version(implementationVersion);
     }
@@ -38,9 +39,9 @@ public class ZalVersion
 
   public static void main(String args[])
   {
-    System.out.println("zal_version: "+current.toString());
-    System.out.println("zal_commit: "+ZalBuildInfo.COMMIT);
-    System.out.println("target_zimbra_version: "+target.toString());
+    System.out.println("zal_version: " + current.toString());
+    System.out.println("zal_commit: " + ZalBuildInfo.COMMIT);
+    System.out.println("target_zimbra_version: " + target.toString());
 
     System.exit(0);
   }

@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
+import org.jetbrains.annotations.NotNull;
 
 public class Attendee
 {
@@ -50,6 +51,7 @@ public class Attendee
     mStatus = status;
   }
 
+  @NotNull
   ZOrganizer toZOrganizer()
   {
     return new ZOrganizer(mAddress, mName);

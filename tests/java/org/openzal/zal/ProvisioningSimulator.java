@@ -2,6 +2,7 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
@@ -233,6 +234,7 @@ public class ProvisioningSimulator extends Provisioning
     throw new RuntimeException("Provisioning method not implemented");
   }
 
+  @NotNull
   public Zimlet getZimlet(String zimletName)
       throws ZimbraException
   {
@@ -467,6 +469,7 @@ public class ProvisioningSimulator extends Provisioning
       super(name, id, attrs, defaults, prov);
     }
 
+    @NotNull
     @Override
     public String getId()
     {

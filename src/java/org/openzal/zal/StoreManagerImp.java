@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.store.file.FileBlobStore;
@@ -49,12 +50,14 @@ public class StoreManagerImp implements StoreManager
     this.sm = (com.zimbra.cs.store.StoreManager) storeManager;
   }
 
+  @NotNull
   private FileBlobStore getFileBlobStore()
   {
     return (FileBlobStore) sm;
   }
 
-  public MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision, String locator)
+  @NotNull
+  public MailboxBlob getMailboxBlob(@NotNull Mailbox mbox, int msgId, int revision, String locator)
     throws ZimbraException
   {
     try
@@ -72,7 +75,8 @@ public class StoreManagerImp implements StoreManager
     }
   }
 
-  public MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
+  @NotNull
+  public MailboxBlob copy(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
     throws IOException, ZimbraException
   {
     try
@@ -93,7 +97,8 @@ public class StoreManagerImp implements StoreManager
     }
   }
 
-  public MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
+  @NotNull
+  public MailboxBlob link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
     throws IOException, ZimbraException
   {
     try
@@ -114,12 +119,12 @@ public class StoreManagerImp implements StoreManager
     }
   }
 
-  public boolean delete(Blob blob) throws IOException
+  public boolean delete(@NotNull Blob blob) throws IOException
   {
     return sm.delete(blob.toZimbra(com.zimbra.cs.store.Blob.class));
   }
 
-  public boolean delete(MailboxBlob mblob) throws IOException
+  public boolean delete(@NotNull MailboxBlob mblob) throws IOException
   {
     return sm.delete(mblob.toZimbra(com.zimbra.cs.store.MailboxBlob.class));
   }
@@ -156,6 +161,7 @@ public class StoreManagerImp implements StoreManager
   $endif$ */
 
 
+  @NotNull
   public String getBlobPath(int mboxId, int itemId, int revision,
                             short volumeId) throws org.openzal.zal.exceptions.ZimbraException
   {
@@ -173,7 +179,7 @@ public class StoreManagerImp implements StoreManager
     return sb.toString();
   }
 
-  public static void quietDelete(MailboxBlob blob)
+  public static void quietDelete(@NotNull MailboxBlob blob)
   {
     com.zimbra.cs.store.StoreManager.getInstance().quietDelete(
       blob.toZimbra(com.zimbra.cs.store.MailboxBlob.class)

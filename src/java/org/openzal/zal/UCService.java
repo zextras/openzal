@@ -30,7 +30,7 @@ import java.util.Set;
 public class UCService extends Entry
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final com.zimbra.cs.account.UCService mUCService;
+  @NotNull private final com.zimbra.cs.account.UCService mUCService;
 
   protected UCService(@NotNull Object ucService)
   {

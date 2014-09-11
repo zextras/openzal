@@ -32,7 +32,7 @@ import java.util.List;
 
 public class Message extends Item
 {
-  private final com.zimbra.cs.mailbox.Message mMessage;
+  @NotNull private final com.zimbra.cs.mailbox.Message mMessage;
 
   public Message(@NotNull Object mailItem)
   {

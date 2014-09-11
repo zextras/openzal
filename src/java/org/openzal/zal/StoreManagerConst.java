@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class StoreManagerConst
 {
 /* $if MajorZimbraVersion <= 7 $
@@ -28,6 +30,7 @@ $else$ */
   private final static String VOLUME_FIELD = "locator";
 /* $endif$ */
 
+  @NotNull
   public static String getVolumeField()
   {
     return VOLUME_FIELD;

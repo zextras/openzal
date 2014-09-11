@@ -20,6 +20,8 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -37,7 +39,7 @@ public class ZalClassLoader extends URLClassLoader {
   }
 
   @Override
-  protected synchronized Class loadClass(String name, boolean resolve)
+  protected synchronized Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
     if( name.startsWith("org.openzal.") )

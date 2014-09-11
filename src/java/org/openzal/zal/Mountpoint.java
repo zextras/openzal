@@ -21,10 +21,11 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Mountpoint extends Folder
 {
-  private final com.zimbra.cs.mailbox.Mountpoint mMountpoint;
+  @NotNull private final com.zimbra.cs.mailbox.Mountpoint mMountpoint;
 
   public Mountpoint(@NotNull Object item)
   {
@@ -32,6 +33,7 @@ public class Mountpoint extends Folder
     mMountpoint = (com.zimbra.cs.mailbox.Mountpoint) item;
   }
 
+  @Nullable
   public String getRemoteUuid()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */

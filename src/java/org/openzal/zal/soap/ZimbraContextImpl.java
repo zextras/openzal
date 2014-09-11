@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Continuation;
 import org.openzal.zal.Jetty;
 import org.openzal.zal.Utils;
@@ -49,10 +50,10 @@ class ZimbraContextImpl implements ZimbraContext
     return mContext;
   }
 
-  private final Element                 mRequest;
-  private final Map<String, Object>     mContext;
-  private final ZimbraSoapContext       mZimbraSoapContext;
-  private final Map<String, String>     mMap;
+  @Nullable private final Element             mRequest;
+  private final           Map<String, Object> mContext;
+  private final           ZimbraSoapContext   mZimbraSoapContext;
+  private final           Map<String, String> mMap;
 
   public ZimbraSoapContext getZimbraSoapContext()
   {
@@ -75,11 +76,12 @@ class ZimbraContextImpl implements ZimbraContext
     mMap = new HashMap<String, String>(32);
 
     Set<Element.Attribute> attributes = request.listAttributes();
-    for( Element.Attribute attribute : attributes )
+    for (Element.Attribute attribute : attributes)
     {
       String key = attribute.getKey();
       String value = attribute.getValue();
-      if (value.isEmpty()){
+      if (value.isEmpty())
+      {
         value = null;
       }
       mMap.put(key, value);
@@ -89,7 +91,8 @@ class ZimbraContextImpl implements ZimbraContext
     {
       String key = element.getName();
       String value = element.getText();
-      if (value.isEmpty()){
+      if (value.isEmpty())
+      {
         value = null;
       }
       mMap.put(key, value);

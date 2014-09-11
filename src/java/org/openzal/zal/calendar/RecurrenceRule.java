@@ -29,6 +29,7 @@ import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
 /* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.calendar.ZRecur;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ import java.util.List;
 
 public class RecurrenceRule
 {
-  private final ZRecur mZRecur;
+  @NotNull private final ZRecur mZRecur;
 
   public enum Frequency
   {
@@ -49,28 +50,29 @@ public class RecurrenceRule
   private static final HashMap<ZRecur.Frequency, Frequency> sZimbra2Zal;
   private static final HashMap<Frequency, ZRecur.Frequency> sZal2Zimbra;
 
-  static {
+  static
+  {
     sZimbra2Zal = new HashMap<ZRecur.Frequency, Frequency>(4);
     sZal2Zimbra = new HashMap<Frequency, ZRecur.Frequency>(4);
 
-    sZimbra2Zal.put(ZRecur.Frequency.YEARLY, Frequency.YEARLY );
-    sZal2Zimbra.put(Frequency.YEARLY, ZRecur.Frequency.YEARLY );
+    sZimbra2Zal.put(ZRecur.Frequency.YEARLY, Frequency.YEARLY);
+    sZal2Zimbra.put(Frequency.YEARLY, ZRecur.Frequency.YEARLY);
 
-    sZimbra2Zal.put(ZRecur.Frequency.MONTHLY, Frequency.MONTHLY );
-    sZal2Zimbra.put(Frequency.MONTHLY, ZRecur.Frequency.MONTHLY );
+    sZimbra2Zal.put(ZRecur.Frequency.MONTHLY, Frequency.MONTHLY);
+    sZal2Zimbra.put(Frequency.MONTHLY, ZRecur.Frequency.MONTHLY);
 
-    sZimbra2Zal.put(ZRecur.Frequency.WEEKLY, Frequency.WEEKLY );
-    sZal2Zimbra.put(Frequency.WEEKLY, ZRecur.Frequency.WEEKLY );
+    sZimbra2Zal.put(ZRecur.Frequency.WEEKLY, Frequency.WEEKLY);
+    sZal2Zimbra.put(Frequency.WEEKLY, ZRecur.Frequency.WEEKLY);
 
-    sZimbra2Zal.put(ZRecur.Frequency.DAILY, Frequency.DAILY );
-    sZal2Zimbra.put(Frequency.DAILY, ZRecur.Frequency.DAILY );
+    sZimbra2Zal.put(ZRecur.Frequency.DAILY, Frequency.DAILY);
+    sZal2Zimbra.put(Frequency.DAILY, ZRecur.Frequency.DAILY);
   }
 
   public RecurrenceRule(MapTimeZone tzMap)
   {
     try
     {
-      mZRecur = new ZRecur("", tzMap.toZimbra(TimeZoneMap.class) );
+      mZRecur = new ZRecur("", tzMap.toZimbra(TimeZoneMap.class));
     }
     catch (ServiceException e)
     {
@@ -80,7 +82,7 @@ public class RecurrenceRule
 
   public RecurrenceRule(Object zRecur)
   {
-    mZRecur = (ZRecur)zRecur;
+    mZRecur = (ZRecur) zRecur;
   }
 
   public <T> T toZimbra(Class<T> cls)

@@ -28,14 +28,15 @@ import java.util.Set;
 
 public class CalendarResource extends Account
 {
-  private final com.zimbra.cs.account.CalendarResource mCalendarResource;
+  @NotNull private final com.zimbra.cs.account.CalendarResource mCalendarResource;
 
   public CalendarResource(@NotNull Object calendarResource)
   {
     super(calendarResource);
-    mCalendarResource = (com.zimbra.cs.account.CalendarResource)calendarResource;
+    mCalendarResource = (com.zimbra.cs.account.CalendarResource) calendarResource;
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mCalendarResource.getMultiAttrSet(name));
@@ -46,6 +47,7 @@ public class CalendarResource extends Account
     return mCalendarResource.getName();
   }
 
+  @NotNull
   Entry toZimbra()
   {
     return mCalendarResource;

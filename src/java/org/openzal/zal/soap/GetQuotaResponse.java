@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.AccountQuotaInfo;
 import org.openzal.zal.ZimbraListWrapper;
 import com.zimbra.cs.service.admin.GetQuotaUsage;
@@ -32,18 +33,18 @@ import java.util.List;
 public class GetQuotaResponse
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final GetQuotaUsageResponse mGetQuotaUsageResponse;
+  @NotNull private final GetQuotaUsageResponse mGetQuotaUsageResponse;
   /* $endif $ */
 
-  public static final String SORT_TOTAL_USED = GetQuotaUsage.SORT_TOTAL_USED;
-  public static final String SORT_QUOTA_LIMIT = GetQuotaUsage.SORT_QUOTA_LIMIT;
+  public static final String SORT_TOTAL_USED   = GetQuotaUsage.SORT_TOTAL_USED;
+  public static final String SORT_QUOTA_LIMIT  = GetQuotaUsage.SORT_QUOTA_LIMIT;
   public static final String SORT_PERCENT_USED = GetQuotaUsage.SORT_PERCENT_USED;
-  public static final String SORT_ACCOUNT = GetQuotaUsage.SORT_ACCOUNT;
+  public static final String SORT_ACCOUNT      = GetQuotaUsage.SORT_ACCOUNT;
 
   protected GetQuotaResponse(Object getQuotaUsageResponse)
   {
   /* $if ZimbraVersion >= 8.0.0 $ */
-    mGetQuotaUsageResponse = (GetQuotaUsageResponse)getQuotaUsageResponse;
+    mGetQuotaUsageResponse = (GetQuotaUsageResponse) getQuotaUsageResponse;
   /* $else $
     throw new UnsupportedOperationException();
   /* $endif $ */

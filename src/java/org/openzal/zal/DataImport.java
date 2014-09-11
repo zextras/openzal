@@ -28,15 +28,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class DataImport
 {
-  private final DataSource.DataImport mDataImport;
+  @NotNull private final DataSource.DataImport mDataImport;
 
   protected DataImport(@NotNull Object dataImport)
   {
-    if ( dataImport == null )
+    if (dataImport == null)
     {
       throw new NullPointerException();
     }
-    mDataImport = (DataSource.DataImport)dataImport;
+    mDataImport = (DataSource.DataImport) dataImport;
   }
 
   public boolean isGalImport()
@@ -53,7 +53,7 @@ public class DataImport
     }
     try
     {
-      ((GalImport)mDataImport).importGal(fid, fullSync, force);
+      ((GalImport) mDataImport).importGal(fid, fullSync, force);
     }
     catch (ServiceException e)
     {

@@ -69,6 +69,7 @@ public class ParsedMessage
     return ZimbraListWrapper.wrapMPartInfos(mParsedMessage.getMessageParts());
   }
 
+  @NotNull
   public MimeMessage getMimeMessage()
   {
     return mParsedMessage.getMimeMessage();
@@ -79,7 +80,7 @@ public class ParsedMessage
     return mParsedMessage.hasAttachments();
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mParsedMessage);
   }

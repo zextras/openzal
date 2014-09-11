@@ -20,6 +20,8 @@
 
 package org.openzal.zal.lib;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Connection;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
@@ -50,6 +52,7 @@ $endif$ */
 
 public class ZimbraDatabase
 {
+  @Nullable
   public static List<Item.UnderlyingData> getByType(Mailbox mbox, byte type, SortBy sort) throws ZimbraException
   {
     List<MailItem.UnderlyingData> list;
@@ -113,6 +116,7 @@ public class ZimbraDatabase
     }
   }
 
+  @NotNull
   public static Object getSynchronizer( Mailbox mbox )
   {
 /* $if MajorZimbraVersion >= 8 $ */
@@ -122,11 +126,13 @@ public class ZimbraDatabase
    $endif$ */
   }
 
+  @NotNull
   public static Object getSynchronizer()
   {
     return getMailboxSynchronizer();
   }
 
+  @NotNull
   public static Object getMailboxSynchronizer()
   {
   /* $if MajorZimbraVersion >= 8 $ */
@@ -143,6 +149,7 @@ public class ZimbraDatabase
                                    pos);
   }
 
+  @NotNull
   public static Set<String> listAccountIds(Connection conn) throws ZimbraException
   {
     try
@@ -161,7 +168,7 @@ public class ZimbraDatabase
 
   public static final String IN_THIS_MAILBOX_AND = DbMailItem.IN_THIS_MAILBOX_AND;
 
-  public static void closeStatement( Statement st )
+  public static void closeStatement(@Nullable Statement st)
     throws ZimbraException
   {
     try
@@ -174,12 +181,12 @@ public class ZimbraDatabase
     }
   }
 
-  public static void quietCloseStatement( Statement st )
+  public static void quietCloseStatement(@Nullable Statement st )
   {
     DbPool.quietCloseStatement(st);
   }
 
-  public static void closeResults( ResultSet res )
+  public static void closeResults(@Nullable ResultSet res )
     throws ZimbraException
   {
     try
@@ -198,7 +205,8 @@ public class ZimbraDatabase
   public static String suitableNumberOfVariables(Object[] array)  { return DbUtil.suitableNumberOfVariables(array.length); }
   public static String suitableNumberOfVariables(Collection<?> c) { return DbUtil.suitableNumberOfVariables(c.size()); }
 
-  public static CurrentVolumes getCurrentVolumes(Connection conn) throws ZimbraException
+  @NotNull
+  public static CurrentVolumes getCurrentVolumes(@NotNull Connection conn) throws ZimbraException
   {
     DbVolume.CurrentVolumes cv;
     try

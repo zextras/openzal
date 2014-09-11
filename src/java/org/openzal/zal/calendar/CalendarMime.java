@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.common.service.ServiceException;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Mime;
 import org.openzal.zal.MimeConstants;
 import org.openzal.zal.Utils;
@@ -114,7 +115,7 @@ public class CalendarMime
   }
 
   private MimeMessage createCalendarMessage(
-    String subject,
+    @Nullable String subject,
     String desc,
     String descHtml,
     ZCalendar.ZVCalendar cal,

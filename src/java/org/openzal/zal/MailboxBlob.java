@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class MailboxBlob
 {
-  private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
+  @NotNull private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
 
   protected MailboxBlob(@NotNull com.zimbra.cs.store.MailboxBlob mailboxBlob)
   {

@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 
 public class ItemStatus implements Serializable
@@ -43,7 +45,7 @@ public class ItemStatus implements Serializable
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

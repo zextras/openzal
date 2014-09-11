@@ -43,11 +43,11 @@ import java.util.Set;
 
 public class Account extends Entry
 {
-  private final com.zimbra.cs.account.Account mAccount;
+  @NotNull private final com.zimbra.cs.account.Account mAccount;
 
   public Account(@NotNull Object account)
   {
-    super((com.zimbra.cs.account.Account) account);
+    super(account);
     mAccount = (com.zimbra.cs.account.Account) account;
   }
 
@@ -56,7 +56,7 @@ public class Account extends Entry
     String accountId,
     Map<String, Object> accountAttrs,
     Map emptyMap,
-    Provisioning provisioning
+    @NotNull Provisioning provisioning
   )
   {
     this(
@@ -65,7 +65,8 @@ public class Account extends Entry
         accountId,
         accountAttrs,
         emptyMap,
-        provisioning.toZimbra(com.zimbra.cs.account.Provisioning.class))
+        provisioning.toZimbra(com.zimbra.cs.account.Provisioning.class)
+      )
     );
   }
 
@@ -148,7 +149,7 @@ public class Account extends Entry
     /* $endif $ */
   }
 
-  public void setPrefAllowAddressForDelegatedSender(Collection<String> addresses)
+  public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> addresses)
     throws ZimbraException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -180,11 +181,13 @@ public class Account extends Entry
     return new HashSet<String>(mAccount.getMultiAttrSet(name));
   }
 
+  @NotNull
   public Collection<String> getMultiAttr(String name)
   {
     return Arrays.asList(mAccount.getMultiAttr(name));
   }
 
+  @NotNull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -199,6 +202,7 @@ public class Account extends Entry
     return mAccount.isIsSystemResource();
   }
 
+  @NotNull
   public Collection<String> getChildAccount()
   {
     return Arrays.asList(mAccount.getChildAccount());
@@ -238,6 +242,7 @@ public class Account extends Entry
     /* $endif $ */
   }
 
+  @Nullable
   public Identity getIdentityByName(String name) throws NoSuchAccountException
   {
     com.zimbra.cs.account.Identity identity;
@@ -270,6 +275,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public String getId()
   {
     return mAccount.getId();
@@ -333,6 +339,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public List<DistributionList> getDistributionLists(boolean directOnly, Map<String, String> via)
   {
     try
@@ -350,6 +357,7 @@ public class Account extends Entry
     return mAccount.isPrefDeleteInviteOnReply();
   }
 
+  @NotNull
   public Collection<String> getAliases()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -378,6 +386,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public PrefExternalSendersType getPrefExternalSendersType()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -413,6 +422,7 @@ public class Account extends Entry
     return mAccount.getAccountStatusAsString();
   }
 
+  @NotNull
   public List<Signature> getAllSignatures() throws NoSuchAccountException
   {
     try
@@ -430,7 +440,7 @@ public class Account extends Entry
     return mAccount.isMobilePolicyAllowPartialProvisioning();
   }
 
-  public void authAccount(String password, Protocol proto)
+  public void authAccount(String password, @NotNull Protocol proto)
   {
     try
     {
@@ -448,7 +458,7 @@ public class Account extends Entry
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {
@@ -509,6 +519,7 @@ public class Account extends Entry
     return mAccount.getUid();
   }
 
+  @Nullable
   public AccountStatus getAccountStatus()
   {
     ZAttrProvisioning.AccountStatus accountStatus = mAccount.getAccountStatus();
@@ -526,16 +537,19 @@ public class Account extends Entry
     return mAccount.getAttrDefault(name);
   }
 
+  @NotNull
   public Collection<String> getMailAlias()
   {
     return Arrays.asList(mAccount.getMailAlias());
   }
 
+  @NotNull
   public Collection<String> getPrefChildVisibleAccount()
   {
     return Arrays.asList(mAccount.getPrefChildVisibleAccount());
   }
 
+  @NotNull
   public Signature createSignature(String signatureName, Map<String, Object> attrs)
     throws NoSuchAccountException
   {
@@ -549,6 +563,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public Collection<String> getChildVisibleAccount()
   {
     return Arrays.asList(mAccount.getChildVisibleAccount());
@@ -568,6 +583,7 @@ public class Account extends Entry
     /* $endif $ */
   }
 
+  @NotNull
   public Collection<String> getAllowFromAddress()
   {
     return Arrays.asList(mAccount.getAllowFromAddress());
@@ -578,6 +594,7 @@ public class Account extends Entry
     return mAccount.getPrefFromDisplay();
   }
 
+  @NotNull
   public Set<String> getDistributionLists()
   {
     Set<String> distributionLists;
@@ -596,6 +613,7 @@ public class Account extends Entry
     return set;
   }
 
+  @NotNull
   public Collection<String> getMailDeliveryAddress()
   {
     return Arrays.asList(mAccount.getMailDeliveryAddress());
@@ -611,7 +629,7 @@ public class Account extends Entry
     return mAccount.isFeatureMobileSyncEnabled();
   }
 
-  public void setPrefExternalSendersType(PrefExternalSendersType zimbraPrefExternalSendersType)
+  public void setPrefExternalSendersType(@NotNull PrefExternalSendersType zimbraPrefExternalSendersType)
   {
     /* $if MajorZimbraVersion >= 8$ */
     try
@@ -644,13 +662,14 @@ public class Account extends Entry
     return mAccount.isPrefOutOfOfficeReplyEnabled();
   }
 
-  public String getAccountStatus(Provisioning prov)
+  public String getAccountStatus(@NotNull Provisioning prov)
   {
     return mAccount.getAccountStatus(
       prov.toZimbra(com.zimbra.cs.account.Provisioning.class)
     );
   }
 
+  @Nullable
   public Signature getSignatureByName(String key)
   {
     com.zimbra.cs.account.Signature signature;
@@ -701,6 +720,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public Map<String, Object> getAttrs()
   {
     return new HashMap<String, Object>(mAccount.getAttrs());
@@ -711,6 +731,7 @@ public class Account extends Entry
     return mAccount.getPrefFromAddress();
   }
 
+  @NotNull
   public Collection<String> getMobilePolicyUnapprovedInROMApplication()
   {
     /* $if MajorZimbraVersion >= 8$ */
@@ -732,11 +753,13 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mAccount.getAttrs(applyDefaults));
   }
 
+  @Nullable
   public DataSource getDataSourceByName(String name) throws NoSuchAccountException
   {
     com.zimbra.cs.account.DataSource dataSource;
@@ -767,6 +790,7 @@ public class Account extends Entry
     return mAccount.getDomainName();
   }
 
+  @NotNull
   public Collection<String> getMobilePolicyApprovedApplicationList()
   {
     /* $if MajorZimbraVersion >= 8$ */
@@ -776,8 +800,9 @@ public class Account extends Entry
     $endif$ */
   }
 
+  @NotNull
   public DataSource createDataSource(
-    DataSourceType sourceType,
+    @NotNull DataSourceType sourceType,
     String sourceName,
     Map<String, Object> attrs,
     boolean passwdAlreadyEncrypted
@@ -825,7 +850,7 @@ public class Account extends Entry
     }
   }
 
-  public void setAllowFromAddress(Collection<String> zimbraAllowFromAddress)
+  public void setAllowFromAddress(@NotNull Collection<String> zimbraAllowFromAddress)
   {
     try
     {
@@ -873,6 +898,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public Identity createIdentity(String identityName, Map<String, Object> attrs)
     throws NoSuchAccountException, TooManyIdentitiesException, IdentityExistsException
   {
@@ -911,7 +937,7 @@ public class Account extends Entry
     return mAccount.getLongAttr(name, defaultValue);
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mAccount);
   }

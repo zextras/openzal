@@ -22,12 +22,13 @@ package org.openzal.zal.soap;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
+import org.jetbrains.annotations.NotNull;
 /* $endif $ */
 
 public class GetQuotaRequest
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final GetQuotaUsageRequest mGetQuotaUsageRequest;
+  @NotNull private final GetQuotaUsageRequest mGetQuotaUsageRequest;
   /* $else $
   private final Object mGetQuotaUsageRequest;
   /* $endif $ */

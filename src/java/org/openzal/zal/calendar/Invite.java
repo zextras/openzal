@@ -46,7 +46,7 @@ import org.openzal.zal.log.ZimbraLog;
 
 public class Invite
 {
-  private static String TRIGGER_TYPE_FIELD = "mTriggerType";
+  private static String TRIGGER_TYPE_FIELD    = "mTriggerType";
   private static String TRIGGER_RELATED_FIELD = "mTriggerRelated";
 
   public MimeMessage getAttachment()
@@ -57,8 +57,9 @@ public class Invite
   private final MimeMessage                           mMimeMessage;
   private final com.zimbra.cs.mailbox.calendar.Invite mInvite;
 
-  private static Field sTriggerTypeField = null;
+  private static Field sTriggerTypeField    = null;
   private static Field sTriggerRelatedField = null;
+
   static
   {
     try
@@ -69,7 +70,8 @@ public class Invite
       sTriggerTypeField.setAccessible(true);
       sTriggerRelatedField.setAccessible(true);
     }
-    catch( Throwable ex ){
+    catch (Throwable ex)
+    {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
     }
   }

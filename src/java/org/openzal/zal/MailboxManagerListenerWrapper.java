@@ -22,10 +22,11 @@ package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.MailboxManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MailboxManagerListenerWrapper implements MailboxManager.Listener
 {
-  private final MailboxManagerListener mListener;
+  @NotNull private final MailboxManagerListener mListener;
 
   public MailboxManagerListenerWrapper(@NotNull MailboxManagerListener listener)
   {
@@ -37,7 +38,7 @@ public class MailboxManagerListenerWrapper implements MailboxManager.Listener
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

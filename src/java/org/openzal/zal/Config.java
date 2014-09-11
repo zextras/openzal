@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Config extends Entry
 {
-  private final com.zimbra.cs.account.Config mConfig;
+  @NotNull private final com.zimbra.cs.account.Config mConfig;
 
   public Config(@NotNull Object config)
   {
@@ -37,7 +37,7 @@ public class Config extends Entry
     mConfig = (com.zimbra.cs.account.Config) config;
   }
 
-  public Config(HashMap<String, Object> hashMap, Provisioning provisioning)
+  public Config(HashMap<String, Object> hashMap, @NotNull Provisioning provisioning)
   {
     this(
       new com.zimbra.cs.account.Config(
@@ -52,6 +52,7 @@ public class Config extends Entry
     return mConfig.getVersionCheckNotificationEmail();
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mConfig.getMultiAttrSet(name));
@@ -62,6 +63,7 @@ public class Config extends Entry
     return mConfig.getAttr(name);
   }
 
+  @NotNull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mConfig.getAttrs(applyDefaults));

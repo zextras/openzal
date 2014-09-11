@@ -20,6 +20,8 @@
 
 package org.openzal.zal.provisioning;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,7 @@ public enum TargetType
   group("DynamicGroup"),
   global("GlobalGrant");
 
+  @NotNull
   private static Map<String, TargetType> TARGET_TYPES = new HashMap<String, TargetType>()
   {{
       put("account", account);
@@ -52,13 +55,15 @@ public enum TargetType
       put("GlobalGrant", global);
     }};
 
+  @NotNull
   private final String mType;
 
-  TargetType(String type)
+  TargetType(@NotNull String type)
   {
     mType = type;
   }
 
+  @NotNull
   public String getCode()
   {
     return mType;
@@ -66,6 +71,10 @@ public enum TargetType
 
   public static TargetType fromString(String type)
   {
-    return TARGET_TYPES.get(type);
+    TargetType targetType = TARGET_TYPES.get(type);
+    if( targetType == null ) {
+      throw new RuntimeException();
+    }
+    return targetType;
   }
 }

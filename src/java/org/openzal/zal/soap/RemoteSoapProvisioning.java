@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.QuotaUsage;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -31,7 +32,7 @@ import java.util.Collection;
 
 public class RemoteSoapProvisioning
 {
-  public static GetQuotaResponse invokeJaxb(GetQuotaRequest getQuotaUsageRequest, String server)
+  public static GetQuotaResponse invokeJaxb(@NotNull GetQuotaRequest getQuotaUsageRequest, String server)
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
     try

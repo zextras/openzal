@@ -36,7 +36,7 @@ import java.util.List;
 
 public class CalendarItem extends Item
 {
-  private final com.zimbra.cs.mailbox.CalendarItem mCalendarItem;
+  @NotNull private final com.zimbra.cs.mailbox.CalendarItem mCalendarItem;
 
   public CalendarItem(@NotNull Object item)
   {
@@ -108,7 +108,7 @@ public class CalendarItem extends Item
   }
 
   @Nullable
-  public Invite getInvite(RecurrenceId recurId)
+  public Invite getInvite(@Nullable RecurrenceId recurId)
   {
     if(recurId == null)
     {

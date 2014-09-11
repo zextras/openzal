@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Account;
 import org.jetbrains.annotations.NotNull;
 import java.util.TimeZone;
@@ -64,6 +65,7 @@ public class ICalendarTimezone
     return new ICalendarTimezone(accountTimeZone);
   }
 
+  @NotNull
   public static ICalendarTimezone lookup(String tzid,
                                       int stdOffset, String stdDtStart, String stdRRule, String stdTzname,
                                       int dayOffset, String dayDtStart, String dayRRule, String dayTzname)
@@ -168,6 +170,7 @@ public class ICalendarTimezone
     return mICalTimeZone.getStandardOffset();
   }
 
+  @Nullable
   public SimpleOnset getDaylightOnset()
   {
     ICalTimeZone.SimpleOnset daylight = mICalTimeZone.getDaylightOnset();
@@ -191,6 +194,7 @@ public class ICalendarTimezone
     return mICalTimeZone.getDaylightOffset();
   }
 
+  @Nullable
   public SimpleOnset getStandardOnset()
   {
     ICalTimeZone.SimpleOnset daylight = mICalTimeZone.getStandardOnset();

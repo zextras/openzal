@@ -33,6 +33,7 @@ import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
 
 public class MapTimeZone
 {
+  @NotNull
   private final TimeZoneMap mTimeZoneMap;
 
   public MapTimeZone(@NotNull Object timeZoneMap)
@@ -42,7 +43,7 @@ public class MapTimeZone
       throw new NullPointerException();
     }
 
-    mTimeZoneMap = (TimeZoneMap)timeZoneMap;
+    mTimeZoneMap = (TimeZoneMap) timeZoneMap;
   }
 
   public MapTimeZone(ICalendarTimezone icaltimezone)
@@ -50,11 +51,13 @@ public class MapTimeZone
     mTimeZoneMap = new TimeZoneMap(icaltimezone.toZimbra(ICalTimeZone.class));
   }
 
+  @NotNull
   public ICalendarTimezone getTimeZone(String key)
   {
     return new ICalendarTimezone(mTimeZoneMap.getTimeZone(key));
   }
 
+  @NotNull
   public ICalendarTimezone getLocalTimeZone()
   {
     return new ICalendarTimezone(mTimeZoneMap.getLocalTimeZone());
