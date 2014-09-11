@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
@@ -30,18 +31,18 @@ import java.util.TreeMap;
 
 public class Metadata
 {
-  private final com.zimbra.cs.mailbox.Metadata mMetadata;
+  @NotNull private final com.zimbra.cs.mailbox.Metadata mMetadata;
 
   protected Metadata(@NotNull Object metadata)
   {
-    if ( metadata == null )
+    if (metadata == null)
     {
       throw new NullPointerException();
     }
-    mMetadata = (com.zimbra.cs.mailbox.Metadata)metadata;
+    mMetadata = (com.zimbra.cs.mailbox.Metadata) metadata;
   }
 
-  public Metadata(String encoded)
+  public Metadata(@Nullable String encoded)
   {
     try
     {

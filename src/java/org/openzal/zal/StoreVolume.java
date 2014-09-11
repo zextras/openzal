@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -303,6 +304,7 @@ public class StoreVolume
       }
     }
 
+    @Nullable
     public static StoreVolume getCurrentSecondaryMessageVolume()
     {
       Volume vol;

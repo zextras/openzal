@@ -27,15 +27,15 @@ import java.util.Map;
 
 public class Signature
 {
-  private final com.zimbra.cs.account.Signature mSignature;
+  @NotNull private final com.zimbra.cs.account.Signature mSignature;
 
   protected Signature(@NotNull Object signature)
   {
-    if ( signature == null )
+    if (signature == null)
     {
       throw new NullPointerException();
     }
-    mSignature = (com.zimbra.cs.account.Signature)signature;
+    mSignature = (com.zimbra.cs.account.Signature) signature;
   }
 
   public String getId()

@@ -20,13 +20,12 @@
 
 package org.openzal.zal;
 
-import com.zimbra.cs.mailbox.MailItem;
 import org.jetbrains.annotations.NotNull;
 
 public class Appointment extends CalendarItem
 {
   public Appointment(@NotNull Object item)
   {
-    super((MailItem)item);
+    super(item);
   }
 }

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class XMLElement
 {
-  private final Element.XMLElement mXMLElement;
+  @NotNull private final Element.XMLElement mXMLElement;
 
   public XMLElement(String name)
   {
@@ -34,11 +34,11 @@ public class XMLElement
 
   protected XMLElement(@NotNull Object element)
   {
-    if ( element == null )
+    if (element == null)
     {
       throw new NullPointerException();
     }
-    mXMLElement = (Element.XMLElement)element;
+    mXMLElement = (Element.XMLElement) element;
   }
 
   public XMLElement clone()

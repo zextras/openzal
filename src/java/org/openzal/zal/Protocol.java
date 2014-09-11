@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Protocol
 {
-  public static Protocol zsync = new Protocol(AuthContext.Protocol.zsync);
-  public static Protocol im = new Protocol(AuthContext.Protocol.im);
+  @NotNull public static Protocol zsync = new Protocol(AuthContext.Protocol.zsync);
+  public static          Protocol im    = new Protocol(AuthContext.Protocol.im);
 
   private final com.zimbra.cs.account.auth.AuthContext.Protocol mProtocol;
 
@@ -34,7 +34,7 @@ public class Protocol
     @NotNull com.zimbra.cs.account.auth.AuthContext.Protocol protocol
   )
   {
-    if ( protocol == null )
+    if (protocol == null)
     {
       throw new NullPointerException();
     }

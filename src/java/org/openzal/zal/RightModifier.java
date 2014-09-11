@@ -24,13 +24,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class RightModifier
 {
-  private final com.zimbra.cs.account.accesscontrol.RightModifier mRightModifier;
+  @NotNull private final com.zimbra.cs.account.accesscontrol.RightModifier mRightModifier;
 
   RightModifier(
     @NotNull com.zimbra.cs.account.accesscontrol.RightModifier rightModifier
   )
   {
-    if ( rightModifier == null )
+    if (rightModifier == null)
     {
       throw new NullPointerException();
     }

@@ -21,11 +21,12 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.Provisioning;
+import org.jetbrains.annotations.NotNull;
 
 
 public class CacheEntry
 {
-  private final Provisioning.CacheEntry mCacheEntry;
+  @NotNull private final Provisioning.CacheEntry mCacheEntry;
 
   public CacheEntry(ProvisioningKey.ByCacheEntry id, String string)
   {

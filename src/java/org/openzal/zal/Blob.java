@@ -27,15 +27,15 @@ import java.io.IOException;
 
 public class Blob
 {
-  private final com.zimbra.cs.store.Blob mBlob;
+  @NotNull private final com.zimbra.cs.store.Blob mBlob;
 
   protected Blob(@NotNull Object blob)
   {
-    if ( blob == null )
+    if (blob == null)
     {
       throw new NullPointerException();
     }
-    mBlob = (com.zimbra.cs.store.Blob)blob;
+    mBlob = (com.zimbra.cs.store.Blob) blob;
   }
 
   public File getFile()

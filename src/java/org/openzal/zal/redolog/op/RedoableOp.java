@@ -20,6 +20,8 @@
 
 package org.openzal.zal.redolog.op;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
@@ -39,7 +41,7 @@ public class RedoableOp
   private final com.zimbra.cs.redolog.op.RedoableOp mRedoableOp;
 
 
-  private static Method sGetVersionMethod = null;
+  @Nullable private static Method sGetVersionMethod = null;
 
   static
   {
@@ -54,7 +56,7 @@ public class RedoableOp
     }
   }
 
-  public RedoableOp(Object redoableOp)
+  public RedoableOp(@NotNull Object redoableOp)
   {
     mRedoableOp = (com.zimbra.cs.redolog.op.RedoableOp) redoableOp;
   }
@@ -75,11 +77,13 @@ public class RedoableOp
     return mRedoableOp.getTimestamp();
   }
 
+  @NotNull
   public TransactionId getTransactionId()
   {
     return new TransactionId(mRedoableOp.getTransactionId());
   }
 
+  @NotNull
   public Version getVersion()
     throws Exception
   {
@@ -100,6 +104,7 @@ public class RedoableOp
     /* $endif $ */
   }
 
+  @NotNull
   public static RedoableOp deserializeOp(RedoLogInput redoLogInput)
     throws IOException
   {
@@ -110,26 +115,30 @@ public class RedoableOp
     );
   }
 
-  public com.zimbra.cs.redolog.op.RedoableOp getProxiedObject()
+  com.zimbra.cs.redolog.op.RedoableOp getProxiedObject()
   {
     return mRedoableOp;
   }
 
+  @NotNull
   public CreateFolderPath toCreateFolderPath()
   {
     return new CreateFolderPath(this);
   }
 
+  @NotNull
   public CreateMessage toCreateMessage()
   {
     return new CreateMessage(this);
   }
 
+  @NotNull
   public CreateTag toCreateTag()
   {
     return new CreateTag(this);
   }
 
+  @NotNull
   public Checkpoint toCheckpoint()
   {
     return new Checkpoint(this);

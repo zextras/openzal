@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.util.JMSession;
@@ -35,6 +36,7 @@ import java.util.Set;
 
 public class MailSession
 {
+  @NotNull
   public static Session getSmtpSession(@Nullable Account account) throws MessagingException
   {
     if (account != null)
@@ -47,6 +49,7 @@ public class MailSession
     }
   }
 
+  @NotNull
   public static Session getSession()
   {
     try

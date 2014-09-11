@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class Link extends Document
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  private final com.zimbra.cs.mailbox.Link mLink;
+  @NotNull private final com.zimbra.cs.mailbox.Link mLink;
 
   public Link(@NotNull Object item)
   {

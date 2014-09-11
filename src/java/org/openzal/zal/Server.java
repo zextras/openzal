@@ -34,12 +34,12 @@ import java.util.Set;
 
 public class Server extends Entry
 {
-  private final com.zimbra.cs.account.Server mServer;
+  @NotNull private final com.zimbra.cs.account.Server mServer;
 
   protected Server(@NotNull Object server)
   {
     super(server);
-    mServer = (com.zimbra.cs.account.Server)server;
+    mServer = (com.zimbra.cs.account.Server) server;
   }
 
   public Server(
@@ -47,8 +47,9 @@ public class Server extends Entry
     String id,
     Map<String, Object> attrs,
     Map<String, Object> defaults,
-    Provisioning prov
-  ) {
+    @NotNull Provisioning prov
+  )
+  {
     this(
       new com.zimbra.cs.account.Server(
         name,
@@ -60,12 +61,13 @@ public class Server extends Entry
     );
   }
 
+  @NotNull
   public Collection<String> getHsmPolicy()
   {
     return Arrays.asList(mServer.getHsmPolicy());
   }
 
-  public void setHsmPolicy(Collection<String> zimbraHsmPolicy)
+  public void setHsmPolicy(@NotNull Collection<String> zimbraHsmPolicy)
   {
     try
     {
@@ -89,6 +91,7 @@ public class Server extends Entry
     }
   }
 
+  @NotNull
   public Collection<String> getServiceInstalled()
   {
     return Arrays.asList(mServer.getServiceInstalled());
@@ -104,6 +107,7 @@ public class Server extends Entry
     return mServer.getName();
   }
 
+  @NotNull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mServer.getAttrs(applyDefaults));
@@ -119,11 +123,13 @@ public class Server extends Entry
     return mServer.isXMPPEnabled();
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mServer.getMultiAttrSet(name));
   }
 
+  @NotNull
   public Collection<String> getMultiAttr(String name)
   {
     return Arrays.asList(mServer.getMultiAttr(name));
@@ -134,12 +140,13 @@ public class Server extends Entry
     return mServer.getAttr(name, defaultValue);
   }
 
+  @NotNull
   public Collection<String> getServiceEnabled()
   {
     return Arrays.asList(mServer.getServiceEnabled());
   }
 
-  protected <T> T toZimbra(Class<T> cls)
+  protected <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mServer);
   }
@@ -149,6 +156,7 @@ public class Server extends Entry
     return mServer.getIntAttr(name, defaultValue);
   }
 
+  @NotNull
   public String getAdminURL(String path) {
     String hostname = getAttr(Provisioning.A_zimbraServiceHostname);
     int port = getIntAttr(Provisioning.A_zimbraAdminPort, 0);

@@ -27,15 +27,15 @@ import java.util.Map;
 
 public class Identity implements Comparable<Identity>
 {
-  private final com.zimbra.cs.account.Identity mIdentity;
+  @NotNull private final com.zimbra.cs.account.Identity mIdentity;
 
   protected Identity(@NotNull Object identity)
   {
-    if ( identity == null )
+    if (identity == null)
     {
       throw new NullPointerException();
     }
-    mIdentity = (com.zimbra.cs.account.Identity)identity;
+    mIdentity = (com.zimbra.cs.account.Identity) identity;
   }
 
   public Map<String, Object> getAttrs(boolean applyDefaults)

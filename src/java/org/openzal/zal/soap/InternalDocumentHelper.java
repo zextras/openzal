@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ContinuationThrowable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -49,7 +50,7 @@ public class InternalDocumentHelper
       mZimbraSoapContext = zimbraSoapContext;
     }
 
-    Element createElement( QName qName )
+    Element createElement( @NotNull QName qName )
     {
       org.dom4j.QName domqName = org.dom4j.QName.get(
         qName.getName(),

@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -57,6 +58,7 @@ public class AttributeInfo
     /* $endif $ */
   }
 
+  @Nullable
   public static AttributeInfo getAttributeInfo( String key )
   {
     try

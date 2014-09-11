@@ -20,10 +20,13 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.servlet.http.HttpServletRequest;
 
 public final class Jetty
 {
+  @NotNull
   public static Continuation getContinuation( HttpServletRequest req )
   {
     return new Continuation( req );

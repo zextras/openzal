@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
@@ -115,7 +116,7 @@ class Extension implements Comparable<Extension>
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -53,6 +54,7 @@ class InternalAdminDocumentHandler extends AdminDocumentHandler
     return mInternalDocumentHelper.needsAdminAuth(context);
   }
 
+  @Nullable
   @Override
   protected Element proxyIfNecessary(Element request, Map<String, Object> context) throws ZimbraException
   {

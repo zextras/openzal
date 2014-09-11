@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zimbra.soap.*;
 import org.dom4j.QName;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ import java.util.Map;
 @Singleton
 public class SoapServiceManager
 {
-  private final Map<QName, DocumentHandler> mOriginalHandlersMap;
+  @NotNull private final Map<QName, DocumentHandler> mOriginalHandlersMap;
 
   @Inject
   public SoapServiceManager()
@@ -44,9 +45,9 @@ public class SoapServiceManager
     @Override
     public void receivedHandlerMap(Map<QName, DocumentHandler> handlerMap)
     {
-      for( Map.Entry<QName, DocumentHandler> entry : handlerMap.entrySet() )
+      for (Map.Entry<QName, DocumentHandler> entry : handlerMap.entrySet())
       {
-        if( !mOriginalHandlersMap.containsKey(entry.getKey()) )
+        if (!mOriginalHandlersMap.containsKey(entry.getKey()))
         {
           mOriginalHandlersMap.put(entry.getKey(), entry.getValue());
         }

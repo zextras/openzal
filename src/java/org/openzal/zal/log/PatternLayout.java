@@ -20,6 +20,9 @@
 
 package org.openzal.zal.log;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class PatternLayout extends org.apache.log4j.PatternLayout
 {
   public static String DEFAULT_PATTERN = "%m%n";
@@ -33,7 +36,8 @@ public class PatternLayout extends org.apache.log4j.PatternLayout
     super(pattern);
   }
 
-  public org.apache.log4j.helpers.PatternParser createPatternParser(String pattern) {
+  @NotNull
+  public org.apache.log4j.helpers.PatternParser createPatternParser(@Nullable String pattern) {
     if (pattern == null) {
       pattern = DEFAULT_PATTERN;
     }

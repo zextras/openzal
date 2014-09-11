@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -113,6 +114,7 @@ public abstract class Utils
     return BEncoding.encode(attrs);
   }
 
+  @Nullable
   public static List<Zimlet> orderZimletsByPriority(List<Zimlet> zimlets)
   {
     for (Zimlet zimlet : zimlets)

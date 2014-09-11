@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
+
 public class FullItemInfo extends PlacedItemInfo
 {
   public final byte   type;
@@ -63,7 +65,7 @@ public class FullItemInfo extends PlacedItemInfo
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

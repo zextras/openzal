@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -220,10 +221,10 @@ public class Provisioning
   public static String A_zimbraHsmPolicy                                      = com.zimbra.cs.account.Provisioning.A_zimbraHsmPolicy;
   public static String A_zimbraDefaultDomainName                              = com.zimbra.cs.account.Provisioning.A_zimbraDefaultDomainName;
 
-  public final com.zimbra.cs.account.Provisioning mProvisioning;
+  @NotNull public final com.zimbra.cs.account.Provisioning mProvisioning;
 
-  private final NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
-  private final NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
+  @NotNull private final NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
+  @NotNull private final NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
   private final static String[] mAccountAttrs = {
     com.zimbra.cs.account.Provisioning.A_c,
     com.zimbra.cs.account.Provisioning.A_cn,
@@ -242,6 +243,7 @@ public class Provisioning
 
     mNamedEntryAccountWrapper = new NamedEntryWrapper<Account>()
     {
+      @NotNull
       @Override
       public Account wrap(NamedEntry entry)
       {
@@ -251,6 +253,7 @@ public class Provisioning
 
     mNamedEntryDomainWrapper = new NamedEntryWrapper<Domain>()
     {
+      @NotNull
       @Override
       public Domain wrap(NamedEntry entry)
       {
@@ -259,7 +262,7 @@ public class Provisioning
     };
   }
 
-  public boolean isValidUid(String uid)
+  public boolean isValidUid(@NotNull String uid)
   {
     return uid.length() == 36 &&
       (uid.charAt(8) == '-' &&
@@ -268,6 +271,7 @@ public class Provisioning
         uid.charAt(23) == '-');
   }
 
+  @Nullable
   public Account getZimbraUser()
     throws ZimbraException
   {
@@ -284,6 +288,7 @@ public class Provisioning
     );
   }
 
+  @Nullable
   public DistributionList getDistributionListById(String id)
     throws ZimbraException
   {
@@ -337,7 +342,7 @@ public class Provisioning
     }
   }
 
-  public void visitAllAccounts(SimpleVisitor<Account> visitor)
+  public void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -365,7 +370,7 @@ public class Provisioning
     }
   }
 
-  public void visitAllLocalAccounts(SimpleVisitor<Account> visitor)
+  public void visitAllLocalAccounts(@NotNull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -390,7 +395,7 @@ public class Provisioning
     }
   }
 
-  public void visitAllAccounts(SimpleVisitor<Account> visitor, Filter<Account> filterAccounts)
+  public void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
     throws ZimbraException
   {
     ProvisioningVisitor<Account> accountProvisioningVisitor = new ProvisioningVisitor<Account>(
@@ -402,8 +407,8 @@ public class Provisioning
   }
 
   public void visitAllLocalAccountsSlow(
-    SimpleVisitor<Account> visitor,
-    Filter<Account> filterAccounts
+    @NotNull SimpleVisitor<Account> visitor,
+    @NotNull Filter<Account> filterAccounts
   )
     throws ZimbraException
   {
@@ -428,7 +433,7 @@ public class Provisioning
     }
   }
 
-  public void visitAllDomains(SimpleVisitor<Domain> visitor) throws ZimbraException
+  public void visitAllDomains(@NotNull SimpleVisitor<Domain> visitor) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Domain>(visitor, mNamedEntryDomainWrapper);
     try
@@ -441,7 +446,7 @@ public class Provisioning
     }
   }
 
-  public void visitDomain(SimpleVisitor<Account> visitor, Domain domain) throws ZimbraException
+  public void visitDomain(@NotNull SimpleVisitor<Account> visitor, @NotNull Domain domain) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
     try
@@ -479,7 +484,7 @@ public class Provisioning
     /* $endif $ */
   }
 
-  public void authAccount(Account account, String password, Protocol protocol, Map<String, Object> context)
+  public void authAccount(@NotNull Account account, String password, @NotNull Protocol protocol, Map<String, Object> context)
     throws ZimbraException
   {
     try
@@ -519,6 +524,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Server getLocalServer()
     throws ZimbraException
   {
@@ -597,7 +603,7 @@ public class Provisioning
     }
   }
 
-  public void modifyAttrs(Entry entry, Map<String, Object> attrs)
+  public void modifyAttrs(@NotNull Entry entry, Map<String, Object> attrs)
     throws ZimbraException
   {
     try
@@ -632,7 +638,7 @@ public class Provisioning
     }
   }
 
-  public List<DistributionList> getAllDistributionLists(Domain domain)
+  public List<DistributionList> getAllDistributionLists(@NotNull Domain domain)
     throws ZimbraException
   {
     try
@@ -706,7 +712,7 @@ public class Provisioning
   }
 
   @Nullable
-  public DistributionList get(ProvisioningKey.ByDistributionList id, String dlStr)
+  public DistributionList get(@NotNull ProvisioningKey.ByDistributionList id, String dlStr)
     throws ZimbraException
   {
     try
@@ -728,7 +734,7 @@ public class Provisioning
   }
 
   @Nullable
-  public Account get(ProvisioningKey.ByAccount by, String target)
+  public Account get(@NotNull ProvisioningKey.ByAccount by, String target)
     throws ZimbraException
   {
     try
@@ -784,7 +790,7 @@ public class Provisioning
     }
   }
 
-  public List<Account> getAllAccounts(Domain domain)
+  public List<Account> getAllAccounts(@NotNull Domain domain)
     throws ZimbraException
   {
     try
@@ -825,7 +831,7 @@ public class Provisioning
     }
   }
 
-  public List<CalendarResource> getAllCalendarResources(Domain domain)
+  public List<CalendarResource> getAllCalendarResources(@NotNull Domain domain)
     throws ZimbraException
   {
     try
@@ -866,6 +872,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public GlobalGrant getGlobalGrant()
     throws ZimbraException
   {
@@ -887,6 +894,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Config getConfig()
     throws ZimbraException
   {
@@ -969,6 +977,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Domain createDomain(String currentDomainName, HashMap<String, Object> stringObjectHashMap)
     throws ZimbraException
   {
@@ -990,6 +999,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Cos createCos(String cosname, HashMap<String, Object> stringObjectHashMap)
     throws ZimbraException
   {
@@ -1011,6 +1021,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public DistributionList createDistributionList(String dlistName, HashMap<String, Object> stringObjectHashMap)
     throws ZimbraException
   {
@@ -1032,6 +1043,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Account createCalendarResource(String dstAccount, String newPassword, Map<String, Object> attrs)
     throws ZimbraException
   {
@@ -1053,6 +1065,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Account createAccount(String dstAccount, String newPassword, Map<String, Object> attrs)
     throws ZimbraException
   {
@@ -1074,7 +1087,7 @@ public class Provisioning
     }
   }
 
-  public void modifyIdentity(Account newAccount, String identityName, Map<String, Object> newAttrs)
+  public void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
     throws ZimbraException
   {
     try
@@ -1092,8 +1105,8 @@ public class Provisioning
   }
 
   public void grantRight(
-    String targetType, TargetBy targetBy, String target,
-    String granteeType, GrantedBy granteeBy, String grantee,
+    String targetType, @NotNull TargetBy targetBy, String target,
+    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException
   {
@@ -1122,8 +1135,8 @@ public class Provisioning
   }
 
   public void revokeRight(
-    String targetType, TargetBy targetBy, String target,
-    String granteeType, GrantedBy granteeBy, String grantee,
+    String targetType, @NotNull TargetBy targetBy, String target,
+    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException
   {
@@ -1150,13 +1163,13 @@ public class Provisioning
     /* $endif $ */
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mProvisioning);
   }
 
   @Nullable
-  public Domain getDomain(Account account)
+  public Domain getDomain(@NotNull Account account)
     throws ZimbraException
   {
     try
@@ -1177,7 +1190,7 @@ public class Provisioning
     }
   }
 
-  public void flushCache(CacheEntryType cacheEntryType, Collection<CacheEntry> cacheEntries)
+  public void flushCache(@NotNull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
     throws ZimbraException
   {
     com.zimbra.cs.account.Provisioning.CacheEntry[] cacheEntriesArray = null;
@@ -1202,7 +1215,7 @@ public class Provisioning
     }
   }
 
-  public CountAccountResult countAccount(Domain domain)
+  public CountAccountResult countAccount(@NotNull Domain domain)
     throws ZimbraException
   {
     try
@@ -1217,7 +1230,7 @@ public class Provisioning
     }
   }
 
-  public long getAccountsOnCos(Domain domain, Cos cos)
+  public long getAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos)
   {
     CountAccountResult accountResult = countAccount(domain);
     for (CountAccountByCos accountByCos : accountResult.getCountAccountByCos())
@@ -1230,7 +1243,7 @@ public class Provisioning
     return -1;
   }
 
-  public long getMaxAccountsOnCos(Domain domain, Cos cos)
+  public long getMaxAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos)
   {
     final Collection<String> cosLimits = domain.getDomainCOSMaxAccounts();
 
@@ -1262,7 +1275,7 @@ public class Provisioning
   }
 
   @Nullable
-  public Server getServer(Account acct)
+  public Server getServer(@NotNull Account acct)
     throws ZimbraException
   {
     try
@@ -1283,7 +1296,7 @@ public class Provisioning
     }
   }
 
-  public boolean onLocalServer(Account userAccount)
+  public boolean onLocalServer(@NotNull Account userAccount)
     throws ZimbraException
   {
     try
@@ -1296,6 +1309,7 @@ public class Provisioning
     }
   }
 
+  @Nullable
   public Zimlet createZimlet(String name, Map<String, Object> attrs) throws org.openzal.zal.exceptions.ZimbraException
   {
     try
@@ -1316,7 +1330,7 @@ public class Provisioning
     }
   }
 
-  public long getEffectiveQuota(Account account)
+  public long getEffectiveQuota(@NotNull Account account)
   {
     long acctQuota = account.getLongAttr(A_zimbraMailQuota, 0);
     Domain domain = getDomain(account);
@@ -1483,9 +1497,10 @@ public class Provisioning
     /* $endif $ */
   }
 
+  @Nullable
   public Grants getGrants(
-    org.openzal.zal.provisioning.TargetType targetType,
-    TargetBy name,
+    @NotNull org.openzal.zal.provisioning.TargetType targetType,
+    @NotNull TargetBy name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
   )
@@ -1522,7 +1537,7 @@ public class Provisioning
 
   public String getGranteeName(
     String grantee_id,
-    String grantee_type
+    @NotNull String grantee_type
   ) throws ZimbraException
   {
     if( grantee_type.equals(GranteeType.GT_GROUP.getCode()) )
@@ -1587,9 +1602,9 @@ public class Provisioning
 
   public static class GalSearchResult
   {
-    private final LinkedList<GalContact> mContactList;
-    private       int                    mTotal;
-    private       boolean                mHasMore;
+    @NotNull private final LinkedList<GalContact> mContactList;
+    private                int                    mTotal;
+    private                boolean                mHasMore;
 
     void setTotal(int total)
     {
@@ -1626,6 +1641,7 @@ public class Provisioning
       mContactList = new LinkedList<GalContact>();
     }
 
+    @NotNull
     public List<GalContact> getContactList()
     {
       return mContactList;
@@ -1647,7 +1663,8 @@ public class Provisioning
     }
   }
 
-  public GalSearchResult galSearch(Account account, String query, int skip, int limit)
+  @NotNull
+  public GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit)
   {
     GalSearchParams searchParams = new GalSearchParams(account.toZimbra(com.zimbra.cs.account.Account.class));
 
@@ -1717,7 +1734,8 @@ public class Provisioning
       mSearchResult.setHasMore(hasMore);
     }
 
-    public Element handleContact(Contact contact)
+    @Nullable
+    public Element handleContact(@NotNull Contact contact)
       throws ZimbraException
     {
       if (mCounter >= mSkip)
@@ -1739,7 +1757,7 @@ public class Provisioning
       return null;
     }
 
-    public void handleElement(Element node)
+    public void handleElement(@NotNull Element node)
     {
       if (mCounter >= mSkip)
       {

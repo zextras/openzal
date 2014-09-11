@@ -34,12 +34,12 @@ import java.util.Set;
 
 public class Domain extends Entry
 {
-  private final com.zimbra.cs.account.Domain mDomain;
+  @NotNull private final com.zimbra.cs.account.Domain mDomain;
 
   public Domain(@NotNull Object domain)
   {
     super(domain);
-    mDomain = (com.zimbra.cs.account.Domain)domain;
+    mDomain = (com.zimbra.cs.account.Domain) domain;
   }
 
   public Domain(
@@ -47,8 +47,9 @@ public class Domain extends Entry
     String id,
     Map<String, Object> attrs,
     Map<String, Object> defaults,
-    Provisioning prov
-  ) {
+    @NotNull Provisioning prov
+  )
+  {
     this(
       new com.zimbra.cs.account.Domain(
         name,
@@ -99,6 +100,7 @@ public class Domain extends Entry
     return mDomain.getName();
   }
 
+  @NotNull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mDomain.getAttrs(applyDefaults));
@@ -113,7 +115,7 @@ public class Domain extends Entry
     /* $endif$ */
   }
 
-  public void setDomainCOSMaxAccounts(Collection<String> zimbraDomainCOSMaxAccounts)
+  public void setDomainCOSMaxAccounts(@NotNull Collection<String> zimbraDomainCOSMaxAccounts)
   {
     try
     {
@@ -147,6 +149,7 @@ public class Domain extends Entry
     }
   }
 
+  @NotNull
   public Collection<String> getDomainCOSMaxAccounts()
   {
     return Arrays.asList(mDomain.getDomainCOSMaxAccounts());
@@ -157,11 +160,13 @@ public class Domain extends Entry
     return mDomain.getPasswordChangeListener();
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mDomain.getMultiAttrSet(name));
   }
 
+  @NotNull
   public List<Account> getAllAccounts()
   {
     try
@@ -174,7 +179,7 @@ public class Domain extends Entry
     }
   }
 
-  protected <T> T toZimbra(Class<T> cls)
+  protected <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mDomain);
   }

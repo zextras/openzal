@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ACE
 {
@@ -72,7 +73,7 @@ public class ACE
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {
@@ -85,12 +86,7 @@ public class ACE
 
     ACE ACE = (ACE) o;
 
-    if (mACE != null ? !mACE.equals(ACE.mACE) : ACE.mACE != null)
-    {
-      return false;
-    }
-
-    return true;
+    return mACE.equals(ACE.mACE);
   }
 
   @Override

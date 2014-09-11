@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.lib.Clock;
 import org.openzal.zal.lib.ActualClock;
 
@@ -31,13 +33,13 @@ import com.zimbra.cs.session.Session;
 
 public class MailboxSessionProxy
 {
-  private final SessionImpl mSession;
-  private       Integer     mMboxId;
-  private       String      mName;
-  private       Listener    mListener;
-  private       Clock       mClock;
+  @NotNull private final SessionImpl mSession;
+  private                Integer     mMboxId;
+  private                String      mName;
+  @NotNull private       Listener    mListener;
+  @NotNull private       Clock       mClock;
 
-  public MailboxSessionProxy(int mboxId, String name, String accountId, Listener listener)
+  public MailboxSessionProxy(int mboxId, String name, String accountId, @NotNull Listener listener)
   {
     mSession = new SessionImpl(accountId, Session.Type.SYNCLISTENER);
     mMboxId = mboxId;
@@ -81,12 +83,13 @@ public class MailboxSessionProxy
     return isRelevant;
   }
 
+  @NotNull
   public String getLoggerName()
   {
     return "MailboxSessionProxy";
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mSession);
   }
@@ -120,7 +123,7 @@ public class MailboxSessionProxy
     }
 
     @Override
-    public void notifyPendingChanges(PendingModifications pns, int changeId, Session source)
+    public void notifyPendingChanges(@NotNull PendingModifications pns, int changeId, @Nullable Session source)
     {
       if( !pns.hasNotifications() )
       {
@@ -225,7 +228,7 @@ public class MailboxSessionProxy
     @Override
     protected void cleanup()
     {
-      mListener = null;
+      mListener.sessionClosed();
     }
   }
 }

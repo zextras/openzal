@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -29,7 +30,7 @@ import java.io.InputStream;
 
 public class ParsedDocument
 {
-  private final com.zimbra.cs.mime.ParsedDocument mParsedDocument;
+  @NotNull private final com.zimbra.cs.mime.ParsedDocument mParsedDocument;
 
   public ParsedDocument(
     InputStream stream,

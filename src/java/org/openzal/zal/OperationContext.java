@@ -25,16 +25,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class OperationContext
 {
-  private final com.zimbra.cs.mailbox.OperationContext mOperationContext;
+  @NotNull private final com.zimbra.cs.mailbox.OperationContext mOperationContext;
 
-  public OperationContext(Account account, boolean enableAdminRights)
+  public OperationContext(@NotNull Account account, boolean enableAdminRights)
   {
     mOperationContext = new com.zimbra.cs.mailbox.OperationContext(
       account.toZimbra(com.zimbra.cs.account.Account.class), enableAdminRights
     );
   }
 
-  public OperationContext(Account account)
+  public OperationContext(@NotNull Account account)
   {
     mOperationContext = new com.zimbra.cs.mailbox.OperationContext(account.toZimbra(com.zimbra.cs.account.Account.class), false);
   }
@@ -48,6 +48,7 @@ public class OperationContext
     mOperationContext = (com.zimbra.cs.mailbox.OperationContext) operationContext;
   }
 
+  @NotNull
   com.zimbra.cs.mailbox.OperationContext getOperationContext()
   {
     return mOperationContext;

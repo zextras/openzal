@@ -20,6 +20,9 @@
 
 package org.openzal.zal.lib;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +40,7 @@ public class Version implements Comparable<Version>
     mVersionParts = Arrays.copyOf(versionParts,versionParts.length);
   }
 
-  public Version(String version)
+  public Version(@NotNull String version)
     throws NumberFormatException
   {
     final List<Integer> versionParts = new ArrayList<Integer>(3);
@@ -58,7 +61,7 @@ public class Version implements Comparable<Version>
   }
 
   @Override
-  public int compareTo(Version version)
+  public int compareTo(@NotNull Version version)
   {
     int maxSize = Math.max(mVersionParts.length, version.mVersionParts.length);
 
@@ -157,7 +160,7 @@ public class Version implements Comparable<Version>
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

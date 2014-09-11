@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.cs.account.NamedEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Entry
 {
@@ -61,7 +62,7 @@ public class Entry
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

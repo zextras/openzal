@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ public enum GlobalInviteStatus
   public final String mRawStatus;
   private final AttendeeInviteStatus mAttendeeInviteStatus;
 
-  GlobalInviteStatus(String status, AttendeeInviteStatus attendeeInviteStatus)
+  GlobalInviteStatus(String status, @NotNull AttendeeInviteStatus attendeeInviteStatus)
   {
     mRawStatus = status;
     mAttendeeInviteStatus = attendeeInviteStatus;
@@ -47,7 +49,9 @@ public enum GlobalInviteStatus
     return mRawStatus;
   }
 
+  @NotNull
   private final static Map<String, GlobalInviteStatus> sZimbra2Zal;
+  @NotNull
   private final static Map<String, GlobalInviteStatus> sICal2Zimbra;
 
   static
@@ -60,7 +64,7 @@ public enum GlobalInviteStatus
     sZimbra2Zal.put("COMP", TASK_COMPLETED);
     sZimbra2Zal.put("INPR", TASK_IN_PROGRESS);
 
-    sICal2Zimbra= new HashMap<String, GlobalInviteStatus>(5);
+    sICal2Zimbra = new HashMap<String, GlobalInviteStatus>(5);
     sICal2Zimbra.put("TENTATIVE", APPOINTMENT_TENTATIVE);
     sICal2Zimbra.put("CANCELLED", APPOINTMENT_CANCELLED);
     sICal2Zimbra.put("CONFIRMED", APPOINTMENT_CONFIRMED);
@@ -69,24 +73,29 @@ public enum GlobalInviteStatus
     sICal2Zimbra.put("IN-PROGRESS", TASK_IN_PROGRESS);
   }
 
+  @NotNull
   public static GlobalInviteStatus fromZimbra(String status)
   {
     GlobalInviteStatus globalInviteStatus = sZimbra2Zal.get(status);
-    if( globalInviteStatus == null ){
-      throw new RuntimeException("Invalid invite status: "+status);
+    if (globalInviteStatus == null)
+    {
+      throw new RuntimeException("Invalid invite status: " + status);
     }
     return globalInviteStatus;
   }
 
+  @NotNull
   public static GlobalInviteStatus fromICal(String status)
   {
     GlobalInviteStatus globalInviteStatus = sICal2Zimbra.get(status);
-    if( globalInviteStatus == null ){
-      throw new RuntimeException("Invalid invite status: "+status);
+    if (globalInviteStatus == null)
+    {
+      throw new RuntimeException("Invalid invite status: " + status);
     }
     return globalInviteStatus;
   }
 
+  @NotNull
   public AttendeeInviteStatus toAttendeeStatus()
   {
     return mAttendeeInviteStatus;

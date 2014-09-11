@@ -69,7 +69,7 @@ public class ContactGroup
 
     private final com.zimbra.cs.mailbox.ContactGroup.Member.Type mZimbraType;
 
-    <T> T toZimbra(Class<T> cls)
+    <T> T toZimbra(@NotNull Class<T> cls)
     {
       return cls.cast(mZimbraType);
     }
@@ -125,7 +125,7 @@ public class ContactGroup
   }
   /* $endif $ */
 
-  public void addMember(Type type, String value)
+  public void addMember(@NotNull Type type, String value)
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
     try

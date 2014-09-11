@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class Tags
@@ -40,7 +42,7 @@ public class Tags
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
-  public static Tags extractFromItem( Item item )
+  public static Tags extractFromItem( @NotNull Item item )
   {
     /* $if ZimbraVersion < 8.0.0 $
     return new Tags(item.getBitmask());

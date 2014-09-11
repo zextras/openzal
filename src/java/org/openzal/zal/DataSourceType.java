@@ -38,17 +38,18 @@ public class DataSourceType
   public static String imap_OCName = AttributeClass.imapDataSource.getOCName();
   public static String pop3_OCName = AttributeClass.pop3DataSource.getOCName();
 
+  @NotNull
   private final String mDataSourceType;
 
   protected DataSourceType(@NotNull Object type)
   {
-    if ( type == null )
+    if (type == null)
     {
       throw new NullPointerException();
     }
 
     /* $if ZimbraVersion >= 8.0.0 $ */
-    mDataSourceType = ((com.zimbra.soap.admin.type.DataSourceType)type).name();
+    mDataSourceType = ((com.zimbra.soap.admin.type.DataSourceType) type).name();
     /* $else $
     mDataSourceType = ((com.zimbra.cs.account.DataSource.Type)type).name();
     /* $endif $ */
@@ -69,6 +70,8 @@ public class DataSourceType
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  @NotNull
   public String name()
   {
     return mDataSourceType;
@@ -77,7 +80,7 @@ public class DataSourceType
   @Override
   public int hashCode()
   {
-    return mDataSourceType != null ? mDataSourceType.hashCode() : 0;
+    return mDataSourceType.hashCode();
   }
 
   @Override

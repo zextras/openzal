@@ -29,15 +29,15 @@ import java.io.InputStream;
 
 public class ZimletFile
 {
-  private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
+  @NotNull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
 
   protected ZimletFile(@NotNull Object zimletFile)
   {
-    if ( zimletFile == null )
+    if (zimletFile == null)
     {
       throw new NullPointerException();
     }
-    mZimletFile = (com.zimbra.cs.zimlet.ZimletFile)zimletFile;
+    mZimletFile = (com.zimbra.cs.zimlet.ZimletFile) zimletFile;
   }
 
   public ZimletFile(String zimlet) throws IOException

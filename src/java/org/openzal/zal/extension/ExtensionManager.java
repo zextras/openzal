@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
@@ -37,8 +38,11 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager
 {
+  @NotNull
   private final File                   mZalRoot;
+  @NotNull
   private final Map<String, Extension> mExtensionMap;
+  @NotNull
   private final Zimbra                 mZimbra;
 
   private File getCurrentJarDirectory()
@@ -58,9 +62,10 @@ public class ExtensionManager
     }
 
     String jarPath = resourceUrl.getPath();
-    if( jarPath.contains("!") ) {
+    if (jarPath.contains("!"))
+    {
       jarPath = jarPath.substring(0, jarPath.indexOf('!'));
-      jarPath = jarPath.replace("file:","");
+      jarPath = jarPath.replace("file:", "");
     }
 
     return new File(jarPath);
@@ -69,7 +74,7 @@ public class ExtensionManager
   public ExtensionManager()
   {
     mZalRoot = getCurrentJarDirectory();
-    mExtensionMap = new HashMap<String,Extension>();
+    mExtensionMap = new HashMap<String, Extension>();
     mZimbra = new Zimbra();
   }
 
@@ -77,7 +82,7 @@ public class ExtensionManager
   {
     String[] entries = mZalRoot.list();
 
-    ZimbraLog.extensions.info("Searching ZAL extensions in directory "+mZalRoot.getAbsolutePath());
+    ZimbraLog.extensions.info("Searching ZAL extensions in directory " + mZalRoot.getAbsolutePath());
 
     if (entries == null || entries.length == 0)
     {

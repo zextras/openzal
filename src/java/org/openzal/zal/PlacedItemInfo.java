@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public class PlacedItemInfo extends ItemInfo
 {
   public int folderId;
@@ -38,7 +40,7 @@ public class PlacedItemInfo extends ItemInfo
 
   public PlacedItemInfo(
     int folderId,
-    ItemInfo itemInfo
+    @NotNull ItemInfo itemInfo
   )
   {
     super(itemInfo.itemId, itemInfo.sequence, itemInfo.date);

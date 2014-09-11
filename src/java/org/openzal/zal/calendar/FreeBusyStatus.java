@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,16 +33,17 @@ public enum FreeBusyStatus
   BusyUnavailable("O"),
   NoData("N");
 
-  private static final Map<String,FreeBusyStatus> sZimbra2Zal;
+  @NotNull
+  private static final Map<String, FreeBusyStatus> sZimbra2Zal;
 
   static
   {
     sZimbra2Zal = new HashMap<String, FreeBusyStatus>(5);
-    sZimbra2Zal.put("B",Busy);
-    sZimbra2Zal.put("F",Free);
-    sZimbra2Zal.put("T",BusyTentative);
-    sZimbra2Zal.put("O",BusyUnavailable);
-    sZimbra2Zal.put("N",NoData);
+    sZimbra2Zal.put("B", Busy);
+    sZimbra2Zal.put("F", Free);
+    sZimbra2Zal.put("T", BusyTentative);
+    sZimbra2Zal.put("O", BusyUnavailable);
+    sZimbra2Zal.put("N", NoData);
   }
 
   public String getRawFreeBusyStatus()
@@ -55,13 +58,13 @@ public enum FreeBusyStatus
     mRawFreeBusyStatus = rawFreeBusyStatus;
   }
 
+  @NotNull
   public static FreeBusyStatus fromZimbra(String freeBusy)
   {
     FreeBusyStatus status = sZimbra2Zal.get(freeBusy);
 
-    if( status == null )
-    {
-      throw new RuntimeException("Invalid FreeBusyStatus: "+freeBusy);
+    if (status == null) {
+      throw new RuntimeException("Invalid FreeBusyStatus: " + freeBusy);
     }
 
     return status;

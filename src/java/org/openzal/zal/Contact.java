@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +80,7 @@ public class Contact extends Item
     }
   }
 
+  @NotNull
   public Map<String, String> getFields()
   {
     return new HashMap<String, String>(
@@ -86,6 +88,7 @@ public class Contact extends Item
     );
   }
 
+  @NotNull
   public Map<String, String> getAllFields()
   {
     return mContact.getAllFields();
@@ -123,7 +126,7 @@ public class Contact extends Item
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

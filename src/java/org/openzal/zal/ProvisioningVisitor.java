@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ProvisioningVisitor<T> implements SimpleVisitor<T>
 {
-  private final SimpleVisitor<T> mVisitor;
-  private final Filter<T> mFilter;
+  @NotNull private final SimpleVisitor<T> mVisitor;
+  @NotNull private final Filter<T>        mFilter;
 
   public ProvisioningVisitor(
     @NotNull SimpleVisitor<T> visitor,
@@ -40,7 +40,7 @@ public class ProvisioningVisitor<T> implements SimpleVisitor<T>
   @Override
   public void visit(T entry)
   {
-    if( !mFilter.filterOut(entry ) )
+    if (!mFilter.filterOut(entry))
     {
       mVisitor.visit(entry);
     }

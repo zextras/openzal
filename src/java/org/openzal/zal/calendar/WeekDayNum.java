@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.ZRecur;
+import org.jetbrains.annotations.NotNull;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ZWeekDay;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 public class WeekDayNum
 {
+  @NotNull
   /* $if ZimbraVersion >= 8.0.0 $ */
   private static final Map<Integer, ZWeekDay> mZal2Zimbra;
   /* $else $
@@ -45,14 +47,14 @@ public class WeekDayNum
   static
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    mZal2Zimbra = new HashMap<Integer,  ZWeekDay>(7);
-    mZal2Zimbra.put(Calendar.SUNDAY,    ZWeekDay.SU);
-    mZal2Zimbra.put(Calendar.MONDAY,    ZWeekDay.MO);
-    mZal2Zimbra.put(Calendar.TUESDAY,   ZWeekDay.TU);
+    mZal2Zimbra = new HashMap<Integer, ZWeekDay>(7);
+    mZal2Zimbra.put(Calendar.SUNDAY, ZWeekDay.SU);
+    mZal2Zimbra.put(Calendar.MONDAY, ZWeekDay.MO);
+    mZal2Zimbra.put(Calendar.TUESDAY, ZWeekDay.TU);
     mZal2Zimbra.put(Calendar.WEDNESDAY, ZWeekDay.WE);
-    mZal2Zimbra.put(Calendar.THURSDAY,  ZWeekDay.TH);
-    mZal2Zimbra.put(Calendar.FRIDAY,    ZWeekDay.FR);
-    mZal2Zimbra.put(Calendar.SATURDAY,  ZWeekDay.SA);
+    mZal2Zimbra.put(Calendar.THURSDAY, ZWeekDay.TH);
+    mZal2Zimbra.put(Calendar.FRIDAY, ZWeekDay.FR);
+    mZal2Zimbra.put(Calendar.SATURDAY, ZWeekDay.SA);
     /* $else $
     mZal2Zimbra = new HashMap<Integer,  ZRecur.ZWeekDay>(7);
     mZal2Zimbra.put(Calendar.SUNDAY,    ZRecur.ZWeekDay.SU);

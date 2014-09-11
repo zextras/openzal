@@ -29,15 +29,15 @@ import java.io.IOException;
 
 public class QueryResults
 {
-  private final ZimbraQueryResults mZimbraQueryResults;
+  @NotNull private final ZimbraQueryResults mZimbraQueryResults;
 
   protected QueryResults(@NotNull Object zimbraQueryResults)
   {
-    if ( zimbraQueryResults == null )
+    if (zimbraQueryResults == null)
     {
       throw new NullPointerException();
     }
-    mZimbraQueryResults = (ZimbraQueryResults)zimbraQueryResults;
+    mZimbraQueryResults = (ZimbraQueryResults) zimbraQueryResults;
   }
 
   public SearchHit getNext()

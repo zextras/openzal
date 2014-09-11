@@ -26,15 +26,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class AuthToken
 {
-  private final com.zimbra.cs.account.AuthToken mAuthToken;
+  @NotNull private final com.zimbra.cs.account.AuthToken mAuthToken;
 
   protected AuthToken(@NotNull Object authToken)
   {
-    if ( authToken == null )
+    if (authToken == null)
     {
       throw new NullPointerException();
     }
-    mAuthToken = (com.zimbra.cs.account.AuthToken)authToken;
+    mAuthToken = (com.zimbra.cs.account.AuthToken) authToken;
   }
 
   public static AuthToken getAuthToken(String encoded) throws org.openzal.zal.exceptions.AuthTokenException

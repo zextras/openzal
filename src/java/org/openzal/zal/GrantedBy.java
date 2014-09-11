@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+
 /* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $endif$ */
@@ -34,7 +36,7 @@ import com.zimbra.cs.account.Provisioning.GranteeBy;
 
 public class GrantedBy
 {
-  private final GranteeBy mGranteeBy;
+  @NotNull private final GranteeBy mGranteeBy;
 
   public static GrantedBy id   = new GrantedBy(GranteeBy.id);
   public static GrantedBy name = new GrantedBy(GranteeBy.name);

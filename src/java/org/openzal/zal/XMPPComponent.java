@@ -27,12 +27,12 @@ import java.util.Set;
 
 public class XMPPComponent extends Entry implements Comparable<XMPPComponent>
 {
-  private final com.zimbra.cs.account.XMPPComponent mXmppComponent;
+  @NotNull private final com.zimbra.cs.account.XMPPComponent mXmppComponent;
 
   protected XMPPComponent(@NotNull Object xmppComponent)
   {
     super(xmppComponent);
-    mXmppComponent = (com.zimbra.cs.account.XMPPComponent)xmppComponent;
+    mXmppComponent = (com.zimbra.cs.account.XMPPComponent) xmppComponent;
   }
 
   public Set<String> getMultiAttrSet(String name)

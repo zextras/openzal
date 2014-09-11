@@ -31,9 +31,9 @@ import org.jetbrains.annotations.NotNull;
 public class PrefExternalSendersType
 {
   /* $if ZimbraVersion >= 8.0.0 $ */
-  public static PrefExternalSendersType ALLNOTINAB =
+  @NotNull public static PrefExternalSendersType ALLNOTINAB =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
-  public static PrefExternalSendersType ALL        =
+  @NotNull public static PrefExternalSendersType ALL        =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
 
   private ZAttrProvisioning.PrefExternalSendersType mValue;
@@ -67,6 +67,7 @@ public class PrefExternalSendersType
     /* $endif $ */
   }
 
+  @NotNull
   public static PrefExternalSendersType fromString(String s)
     throws ZimbraException
   {
@@ -87,7 +88,7 @@ public class PrefExternalSendersType
   public boolean isALLNOTINAB() { return this == ALLNOTINAB;}
   public boolean isALL() { return this == ALL;}
 
-  protected <T> T toZimbra(Class<T> cls)
+  protected <T> T toZimbra(@NotNull Class<T> cls)
   {
 /* $if ZimbraVersion >= 8.0.0 $ */
     return cls.cast(mValue);
