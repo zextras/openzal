@@ -51,6 +51,7 @@ import com.zimbra.cs.zimlet.ZimletUtil;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -115,11 +116,21 @@ public abstract class Utils
 
   public static List<Zimlet> orderZimletsByPriority(List<Zimlet> zimlets)
   {
+    List<com.zimbra.cs.account.Zimlet> zimbraZimletList =
+      new ArrayList<com.zimbra.cs.account.Zimlet>(zimlets.size());
+
     for (Zimlet zimlet : zimlets)
     {
-      zimlet.getPriority();
+      zimbraZimletList.add(zimlet.toZimbra());
     }
-    return null;
+
+    List<Zimlet> orderedZimletList = new ArrayList<Zimlet>(zimlets.size());
+    for (com.zimbra.cs.account.Zimlet zimlet : ZimletUtil.orderZimletsByPriority(zimbraZimletList))
+    {
+      orderedZimletList.add(new Zimlet(zimlet));
+    }
+
+    return orderedZimletList;
   }
 
   public static String getPublicURLForDomain(Server server, Domain domain, String path)
