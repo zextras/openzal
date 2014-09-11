@@ -45,6 +45,13 @@ CommonZimbraVersions=[
   "8.5.0"
 ]
 
+MajorZimbraVersions=[
+  "6.0.16",
+  "7.2.7",
+  "8.0.7",
+  "8.5.0"
+]
+
 joined_zimbra_jar_versions  = join(ZimbraVersions, "zal-" )
 joined_zimbra_test_versions = join(ZimbraVersions, "only-test-")
 parallel_tests              = join(ZimbraVersions, '      <antcall target="only-test-', '-silent" />\n' )
@@ -54,6 +61,7 @@ joined_common_zimbra_test_versions = join(CommonZimbraVersions, "only-test-")
 common_parallel_tests              = join(CommonZimbraVersions, '      <antcall target="only-test-', '-silent" />\n' )
 
 joined_zimbra_versions = join(ZimbraVersions, '')
+joined_major_zimbra_versions = join(MajorZimbraVersions, '')
 
 zal_version = file("../version").read().replace("\n","").replace("\r","")
 zal_version_micro = zal_version[zal_version.rindex('.')+1:]
@@ -67,6 +75,7 @@ Parameters = {
   "FIRST_ZIMBRA_VERSION": ZimbraVersions[0],
   "LAST_ZIMBRA_VERSION": ZimbraVersions[-1],
   "ZIMBRA_VERSIONS": joined_zimbra_versions,
+  "MAJOR_ZIMBRA_VERSIONS": joined_major_zimbra_versions,
   "JOINED_ZIMBRA_JAR_VERSIONS": joined_zimbra_jar_versions,
   "JOINED_ZIMBRA_TEST_VERSIONS": joined_zimbra_test_versions,
   "JOINED_COMMON_ZIMBRA_JAR_VERSIONS": joined_common_zimbra_jar_versions,

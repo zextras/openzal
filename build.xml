@@ -3451,6 +3451,43 @@
     <exec executable="doxygen" />
   </target>
 
+  <target name="fast-compatibility-check" description="check compatibility of zal jars">
+
+    <if>
+      <equals arg1="0" arg2="0" />
+      <then>
+        <var name="lastZalPath" value="" />
+      </then>
+      <else>
+        <var name="lastZalPath" value="bin/previous-zal-version.jar" />
+      </else>
+    </if>
+
+    <for list="6.0.16,7.2.7,8.0.7,8.5.0" param="currentZimbraVersion">
+      <sequential>
+        <if>
+          <equals arg1="${lastZalPath}" arg2="" />
+          <else>
+            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+              <arg value="-l"/>
+              <arg value="OpenZal"/>
+              <arg value="${lastZalPath}"/>
+              <arg value="dist/@{currentZimbraVersion}/zal.jar"/>
+            </exec>
+          </else>
+        </if>
+        <var name="lastZalPath" value="dist/@{currentZimbraVersion}/zal.jar" />
+      </sequential>
+    </for>
+
+    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+      <arg value="-l"/>
+      <arg value="OpenZal"/>
+      <arg value="dist/8.5.0/zal.jar"/>
+      <arg value="dist/6.0.7/zal.jar"/>
+    </exec>
+  </target>
+
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
@@ -3494,6 +3531,7 @@
       zal-common
       zal-{zimbra-version}
       compatibility-check
+      fast-compatibility-check
       clean
       doxygen
       help
