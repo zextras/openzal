@@ -27,16 +27,18 @@ import java.util.Set;
 
 public class Grants
 {
-  private final RightCommand.Grants mGrants;
+  @NotNull private final RightCommand.Grants mGrants;
 
   protected Grants(@NotNull Object grants)
   {
-    if( grants == null ) {
+    if (grants == null)
+    {
       throw new NullPointerException();
     }
-    mGrants = (RightCommand.Grants)grants;
+    mGrants = (RightCommand.Grants) grants;
   }
 
+  @NotNull
   public Set<ACE> getACEs()
   {
     return ZimbraListWrapper.wrapACEs(mGrants.getACEs());

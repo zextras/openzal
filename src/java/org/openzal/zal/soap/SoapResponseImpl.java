@@ -21,6 +21,7 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.soap.Element;
+import org.jetbrains.annotations.NotNull;
 
 class SoapResponseImpl implements SoapResponse
 {
@@ -72,6 +73,7 @@ class SoapResponseImpl implements SoapResponse
     mElement = response.mElement;
   }
 
+  @NotNull
   @Override
   public SoapResponse createNode(String name)
   {

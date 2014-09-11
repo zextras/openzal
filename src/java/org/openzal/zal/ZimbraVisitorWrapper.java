@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 class ZimbraVisitorWrapper<T> implements NamedEntry.Visitor
 {
-  private final SimpleVisitor<T> mVisitor;
-  private final NamedEntryWrapper<T> mNamedEntryWrapper;
+  @NotNull private final SimpleVisitor<T>     mVisitor;
+  @NotNull private final NamedEntryWrapper<T> mNamedEntryWrapper;
 
   protected ZimbraVisitorWrapper(
     @NotNull SimpleVisitor<T> visitor,

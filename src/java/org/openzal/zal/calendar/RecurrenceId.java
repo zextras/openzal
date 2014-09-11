@@ -26,6 +26,7 @@ import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.cs.mailbox.calendar.ParsedDateTime;
 /* $endif $ */
 import com.zimbra.cs.mailbox.calendar.RecurId;
+import org.jetbrains.annotations.NotNull;
 
 
 public class RecurrenceId
@@ -33,7 +34,7 @@ public class RecurrenceId
   private final long mExceptionStartTimeUtc;
   private ParsedDateTime mDt;
 
-  public RecurrenceId(Long exceptionStartTimeUtc)
+  public RecurrenceId(long exceptionStartTimeUtc)
   {
     mExceptionStartTimeUtc = exceptionStartTimeUtc;
   }
@@ -43,7 +44,7 @@ public class RecurrenceId
     return mExceptionStartTimeUtc;
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(new RecurId(ParsedDateTime.fromUTCTime(mExceptionStartTimeUtc), RecurId.RANGE_NONE));
   }

@@ -27,14 +27,15 @@ import java.util.Set;
 
 public class GlobalGrant extends Entry
 {
-  private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
+  @NotNull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
 
   public GlobalGrant(@NotNull Object globalGrant)
   {
     super(globalGrant);
-    mGlobalGrant = (com.zimbra.cs.account.GlobalGrant)globalGrant;
+    mGlobalGrant = (com.zimbra.cs.account.GlobalGrant) globalGrant;
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mGlobalGrant.getMultiAttrSet(name));

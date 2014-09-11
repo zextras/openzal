@@ -31,11 +31,11 @@ import java.util.Map;
 
 public class ParsedContact
 {
-  private final com.zimbra.cs.mime.ParsedContact mParsedContact;
+  @NotNull private final com.zimbra.cs.mime.ParsedContact mParsedContact;
 
   protected ParsedContact(Object parsedContact)
   {
-    mParsedContact = (com.zimbra.cs.mime.ParsedContact)parsedContact;
+    mParsedContact = (com.zimbra.cs.mime.ParsedContact) parsedContact;
   }
 
   protected <T> T toZimbra(Class<T> cls)

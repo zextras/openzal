@@ -36,7 +36,7 @@ public class AccountStatus
   public static String ACCOUNT_STATUS_ACTIVE      = Provisioning.ACCOUNT_STATUS_ACTIVE;
   public static String ACCOUNT_STATUS_CLOSED      = Provisioning.ACCOUNT_STATUS_CLOSED;
 
-  private final ZAttrProvisioning.AccountStatus mAccountStatus;
+  @NotNull private final ZAttrProvisioning.AccountStatus mAccountStatus;
 
   public static AccountStatus maintenance = new AccountStatus(ZAttrProvisioning.AccountStatus.maintenance);
 
@@ -52,7 +52,7 @@ public class AccountStatus
   @Override
   public int hashCode()
   {
-    return mAccountStatus != null ? mAccountStatus.hashCode() : 0;
+    return mAccountStatus.hashCode();
   }
 
   @Override

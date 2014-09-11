@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.mail.internet.MimePart;
 import java.util.List;
@@ -64,6 +65,7 @@ public class MPartInfo
     return mMPartInfo.getPartNum();
   }
 
+  @Nullable
   public MPartInfo getParent()
   {
     com.zimbra.cs.mime.MPartInfo parent = mMPartInfo.getParent();

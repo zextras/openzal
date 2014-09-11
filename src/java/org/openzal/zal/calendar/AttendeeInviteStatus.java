@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +41,9 @@ public enum AttendeeInviteStatus
   private final String mRawStatus;
   private final String mIcalValue;
 
+  @NotNull
   private static final Map<String, AttendeeInviteStatus> sZimbra2Zal;
+  @NotNull
   private static final Map<String, AttendeeInviteStatus> sICal2Zimbra;
 
   static
@@ -68,7 +72,6 @@ public enum AttendeeInviteStatus
   }
 
 
-
   AttendeeInviteStatus(String rawStatus, String icalValue)
   {
     mRawStatus = rawStatus;
@@ -85,6 +88,7 @@ public enum AttendeeInviteStatus
     return mIcalValue;
   }
 
+  @NotNull
   public static AttendeeInviteStatus fromZimbra(String partStat)
   {
     AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
@@ -94,11 +98,11 @@ public enum AttendeeInviteStatus
     return attendeeInviteStatus;
   }
 
+  @NotNull
   public static AttendeeInviteStatus fromICal(String partStat)
   {
     AttendeeInviteStatus attendeeInviteStatus = sICal2Zimbra.get(partStat);
-    if (attendeeInviteStatus == null)
-    {
+    if (attendeeInviteStatus == null) {
       throw new RuntimeException("Invalid invite status: "+partStat);
     }
     return attendeeInviteStatus;

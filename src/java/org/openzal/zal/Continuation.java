@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
+
 /* $if MajorZimbraVersion < 8 $
 import org.mortbay.jetty.HttpConnection;
 import org.mortbay.util.ajax.ContinuationSupport;
@@ -130,7 +132,7 @@ public class Continuation
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
     {

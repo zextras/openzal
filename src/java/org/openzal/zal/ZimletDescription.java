@@ -25,15 +25,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class ZimletDescription
 {
-  private final com.zimbra.cs.zimlet.ZimletDescription mZimletDescription;
+  @NotNull private final com.zimbra.cs.zimlet.ZimletDescription mZimletDescription;
 
   protected ZimletDescription(@NotNull Object zimletDescription)
   {
-    if ( zimletDescription == null )
+    if (zimletDescription == null)
     {
       throw new NullPointerException();
     }
-    mZimletDescription = (com.zimbra.cs.zimlet.ZimletDescription)zimletDescription;
+    mZimletDescription = (com.zimbra.cs.zimlet.ZimletDescription) zimletDescription;
   }
 
   public String getName()
@@ -41,6 +41,7 @@ public class ZimletDescription
     return mZimletDescription.getName();
   }
 
+  @NotNull
   public Version getVersion()
   {
     String version = mZimletDescription.getVersion().toString();

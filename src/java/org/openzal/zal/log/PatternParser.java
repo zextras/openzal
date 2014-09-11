@@ -23,6 +23,7 @@ package org.openzal.zal.log;
 import org.apache.log4j.helpers.FormattingInfo;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class PatternParser extends org.apache.log4j.helpers.PatternParser
 {
@@ -48,7 +49,7 @@ public class PatternParser extends org.apache.log4j.helpers.PatternParser
       super(formattingInfo);
     }
 
-    public String convert(LoggingEvent event) {
+    public String convert(@NotNull LoggingEvent event) {
       // ZimbraLog.getContext() is private...
       return event.getThreadName();
     }

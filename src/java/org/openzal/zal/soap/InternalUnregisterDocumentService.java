@@ -23,6 +23,7 @@ package org.openzal.zal.soap;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import org.dom4j.Namespace;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ class InternalUnregisterDocumentService implements DocumentService
   }
 
   @Override
-  public void registerHandlers(DocumentDispatcher dispatcher)
+  public void registerHandlers(@NotNull DocumentDispatcher dispatcher)
   {
     Map<QName, ? extends SoapHandler> services = mSoapService.getServices();
     for( QName qName : services.keySet() )

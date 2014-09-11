@@ -29,15 +29,15 @@ import java.util.Map;
 
 public class DataSource
 {
-  private final com.zimbra.cs.account.DataSource mDataSource;
+  @NotNull private final com.zimbra.cs.account.DataSource mDataSource;
 
   DataSource(@NotNull Object dataSource)
   {
-    if ( dataSource == null )
+    if (dataSource == null)
     {
       throw new NullPointerException();
     }
-    mDataSource = (com.zimbra.cs.account.DataSource)dataSource;
+    mDataSource = (com.zimbra.cs.account.DataSource) dataSource;
   }
 
   public static String decryptData(String dataSourceId, String data)

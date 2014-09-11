@@ -21,6 +21,8 @@
 package org.openzal.zal.lib;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -31,12 +33,14 @@ public class ActualClock implements Clock
     return System.currentTimeMillis();
   }
 
+  @NotNull
   @Override
   public Calendar getCurrentTime()
   {
     return new GregorianCalendar();
   }
 
+  @NotNull
   public Calendar getDaysFromNow(int numDays)
   {
     Calendar now = getCurrentTime();

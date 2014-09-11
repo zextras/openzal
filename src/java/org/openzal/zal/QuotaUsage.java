@@ -25,15 +25,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class QuotaUsage
 {
-  private final SoapProvisioning.QuotaUsage mQuotaUsage;
+  @NotNull private final SoapProvisioning.QuotaUsage mQuotaUsage;
 
   protected QuotaUsage(@NotNull Object quotaUsage)
   {
-    if ( quotaUsage == null )
+    if (quotaUsage == null)
     {
       throw new NullPointerException();
     }
-    mQuotaUsage = (SoapProvisioning.QuotaUsage)quotaUsage;
+    mQuotaUsage = (SoapProvisioning.QuotaUsage) quotaUsage;
   }
 
   public String getName()

@@ -21,8 +21,10 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.NamedEntry;
+import org.jetbrains.annotations.NotNull;
 
 interface NamedEntryWrapper<T>
 {
+  @NotNull
   public T wrap(NamedEntry entry);
 }

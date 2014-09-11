@@ -20,12 +20,14 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
 public class DataSourceManager
 {
-  public static DataImport getDataImport(DataSource dataSource)
+  @NotNull
+  public static DataImport getDataImport(@NotNull DataSource dataSource)
   {
     try
     {

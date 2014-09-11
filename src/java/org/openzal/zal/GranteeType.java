@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -42,6 +44,7 @@ public class GranteeType
     mGranteeType = granteeType;
   }
 
+  @Nullable
   public String getCode()
   {
     if (mGranteeType != null)
@@ -51,6 +54,7 @@ public class GranteeType
     return null;
   }
 
+  @NotNull
   public static GranteeType fromCode(String code)
   {
     try

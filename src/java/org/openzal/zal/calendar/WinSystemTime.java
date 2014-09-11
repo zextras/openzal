@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class WinSystemTime
 {
+  @NotNull
   private final WindowsSystemTime mWindowsSystemTime;
 
   public WinSystemTime(int year, int month, int dayOfWeek, int day, int hour, int minute, int second, int ms)
@@ -43,12 +44,12 @@ public class WinSystemTime
 
   public WinSystemTime(@NotNull Object windowsSystemTime)
   {
-    if ( windowsSystemTime == null )
+    if (windowsSystemTime == null)
     {
       throw new NullPointerException();
     }
 
-    mWindowsSystemTime = (WindowsSystemTime)windowsSystemTime;
+    mWindowsSystemTime = (WindowsSystemTime) windowsSystemTime;
   }
 
   protected <T> T toZimbra(Class<T> cls)

@@ -30,16 +30,16 @@ import java.util.List;
 
 public class Acl
 {
-  public static final byte GRANTEE_USER     = ACL.GRANTEE_USER;
-  public static final byte GRANTEE_GROUP    = ACL.GRANTEE_GROUP;
-  public static final byte GRANTEE_AUTHUSER = ACL.GRANTEE_AUTHUSER;
-  public static final byte GRANTEE_DOMAIN   = ACL.GRANTEE_DOMAIN;
-  public static final byte GRANTEE_COS      = ACL.GRANTEE_COS;
-  public static final byte GRANTEE_PUBLIC   = ACL.GRANTEE_PUBLIC;
-  public static final byte GRANTEE_GUEST    = ACL.GRANTEE_GUEST;
-  public static final byte GRANTEE_KEY      = ACL.GRANTEE_KEY;
+  public static byte GRANTEE_USER     = ACL.GRANTEE_USER;
+  public static byte GRANTEE_GROUP    = ACL.GRANTEE_GROUP;
+  public static byte GRANTEE_AUTHUSER = ACL.GRANTEE_AUTHUSER;
+  public static byte GRANTEE_DOMAIN   = ACL.GRANTEE_DOMAIN;
+  public static byte GRANTEE_COS      = ACL.GRANTEE_COS;
+  public static byte GRANTEE_PUBLIC   = ACL.GRANTEE_PUBLIC;
+  public static byte GRANTEE_GUEST    = ACL.GRANTEE_GUEST;
+  public static byte GRANTEE_KEY      = ACL.GRANTEE_KEY;
 
-  private final ACL mAcl;
+  @NotNull private final ACL mAcl;
 
   public Acl()
   {
@@ -48,11 +48,11 @@ public class Acl
 
   Acl(@NotNull Object acl)
   {
-    if ( acl == null )
+    if (acl == null)
     {
       throw new NullPointerException();
     }
-    mAcl = (ACL)acl;
+    mAcl = (ACL) acl;
   }
 
   public Short getGrantedRights(Account authuser)
@@ -76,7 +76,7 @@ public class Acl
   public Grant grantAccess(String zimbraId, byte type, short rights, String secret)
     throws ZimbraException
   {
-    ACL.Grant  grant;
+    ACL.Grant grant;
     try
     {
       grant = mAcl.grantAccess(zimbraId, type, rights, secret);

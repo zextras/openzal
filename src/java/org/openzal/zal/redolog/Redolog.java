@@ -20,6 +20,7 @@
 
 package org.openzal.zal.redolog;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.redolog.op.RedoableOp;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -28,7 +29,7 @@ import com.zimbra.cs.mailbox.MailboxOperation;
 
 public class Redolog
 {
-  public static int getOpCode( RedoableOp op )
+  public static int getOpCode( @NotNull RedoableOp op )
   {
     return op.getOpCode();
   }

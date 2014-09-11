@@ -20,13 +20,15 @@
 
 package org.openzal.zal.tools;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.jar.Manifest;
 import java.util.zip.ZipFile;
 
 public class ChecksumWriter
 {
-  public static void main(String args[]) throws Exception
+  public static void main(@NotNull String args[]) throws Exception
   {
     if( args.length == 0 )
     {

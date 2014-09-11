@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import com.zimbra.common.service.ServiceException;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -70,7 +71,7 @@ public class Item implements Comparable<Item>
     mMailItem = (MailItem)item;
   }
 
-  public Item(Item item)
+  public Item(@NotNull Item item)
   {
     mMailItem = item.mMailItem;
   }
@@ -80,7 +81,7 @@ public class Item implements Comparable<Item>
     return mMailItem.getId();
   }
 
-  public <T> T toZimbra(Class<T> cls)
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mMailItem);
   }
@@ -90,7 +91,7 @@ public class Item implements Comparable<Item>
     return byteType(mMailItem.getType());
   }
 
-  static byte byteType(Object type)
+  static byte byteType(@NotNull Object type)
   {
 /* $if MajorZimbraVersion >= 8 $ */
     return ((MailItem.Type)type).toByte();
@@ -99,7 +100,7 @@ public class Item implements Comparable<Item>
 /* $endif$ */
   }
 
-  public static <T> T convertType(Class<T> cls, byte type)
+  public static <T> T convertType(@NotNull Class<T> cls, byte type)
   {
 /* $if MajorZimbraVersion >= 8 $ */
     return cls.cast(MailItem.Type.of(type));
@@ -120,7 +121,8 @@ public class Item implements Comparable<Item>
   }
  $endif$ */
 
-  public static Item constructItem(Mailbox mbox, UnderlyingData data) throws ZimbraException
+  @NotNull
+  public static Item constructItem(@NotNull Mailbox mbox, @NotNull UnderlyingData data) throws ZimbraException
   {
     try
     {
@@ -137,6 +139,7 @@ public class Item implements Comparable<Item>
     }
   }
 
+  @NotNull
   public Mailbox getMailbox()
   {
     return new Mailbox(mMailItem.getMailbox());
@@ -176,71 +179,85 @@ public class Item implements Comparable<Item>
     return zimbraMetadata;
   }
 
+  @NotNull
   public Message toMessage()
   {
     return new Message(mMailItem);
   }
 
+  @NotNull
   public Contact toContact()
   {
     return new Contact(mMailItem);
   }
 
+  @NotNull
   public Folder toFolder()
   {
     return new Folder(mMailItem);
   }
 
+  @NotNull
   public Tag toTag()
   {
     return new Tag(mMailItem);
   }
 
+  @NotNull
   public Document toDocument()
   {
     return new Document(mMailItem);
   }
 
+  @NotNull
   public Task toTask()
   {
     return new Task(mMailItem);
   }
 
+  @NotNull
   public Appointment toAppointment()
   {
     return new Appointment(mMailItem);
   }
 
+  @NotNull
   public Flag toFlag()
   {
     return new Flag(mMailItem);
   }
 
+  @NotNull
   public Note toNote()
   {
     return new Note(mMailItem);
   }
 
+  @NotNull
   public Chat toChat()
   {
     return new Chat(mMailItem);
   }
 
+  @NotNull
   public SearchFolder toSearchFolder()
   {
     return new SearchFolder(mMailItem);
   }
 
+  @NotNull
   public CalendarItem toCalendarItem()
   {
     return new CalendarItem(mMailItem);
   }
 
+  @NotNull
   public Mountpoint toMountpoint()
   {
     return new Mountpoint(mMailItem);
   }
 
+  @NotNull
   public Comment toComment()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -250,6 +267,7 @@ public class Item implements Comparable<Item>
     /* $endif$ */
   }
 
+  @NotNull
   public Link toLink()
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -291,7 +309,7 @@ $endif$ */
       mCustomMetadata = new MailItem.CustomMetadata(key);
     }
 
-    public <T> T toZimbra(Class<T> cls)
+    public <T> T toZimbra(@NotNull Class<T> cls)
     {
       return cls.cast(mCustomMetadata);
     }
@@ -308,6 +326,7 @@ $endif$ */
 
   }
 
+  @NotNull
   public CustomMetadata getCustomData(String section) throws ZimbraException
   {
     try
@@ -334,7 +353,7 @@ $endif$ */
       mUnderlyingData = (MailItem.UnderlyingData)data;
     }
 
-    public <T> T toZimbra(Class<T> cls)
+    public <T> T toZimbra(@NotNull Class<T> cls)
     {
       return cls.cast(mUnderlyingData);
     }
@@ -392,6 +411,7 @@ $endif$ */
     }
   }
 
+  @NotNull
   public UnderlyingData getUnderlyingData()
   {
     return new UnderlyingData(mMailItem.getUnderlyingData());
@@ -439,12 +459,13 @@ $endif$ */
     /* $endif$ */
         }
 
-        public <T> T toZimbra(Class<T> cls)
+        public <T> T toZimbra(@NotNull Class<T> cls)
         {
           return cls.cast(mColor);
         }
       }
 
+      @NotNull
       public Color getColor()
       {
         return new Color(mMailItem.getRgbColor());
@@ -522,7 +543,7 @@ $endif$ */
   }
 /* $endif$ */
 
-  public static String getNameForType(Item item)
+  public static String getNameForType(@NotNull Item item)
   {
     return getNameForType(item.getType());
   }
@@ -568,6 +589,7 @@ $endif$ */
     return mMailItem.inSpam();
   }
 
+  @NotNull
   public String toString()
   {
     return String.valueOf(mMailItem.getId());
@@ -624,7 +646,8 @@ $endif$ */
     }
   }
 
-  public static UnderlyingData decodeZimbraMetadata(ZimbraVersion originVersion, final String encodedString)
+  @NotNull
+  public static UnderlyingData decodeZimbraMetadata(@Nullable ZimbraVersion originVersion, final String encodedString)
     throws ZimbraException
   {
     try
@@ -673,6 +696,7 @@ $endif$ */
     }
   }
 
+  @Nullable
   public String encodeZimbraMetadata()
   {
     try
@@ -706,6 +730,7 @@ $endif$ */
     return mMailItem.getSubject();
   }
 
+  @NotNull
   public Acl getEffectiveACL()
   {
 /* $if MajorZimbraVersion >= 8 $ */
@@ -721,7 +746,7 @@ $endif$ */
   }
 
   @Override
-  public int compareTo(Item item)
+  public int compareTo(@NotNull Item item)
   {
     return mMailItem.compareTo(item.toZimbra(MailItem.class));
   }

@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Utils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
@@ -89,11 +90,11 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
     return mOriginalDocumentHandler.domainAuthSufficient(context);
   }
 
-  private static Method sMethod = null;
+  @Nullable private static Method sMethod = null;
 
-/*
-  protected Element proxyIfNecessary(Element request, Map<String, Object> context) throws ServiceException {
-*/
+  /*
+    protected Element proxyIfNecessary(Element request, Map<String, Object> context) throws ServiceException {
+  */
   static
   {
     try

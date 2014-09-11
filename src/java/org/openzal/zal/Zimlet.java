@@ -29,14 +29,15 @@ import java.util.Set;
 
 public class Zimlet extends Entry
 {
-  private final com.zimbra.cs.account.Zimlet mZimlet;
+  @NotNull private final com.zimbra.cs.account.Zimlet mZimlet;
 
   Zimlet(@NotNull Object zimlet)
   {
     super(zimlet);
-    mZimlet = (com.zimbra.cs.account.Zimlet)zimlet;
+    mZimlet = (com.zimbra.cs.account.Zimlet) zimlet;
   }
 
+  @NotNull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mZimlet.getMultiAttrSet(name));
@@ -67,6 +68,7 @@ public class Zimlet extends Entry
     return new HashMap<String, Object>();
   }
 
+  @NotNull
   com.zimbra.cs.account.Zimlet toZimbra()
   {
     return mZimlet;

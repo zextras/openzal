@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Continuation;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class ZimbraContextSimple implements ZimbraContext
     return mRequesterIp;
   }
 
+  @NotNull
   @Override
   public SoapResponse execLocalRequest()
   {

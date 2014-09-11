@@ -21,13 +21,14 @@
 package org.openzal.zal.redolog;
 
 import com.zimbra.cs.redolog.logger.LogWriter;
+import org.jetbrains.annotations.Nullable;
 
 
 public class RedologLogWriter
 {
   private final LogWriter mLogWriter;
 
-  public RedologLogWriter(Object logWriter)
+  public RedologLogWriter(@Nullable Object logWriter)
   {
     if (logWriter == null )
     {

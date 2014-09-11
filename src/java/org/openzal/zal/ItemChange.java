@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public class ItemChange extends PlacedItemInfo
 {
   public boolean deleted;
@@ -40,7 +42,7 @@ public class ItemChange extends PlacedItemInfo
   public ItemChange(
     boolean deleted,
     int folderId,
-    ItemInfo itemInfo
+    @NotNull ItemInfo itemInfo
   )
   {
     super(folderId, itemInfo.itemId, itemInfo.sequence, itemInfo.date);

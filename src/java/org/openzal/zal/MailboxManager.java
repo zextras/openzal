@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -31,8 +32,8 @@ import java.util.Set;
 @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
 public class MailboxManager
 {
-  private final com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
-  private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
+  private final          com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
+  @NotNull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
 
   public MailboxManager()
   {

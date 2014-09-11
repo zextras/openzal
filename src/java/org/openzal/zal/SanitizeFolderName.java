@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class SanitizeFolderName
     return mName;
   }
 
-  public String sanitizeName(OperationContext zcontext)
+  public String sanitizeName(@NotNull OperationContext zcontext)
     throws InternalServerException
   {
     String sanitize = trimControlChars(mName);
@@ -71,7 +72,7 @@ public class SanitizeFolderName
     return sanitize;
   }
 
-  private String checkExistanceInMailbox(OperationContext zcontext, String folderName, int start)
+  private String checkExistanceInMailbox(@NotNull OperationContext zcontext, String folderName, int start)
     throws UnableToSanitizeFolderNameException
   {
     String tmpFolderName = folderName;
@@ -99,7 +100,8 @@ public class SanitizeFolderName
     }
   }
 
-  private String trimControlChars(String str) {
+  @NotNull
+  private String trimControlChars(@NotNull String str) {
     StringBuilder sb = new StringBuilder();
     for (char c : str.toCharArray()) {
       if( c > 31 ) sb.append(c);

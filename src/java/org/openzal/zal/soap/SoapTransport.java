@@ -21,6 +21,7 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.soap.Element;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -31,7 +32,7 @@ import java.io.IOException;
 
 public class SoapTransport
 {
-  private final SoapHttpTransport mSoapHttpTransport;
+  @NotNull private final SoapHttpTransport mSoapHttpTransport;
 
   public SoapTransport(String adminUrl)
   {

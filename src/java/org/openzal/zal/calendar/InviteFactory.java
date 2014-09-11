@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -43,36 +44,37 @@ import java.util.*;
 
 public class InviteFactory
 {
-  private       String             mMethod;
-  private       MapTimeZone        mTimeZoneMap;
-  private       String             mUid;
-  private       GlobalInviteStatus mStatus;
-  private       Priority           mPriority;
-  private       int                mPercentage;
-  private       long               mCompletedTime;
-  private       FreeBusyStatus     mFreeBusyStatus;
-  private       Sensitivity        mSensitivity;
-  private       boolean            mAllDayEvent;
-  private       long               mUtcDateStart;
-  private       long               mUtcDateEnd;
-  private       long               mExceptionStartTime;
-  private       String             mOrganizerAddress;
-  private       String             mOrganizerName;
-  private       List<Attendee>     mAttendeeList;
-  private       String             mSubject;
-  private       String             mLocation;
-  private       String             mDescription;
-  private       String             mDescriptionHtml;
-  private       long               mLastModifyTimeUtc;
-  private       int                mSequence;
-  private       ICalendarTimezone  mTimezone;
-  private       boolean            mAlarmSet;
-  private       int                mAlarmTime;
-  private       long               mReminderTime;
-  private       MimeMessage        mMimeMessage;
-  private       boolean            mHasAttachment;
-  private final Clock              mClock;
-  private       RecurrenceRule     mRecurrenceRule;
+  private                String             mMethod;
+  private                MapTimeZone        mTimeZoneMap;
+  private                String             mUid;
+  private                GlobalInviteStatus mStatus;
+  private                Priority           mPriority;
+  private                int                mPercentage;
+  private                long               mCompletedTime;
+  private                FreeBusyStatus     mFreeBusyStatus;
+  private                Sensitivity        mSensitivity;
+  private                boolean            mAllDayEvent;
+  private                long               mUtcDateStart;
+  private                long               mUtcDateEnd;
+  private                long               mExceptionStartTime;
+  private                String             mOrganizerAddress;
+  private                String             mOrganizerName;
+  private                List<Attendee>     mAttendeeList;
+  private                String             mSubject;
+  private                String             mLocation;
+  private                String             mDescription;
+  private                String             mDescriptionHtml;
+  private                long               mLastModifyTimeUtc;
+  private                int                mSequence;
+  private                ICalendarTimezone  mTimezone;
+  private                boolean            mAlarmSet;
+  private                int                mAlarmTime;
+  private                long               mReminderTime;
+  private                MimeMessage        mMimeMessage;
+  private                boolean            mHasAttachment;
+  @NotNull
+  private final          Clock              mClock;
+  private                RecurrenceRule     mRecurrenceRule;
 
   public InviteFactory()
   {

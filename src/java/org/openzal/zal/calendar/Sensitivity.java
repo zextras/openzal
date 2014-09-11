@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,23 +44,27 @@ public enum Sensitivity
     mSensitivity = sensitivity;
   }
 
+  @NotNull
   private static final Map<String, Sensitivity> sZimbra2Zal;
 
-  static {
+  static
+  {
     sZimbra2Zal = new HashMap<String, Sensitivity>(3);
-    sZimbra2Zal.put("PUB",PUBLIC);
-    sZimbra2Zal.put("PRI",PRIVATE);
-    sZimbra2Zal.put("CON",CONFIDENTIAL);
+    sZimbra2Zal.put("PUB", PUBLIC);
+    sZimbra2Zal.put("PRI", PRIVATE);
+    sZimbra2Zal.put("CON", CONFIDENTIAL);
     sZimbra2Zal.put("PUBLIC", PUBLIC);
     sZimbra2Zal.put("PRIVATE", PRIVATE);
     sZimbra2Zal.put("CONFIDENTIAL", CONFIDENTIAL);
   }
 
-  public static Sensitivity fromZimbra(String classProp)
+  @NotNull
+  public static Sensitivity fromZimbra(@NotNull String classProp)
   {
     Sensitivity sensitivity = sZimbra2Zal.get(classProp);
-    if( sensitivity == null ){
-      throw new RuntimeException("Invalid invite sensitivity: "+classProp);
+    if (sensitivity == null)
+    {
+      throw new RuntimeException("Invalid invite sensitivity: " + classProp);
     }
 
     return sensitivity;

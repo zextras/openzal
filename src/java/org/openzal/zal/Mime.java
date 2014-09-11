@@ -20,6 +20,9 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -30,11 +33,13 @@ import java.util.List;
 
 public class Mime
 {
+  @NotNull
   public static List<MPartInfo> getParts(MimeMessage mimeMessage) throws IOException, MessagingException
   {
     return ZimbraListWrapper.wrapMPartInfos(com.zimbra.cs.mime.Mime.getParts(mimeMessage));
   }
 
+  @NotNull
   public static MPartInfo getTextBody(MimeMessage mimeMessage, boolean preferHtml)
     throws IOException, MessagingException
   {
@@ -47,22 +52,26 @@ public class Mime
     com.zimbra.cs.mime.Mime.recursiveRepairTransferEncoding(mimemessage1);
   }
 
+  @Nullable
   public static MimeMultipart getMultipartContent(MimePart multipartPart, String contentType)
     throws IOException, MessagingException
   {
     return com.zimbra.cs.mime.Mime.getMultipartContent(multipartPart, contentType);
   }
 
+  @Nullable
   public static String getSubject(MimeMessage mimeMessage) throws MessagingException
   {
     return com.zimbra.cs.mime.Mime.getSubject(mimeMessage);
   }
 
+  @Nullable
   public static MimePart getMimePart(MimePart mimePart, String part) throws IOException, MessagingException
   {
     return com.zimbra.cs.mime.Mime.getMimePart(mimePart, part);
   }
 
+  @NotNull
   public static MimeMessage buildFixedMimeMessage(Session session)
   {
     return new com.zimbra.cs.mime.Mime.FixedMimeMessage(session);

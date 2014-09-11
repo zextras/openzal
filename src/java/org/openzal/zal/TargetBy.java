@@ -27,7 +27,7 @@ import com.zimbra.common.service.ServiceException;
 public class TargetBy
 {
   /* $if MajorZimbraVersion >= 8 $ */
-  private final com.zimbra.soap.type.TargetBy mTargetBy;
+  @NotNull private final com.zimbra.soap.type.TargetBy mTargetBy;
   /* $else $
   private final Object mTargetBy;
   /* $endif $ */

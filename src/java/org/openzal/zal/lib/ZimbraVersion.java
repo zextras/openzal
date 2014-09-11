@@ -21,6 +21,7 @@
 package org.openzal.zal.lib;
 
 import com.zimbra.cs.util.BuildInfo;
+import org.jetbrains.annotations.NotNull;
 
 public class ZimbraVersion extends Version
 {
@@ -50,7 +51,7 @@ public class ZimbraVersion extends Version
     );
   }
 
-  public ZimbraVersion(String zimbraVersion)
+  public ZimbraVersion(@NotNull String zimbraVersion)
   {
     super(zimbraVersion);
   }

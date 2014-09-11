@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 
+import org.jetbrains.annotations.Nullable;
+
 public class ZimbraId
 {
   private String mId;
@@ -42,7 +44,7 @@ public class ZimbraId
   }
 
   @Override
-  public boolean equals(Object o)
+  public boolean equals(@Nullable Object o)
   {
     if (this == o)
       return true;

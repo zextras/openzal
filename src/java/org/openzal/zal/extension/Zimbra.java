@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
 import org.openzal.zal.lib.ZimbraDatabase;
@@ -31,10 +32,10 @@ import java.lang.reflect.Field;
 
 public class Zimbra
 {
-  private final Provisioning   mProvisioning;
-  private final MailboxManager mMailboxManager;
-  private final ZimbraDatabase mZimbraDatabase;
-  private final StoreManager   mStoreManager;
+  @NotNull private final Provisioning   mProvisioning;
+  @NotNull private final MailboxManager mMailboxManager;
+  @NotNull private final ZimbraDatabase mZimbraDatabase;
+  @NotNull private final StoreManager   mStoreManager;
 
   Zimbra()
   {
@@ -67,21 +68,25 @@ public class Zimbra
     }
   }
 
+  @NotNull
   public Provisioning getProvisioning()
   {
     return mProvisioning;
   }
 
+  @NotNull
   public MailboxManager getMailboxManager()
   {
     return mMailboxManager;
   }
 
+  @NotNull
   public ZimbraDatabase getZimbraDatabase()
   {
     return mZimbraDatabase;
   }
 
+  @NotNull
   public StoreManager getStoreManager()
   {
     return mStoreManager;

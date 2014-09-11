@@ -20,6 +20,9 @@
 
 package org.openzal.zal.calendar;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum Priority
 {
   HIGH(1),
@@ -38,7 +41,8 @@ public enum Priority
     return String.valueOf(mRawPriority);
   }
 
-  public static Priority fromZimbra(String zimbraPriority)
+  @NotNull
+  public static Priority fromZimbra(@Nullable String zimbraPriority)
   {
     if(zimbraPriority == null)
     {

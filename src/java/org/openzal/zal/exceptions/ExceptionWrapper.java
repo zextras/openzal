@@ -21,6 +21,7 @@
 package org.openzal.zal.exceptions;
 
 import com.zimbra.common.service.ServiceException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class ExceptionWrapper
     ZimbraException create(Exception exception);
   }
 
+  @NotNull
   private static Map<String, ExceptionWrapperCreator> mExceptionMap = new HashMap<String, ExceptionWrapperCreator>();
 
   private static final String INTERNAL_SERVER_EXCEPTION = "internalServerException";
@@ -46,34 +48,41 @@ public class ExceptionWrapper
 
   static
   {
-    mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.NO_SUCH_ACCOUNT, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
+    mExceptionMap.put(
+      com.zimbra.cs.account.AccountServiceException.NO_SUCH_ACCOUNT, new ExceptionWrapperCreator()
       {
-        return new NoSuchAccountException(exception);
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new NoSuchAccountException(exception);
+        }
       }
-    });
-    mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.TOO_MANY_IDENTITIES, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
+    );
+    mExceptionMap.put(
+      com.zimbra.cs.account.AccountServiceException.TOO_MANY_IDENTITIES, new ExceptionWrapperCreator()
       {
-        return new TooManyIdentitiesException(exception);
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new TooManyIdentitiesException(exception);
+        }
       }
-    });
-    mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.DATA_SOURCE_EXISTS, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
+    );
+    mExceptionMap.put(
+      com.zimbra.cs.account.AccountServiceException.DATA_SOURCE_EXISTS, new ExceptionWrapperCreator()
       {
-        return new DataSourceExistsException(exception);
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new DataSourceExistsException(exception);
+        }
       }
-    });
-    mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.IDENTITY_EXISTS, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
+    );
+    mExceptionMap.put(
+      com.zimbra.cs.account.AccountServiceException.IDENTITY_EXISTS, new ExceptionWrapperCreator()
+      {
+        @Override
+        public ZimbraException create(Exception exception)
       {
         return new IdentityExistsException(exception);
       }
@@ -341,5 +350,19 @@ public class ExceptionWrapper
   )
   {
     throw new UnableToObtainDBConnectionException(e);
+  }
+
+  public static NoSuchZimletException createNoSuchZimletException(
+    com.zimbra.common.service.ServiceException e
+  )
+  {
+    throw new NoSuchZimletException(e);
+  }
+
+  public static NoSuchZimletException createNoSuchZimletException(
+    String msg
+  )
+  {
+    throw new NoSuchZimletException(msg);
   }
 }
