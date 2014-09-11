@@ -342,4 +342,18 @@ public class ExceptionWrapper
   {
     throw new UnableToObtainDBConnectionException(e);
   }
+
+  public static NoSuchZimletException createNoSuchZimletException(
+    com.zimbra.common.service.ServiceException e
+  )
+  {
+    throw new NoSuchZimletException(e);
+  }
+
+  public static NoSuchZimletException createNoSuchZimletException(
+    String msg
+  )
+  {
+    throw new NoSuchZimletException(msg);
+  }
 }

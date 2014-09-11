@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -575,7 +576,7 @@ public class Provisioning
     }
   }
 
-  @Nullable
+  @NotNull
   public Zimlet getZimlet(String zimletName)
     throws ZimbraException
   {
@@ -584,7 +585,7 @@ public class Provisioning
       com.zimbra.cs.account.Zimlet zimlet = mProvisioning.getZimlet(zimletName);
       if (zimlet == null)
       {
-        return null;
+        throw ExceptionWrapper.createNoSuchZimletException("Zimlet " + zimletName + " not found.");
       }
       else
       {
@@ -593,7 +594,7 @@ public class Provisioning
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      throw ExceptionWrapper.createNoSuchZimletException(e);
     }
   }
 
