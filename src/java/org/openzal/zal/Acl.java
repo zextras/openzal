@@ -30,14 +30,14 @@ import java.util.List;
 
 public class Acl
 {
-  public static byte GRANTEE_USER     = ACL.GRANTEE_USER;
-  public static byte GRANTEE_GROUP    = ACL.GRANTEE_GROUP;
-  public static byte GRANTEE_AUTHUSER = ACL.GRANTEE_AUTHUSER;
-  public static byte GRANTEE_DOMAIN   = ACL.GRANTEE_DOMAIN;
-  public static byte GRANTEE_COS      = ACL.GRANTEE_COS;
-  public static byte GRANTEE_PUBLIC   = ACL.GRANTEE_PUBLIC;
-  public static byte GRANTEE_GUEST    = ACL.GRANTEE_GUEST;
-  public static byte GRANTEE_KEY      = ACL.GRANTEE_KEY;
+  public static final byte GRANTEE_USER     = ACL.GRANTEE_USER;
+  public static final byte GRANTEE_GROUP    = ACL.GRANTEE_GROUP;
+  public static final byte GRANTEE_AUTHUSER = ACL.GRANTEE_AUTHUSER;
+  public static final byte GRANTEE_DOMAIN   = ACL.GRANTEE_DOMAIN;
+  public static final byte GRANTEE_COS      = ACL.GRANTEE_COS;
+  public static final byte GRANTEE_PUBLIC   = ACL.GRANTEE_PUBLIC;
+  public static final byte GRANTEE_GUEST    = ACL.GRANTEE_GUEST;
+  public static final byte GRANTEE_KEY      = ACL.GRANTEE_KEY;
 
   @NotNull private final ACL mAcl;
 
