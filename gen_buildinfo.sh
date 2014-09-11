@@ -5,7 +5,7 @@ package org.openzal.zal;
 
 public class ZalBuildInfo
 {
-    public final static String COMMIT="$(git rev-parse HEAD)";
-    public final static String VERSION="$(cat version)";
+    public static String COMMIT="$(git rev-parse HEAD)";
+    public static String VERSION="$(cat version)";
 }
 EOF
