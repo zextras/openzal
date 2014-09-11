@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
@@ -36,7 +37,7 @@ class InternalDocumentHandler extends DocumentHandler
   }
 
   @Override
-  public Element handle(Element request, Map<String, Object> context) throws ZimbraException
+  public Element handle(Element request, Map<String, Object> context) throws ServiceException
   {
     return mInternalDocumentHelper.handle(request, context);
   }

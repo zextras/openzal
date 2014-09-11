@@ -20,6 +20,8 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.AccountServiceException;
 import org.openzal.zal.ContinuationThrowable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -60,7 +62,7 @@ public class InternalDocumentHelper
   }
 
   @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-  public Element handle(Element request, Map<String, Object> context) throws ZimbraException
+  public Element handle(Element request, Map<String, Object> context) throws ZimbraException, ServiceException
   {
     ZimbraContext zimbraContext = new ZimbraContextImpl(request,context);
     ZimbraSoapContext zimbraSoapContext = (ZimbraSoapContext) context.get(SoapEngine.ZIMBRA_CONTEXT);
@@ -81,9 +83,9 @@ public class InternalDocumentHelper
 
     if( exception != null )
     {
-      if (exception instanceof ZimbraException)
+      if (exception instanceof ServiceException)
       {
-        throw (ZimbraException) exception;
+        throw (ServiceException) exception;
       }
 
       if (exception instanceof RuntimeException)
@@ -91,7 +93,7 @@ public class InternalDocumentHelper
         throw (RuntimeException) exception;
       }
 
-      ZimbraLog.extensions.warn("ZAL SOAP Unkown Exception: "+ Utils.exceptionToString(exception));
+      ZimbraLog.extensions.warn("ZAL SOAP Unknown Exception: " + Utils.exceptionToString(exception));
     }
 
     return soapResponse.getElement();
