@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 
+import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -642,7 +643,7 @@ $endif$ */
 
       UnderlyingData underlyingData = new UnderlyingData();
       Object parameters[] = new Object[1];
-      parameters[0] = meta;
+      parameters[0] = meta.toZimbra(com.zimbra.cs.mailbox.Metadata.class);
 
       sDeserializeMethod.invoke(
         underlyingData.toZimbra(MailItem.UnderlyingData.class),
