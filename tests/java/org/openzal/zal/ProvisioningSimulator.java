@@ -234,6 +234,7 @@ public class ProvisioningSimulator extends Provisioning
     throw new RuntimeException("Provisioning method not implemented");
   }
 
+  @NotNull
   public Zimlet getZimlet(String zimletName)
       throws ZimbraException
   {
