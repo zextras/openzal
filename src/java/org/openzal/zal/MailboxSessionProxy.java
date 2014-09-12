@@ -184,7 +184,7 @@ public class MailboxSessionProxy
             }
             else
             {
-              ZimbraLog.mobile.debug(getLoggerName() + " Unable to obtain modification informations");
+              ZimbraLog.mailbox.debug(getLoggerName() + " Unable to obtain modification informations");
               itemChange = new ItemChange(
                 false,
                 0,

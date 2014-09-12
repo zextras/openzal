@@ -25,10 +25,10 @@ import org.openzal.zal.Continuation;
 import org.openzal.zal.Jetty;
 import org.openzal.zal.Utils;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.SoapEngine;
 import com.zimbra.soap.SoapServlet;
 import com.zimbra.soap.ZimbraSoapContext;
+import org.openzal.zal.log.ZimbraLog;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;

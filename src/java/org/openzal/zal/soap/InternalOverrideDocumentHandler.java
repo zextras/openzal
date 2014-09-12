@@ -24,12 +24,12 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Utils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.session.Session;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -117,7 +117,7 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
     }
     catch (NoSuchMethodException e)
     {
-      ZimbraLog.extensions.fatal("Reflection initialization failed: " + Utils.exceptionToString(e));
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(e));
     }
   }
 

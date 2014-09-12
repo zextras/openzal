@@ -48,7 +48,6 @@ public class DataImport
   {
     if (!isGalImport())
     {
-      //TODO
       throw new RuntimeException();
     }
     try

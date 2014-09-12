@@ -142,7 +142,7 @@ public final class Flag extends Item
     }
     catch (Throwable ex)
     {
-      ZimbraLog.mailbox.warn("Exception: " + Utils.exceptionToString(ex));
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
     }
 
     return null;

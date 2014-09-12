@@ -1333,7 +1333,7 @@ public class Mailbox
             }
             catch (Throwable ex)
             {
-              ZimbraLog.mailbox.debug("getItemList(): skipping item: " + Utils.exceptionToString(ex));
+              ZimbraLog.extensions.debug("getItemList(): skipping item: " + Utils.exceptionToString(ex));
             }
           }
         }

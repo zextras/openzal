@@ -27,10 +27,10 @@ import org.openzal.zal.ContinuationThrowable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.SoapEngine;
 import com.zimbra.soap.ZimbraSoapContext;
 import org.dom4j.Namespace;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.util.Map;
 

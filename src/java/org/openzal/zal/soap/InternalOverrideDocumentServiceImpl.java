@@ -21,12 +21,12 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.DocumentService;
 import org.dom4j.Namespace;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.util.Map;
 

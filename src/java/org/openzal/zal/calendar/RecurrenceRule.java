@@ -157,15 +157,10 @@ public class RecurrenceRule
     return mZRecur.getCount();
   }
 
-/**
-  The BYSETPOS rule part specifies aa list of values which corresponds
-  to the nth occurrence within the set of events specified by the rule
-*/
   public List<Integer> getBySetPosList()
   {
     return mZRecur.getBySetPosList();
   }
-
 
   public void setFrequency(Frequency frequency)
   {
