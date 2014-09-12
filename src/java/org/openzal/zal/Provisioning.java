@@ -271,7 +271,7 @@ public class Provisioning
         uid.charAt(23) == '-');
   }
 
-  @Nullable
+  @NotNull
   public Account getZimbraUser()
     throws ZimbraException
   {
@@ -1597,7 +1597,6 @@ public class Provisioning
       return mCountAccountByCos.getCount();
     }
   }
-
 
 
   public static class GalSearchResult
