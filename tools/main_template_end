@@ -1,0 +1,27 @@
+
+  <target name="zal-common" depends="${JOINED_COMMON_ZIMBRA_JAR_VERSIONS}" />
+  <target name="zal-all" depends="${JOINED_ZIMBRA_JAR_VERSIONS}" />
+
+  <target name="clean" description="clean up" >
+    <delete includeemptydirs="true">
+      <fileset dir="dist/" includes="**/*" />
+      <fileset dir="build/" includes="**/*" />
+      <fileset dir="tmpsrc/" includes="**/*" />
+    </delete>
+  </target>
+
+  <target name="doxygen" description="create doxygen documentation" >
+    <exec executable="doxygen" />
+  </target>
+
+  <target name="help">
+    <echo>commands availables are:
+      zal-all
+      zal-common
+      zal-{zimbra-version}
+      clean
+      help
+    </echo>
+  </target>
+
+</project>
