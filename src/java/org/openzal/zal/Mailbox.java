@@ -1812,7 +1812,7 @@ public class Mailbox
       note = mMbox.createNote(
         octxt.getOperationContext(),
         content,
-        rectangle.getZimbraRectangle(),
+        rectangle.toZimbra(com.zimbra.cs.mailbox.Note.Rectangle.class),
     /* $if MajorZimbraVersion <= 7 $
         color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class),
        $else$ */

@@ -20,8 +20,6 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Iterator;
 import java.util.Set;
 /* $if MajorZimbraVersion <= 7 $
