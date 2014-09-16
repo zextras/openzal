@@ -28,8 +28,11 @@ import java.util.GregorianCalendar;
 
 public class ActualClock implements Clock
 {
+  public static Clock sInstance = new ActualClock();
+
   @Override
-  public long now() {
+  public long now()
+  {
     return System.currentTimeMillis();
   }
 
