@@ -48,9 +48,10 @@ public enum AttendeeInviteStatus
 
   static
   {
-    sZimbra2Zal = new HashMap<String, AttendeeInviteStatus>(9);
+    sZimbra2Zal = new HashMap<String, AttendeeInviteStatus>(10);
     sZimbra2Zal.put("TE", TENTATIVE);
     sZimbra2Zal.put("NE", NEEDS_ACTION);
+    sZimbra2Zal.put("",   NEEDS_ACTION);
     sZimbra2Zal.put("DG", DELEGATED);
     sZimbra2Zal.put("DE", DECLINED);
     sZimbra2Zal.put("CO", COMPLETED);

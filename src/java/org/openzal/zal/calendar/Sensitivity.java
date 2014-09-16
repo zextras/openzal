@@ -49,7 +49,8 @@ public enum Sensitivity
 
   static
   {
-    sZimbra2Zal = new HashMap<String, Sensitivity>(3);
+    sZimbra2Zal = new HashMap<String, Sensitivity>(7);
+    sZimbra2Zal.put("", PUBLIC);
     sZimbra2Zal.put("PUB", PUBLIC);
     sZimbra2Zal.put("PRI", PRIVATE);
     sZimbra2Zal.put("CON", CONFIDENTIAL);
