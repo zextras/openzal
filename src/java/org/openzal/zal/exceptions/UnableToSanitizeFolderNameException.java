@@ -22,14 +22,23 @@ package org.openzal.zal.exceptions;
 
 public class UnableToSanitizeFolderNameException extends InternalServerException
 {
+  private final String mFolderName;
+
   protected UnableToSanitizeFolderNameException(String folderName, ZimbraException ex)
   {
-    this(folderName);
-    this.initCause(ex);
+    super(ex);
+    mFolderName = folderName;
   }
 
   public UnableToSanitizeFolderNameException(String folderName)
   {
     super(new RuntimeException("Cannot sanitize folder name: " + folderName));
+    mFolderName = folderName;
+  }
+
+  @Override
+  public String getMessage()
+  {
+    return "Cannot sanitize folder name: " + mFolderName;
   }
 }
