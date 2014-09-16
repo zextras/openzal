@@ -38,12 +38,13 @@ public enum FreeBusyStatus
 
   static
   {
-    sZimbra2Zal = new HashMap<String, FreeBusyStatus>(5);
+    sZimbra2Zal = new HashMap<String, FreeBusyStatus>(6);
     sZimbra2Zal.put("B", Busy);
     sZimbra2Zal.put("F", Free);
     sZimbra2Zal.put("T", BusyTentative);
     sZimbra2Zal.put("O", BusyUnavailable);
     sZimbra2Zal.put("N", NoData);
+    sZimbra2Zal.put("",  NoData);
   }
 
   public String getRawFreeBusyStatus()

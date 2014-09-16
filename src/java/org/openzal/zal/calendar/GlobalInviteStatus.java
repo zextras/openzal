@@ -56,15 +56,16 @@ public enum GlobalInviteStatus
 
   static
   {
-    sZimbra2Zal = new HashMap<String, GlobalInviteStatus>(5);
+    sZimbra2Zal = new HashMap<String, GlobalInviteStatus>(7);
     sZimbra2Zal.put("TENT", APPOINTMENT_TENTATIVE);
     sZimbra2Zal.put("CANC", APPOINTMENT_CANCELLED);
     sZimbra2Zal.put("CONF", APPOINTMENT_CONFIRMED);
     sZimbra2Zal.put("NEED", APPOINTMENT_NEED_ACTION);
+    sZimbra2Zal.put("",     APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("COMP", TASK_COMPLETED);
     sZimbra2Zal.put("INPR", TASK_IN_PROGRESS);
 
-    sICal2Zimbra = new HashMap<String, GlobalInviteStatus>(5);
+    sICal2Zimbra = new HashMap<String, GlobalInviteStatus>(6);
     sICal2Zimbra.put("TENTATIVE", APPOINTMENT_TENTATIVE);
     sICal2Zimbra.put("CANCELLED", APPOINTMENT_CANCELLED);
     sICal2Zimbra.put("CONFIRMED", APPOINTMENT_CONFIRMED);
