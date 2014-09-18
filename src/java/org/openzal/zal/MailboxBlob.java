@@ -35,7 +35,7 @@ public class MailboxBlob
     mMailboxBlob = mailboxBlob;
   }
 
-  public boolean isEmpty()
+  public boolean isNull()
   {
     return mMailboxBlob == null;
   }
