@@ -28,16 +28,15 @@ import java.io.IOException;
 
 public class MailboxBlob
 {
-  private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
+  @NotNull private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
 
-  protected MailboxBlob(com.zimbra.cs.store.MailboxBlob mailboxBlob)
+  protected MailboxBlob(@NotNull com.zimbra.cs.store.MailboxBlob mailboxBlob)
   {
+    if (mailboxBlob == null)
+    {
+      throw new NullPointerException();
+    }
     mMailboxBlob = mailboxBlob;
-  }
-
-  public boolean isNull()
-  {
-    return mMailboxBlob == null;
   }
 
   public String getDigest()
