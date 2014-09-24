@@ -200,6 +200,8 @@ public abstract class Utils
             );
           }
       }
+      // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
 /* $endif$ */
     }
     catch (ServiceException e)
@@ -209,6 +211,8 @@ public abstract class Utils
 /* $if ZimbraVersion >= 8.5.0 $ */
     catch (ZimletException e)
     {
+      // In Zimbra >= 8.5.0 if something fails, flush the cache.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
       throw ExceptionWrapper.wrap(e);
     }
 /* $endif$ */
