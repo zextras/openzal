@@ -64,6 +64,18 @@ public class ProvisioningSimulator extends Provisioning
 
   public Account addUser(String name, String address)
   {
+    return addUser(name, address, new HashMap<String, Object>());
+  }
+
+  public Account addUserToHost(String name, String address, final String hostname)
+  {
+    return addUser(name, address, new HashMap<String, Object>(1) {{
+      put(Provisioning.A_zimbraMailHost, hostname);
+    }});
+  }
+
+  public Account addUser(String name, String address, Map<String, Object> attrs)
+  {
     if (mAccountMap.containsKey(address))
     {
       return mAccountMap.get(address);
@@ -78,7 +90,7 @@ public class ProvisioningSimulator extends Provisioning
     String domain = address.substring(domainIdx + 1);
     addDomain(domain);
 
-    Account account = createFakeAccount(name, address);
+    Account account = createFakeAccount(name, address, attrs);
     mAccountMap.put(address, account);
 
     return account;
@@ -102,7 +114,7 @@ public class ProvisioningSimulator extends Provisioning
     return createFakeAccount(name,accountStr,Collections.<String,Object>emptyMap());
   }
 
-  public Account createFakeAccount(String name, String accountStr, Map<String,Object> extraAttr )
+  public Account createFakeAccount(String name, String accountStr, Map<String,Object> extraAttr)
   {
     if( name == null ) {
       name = "mockito";
@@ -113,13 +125,17 @@ public class ProvisioningSimulator extends Provisioning
     }
 
     Map<String,Object> attrs = new HashMap<String, Object>();
+
     attrs.put(com.zimbra.cs.account.Provisioning.A_mail, accountStr);
 
     Map<String, Object> defaults = new HashMap<String, Object>();
     defaults.put(com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus,
                  com.zimbra.cs.account.Provisioning.ACCOUNT_STATUS_ACTIVE);
-    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName,
-                 accountStr);
+    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, accountStr );
+    attrs.putAll(extraAttr);
+
+    defaults.put(Provisioning.A_zimbraMailHost,
+                 "localhost");
 
     return new AccountSimulator(
       name,
@@ -141,8 +157,8 @@ public class ProvisioningSimulator extends Provisioning
   }
 
   public boolean onLocalServer(Account userAccount)
-    throws ZimbraException {
-    return true;
+  {
+    return userAccount.getMailHost().equals("localhost");
   }
 
   public com.zimbra.cs.account.Provisioning toZimbra()

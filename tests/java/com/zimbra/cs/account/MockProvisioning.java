@@ -178,7 +178,22 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
 
   public List<NamedEntry> searchDirectory(SearchOptions options) {
-    throw new UnsupportedOperationException();
+    List<Account> accounts = getAllAccounts(null);
+    List<NamedEntry> namedEntries = new ArrayList<NamedEntry>();
+    String searchId = null;
+    String query = options.getQuery();
+    if ( query != null && query.startsWith("("+Provisioning.A_zimbraId+"=") )
+    {
+      searchId = query.replace("(" + Provisioning.A_zimbraId + "=", "").replace(")", "");
+    }
+    for (Account account : accounts)
+    {
+      if (searchId == null || searchId.equals(account.getId()))
+      {
+        namedEntries.add(account);
+      }
+    }
+    return namedEntries;
   }
 
   public void searchAccountsOnServer(Server server, Provisioning.SearchOptions searchOptions, NamedEntry.Visitor visitor)
