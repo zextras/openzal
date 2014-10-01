@@ -443,38 +443,45 @@ public class Provisioning
     }
   }
 
-  public void visitAccountByIdNoDefaults(SimpleVisitor<Account> visitor, ZimbraId accountId) throws ServiceException
+  public void visitAccountByIdNoDefaults(SimpleVisitor<Account> visitor, ZimbraId accountId)
   {
-    ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
-
-    /* $if ZimbraVersion >= 8.0.0 $ */
-    SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
-    searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
-    searchOptions.setTypes(
-      SearchDirectoryOptions.ObjectType.accounts,
-      SearchDirectoryOptions.ObjectType.resources
-    );
-    searchOptions.setFilter(ZLdapFilterFactory.getInstance().accountById(accountId.getId()));
-
-    mProvisioning.searchDirectory(searchOptions, zimbraVisitor);
-    /* $else $
-    String query = "(" + com.zimbra.cs.account.Provisioning.A_zimbraId + "=" + accountId.getId() + ")";
-    com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-    searchOptions.setFlags(
-        com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
-        com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
-        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
-    );
-    searchOptions.setQuery(query);
-    List<NamedEntry> accounts = mProvisioning.searchDirectory(searchOptions);
-
-    if (accounts.size() != 1)
+    try
     {
-      return;
-    }
+      ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
 
-    zimbraVisitor.visit(accounts.get(0));
-    /* $endif $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
+      SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
+      searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
+      searchOptions.setTypes(
+        SearchDirectoryOptions.ObjectType.accounts,
+        SearchDirectoryOptions.ObjectType.resources
+      );
+      searchOptions.setFilter(ZLdapFilterFactory.getInstance().accountById(accountId.getId()));
+
+      mProvisioning.searchDirectory(searchOptions, zimbraVisitor);
+/* $else $
+      String query = "(" + com.zimbra.cs.account.Provisioning.A_zimbraId + "=" + accountId.getId() + ")";
+      com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
+      searchOptions.setFlags(
+          com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
+          com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
+          com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
+      );
+      searchOptions.setQuery(query);
+      List<NamedEntry> accounts = mProvisioning.searchDirectory(searchOptions);
+
+      if (accounts.size() != 1)
+      {
+        return;
+      }
+
+      zimbraVisitor.visit(accounts.get(0));
+/* $endif $ */
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public void visitAllDomains(@NotNull SimpleVisitor<Domain> visitor) throws ZimbraException
