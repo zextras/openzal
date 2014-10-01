@@ -2,6 +2,7 @@ package com.zimbra.cs.account;
 
 import java.util.UUID;
 
+import org.openzal.zal.ZimbraId;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 /**
  * Mock implementation of {@link org.openzal.zal.Provisioning} for testing.
@@ -87,6 +88,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
     HashMap<String, Object> zimbraAttrs = new HashMap<String, Object>();
     zimbraAttrs.put(A_zimbraId, org.openzal.zal.Provisioning.ZIMBRA_USER_ID);
+    zimbraAttrs.put(A_zimbraIsAdminAccount, "TRUE");
     createAccount("zimbra", "", zimbraAttrs);
   }
 
@@ -1024,9 +1026,14 @@ $endif $
 
   public void searchDirectory(SearchDirectoryOptions options, NamedEntry.Visitor visitor) throws ServiceException
   {
+    String accountId = options.getFilter().toString();
+
     for( Account account : getAllAccounts(null))
     {
-      visitor.visit(account);
+      if( account.getId().equals(accountId) )
+      {
+        visitor.visit(account);
+      }
     }
   }
 

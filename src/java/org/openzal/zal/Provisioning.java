@@ -275,7 +275,7 @@ public class Provisioning
   public Account getZimbraUser()
     throws ZimbraException
   {
-    return getAccountById(ZIMBRA_USER_ID);
+    return assertAccountById(ZIMBRA_USER_ID);
   }
 
   public OperationContext createZContext()
@@ -803,21 +803,29 @@ public class Provisioning
   public Account assertAccountByName(String accountStr)
     throws NoSuchAccountException
   {
-    try
+    Account account = getAccountByName(accountStr);
+    if (account == null)
     {
-      com.zimbra.cs.account.Account account = mProvisioning.getAccountByName(accountStr);
-      if (account == null)
-      {
-        throw new NoSuchAccountException(accountStr);
-      }
-      else
-      {
-        return new Account(account);
-      }
+      throw new NoSuchAccountException(accountStr);
     }
-    catch (com.zimbra.common.service.ServiceException e)
+    else
     {
-      throw ExceptionWrapper.wrap(e);
+      return account;
+    }
+  }
+
+  @NotNull
+  public Account assertAccountById(String accountStr)
+    throws NoSuchAccountException
+  {
+    Account account = getAccountById(accountStr);
+    if (account == null)
+    {
+      throw new NoSuchAccountException(accountStr);
+    }
+    else
+    {
+      return account;
     }
   }
 

@@ -197,7 +197,7 @@ public class ZLdapFilterFactorySimulator {
   @Override
   public ZLdapFilter accountById(String id) {
     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class);
-    when(filter.toFilterString()).thenReturn("");
+    when(filter.toString()).thenReturn(id);
 
     return filter;
   }
