@@ -187,14 +187,23 @@ public abstract class Utils
       provisioning.flushCache(CacheEntryType.zimlet, null);
       ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
 
+      FileInputStream in = new FileInputStream(new File(zimlet.getZimletPath()));
+      ZimletFile rawZimlet = new ZimletFile(zimlet.getName(), in);
+
       ZimletUtil.ZimletSoapUtil zimletSoapUtil = new ZimletUtil.ZimletSoapUtil();
       for (Server server : provisioning.getAllServers())
       {
-          if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer()) {
-            zimletSoapUtil.deployZimletRemotely(
+        if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer())
+        {
+          if( !server.hasMailboxService() )
+          {
+            continue;
+          }
+
+          zimletSoapUtil.deployZimletRemotely(
               server.toZimbra(com.zimbra.cs.account.Server.class),
-              zimlet.getName(),
-              zimlet.getZimletContent(),
+              rawZimlet.getName(),
+              rawZimlet.getZimletContent(),
               null,
               true
             );

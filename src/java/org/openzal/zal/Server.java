@@ -156,6 +156,11 @@ public class Server extends Entry
     return mServer.getIntAttr(name, defaultValue);
   }
 
+  public boolean hasMailboxService()
+  {
+    return mServer.hasMailboxService();
+  }
+
   @NotNull
   public String getAdminURL(String path) {
     String hostname = getAttr(Provisioning.A_zimbraServiceHostname);
