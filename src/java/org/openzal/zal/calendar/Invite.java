@@ -295,7 +295,11 @@ public class Invite
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
-    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
+    if( !mInvite.getCalendarItem().isRecurring() ) {
+      return Collections.emptyList();
+    }
+
+    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
@@ -323,7 +327,11 @@ public class Invite
   {
     List<Long> startTimeOfDeletedInstances = new LinkedList<Long>();
 
-    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
+    if( !mInvite.getCalendarItem().isRecurring() ) {
+      return Collections.emptyList();
+    }
+
+    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
