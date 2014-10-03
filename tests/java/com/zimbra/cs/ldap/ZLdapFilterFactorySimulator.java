@@ -22,7 +22,7 @@ public class ZLdapFilterFactorySimulator {
   }
 
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
+  /* $if ZimbraVersion >= 8.0.8 $ */
 
   public ZLdapFilter serverByAlwaysOnCluster(String clusterId)
   {
@@ -593,6 +593,7 @@ public class ZLdapFilterFactorySimulator {
   public ZLdapFilter dnSubtreeMatch(String... dns) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
+
 
   /* $endif $*/
 
