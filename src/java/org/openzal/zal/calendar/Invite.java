@@ -295,11 +295,20 @@ public class Invite
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
-    if( !mInvite.getCalendarItem().isRecurring() ) {
+    if( mInvite.getCalendarItem() != null && !mInvite.getCalendarItem().isRecurring() ) {
       return Collections.emptyList();
     }
 
-    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
+    Recurrence.RecurrenceRule recurrence;
+    if( mInvite.getCalendarItem() != null )
+    {
+      recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
+    }
+    else
+    {
+      recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
+    }
+
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
@@ -327,11 +336,20 @@ public class Invite
   {
     List<Long> startTimeOfDeletedInstances = new LinkedList<Long>();
 
-    if( !mInvite.getCalendarItem().isRecurring() ) {
+    if( mInvite.getCalendarItem() != null && !mInvite.getCalendarItem().isRecurring() ) {
       return Collections.emptyList();
     }
 
-    Recurrence.RecurrenceRule recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
+    Recurrence.RecurrenceRule recurrence;
+    if( mInvite.getCalendarItem() != null )
+    {
+      recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
+    }
+    else
+    {
+      recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
+    }
+
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
