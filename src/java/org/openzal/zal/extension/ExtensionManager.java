@@ -162,8 +162,8 @@ public class ExtensionManager
 
     public boolean isCompatible(Version currentVersion)
     {
-      int parts = mRequiredVersion.getPartCount();
-      return currentVersion.truncate(parts).equals(mRequiredVersion);
+      return currentVersion.truncate(2).equals(mRequiredVersion.truncate(2)) &&
+             currentVersion.isAtLeast(mRequiredVersion);
     }
   }
 
