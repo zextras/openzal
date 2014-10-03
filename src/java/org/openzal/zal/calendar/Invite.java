@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.cs.mailbox.CalendarItem;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
 import org.openzal.zal.ZimbraListWrapper;
@@ -295,19 +296,22 @@ public class Invite
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
-    if( mInvite.getCalendarItem() != null && !mInvite.getCalendarItem().isRecurring() ) {
+    CalendarItem calendarItem;
+    try
+    {
+      calendarItem = mInvite.getCalendarItem();
+    }
+    catch( Exception ex )
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+
+    if(calendarItem == null || (!calendarItem.isRecurring())) {
       return Collections.emptyList();
     }
 
     Recurrence.RecurrenceRule recurrence;
-    if( mInvite.getCalendarItem() != null )
-    {
-      recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
-    }
-    else
-    {
-      recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
-    }
+    recurrence = (Recurrence.RecurrenceRule) calendarItem.getRecurrence();
 
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
@@ -320,7 +324,7 @@ public class Invite
 
       try
       {
-        com.zimbra.cs.mailbox.calendar.Invite invite = mInvite.getCalendarItem().getInvite(exception.getRecurId());
+        com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
         inviteList.add(new Invite(invite));
       }
       catch (Exception ex)
@@ -336,20 +340,23 @@ public class Invite
   {
     List<Long> startTimeOfDeletedInstances = new LinkedList<Long>();
 
-    if( mInvite.getCalendarItem() != null && !mInvite.getCalendarItem().isRecurring() ) {
+    CalendarItem calendarItem;
+    try
+    {
+      calendarItem = mInvite.getCalendarItem();
+    }
+    catch( Exception ex )
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+
+    if(calendarItem == null || (!calendarItem.isRecurring())) {
       return Collections.emptyList();
     }
 
     Recurrence.RecurrenceRule recurrence;
-    if( mInvite.getCalendarItem() != null )
-    {
-      recurrence = (Recurrence.RecurrenceRule) mInvite.getCalendarItem().getRecurrence();
-    }
-    else
-    {
-      recurrence = (Recurrence.RecurrenceRule) mInvite.getRecurrence();
-    }
-
+    recurrence = (Recurrence.RecurrenceRule) calendarItem.getRecurrence();
+    
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
