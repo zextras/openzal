@@ -22,7 +22,7 @@ public class ZLdapFilterFactorySimulator {
   }
 
 
-  /* $if ZimbraVersion >= 8.0.8 $ */
+  /* $if ZimbraVersion >= 8.5.0 $ */
 
   public ZLdapFilter serverByAlwaysOnCluster(String clusterId)
   {
@@ -43,6 +43,10 @@ public class ZLdapFilterFactorySimulator {
   {
     return new FakeLdapFilter(FilterId.ALL_ALWAYSONCLUSTERS);
   }
+
+  /* $endif$ */
+
+  /* $if ZimbraVersion >= 8.0.8 $ */
 
   public ZLdapFilter velodromeAllDistributionListsByDomain(String s)
   {
