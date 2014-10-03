@@ -356,7 +356,7 @@ public class Invite
 
     Recurrence.RecurrenceRule recurrence;
     recurrence = (Recurrence.RecurrenceRule) calendarItem.getRecurrence();
-    
+
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {

@@ -2171,7 +2171,7 @@ public class Mailbox
       Class partypes[] = new Class[1];
       partypes[0] = com.zimbra.cs.mailbox.Mailbox.class;
 
-/* $if MajorZimbraVersion < 8 $
+/* $if ZimbraVersion < 7.2.7 $
       sGetAllFlags = Flag.class.getDeclaredMethod("getAllFlags", partypes);
   $else$ */
       sGetAllFlags = com.zimbra.cs.mailbox.Flag.class.getDeclaredMethod("allOf", partypes);
