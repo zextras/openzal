@@ -158,7 +158,11 @@ public class Server extends Entry
 
   public boolean hasMailboxService()
   {
-    return mServer.hasMailboxService();
+    return getMultiAttrSet(
+      com.zimbra.cs.account.Provisioning.A_zimbraServiceEnabled
+    ).contains(
+      com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX
+    );
   }
 
   @NotNull
