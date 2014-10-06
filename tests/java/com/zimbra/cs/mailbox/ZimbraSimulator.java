@@ -3,6 +3,7 @@ package com.zimbra.cs.mailbox;
 import com.zextras.lib.Error.UnableToRegisterDatabaseDriverError;
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
+import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.Provisioning;
@@ -27,7 +28,7 @@ import com.zimbra.cs.index.MailboxIndex;
 
 
 // for testing purpose only
-public class ZimbraSimulator
+public class ZimbraSimulator extends ExternalResource
 {
   private final StoreManagerImp mStoreManager;
 
@@ -39,7 +40,6 @@ public class ZimbraSimulator
   private RamFS mStoreRoot;
 
   public ZimbraSimulator()
-    throws UnableToRegisterDatabaseDriverError
   {
     try
     {
@@ -48,9 +48,7 @@ public class ZimbraSimulator
     catch (Exception e)
     {
       ZELog.chat.err("Error loading DB Driver: " + Utils.exceptionToString(e));
-      UnableToRegisterDatabaseDriverError newEx = new UnableToRegisterDatabaseDriverError();
-      newEx.initCause(e);
-      throw newEx;
+      throw new RuntimeException(e);
     }
 
     init();
@@ -58,6 +56,23 @@ public class ZimbraSimulator
     mStoreManager = new StoreManagerImp(
       com.zimbra.cs.store.StoreManager.getInstance()
     );
+  }
+
+/*
+  junit @Rule implementation
+ */
+  protected void before() throws Throwable {
+  }
+
+  protected void after() {
+    try
+    {
+      cleanup();
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   private void init()
