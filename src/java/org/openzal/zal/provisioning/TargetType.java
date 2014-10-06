@@ -27,11 +27,11 @@ import java.util.Map;
 
 public enum TargetType
 {
-  account("Account"),
+  account("account"),
   calresource("CalendarResource"),
   cos("Cos"),
-  dl("DistributionList"),
-  domain("Domain"),
+  dl("dl"),
+  domain("domain"),
   server("Server"),
   xmppcomponent("XMPPComponent"),
   zimlet("Zimlet"),
@@ -45,7 +45,7 @@ public enum TargetType
       put("account", account);
       put("CalendarResource", calresource);
       put("Cos", cos);
-      put("DistributionList", dl);
+      put("dl", dl);
       put("Domain", domain);
       put("Server", server);
       put("XMPPComponent", xmppcomponent);
