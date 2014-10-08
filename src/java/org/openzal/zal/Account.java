@@ -1002,5 +1002,22 @@ public class Account extends Entry
   {
     return mAccount.getPrefMailDefaultCharset();
   }
+
+  public boolean isLocalAccount()
+  {
+    try
+    {
+      return com.zimbra.cs.account.Provisioning.onLocalServer(mAccount);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public String getServerHostname()
+  {
+    return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
+  }
 }
 

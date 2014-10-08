@@ -220,6 +220,7 @@ public class Provisioning
   public static String A_zimbraPrefMailDefaultCharset                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefMailDefaultCharset;
   public static String A_zimbraHsmPolicy                                      = com.zimbra.cs.account.Provisioning.A_zimbraHsmPolicy;
   public static String A_zimbraDefaultDomainName                              = com.zimbra.cs.account.Provisioning.A_zimbraDefaultDomainName;
+  public static String A_zimbraPublicServiceHostname                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceHostname;
 
   @NotNull public final com.zimbra.cs.account.Provisioning mProvisioning;
 
@@ -575,7 +576,7 @@ public class Provisioning
     }
   }
 
-  @Nullable
+  @NotNull
   public Server getLocalServer()
     throws ZimbraException
   {
@@ -584,7 +585,7 @@ public class Provisioning
       com.zimbra.cs.account.Server server = mProvisioning.getLocalServer();
       if (server == null)
       {
-        return null;
+        throw new RuntimeException();
       }
       else
       {
@@ -975,7 +976,7 @@ public class Provisioning
     }
   }
 
-  @Nullable
+  @NotNull
   public Config getConfig()
     throws ZimbraException
   {
@@ -984,7 +985,7 @@ public class Provisioning
       com.zimbra.cs.account.Config config = mProvisioning.getConfig();
       if (config == null)
       {
-        return null;
+        throw new RuntimeException("Unable to retrieve global config");
       }
       else
       {

@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
@@ -135,13 +136,17 @@ public abstract class Utils
     return orderedZimletList;
   }
 
-  public static String getPublicURLForDomain(Server server, Domain domain, String path)
+  public static String getPublicURLForDomain(
+    @NotNull Server server,
+    @Nullable Domain domain,
+    @NotNull String path
+  )
   {
     try
     {
       return URLUtil.getPublicURLForDomain(
         server.toZimbra(com.zimbra.cs.account.Server.class),
-        domain.toZimbra(com.zimbra.cs.account.Domain.class),
+        domain != null ? domain.toZimbra(com.zimbra.cs.account.Domain.class) : null,
         path,
         true
       );
