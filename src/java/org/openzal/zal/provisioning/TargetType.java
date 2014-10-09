@@ -28,31 +28,31 @@ import java.util.Map;
 public enum TargetType
 {
   account("account"),
-  calresource("CalendarResource"),
-  cos("Cos"),
+  calresource("calresource"),
+  cos("cos"),
   dl("dl"),
   domain("domain"),
-  server("Server"),
-  xmppcomponent("XMPPComponent"),
-  zimlet("Zimlet"),
-  config("GlobalConfig"),
-  group("DynamicGroup"),
-  global("GlobalGrant");
+  server("server"),
+  xmppcomponent("xmppcomponent"),
+  zimlet("zimlet"),
+  config("config"),
+  group("group"),
+  global("global");
 
   @NotNull
   private static Map<String, TargetType> TARGET_TYPES = new HashMap<String, TargetType>()
   {{
       put("account", account);
-      put("CalendarResource", calresource);
-      put("Cos", cos);
+      put("calresource", calresource);
+      put("cos", cos);
       put("dl", dl);
-      put("Domain", domain);
-      put("Server", server);
-      put("XMPPComponent", xmppcomponent);
-      put("Zimlet", zimlet);
-      put("GlobalConfig", config);
-      put("DynamicGroup", group);
-      put("GlobalGrant", global);
+      put("domain", domain);
+      put("server", server);
+      put("xmppcomponent", xmppcomponent);
+      put("zimlet", zimlet);
+      put("config", config);
+      put("group", group);
+      put("global", global);
     }};
 
   @NotNull
