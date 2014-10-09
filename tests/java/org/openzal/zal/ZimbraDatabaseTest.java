@@ -1,4 +1,4 @@
-package java.org.openzal.zal;
+package org.openzal.zal;
 
 import org.openzal.zal.Mailbox;
 import com.zimbra.cs.db.DbMailItem;

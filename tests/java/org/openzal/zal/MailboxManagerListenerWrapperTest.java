@@ -1,4 +1,4 @@
-package java.org.openzal.zal;
+package org.openzal.zal;
 
 import org.junit.Test;
 import org.mockito.Mockito;

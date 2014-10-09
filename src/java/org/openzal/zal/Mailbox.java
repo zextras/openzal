@@ -305,7 +305,7 @@ public class Mailbox
       sMailboxData.setAccessible(true);
 
       Class mailboxChangeClass = null;
-      for( Class cls : Mailbox.class.getDeclaredClasses() )
+      for( Class cls : com.zimbra.cs.mailbox.Mailbox.class.getDeclaredClasses() )
       {
         if( cls.getName().equals("com.zimbra.cs.mailbox.Mailbox$MailboxChange") )
         {
@@ -318,6 +318,7 @@ public class Mailbox
     }
     catch( Throwable ex ){
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: "+Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -340,7 +341,7 @@ public class Mailbox
     catch( Throwable ex )
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Exception: "+Utils.exceptionToString(ex));
-      return 0;
+      throw new RuntimeException(ex);
     }
   }
   $else$ */
@@ -2064,6 +2065,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2083,6 +2085,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2139,6 +2142,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2172,7 +2176,7 @@ public class Mailbox
       partypes[0] = com.zimbra.cs.mailbox.Mailbox.class;
 
 /* $if MajorZimbraVersion < 8 $
-      sGetAllFlags = Flag.class.getDeclaredMethod("getAllFlags", partypes);
+      sGetAllFlags = com.zimbra.cs.mailbox.Flag.class.getDeclaredMethod("getAllFlags", partypes);
   $else$ */
       sGetAllFlags = com.zimbra.cs.mailbox.Flag.class.getDeclaredMethod("allOf", partypes);
 /* $endif$ */
@@ -2181,6 +2185,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2225,6 +2230,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2256,6 +2262,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -2283,6 +2290,7 @@ public class Mailbox
           "ZAL Reflection Initialization Exception: " +
             "com.zimbra.cs.mailbox.Mailbox$FolderCache not found"
         );
+        throw new RuntimeException();
       }
       else
       {
@@ -2294,6 +2302,7 @@ public class Mailbox
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 /* $endif$ */
