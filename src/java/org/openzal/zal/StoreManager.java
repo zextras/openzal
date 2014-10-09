@@ -22,10 +22,12 @@ package org.openzal.zal;
 
 import java.io.IOException;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 
 public interface StoreManager
 {
+  @Nullable
   MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision, String locator)
     throws ZimbraException;
 

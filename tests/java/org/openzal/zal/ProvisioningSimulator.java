@@ -28,6 +28,7 @@ public class ProvisioningSimulator extends Provisioning
 {
   private Map<String, Domain> mDomainMap;
   private Map<String, Account> mAccountMap;
+  private Map<String, DistributionList> mDistributionListMap;
 
   /*************** Simulator methods ********************/
   public ProvisioningSimulator()
@@ -35,6 +36,7 @@ public class ProvisioningSimulator extends Provisioning
     super(null);
     mDomainMap = new HashMap<String, Domain>();
     mAccountMap = new HashMap<String, Account>();
+    mDistributionListMap = new HashMap<String, DistributionList>();
   }
 
   public void addDomain(String domain)
@@ -44,6 +46,30 @@ public class ProvisioningSimulator extends Provisioning
       return;
     }
     mDomainMap.put(domain, createFakeDomain(domain));
+  }
+
+  public void addDistributionList(String name, Set<String> members)
+  {
+    if (mDistributionListMap.containsKey(name))
+    {
+      return;
+    }
+    mDistributionListMap.put(name, createFakeDistributionList(name, members));
+  }
+
+  private DistributionList createFakeDistributionList(String name, Set<String> members)
+  {
+    Map<String, Object> listAttrs = new HashMap<String, Object>();
+
+    String[] arrayMembers = new String[ members.size() ];
+    members.toArray(arrayMembers);
+    listAttrs.put(Provisioning.A_zimbraMailForwardingAddress, arrayMembers);
+    return new DistributionList( new com.zimbra.cs.account.DistributionList(name, name, listAttrs, null) {} );
+  }
+
+  public Collection<String> getGroupMembers(String list)
+  {
+    return getDistributionListById(list).getAllMembersSet();
   }
 
   public void addUserWithAliases(String address, List<String> aliases)
@@ -179,21 +205,13 @@ public class ProvisioningSimulator extends Provisioning
   }
 
   public DistributionList getDistributionListById(String id)
-    throws ZimbraException {
-/* $if MajorZimbraVersion >= 8 $ */
-    throw new RuntimeException("Provisioning method not implemented");
-/* $else$
-    throw new RuntimeException("Provisioning method not implemented");
-   $endif$ */
+  {
+    return mDistributionListMap.get(id);
   }
 
   public DistributionList getDistributionListByName(String name)
-    throws ZimbraException {
-/* $if MajorZimbraVersion >= 8 $ */
-    throw new RuntimeException("Provisioning method not implemented");
-/* $else$
-    throw new RuntimeException("Provisioning method not implemented");
-   $endif$ */
+  {
+    return mDistributionListMap.get(name);
   }
 
   public void visitAllAccounts( NamedEntry.Visitor visitor )

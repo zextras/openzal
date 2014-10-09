@@ -115,9 +115,10 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
       sMethod = DocumentHandler.class.getDeclaredMethod("proxyIfNecessary", parameters);
       sMethod.setAccessible(true);
     }
-    catch (NoSuchMethodException e)
+    catch (NoSuchMethodException ex)
     {
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(e));
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
