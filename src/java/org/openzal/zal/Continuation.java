@@ -78,7 +78,7 @@ public class Continuation
     suspend(0);
   }
 
-  public void suspend(long timeoutMs)
+  public void suspend(long timeoutMs) throws Error
   {
     try
     {
@@ -90,7 +90,7 @@ public class Continuation
       mContinuation.undispatch();
 /* $endif$ */
     }
-    catch (Error ex)
+    catch (Throwable ex)
     {
       throw new ContinuationThrowable(ex);
     }

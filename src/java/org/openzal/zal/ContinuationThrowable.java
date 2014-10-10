@@ -22,15 +22,25 @@ package org.openzal.zal;
 
 public class ContinuationThrowable extends RuntimeException
 {
-  private final Error mJettyException;
+  private final Throwable mJettyException;
 
-  public ContinuationThrowable(Error ex)
+  public ContinuationThrowable(Throwable ex)
   {
+    if( !(ex instanceof Error) && !(ex instanceof RuntimeException) )
+    {
+      throw new RuntimeException("Invalid continuation: "+ex.getClass().getName());
+    }
     mJettyException = ex;
   }
 
   public void throwJettyException()
   {
-    throw mJettyException;
+    if( mJettyException instanceof Error) {
+      throw (Error)mJettyException;
+    }
+
+    if( mJettyException instanceof RuntimeException) {
+      throw (RuntimeException)mJettyException;
+    }
   }
 }
