@@ -42,7 +42,7 @@ public class Tags
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
-  public static Tags extractFromItem( @NotNull Item item )
+  public static Tags extractFromItem( @NotNull Tag item )
   {
     /* $if ZimbraVersion < 8.0.0 $
     return new Tags(item.getBitmask());

@@ -286,15 +286,6 @@ public class Item implements Comparable<Item>
 $endif$ */
   }
 
-  public long getBitmask()
-  {
-/* $if ZimbraVersion >= 8.0.0 $ */
-    return mMailItem.getFlagBitmask();
-/* $else$
-    return mMailItem.getBitmask();
-$endif$ */
-  }
-
   public static class CustomMetadata
   {
     private MailItem.CustomMetadata mCustomMetadata;
