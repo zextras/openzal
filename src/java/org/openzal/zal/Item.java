@@ -279,7 +279,7 @@ public class Item implements Comparable<Item>
 
   public long getTagBitmask()
   {
-/* $ if ZimbraVersion >= 8.0.0 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
     throw new UnsupportedOperationException();
 /* $else$
     return mMailItem.getTagBitmask();
@@ -288,7 +288,7 @@ $endif$ */
 
   public long getBitmask()
   {
-/* $ if ZimbraVersion >= 8.0.0 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
     return mMailItem.getFlagBitmask();
 /* $else$
     return mMailItem.getBitmask();
