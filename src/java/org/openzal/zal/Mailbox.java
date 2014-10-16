@@ -622,7 +622,7 @@ public class Mailbox
   public void rename(@NotNull OperationContext zContext, int id, byte type, String name, int folderId)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 7 $ */
+    /* $if ZimbraVersion >= 7.0.0 $ */
     try
     {
       mMbox.rename(zContext.getOperationContext(), id, Item.convertType(type), name, folderId);
@@ -1456,7 +1456,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    /* $if ZimbraVersion <= 7 $
+    /* $if ZimbraVersion < 8.0.0 $
     return addMessage(octxt, in,
                       sizeHint, receivedDate,
                       folderId, noIcal,
@@ -1476,7 +1476,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    /* $if MajorZimbraVersion <= 7 $
+    /* $if ZimbraVersion < 8.0.0 $
     MailItem message;
     try
     {
