@@ -622,7 +622,6 @@ public class Mailbox
   public void rename(@NotNull OperationContext zContext, int id, byte type, String name, int folderId)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     try
     {
       mMbox.rename(zContext.getOperationContext(), id, Item.convertType(type), name, folderId);
@@ -631,9 +630,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-      throw new UnsupportedOperationException();
-       $endif$ */
   }
 
   public void delete(@NotNull OperationContext octxt, int itemId, byte type)
