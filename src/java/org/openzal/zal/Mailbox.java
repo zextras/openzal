@@ -2316,7 +2316,8 @@ public class Mailbox
       Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
         .get(sFolderCache.get(mMbox))).values());
 /* $else$
-      Collection<Folder> list = (Collection<Folder>)((Map<Integer,Folder>)sFolderCache.get(mMbox)).values();
+      Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>)
+        ((Map<Integer,com.zimbra.cs.mailbox.Folder>)sFolderCache.get(mMbox)).values();
   $endif$ */
 
       ArrayList<Folder> newList = new ArrayList<Folder>(list.size());
