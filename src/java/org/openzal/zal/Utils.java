@@ -34,7 +34,7 @@ import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
 import com.zimbra.cs.mailbox.calendar.ZCalendar;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 /* $endif $ */
-/* $if ZimbraVersion <= 7.0.0 $
+/* $if ZimbraVersion < 8.0.0 $
 import com.zimbra.cs.mailbox.Tag;
 /* $endif $ */
 import com.zimbra.common.service.ServiceException;
@@ -159,7 +159,7 @@ public abstract class Utils
 
   public static String bitmaskToTags(long tagBitmask)
   {
-    /* $if ZimbraVersion <= 7.0.0 $
+    /* $if ZimbraVersion < 8.0.0 $
     return Tag.bitmaskToTags(tagBitmask);
     /* $else $ */
     throw new UnsupportedOperationException();
