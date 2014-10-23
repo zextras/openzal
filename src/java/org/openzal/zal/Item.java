@@ -709,6 +709,43 @@ $endif$ */
     }
   }
 
+  private static Method sEncodeMetadata;
+
+  static
+  {
+    try
+    {
+      Class partypes[] = {com.zimbra.cs.mailbox.Metadata.class};
+
+      sEncodeMetadata = MailItem.class.getDeclaredMethod("encodeMetadata", partypes);
+      sEncodeMetadata.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @Nullable
+  public String encodeSubmetadataForItemType()
+  {
+    try
+    {
+      Object parameters[] = { new com.zimbra.cs.mailbox.Metadata() };
+      com.zimbra.cs.mailbox.Metadata meta = (com.zimbra.cs.mailbox.Metadata) sEncodeMetadata.invoke(
+        mMailItem,
+        parameters
+      );
+      return meta.toString();
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.mailbox.warn("Exception: " + Utils.exceptionToString(ex));
+      return null;
+    }
+  }
+
   public String[] getTags()
   {
     /* $if MajorZimbraVersion >= 8 $ */
