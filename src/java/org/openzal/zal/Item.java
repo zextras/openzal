@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mailbox.ACL;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -764,7 +765,15 @@ $endif$ */
   public Acl getEffectiveACL()
   {
 /* $if MajorZimbraVersion >= 8 $ */
-    return new Acl(mMailItem.getEffectiveACL());
+    ACL acl = mMailItem.getEffectiveACL();
+    if( acl == null )
+    {
+      return new Acl();
+    }
+    else
+    {
+      return new Acl(acl);
+    }
 /* $else$
       throw new UnsupportedOperationException();
    $endif$ */
