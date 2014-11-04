@@ -905,7 +905,7 @@ public class Mailbox
     }
   }
 
-  @NotNull
+  @Nullable
   public ZimbraItemId sendMimeMessage(
     @NotNull OperationContext octxt, Boolean saveToSent, MimeMessage mm,
                                       List<Upload> uploads,
@@ -951,6 +951,10 @@ public class Mailbox
         null, replyToSender
       );
   /* $endif$ */
+
+      if( newItemId == null ) {
+        return null;
+      }
       return new ZimbraItemId(newItemId.getAccountId(), newItemId.getId());
     }
     catch (com.zimbra.common.service.ServiceException e)
