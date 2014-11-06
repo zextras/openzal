@@ -184,7 +184,7 @@ public abstract class Utils
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, null, null);
    $endif$ */
 
-/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.8$
+/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.9$
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, true);
    $endif$ */
 
