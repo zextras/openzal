@@ -46,7 +46,7 @@ public class ZLdapFilterFactorySimulator {
 
   /* $endif$ */
 
-  /* $if ZimbraVersion >= 8.0.9 $ */
+  /* $if ZimbraVersion >= 8.0.8 $ */
 
   public ZLdapFilter velodromeAllDistributionListsByDomain(String s)
   {
