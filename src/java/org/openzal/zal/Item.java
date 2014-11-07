@@ -761,8 +761,8 @@ $endif$ */
           Tag tag = getMailbox().getTagById(operationContext, i + 64);
           tagList.add(tag.getName());
         }
-        i += 1;
         tagBitmask &= ~(1L << i);
+        i += 1;
       }
       return tagList.toArray(new String[tagList.size()]);
    $endif$ */
