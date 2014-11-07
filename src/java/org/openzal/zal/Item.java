@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mailbox.ACL;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -279,19 +280,10 @@ public class Item implements Comparable<Item>
 
   public long getTagBitmask()
   {
-/* $ if ZimbraVersion >= 8.0.0 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
     throw new UnsupportedOperationException();
 /* $else$
     return mMailItem.getTagBitmask();
-$endif$ */
-  }
-
-  public long getBitmask()
-  {
-/* $ if ZimbraVersion >= 8.0.0 $ */
-    return mMailItem.getFlagBitmask();
-/* $else$
-    return mMailItem.getBitmask();
 $endif$ */
   }
 
@@ -643,6 +635,7 @@ $endif$ */
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -693,6 +686,7 @@ $endif$ */
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -705,6 +699,43 @@ $endif$ */
       Object parameters[] = new Object[0];
       com.zimbra.cs.mailbox.Metadata meta = (com.zimbra.cs.mailbox.Metadata) sSerializeMethod.invoke(
         underlyingData.toZimbra(MailItem.UnderlyingData.class),
+        parameters
+      );
+      return meta.toString();
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.mailbox.warn("Exception: " + Utils.exceptionToString(ex));
+      return null;
+    }
+  }
+
+  private static Method sEncodeMetadata;
+
+  static
+  {
+    try
+    {
+      Class partypes[] = {com.zimbra.cs.mailbox.Metadata.class};
+
+      sEncodeMetadata = MailItem.class.getDeclaredMethod("encodeMetadata", partypes);
+      sEncodeMetadata.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @Nullable
+  public String encodeSubmetadataForItemType()
+  {
+    try
+    {
+      Object parameters[] = { new com.zimbra.cs.mailbox.Metadata() };
+      com.zimbra.cs.mailbox.Metadata meta = (com.zimbra.cs.mailbox.Metadata) sEncodeMetadata.invoke(
+        mMailItem,
         parameters
       );
       return meta.toString();
@@ -734,7 +765,15 @@ $endif$ */
   public Acl getEffectiveACL()
   {
 /* $if MajorZimbraVersion >= 8 $ */
-    return new Acl(mMailItem.getEffectiveACL());
+    ACL acl = mMailItem.getEffectiveACL();
+    if( acl == null )
+    {
+      return new Acl();
+    }
+    else
+    {
+      return new Acl(acl);
+    }
 /* $else$
       throw new UnsupportedOperationException();
    $endif$ */

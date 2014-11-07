@@ -156,6 +156,15 @@ public class Server extends Entry
     return mServer.getIntAttr(name, defaultValue);
   }
 
+  public boolean hasMailboxService()
+  {
+    return getMultiAttrSet(
+      com.zimbra.cs.account.Provisioning.A_zimbraServiceEnabled
+    ).contains(
+      com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX
+    );
+  }
+
   @NotNull
   public String getAdminURL(String path) {
     String hostname = getAttr(Provisioning.A_zimbraServiceHostname);

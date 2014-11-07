@@ -332,7 +332,14 @@ public class StoreVolume
       List<Volume> list = VolumeManager.getInstance().getAllVolumes();
 /*  $endif$ */
 
-      return ZimbraListWrapper.wrapVolumes(list);
+      ArrayList<StoreVolume> newList = new ArrayList<StoreVolume>(list.size());
+      for( Volume vol : list )
+      {
+        if( vol.getType() == type ) {
+          newList.add(new StoreVolume(vol));
+        }
+      }
+      return newList;
     }
 
     public static StoreVolume getCurrentMessageVolume()

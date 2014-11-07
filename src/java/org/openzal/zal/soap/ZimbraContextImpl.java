@@ -210,7 +210,8 @@ class ZimbraContextImpl implements ZimbraContext
     }
     catch (Throwable ex)
     {
-      ZimbraLog.extensions.fatal("Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -249,6 +250,6 @@ class ZimbraContextImpl implements ZimbraContext
   @Override
   public boolean isDelegatedAuth()
   {
-    return mZimbraSoapContext.isDelegatedRequest();
+    return mZimbraSoapContext.getAuthToken().isDelegatedAuth();
   }
 }

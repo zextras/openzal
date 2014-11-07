@@ -25,7 +25,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.extension.ZimbraExtension;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.NoSuchDomainException;
 
 public class Config extends Entry
 {
@@ -67,6 +71,25 @@ public class Config extends Entry
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mConfig.getAttrs(applyDefaults));
+  }
+
+  public @NotNull Domain getDefaultDomain()
+  {
+    String defaultDomainName = mConfig.getAttr("zimbraDefaultDomainName","");
+    try
+    {
+      Object domain = mConfig.getProvisioning().getDomainByName(defaultDomainName);
+      if( domain == null )
+      {
+        throw new NoSuchDomainException(defaultDomainName);
+      }
+
+      return new Domain(domain);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public String getAttr(String name, String defaultValue)

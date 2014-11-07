@@ -44,10 +44,11 @@ public enum Priority
   @NotNull
   public static Priority fromZimbra(@Nullable String zimbraPriority)
   {
-    if(zimbraPriority == null)
+    if(zimbraPriority == null || zimbraPriority.isEmpty())
     {
       zimbraPriority = "9";
     }
+
     int priority = Integer.valueOf(zimbraPriority);
 
     if( priority < MEDIUM.mRawPriority )

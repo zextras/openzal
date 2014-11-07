@@ -38,7 +38,7 @@ public class ParsedContact
     mParsedContact = (com.zimbra.cs.mime.ParsedContact) parsedContact;
   }
 
-  protected <T> T toZimbra(Class<T> cls)
+  protected <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mParsedContact);
   }

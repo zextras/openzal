@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class Continuation
 {
-/* $if ZimbraVersion >= 8 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
   org.eclipse.jetty.continuation.Continuation mContinuation;
 /* $else$
   org.mortbay.util.ajax.Continuation mContinuation;
@@ -78,7 +78,7 @@ public class Continuation
     suspend(0);
   }
 
-  public void suspend(long timeoutMs)
+  public void suspend(long timeoutMs) throws Error
   {
     try
     {
@@ -90,7 +90,7 @@ public class Continuation
       mContinuation.undispatch();
 /* $endif$ */
     }
-    catch (Error ex)
+    catch (Throwable ex)
     {
       throw new ContinuationThrowable(ex);
     }

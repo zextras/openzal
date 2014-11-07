@@ -53,6 +53,7 @@ public class RedoableOp
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 

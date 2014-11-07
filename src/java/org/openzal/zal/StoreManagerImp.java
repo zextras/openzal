@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.store.file.FileBlobStore;
@@ -56,23 +57,28 @@ public class StoreManagerImp implements StoreManager
     return (FileBlobStore) sm;
   }
 
-  @NotNull
+  @Nullable
   public MailboxBlob getMailboxBlob(@NotNull Mailbox mbox, int msgId, int revision, String locator)
     throws ZimbraException
   {
+    com.zimbra.cs.store.MailboxBlob mailboxBlob;
     try
     {
-      return new MailboxBlob(
-        sm.getMailboxBlob(mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
+      mailboxBlob = sm.getMailboxBlob(mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
                           msgId,
                           revision,
-                          locator)
-      );
+                          locator);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
+    if (mailboxBlob == null)
+    {
+      return null;
+    }
+
+    return new MailboxBlob(mailboxBlob);
   }
 
   @NotNull

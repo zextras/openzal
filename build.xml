@@ -27,7 +27,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 1.2.0 </echo>
+    <echo> Building ZAL version 1.5.1 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -74,7 +74,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -127,7 +127,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -177,7 +177,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.8" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -230,7 +230,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.8" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -280,7 +280,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.9" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -333,7 +333,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.9" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -383,7 +383,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.10" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -436,7 +436,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.10" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -486,7 +486,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.12" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -539,7 +539,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.12" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -589,7 +589,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.13" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -642,7 +642,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.13" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -692,7 +692,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.14" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -745,7 +745,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.14" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -795,7 +795,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.15" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -848,7 +848,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.15" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -898,7 +898,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.16" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -951,7 +951,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.16" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1001,7 +1001,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1054,7 +1054,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1104,7 +1104,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1157,7 +1157,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1207,7 +1207,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1260,7 +1260,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1310,7 +1310,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1363,7 +1363,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1413,7 +1413,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1466,7 +1466,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1516,7 +1516,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1569,7 +1569,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1619,7 +1619,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1672,7 +1672,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1722,7 +1722,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1775,7 +1775,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1825,7 +1825,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1878,7 +1878,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1928,7 +1928,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1981,7 +1981,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2031,7 +2031,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2084,7 +2084,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2134,7 +2134,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2187,7 +2187,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2237,7 +2237,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2290,7 +2290,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2340,7 +2340,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2393,7 +2393,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2443,7 +2443,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2496,7 +2496,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2546,7 +2546,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2599,7 +2599,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2649,7 +2649,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2702,7 +2702,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2752,7 +2752,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2805,7 +2805,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2855,7 +2855,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2908,7 +2908,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2958,7 +2958,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3011,7 +3011,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3061,7 +3061,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3114,7 +3114,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3164,7 +3164,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3217,7 +3217,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3267,7 +3267,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3320,9 +3320,215 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.7" />
+      <attribute name="Created-By" value="ZeXtras" />
+    </manifest>
+    <fileset dir="${itbase_build}" />
+  </jar>
+</target>
+
+
+<path id="zimbra-jars-8.0.8">
+    <fileset dir="zimbra-jars/8.0.8/" >
+        <include name="*.jar"/>
+    </fileset>
+</path>
+
+<target name="zal-8.0.8"  description="create jar" depends="init">
+
+  <var name="tmpsrc"  value="tmpsrc/8.0.8/jar/" />
+  <var name="build" value="build/8.0.8/jar/" />
+  <var name="dist"  value="dist/8.0.8/"/>
+
+  <mkdir dir="${tmpsrc}"/>
+  <mkdir dir="${build}"/>
+  <mkdir dir="${dist}"/>
+
+  <echo>Creating zal JAR for zimbra 8.0.8 ...</echo>
+
+  <echo>Preprocessing...</echo>
+  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.0.8" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="0" />
+    <var name="MinorZimbraVersion"  value="8" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.0.8" />
+      <path refid="libraries" />
+      <pathelement path="${build}" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+  <delete dir="${tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.0.8" />
+      <attribute name="Created-By" value="ZeXtras" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
+    </manifest>
+    <fileset dir="${build}" />
+  </jar>
+
+  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
+    <classpath>
+      <pathelement location="${dist}/zal.jar.unsigned" />
+    </classpath>
+    <arg value="${dist}/zal.jar" />
+  </java>
+
+  <delete file="${dist}/zal.jar.unsigned" />
+</target>
+
+
+<target name="zal-8.0.8-itbase"  description="create test jar" depends="init">
+
+  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.8/itbase/" />
+  <var name="itbase_build" value="build/8.0.8/itbase/" />
+  <var name="dist"  value="dist/8.0.8/"/>
+
+  <mkdir dir="${itbase_tmpsrc}"/>
+  <mkdir dir="${itbase_build}"/>
+
+  <echo>Preprocessing ZAL test library...</echo>
+  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.0.8" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="0" />
+    <var name="MinorZimbraVersion"  value="8" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.0.8" />
+      <path refid="libraries" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+
+  <delete dir="${itbase_tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.0.8" />
+      <attribute name="Created-By" value="ZeXtras" />
+    </manifest>
+    <fileset dir="${itbase_build}" />
+  </jar>
+</target>
+
+
+<path id="zimbra-jars-8.0.9">
+    <fileset dir="zimbra-jars/8.0.9/" >
+        <include name="*.jar"/>
+    </fileset>
+</path>
+
+<target name="zal-8.0.9"  description="create jar" depends="init">
+
+  <var name="tmpsrc"  value="tmpsrc/8.0.9/jar/" />
+  <var name="build" value="build/8.0.9/jar/" />
+  <var name="dist"  value="dist/8.0.9/"/>
+
+  <mkdir dir="${tmpsrc}"/>
+  <mkdir dir="${build}"/>
+  <mkdir dir="${dist}"/>
+
+  <echo>Creating zal JAR for zimbra 8.0.9 ...</echo>
+
+  <echo>Preprocessing...</echo>
+  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.0.9" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="0" />
+    <var name="MinorZimbraVersion"  value="9" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.0.9" />
+      <path refid="libraries" />
+      <pathelement path="${build}" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+  <delete dir="${tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.0.9" />
+      <attribute name="Created-By" value="ZeXtras" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
+    </manifest>
+    <fileset dir="${build}" />
+  </jar>
+
+  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
+    <classpath>
+      <pathelement location="${dist}/zal.jar.unsigned" />
+    </classpath>
+    <arg value="${dist}/zal.jar" />
+  </java>
+
+  <delete file="${dist}/zal.jar.unsigned" />
+</target>
+
+
+<target name="zal-8.0.9-itbase"  description="create test jar" depends="init">
+
+  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.9/itbase/" />
+  <var name="itbase_build" value="build/8.0.9/itbase/" />
+  <var name="dist"  value="dist/8.0.9/"/>
+
+  <mkdir dir="${itbase_tmpsrc}"/>
+  <mkdir dir="${itbase_build}"/>
+
+  <echo>Preprocessing ZAL test library...</echo>
+  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.0.9" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="0" />
+    <var name="MinorZimbraVersion"  value="9" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.0.9" />
+      <path refid="libraries" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+
+  <delete dir="${itbase_tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.0.9" />
       <attribute name="Created-By" value="ZeXtras" />
     </manifest>
     <fileset dir="${itbase_build}" />
@@ -3370,7 +3576,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.5.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3423,7 +3629,7 @@
   <jar jarfile="${dist}/zal-itbase.jar" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.2.0" />
+      <attribute name="Specification-Version" value="1.5.1" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.5.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3433,8 +3639,111 @@
 </target>
 
 
-  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.7,zal-8.5.0" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.5.0" />
+<path id="zimbra-jars-8.5.1">
+    <fileset dir="zimbra-jars/8.5.1/" >
+        <include name="*.jar"/>
+    </fileset>
+</path>
+
+<target name="zal-8.5.1"  description="create jar" depends="init">
+
+  <var name="tmpsrc"  value="tmpsrc/8.5.1/jar/" />
+  <var name="build" value="build/8.5.1/jar/" />
+  <var name="dist"  value="dist/8.5.1/"/>
+
+  <mkdir dir="${tmpsrc}"/>
+  <mkdir dir="${build}"/>
+  <mkdir dir="${dist}"/>
+
+  <echo>Creating zal JAR for zimbra 8.5.1 ...</echo>
+
+  <echo>Preprocessing...</echo>
+  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.5.1" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="5" />
+    <var name="MinorZimbraVersion"  value="1" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.5.1" />
+      <path refid="libraries" />
+      <pathelement path="${build}" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+  <delete dir="${tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.5.1" />
+      <attribute name="Created-By" value="ZeXtras" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
+    </manifest>
+    <fileset dir="${build}" />
+  </jar>
+
+  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
+    <classpath>
+      <pathelement location="${dist}/zal.jar.unsigned" />
+    </classpath>
+    <arg value="${dist}/zal.jar" />
+  </java>
+
+  <delete file="${dist}/zal.jar.unsigned" />
+</target>
+
+
+<target name="zal-8.5.1-itbase"  description="create test jar" depends="init">
+
+  <var name="itbase_tmpsrc"  value="tmpsrc/8.5.1/itbase/" />
+  <var name="itbase_build" value="build/8.5.1/itbase/" />
+  <var name="dist"  value="dist/8.5.1/"/>
+
+  <mkdir dir="${itbase_tmpsrc}"/>
+  <mkdir dir="${itbase_build}"/>
+
+  <echo>Preprocessing ZAL test library...</echo>
+  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.5.1" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="5" />
+    <var name="MinorZimbraVersion"  value="1" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.5.1" />
+      <path refid="libraries" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+
+  <delete dir="${itbase_tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.5.1" />
+      <attribute name="Created-By" value="ZeXtras" />
+    </manifest>
+    <fileset dir="${itbase_build}" />
+  </jar>
+</target>
+
+
+  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.5.1" />
+  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">

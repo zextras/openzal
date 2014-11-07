@@ -46,8 +46,8 @@ public class Attendee
 
   public Attendee(String address, String name, AttendeeInviteStatus status)
   {
-    mAddress = address;
-    mName = name;
+    mAddress = (address == null) ? "" : address.replaceAll(";","");
+    mName = (name == null) ? "" : name;
     mStatus = status;
   }
 

@@ -360,18 +360,7 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getAliases()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
-    try
-    {
-      return Arrays.asList(mAccount.getAliases());
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $
-    return Collections.emptyList();
-    /* $endif $ */
+    return Arrays.asList(mAccount.getMailAlias());
   }
 
   public void setPrefOutOfOfficeUntilDate(Date zimbraPrefOutOfOfficeUntilDate)
@@ -1001,6 +990,23 @@ public class Account extends Entry
   public String getPrefMailDefaultCharset()
   {
     return mAccount.getPrefMailDefaultCharset();
+  }
+
+  public boolean isLocalAccount()
+  {
+    try
+    {
+      return com.zimbra.cs.account.Provisioning.onLocalServer(mAccount);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public String getServerHostname()
+  {
+    return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
   }
 }
 

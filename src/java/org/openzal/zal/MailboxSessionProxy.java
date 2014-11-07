@@ -45,7 +45,7 @@ public class MailboxSessionProxy
     mMboxId = mboxId;
     mName = name;
     mListener = listener;
-    mClock = new ActualClock();
+    mClock = ActualClock.sInstance;
   }
 
   public MailboxSessionProxy(Object session)

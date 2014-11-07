@@ -188,5 +188,10 @@ public class Domain extends Entry
   {
     return mDomain.getLongAttr(name, defaultValue);
   }
+
+  public String getPublicHostname()
+  {
+    return mDomain.getAttr(Provisioning.A_zimbraPublicServiceHostname, null);
+  }
 }
 

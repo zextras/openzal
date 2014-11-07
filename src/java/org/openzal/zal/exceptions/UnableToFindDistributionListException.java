@@ -22,14 +22,23 @@ package org.openzal.zal.exceptions;
 
 public class UnableToFindDistributionListException extends InternalServerException
 {
-  protected UnableToFindDistributionListException(String folderName)
+  private final String mDistributionList;
+
+  protected UnableToFindDistributionListException(String distributionList)
   {
-    super(new RuntimeException("Cannot sanitize folder name: " + folderName));
+    super(new RuntimeException("Unable to find distribution list: " + distributionList));
+    mDistributionList = distributionList;
   }
 
-  public UnableToFindDistributionListException(String list, Throwable t)
+  public UnableToFindDistributionListException(String distributionList, Throwable t)
   {
-    this(list);
-    initCause(t);
+    super(t);
+    mDistributionList = distributionList;
+  }
+
+  @Override
+  public String getMessage()
+  {
+    return mDistributionList;
   }
 }

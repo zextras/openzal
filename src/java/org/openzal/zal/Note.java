@@ -35,9 +35,9 @@ public class Note extends Item
       mRectangle = rectangle;
     }
 
-    public com.zimbra.cs.mailbox.Note.Rectangle getZimbraRectangle()
+    public <T> T toZimbra(Class<T> cls)
     {
-      return mRectangle;
+      return cls.cast(mRectangle);
     }
   }
 

@@ -22,6 +22,11 @@ package org.openzal.zal.exceptions;
 
 public class NoSuchDomainException extends ZimbraException
 {
+  public NoSuchDomainException(String domainName)
+  {
+    super("no such domain "+domainName);
+  }
+
   protected NoSuchDomainException(Exception exception)
   {
     super(exception);

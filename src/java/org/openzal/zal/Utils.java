@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
@@ -33,7 +34,7 @@ import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
 import com.zimbra.cs.mailbox.calendar.ZCalendar;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 /* $endif $ */
-/* $if ZimbraVersion <= 7.0.0 $
+/* $if ZimbraVersion < 8.0.0 $
 import com.zimbra.cs.mailbox.Tag;
 /* $endif $ */
 import com.zimbra.common.service.ServiceException;
@@ -135,13 +136,17 @@ public abstract class Utils
     return orderedZimletList;
   }
 
-  public static String getPublicURLForDomain(Server server, Domain domain, String path)
+  public static String getPublicURLForDomain(
+    @NotNull Server server,
+    @Nullable Domain domain,
+    @NotNull String path
+  )
   {
     try
     {
       return URLUtil.getPublicURLForDomain(
         server.toZimbra(com.zimbra.cs.account.Server.class),
-        domain.toZimbra(com.zimbra.cs.account.Domain.class),
+        domain != null ? domain.toZimbra(com.zimbra.cs.account.Domain.class) : null,
         path,
         true
       );
@@ -154,7 +159,7 @@ public abstract class Utils
 
   public static String bitmaskToTags(long tagBitmask)
   {
-    /* $if ZimbraVersion <= 7.0.0 $
+    /* $if ZimbraVersion < 8.0.0 $
     return Tag.bitmaskToTags(tagBitmask);
     /* $else $ */
     throw new UnsupportedOperationException();
@@ -179,7 +184,7 @@ public abstract class Utils
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, null, null);
    $endif$ */
 
-/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.7$
+/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.9$
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, true);
    $endif$ */
 
@@ -187,19 +192,30 @@ public abstract class Utils
       provisioning.flushCache(CacheEntryType.zimlet, null);
       ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
 
+      FileInputStream in = new FileInputStream(new File(zimlet.getZimletPath()));
+      ZimletFile rawZimlet = new ZimletFile(zimlet.getName(), in);
+
       ZimletUtil.ZimletSoapUtil zimletSoapUtil = new ZimletUtil.ZimletSoapUtil();
       for (Server server : provisioning.getAllServers())
       {
-          if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer()) {
-            zimletSoapUtil.deployZimletRemotely(
+        if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer())
+        {
+          if( !server.hasMailboxService() )
+          {
+            continue;
+          }
+
+          zimletSoapUtil.deployZimletRemotely(
               server.toZimbra(com.zimbra.cs.account.Server.class),
-              zimlet.getName(),
-              zimlet.getZimletContent(),
+              rawZimlet.getName(),
+              rawZimlet.getZimletContent(),
               null,
               true
             );
           }
       }
+      // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
 /* $endif$ */
     }
     catch (ServiceException e)
@@ -209,6 +225,8 @@ public abstract class Utils
 /* $if ZimbraVersion >= 8.5.0 $ */
     catch (ZimletException e)
     {
+      // In Zimbra >= 8.5.0 if something fails, flush the cache.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
       throw ExceptionWrapper.wrap(e);
     }
 /* $endif$ */

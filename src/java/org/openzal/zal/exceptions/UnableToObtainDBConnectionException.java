@@ -26,7 +26,12 @@ public class UnableToObtainDBConnectionException extends InternalServerException
 {
   public UnableToObtainDBConnectionException(ServiceException e)
   {
-    super(new RuntimeException("Unable to obtain database connection"));
-    initCause(e);
+    super(e);
+  }
+
+  @Override
+  public String getMessage()
+  {
+    return "Unable to obtain database connection";
   }
 }

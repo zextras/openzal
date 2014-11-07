@@ -220,6 +220,9 @@ public class Provisioning
   public static String A_zimbraPrefMailDefaultCharset                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefMailDefaultCharset;
   public static String A_zimbraHsmPolicy                                      = com.zimbra.cs.account.Provisioning.A_zimbraHsmPolicy;
   public static String A_zimbraDefaultDomainName                              = com.zimbra.cs.account.Provisioning.A_zimbraDefaultDomainName;
+  public static String A_zimbraPublicServiceHostname                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceHostname;
+  public static String A_zimbraMailForwardingAddress                          = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddress;
+  public static String A_zimbraGalLastSuccessfulSyncTimestamp                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLastSuccessfulSyncTimestamp;
 
   @NotNull public final com.zimbra.cs.account.Provisioning mProvisioning;
 
@@ -275,7 +278,7 @@ public class Provisioning
   public Account getZimbraUser()
     throws ZimbraException
   {
-    return getAccountById(ZIMBRA_USER_ID);
+    return assertAccountById(ZIMBRA_USER_ID);
   }
 
   public OperationContext createZContext()
@@ -353,11 +356,17 @@ public class Provisioning
       ZLdapFilterFactory zldapFilterFactory = ZLdapFilterFactory.getInstance();
       searchOptions.setTypes(com.zimbra.cs.account.SearchDirectoryOptions.ObjectType.accounts);
       searchOptions.setFilter(zldapFilterFactory.allAccountsOnly());
-      searchOptions.setMakeObjectOpt(com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
+      searchOptions.setMakeObjectOpt(
+        com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS
+      );
       mProvisioning.searchDirectory(searchOptions, namedEntryVisitor);
     /* $else$
       com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-      searchOptions.setFlags(com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS);
+      searchOptions.setFlags(
+        com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
+        com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
+        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
+      );
       for(com.zimbra.cs.account.Server server : mProvisioning.getAllServers())
       {
         mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
@@ -370,7 +379,7 @@ public class Provisioning
     }
   }
 
-  public void visitAllLocalAccounts(@NotNull SimpleVisitor<Account> visitor)
+  public void visitAllLocalAccountsNoDefaults(@NotNull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -384,7 +393,11 @@ public class Provisioning
       searchOptions.setMakeObjectOpt(com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
       /* $else$
       com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-      searchOptions.setFlags(com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS);
+      searchOptions.setFlags(
+        com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
+        com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
+        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
+      );
       $endif$ */
 
       mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
@@ -425,11 +438,52 @@ public class Provisioning
       accountListBuilder,
       filterAccounts
     );
-    visitAllLocalAccounts(accountListBuilderVisitor);
+    visitAllLocalAccountsNoDefaults(accountListBuilderVisitor);
 
     for (Account account : allAccounts)
     {
       visitor.visit(account);
+    }
+  }
+
+  public void visitAccountByIdNoDefaults(SimpleVisitor<Account> visitor, ZimbraId accountId)
+  {
+    try
+    {
+      ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
+
+/* $if ZimbraVersion >= 8.0.0 $ */
+      SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
+      searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
+      searchOptions.setTypes(
+        SearchDirectoryOptions.ObjectType.accounts,
+        SearchDirectoryOptions.ObjectType.resources
+      );
+      searchOptions.setFilter(ZLdapFilterFactory.getInstance().accountById(accountId.getId()));
+
+      mProvisioning.searchDirectory(searchOptions, zimbraVisitor);
+/* $else $
+      String query = "(" + com.zimbra.cs.account.Provisioning.A_zimbraId + "=" + accountId.getId() + ")";
+      com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
+      searchOptions.setFlags(
+          com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
+          com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
+          com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
+      );
+      searchOptions.setQuery(query);
+      List<NamedEntry> accounts = mProvisioning.searchDirectory(searchOptions);
+
+      if (accounts.size() != 1)
+      {
+        return;
+      }
+
+      zimbraVisitor.visit(accounts.get(0));
+/* $endif $ */
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 
@@ -524,7 +578,7 @@ public class Provisioning
     }
   }
 
-  @Nullable
+  @NotNull
   public Server getLocalServer()
     throws ZimbraException
   {
@@ -533,7 +587,7 @@ public class Provisioning
       com.zimbra.cs.account.Server server = mProvisioning.getLocalServer();
       if (server == null)
       {
-        return null;
+        throw new RuntimeException();
       }
       else
       {
@@ -755,6 +809,36 @@ public class Provisioning
     }
   }
 
+  @NotNull
+  public Account assertAccountByName(String accountStr)
+    throws NoSuchAccountException
+  {
+    Account account = getAccountByName(accountStr);
+    if (account == null)
+    {
+      throw new NoSuchAccountException(accountStr);
+    }
+    else
+    {
+      return account;
+    }
+  }
+
+  @NotNull
+  public Account assertAccountById(String accountStr)
+    throws NoSuchAccountException
+  {
+    Account account = getAccountById(accountStr);
+    if (account == null)
+    {
+      throw new NoSuchAccountException(accountStr);
+    }
+    else
+    {
+      return account;
+    }
+  }
+
   @Nullable
   public Account getAccountByName(String accountStr)
     throws NoSuchAccountException
@@ -894,7 +978,7 @@ public class Provisioning
     }
   }
 
-  @Nullable
+  @NotNull
   public Config getConfig()
     throws ZimbraException
   {
@@ -903,7 +987,7 @@ public class Provisioning
       com.zimbra.cs.account.Config config = mProvisioning.getConfig();
       if (config == null)
       {
-        return null;
+        throw new RuntimeException("Unable to retrieve global config");
       }
       else
       {

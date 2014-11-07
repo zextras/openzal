@@ -112,7 +112,7 @@ public final class Flag extends Item
   public static int BITMASK_ARCHIVED    = com.zimbra.cs.mailbox.Flag.BITMASK_ARCHIVED;
   public static int BITMASK_IN_DUMPSTER = com.zimbra.cs.mailbox.Flag.BITMASK_IN_DUMPSTER;
 
-  @Nullable private static Method sFlagOf = null;
+  private static Method sFlagOf;
 
   static
   {
@@ -127,6 +127,7 @@ public final class Flag extends Item
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
   }
 
@@ -143,9 +144,8 @@ public final class Flag extends Item
     catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
     }
-
-    return null;
   }
 /* $endif$ */
 

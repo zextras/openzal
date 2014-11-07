@@ -80,7 +80,7 @@ public class InviteFactory
   {
     mAlarmSet = false;
     mSequence = 0;
-    mClock = new ActualClock();
+    mClock = ActualClock.sInstance;
   }
 
   public Invite createTask(Mailbox mbox)
