@@ -26,7 +26,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Metadata
@@ -135,6 +137,47 @@ public class Metadata
   protected <T> T toZimbra(Class<T> cls)
   {
     return cls.cast(mMetadata);
+  }
+
+  public int getInt(String key, int i)
+  {
+    try
+    {
+      return mMetadata.getInt(key, i);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public short getShort(String key, short i)
+  {
+    try
+    {
+      return mMetadata.getShort(key, i);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void put(String key, List<Object> list )
+  {
+    mMetadata.put(key, list);
+  }
+
+  public List<Integer> getList(String key)
+  {
+    try
+    {
+      return mMetadata.getList(key, true).asList();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
 
