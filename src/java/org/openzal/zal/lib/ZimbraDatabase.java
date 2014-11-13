@@ -154,7 +154,7 @@ public class ZimbraDatabase
   {
     try
     {
-    /* $if ZimbraVersion >= 8 $ */
+    /* $if ZimbraVersion >= 8.0.0 $ */
       return DbMailbox.listAccountIds(conn.toZimbra(DbPool.DbConnection.class));
     /* $else $
       return DbMailbox.listAccountIds(conn.toZimbra(DbPool.Connection.class));
@@ -211,7 +211,7 @@ public class ZimbraDatabase
     DbVolume.CurrentVolumes cv;
     try
     {
-      /* $if ZimbraVersion >= 8 $ */
+      /* $if ZimbraVersion >= 8.0.0 $ */
       cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.DbConnection.class));
       /* $else $
       cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.Connection.class));

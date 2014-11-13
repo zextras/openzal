@@ -622,7 +622,6 @@ public class Mailbox
   public void rename(@NotNull OperationContext zContext, int id, byte type, String name, int folderId)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 7 $ */
     try
     {
       mMbox.rename(zContext.getOperationContext(), id, Item.convertType(type), name, folderId);
@@ -631,9 +630,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-      throw new UnsupportedOperationException();
-       $endif$ */
   }
 
   public void delete(@NotNull OperationContext octxt, int itemId, byte type)
@@ -909,7 +905,7 @@ public class Mailbox
     }
   }
 
-  @NotNull
+  @Nullable
   public ZimbraItemId sendMimeMessage(
     @NotNull OperationContext octxt, Boolean saveToSent, MimeMessage mm,
                                       List<Upload> uploads,
@@ -955,6 +951,10 @@ public class Mailbox
         null, replyToSender
       );
   /* $endif$ */
+
+      if( newItemId == null ) {
+        return null;
+      }
       return new ZimbraItemId(newItemId.getAccountId(), newItemId.getId());
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1456,7 +1456,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    /* $if ZimbraVersion <= 7 $
+    /* $if ZimbraVersion < 8.0.0 $
     return addMessage(octxt, in,
                       sizeHint, receivedDate,
                       folderId, noIcal,
@@ -1476,7 +1476,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    /* $if MajorZimbraVersion <= 7 $
+    /* $if ZimbraVersion < 8.0.0 $
     MailItem message;
     try
     {
@@ -2320,7 +2320,8 @@ public class Mailbox
       Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
         .get(sFolderCache.get(mMbox))).values());
 /* $else$
-      Collection<Folder> list = (Collection<Folder>)((Map<Integer,Folder>)sFolderCache.get(mMbox)).values();
+      Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>)
+        ((Map<Integer,com.zimbra.cs.mailbox.Folder>)sFolderCache.get(mMbox)).values();
   $endif$ */
 
       ArrayList<Folder> newList = new ArrayList<Folder>(list.size());

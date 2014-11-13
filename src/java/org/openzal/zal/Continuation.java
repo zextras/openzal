@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class Continuation
 {
-/* $if ZimbraVersion >= 8 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
   org.eclipse.jetty.continuation.Continuation mContinuation;
 /* $else$
   org.mortbay.util.ajax.Continuation mContinuation;

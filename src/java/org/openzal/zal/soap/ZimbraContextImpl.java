@@ -250,6 +250,6 @@ class ZimbraContextImpl implements ZimbraContext
   @Override
   public boolean isDelegatedAuth()
   {
-    return mZimbraSoapContext.isDelegatedRequest();
+    return mZimbraSoapContext.getAuthToken().isDelegatedAuth();
   }
 }

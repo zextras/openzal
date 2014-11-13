@@ -273,6 +273,18 @@ public class Invite
     return mInvite.getEffectiveEndTime().getDate();
   }
 
+  public long getEffectiveDuration()
+  {
+    try
+    {
+      return Math.abs(mInvite.getEffectiveDuration().subtractFromTime(0));
+    }
+    catch (Exception ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+  }
+
   public long getUtcStartTime()
   {
     ParsedDateTime parsedDateTime = mInvite.getStartTime();

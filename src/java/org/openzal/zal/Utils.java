@@ -34,7 +34,7 @@ import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
 import com.zimbra.cs.mailbox.calendar.ZCalendar;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
 /* $endif $ */
-/* $if ZimbraVersion <= 7.0.0 $
+/* $if ZimbraVersion < 8.0.0 $
 import com.zimbra.cs.mailbox.Tag;
 /* $endif $ */
 import com.zimbra.common.service.ServiceException;
@@ -159,7 +159,7 @@ public abstract class Utils
 
   public static String bitmaskToTags(long tagBitmask)
   {
-    /* $if ZimbraVersion <= 7.0.0 $
+    /* $if ZimbraVersion < 8.0.0 $
     return Tag.bitmaskToTags(tagBitmask);
     /* $else $ */
     throw new UnsupportedOperationException();
@@ -184,7 +184,7 @@ public abstract class Utils
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, null, null);
    $endif$ */
 
-/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.8$
+/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.9$
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, true);
    $endif$ */
 
@@ -214,6 +214,8 @@ public abstract class Utils
             );
           }
       }
+      // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
 /* $endif$ */
     }
     catch (ServiceException e)
@@ -223,6 +225,8 @@ public abstract class Utils
 /* $if ZimbraVersion >= 8.5.0 $ */
     catch (ZimletException e)
     {
+      // In Zimbra >= 8.5.0 if something fails, flush the cache.
+      provisioning.flushCache(CacheEntryType.zimlet, null);
       throw ExceptionWrapper.wrap(e);
     }
 /* $endif$ */
