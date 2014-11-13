@@ -143,7 +143,15 @@ public class Metadata
   {
     try
     {
-      return mMetadata.getInt(key, i);
+      String value = mMetadata.get(key);
+      if( value == null )
+      {
+        return i;
+      }
+      else
+      {
+        return Integer.valueOf(value);
+      }
     }
     catch (ServiceException e)
     {
@@ -155,7 +163,15 @@ public class Metadata
   {
     try
     {
-      return mMetadata.getShort(key, i);
+      String value = mMetadata.get(key);
+      if( value == null )
+      {
+        return i;
+      }
+      else
+      {
+        return Short.valueOf(value);
+      }
     }
     catch (ServiceException e)
     {
