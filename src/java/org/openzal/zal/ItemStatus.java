@@ -29,8 +29,8 @@ public class ItemStatus implements Serializable
 {
   private static final long serialVersionUID = 1522734297886684519L;
 
-  public int sequence;
-  public long date;
+  public final int sequence;
+  public final long date;
 
   public ItemStatus(int sequence, long date)
   {
@@ -41,7 +41,7 @@ public class ItemStatus implements Serializable
   @Override
   public String toString()
   {
-    return "sq: "+sequence+" dt: "+date;
+    return sequence+"@"+date;
   }
 
   @Override
