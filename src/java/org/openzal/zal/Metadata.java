@@ -26,7 +26,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Metadata
@@ -128,6 +130,17 @@ public class Metadata
 
   public Metadata put(String key, Object value)
   {
+    if( value instanceof Metadata )
+    {
+      mMetadata.put(key, ((Metadata)value).toZimbra(com.zimbra.cs.mailbox.Metadata.class));
+      return this;
+    }
+    if( value instanceof MetadataList )
+    {
+      mMetadata.put(key, ((MetadataList)value).toZimbra(com.zimbra.cs.mailbox.MetadataList.class));
+      return this;
+    }
+
     mMetadata.put(key, value);
     return this;
   }
@@ -135,6 +148,65 @@ public class Metadata
   protected <T> T toZimbra(Class<T> cls)
   {
     return cls.cast(mMetadata);
+  }
+
+  public int getInt(String key, int i)
+  {
+    try
+    {
+      String value = mMetadata.get(key);
+      if( value == null )
+      {
+        return i;
+      }
+      else
+      {
+        return Integer.valueOf(value);
+      }
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public short getShort(String key, short i)
+  {
+    try
+    {
+      String value = mMetadata.get(key);
+      if( value == null )
+      {
+        return i;
+      }
+      else
+      {
+        return Short.valueOf(value);
+      }
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void put(String key, List<Object> list )
+  {
+    mMetadata.put(key, list);
+  }
+
+  public MetadataList getList(String key)
+  {
+    try
+    {
+      Object obj = mMetadata.getList(key, true);
+      if( obj == null ) return new MetadataList();
+      return new MetadataList(obj);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
 
