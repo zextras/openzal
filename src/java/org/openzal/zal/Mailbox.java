@@ -1598,6 +1598,17 @@ public class Mailbox
     return new Message(message);
   }
 
+  public Contact getContactById(OperationContext octxt,int id)
+  {
+    try
+    {
+      return new Contact(mMbox.getContactById(octxt.getOperationContext(),id));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 
   @NotNull
   public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId, String tags)
