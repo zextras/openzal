@@ -102,5 +102,10 @@ public class ParsedContact
   {
     return ZimbraListWrapper.wrapAttachments(mParsedContact.getAttachments());
   }
+
+  public Map<String,String> getFields()
+  {
+    return mParsedContact.getFields();
+  }
 }
 
