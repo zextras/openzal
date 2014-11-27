@@ -176,13 +176,15 @@ class ZimbraContextImpl implements ZimbraContext
   @Override
   public String getTargetAccountId()
   {
-    return mZimbraSoapContext.getRequestedAccountId();
+    String accountId = mZimbraSoapContext.getRequestedAccountId();
+    return accountId == null ? "" : accountId;
   }
 
   @Override
   public String getAuthenticatedAccontId()
   {
-    return mZimbraSoapContext.getAuthtokenAccountId();
+    String accountId =  mZimbraSoapContext.getAuthtokenAccountId();
+    return accountId == null ? "" : accountId;
   }
 
   @Override

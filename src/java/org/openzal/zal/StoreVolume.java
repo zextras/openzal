@@ -305,6 +305,19 @@ public class StoreVolume
     }
 
     @Nullable
+    public static StoreVolume getVolumeByName(String volumeName)
+    {
+      for (StoreVolume storeVolume : StoreVolume.getAll())
+      {
+        if (storeVolume.getName().equals(volumeName))
+        {
+          return storeVolume;
+        }
+      }
+      return null;
+    }
+
+    @Nullable
     public static StoreVolume getCurrentSecondaryMessageVolume()
     {
       Volume vol;

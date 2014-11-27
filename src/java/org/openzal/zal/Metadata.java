@@ -130,6 +130,17 @@ public class Metadata
 
   public Metadata put(String key, Object value)
   {
+    if( value instanceof Metadata )
+    {
+      mMetadata.put(key, ((Metadata)value).toZimbra(com.zimbra.cs.mailbox.Metadata.class));
+      return this;
+    }
+    if( value instanceof MetadataList )
+    {
+      mMetadata.put(key, ((MetadataList)value).toZimbra(com.zimbra.cs.mailbox.MetadataList.class));
+      return this;
+    }
+
     mMetadata.put(key, value);
     return this;
   }
@@ -184,11 +195,13 @@ public class Metadata
     mMetadata.put(key, list);
   }
 
-  public List<Integer> getList(String key)
+  public MetadataList getList(String key)
   {
     try
     {
-      return mMetadata.getList(key, true).asList();
+      Object obj = mMetadata.getList(key, true);
+      if( obj == null ) return new MetadataList();
+      return new MetadataList(obj);
     }
     catch (ServiceException e)
     {

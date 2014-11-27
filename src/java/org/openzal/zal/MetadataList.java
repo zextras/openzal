@@ -20,6 +20,10 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
+import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
 public class MetadataList
 {
   private final com.zimbra.cs.mailbox.MetadataList mMetadataList;
@@ -29,15 +33,54 @@ public class MetadataList
     mMetadataList = new com.zimbra.cs.mailbox.MetadataList();
   }
 
+  public MetadataList( Object metadataList)
+  {
+    mMetadataList = (com.zimbra.cs.mailbox.MetadataList)metadataList;
+  }
+
   public MetadataList add(Object value) {
+
+    if( value instanceof Metadata )
+    {
+      mMetadataList.add(((Metadata)value).toZimbra(com.zimbra.cs.mailbox.Metadata.class));
+      return this;
+    }
+    if( value instanceof MetadataList )
+    {
+      mMetadataList.add(((MetadataList)value).toZimbra(com.zimbra.cs.mailbox.MetadataList.class));
+      return this;
+    }
+
     if (value != null) {
       mMetadataList.add(value);
     }
     return this;
   }
 
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mMetadataList);
+  }
+
   public String toString()
   {
     return mMetadataList.toString();
+  }
+
+  public Metadata getMap(int index)
+  {
+    try
+    {
+      return new Metadata(mMetadataList.getMap(index));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public int size()
+  {
+    return mMetadataList.size();
   }
 }
