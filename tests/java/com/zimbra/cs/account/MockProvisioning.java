@@ -127,6 +127,8 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     throws ServiceException
   {
     validate(ProvisioningValidator.CREATE_ACCOUNT, email, null, attrs);
+    attrs.put("password",password);
+
     if (!attrs.containsKey(A_zimbraId))
     {
       attrs.put(A_zimbraId, UUID.randomUUID().toString());
@@ -268,6 +270,7 @@ $endif $
     validate(ProvisioningValidator.CREATE_ACCOUNT, email, null, attrs);
 
     addBasicAccountAttrs( attrs );
+    attrs.put("password",password);
     Account account = new Account(email, email, attrs, null, this);
     try {
       name2account.put(email, account);
@@ -516,6 +519,9 @@ $endif $
   public void authAccount(Account acct, String password, Protocol proto)
   /* $endif $ */
   {
+    if( password.equals(acct.getAttr("password")) ) {
+      return;
+    }
     throw new UnsupportedOperationException();
   }
 
@@ -525,6 +531,9 @@ $endif $
   public void authAccount(Account acct, String password, Protocol proto, Map<String, Object> authCtxt)
   /* $endif $ */
   {
+    if( password.equals(acct.getAttr("password")) ) {
+      return;
+    }
     throw new UnsupportedOperationException();
   }
 

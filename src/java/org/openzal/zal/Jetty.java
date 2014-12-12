@@ -29,6 +29,13 @@ public final class Jetty
   @NotNull
   public static Continuation getContinuation( HttpServletRequest req )
   {
-    return new Continuation( req );
+    if( req.getClass().getName().contains("jetty") )
+    {
+      return new ContinuationJetty(req);
+    }
+    else
+    {
+      return new FakeContinuation(req);
+    }
   }
 }

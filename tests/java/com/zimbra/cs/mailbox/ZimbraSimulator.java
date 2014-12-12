@@ -149,6 +149,11 @@ public class ZimbraSimulator extends ExternalResource
     return new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
   }
 
+  public MockProvisioning getMockProvisioning()
+  {
+    return (MockProvisioning)com.zimbra.cs.account.Provisioning.getInstance();
+  }
+
   public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
   {
     return new org.openzal.zal.MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());

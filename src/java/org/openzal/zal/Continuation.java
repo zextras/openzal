@@ -20,142 +20,21 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
-
-/* $if MajorZimbraVersion < 8 $
-import org.mortbay.jetty.HttpConnection;
-import org.mortbay.util.ajax.ContinuationSupport;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-  $else$ */
-import org.eclipse.jetty.continuation.ContinuationSupport;
-/* $endif$ */
-
-import javax.servlet.http.HttpServletRequest;
-
-public class Continuation
+public interface Continuation
 {
-/* $if ZimbraVersion >= 8.0.0 $ */
-  org.eclipse.jetty.continuation.Continuation mContinuation;
-/* $else$
-  org.mortbay.util.ajax.Continuation mContinuation;
- $endif$ */
+  boolean isSuspended();
 
-  public Continuation(HttpServletRequest req)
-  {
-/* $if MajorZimbraVersion <= 7 $
-    mContinuation = ContinuationSupport.getContinuation( req, null );
-   $else$ */
-    mContinuation = ContinuationSupport.getContinuation(req);
-/* $endif$ */
-  }
+  void resume();
 
-  public boolean isSuspended()
-  {
-/* $if MajorZimbraVersion <= 7 $
-    return mContinuation.isPending();
-   $else$ */
-    return mContinuation.isSuspended();
-/* $endif$ */
-  }
+  boolean isInitial();
 
-  public void resume()
-  {
-    mContinuation.resume();
-  }
+  void suspend();
 
-  public boolean isInitial()
-  {
-/* $if MajorZimbraVersion <= 7 $
-    SelectChannelConnector.RetryContinuation retry = (SelectChannelConnector.RetryContinuation)mContinuation;
-    return !mContinuation.isResumed() && !retry.isExpired();
-   $else$ */
-    return mContinuation.isInitial();
-/* $endif$ */
-  }
+  void suspend(long timeoutMs) throws Error;
 
-  public void suspend()
-  {
-    suspend(0);
-  }
+  boolean isExpired();
 
-  public void suspend(long timeoutMs) throws Error
-  {
-    try
-    {
-/* $if MajorZimbraVersion <= 7 $
-      mContinuation.suspend(timeoutMs);
-   $else$ */
-      mContinuation.setTimeout(timeoutMs);
-      mContinuation.suspend();
-      mContinuation.undispatch();
-/* $endif$ */
-    }
-    catch (Throwable ex)
-    {
-      throw new ContinuationThrowable(ex);
-    }
-  }
+  void setObject(Object obj);
 
-  public boolean isExpired()
-  {
-/* $if MajorZimbraVersion <= 7 $
-      return !mContinuation.isPending();
-   $else$ */
-    return mContinuation.isExpired();
-/* $endif$ */
-  }
-
-  private static final String sAttributeKey = "ZAL";
-
-  public void setObject(Object obj)
-  {
-/* $if MajorZimbraVersion <= 7 $
-      mContinuation.setObject(obj);
-   $else$ */
-    mContinuation.setAttribute(sAttributeKey, obj);
-/* $endif$ */
-  }
-
-  public Object getObject()
-  {
-/* $if MajorZimbraVersion <= 7 $
-    return mContinuation.getObject();
-   $else$ */
-    return mContinuation.getAttribute(sAttributeKey);
-/* $endif$ */
-  }
-
-  @Override
-  public String toString()
-  {
-    return mContinuation.toString();
-  }
-
-  @Override
-  public boolean equals(@Nullable Object o)
-  {
-    if (this == o)
-    {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass())
-    {
-      return false;
-    }
-
-    Continuation that = (Continuation) o;
-
-    if (!mContinuation.equals(that.mContinuation))
-    {
-      return false;
-    }
-
-    return true;
-  }
-
-  @Override
-  public int hashCode()
-  {
-    return mContinuation.hashCode();
-  }
+  Object getObject();
 }
