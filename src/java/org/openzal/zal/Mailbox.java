@@ -577,7 +577,7 @@ public class Mailbox
     }
   }
 
-  @Nullable
+  @NotNull
   public CalendarItem getCalendarItemByUid(@NotNull OperationContext octxt, String uid)
     throws NoSuchCalendarException
   {
@@ -589,11 +589,6 @@ public class Mailbox
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
-    }
-
-    if (mailItem == null)
-    {
-      return null;
     }
 
     return new CalendarItem(mailItem);
