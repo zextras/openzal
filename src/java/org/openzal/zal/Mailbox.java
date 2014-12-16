@@ -1002,7 +1002,7 @@ public class Mailbox
 
   public List<CalendarItem> getCalendarItemsForRange(
     @NotNull OperationContext octxt, byte type, long start,
-                                                     long end, int folderId, int[] excludeFolders
+    long end, int folderId, int[] excludeFolders
   )
     throws ZimbraException
   {

@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zextras.mobile.v2.engine.ItemId;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemInfo extends ItemStatus
@@ -67,5 +68,10 @@ public class ItemInfo extends ItemStatus
       "itemId: " + itemId + " " +
       "sq: " + sequence + " " +
       "dt: "+date;
+  }
+
+  public ItemId getItemId()
+  {
+    return new ItemId(itemId);
   }
 }
