@@ -556,6 +556,19 @@ public class Provisioning
     }
   }
 
+  public Account getAccountByAccountIdOrItemId(String id)
+  {
+    int index = id.indexOf("/");
+    if (index > 0)
+    {
+      return getAccountById(id.substring(0, index));
+    }
+    else
+    {
+      return getAccountById(id);
+    }
+  }
+
   @Nullable
   public Account getAccountById(String accountId)
     throws ZimbraException

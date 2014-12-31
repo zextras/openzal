@@ -25,13 +25,11 @@ import java.io.*;
 import java.util.*;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.*;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
-
-import com.zimbra.cs.mailbox.MailItem;
 
 import org.openzal.zal.log.ZimbraLog;
 import org.jetbrains.annotations.NotNull;
@@ -749,11 +747,25 @@ $endif$ */
 
   public String[] getTags()
   {
-    /* $if MajorZimbraVersion >= 8 $ */
-    return mMailItem.getTags();
-    /* $else$
-      throw new UnsupportedOperationException();
-     $endif$ */
+/* $if MajorZimbraVersion >= 8 $ */
+      return mMailItem.getTags();
+/* $else$
+      OperationContext operationContext = getMailbox().newOperationContext();
+      int i = 0;
+      long tagBitmask = getTagBitmask();
+      List<String> tagList = new ArrayList<String>();
+      while (tagBitmask > 0)
+      {
+        if ((tagBitmask & (1L << i)) != 0)
+        {
+          Tag tag = getMailbox().getTagById(operationContext, i + 64);
+          tagList.add(tag.getName());
+        }
+        tagBitmask &= ~(1L << i);
+        i += 1;
+      }
+      return tagList.toArray(new String[tagList.size()]);
+   $endif$ */
   }
 
   public String getSubject()
