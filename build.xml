@@ -27,7 +27,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 1.5.1 </echo>
+    <echo> Building ZAL version 1.5.2 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -74,7 +74,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -94,47 +94,6 @@
 </target>
 
 
-<target name="zal-6.0.7-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.7/itbase/" />
-  <var name="itbase_build" value="build/6.0.7/itbase/" />
-  <var name="dist"  value="dist/6.0.7/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.7" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="7" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.7" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.7" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.8">
@@ -177,7 +136,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.8" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -197,47 +156,6 @@
 </target>
 
 
-<target name="zal-6.0.8-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.8/itbase/" />
-  <var name="itbase_build" value="build/6.0.8/itbase/" />
-  <var name="dist"  value="dist/6.0.8/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.8" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="8" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.8" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.8" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.9">
@@ -280,7 +198,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.9" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -300,47 +218,6 @@
 </target>
 
 
-<target name="zal-6.0.9-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.9/itbase/" />
-  <var name="itbase_build" value="build/6.0.9/itbase/" />
-  <var name="dist"  value="dist/6.0.9/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.9" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="9" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.9" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.9" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.10">
@@ -383,7 +260,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.10" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -403,47 +280,6 @@
 </target>
 
 
-<target name="zal-6.0.10-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.10/itbase/" />
-  <var name="itbase_build" value="build/6.0.10/itbase/" />
-  <var name="dist"  value="dist/6.0.10/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.10" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="10" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.10" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.10" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.12">
@@ -486,7 +322,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.12" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -506,47 +342,6 @@
 </target>
 
 
-<target name="zal-6.0.12-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.12/itbase/" />
-  <var name="itbase_build" value="build/6.0.12/itbase/" />
-  <var name="dist"  value="dist/6.0.12/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.12" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="12" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.12" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.12" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.13">
@@ -589,7 +384,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.13" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -609,47 +404,6 @@
 </target>
 
 
-<target name="zal-6.0.13-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.13/itbase/" />
-  <var name="itbase_build" value="build/6.0.13/itbase/" />
-  <var name="dist"  value="dist/6.0.13/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.13" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="13" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.13" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.13" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.14">
@@ -692,7 +446,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.14" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -712,47 +466,6 @@
 </target>
 
 
-<target name="zal-6.0.14-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.14/itbase/" />
-  <var name="itbase_build" value="build/6.0.14/itbase/" />
-  <var name="dist"  value="dist/6.0.14/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.14" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="14" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.14" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.14" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.15">
@@ -795,7 +508,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.15" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -815,47 +528,6 @@
 </target>
 
 
-<target name="zal-6.0.15-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.15/itbase/" />
-  <var name="itbase_build" value="build/6.0.15/itbase/" />
-  <var name="dist"  value="dist/6.0.15/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.15" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="15" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.15" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.15" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-6.0.16">
@@ -898,7 +570,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="6.0.16" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -918,47 +590,6 @@
 </target>
 
 
-<target name="zal-6.0.16-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/6.0.16/itbase/" />
-  <var name="itbase_build" value="build/6.0.16/itbase/" />
-  <var name="dist"  value="dist/6.0.16/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="6.0.16" />
-    <var name="MajorZimbraVersion"  value="6" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="16" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-6.0.16" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="6.0.16" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.0.0">
@@ -1001,7 +632,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1021,47 +652,6 @@
 </target>
 
 
-<target name="zal-7.0.0-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.0.0/itbase/" />
-  <var name="itbase_build" value="build/7.0.0/itbase/" />
-  <var name="dist"  value="dist/7.0.0/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.0.0" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="0" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.0.0" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.0.0" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.0.1">
@@ -1104,7 +694,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1124,47 +714,6 @@
 </target>
 
 
-<target name="zal-7.0.1-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.0.1/itbase/" />
-  <var name="itbase_build" value="build/7.0.1/itbase/" />
-  <var name="dist"  value="dist/7.0.1/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.0.1" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="1" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.0.1" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.0.1" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.1.0">
@@ -1207,7 +756,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1227,47 +776,6 @@
 </target>
 
 
-<target name="zal-7.1.0-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.1.0/itbase/" />
-  <var name="itbase_build" value="build/7.1.0/itbase/" />
-  <var name="dist"  value="dist/7.1.0/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.1.0" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="1" />
-    <var name="MinorZimbraVersion"  value="0" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.1.0" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.1.0" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.1.1">
@@ -1310,7 +818,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1330,47 +838,6 @@
 </target>
 
 
-<target name="zal-7.1.1-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.1.1/itbase/" />
-  <var name="itbase_build" value="build/7.1.1/itbase/" />
-  <var name="dist"  value="dist/7.1.1/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.1.1" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="1" />
-    <var name="MinorZimbraVersion"  value="1" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.1.1" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.1.1" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.1.2">
@@ -1413,7 +880,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1433,47 +900,6 @@
 </target>
 
 
-<target name="zal-7.1.2-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.1.2/itbase/" />
-  <var name="itbase_build" value="build/7.1.2/itbase/" />
-  <var name="dist"  value="dist/7.1.2/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.1.2" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="1" />
-    <var name="MinorZimbraVersion"  value="2" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.1.2" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.1.2" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.1.3">
@@ -1516,7 +942,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1536,47 +962,6 @@
 </target>
 
 
-<target name="zal-7.1.3-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.1.3/itbase/" />
-  <var name="itbase_build" value="build/7.1.3/itbase/" />
-  <var name="dist"  value="dist/7.1.3/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.1.3" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="1" />
-    <var name="MinorZimbraVersion"  value="3" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.1.3" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.1.3" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.1.4">
@@ -1619,7 +1004,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.1.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1639,47 +1024,6 @@
 </target>
 
 
-<target name="zal-7.1.4-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.1.4/itbase/" />
-  <var name="itbase_build" value="build/7.1.4/itbase/" />
-  <var name="dist"  value="dist/7.1.4/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.1.4" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="1" />
-    <var name="MinorZimbraVersion"  value="4" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.1.4" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.1.4" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.0">
@@ -1722,7 +1066,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1742,47 +1086,6 @@
 </target>
 
 
-<target name="zal-7.2.0-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.0/itbase/" />
-  <var name="itbase_build" value="build/7.2.0/itbase/" />
-  <var name="dist"  value="dist/7.2.0/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.0" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="0" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.0" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.0" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.1">
@@ -1825,7 +1128,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1845,47 +1148,6 @@
 </target>
 
 
-<target name="zal-7.2.1-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.1/itbase/" />
-  <var name="itbase_build" value="build/7.2.1/itbase/" />
-  <var name="dist"  value="dist/7.2.1/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.1" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="1" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.1" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.1" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.2">
@@ -1928,7 +1190,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -1948,47 +1210,6 @@
 </target>
 
 
-<target name="zal-7.2.2-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.2/itbase/" />
-  <var name="itbase_build" value="build/7.2.2/itbase/" />
-  <var name="dist"  value="dist/7.2.2/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.2" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="2" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.2" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.2" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.3">
@@ -2031,7 +1252,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2051,47 +1272,6 @@
 </target>
 
 
-<target name="zal-7.2.3-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.3/itbase/" />
-  <var name="itbase_build" value="build/7.2.3/itbase/" />
-  <var name="dist"  value="dist/7.2.3/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.3" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="3" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.3" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.3" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.4">
@@ -2134,7 +1314,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2154,47 +1334,6 @@
 </target>
 
 
-<target name="zal-7.2.4-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.4/itbase/" />
-  <var name="itbase_build" value="build/7.2.4/itbase/" />
-  <var name="dist"  value="dist/7.2.4/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.4" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="4" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.4" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.4" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.5">
@@ -2237,7 +1376,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2257,47 +1396,6 @@
 </target>
 
 
-<target name="zal-7.2.5-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.5/itbase/" />
-  <var name="itbase_build" value="build/7.2.5/itbase/" />
-  <var name="dist"  value="dist/7.2.5/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.5" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="5" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.5" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.5" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.6">
@@ -2340,7 +1438,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2360,47 +1458,6 @@
 </target>
 
 
-<target name="zal-7.2.6-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.6/itbase/" />
-  <var name="itbase_build" value="build/7.2.6/itbase/" />
-  <var name="dist"  value="dist/7.2.6/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.6" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="6" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.6" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.6" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-7.2.7">
@@ -2443,7 +1500,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="7.2.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2463,47 +1520,6 @@
 </target>
 
 
-<target name="zal-7.2.7-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/7.2.7/itbase/" />
-  <var name="itbase_build" value="build/7.2.7/itbase/" />
-  <var name="dist"  value="dist/7.2.7/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="7.2.7" />
-    <var name="MajorZimbraVersion"  value="7" />
-    <var name="MiddleZimbraVersion" value="2" />
-    <var name="MinorZimbraVersion"  value="7" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-7.2.7" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="7.2.7" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.0">
@@ -2546,7 +1562,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2566,47 +1582,6 @@
 </target>
 
 
-<target name="zal-8.0.0-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.0/itbase/" />
-  <var name="itbase_build" value="build/8.0.0/itbase/" />
-  <var name="dist"  value="dist/8.0.0/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.0" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="0" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.0" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.0" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.1">
@@ -2649,7 +1624,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2669,47 +1644,6 @@
 </target>
 
 
-<target name="zal-8.0.1-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.1/itbase/" />
-  <var name="itbase_build" value="build/8.0.1/itbase/" />
-  <var name="dist"  value="dist/8.0.1/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.1" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="1" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.1" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.1" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.2">
@@ -2752,7 +1686,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.2" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2772,47 +1706,6 @@
 </target>
 
 
-<target name="zal-8.0.2-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.2/itbase/" />
-  <var name="itbase_build" value="build/8.0.2/itbase/" />
-  <var name="dist"  value="dist/8.0.2/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.2" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="2" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.2" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.2" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.3">
@@ -2855,7 +1748,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.3" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2875,47 +1768,6 @@
 </target>
 
 
-<target name="zal-8.0.3-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.3/itbase/" />
-  <var name="itbase_build" value="build/8.0.3/itbase/" />
-  <var name="dist"  value="dist/8.0.3/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.3" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="3" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.3" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.3" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.4">
@@ -2958,7 +1810,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.4" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -2978,47 +1830,6 @@
 </target>
 
 
-<target name="zal-8.0.4-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.4/itbase/" />
-  <var name="itbase_build" value="build/8.0.4/itbase/" />
-  <var name="dist"  value="dist/8.0.4/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.4" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="4" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.4" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.4" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.5">
@@ -3061,7 +1872,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.5" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3081,47 +1892,6 @@
 </target>
 
 
-<target name="zal-8.0.5-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.5/itbase/" />
-  <var name="itbase_build" value="build/8.0.5/itbase/" />
-  <var name="dist"  value="dist/8.0.5/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.5" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="5" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.5" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.5" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.6">
@@ -3164,7 +1934,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.6" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3184,47 +1954,6 @@
 </target>
 
 
-<target name="zal-8.0.6-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.6/itbase/" />
-  <var name="itbase_build" value="build/8.0.6/itbase/" />
-  <var name="dist"  value="dist/8.0.6/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.6" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="6" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.6" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.6" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.7">
@@ -3267,7 +1996,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.7" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3287,47 +2016,6 @@
 </target>
 
 
-<target name="zal-8.0.7-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.7/itbase/" />
-  <var name="itbase_build" value="build/8.0.7/itbase/" />
-  <var name="dist"  value="dist/8.0.7/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.7" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="7" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.7" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.7" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.8">
@@ -3370,7 +2058,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.8" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3390,47 +2078,6 @@
 </target>
 
 
-<target name="zal-8.0.8-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.8/itbase/" />
-  <var name="itbase_build" value="build/8.0.8/itbase/" />
-  <var name="dist"  value="dist/8.0.8/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.8" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="8" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.8" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.8" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.0.9">
@@ -3473,7 +2120,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.0.9" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3493,47 +2140,6 @@
 </target>
 
 
-<target name="zal-8.0.9-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.0.9/itbase/" />
-  <var name="itbase_build" value="build/8.0.9/itbase/" />
-  <var name="dist"  value="dist/8.0.9/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.0.9" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="0" />
-    <var name="MinorZimbraVersion"  value="9" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.0.9" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.0.9" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.5.0">
@@ -3576,7 +2182,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.5.0" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3596,47 +2202,6 @@
 </target>
 
 
-<target name="zal-8.5.0-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.5.0/itbase/" />
-  <var name="itbase_build" value="build/8.5.0/itbase/" />
-  <var name="dist"  value="dist/8.5.0/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.5.0" />
-    <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="5" />
-    <var name="MinorZimbraVersion"  value="0" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-8.5.0" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="-Xlint:none" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.5.0" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
-</target>
 
 
 <path id="zimbra-jars-8.5.1">
@@ -3679,7 +2244,7 @@
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="8.5.1" />
       <attribute name="Created-By" value="ZeXtras" />
@@ -3699,51 +2264,72 @@
 </target>
 
 
-<target name="zal-8.5.1-itbase"  description="create test jar" depends="init">
 
-  <var name="itbase_tmpsrc"  value="tmpsrc/8.5.1/itbase/" />
-  <var name="itbase_build" value="build/8.5.1/itbase/" />
-  <var name="dist"  value="dist/8.5.1/"/>
 
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
+<path id="zimbra-jars-8.6.0">
+    <fileset dir="zimbra-jars/8.6.0/" >
+        <include name="*.jar"/>
+    </fileset>
+</path>
 
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="8.5.1" />
+<target name="zal-8.6.0"  description="create jar" depends="init">
+
+  <var name="tmpsrc"  value="tmpsrc/8.6.0/jar/" />
+  <var name="build" value="build/8.6.0/jar/" />
+  <var name="dist"  value="dist/8.6.0/"/>
+
+  <mkdir dir="${tmpsrc}"/>
+  <mkdir dir="${build}"/>
+  <mkdir dir="${dist}"/>
+
+  <echo>Creating zal JAR for zimbra 8.6.0 ...</echo>
+
+  <echo>Preprocessing...</echo>
+  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.6.0" />
     <var name="MajorZimbraVersion"  value="8" />
-    <var name="MiddleZimbraVersion" value="5" />
-    <var name="MinorZimbraVersion"  value="1" />
+    <var name="MiddleZimbraVersion" value="6" />
+    <var name="MinorZimbraVersion"  value="0" />
     <filetype commentend="*/" commentbegin="/*" extensions="java"/>
   </preprocess>
 
-  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
     <classpath>
-      <path refid="zimbra-jars-8.5.1" />
+      <path refid="zimbra-jars-8.6.0" />
       <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
+      <pathelement path="${build}" />
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <delete dir="${tmpsrc}/"/>
 
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
     <manifest>
       <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="1.5.1" />
+      <attribute name="Specification-Version" value="1.5.2" />
       <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="8.5.1" />
+      <attribute name="Implementation-Version" value="8.6.0" />
       <attribute name="Created-By" value="ZeXtras" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
     </manifest>
-    <fileset dir="${itbase_build}" />
+    <fileset dir="${build}" />
   </jar>
+
+  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
+    <classpath>
+      <pathelement location="${dist}/zal.jar.unsigned" />
+    </classpath>
+    <arg value="${dist}/zal.jar" />
+  </java>
+
+  <delete file="${dist}/zal.jar.unsigned" />
 </target>
 
 
-  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.5.1" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1" />
+
+
+  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.5.1,zal-8.6.0" />
+  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
