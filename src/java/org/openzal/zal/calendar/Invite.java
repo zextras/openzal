@@ -115,7 +115,15 @@ public class Invite
 
   public String getLocation()
   {
-    return mInvite.getLocation();
+    String location = mInvite.getLocation();
+    if( location == null )
+    {
+      return "";
+    }
+    else
+    {
+      return location;
+    }
   }
 
   public long getUtcDateCompleted()
@@ -422,7 +430,7 @@ public class Invite
     return mInvite.getMethod();
   }
 
-  @Nullable
+  @NotNull
   public RecurrenceId getRecurId()
   {
     if (mInvite.hasRecurId())
