@@ -564,6 +564,22 @@ public class Mailbox
   }
 
   @NotNull
+  public Mountpoint getMountpointById(@NotNull OperationContext octxt, int id)
+  {
+    MailItem mountpoint;
+    try
+    {
+      mountpoint = mMbox.getMountpointById(octxt.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Mountpoint(mountpoint);
+  }
+
+  @NotNull
   public CalendarItem getCalendarItemById(@NotNull OperationContext octxt, int id)
     throws NoSuchCalendarException
   {
