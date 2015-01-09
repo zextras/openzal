@@ -2606,7 +2606,7 @@ public class Mailbox
     String updateQuery = "UPDATE " + DbMailbox.qualifyZimbraTableName(
       mMbox,
       "mailbox_metadata"
-    ) + " SET metadata=? WHERE mailbox_id=? AND section=? LIMIT 1";
+    ) + " SET metadata=? WHERE mailbox_id=? AND section=?";
     Connection connection = null;
     try
     {
@@ -2621,7 +2621,8 @@ public class Mailbox
       if (res == 0)
       {
         //REPLACE works only on mysql
-        String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        //String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
 
         PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
         insertStatement.setInt(1, getId());
