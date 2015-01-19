@@ -1008,5 +1008,17 @@ public class Account extends Entry
   {
     return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
   }
+
+  public boolean checkAuthTokenValidityValue(AuthToken authToken)
+  {
+    try
+    {
+      return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 
