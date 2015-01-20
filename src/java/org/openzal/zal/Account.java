@@ -1009,11 +1009,15 @@ public class Account extends Entry
     return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
   }
 
-  public boolean checkAuthTokenValidityValue(AuthToken authToken)
+  public boolean checkAuthTokenValidityValue(Provisioning provisioning, AuthToken authToken)
   {
     try
     {
+      /* $if ZimbraVersion > 6.0.7 $ */
       return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+      /* $else $
+      return com.zimbra.cs.service.AuthProvider.checkAuthTokenValidityValue(provisioning, this, authToken);
+      /* $endif $ */
     }
     catch (ServiceException e)
     {

@@ -73,4 +73,16 @@ public class AuthToken
   {
     return cls.cast(mAuthToken);
   }
+
+  public String getEncoded()
+  {
+    try
+    {
+      return mAuthToken.getEncoded();
+    }
+    catch (AuthTokenException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
