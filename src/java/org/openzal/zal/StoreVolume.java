@@ -337,6 +337,12 @@ public class StoreVolume
       }
     }
 
+
+    public static boolean hasSecondaryMessageVolume()
+    {
+      return getCurrentSecondaryMessageVolume() != null;
+    }
+
     public static List<StoreVolume> getByType(short type)
     {
 /*  $if MajorZimbraVersion <= 7 $

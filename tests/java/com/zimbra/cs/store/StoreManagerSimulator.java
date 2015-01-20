@@ -1,5 +1,7 @@
 package com.zimbra.cs.store;
 
+import com.zextras.lib.Error.MissingReadPermissions;
+import com.zextras.lib.Error.MissingWritePermissions;
 import com.zextras.lib.vfs.FileStreamWriter;
 import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
@@ -71,6 +73,10 @@ public final class StoreManagerSimulator extends StoreManager {
     {
       throw new RuntimeException(e);
     }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new RuntimeException(missingWritePermissions);
+    }
   }
 
   public BlobBuilder getBlobBuilder()
@@ -86,7 +92,15 @@ public final class StoreManagerSimulator extends StoreManager {
     MockBlob mockblob = new MockBlob();
     mockblob.setFile(file);
 
-    OutputStream writer = file.openOutputStreamWrapper();
+    OutputStream writer;
+    try
+    {
+      writer = file.openOutputStreamWrapper();
+    }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new IOException(missingWritePermissions);
+    }
     try
     {
       IOUtils.copy(data, writer);
@@ -231,6 +245,10 @@ public final class StoreManagerSimulator extends StoreManager {
     {
       throw new RuntimeException(e);
     }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new RuntimeException(missingWritePermissions);
+    }
 
     MockBlob mockBlob = new MockBlob();
     mockBlob.setFile(destinationFile);
@@ -300,12 +318,23 @@ public final class StoreManagerSimulator extends StoreManager {
     {
       throw new RuntimeException(e);
     }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new RuntimeException(missingWritePermissions);
+    }
     return newBlob;
   }
 
   public boolean delete(Blob blob) throws IOException
   {
-    ((MockBlob)blob).getVirtualFile().remove();
+    try
+    {
+      ((MockBlob)blob).getVirtualFile().remove();
+    }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new IOException(missingWritePermissions);
+    }
     return true;
   }
 
@@ -318,6 +347,10 @@ public final class StoreManagerSimulator extends StoreManager {
     catch (IOException e)
     {
       throw new RuntimeException(e);
+    }
+    catch (MissingWritePermissions missingWritePermissions)
+    {
+      throw new RuntimeException(missingWritePermissions);
     }
     return true;
   }
@@ -392,7 +425,14 @@ public final class StoreManagerSimulator extends StoreManager {
 
     public InputStream getInputStream() throws IOException
     {
-      return mFile.openInputStreamWrapper();
+      try
+      {
+        return mFile.openInputStreamWrapper();
+      }
+      catch (MissingReadPermissions missingReadPermissions)
+      {
+        throw new IOException(missingReadPermissions);
+      }
     }
 
     public long getRawSize()
@@ -486,7 +526,15 @@ public final class StoreManagerSimulator extends StoreManager {
           UUID.randomUUID().toString()
         );
         mockblob.setFile(file);
-        FileStreamWriter writer = file.openWriterStream();
+        FileStreamWriter writer = null;
+        try
+        {
+          writer = file.openWriterStream();
+        }
+        catch (MissingWritePermissions missingWritePermissions)
+        {
+          throw new IOException(missingWritePermissions);
+        }
         try
         {
           writer.write(Unpooled.wrappedBuffer(content));

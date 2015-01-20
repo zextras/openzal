@@ -3745,8 +3745,111 @@
 </target>
 
 
-  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.5.1" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1" />
+<path id="zimbra-jars-8.6.0">
+    <fileset dir="../build-commons/zimbra-jars/zimbra-jars-8.6.0/" >
+        <include name="*.jar"/>
+    </fileset>
+</path>
+
+<target name="zal-8.6.0"  description="create jar" depends="init">
+
+  <var name="tmpsrc"  value="tmpsrc/8.6.0/jar/" />
+  <var name="build" value="build/8.6.0/jar/" />
+  <var name="dist"  value="dist/8.6.0/"/>
+
+  <mkdir dir="${tmpsrc}"/>
+  <mkdir dir="${build}"/>
+  <mkdir dir="${dist}"/>
+
+  <echo>Creating zal JAR for zimbra 8.6.0 ...</echo>
+
+  <echo>Preprocessing...</echo>
+  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.6.0" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="6" />
+    <var name="MinorZimbraVersion"  value="0" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.6.0" />
+      <path refid="libraries" />
+      <pathelement path="${build}" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+  <delete dir="${tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.2" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.6.0" />
+      <attribute name="Created-By" value="ZeXtras" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
+    </manifest>
+    <fileset dir="${build}" />
+  </jar>
+
+  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
+    <classpath>
+      <pathelement location="${dist}/zal.jar.unsigned" />
+    </classpath>
+    <arg value="${dist}/zal.jar" />
+  </java>
+
+  <delete file="${dist}/zal.jar.unsigned" />
+</target>
+
+
+<target name="zal-8.6.0-itbase"  description="create test jar" depends="init">
+
+  <var name="itbase_tmpsrc"  value="tmpsrc/8.6.0/itbase/" />
+  <var name="itbase_build" value="build/8.6.0/itbase/" />
+  <var name="dist"  value="dist/8.6.0/"/>
+
+  <mkdir dir="${itbase_tmpsrc}"/>
+  <mkdir dir="${itbase_build}"/>
+
+  <echo>Preprocessing ZAL test library...</echo>
+  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+    <var name="ZimbraVersion" value="8.6.0" />
+    <var name="MajorZimbraVersion"  value="8" />
+    <var name="MiddleZimbraVersion" value="6" />
+    <var name="MinorZimbraVersion"  value="0" />
+    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+  </preprocess>
+
+  <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+    <classpath>
+      <path refid="zimbra-jars-8.6.0" />
+      <path refid="libraries" />
+      <pathelement location="${dist}/zal.jar" />
+      <pathelement location="../dist/zextras.jar" />
+    </classpath>
+   <compilerarg value="-Xlint:none" />
+  </javac>
+
+  <delete dir="${itbase_tmpsrc}/"/>
+
+  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+    <manifest>
+      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+      <attribute name="Specification-Version" value="1.5.2" />
+      <attribute name="Specification-Vendor" value="ZeXtras" />
+      <attribute name="Implementation-Version" value="8.6.0" />
+      <attribute name="Created-By" value="ZeXtras" />
+    </manifest>
+    <fileset dir="${itbase_build}" />
+  </jar>
+</target>
+
+
+  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.6.0" />
+  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -3772,7 +3875,7 @@
       </else>
     </if>
 
-    <for list="6.0.16,7.2.7,8.0.8,8.5.0" param="currentZimbraVersion">
+    <for list="6.0.16,7.2.7,8.0.8,8.5.0,8.6.0" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -3792,7 +3895,7 @@
     <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.5.1/zal.jar"/>
+      <arg value="dist/8.6.0/zal.jar"/>
       <arg value="dist/6.0.7/zal.jar"/>
     </exec>
   </target>
@@ -3809,7 +3912,7 @@
       </else>
     </if>
 
-    <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1" param="currentZimbraVersion">
+    <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -3829,7 +3932,7 @@
     <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.5.1/zal.jar"/>
+      <arg value="dist/8.6.0/zal.jar"/>
       <arg value="dist/6.0.7/zal.jar"/>
     </exec>
   </target>
