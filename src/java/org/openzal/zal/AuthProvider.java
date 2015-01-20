@@ -21,7 +21,6 @@
 package org.openzal.zal;
 
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.service.AuthProviderException;
@@ -33,14 +32,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class AuthProvider
 {
-  private final Provisioning mProvisioning;
-
-  @Inject
-  public AuthProvider(Provisioning provisioning)
-  {
-    mProvisioning = provisioning;
-  }
-
   @NotNull
   public static ZAuthToken getAuthToken(@NotNull Account requester)
   {
@@ -87,10 +78,5 @@ public class AuthProvider
     {
       throw ExceptionWrapper.wrap(e);
     }
-  }
-
-  public boolean checkAuthTokenValidityValue(Account account, AuthToken authToken)
-  {
-    return account.checkAuthTokenValidityValue(mProvisioning, authToken);
   }
 }
