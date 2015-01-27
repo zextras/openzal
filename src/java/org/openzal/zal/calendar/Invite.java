@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.CalendarItem;
+import org.openzal.zal.Item;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
 import org.openzal.zal.ZimbraListWrapper;
@@ -30,6 +31,7 @@ import com.zimbra.common.service.ServiceException;
 
 import javax.mail.internet.MimeMessage;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.*;
 import org.openzal.zal.log.ZimbraLog;
 
@@ -520,10 +522,13 @@ public class Invite
 
   private Attendee convertAttendee(ZAttendee attendee)
   {
+    AttendeeType type = AttendeeType.fromString(attendee.getRole());
+
     return new Attendee(
       attendee.getAddress(),
       attendee.getCn(),
-      AttendeeInviteStatus.fromZimbra(attendee.getPartStat())
+      AttendeeInviteStatus.fromZimbra(attendee.getPartStat()),
+      type
     );
   }
 
@@ -700,5 +705,29 @@ public class Invite
   {
     ZCalendar.ICalTok method = ZCalendar.ICalTok.lookup( mInvite.getMethod() );
    return method == ZCalendar.ICalTok.CANCEL;
+  }
+
+  public String getBody()
+  {
+    try
+    {
+      return new String(mInvite.getCalendarItem().getContent(), Charset.defaultCharset());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<String> getTags()
+  {
+    try
+    {
+      return Arrays.asList(new Item(mInvite.getCalendarItem()).getTags());
+    }
+    catch (Throwable t)
+    {
+      return Collections.emptyList();
+    }
   }
 }

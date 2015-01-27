@@ -22,6 +22,7 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Attendee
 {
@@ -40,13 +41,26 @@ public class Attendee
     return mStatus;
   }
 
+  @Nullable
+  public AttendeeType getType()
+  {
+    return mType;
+  }
+
+  private final AttendeeType         mType;
   private final String               mAddress;
   private final String               mName;
   private final AttendeeInviteStatus mStatus;
 
   public Attendee(String address, String name, AttendeeInviteStatus status)
   {
-    mAddress = (address == null) ? "" : address.replaceAll(";","");
+    this(address, name, status, null);
+  }
+
+  public Attendee(String address, String name, AttendeeInviteStatus status, AttendeeType type)
+  {
+    mType = type;
+    mAddress = (address == null) ? "" : address.replaceAll(";", "");
     mName = (name == null) ? "" : name;
     mStatus = status;
   }
