@@ -210,21 +210,6 @@ public class Mailbox
   }
 
   @NotNull
-  public OperationContext newContext()
-  {
-    try
-    {
-      return new OperationContext(
-        new com.zimbra.cs.mailbox.OperationContext(mMbox)
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @NotNull
   public com.zimbra.cs.mailbox.Mailbox getMailbox()
   {
     return mMbox;
