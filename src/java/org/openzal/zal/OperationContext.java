@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.calendar.Attendee;
 
 
 public class OperationContext
@@ -52,5 +53,10 @@ public class OperationContext
   com.zimbra.cs.mailbox.OperationContext getOperationContext()
   {
     return mOperationContext;
+  }
+
+  public Account getAccount()
+  {
+    return new Account(mOperationContext.getAuthenticatedUser());
   }
 }

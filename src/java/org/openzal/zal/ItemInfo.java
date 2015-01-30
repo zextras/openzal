@@ -68,4 +68,9 @@ public class ItemInfo extends ItemStatus
       "sq: " + sequence + " " +
       "dt: "+date;
   }
+
+  public int getItemId()
+  {
+    return itemId;
+  }
 }

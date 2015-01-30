@@ -564,6 +564,22 @@ public class Mailbox
   }
 
   @NotNull
+  public Mountpoint getMountpointById(@NotNull OperationContext octxt, int id)
+  {
+    MailItem mountpoint;
+    try
+    {
+      mountpoint = mMbox.getMountpointById(octxt.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Mountpoint(mountpoint);
+  }
+
+  @NotNull
   public CalendarItem getCalendarItemById(@NotNull OperationContext octxt, int id)
     throws NoSuchCalendarException
   {
@@ -577,7 +593,7 @@ public class Mailbox
     }
   }
 
-  @Nullable
+  @NotNull
   public CalendarItem getCalendarItemByUid(@NotNull OperationContext octxt, String uid)
     throws NoSuchCalendarException
   {
@@ -589,11 +605,6 @@ public class Mailbox
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
-    }
-
-    if (mailItem == null)
-    {
-      return null;
     }
 
     return new CalendarItem(mailItem);
@@ -991,7 +1002,7 @@ public class Mailbox
 
   public List<CalendarItem> getCalendarItemsForRange(
     @NotNull OperationContext octxt, byte type, long start,
-                                                     long end, int folderId, int[] excludeFolders
+    long end, int folderId, int[] excludeFolders
   )
     throws ZimbraException
   {
@@ -2595,7 +2606,7 @@ public class Mailbox
     String updateQuery = "UPDATE " + DbMailbox.qualifyZimbraTableName(
       mMbox,
       "mailbox_metadata"
-    ) + " SET metadata=? WHERE mailbox_id=? AND section=? LIMIT 1";
+    ) + " SET metadata=? WHERE mailbox_id=? AND section=?";
     Connection connection = null;
     try
     {
@@ -2610,7 +2621,8 @@ public class Mailbox
       if (res == 0)
       {
         //REPLACE works only on mysql
-        String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        //String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
 
         PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
         insertStatement.setInt(1, getId());
