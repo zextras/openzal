@@ -289,6 +289,8 @@ $endif $
     // validate("createAccountCheckDomainCosAndFeature", email, attrs);
 
     addBasicAccountAttrs( attrs );
+    attrs.put("password",password);
+
     Account account = new Account(email, email, attrs, null, this);
     try {
       name2account.put(email, account);
