@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zextras.mobile.v2.it.base.ContinuationHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,13 +30,13 @@ public final class Jetty
   @NotNull
   public static Continuation getContinuation( HttpServletRequest req )
   {
-    if( req.getClass().getName().contains("jetty") )
+    if( req instanceof ContinuationHttpServletRequest)
     {
-      return new ContinuationJetty(req);
+      return ((ContinuationHttpServletRequest)req).getContinuation();
     }
     else
     {
-      return new FakeContinuation(req);
+      return new ContinuationJetty(req);
     }
   }
 }
