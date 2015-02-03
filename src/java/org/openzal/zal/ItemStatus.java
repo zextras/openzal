@@ -21,10 +21,14 @@
 package org.openzal.zal;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
+@JsonSerialize(using = ToStringSerializer.class)
 public class ItemStatus implements Serializable
 {
   private static final long serialVersionUID = 1522734297886684519L;
@@ -36,6 +40,16 @@ public class ItemStatus implements Serializable
   {
     this.sequence = sequence;
     this.date = date;
+  }
+
+  @JsonCreator
+  public static ItemStatus fromString(String value)
+  {
+    String[] values = value.split("@");
+    return new ItemStatus(
+      Integer.valueOf(values[0]),
+      Long.valueOf(values[1])
+    );
   }
 
   @Override
