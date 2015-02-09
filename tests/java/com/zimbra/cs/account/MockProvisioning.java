@@ -71,7 +71,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   private int mCounter = 1;
 
-  public MockProvisioning() throws ServiceException
+  public MockProvisioning()
   {
     Map<String, Object> attrs = new HashMap<String, Object>();
     attrs.put(A_zimbraServiceHostname, "localhost");
@@ -89,7 +89,14 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     HashMap<String, Object> zimbraAttrs = new HashMap<String, Object>();
     zimbraAttrs.put(A_zimbraId, org.openzal.zal.Provisioning.ZIMBRA_USER_ID);
     zimbraAttrs.put(A_zimbraIsAdminAccount, "TRUE");
-    createAccount("zimbra", "", zimbraAttrs);
+    try
+    {
+      createAccount("zimbra", "", zimbraAttrs);
+    }
+    catch (ServiceException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
 /* $if ZimbraVersion >= 8.5.0 $ */
@@ -599,7 +606,11 @@ $endif $
       attrs.put(A_zimbraSmtpHostname, "localhost");
     }
 
-    Domain domain = new Domain(name, id, attrs, null, this);
+    Domain domain = new Domain(name, id, attrs, null, this){
+      public String getGalSearchBase(String searchBaseSpec) throws ServiceException {
+        return searchBaseSpec;
+      }
+    };
     id2domain.put(id, domain);
     name2domain.put(name, domain);
     return domain;
