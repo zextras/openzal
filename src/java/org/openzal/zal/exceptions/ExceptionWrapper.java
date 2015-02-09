@@ -296,6 +296,15 @@ public class ExceptionWrapper
         return new ZimbraException(exception);
       }
     });
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.IMMUTABLE_OBJECT, new ExceptionWrapperCreator()
+      {
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new ImmutableChangeAttempt(exception);
+        }
+      }
+    );
   }
 
   public static ZimbraException wrap(Exception exception)
