@@ -168,4 +168,9 @@ $endif$ */
   {
     return mMessage.getConversationId();
   }
+
+  public boolean isFlagged()
+  {
+    return (getFlagBitmask() & Flag.BITMASK_FLAGGED) == Flag.BITMASK_FLAGGED;
+  }
 }
