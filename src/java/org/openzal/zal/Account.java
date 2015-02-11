@@ -381,7 +381,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return new PrefExternalSendersType(mAccount.getPrefExternalSendersType());
     /* $else $
-    throw new UnsupportedOperationException();
+    return PrefExternalSendersType.ALL;
     /* $endif $ */
   }
 
@@ -485,7 +485,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.getPrefOutOfOfficeExternalReply();
     /* $else $
-    throw new UnsupportedOperationException();
+    return mAccount.getPrefOutOfOfficeReply();
     /* $endif $ */
   }
 
@@ -870,7 +870,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
     /* $else $
-    return false;
+    return mAccount.isPrefOutOfOfficeReplyEnabled();
     /* $endif $ */
   }
 
