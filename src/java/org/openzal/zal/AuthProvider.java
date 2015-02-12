@@ -21,11 +21,15 @@
 package org.openzal.zal;
 
 
+import com.google.inject.Singleton;
+import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.service.AuthProviderException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
 
+@Singleton
 public class AuthProvider
 {
   @NotNull
@@ -40,6 +44,37 @@ public class AuthProvider
         ).toZAuthToken());
     }
     catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @NotNull
+  public AuthToken decodeAuthToken(@NotNull String encoded)
+  {
+    try
+    {
+      return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(encoded));
+    }
+    catch (AuthTokenException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @NotNull
+  public AuthToken createAuthTokenForAccount(@NotNull Account account)
+  {
+    try
+    {
+      return new AuthToken(
+        com.zimbra.cs.service.AuthProvider.getAuthToken(
+          account.toZimbra(com.zimbra.cs.account.Account.class),
+          true
+        )
+      );
+    }
+    catch (AuthProviderException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
