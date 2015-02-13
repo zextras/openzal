@@ -381,7 +381,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return new PrefExternalSendersType(mAccount.getPrefExternalSendersType());
     /* $else $
-    throw new UnsupportedOperationException();
+    return PrefExternalSendersType.ALL;
     /* $endif $ */
   }
 
@@ -485,7 +485,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.getPrefOutOfOfficeExternalReply();
     /* $else $
-    throw new UnsupportedOperationException();
+    return mAccount.getPrefOutOfOfficeReply();
     /* $endif $ */
   }
 
@@ -870,7 +870,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
     /* $else $
-    return false;
+    return mAccount.isPrefOutOfOfficeReplyEnabled();
     /* $endif $ */
   }
 
@@ -1007,6 +1007,22 @@ public class Account extends Entry
   public String getServerHostname()
   {
     return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
+  }
+
+  public boolean checkAuthTokenValidityValue(AuthToken authToken)
+  {
+    try
+    {
+      /* $if ZimbraVersion > 6.0.7 $ */
+      return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+      /* $else $
+      return com.zimbra.cs.service.AuthProvider.checkAuthTokenValidityValue(mAccount.getProvisioning(), mAccount, authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+      /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
 

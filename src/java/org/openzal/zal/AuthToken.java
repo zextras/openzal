@@ -63,4 +63,26 @@ public class AuthToken
   {
     return mAuthToken.isDelegatedAdmin();
   }
+
+  public String toString()
+  {
+    return mAuthToken.toString();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mAuthToken);
+  }
+
+  public String getEncoded()
+  {
+    try
+    {
+      return mAuthToken.getEncoded();
+    }
+    catch (AuthTokenException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
