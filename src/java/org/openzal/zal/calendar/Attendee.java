@@ -20,6 +20,8 @@
 
 package org.openzal.zal.calendar;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +54,12 @@ public class Attendee
   private final String               mName;
   private final AttendeeInviteStatus mStatus;
 
-  public Attendee(String address, String name, AttendeeInviteStatus status)
+  @JsonCreator
+  public Attendee(
+    @JsonProperty("address") String address,
+    @JsonProperty("name") String name,
+    @JsonProperty("status") AttendeeInviteStatus status
+  )
   {
     this(address, name, status, null);
   }
