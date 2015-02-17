@@ -707,10 +707,16 @@ public class Invite
    return method == ZCalendar.ICalTok.CANCEL;
   }
 
+  @Nullable
   public String getBody()
   {
     try
     {
+      byte[] content = mInvite.getCalendarItem().getContent();
+      if (content == null)
+      {
+        return null;
+      }
       return new String(mInvite.getCalendarItem().getContent(), Charset.defaultCharset());
     }
     catch (ServiceException e)
