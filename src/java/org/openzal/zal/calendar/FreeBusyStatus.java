@@ -70,4 +70,23 @@ public enum FreeBusyStatus
 
     return status;
   }
+
+  public GlobalInviteStatus toGlobalInviteStatus()
+  {
+    switch(this)
+    {
+      case Busy:
+        return GlobalInviteStatus.APPOINTMENT_CONFIRMED;
+      case Free:
+        return GlobalInviteStatus.APPOINTMENT_CANCELLED;
+      case BusyTentative:
+        return GlobalInviteStatus.APPOINTMENT_TENTATIVE;
+      case BusyUnavailable:
+        return GlobalInviteStatus.APPOINTMENT_CANCELLED;
+      case NoData:
+        return GlobalInviteStatus.APPOINTMENT_NEED_ACTION;
+    }
+
+    throw new RuntimeException();
+  }
 }

@@ -23,6 +23,8 @@ package org.openzal.zal.calendar;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Account;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 import java.util.TimeZone;
 
 /* $if ZimbraVersion >= 8.0.0 $*/
@@ -222,5 +224,10 @@ public class ICalendarTimezone
   public TimeZone getTimeZone()
   {
     return mICalTimeZone;
+  }
+
+  public boolean inDaylightTime(Date date)
+  {
+    return mICalTimeZone.inDaylightTime(date);
   }
 }
