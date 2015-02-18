@@ -1607,6 +1607,16 @@ public class Mailbox
   }
 
   @NotNull
+  public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId)
+  {
+    /* $if MajorZimbraVersion <= 7 $
+    return createContact(octxt, pc, folderId, "");
+    $else $ */
+    return createContact(octxt, pc, folderId, Collections.<String>emptyList());
+    /* $endif $ */
+  }
+
+  @NotNull
   public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId, String tags)
     throws ZimbraException
   {
