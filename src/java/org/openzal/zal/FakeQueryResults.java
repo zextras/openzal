@@ -39,11 +39,6 @@ public class FakeQueryResults extends QueryResults
   {
     super(
       new ZimbraQueryResults(){
-            @Override
-            public void close() throws IOException
-            {
-
-            }
 
             @Override
             public void resetIterator() throws ServiceException
@@ -87,6 +82,7 @@ public class FakeQueryResults extends QueryResults
               return null;
             }
 
+        /* $if ZimbraVersion >= 8.0.0 $ */
             @Override
             public long getCursorOffset()
             {
@@ -94,11 +90,41 @@ public class FakeQueryResults extends QueryResults
             }
 
             @Override
+            public void close() throws IOException
+            {
+
+            }
+        /* $endif $ */
+
+
+        /* $if ZimbraVersion >= 8.0.2 $ */
+            @Override
             public boolean isPreSorted()
             {
               return false;
             }
-          }
+      /* $endif $ */
+
+      /* $if ZimbraVersion < 8.0.0 $
+
+            @Override
+            public ZimbraHit getFirstHit() throws ServiceException
+            {
+              return null;
+            }
+
+            @Override
+            public void doneWithSearchResults() throws ServiceException
+            {
+
+            }
+            @Override
+            public int estimateResultSize() throws ServiceException
+            {
+              return 0;
+            }
+         $endif $*/
+      }
     );
     mZimbraQueryResults = zimbraQueryResults;
     element = 0;
