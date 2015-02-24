@@ -23,6 +23,6 @@ public enum AttendeeType
       return Resource;
     }
 
-    throw new RuntimeException();
+    return Required;
   }
 }
