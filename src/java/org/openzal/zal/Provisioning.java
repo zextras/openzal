@@ -527,7 +527,7 @@ public class Provisioning
       {
         throw ExceptionWrapper.createUnableToFindDistributionList(list);
       }
-      return distributionList.getAllMembersSet();
+      return Arrays.asList(distributionList.getAllMembers());
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
