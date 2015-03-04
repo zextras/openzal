@@ -39,6 +39,15 @@ public class Acl
   public static final byte GRANTEE_GUEST    = ACL.GRANTEE_GUEST;
   public static final byte GRANTEE_KEY      = ACL.GRANTEE_KEY;
 
+  public static final short RIGHT_READ     = ACL.RIGHT_READ;
+  public static final short RIGHT_WRITE    = ACL.RIGHT_WRITE;
+  public static final short RIGHT_INSERT   = ACL.RIGHT_INSERT;
+  public static final short RIGHT_DELETE   = ACL.RIGHT_DELETE;
+  public static final short RIGHT_ACTION   = ACL.RIGHT_ACTION;
+  public static final short RIGHT_ADMIN    = ACL.RIGHT_ADMIN;
+  public static final short RIGHT_PRIVATE  = ACL.RIGHT_PRIVATE;
+  public static final short RIGHT_FREEBUSY = ACL.RIGHT_FREEBUSY;
+
   @NotNull private final ACL mAcl;
 
   public Acl()

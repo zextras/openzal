@@ -89,6 +89,8 @@ public class ZimbraSimulator extends ExternalResource
       /* $if ZimbraVersion < 8.0.0 $
       Volume.reloadVolumes();
        $endif$ */
+
+      ScheduledTaskManager.startup();
     }
     catch (Exception e)
     {
