@@ -90,7 +90,14 @@ public class ZimbraSimulator extends ExternalResource
       Volume.reloadVolumes();
        $endif$ */
 
-      ScheduledTaskManager.startup();
+      try
+      {
+        ScheduledTaskManager.getTask("", "", -1);
+      }
+      catch (Throwable ex)
+      {
+        ScheduledTaskManager.startup();
+      }
     }
     catch (Exception e)
     {
