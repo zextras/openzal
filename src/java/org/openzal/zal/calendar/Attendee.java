@@ -43,7 +43,6 @@ public class Attendee
     return mStatus;
   }
 
-  @Nullable
   public AttendeeType getType()
   {
     return mType;
@@ -54,17 +53,24 @@ public class Attendee
   private final String               mName;
   private final AttendeeInviteStatus mStatus;
 
+  /*
+  public Attendee(
+    String address,
+    String name,
+    AttendeeInviteStatus status
+  )
+  {
+    this(address, name, status, AttendeeType.Required);
+  }
+  */
+
   @JsonCreator
   public Attendee(
     @JsonProperty("address") String address,
     @JsonProperty("name") String name,
-    @JsonProperty("status") AttendeeInviteStatus status
+    @JsonProperty("status") AttendeeInviteStatus status,
+    @JsonProperty("type") AttendeeType type
   )
-  {
-    this(address, name, status, null);
-  }
-
-  public Attendee(String address, String name, AttendeeInviteStatus status, AttendeeType type)
   {
     mType = type;
     mAddress = (address == null) ? "" : address.replaceAll(";", "");

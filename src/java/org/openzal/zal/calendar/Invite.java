@@ -260,7 +260,7 @@ public class Invite
   public Attendee getOrganizer()
   {
     ZOrganizer organizer = mInvite.getOrganizer();
-    return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED);
+    return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
   }
 
   public long getUtcLastModify()
