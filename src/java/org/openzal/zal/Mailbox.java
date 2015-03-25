@@ -1108,6 +1108,11 @@ public class Mailbox
   {
     try
     {
+      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, MailItem.Type.UNKNOWN) & Acl.RIGHT_WRITE) == 0)
+      {
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
+      }
+
       mMbox.modifyPartStat(
         octxt.getOperationContext(),
         calItemId,
