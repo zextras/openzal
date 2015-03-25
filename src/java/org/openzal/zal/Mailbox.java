@@ -794,6 +794,23 @@ public class Mailbox
     }
   }
 
+  public void removeConfig(@NotNull OperationContext octxt, String section)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.setConfig(
+        octxt.getOperationContext(),
+        section,
+        null
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void alterTag(@NotNull OperationContext octxt, int itemId, byte type, int tagId, boolean addTag)
     throws ZimbraException
   {
