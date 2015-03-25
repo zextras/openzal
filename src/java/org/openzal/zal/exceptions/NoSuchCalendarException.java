@@ -26,4 +26,9 @@ public class NoSuchCalendarException extends ZimbraException
   {
     super(exception);
   }
+
+  public NoSuchCalendarException(String uid)
+  {
+    super(uid);
+  }
 }

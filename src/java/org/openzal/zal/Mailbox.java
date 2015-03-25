@@ -592,6 +592,11 @@ public class Mailbox
       throw ExceptionWrapper.wrap(e);
     }
 
+    if (mailItem == null)
+    {
+      throw new NoSuchCalendarException(uid);
+    }
+
     return new CalendarItem(mailItem);
   }
 
