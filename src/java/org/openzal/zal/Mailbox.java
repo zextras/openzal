@@ -1130,10 +1130,15 @@ public class Mailbox
   {
     try
     {
-      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, MailItem.Type.UNKNOWN) & Acl.RIGHT_WRITE) == 0)
+  /* $if ZimbraVersion >= 8.0.0 $ */
+      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN) & Acl.RIGHT_WRITE) == 0)
+  /* $else $
+      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN) & Acl.RIGHT_WRITE) == 0)
+  /* $endif $ */
       {
         throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
       }
+
 
       mMbox.modifyPartStat(
         octxt.getOperationContext(),
