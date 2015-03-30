@@ -53,7 +53,6 @@ public class Attendee
   private final String               mName;
   private final AttendeeInviteStatus mStatus;
 
-  /*
   public Attendee(
     String address,
     String name,
@@ -62,7 +61,6 @@ public class Attendee
   {
     this(address, name, status, AttendeeType.Required);
   }
-  */
 
   @JsonCreator
   public Attendee(
