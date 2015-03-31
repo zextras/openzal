@@ -148,12 +148,12 @@ public class MailboxManager
 
   public void addListener(MailboxManagerListener listener)
   {
-    MailboxManagerListenerWrapper wrapper = new MailboxManagerListenerWrapper(listener);
+    final MailboxManagerListenerWrapper wrapper = new MailboxManagerListenerWrapper(listener);
     List<com.zimbra.cs.mailbox.Mailbox> mailboxList = mMailboxManager.getAllLoadedMailboxes();
 
     mMailboxManager.addListener(wrapper);
 
-    Set<Mailbox> set = new HashSet<Mailbox>();
+    final Set<Mailbox> set = new HashSet<Mailbox>();
     for(com.zimbra.cs.mailbox.Mailbox mailbox : mailboxList )
     {
       set.add(new Mailbox(mailbox));
@@ -164,7 +164,16 @@ public class MailboxManager
     in the meanwhile some mailboxes could be already loaded,
     here we call mailboxLoaded for each mailbox already loaded
 */
-    wrapper.notifyExistingMailboxesAndStopTracking(set);
+    new Thread(
+      new Runnable()
+      {
+        @Override
+        public void run()
+        {
+          wrapper.notifyExistingMailboxesAndStopTracking(set);
+        }
+      }
+    ).start();
   }
 
   public void removeListener(MailboxManagerListener listener)
