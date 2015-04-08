@@ -24,6 +24,8 @@ import java.util.Calendar;
 
 public interface Clock
 {
+  long ONE_DAY = 24L * 60L * 60L * 1000L;
+
   public long now();
   public Calendar getCurrentTime();
   public Calendar getDaysFromNow(int numDays);
