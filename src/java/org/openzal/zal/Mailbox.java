@@ -1119,6 +1119,46 @@ public class Mailbox
     }
   }
 
+  public boolean canRead(OperationContext octxt, int itemId)
+  {
+    short rights;
+
+    try
+    {
+    /* $if ZimbraVersion >= 8.0.0 $ */
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
+    /* $else $
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
+    /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_READ) != 0;
+  }
+
+  public boolean canWrite(OperationContext octxt, int itemId)
+  {
+    short rights;
+
+    try
+    {
+    /* $if ZimbraVersion >= 8.0.0 $ */
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
+    /* $else $
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
+    /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_WRITE) != 0;
+  }
+
   public void modifyPartStat(
     @NotNull OperationContext octxt, int calItemId,
                              @Nullable RecurrenceId recurId, String cnStr,
@@ -1130,11 +1170,7 @@ public class Mailbox
   {
     try
     {
-  /* $if ZimbraVersion >= 8.0.0 $ */
-      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN) & Acl.RIGHT_WRITE) == 0)
-  /* $else $
-      if ((mMbox.getEffectivePermissions(octxt.getOperationContext(), calItemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN) & Acl.RIGHT_WRITE) == 0)
-  /* $endif $ */
+      if (! canWrite(octxt, calItemId))
       {
         throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
       }
