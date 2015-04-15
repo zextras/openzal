@@ -1133,7 +1133,7 @@ public class Mailbox
     }
     catch (ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return false;
     }
 
     return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_READ) != 0;
@@ -1153,7 +1153,7 @@ public class Mailbox
     }
     catch (ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return false;
     }
 
     return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_WRITE) != 0;
