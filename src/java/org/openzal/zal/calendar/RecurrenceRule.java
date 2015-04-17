@@ -32,6 +32,8 @@ import com.zimbra.cs.mailbox.calendar.ZRecur;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -116,7 +118,7 @@ public class RecurrenceRule
     return mZRecur.getByMonthDayList();
   }
 
-  public List<Integer> getByCalendarDayList()
+  public List<Integer> getByCalendarDayList(long startTime)
   {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
     List<Integer> list = new ArrayList<Integer>(byDayList.size());
@@ -124,6 +126,13 @@ public class RecurrenceRule
     for( ZRecur.ZWeekDayNum weekDayNum : byDayList )
     {
       list.add(weekDayNum.mDay.getCalendarDay());
+    }
+
+    if (list.isEmpty() && Frequency.WEEKLY.equals(getFrequency()))
+    {
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTimeInMillis(startTime);
+      list.add(calendar.get(Calendar.DAY_OF_WEEK));
     }
 
     return list;
