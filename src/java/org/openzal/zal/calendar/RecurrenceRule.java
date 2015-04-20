@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 public class RecurrenceRule
 {
@@ -118,7 +119,12 @@ public class RecurrenceRule
     return mZRecur.getByMonthDayList();
   }
 
-  public List<Integer> getByCalendarDayList(long startTime)
+  public List<Integer> getByCalendarDayList()
+  {
+    return getByCalendarDayList(null, null);
+  }
+
+  public List<Integer> getByCalendarDayList(Long startTime, TimeZone timezone)
   {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
     List<Integer> list = new ArrayList<Integer>(byDayList.size());
@@ -128,9 +134,9 @@ public class RecurrenceRule
       list.add(weekDayNum.mDay.getCalendarDay());
     }
 
-    if (list.isEmpty() && Frequency.WEEKLY.equals(getFrequency()))
+    if (list.isEmpty() && Frequency.WEEKLY.equals(getFrequency()) && startTime != null && timezone != null)
     {
-      Calendar calendar = Calendar.getInstance();
+      Calendar calendar = Calendar.getInstance(timezone);
       calendar.setTimeInMillis(startTime);
       list.add(calendar.get(Calendar.DAY_OF_WEEK));
     }
