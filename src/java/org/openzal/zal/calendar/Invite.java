@@ -500,6 +500,28 @@ public class Invite
 
   public
   @Nullable
+  Attendee getMatchingAttendee(Account account)
+  {
+    Attendee attendee = getMatchingAttendee(account.getName());
+    if( attendee != null )
+    {
+      return attendee;
+    }
+
+    for( String alias : account.getMailAlias() )
+    {
+      attendee = getMatchingAttendee(alias);
+      if( attendee != null )
+      {
+        return attendee;
+      }
+    }
+
+    return null;
+  }
+
+  public
+  @Nullable
   Attendee getMatchingAttendee(String address)
   {
     try
