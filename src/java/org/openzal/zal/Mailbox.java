@@ -1662,6 +1662,7 @@ public class Mailbox
     return new Message(message);
   }
 
+  @NotNull
   public Contact getContactById(OperationContext octxt,int id)
   {
     try
