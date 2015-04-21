@@ -61,6 +61,8 @@ public enum GlobalInviteStatus
     sZimbra2Zal.put("CANC", APPOINTMENT_CANCELLED);
     sZimbra2Zal.put("CONF", APPOINTMENT_CONFIRMED);
     sZimbra2Zal.put("NEED", APPOINTMENT_NEED_ACTION);
+    sZimbra2Zal.put("WAITING", APPOINTMENT_NEED_ACTION);
+    sZimbra2Zal.put("DEFERRED", APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("",     APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("COMP", TASK_COMPLETED);
     sZimbra2Zal.put("INPR", TASK_IN_PROGRESS);
