@@ -144,6 +144,17 @@ public class RecurrenceRule
     return list;
   }
 
+  public int getByWeekOfMonth()
+  {
+    List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
+    if (! byDayList.isEmpty())
+    {
+      return byDayList.get(0).mOrdinal;
+    }
+
+    throw new RuntimeException("Recurrence not supported");
+  }
+
   public List<Integer> getByOffsetDayList()
   {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
