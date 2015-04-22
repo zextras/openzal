@@ -32,6 +32,7 @@ import com.zimbra.cs.util.AccountUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -361,6 +362,19 @@ public class Account extends Entry
   public Collection<String> getAliases()
   {
     return Arrays.asList(mAccount.getMailAlias());
+  }
+
+  @NotNull
+  public List<String> getAllAddresses()
+  {
+    String[] alises = mAccount.getMailAlias();
+
+    ArrayList<String> list = new ArrayList<String>(alises.length + 1);
+
+    list.add(getName());
+    list.addAll(Arrays.asList(alises));
+
+    return list;
   }
 
   public void setPrefOutOfOfficeUntilDate(Date zimbraPrefOutOfOfficeUntilDate)
