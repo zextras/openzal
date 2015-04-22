@@ -257,9 +257,14 @@ public class Invite
     }
   }
 
+  @Nullable
   public Attendee getOrganizer()
   {
     ZOrganizer organizer = mInvite.getOrganizer();
+    if (organizer == null)
+    {
+      return null;
+    }
     return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
   }
 
