@@ -201,6 +201,14 @@ public class ExceptionWrapper
         return new NoSuchConversationException(exception);
       }
     });
+    mExceptionMap.put( MailServiceException.NO_SUCH_APPT, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchAppointmentException(exception);
+      }
+    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB, new ExceptionWrapperCreator()
     {
       @Override
