@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.exceptions.*;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -325,7 +326,10 @@ public class Account extends Entry
 
   public String getDisplayName()
   {
-    return mAccount.getDisplayName();
+    return StringUtils.defaultIfEmpty(
+      mAccount.getDisplayName(),
+      getName()
+    );
   }
 
   public void unsetSignatureId()
