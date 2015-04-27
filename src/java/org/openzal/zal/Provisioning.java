@@ -1755,7 +1755,27 @@ public class Provisioning
 
     void addContact(GalContact galContact)
     {
-      mContactList.add(galContact);
+      if( !alreadyAddedByEmail(galContact) )
+      {
+        mContactList.add(galContact);
+      }
+    }
+
+    private boolean alreadyAddedByEmail(GalContact galContact)
+    {
+      String email = galContact.getSingleAttr("email");
+      if( email == null ) {
+        email = "";
+      }
+
+      for( GalContact current : mContactList )
+      {
+        if( email.equalsIgnoreCase(current.getSingleAttr("email")) )
+        {
+          return true;
+        }
+      }
+      return false;
     }
   }
 
