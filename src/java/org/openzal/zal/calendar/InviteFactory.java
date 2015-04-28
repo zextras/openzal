@@ -256,8 +256,8 @@ public class InviteFactory
     }
 
     mRecurrenceRule = invite.getRecurrenceRule();
-    mOrganizerAddress = invite.getOrganizer().getAddress();
-    mOrganizerName = invite.getOrganizer().getName();
+    mOrganizerAddress = invite.hasOrganizer() ? invite.getOrganizer().getAddress() : null;
+    mOrganizerName = invite.hasOrganizer() ? invite.getOrganizer().getName() : null;
     mSequence = invite.getSequence() + 1;
     mPercentage = invite.getTaskPercentComplete();
     mSubject = invite.getSubject();
