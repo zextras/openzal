@@ -20,7 +20,13 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.mailbox.calendar.RecurId;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import org.openzal.zal.calendar.Attendee;
+import org.openzal.zal.calendar.AttendeeInviteStatus;
+import org.openzal.zal.calendar.CalendarItemData;
 import org.openzal.zal.calendar.Invite;
+import org.openzal.zal.calendar.InviteFactory;
 import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -29,9 +35,13 @@ import com.zimbra.cs.mailbox.calendar.Recurrence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 
 public class CalendarItem extends Item
@@ -130,5 +140,143 @@ public class CalendarItem extends Item
     }
 
     return new Invite(invite);
+  }
+
+  public void updatePartStat(Account invitedUser, String partStat, @Nullable RecurrenceId recurId, long time)
+    throws IOException, MessagingException
+  {
+    Mailbox mailbox = getMailbox();
+    OperationContext operationContext = mailbox.newOperationContext();
+    int sequence;
+    Invite requestInvite;
+
+    Invite defaultInvite = getDefaultInviteOrNull();
+    if (recurId == null)
+    {
+      requestInvite = defaultInvite;
+    }
+    else
+    {
+      requestInvite = getInvite(recurId);
+    }
+
+    if (defaultInvite == null || requestInvite == null)
+    {
+      return;
+    }
+
+    sequence = requestInvite.getSequence();
+
+    ParsedMessage parsedMessage = null;
+    MimeMessage mimeMessage = null;
+    if (getDigest() != null)
+    {
+      mimeMessage = getMimeMessage();
+    }
+
+    if (mimeMessage != null)
+    {
+      parsedMessage = new ParsedMessage(mimeMessage, mailbox.attachmentsIndexingEnabled());
+    }
+
+    List<Invite> exceptions = defaultInvite.getExceptionInstances();
+
+    List<CalendarItemData> newExceptions = new ArrayList<CalendarItemData>(exceptions.size());
+    for (Invite exception : exceptions)
+    {
+      if (recurId != null && recurId.equals(exception.getRecurId()))
+      {
+        newExceptions.add(new CalendarItemData(updateInvitePartStat(mailbox, invitedUser, partStat, exception), parsedMessage));
+      }
+      else
+      {
+        newExceptions.add(new CalendarItemData(exception, parsedMessage));
+      }
+    }
+
+    CalendarItemData defaultCalendarItemData;
+    if (recurId == null)
+    {
+      defaultCalendarItemData = new CalendarItemData(updateInvitePartStat(mailbox, invitedUser, partStat, defaultInvite), parsedMessage);
+    }
+    else
+    {
+      defaultCalendarItemData = new CalendarItemData(defaultInvite, parsedMessage);
+    }
+
+    mailbox.setCalendarItem(
+      operationContext,
+      getFolderId(),
+      getFlagBitmask(),
+      getTags(),
+      defaultCalendarItemData,
+      newExceptions,
+      updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
+      0L
+    );
+  }
+
+  private Invite updateInvitePartStat(Mailbox mailbox, Account invitedUser, String partStat, Invite invite)
+  {
+    InviteFactory inviteFactory = new InviteFactory();
+    inviteFactory.populateFactoryFromExistingInvite(invite);
+    List<Attendee> attendees = invite.getAttendees();
+    ListIterator<Attendee> attendeesIterator = attendees.listIterator();
+    while (attendeesIterator.hasNext())
+    {
+      Attendee attendee = attendeesIterator.next();
+      if (invitedUser.addressMatchesAccount(attendee.getAddress()))
+      {
+        attendeesIterator.set(new Attendee(
+          attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType())
+        );
+      }
+    }
+
+    inviteFactory.setAttendeeList(attendees);
+    return inviteFactory.createAppointment(mailbox);
+  }
+
+  private List<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> updateAttendeePartStat(
+    Account invitedUser,
+    String partStat,
+    long time,
+    int sequence,
+    RecurrenceId recurId
+  )
+  {
+    boolean updated = false;
+    List<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> replies = mCalendarItem.getAllReplies();
+    ListIterator<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> repliesIterator = replies.listIterator();
+    while (repliesIterator.hasNext())
+    {
+      com.zimbra.cs.mailbox.CalendarItem.ReplyInfo reply = repliesIterator.next();
+      ZAttendee attendee = reply.getAttendee();
+      if (invitedUser.addressMatchesAccount(reply.getAttendee().getAddress()))
+      {
+        attendee.setPartStat(partStat);
+        repliesIterator.set(new com.zimbra.cs.mailbox.CalendarItem.ReplyInfo(
+          attendee,
+          sequence,
+          time,
+          recurId == null ? null : recurId.toZimbra(RecurId.class)
+        ));
+        updated = true;
+      }
+    }
+
+    if (!updated)
+    {
+      ZAttendee attendee = new ZAttendee(invitedUser.getMail());
+      attendee.setPartStat(partStat);
+      replies.add(new com.zimbra.cs.mailbox.CalendarItem.ReplyInfo(
+        attendee,
+        sequence,
+        time,
+        recurId == null ? null : recurId.toZimbra(RecurId.class)
+      ));
+    }
+
+    return replies;
   }
 }

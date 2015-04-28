@@ -310,9 +310,14 @@ public class Invite
     return parsedDateTime.getDate().getTime();
   }
 
+  @Nullable
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
+    if (recurrence == null)
+    {
+      return null;
+    }
     ZRecur zrec = ((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule();
     return new RecurrenceRule(zrec);
   }
