@@ -39,6 +39,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -141,7 +142,7 @@ public class CalendarItem extends Item
     return new Invite(invite);
   }
 
-  public void updatePartStat(Account invitedUser, String partStat, RecurrenceId recurId)
+  public void updatePartStat(Account invitedUser, String partStat, @Nullable RecurrenceId recurId, long time)
     throws IOException, MessagingException
   {
     Mailbox mailbox = getMailbox();
@@ -210,7 +211,7 @@ public class CalendarItem extends Item
       getTags(),
       defaultCalendarItemData,
       newExceptions,
-      updateAttendeePartStat(invitedUser, partStat, sequence, recurId),
+      updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
       0L
     );
   }
@@ -239,6 +240,7 @@ public class CalendarItem extends Item
   private List<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> updateAttendeePartStat(
     Account invitedUser,
     String partStat,
+    long time,
     int sequence,
     RecurrenceId recurId
   )
@@ -256,7 +258,7 @@ public class CalendarItem extends Item
         repliesIterator.set(new com.zimbra.cs.mailbox.CalendarItem.ReplyInfo(
           attendee,
           sequence,
-          System.currentTimeMillis(),
+          time,
           recurId == null ? null : recurId.toZimbra(RecurId.class)
         ));
         updated = true;
@@ -270,7 +272,7 @@ public class CalendarItem extends Item
       replies.add(new com.zimbra.cs.mailbox.CalendarItem.ReplyInfo(
         attendee,
         sequence,
-        System.currentTimeMillis(),
+        time,
         recurId == null ? null : recurId.toZimbra(RecurId.class)
       ));
     }
