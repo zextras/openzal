@@ -255,6 +255,7 @@ public class InviteFactory
       mAlarmTime = invite.getAlarmMinutesBeforeStart();
     }
 
+    mRecurrenceRule = invite.getRecurrenceRule();
     mOrganizerAddress = invite.getOrganizer().getAddress();
     mOrganizerName = invite.getOrganizer().getName();
     mSequence = invite.getSequence() + 1;

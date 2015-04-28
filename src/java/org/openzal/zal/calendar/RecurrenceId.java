@@ -53,4 +53,32 @@ public class RecurrenceId
   {
     return mDt;
   }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o)
+    {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass())
+    {
+      return false;
+    }
+
+    RecurrenceId that = (RecurrenceId) o;
+
+    if (mExceptionStartTimeUtc != that.mExceptionStartTimeUtc)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return (int) (mExceptionStartTimeUtc ^ (mExceptionStartTimeUtc >>> 32));
+  }
 }
