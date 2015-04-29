@@ -68,7 +68,7 @@ public class Folder extends Item
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getAttributes();
   }
 
-  public boolean isDescendant(Folder folder)
+  public boolean isParentOf(Folder folder)
     throws ZimbraException
   {
     try
