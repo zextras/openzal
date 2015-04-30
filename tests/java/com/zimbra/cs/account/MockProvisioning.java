@@ -18,6 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import com.zimbra.cs.mime.handler.TextEnrichedHandler;
+import com.zimbra.cs.mime.handler.TextHtmlHandler;
+import com.zimbra.cs.mime.handler.TextPlainHandler;
+import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 
 /* $if MajorZimbraVersion >= 8 $ */
 import com.zimbra.common.account.Key;
@@ -82,9 +86,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     localhost = new Server("localhost", "localhost", attrs, Collections.<String, Object>emptyMap(), this);
     mDefaultCos = new Cos("test", "id", new HashMap<String, Object>(), this);
 
-    MockMimeTypeInfo mime = new MockMimeTypeInfo();
-    mime.setHandlerClass(UnknownTypeHandler.class.getName());
-    addMimeType("all", mime);
+    initMimeTypes();
 
     HashMap<String, Object> zimbraAttrs = new HashMap<String, Object>();
     zimbraAttrs.put(A_zimbraId, org.openzal.zal.Provisioning.ZIMBRA_USER_ID);
@@ -97,6 +99,37 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     {
       throw new RuntimeException(e);
     }
+  }
+
+  private void initMimeTypes()
+  {
+    MockMimeTypeInfo mime = new MockMimeTypeInfo();
+    mime.setMimeTypes("text/html");
+    mime.setFileExtensions("html", "htm");
+    mime.setHandlerClass(TextHtmlHandler.class.getName());
+    addMimeType("text/html", mime);
+
+    mime = new MockMimeTypeInfo();
+    mime.setMimeTypes("text/plain");
+    mime.setFileExtensions("txt", "text");
+    mime.setHandlerClass(TextPlainHandler.class.getName());
+    addMimeType("text/plain", mime);
+
+    mime = new MockMimeTypeInfo();
+    mime.setMimeTypes("text/enriched");
+    mime.setFileExtensions("txe");
+    mime.setHandlerClass(TextEnrichedHandler.class.getName());
+    addMimeType("text/enriched", mime);
+
+    mime = new MockMimeTypeInfo();
+    mime.setMimeTypes("not/exist");
+    mime.setFileExtensions("NotExist");
+    mime.setHandlerClass("com.zimbra.cs.mime.handler.NotExist");
+    addMimeType("not/exist", mime);
+
+    mime = new MockMimeTypeInfo();
+    mime.setHandlerClass(UnknownTypeHandler.class.getName());
+    addMimeType("all", mime);
   }
 
 /* $if ZimbraVersion >= 8.5.0 $ */
