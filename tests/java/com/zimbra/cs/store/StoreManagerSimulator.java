@@ -26,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.Exception;
+import java.lang.RuntimeException;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
@@ -250,7 +252,15 @@ public final class StoreManagerSimulator extends StoreManager {
       throw new RuntimeException(missingWritePermissions);
     }
 
-    MockBlob mockBlob = new MockBlob();
+    MockBlob mockBlob;
+    try
+    {
+      mockBlob = new MockBlob();
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
     mockBlob.setFile(destinationFile);
 
     MockStagedBlob mockStagedBlob = new MockStagedBlob(destMbox, mockBlob);
@@ -366,7 +376,15 @@ public final class StoreManagerSimulator extends StoreManager {
   {
     RelativePath path = getBlobPath(mbox.getId(), itemId, revision, Short.valueOf(locator));
 
-    MockBlob mockBlob = new MockBlob();
+    MockBlob mockBlob;
+    try
+    {
+      mockBlob = new MockBlob();
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
     mockBlob.setFile(mStoreRoot.getRoot().resolveFile(path));
 
     MockStagedBlob mockStagedBlob = new MockStagedBlob(
@@ -404,13 +422,13 @@ public final class StoreManagerSimulator extends StoreManager {
 
   static java.io.File sNonExistingPath = new java.io.File("/tmp/i/dont/exist");
 
-  private class MockBlob extends Blob
+  private static class MockBlob extends Blob
   {
     private com.zextras.lib.vfs.File mFile;
 
-    MockBlob()
+    MockBlob() throws IOException
     {
-      super(sNonExistingPath);
+      super(File.createTempFile("fakestore",".tmp"));
     }
 
     public void setFile(com.zextras.lib.vfs.File file)
@@ -494,13 +512,25 @@ public final class StoreManagerSimulator extends StoreManager {
     }
   }
 
+  private static MockBlob createMockBlob()
+  {
+    try
+    {
+      return new MockBlob();
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
   private class MockBlobBuilder extends BlobBuilder
   {
     private ByteArrayOutputStream out;
 
     protected MockBlobBuilder()
     {
-      super(new MockBlob());
+      super(createMockBlob());
     }
 
     protected OutputStream createOutputStream(java.io.File file) throws FileNotFoundException
