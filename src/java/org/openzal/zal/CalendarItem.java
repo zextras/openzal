@@ -25,8 +25,10 @@ import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import org.openzal.zal.calendar.Attendee;
 import org.openzal.zal.calendar.AttendeeInviteStatus;
 import org.openzal.zal.calendar.CalendarItemData;
+import org.openzal.zal.calendar.CalendarMime;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.InviteFactory;
+import org.openzal.zal.calendar.PlainTextToHtmlConverter;
 import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -39,7 +41,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -142,7 +143,13 @@ public class CalendarItem extends Item
     return new Invite(invite);
   }
 
-  public void updatePartStat(Account invitedUser, String partStat, @Nullable RecurrenceId recurId, long time)
+  public void updatePartStat(
+    PlainTextToHtmlConverter textParser,
+    Account invitedUser,
+    String partStat,
+    @Nullable RecurrenceId recurId,
+    long time
+  )
     throws IOException, MessagingException
   {
     Mailbox mailbox = getMailbox();
@@ -177,6 +184,27 @@ public class CalendarItem extends Item
     if (mimeMessage != null)
     {
       parsedMessage = new ParsedMessage(mimeMessage, mailbox.attachmentsIndexingEnabled());
+    }
+
+    if (mimeMessage != null)
+    {
+      try
+      {
+        CalendarMime calendarMime = new CalendarMime(textParser);
+        MimeMessage newMimeMessage = calendarMime.createCalendarMessage(
+          defaultInvite,
+          parsedMessage.getMimeMessage()
+        );
+
+        parsedMessage = new ParsedMessage(
+          newMimeMessage,
+          mailbox.attachmentsIndexingEnabled()
+        );
+      }
+      catch (Exception ex)
+      {
+        parsedMessage = null;
+      }
     }
 
     List<Invite> exceptions = defaultInvite.getExceptionInstances();
