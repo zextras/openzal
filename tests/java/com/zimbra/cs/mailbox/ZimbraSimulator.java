@@ -113,6 +113,7 @@ public class ZimbraSimulator extends ExternalResource
     System.setProperty("zimbra.config", "it/data/zimbra-config/localconfig-test.xml");
 
     LC.zimbra_attrs_directory.setDefault("it/data/zimbra-attrs/" + ZimbraVersion.current.toString());
+    LC.zimbra_rights_directory.setDefault("it/data/zimbra-rights/" + ZimbraVersion.current.toString());
     ZimbraLog.toolSetupLog4j("INFO", "it/data/zimbra-config/log4j-test.properties");
   }
 
