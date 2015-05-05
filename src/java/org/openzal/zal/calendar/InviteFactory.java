@@ -44,37 +44,39 @@ import java.util.*;
 
 public class InviteFactory
 {
-  private                String             mMethod;
-  private                MapTimeZone        mTimeZoneMap;
-  private                String             mUid;
-  private                GlobalInviteStatus mStatus;
-  private                Priority           mPriority;
-  private                int                mPercentage;
-  private                long               mCompletedTime;
-  private                FreeBusyStatus     mFreeBusyStatus;
-  private                Sensitivity        mSensitivity;
-  private                boolean            mAllDayEvent;
-  private                long               mUtcDateStart;
-  private                long               mUtcDateEnd;
-  private                long               mExceptionStartTime;
-  private                String             mOrganizerAddress;
-  private                String             mOrganizerName;
-  private                List<Attendee>     mAttendeeList;
-  private                String             mSubject;
-  private                String             mLocation;
-  private                String             mDescription;
-  private                String             mDescriptionHtml;
-  private                long               mLastModifyTimeUtc;
-  private                int                mSequence;
-  private                ICalendarTimezone  mTimezone;
-  private                boolean            mAlarmSet;
-  private                int                mAlarmTime;
-  private                long               mReminderTime;
-  private                MimeMessage        mMimeMessage;
-  private                boolean            mHasAttachment;
+  private       String             mMethod;
+  private       MapTimeZone        mTimeZoneMap;
+  private       String             mUid;
+  private       GlobalInviteStatus mStatus;
+  private       Priority           mPriority;
+  private       int                mPercentage;
+  private       long               mCompletedTime;
+  private       FreeBusyStatus     mFreeBusyStatus;
+  private       Sensitivity        mSensitivity;
+  private       boolean            mAllDayEvent;
+  private       long               mUtcDateStart;
+  private       long               mUtcDateEnd;
+  private       long               mExceptionStartTime;
+  private       String             mOrganizerAddress;
+  private       String             mOrganizerName;
+  private       List<Attendee>     mAttendeeList;
+  private       String             mSubject;
+  private       String             mLocation;
+  private       String             mDescription;
+  private       String             mDescriptionHtml;
+  private       long               mLastModifyTimeUtc;
+  private       int                mSequence;
+  private       ICalendarTimezone  mTimezone;
+  private       boolean            mAlarmSet;
+  private       int                mAlarmTime;
+  private       long               mReminderTime;
+  private       MimeMessage        mMimeMessage;
+  private       boolean            mHasAttachment;
   @NotNull
-  private final          Clock              mClock;
-  private                RecurrenceRule     mRecurrenceRule;
+  private final Clock              mClock;
+  private       RecurrenceRule     mRecurrenceRule;
+  private       int                mMailItemId = 0;
+  private       String             mPartStat;
 
   public InviteFactory()
   {
@@ -258,7 +260,7 @@ public class InviteFactory
     mRecurrenceRule = invite.getRecurrenceRule();
     mOrganizerAddress = invite.hasOrganizer() ? invite.getOrganizer().getAddress() : null;
     mOrganizerName = invite.hasOrganizer() ? invite.getOrganizer().getName() : null;
-    mSequence = invite.getSequence() + 1;
+    mSequence = invite.getSequence();
     mPercentage = invite.getTaskPercentComplete();
     mSubject = invite.getSubject();
     mUtcDateStart = invite.getUtcStartTime();
@@ -274,6 +276,8 @@ public class InviteFactory
     {
       mExceptionStartTime = 0L;
     }
+    mMailItemId = invite.getMailItemId();
+    mPartStat = invite.getPartStat();
   }
 
 
@@ -411,6 +415,16 @@ public class InviteFactory
       throw ExceptionWrapper.wrap(e);
     }
 
+    if (mMailItemId > 0)
+    {
+      invite.setInviteId(mMailItemId);
+    }
+
+    if (mPartStat != null && !invite.isOrganizer())
+    {
+      invite.setPartStat(mPartStat);
+    }
+
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
@@ -425,5 +439,10 @@ public class InviteFactory
   public void setRecurrenceRule(RecurrenceRule recurrenceRule)
   {
     mRecurrenceRule = recurrenceRule;
+  }
+
+  public void setPartStat(String partStat)
+  {
+    mPartStat = partStat;
   }
 }
