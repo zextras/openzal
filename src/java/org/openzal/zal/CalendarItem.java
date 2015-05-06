@@ -25,8 +25,10 @@ import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import org.openzal.zal.calendar.Attendee;
 import org.openzal.zal.calendar.AttendeeInviteStatus;
 import org.openzal.zal.calendar.CalendarItemData;
+import org.openzal.zal.calendar.CalendarMime;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.InviteFactory;
+import org.openzal.zal.calendar.PlainTextToHtmlConverter;
 import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -39,7 +41,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -142,7 +143,13 @@ public class CalendarItem extends Item
     return new Invite(invite);
   }
 
-  public void updatePartStat(Account invitedUser, String partStat, @Nullable RecurrenceId recurId, long time)
+  public void updatePartStat(
+    PlainTextToHtmlConverter textParser,
+    Account invitedUser,
+    String partStat,
+    @Nullable RecurrenceId recurId,
+    long time
+  )
     throws IOException, MessagingException
   {
     Mailbox mailbox = getMailbox();
@@ -167,16 +174,10 @@ public class CalendarItem extends Item
 
     sequence = requestInvite.getSequence();
 
-    ParsedMessage parsedMessage = null;
     MimeMessage mimeMessage = null;
     if (getDigest() != null)
     {
       mimeMessage = getMimeMessage();
-    }
-
-    if (mimeMessage != null)
-    {
-      parsedMessage = new ParsedMessage(mimeMessage, mailbox.attachmentsIndexingEnabled());
     }
 
     List<Invite> exceptions = defaultInvite.getExceptionInstances();
@@ -186,24 +187,63 @@ public class CalendarItem extends Item
     {
       if (recurId != null && recurId.equals(exception.getRecurId()))
       {
-        newExceptions.add(new CalendarItemData(updateInvitePartStat(mailbox, invitedUser, partStat, exception), parsedMessage));
+        Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, exception);
+        newExceptions.add(
+          new CalendarItemData(
+            updatedInvite,
+            getParsedMessage(
+              textParser,
+              mailbox,
+              mimeMessage,
+              updatedInvite
+            )
+          )
+        );
       }
       else
       {
-        newExceptions.add(new CalendarItemData(exception, parsedMessage));
+        newExceptions.add(
+          new CalendarItemData(
+            exception,
+            getParsedMessage(
+              textParser,
+              mailbox,
+              mimeMessage,
+              exception
+            )
+          )
+        );
       }
     }
 
     CalendarItemData defaultCalendarItemData;
     if (recurId == null)
     {
-      defaultCalendarItemData = new CalendarItemData(updateInvitePartStat(mailbox, invitedUser, partStat, defaultInvite), parsedMessage);
+      Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, defaultInvite);
+      defaultCalendarItemData = new CalendarItemData(
+        updatedInvite,
+        getParsedMessage(
+          textParser,
+          mailbox,
+          mimeMessage,
+          updatedInvite
+        )
+      );
     }
     else
     {
-      defaultCalendarItemData = new CalendarItemData(defaultInvite, parsedMessage);
+      defaultCalendarItemData = new CalendarItemData(
+        defaultInvite,
+        getParsedMessage(
+          textParser,
+          mailbox,
+          mimeMessage,
+          defaultInvite
+        )
+      );
     }
 
+    /* $if MajorZimbraVersion >= 8 $ */
     mailbox.setCalendarItem(
       operationContext,
       getFolderId(),
@@ -214,6 +254,55 @@ public class CalendarItem extends Item
       updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
       0L
     );
+    /* $else $
+    mailbox.setCalendarItem(
+      operationContext,
+      getFolderId(),
+      getFlagBitmask(),
+      getTagBitmask(),
+      defaultCalendarItemData,
+      newExceptions,
+      updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
+      0L
+    );
+    /* $endif $ */
+  }
+
+  @Nullable
+  public ParsedMessage getParsedMessage(
+    PlainTextToHtmlConverter textParser,
+    Mailbox mailbox,
+    MimeMessage mimeMessage,
+    Invite invite
+  )
+  {
+    ParsedMessage parsedMessage;
+    if (mimeMessage == null)
+    {
+      return null;
+    }
+
+    parsedMessage = new ParsedMessage(mimeMessage, mailbox.attachmentsIndexingEnabled());
+
+    try
+    {
+      CalendarMime calendarMime = new CalendarMime(textParser);
+      MimeMessage newMimeMessage = calendarMime.createCalendarMessage(
+        invite,
+        parsedMessage.getMimeMessage()
+      );
+
+      parsedMessage = new ParsedMessage(
+        newMimeMessage,
+        mailbox.attachmentsIndexingEnabled()
+      );
+    }
+    catch (Exception ex)
+    {
+      return null;
+    }
+
+    return parsedMessage;
   }
 
   private Invite updateInvitePartStat(Mailbox mailbox, Account invitedUser, String partStat, Invite invite)
@@ -234,7 +323,10 @@ public class CalendarItem extends Item
     }
 
     inviteFactory.setAttendeeList(attendees);
-    return inviteFactory.createAppointment(mailbox);
+    inviteFactory.setPartStat(partStat);
+    Invite updatedInvite = inviteFactory.createAppointment(mailbox);
+
+    return updatedInvite;
   }
 
   private List<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> updateAttendeePartStat(
