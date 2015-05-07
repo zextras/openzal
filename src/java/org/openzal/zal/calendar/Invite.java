@@ -92,6 +92,17 @@ public class Invite
       throw new NullPointerException();
     }
     mInvite = (com.zimbra.cs.mailbox.calendar.Invite) invite;
+    if (mimeMessage == null)
+    {
+      if (mInvite.hasAttachment())
+      {
+        try
+        {
+          mimeMessage = mInvite.getMimeMessage();
+        }
+        catch (ServiceException ignored) {}
+      }
+    }
     mMimeMessage = mimeMessage;
   }
 
@@ -767,5 +778,10 @@ public class Invite
     {
       return Collections.emptyList();
     }
+  }
+
+  public String getPartStat()
+  {
+    return mInvite.getPartStat();
   }
 }
