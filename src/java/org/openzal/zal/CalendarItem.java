@@ -311,6 +311,7 @@ public class CalendarItem extends Item
     inviteFactory.populateFactoryFromExistingInvite(invite);
     List<Attendee> attendees = invite.getAttendees();
     ListIterator<Attendee> attendeesIterator = attendees.listIterator();
+    boolean updated = false;
     while (attendeesIterator.hasNext())
     {
       Attendee attendee = attendeesIterator.next();
@@ -319,7 +320,19 @@ public class CalendarItem extends Item
         attendeesIterator.set(new Attendee(
           attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType())
         );
+        updated = true;
       }
+    }
+
+    if (! updated)
+    {
+      attendees.add(
+        new Attendee(
+          invitedUser.getName(),
+          invitedUser.getDisplayName(),
+          AttendeeInviteStatus.fromZimbra(partStat)
+        )
+      );
     }
 
     inviteFactory.setAttendeeList(attendees);
@@ -359,7 +372,7 @@ public class CalendarItem extends Item
 
     if (!updated)
     {
-      ZAttendee attendee = new ZAttendee(invitedUser.getMail());
+      ZAttendee attendee = new ZAttendee(invitedUser.getName());
       attendee.setPartStat(partStat);
       replies.add(new com.zimbra.cs.mailbox.CalendarItem.ReplyInfo(
         attendee,
