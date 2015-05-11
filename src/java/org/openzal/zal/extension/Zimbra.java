@@ -37,7 +37,7 @@ public class Zimbra
   @NotNull private final ZimbraDatabase mZimbraDatabase;
   @NotNull private final StoreManager   mStoreManager;
 
-  Zimbra()
+  public Zimbra()
   {
     try
     {
@@ -60,6 +60,19 @@ public class Zimbra
     {
       sIsMailboxd = com.zimbra.cs.util.Zimbra.class.getDeclaredField("sIsMailboxd");
       sIsMailboxd.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public void forceMailboxd()
+  {
+    try
+    {
+      sIsMailboxd.set(null, true);
     }
     catch (Throwable ex)
     {

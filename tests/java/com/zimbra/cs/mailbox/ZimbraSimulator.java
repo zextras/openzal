@@ -5,6 +5,7 @@ import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
+import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.Provisioning;
 
@@ -172,5 +173,10 @@ public class ZimbraSimulator extends ExternalResource
   public StoreManager getStoreManager()
   {
     return mStoreManager;
+  }
+
+  public Zimbra getZimbra()
+  {
+    return new Zimbra();
   }
 }
