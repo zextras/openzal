@@ -41,8 +41,8 @@ public class Zimbra
   {
     try
     {
-      mProvisioning = new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
-      mMailboxManager = new MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+      mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
+      mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mStoreManager = new StoreManagerImp();
     }

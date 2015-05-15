@@ -1,6 +1,5 @@
 package com.zimbra.cs.mailbox;
 
-import com.zextras.lib.Error.UnableToRegisterDatabaseDriverError;
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import org.junit.rules.ExternalResource;
@@ -157,7 +156,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public Provisioning getProvisioning() throws Exception
   {
-    return new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
+    return new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
   }
 
   public MockProvisioning getMockProvisioning()
@@ -167,7 +166,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
   {
-    return new org.openzal.zal.MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+    return new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
   }
 
   public StoreManager getStoreManager()

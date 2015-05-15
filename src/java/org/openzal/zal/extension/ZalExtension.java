@@ -22,8 +22,8 @@ package org.openzal.zal.extension;
 
 public interface ZalExtension
 {
-  public String getBuildId();
-  public String getName();
-  public void startup(ZalExtensionController extensionController, Zimbra zimbra);
-  public void shutdown();
+  String getBuildId();
+  String getName();
+  void startup(ZalExtensionController extensionController);
+  void shutdown();
 }

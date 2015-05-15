@@ -25,11 +25,15 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class ZalClassLoader extends URLClassLoader {
+@SuppressWarnings({"SynchronizedMethod", "rawtypes", "CustomClassloader"})
+public class BootstrapClassLoader extends URLClassLoader
+{
+  private final boolean mDelegateZalLoading;
 
-  public ZalClassLoader(URL[] urls, ClassLoader parent)
+  public BootstrapClassLoader(URL[] urls, ClassLoader parent, boolean delegateZalLoading)
   {
     super(urls, parent);
+    mDelegateZalLoading = delegateZalLoading;
   }
 
   @Override
@@ -42,15 +46,20 @@ public class ZalClassLoader extends URLClassLoader {
   protected synchronized Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
-    if( name.startsWith("org.openzal.") )
+    if (mDelegateZalLoading)
     {
-      if( super.getParent() != null)
+      if (name.startsWith("org.openzal."))
       {
-        Class cls = super.getParent().loadClass(name);
-        if (resolve) {
-          resolveClass(cls);
-        }
-        return cls;
+        return getParent().loadClass(name);
+      }
+    }
+    else
+    {
+      if (name.equals("org.openzal.zal.extension.ZalExtension") ||
+          name.equals("org.openzal.zal.extension.ZalEntrypoint") ||
+          name.equals("org.openzal.zal.extension.ZalExtensionController"))
+      {
+        return getParent().loadClass(name);
       }
     }
 

@@ -20,8 +20,6 @@
 
 package org.openzal.zal.tools;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,12 +40,10 @@ public abstract class JarUtils
 {
   private static final String MANIFEST = "META-INF/MANIFEST.MF";
 
-  @NotNull
-  public static File getCurrentJar()
+  public static File getJarPathOfClass(Class cls)
   {
-    String classResourceName = ChecksumChecker.class.getName().replace(".", "/") + ".class";
-
-    URL resourceUrl = ChecksumChecker.class.getClassLoader().getResource(classResourceName);
+    String classResourceName = cls.getName().replace(".", "/") + ".class";
+    URL resourceUrl = cls.getClassLoader().getResource(classResourceName);
 
     if (resourceUrl == null)
     {
@@ -61,6 +57,11 @@ public abstract class JarUtils
     }
 
     return new File(jarPath);
+  }
+
+  public static File getCurrentJar()
+  {
+    return getJarPathOfClass(JarUtils.class);
   }
 
   public static void copyJar(ZipFile zipFile, Manifest manifest, File destination) throws IOException

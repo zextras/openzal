@@ -43,7 +43,7 @@
       <attribute name="Specification-Vendor" value="ZeXtras" />
       <attribute name="Implementation-Version" value="${ZimbraVersion}" />
       <attribute name="Created-By" value="ZeXtras" />
-      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypoint" />
+      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypointImpl" />
     </manifest>
     <fileset dir="${build}" />
   </jar>

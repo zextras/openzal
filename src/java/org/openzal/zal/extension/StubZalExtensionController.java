@@ -38,13 +38,7 @@ public class StubZalExtensionController implements ZalExtensionController
   }
 
   @Override
-  public void reload(File directory) throws IOException
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void update(File directory) throws IOException
+  public void reload(File extensionDirectory) throws IOException
   {
     throw new UnsupportedOperationException();
   }
