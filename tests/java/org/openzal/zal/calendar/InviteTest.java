@@ -106,7 +106,7 @@ public class InviteTest
 
     Mockito.when(zimbraInvite.hasAlarm()).thenReturn(true);
     Mockito.when(zimbraInvite.getAlarms()).thenReturn(Collections.singletonList(alarm));
-    Mockito.when(zimbraInvite.getEndTime()).thenReturn(ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"));
+    Mockito.when(zimbraInvite.getEffectiveEndTime()).thenReturn(ParsedDateTime.parseUtcOnly("2014-09-10T09:29:21.000Z"));
 
     Invite zeInvite = new Invite(zimbraInvite);
 
