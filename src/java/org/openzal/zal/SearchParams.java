@@ -82,6 +82,11 @@ public class SearchParams
     mParams.setChunkSize(limit);
   }
 
+  public void setOffset( int offset )
+  {
+    mParams.setOffset(offset);
+  }
+
   public void setPrefetch( boolean prefetch )
   {
     mParams.setPrefetch( prefetch );
