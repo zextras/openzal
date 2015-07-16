@@ -156,6 +156,8 @@ public class Zimbra
   avoid concurrent modification exception when disabling an extension
   during extension postInit
 */
+
+/* $if ZimbraVersion >= 7.0.0$ */
     try
     {
       Map map = (Map)sInitializedExtensions.get(null);
@@ -168,5 +170,6 @@ public class Zimbra
     {
       throw new RuntimeException(e);
     }
+/* $endif$ */
   }
 }
