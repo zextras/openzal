@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -527,7 +527,7 @@ public class Provisioning
       {
         throw ExceptionWrapper.createUnableToFindDistributionList(list);
       }
-      return distributionList.getAllMembersSet();
+      return Arrays.asList(distributionList.getAllMembers());
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1755,7 +1755,27 @@ public class Provisioning
 
     void addContact(GalContact galContact)
     {
-      mContactList.add(galContact);
+      if( !alreadyAddedByEmail(galContact) )
+      {
+        mContactList.add(galContact);
+      }
+    }
+
+    private boolean alreadyAddedByEmail(GalContact galContact)
+    {
+      String email = galContact.getSingleAttr("email");
+      if( email == null ) {
+        email = "";
+      }
+
+      for( GalContact current : mContactList )
+      {
+        if( email.equalsIgnoreCase(current.getSingleAttr("email")) )
+        {
+          return true;
+        }
+      }
+      return false;
     }
   }
 

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.exceptions.*;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -32,6 +33,7 @@ import com.zimbra.cs.util.AccountUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -324,7 +326,10 @@ public class Account extends Entry
 
   public String getDisplayName()
   {
-    return mAccount.getDisplayName();
+    return StringUtils.defaultIfEmpty(
+      mAccount.getDisplayName(),
+      getName()
+    );
   }
 
   public void unsetSignatureId()
@@ -363,6 +368,19 @@ public class Account extends Entry
     return Arrays.asList(mAccount.getMailAlias());
   }
 
+  @NotNull
+  public List<String> getAllAddresses()
+  {
+    String[] alises = mAccount.getMailAlias();
+
+    ArrayList<String> list = new ArrayList<String>(alises.length + 1);
+
+    list.add(getName());
+    list.addAll(Arrays.asList(alises));
+
+    return list;
+  }
+
   public void setPrefOutOfOfficeUntilDate(Date zimbraPrefOutOfOfficeUntilDate)
   {
     try
@@ -381,7 +399,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return new PrefExternalSendersType(mAccount.getPrefExternalSendersType());
     /* $else $
-    throw new UnsupportedOperationException();
+    return PrefExternalSendersType.ALL;
     /* $endif $ */
   }
 
@@ -485,7 +503,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.getPrefOutOfOfficeExternalReply();
     /* $else $
-    throw new UnsupportedOperationException();
+    return mAccount.getPrefOutOfOfficeReply();
     /* $endif $ */
   }
 
@@ -870,7 +888,7 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
     /* $else $
-    return false;
+    return mAccount.isPrefOutOfOfficeReplyEnabled();
     /* $endif $ */
   }
 
@@ -1007,6 +1025,22 @@ public class Account extends Entry
   public String getServerHostname()
   {
     return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
+  }
+
+  public boolean checkAuthTokenValidityValue(AuthToken authToken)
+  {
+    try
+    {
+      /* $if ZimbraVersion > 6.0.7 $ */
+      return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+      /* $else $
+      return com.zimbra.cs.service.AuthProvider.checkAuthTokenValidityValue(mAccount.getProvisioning(), mAccount, authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
+      /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
 

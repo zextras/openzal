@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,8 +20,11 @@
 
 package org.openzal.zal.calendar;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Attendee
 {
@@ -40,13 +43,35 @@ public class Attendee
     return mStatus;
   }
 
+  public AttendeeType getType()
+  {
+    return mType;
+  }
+
+  private final AttendeeType         mType;
   private final String               mAddress;
   private final String               mName;
   private final AttendeeInviteStatus mStatus;
 
-  public Attendee(String address, String name, AttendeeInviteStatus status)
+  public Attendee(
+    String address,
+    String name,
+    AttendeeInviteStatus status
+  )
   {
-    mAddress = (address == null) ? "" : address.replaceAll(";","");
+    this(address, name, status, AttendeeType.Required);
+  }
+
+  @JsonCreator
+  public Attendee(
+    @JsonProperty("address") String address,
+    @JsonProperty("name") String name,
+    @JsonProperty("status") AttendeeInviteStatus status,
+    @JsonProperty("type") AttendeeType type
+  )
+  {
+    mType = type;
+    mAddress = (address == null) ? "" : address;
     mName = (name == null) ? "" : name;
     mStatus = status;
   }

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -52,5 +52,33 @@ public class RecurrenceId
   ParsedDateTime getDt()
   {
     return mDt;
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o)
+    {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass())
+    {
+      return false;
+    }
+
+    RecurrenceId that = (RecurrenceId) o;
+
+    if (mExceptionStartTimeUtc != that.mExceptionStartTimeUtc)
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return (int) (mExceptionStartTimeUtc ^ (mExceptionStartTimeUtc >>> 32));
   }
 }

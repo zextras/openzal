@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -29,6 +29,13 @@ public final class Jetty
   @NotNull
   public static Continuation getContinuation( HttpServletRequest req )
   {
-    return new Continuation( req );
+    if( req instanceof ContinuationHttpServletRequest)
+    {
+      return ((ContinuationHttpServletRequest)req).getContinuation();
+    }
+    else
+    {
+      return new ContinuationJetty(req);
+    }
   }
 }

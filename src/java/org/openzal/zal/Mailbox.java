@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -207,21 +207,6 @@ public class Mailbox
         ).getZimbraUser().toZimbra(com.zimbra.cs.account.Account.class)
       )
     );
-  }
-
-  @NotNull
-  public OperationContext newContext()
-  {
-    try
-    {
-      return new OperationContext(
-        new com.zimbra.cs.mailbox.OperationContext(mMbox)
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
   }
 
   @NotNull
@@ -564,6 +549,22 @@ public class Mailbox
   }
 
   @NotNull
+  public Mountpoint getMountpointById(@NotNull OperationContext octxt, int id)
+  {
+    MailItem mountpoint;
+    try
+    {
+      mountpoint = mMbox.getMountpointById(octxt.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Mountpoint(mountpoint);
+  }
+
+  @NotNull
   public CalendarItem getCalendarItemById(@NotNull OperationContext octxt, int id)
     throws NoSuchCalendarException
   {
@@ -577,7 +578,7 @@ public class Mailbox
     }
   }
 
-  @Nullable
+  @NotNull
   public CalendarItem getCalendarItemByUid(@NotNull OperationContext octxt, String uid)
     throws NoSuchCalendarException
   {
@@ -593,7 +594,7 @@ public class Mailbox
 
     if (mailItem == null)
     {
-      return null;
+      throw new NoSuchCalendarException(uid);
     }
 
     return new CalendarItem(mailItem);
@@ -798,6 +799,23 @@ public class Mailbox
     }
   }
 
+  public void removeConfig(@NotNull OperationContext octxt, String section)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.setConfig(
+        octxt.getOperationContext(),
+        section,
+        null
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void alterTag(@NotNull OperationContext octxt, int itemId, byte type, int tagId, boolean addTag)
     throws ZimbraException
   {
@@ -874,7 +892,8 @@ public class Mailbox
     try
     {
       MailItem item = mMbox.getItemById(octxt.getOperationContext(), itemId, Item.convertType(Item.TYPE_UNKNOWN));
-      mMbox.setTags(octxt.getOperationContext(), itemId, Item.convertType(type), flags,
+      mMbox.setTags(
+        octxt.getOperationContext(), itemId, Item.convertType(type), flags,
   /* $if MajorZimbraVersion >= 8 $ */
         item.getTags()
   /* $else$
@@ -991,7 +1010,7 @@ public class Mailbox
 
   public List<CalendarItem> getCalendarItemsForRange(
     @NotNull OperationContext octxt, byte type, long start,
-                                                     long end, int folderId, int[] excludeFolders
+    long end, int folderId, int[] excludeFolders
   )
     throws ZimbraException
   {
@@ -1101,6 +1120,46 @@ public class Mailbox
     }
   }
 
+  public boolean canRead(OperationContext octxt, int itemId)
+  {
+    short rights;
+
+    try
+    {
+    /* $if ZimbraVersion >= 8.0.0 $ */
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
+    /* $else $
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
+    /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      return false;
+    }
+
+    return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_READ) != 0;
+  }
+
+  public boolean canWrite(OperationContext octxt, int itemId)
+  {
+    short rights;
+
+    try
+    {
+    /* $if ZimbraVersion >= 8.0.0 $ */
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
+    /* $else $
+      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
+    /* $endif $ */
+    }
+    catch (ServiceException e)
+    {
+      return false;
+    }
+
+    return (rights & Acl.RIGHT_ADMIN) != 0 || (rights & Acl.RIGHT_WRITE) != 0;
+  }
+
   public void modifyPartStat(
     @NotNull OperationContext octxt, int calItemId,
                              @Nullable RecurrenceId recurId, String cnStr,
@@ -1112,6 +1171,12 @@ public class Mailbox
   {
     try
     {
+      if (! canWrite(octxt, calItemId))
+      {
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
+      }
+
+
       mMbox.modifyPartStat(
         octxt.getOperationContext(),
         calItemId,
@@ -1598,6 +1663,7 @@ public class Mailbox
     return new Message(message);
   }
 
+  @NotNull
   public Contact getContactById(OperationContext octxt,int id)
   {
     try
@@ -1608,6 +1674,16 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @NotNull
+  public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId)
+  {
+    /* $if MajorZimbraVersion <= 7 $
+    return createContact(octxt, pc, folderId, "");
+    $else $ */
+    return createContact(octxt, pc, folderId, Collections.<String>emptyList());
+    /* $endif $ */
   }
 
   @NotNull
@@ -2595,7 +2671,7 @@ public class Mailbox
     String updateQuery = "UPDATE " + DbMailbox.qualifyZimbraTableName(
       mMbox,
       "mailbox_metadata"
-    ) + " SET metadata=? WHERE mailbox_id=? AND section=? LIMIT 1";
+    ) + " SET metadata=? WHERE mailbox_id=? AND section=?";
     Connection connection = null;
     try
     {
@@ -2610,7 +2686,8 @@ public class Mailbox
       if (res == 0)
       {
         //REPLACE works only on mysql
-        String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        //String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
 
         PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
         insertStatement.setInt(1, getId());

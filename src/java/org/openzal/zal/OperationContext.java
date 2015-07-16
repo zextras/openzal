@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.calendar.Attendee;
 
 
 public class OperationContext
@@ -52,5 +53,10 @@ public class OperationContext
   com.zimbra.cs.mailbox.OperationContext getOperationContext()
   {
     return mOperationContext;
+  }
+
+  public Account getAccount()
+  {
+    return new Account(mOperationContext.getAuthenticatedUser());
   }
 }

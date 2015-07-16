@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -39,16 +39,16 @@ public class PrefExternalSendersType
   private ZAttrProvisioning.PrefExternalSendersType mValue;
   /* $else $
 
-  public static PrefExternalSendersType ALLNOTINAB = null;
-  public static PrefExternalSendersType ALL        = null;
+  public static PrefExternalSendersType ALLNOTINAB = new PrefExternalSendersType("ALLNOTINAB");
+  public static PrefExternalSendersType ALL        = new PrefExternalSendersType("ALL");
 
-  private Object mValue;
+  private String mValue;
   /* $endif $ */
 
   /* $if ZimbraVersion >= 8.0.0 $ */
   PrefExternalSendersType(@NotNull ZAttrProvisioning.PrefExternalSendersType value)
   /* $else $
-  PrefExternalSendersType(@NotNull Object value)
+  PrefExternalSendersType(@NotNull String value)
   /* $endif $ */
   {
     if (value == null)
@@ -63,7 +63,7 @@ public class PrefExternalSendersType
     /* $if ZimbraVersion >= 8.0.0 $ */
     return mValue.toString();
     /* $else $
-    throw new UnsupportedOperationException();
+    return mValue;
     /* $endif $ */
   }
 
@@ -81,7 +81,7 @@ public class PrefExternalSendersType
       throw ExceptionWrapper.wrap(e);
     }
     /* $else $
-    throw new UnsupportedOperationException();
+    return new PrefExternalSendersType(s);
     /* $endif $ */
   }
 

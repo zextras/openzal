@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -78,15 +78,24 @@ public class CalendarMime
     String descHtml = inv.getDescriptionHtml();
     ZCalendar.ZVCalendar cal = inv.newToICalendar(true);
 
-    List<BodyPart> bodyPartList = extractAttachmentFromOriginalMime(previousMimeMessage);
+    List<BodyPart> bodyPartList = extractAttachmentFromOriginalMime(previousMimeMessage, inv.getMailItemId());
 
     return createCalendarMessage(subject, desc, descHtml, cal, bodyPartList);
   }
 
-  private List<BodyPart> extractAttachmentFromOriginalMime(MimeMessage mimeMessage) throws MessagingException, IOException
+  private List<BodyPart> extractAttachmentFromOriginalMime(MimeMessage mimeMessage, int inviteId) throws MessagingException, IOException
   {
     MimeMultipart mimeMultipart = (MimeMultipart)mimeMessage.getContent();
     MimeMessage subMimeMessage = (MimeMessage)mimeMultipart.getBodyPart(0).getContent();
+    for (int n = 0; n < mimeMultipart.getCount(); ++n)
+    {
+      BodyPart part = mimeMultipart.getBodyPart(n);
+      String[] headerInvId = part.getHeader("invId");
+      if (headerInvId != null && headerInvId.length > 0 && headerInvId[0].equals(String.valueOf(inviteId)))
+      {
+        subMimeMessage = (MimeMessage) part.getContent();
+      }
+    }
     MimeMultipart subMultipart = (MimeMultipart)subMimeMessage.getContent();
 
     List<BodyPart> bodyPartList = new LinkedList<BodyPart>();

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -27,6 +27,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
@@ -147,7 +148,32 @@ public class MailboxManager
 
   public void addListener(MailboxManagerListener listener)
   {
-    mMailboxManager.addListener(new MailboxManagerListenerWrapper(listener));
+    final MailboxManagerListenerWrapper wrapper = new MailboxManagerListenerWrapper(listener);
+    List<com.zimbra.cs.mailbox.Mailbox> mailboxList = mMailboxManager.getAllLoadedMailboxes();
+
+    mMailboxManager.addListener(wrapper);
+
+    final Set<Mailbox> set = new HashSet<Mailbox>();
+    for(com.zimbra.cs.mailbox.Mailbox mailbox : mailboxList )
+    {
+      set.add(new Mailbox(mailbox));
+    }
+
+/*
+    MailboxManager Listener should be added in the boot phase,
+    in the meanwhile some mailboxes could be already loaded,
+    here we call mailboxLoaded for each mailbox already loaded
+*/
+    new Thread(
+      new Runnable()
+      {
+        @Override
+        public void run()
+        {
+          wrapper.notifyExistingMailboxesAndStopTracking(set);
+        }
+      }
+    ).start();
   }
 
   public void removeListener(MailboxManagerListener listener)

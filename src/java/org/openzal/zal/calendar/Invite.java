@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.CalendarItem;
+import org.openzal.zal.Item;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
 import org.openzal.zal.ZimbraListWrapper;
@@ -30,6 +31,7 @@ import com.zimbra.common.service.ServiceException;
 
 import javax.mail.internet.MimeMessage;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.*;
 import org.openzal.zal.log.ZimbraLog;
 
@@ -90,6 +92,17 @@ public class Invite
       throw new NullPointerException();
     }
     mInvite = (com.zimbra.cs.mailbox.calendar.Invite) invite;
+    if (mimeMessage == null)
+    {
+      if (mInvite.hasAttachment())
+      {
+        try
+        {
+          mimeMessage = mInvite.getMimeMessage();
+        }
+        catch (ServiceException ignored) {}
+      }
+    }
     mMimeMessage = mimeMessage;
   }
 
@@ -115,7 +128,15 @@ public class Invite
 
   public String getLocation()
   {
-    return mInvite.getLocation();
+    String location = mInvite.getLocation();
+    if( location == null )
+    {
+      return "";
+    }
+    else
+    {
+      return location;
+    }
   }
 
   public long getUtcDateCompleted()
@@ -247,10 +268,15 @@ public class Invite
     }
   }
 
+  @Nullable
   public Attendee getOrganizer()
   {
     ZOrganizer organizer = mInvite.getOrganizer();
-    return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED);
+    if (organizer == null)
+    {
+      return null;
+    }
+    return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
   }
 
   public long getUtcLastModify()
@@ -295,9 +321,14 @@ public class Invite
     return parsedDateTime.getDate().getTime();
   }
 
+  @Nullable
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
+    if (recurrence == null)
+    {
+      return null;
+    }
     ZRecur zrec = ((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule();
     return new RecurrenceRule(zrec);
   }
@@ -422,7 +453,7 @@ public class Invite
     return mInvite.getMethod();
   }
 
-  @Nullable
+  @NotNull
   public RecurrenceId getRecurId()
   {
     if (mInvite.hasRecurId())
@@ -490,6 +521,28 @@ public class Invite
 
   public
   @Nullable
+  Attendee getMatchingAttendee(Account account)
+  {
+    Attendee attendee = getMatchingAttendee(account.getName());
+    if( attendee != null )
+    {
+      return attendee;
+    }
+
+    for( String alias : account.getMailAlias() )
+    {
+      attendee = getMatchingAttendee(alias);
+      if( attendee != null )
+      {
+        return attendee;
+      }
+    }
+
+    return null;
+  }
+
+  public
+  @Nullable
   Attendee getMatchingAttendee(String address)
   {
     try
@@ -512,10 +565,13 @@ public class Invite
 
   private Attendee convertAttendee(ZAttendee attendee)
   {
+    AttendeeType type = AttendeeType.fromString(attendee.getRole());
+
     return new Attendee(
       attendee.getAddress(),
       attendee.getCn(),
-      AttendeeInviteStatus.fromZimbra(attendee.getPartStat())
+      AttendeeInviteStatus.fromZimbra(attendee.getPartStat()),
+      type
     );
   }
 
@@ -692,5 +748,40 @@ public class Invite
   {
     ZCalendar.ICalTok method = ZCalendar.ICalTok.lookup( mInvite.getMethod() );
    return method == ZCalendar.ICalTok.CANCEL;
+  }
+
+  @Nullable
+  public String getBody()
+  {
+    try
+    {
+      byte[] content = mInvite.getCalendarItem().getContent();
+      if (content == null)
+      {
+        return null;
+      }
+      return new String(mInvite.getCalendarItem().getContent(), Charset.defaultCharset());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<String> getTags()
+  {
+    try
+    {
+      return Arrays.asList(new Item(mInvite.getCalendarItem()).getTags());
+    }
+    catch (Throwable t)
+    {
+      return Collections.emptyList();
+    }
+  }
+
+  public String getPartStat()
+  {
+    return mInvite.getPartStat();
   }
 }

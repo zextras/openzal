@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -24,9 +24,20 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class MailboxManagerListenerWrapper implements MailboxManager.Listener
 {
-  @NotNull private final MailboxManagerListener mListener;
+  @NotNull
+  private final MailboxManagerListener mListener;
+  private final Set<String>            mAlreadyNotifiedMailboxes;
+  private final ReentrantLock          mLock;
+  private       boolean                mTrack;
 
   public MailboxManagerListenerWrapper(@NotNull MailboxManagerListener listener)
   {
@@ -35,6 +46,9 @@ public class MailboxManagerListenerWrapper implements MailboxManager.Listener
       throw new NullPointerException();
     }
     mListener = listener;
+    mAlreadyNotifiedMailboxes = new HashSet<String>();
+    mLock = new ReentrantLock();
+    mTrack = true;
   }
 
   @Override
@@ -51,7 +65,7 @@ public class MailboxManagerListenerWrapper implements MailboxManager.Listener
 
     MailboxManagerListenerWrapper that = (MailboxManagerListenerWrapper) o;
 
-    if (mListener != null ? !mListener.equals(that.mListener) : that.mListener != null)
+    if (!mListener.equals(that.mListener))
     {
       return false;
     }
@@ -59,33 +73,76 @@ public class MailboxManagerListenerWrapper implements MailboxManager.Listener
     return true;
   }
 
+  private void notifiedMailbox(String accountId)
+  {
+    if (mTrack)
+    {
+      mLock.lock();
+      try
+      {
+        mAlreadyNotifiedMailboxes.add(accountId);
+      }
+      finally
+      {
+        mLock.unlock();
+      }
+    }
+  }
+
+  public void notifyExistingMailboxesAndStopTracking(Set<Mailbox> alreadyLoadedMailboxes)
+  {
+    mLock.lock();
+    try
+    {
+      for( Mailbox mailbox : alreadyLoadedMailboxes )
+      {
+        if( mAlreadyNotifiedMailboxes.contains(mailbox.getAccountId()) )
+        {
+          continue;
+        }
+
+        mListener.mailboxLoaded(mailbox);
+      }
+
+      mTrack = false;
+    }
+    finally
+    {
+      mLock.unlock();
+    }
+  }
+
   @Override
   public int hashCode()
   {
-    return mListener != null ? mListener.hashCode() : 0;
+    return mListener.hashCode();
   }
 
   @Override
   public void mailboxAvailable(com.zimbra.cs.mailbox.Mailbox mbox)
   {
+    notifiedMailbox(mbox.getAccountId());
     mListener.mailboxAvailable(new Mailbox(mbox));
   }
 
   @Override
   public void mailboxCreated(com.zimbra.cs.mailbox.Mailbox mbox)
   {
+    notifiedMailbox(mbox.getAccountId());
     mListener.mailboxCreated(new Mailbox(mbox));
   }
 
   @Override
   public void mailboxDeleted(String accountId)
   {
+    notifiedMailbox(accountId);
     mListener.mailboxDeleted(accountId);
   }
 
   @Override
   public void mailboxLoaded(com.zimbra.cs.mailbox.Mailbox mbox)
   {
+    notifiedMailbox(mbox.getAccountId());
     mListener.mailboxLoaded(new Mailbox(mbox));
   }
 }

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -24,6 +24,8 @@ import java.util.Calendar;
 
 public interface Clock
 {
+  long ONE_DAY = 24L * 60L * 60L * 1000L;
+
   public long now();
   public Calendar getCurrentTime();
   public Calendar getDaysFromNow(int numDays);

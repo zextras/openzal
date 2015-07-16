@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -62,5 +62,27 @@ public class AuthToken
   public boolean isDelegatedAdmin()
   {
     return mAuthToken.isDelegatedAdmin();
+  }
+
+  public String toString()
+  {
+    return mAuthToken.toString();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mAuthToken);
+  }
+
+  public String getEncoded()
+  {
+    try
+    {
+      return mAuthToken.getEncoded();
+    }
+    catch (AuthTokenException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }

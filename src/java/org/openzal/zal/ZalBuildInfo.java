@@ -1,7 +1,27 @@
+/*
+ * ZAL - The abstraction layer for Zimbra.
+ * Copyright (C) 2015 ZeXtras S.r.l.
+ *
+ * This file is part of ZAL.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.openzal.zal;
 
 public class ZalBuildInfo
 {
-    public static String COMMIT="d168ebccd31eabb7c80eaba6adcd06dded7949e4";
-    public static String VERSION="1.5.2";
+    public static String COMMIT="9daf40a04f01f2c76f41f2c464c6d7f98faea0c0";
+    public static String VERSION="1.8.3";
 }

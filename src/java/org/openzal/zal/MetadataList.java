@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -24,9 +24,6 @@ import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
-import java.util.Collections;
-import java.util.List;
-
 public class MetadataList
 {
   private final com.zimbra.cs.mailbox.MetadataList mMetadataList;
@@ -35,6 +32,7 @@ public class MetadataList
   {
     mMetadataList = new com.zimbra.cs.mailbox.MetadataList();
   }
+
   public MetadataList( Object metadataList)
   {
     mMetadataList = (com.zimbra.cs.mailbox.MetadataList)metadataList;

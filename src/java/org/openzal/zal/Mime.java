@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.mime.ExpandMimeMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,5 +76,22 @@ public class Mime
   public static MimeMessage buildFixedMimeMessage(Session session)
   {
     return new com.zimbra.cs.mime.Mime.FixedMimeMessage(session);
+  }
+
+/*
+  Apply zimbra own modifiers, for example it explode ms-tnef
+*/
+  public static MimeMessage expandMessage(MimeMessage original) throws MessagingException
+  {
+    try
+    {
+      ExpandMimeMessage expandMimeMessage = new ExpandMimeMessage(original);
+      expandMimeMessage.expand();
+      return expandMimeMessage.getExpanded();
+    }
+    catch (Throwable ex)
+    {
+      return original;
+    }
   }
 }

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -69,5 +69,24 @@ public enum FreeBusyStatus
     }
 
     return status;
+  }
+
+  public GlobalInviteStatus toGlobalInviteStatus()
+  {
+    switch(this)
+    {
+      case Busy:
+        return GlobalInviteStatus.APPOINTMENT_CONFIRMED;
+      case Free:
+        return GlobalInviteStatus.APPOINTMENT_CANCELLED;
+      case BusyTentative:
+        return GlobalInviteStatus.APPOINTMENT_TENTATIVE;
+      case BusyUnavailable:
+        return GlobalInviteStatus.APPOINTMENT_CANCELLED;
+      case NoData:
+        return GlobalInviteStatus.APPOINTMENT_NEED_ACTION;
+    }
+
+    throw new RuntimeException();
   }
 }

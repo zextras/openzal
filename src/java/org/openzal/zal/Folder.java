@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,10 +20,13 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.MailItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.ZimbraException;
 
 
 public class Folder extends Item
@@ -63,5 +66,20 @@ public class Folder extends Item
   public byte getAttributes()
   {
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getAttributes();
+  }
+
+  public boolean isParentOf(Folder folder)
+    throws ZimbraException
+  {
+    try
+    {
+      return ((com.zimbra.cs.mailbox.Folder) mMailItem).isDescendant(
+        folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }

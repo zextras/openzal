@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -32,8 +32,11 @@ import com.zimbra.cs.mailbox.calendar.ZRecur;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 public class RecurrenceRule
 {
@@ -118,6 +121,11 @@ public class RecurrenceRule
 
   public List<Integer> getByCalendarDayList()
   {
+    return getByCalendarDayList(null, null);
+  }
+
+  public List<Integer> getByCalendarDayList(Long startTime, TimeZone timezone)
+  {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
     List<Integer> list = new ArrayList<Integer>(byDayList.size());
 
@@ -126,7 +134,25 @@ public class RecurrenceRule
       list.add(weekDayNum.mDay.getCalendarDay());
     }
 
+    if (list.isEmpty() && Frequency.WEEKLY.equals(getFrequency()) && startTime != null && timezone != null)
+    {
+      Calendar calendar = Calendar.getInstance(timezone);
+      calendar.setTimeInMillis(startTime);
+      list.add(calendar.get(Calendar.DAY_OF_WEEK));
+    }
+
     return list;
+  }
+
+  public int getByWeekOfMonth()
+  {
+    List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
+    if (! byDayList.isEmpty())
+    {
+      return byDayList.get(0).mOrdinal;
+    }
+
+    throw new RuntimeException("Recurrence not supported");
   }
 
   public List<Integer> getByOffsetDayList()

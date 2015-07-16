@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -201,6 +201,14 @@ public class ExceptionWrapper
         return new NoSuchConversationException(exception);
       }
     });
+    mExceptionMap.put( MailServiceException.NO_SUCH_APPT, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchAppointmentException(exception);
+      }
+    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB, new ExceptionWrapperCreator()
     {
       @Override
@@ -296,6 +304,15 @@ public class ExceptionWrapper
         return new ZimbraException(exception);
       }
     });
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.IMMUTABLE_OBJECT, new ExceptionWrapperCreator()
+      {
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new ImmutableChangeAttempt(exception);
+        }
+      }
+    );
   }
 
   public static ZimbraException wrap(Exception exception)

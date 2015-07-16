@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -67,5 +67,10 @@ public class ItemInfo extends ItemStatus
       "itemId: " + itemId + " " +
       "sq: " + sequence + " " +
       "dt: "+date;
+  }
+
+  public int getItemId()
+  {
+    return itemId;
   }
 }
