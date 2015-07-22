@@ -176,7 +176,7 @@ public class Invite
             return hasStartTime();
           }
 
-          if (Alarm.TriggerRelated.END.equals(triggerRelated))
+          if (Alarm.TriggerRelated.END.equals(triggerRelated) || triggerRelated == null)
           {
             return hasEndDate();
           }
