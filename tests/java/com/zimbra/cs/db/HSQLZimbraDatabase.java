@@ -217,7 +217,7 @@ public boolean databaseExists(DbPool.DbConnection connection, String dbname)
     return "LIMIT " + limit + " OFFSET " + offset;
   }
 
-  public void useMVCC(Mailbox mbox) throws ServiceException, SQLException {
+  public static void useMVCC(Mailbox mbox) throws ServiceException, SQLException {
     //tell HSQLDB to use multiversion so our asserts can read while write is open
     PreparedStatement stmt = null;
     ResultSet rs = null;

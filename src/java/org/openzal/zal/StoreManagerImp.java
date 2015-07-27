@@ -20,6 +20,9 @@
 
 package org.openzal.zal;
 
+import com.zextras.annotations.VisibleForTesting;
+import com.zimbra.cs.store.file.FileBlobStoreWrap;
+import com.zimbra.cs.store.file.FileBlobStoreWrapImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
@@ -52,9 +55,9 @@ public class StoreManagerImp implements StoreManager
   }
 
   @NotNull
-  private FileBlobStore getFileBlobStore()
+  public FileBlobStoreWrap getFileBlobStore()
   {
-    return (FileBlobStore) sm;
+    return new FileBlobStoreWrapImpl((FileBlobStore) sm);
   }
 
   @Nullable
