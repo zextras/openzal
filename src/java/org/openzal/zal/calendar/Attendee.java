@@ -71,7 +71,7 @@ public class Attendee
   )
   {
     mType = type;
-    mAddress = (address == null) ? "" : address.replaceAll(";", "");
+    mAddress = (address == null) ? "" : address;
     mName = (name == null) ? "" : name;
     mStatus = status;
   }

@@ -289,14 +289,28 @@ public class Invite
     return mInvite.getStartTime() != null;
   }
 
+  @Nullable
   public Date getStartTimeDate()
   {
-    return mInvite.getStartTime().getDate();
+    ParsedDateTime startTime = mInvite.getStartTime();
+    if (startTime == null)
+    {
+      return null;
+    }
+
+    return startTime.getDate();
   }
 
+  @Nullable
   public Date getEndTimeDate()
   {
-    return mInvite.getEffectiveEndTime().getDate();
+    ParsedDateTime endTime = mInvite.getEffectiveEndTime();
+    if (endTime == null)
+    {
+      return null;
+    }
+
+    return endTime.getDate();
   }
 
   public long getEffectiveDuration()
@@ -688,7 +702,7 @@ public class Invite
 
   public boolean hasEndDate()
   {
-    return mInvite.getEndTime() != null;
+    return mInvite.getEffectiveEndTime() != null;
   }
 
   public boolean hasEffectiveEndDate()

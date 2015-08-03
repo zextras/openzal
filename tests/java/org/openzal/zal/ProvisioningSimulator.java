@@ -157,16 +157,17 @@ public class ProvisioningSimulator extends ProvisioningImp
     Map<String, Object> defaults = new HashMap<String, Object>();
     defaults.put(com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus,
                  com.zimbra.cs.account.Provisioning.ACCOUNT_STATUS_ACTIVE);
-    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, accountStr );
+    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, name );
     attrs.putAll(extraAttr);
+    attrs.putAll(defaults);
 
     defaults.put(
       ProvisioningImp.A_zimbraMailHost,
                  "localhost");
 
     return new AccountSimulator(
-      name,
       accountStr,
+      "accountId",
       attrs,
       defaults,
       this
@@ -528,7 +529,13 @@ public class ProvisioningSimulator extends ProvisioningImp
     @Override
     public String getDisplayName()
     {
-      return getName();
+      String displayName = getAttr("displayName");
+      if (displayName == null || displayName.isEmpty())
+      {
+        return getName();
+      }
+
+      return displayName;
     }
 
     @Override

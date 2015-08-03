@@ -22,6 +22,8 @@ package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.mail.internet.InternetAddress;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +48,21 @@ public class Identity implements Comparable<Identity>
   protected <T> T toZimbra(Class<T> cls)
   {
     return cls.cast(mIdentity);
+  }
+
+  public InternetAddress getFriendlyEmailAddress() throws UnsupportedEncodingException
+  {
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    return mIdentity.getFriendlyEmailAddress();
+    /* $else $
+    String address = mIdentity.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress);
+    String personal = mIdentity.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay);
+    if (personal != null && personal.trim().equals(""))
+    {
+      personal = null;
+    }
+    return new InternetAddress(address, personal, "UTF-8");
+    /* $endif $ */
   }
 
   @Override

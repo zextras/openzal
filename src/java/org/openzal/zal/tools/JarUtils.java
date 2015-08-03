@@ -47,7 +47,7 @@ public abstract class JarUtils
 
     if (resourceUrl == null)
     {
-      throw new RuntimeException("Unable get current jar path");
+      throw new RuntimeException("Unable get jar path");
     }
 
     String jarPath = resourceUrl.getPath();
