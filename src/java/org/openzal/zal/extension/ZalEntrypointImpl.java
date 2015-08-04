@@ -25,9 +25,13 @@ import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
+import org.openzal.zal.tools.ZalVersionValidator;
+import org.openzal.zal.tools.ZeXtrasVersionValidator;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.jar.JarInputStream;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
@@ -37,6 +41,9 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   private boolean          mExtensionPathExists;
   private ZalEntrypoint    mZalEntryPoint;
   private File             mCustomExtensionDirectory;
+
+  private static final String ZAL_FILE     = "zal.jar";
+  private static final String ZEXTRAS_FILE = "zextras.jar";
 
   public ZalEntrypointImpl()
   {
@@ -148,6 +155,30 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       }
     }
 
+    private void checkTargetExtension(File extensionDirectory)
+    {
+      try
+      {
+        ZalVersionValidator zalVersionValidator = new ZalVersionValidator(
+          new JarInputStream(
+            new FileInputStream(extensionDirectory.getAbsolutePath() + ZAL_FILE)
+          )
+        );
+        ZeXtrasVersionValidator zeXtrasVersionValidator = new ZeXtrasVersionValidator(
+          new JarInputStream(
+            new FileInputStream(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE)
+          )
+        );
+
+        zeXtrasVersionValidator.validateZalVersion(zalVersionValidator.getVersion());
+        zalVersionValidator.validateZimbraVersion(ZimbraVersion.current);
+      }
+      catch (IOException e)
+      {
+        throw new RuntimeException(e);
+      }
+    }
+
     @Override
     public void shutdown()
     {
@@ -168,6 +199,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     public void reload(File extensionDirectory)
     {
       checkState();
+      checkTargetExtension(extensionDirectory);
       destroy();
       mCustomExtensionDirectory = extensionDirectory;
       init();
