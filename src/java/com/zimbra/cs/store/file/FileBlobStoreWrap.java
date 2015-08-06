@@ -7,6 +7,9 @@ import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
+/* $if ZimbraVersion < 8.0.0 $
+import com.zimbra.cs.store.StorageCallback;
+/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,14 +20,26 @@ public interface FileBlobStoreWrap
 
     void shutdown();
 
+    /* $if ZimbraVersion >= 7.2.0 $ */
     boolean supports(StoreManager.StoreFeature feature);
+    /* $endif $ */
 
     BlobBuilder getBlobBuilder() throws IOException, ServiceException;
 
+    /* $if ZimbraVersion >= 8.0.0 $ */
     Blob storeIncoming(InputStream in, boolean storeAsIs)
+    /* $elseif ZimbraVersion >= 7.0.0 $
+    Blob storeIncoming(InputStream in, StorageCallback callback, boolean storeAsIs)
+    /* $else $
+    Blob storeIncoming(InputStream in, long sizeHint, StorageCallback callback, boolean storeAsIs)
+    /* $endif $ */
     throws IOException, ServiceException;
 
+    /* $if ZimbraVersion >= 8.0.0 $ */
     VolumeStagedBlob stage(InputStream in, long actualSize, Mailbox mbox)
+    /* $else $
+    VolumeStagedBlob stage(InputStream in, long actualSize, StorageCallback callback, Mailbox mbox)
+    /* $endif $ */
     throws IOException, ServiceException;
 
     VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException;
@@ -56,5 +71,11 @@ public interface FileBlobStoreWrap
 
     InputStream getContent(Blob blob) throws IOException;
 
+    /* $if ZimbraVersion >= 7.2.1 $ */
     boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException;
+    /* $elseif ZimbraVersion >= 7.2.0 $
+    boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob> blobs) throws IOException, ServiceException;
+    /* $else $
+    boolean deleteStore(Mailbox mbox) throws IOException, ServiceException;
+    /* $endif $ */
 }

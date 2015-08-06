@@ -137,6 +137,40 @@ public class StoreManagerImp implements StoreManager
     return sm.delete(mblob.toZimbra(com.zimbra.cs.store.MailboxBlob.class));
   }
 
+  @Override
+  public StoreVolume getCurrentVolume()
+  {
+    Volume volume;
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    volume = VolumeManager.getInstance().getCurrentMessageVolume();
+    /* $else $
+    volume = Volume.getCurrentMessageVolume();
+    /* $endif $ */
+    if (volume == null)
+    {
+      return null;
+    }
+
+    return new StoreVolume(volume);
+  }
+
+  @Override
+  public StoreVolume getCurrentSecondaryVolume()
+  {
+    Volume volume;
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    volume = VolumeManager.getInstance().getCurrentSecondaryMessageVolume();
+    /* $else $
+    volume = Volume.getCurrentSecondaryMessageVolume();
+    /* $endif $ */
+    if (volume == null)
+    {
+      return null;
+    }
+
+    return new StoreVolume(volume);
+  }
+
   /* $if ZimbraVersion >= 8.0.0 $*/
   private String getBlobDir(short volumeId, int mboxId, int itemId )
   {
