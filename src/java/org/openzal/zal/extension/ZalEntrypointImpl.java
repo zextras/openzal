@@ -42,8 +42,8 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   private ZalEntrypoint    mZalEntryPoint;
   private File             mCustomExtensionDirectory;
 
-  private static final String ZAL_FILE     = "zal.jar";
-  private static final String ZEXTRAS_FILE = "zextras.jar";
+  private static final String ZAL_FILE     = "/zal.jar";
+  private static final String ZEXTRAS_FILE = "/zextras.jar";
 
   public ZalEntrypointImpl()
   {
