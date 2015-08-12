@@ -43,4 +43,8 @@ public interface StoreManager
   boolean delete(Blob blob) throws IOException;
 
   boolean delete(MailboxBlob mblob) throws IOException;
+
+  StoreVolume getCurrentVolume();
+
+  StoreVolume getCurrentSecondaryVolume();
 }

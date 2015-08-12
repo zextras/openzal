@@ -4,7 +4,6 @@ import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.cs.store.file.FileBlobStoreSimulatorWrap;
 import com.zimbra.cs.store.file.FileBlobStoreWrap;
-import com.zimbra.cs.volume.VolumeManager;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
 import org.openzal.zal.lib.ZimbraVersion;

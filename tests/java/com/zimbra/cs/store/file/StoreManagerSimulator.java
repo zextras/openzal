@@ -14,9 +14,6 @@ import com.zimbra.cs.store.FileDescriptorCache;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.store.file.FileBlobStoreSimulatorWrap;
-import com.zimbra.cs.volume.Volume;
-import com.zimbra.cs.volume.VolumeManager;
 import io.netty.buffer.Unpooled;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -30,6 +27,8 @@ import java.nio.channels.FileChannel;
 import java.util.UUID;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
+import com.zimbra.cs.volume.Volume;
+import com.zimbra.cs.volume.VolumeManager;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
@@ -310,6 +309,19 @@ public final class StoreManagerSimulator extends StoreManager
   {
     MailboxBlob newBlob = copy(
       (MockBlob) src,
+      destMbox,
+      destItemId,
+      destRevision,
+      String.valueOf(currentVolume())
+    );
+    return newBlob;
+  }
+
+  public MailboxBlob link(MailboxBlob src, Mailbox destMbox, int destItemId, int destRevision)
+    throws IOException, ServiceException
+  {
+    MailboxBlob newBlob = copy(
+      (MockBlob) src.getLocalBlob(),
       destMbox,
       destItemId,
       destRevision,

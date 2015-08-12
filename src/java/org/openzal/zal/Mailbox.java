@@ -1344,7 +1344,8 @@ public class Mailbox
         params
       );
 
-      result.skipToHit(offset);
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
 
       return new QueryResults(
         result
@@ -1372,7 +1373,8 @@ $endif$
         params
       );
 
-      result.skipToHit(offset);
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
 
       return new QueryResults(
         result

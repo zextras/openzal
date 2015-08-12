@@ -8,7 +8,12 @@ import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
+/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.VolumeManager;
+/* $else $
+import com.zimbra.cs.store.StorageCallback;
+import com.zimbra.cs.store.file.Volume;
+/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,11 +39,13 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
     mStore.shutdown();
   }
 
+  /* $if ZimbraVersion >= 7.2.0 $ */
   @Override
   public boolean supports(StoreManager.StoreFeature feature)
   {
     return mStore.supports(feature);
   }
+  /* $endif $ */
 
   @Override
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
@@ -47,13 +54,29 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   }
 
   @Override
+  /* $if ZimbraVersion >= 8.0.0 $ */
   public Blob storeIncoming(InputStream in, boolean storeAsIs) throws IOException, ServiceException
   {
     return mStore.storeIncoming(in, storeAsIs);
   }
+  /* $elseif ZimbraVersion >= 7.0.0 $
+  public Blob storeIncoming(InputStream in, StorageCallback callback, boolean storeAsIs) throws IOException, ServiceException
+  {
+    return mStore.storeIncoming(in, callback, storeAsIs);
+  }
+  /* $else $
+  public Blob storeIncoming(InputStream in, long sizeHint, StorageCallback callback, boolean storeAsIs) throws IOException, ServiceException
+  {
+    return mStore.storeIncoming(in, sizeHint, callback, storeAsIs);
+  }
+  /* $endif $ */
 
   @Override
+  /* $if ZimbraVersion >= 8.0.0 $ */
   public VolumeStagedBlob stage(InputStream in, long actualSize, Mailbox mbox) throws IOException, ServiceException
+  /* $else $
+  public VolumeStagedBlob stage(InputStream in, long actualSize, StorageCallback callback, Mailbox mbox) throws IOException, ServiceException
+  /* $endif $ */
   {
     throw new RuntimeException();
   }
@@ -67,7 +90,11 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob copy(MailboxBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 8.0.0 $ */
     short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    /* $else $
+    short volumeId = Volume.getCurrentMessageVolume().getId();
+    /* $endif $ */
     return new MockVolumeMailboxBlob(mStore.copy(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -80,7 +107,11 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob link(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 8.0.0 $ */
     short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    /* $else $
+    short volumeId = Volume.getCurrentMessageVolume().getId();
+    /* $endif $ */
     return new MockVolumeMailboxBlob(mStore.link(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -93,7 +124,11 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 8.0.0 $ */
     short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    /* $else $
+    short volumeId = Volume.getCurrentMessageVolume().getId();
+    /* $endif $ */
     return new MockVolumeMailboxBlob(mStore.renameTo(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -134,7 +169,13 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   }
 
   @Override
+  /* $if ZimbraVersion >= 7.2.1 $ */
   public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
+  /* $elseif ZimbraVersion >= 7.2.0 $
+  public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob> blobs) throws IOException, ServiceException
+  /* $else $
+  public boolean deleteStore(Mailbox mbox) throws IOException, ServiceException
+  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
