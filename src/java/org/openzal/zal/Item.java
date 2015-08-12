@@ -159,6 +159,11 @@ public class Item implements Comparable<Item>
     return mMailItem.getModifiedSequence();
   }
 
+  public int getSavedSequence()
+  {
+    return mMailItem.getSavedSequence();
+  }
+
   public boolean isTagged(int mask)
   {
     return (mMailItem.getFlagBitmask() & mask) != 0;
