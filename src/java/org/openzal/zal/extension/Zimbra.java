@@ -30,6 +30,7 @@ import com.zimbra.cs.extension.ZimbraExtension;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Zimbra
 {
@@ -146,5 +147,29 @@ public class Zimbra
     {
       throw new RuntimeException(e);
     }
+  }
+
+  public static void overrideExtensionMap()
+  {
+/*
+  ZX-3303
+  avoid concurrent modification exception when disabling an extension
+  during extension postInit
+*/
+
+/* $if ZimbraVersion >= 7.0.0$ */
+    try
+    {
+      Map map = (Map)sInitializedExtensions.get(null);
+      sInitializedExtensions.set(
+        null,
+        new ConcurrentHashMap<String,String>(map)
+      );
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
+/* $endif$ */
   }
 }
