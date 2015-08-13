@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 import com.zimbra.cs.account.Provisioning.CacheEntryType;
 $endif$ */
 
-public class ProvisioningSimulator extends Provisioning
+public class ProvisioningSimulator extends ProvisioningImp
 {
   private Map<String, Domain> mDomainMap;
   private Map<String, Account> mAccountMap;
@@ -63,7 +63,7 @@ public class ProvisioningSimulator extends Provisioning
 
     String[] arrayMembers = new String[ members.size() ];
     members.toArray(arrayMembers);
-    listAttrs.put(Provisioning.A_zimbraMailForwardingAddress, arrayMembers);
+    listAttrs.put(ProvisioningImp.A_zimbraMailForwardingAddress, arrayMembers);
     return new DistributionList( new com.zimbra.cs.account.DistributionList(name, name, listAttrs, null) {} );
   }
 
@@ -96,7 +96,7 @@ public class ProvisioningSimulator extends Provisioning
   public Account addUserToHost(String name, String address, final String hostname)
   {
     return addUser(name, address, new HashMap<String, Object>(1) {{
-      put(Provisioning.A_zimbraMailHost, hostname);
+      put(ProvisioningImp.A_zimbraMailHost, hostname);
     }});
   }
 
@@ -161,7 +161,8 @@ public class ProvisioningSimulator extends Provisioning
     attrs.putAll(extraAttr);
     attrs.putAll(defaults);
 
-    defaults.put(Provisioning.A_zimbraMailHost,
+    defaults.put(
+      ProvisioningImp.A_zimbraMailHost,
                  "localhost");
 
     return new AccountSimulator(
@@ -355,7 +356,7 @@ public class ProvisioningSimulator extends Provisioning
         "",
         new HashMap<String, Object>(),
         new HashMap<String, Object>(),
-        new Provisioning(mProvisioning)
+        new ProvisioningImp(mProvisioning)
       ));
   }
 
@@ -398,7 +399,7 @@ public class ProvisioningSimulator extends Provisioning
       new HashMap<String, Object>(){{
         put("key", "value");
       }},
-      new Provisioning(mProvisioning)
+      new ProvisioningImp(mProvisioning)
     );
   }
 

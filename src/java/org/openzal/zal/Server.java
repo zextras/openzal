@@ -167,8 +167,8 @@ public class Server extends Entry
 
   @NotNull
   public String getAdminURL(String path) {
-    String hostname = getAttr(Provisioning.A_zimbraServiceHostname);
-    int port = getIntAttr(Provisioning.A_zimbraAdminPort, 0);
+    String hostname = getAttr(ProvisioningImp.A_zimbraServiceHostname);
+    int port = getIntAttr(ProvisioningImp.A_zimbraAdminPort, 0);
     StringBuffer sb = new StringBuffer(128);
     sb.append(LC.zimbra_admin_service_scheme.value()).append(hostname).append(":").append(port).append(path);
     return sb.toString();

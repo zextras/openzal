@@ -2,10 +2,10 @@ package com.zimbra.cs.account;
 
 import java.util.UUID;
 
-import org.openzal.zal.ZimbraId;
+import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 /**
- * Mock implementation of {@link org.openzal.zal.Provisioning} for testing.
+ * Mock implementation of {@link ProvisioningImp} for testing.
  *
  * @author ysasaki
  * Zimbra Collaboration Suite Server
@@ -30,7 +30,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.mime.MockMimeTypeInfo;
-import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
 

@@ -203,7 +203,7 @@ public class Mailbox
   {
     return new OperationContext(
       new com.zimbra.cs.mailbox.OperationContext(
-        new Provisioning(
+        new ProvisioningImp(
           com.zimbra.cs.account.Provisioning.getInstance()
         ).getZimbraUser().toZimbra(com.zimbra.cs.account.Account.class)
       )

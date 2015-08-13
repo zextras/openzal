@@ -6,6 +6,7 @@ import com.zimbra.cs.store.file.FileBlobStoreSimulatorWrap;
 import com.zimbra.cs.store.file.FileBlobStoreWrap;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
+import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.Provisioning;
 
@@ -204,7 +205,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public Provisioning getProvisioning() throws Exception
   {
-    return new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
+    return new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
   }
 
   public MockProvisioning getMockProvisioning()
@@ -214,7 +215,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
   {
-    return new org.openzal.zal.MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+    return new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
   }
 
   public StoreManager getStoreManager()
@@ -225,5 +226,10 @@ public class ZimbraSimulator extends ExternalResource
   public void useMVCC(org.openzal.zal.Mailbox mbox) throws Exception
   {
     HSQLZimbraDatabase.useMVCC(mbox.toZimbra(Mailbox.class));
+  }
+
+  public Zimbra getZimbra()
+  {
+    return new Zimbra();
   }
 }

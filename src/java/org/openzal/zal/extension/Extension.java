@@ -31,32 +31,38 @@ import java.util.List;
 
 class Extension implements Comparable<Extension>
 {
-  private final String         mExtensionClassName;
-  private final List<File>     mLibraries;
-  private final ZalClassLoader mClassLoader;
-  private final ZalExtension   mZalExtension;
+  private final String      mExtensionClassName;
+  private final ClassLoader mClassLoader;
+  private final ZalExtension mZalExtension;
 
   public Extension(
     String extensionClassName,
     List<File> libraries
+  ) throws ClassNotFoundException
+  {
+    this(extensionClassName, createClassLoader(libraries));
+  }
+
+  public Extension(
+    String extensionClassName,
+    ClassLoader classLoader
   )
     throws ClassNotFoundException
   {
     mExtensionClassName = extensionClassName;
-    mLibraries = libraries;
-    mClassLoader = createClassLoader();
+    mClassLoader = classLoader;
     mZalExtension = createZalExtension();
   }
 
-  private ZalClassLoader createClassLoader()
+  private static BootstrapClassLoader createClassLoader(List<File> libraries)
   {
-    List<URL> urls = new ArrayList<URL>(mLibraries.size());
+    List<URL> urls = new ArrayList<URL>(libraries.size());
 
-    for( File file : mLibraries )
+    for (File file : libraries)
     {
       try
       {
-        urls.add( new URL("jar:file:"+file.getAbsolutePath()+"!/") );
+        urls.add(new URL("jar:file:" + file.getAbsolutePath() + "!/"));
       }
       catch (MalformedURLException e)
       {
@@ -64,7 +70,11 @@ class Extension implements Comparable<Extension>
       }
     }
 
-    return new ZalClassLoader(urls.toArray(new URL[urls.size()]), this.getClass().getClassLoader());
+    return new BootstrapClassLoader(
+      urls.toArray(new URL[urls.size()]),
+      Extension.class.getClassLoader(),
+      true
+    );
   }
 
   private ZalExtension createZalExtension() throws ClassNotFoundException
@@ -150,11 +160,11 @@ class Extension implements Comparable<Extension>
     }
   }
 
-  public void start(ZalExtensionController controller, Zimbra zimbra)
+  public void start(ZalExtensionController controller)
   {
     try
     {
-      mZalExtension.startup(controller, zimbra);
+      mZalExtension.startup(controller);
     }
     catch (Throwable ex)
     {

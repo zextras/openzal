@@ -27,6 +27,5 @@ public interface ZalExtensionController
 {
   void shutdown();
   void reboot();
-  void reload(File directory) throws IOException;
-  void update(File directory) throws IOException;
+  void reload(File extensionDirectory) throws IOException;
 }

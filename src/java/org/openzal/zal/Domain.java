@@ -191,7 +191,7 @@ public class Domain extends Entry
 
   public String getPublicHostname()
   {
-    return mDomain.getAttr(Provisioning.A_zimbraPublicServiceHostname, null);
+    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
   }
 }
 
