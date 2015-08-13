@@ -52,7 +52,7 @@ public class ZimbraSimulator extends ExternalResource
 
     init();
 
-    mStoreManager = new StoreManagerTestImp();
+    mStoreManager = new StoreManagerTestUtil();
   }
 
   /*
