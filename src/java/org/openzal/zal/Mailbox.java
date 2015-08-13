@@ -27,6 +27,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
 
+import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.cs.index.*;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.session.Session;
 import org.openzal.zal.calendar.CalendarItemData;
@@ -41,7 +43,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
-import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.util.*;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
@@ -1290,13 +1291,28 @@ public class Mailbox
     mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
   }
 
+
   @NotNull
   public QueryResults search(
     @NotNull OperationContext octxt,
-                               String queryString,
-                               @NotNull byte[] types,
-                               @NotNull SortedBy sortBy,
-                               int chunkSize
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize
+  )
+    throws IOException, ZimbraException
+  {
+    return search(octxt, queryString, types, sortBy, chunkSize, 0);
+  }
+
+  @NotNull
+  public QueryResults search(
+    @NotNull OperationContext octxt,
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize,
+    int offset
   )
     throws IOException, ZimbraException
   {
@@ -1308,25 +1324,58 @@ public class Mailbox
       {
         typeList.add(Item.convertType(type));
       }
+
+      com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
+      params.setQueryString(queryString);
+      params.setTimeZone(null);
+      params.setLocale(null);
+      params.setTypes(typeList);
+      params.setSortBy(sortBy.toZimbra(SortBy.class));
+      params.setChunkSize(chunkSize);
+      params.setPrefetch(true);
+      params.setFetchMode(com.zimbra.cs.index.SearchParams.Fetch.NORMAL);
+      params.setInDumpster(false);
+      params.setLimit(chunkSize);
+      params.setOffset(offset);
+
+      ZimbraQueryResults result = mMbox.index.search(
+        SoapProtocol.Soap12,
+        octxt.getOperationContext(),
+        params
+      );
+
+      result.skipToHit(offset);
+
       return new QueryResults(
-        mMbox.index.search(
-          octxt.getOperationContext(),
-          queryString,
-          typeList,
-          sortBy.toZimbra(SortBy.class),
-          chunkSize,
-          false
-        )
+        result
       );
 /* $else$
+      com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
+
+ $if ZimbraVersion >= 7.0.0 $
+      params.setInDumpster(false);
+$endif$
+
+      params.setQueryStr(queryString);
+      params.setTimeZone(null);
+      params.setLocale(null);
+      params.setTypes(types);
+      params.setSortBy(sortBy.toZimbra(SortBy.class));
+      params.setChunkSize(chunkSize);
+      params.setPrefetch(true);
+      params.setLimit(chunkSize);
+      params.setOffset(offset);
+
+      ZimbraQueryResults result = mMbox.search(
+        SoapProtocol.Soap12,
+        octxt.getOperationContext(),
+        params
+      );
+
+      result.skipToHit(offset);
+
       return new QueryResults(
-        mMbox.search(
-          octxt.getOperationContext(),
-          queryString,
-          types,
-          sortBy.toZimbra(SortBy.class),
-          chunkSize
-        )
+        result
       );
    $endif$ */
     }
