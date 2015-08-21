@@ -1783,6 +1783,36 @@ public class ProvisioningImp implements Provisioning
     return result;
   }
 
+  @Override
+  public void deleteAccountByName(String name)
+  {
+    try
+    {
+      Account account = getAccountByName(name);
+      if( account != null)
+      {
+        mProvisioning.deleteAccount(account.getId());
+      }
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void deleteAccountById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteAccount(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   private static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;
