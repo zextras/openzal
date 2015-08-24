@@ -22,13 +22,15 @@ package org.openzal.zal.extension;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public interface ExtensionManager
 {
+  Extension getExtension();
   void setCustomClassLoader(ClassLoader classLoader);
   void setCustomZalExtensionController(ZalExtensionController customZalExtensionController);
   void setCustomExtensionDirectory(File zalRoot);
   void loadExtension() throws IOException;
-  void startExtension();
+  void startExtension(WeakReference<ClassLoader> previousExtension);
   void shutdownExtension();
 }

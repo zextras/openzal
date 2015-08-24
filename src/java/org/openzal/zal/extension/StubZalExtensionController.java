@@ -22,6 +22,7 @@ package org.openzal.zal.extension;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class StubZalExtensionController implements ZalExtensionController
 {
@@ -38,7 +39,7 @@ public class StubZalExtensionController implements ZalExtensionController
   }
 
   @Override
-  public void reload(File extensionDirectory) throws IOException
+  public void reload(File extensionDirectory, WeakReference<ClassLoader> previousClassLoader) throws IOException
   {
     throw new UnsupportedOperationException();
   }
