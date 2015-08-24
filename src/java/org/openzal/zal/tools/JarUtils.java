@@ -43,15 +43,15 @@ public abstract class JarUtils
   private static final String MANIFEST = "META-INF/MANIFEST.MF";
 
   @NotNull
-  public static File getCurrentJar()
+  public static File getJar(Class cls)
   {
-    String classResourceName = ChecksumChecker.class.getName().replace(".", "/") + ".class";
+    String classResourceName = cls.getName().replace(".", "/") + ".class";
 
-    URL resourceUrl = ChecksumChecker.class.getClassLoader().getResource(classResourceName);
+    URL resourceUrl = cls.getClassLoader().getResource(classResourceName);
 
     if (resourceUrl == null)
     {
-      throw new RuntimeException("Unable get current jar path");
+      throw new RuntimeException("Unable get jar path");
     }
 
     String jarPath = resourceUrl.getPath();
@@ -61,6 +61,12 @@ public abstract class JarUtils
     }
 
     return new File(jarPath);
+  }
+
+  @NotNull
+  public static File getCurrentJar()
+  {
+    return getJar(JarUtils.class);
   }
 
   public static void copyJar(ZipFile zipFile, Manifest manifest, File destination) throws IOException
