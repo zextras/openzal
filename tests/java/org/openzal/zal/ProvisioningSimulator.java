@@ -88,19 +88,19 @@ public class ProvisioningSimulator extends Provisioning
     return addUser(address, address);
   }
 
-  public Account addUser(String name, String address)
+  public Account addUser(String address, String name)
   {
-    return addUser(name, address, new HashMap<String, Object>());
+    return addUser(address, name, new HashMap<String, Object>());
   }
 
-  public Account addUserToHost(String name, String address, final String hostname)
+  public Account addUserToHost(String address, String name, final String hostname)
   {
-    return addUser(name, address, new HashMap<String, Object>(1) {{
+    return addUser(address, name, new HashMap<String, Object>(1) {{
       put(Provisioning.A_zimbraMailHost, hostname);
     }});
   }
 
-  public Account addUser(String name, String address, Map<String, Object> attrs)
+  public Account addUser(String address, String name, Map<String, Object> attrs)
   {
     if (mAccountMap.containsKey(address))
     {
@@ -116,7 +116,7 @@ public class ProvisioningSimulator extends Provisioning
     String domain = address.substring(domainIdx + 1);
     addDomain(domain);
 
-    Account account = createFakeAccount(name, address, attrs);
+    Account account = createFakeAccount(address, name, attrs);
     mAccountMap.put(address, account);
 
     return account;
@@ -140,10 +140,10 @@ public class ProvisioningSimulator extends Provisioning
     return createFakeAccount(name,accountStr,Collections.<String,Object>emptyMap());
   }
 
-  public Account createFakeAccount(String name, String accountStr, Map<String,Object> extraAttr)
+  public Account createFakeAccount(String address, String accountStr, Map<String,Object> extraAttr)
   {
-    if( name == null ) {
-      name = "mockito";
+    if( address == null ) {
+      address = "mockito";
     }
 
     if( accountStr == null ) {
@@ -164,7 +164,7 @@ public class ProvisioningSimulator extends Provisioning
                  "localhost");
 
     return new AccountSimulator(
-      name,
+      address,
       accountStr,
       attrs,
       defaults,
@@ -527,7 +527,7 @@ public class ProvisioningSimulator extends Provisioning
     @Override
     public String getDisplayName()
     {
-      return getName();
+      return getAttr(com.zimbra.cs.account.Provisioning.A_displayName);
     }
 
     @Override

@@ -1173,7 +1173,7 @@ public class Mailbox
     {
       if (! canWrite(octxt, calItemId))
       {
-        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getName() + " on " + mMbox.getAccount().getMail() + " mailbox");
       }
 
 
