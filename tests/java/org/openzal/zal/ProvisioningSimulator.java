@@ -143,11 +143,11 @@ public class ProvisioningSimulator extends Provisioning
   public Account createFakeAccount(String address, String accountStr, Map<String,Object> extraAttr)
   {
     if( address == null ) {
-      address = "mockito";
+      address = "mockito@example.com";
     }
 
     if( accountStr == null ) {
-      accountStr = "mockito@example.com";
+      accountStr = "mockito";
     }
 
     Map<String,Object> attrs = new HashMap<String, Object>();
