@@ -45,6 +45,12 @@ public class PermissiveMap<K, V> extends AbstractMap<K, V> implements Map<K, V>
     mValues = new ArrayList<V>(16);
   }
 
+  public PermissiveMap(Map<K,V> map)
+  {
+    this();
+    putAll(map);
+  }
+
   @Override
   public int size()
   {

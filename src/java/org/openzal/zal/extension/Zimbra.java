@@ -23,6 +23,7 @@ package org.openzal.zal.extension;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
+import org.openzal.zal.lib.PermissiveMap;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
 import com.zimbra.cs.extension.ExtensionUtil;
@@ -163,7 +164,7 @@ public class Zimbra
       Map map = (Map)sInitializedExtensions.get(null);
       sInitializedExtensions.set(
         null,
-        new ConcurrentHashMap<String,String>(map)
+        new PermissiveMap<String,String>(map)
       );
     }
     catch (IllegalAccessException e)
