@@ -16,7 +16,7 @@ import com.zimbra.cs.account.MockProvisioning;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
-import com.zimbra.cs.store.StoreManagerSimulator;
+import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.dom4j.DocumentException;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -53,18 +53,18 @@ public class ZimbraSimulator extends ExternalResource
 
     init();
 
-    mStoreManager = new StoreManagerImp(
-      com.zimbra.cs.store.StoreManager.getInstance()
-    );
+    mStoreManager = new StoreManagerTestUtil();
   }
 
-/*
-  junit @Rule implementation
- */
-  protected void before() throws Throwable {
+  /*
+    junit @Rule implementation
+   */
+  protected void before() throws Throwable
+  {
   }
 
-  protected void after() {
+  protected void after()
+  {
     try
     {
       cleanup();
@@ -149,9 +149,42 @@ public class ZimbraSimulator extends ExternalResource
     HSQLZimbraDatabase.createDatabase();
   }
 
+  /*
+  private static Field                      sVolumeManagerInstance;
+  private static Constructor<VolumeManager> sVolumeManagerBuilder;
+  private static Field                      sId2Volume;
+
+  static
+  {
+    try
+    {
+      sVolumeManagerBuilder = VolumeManager.class.getDeclaredConstructor();
+      sVolumeManagerBuilder.setAccessible(true);
+
+      sVolumeManagerInstance = VolumeManager.class.getDeclaredField("SINGLETON");
+      sVolumeManagerInstance.setAccessible(true);
+      removeFinal(sVolumeManagerInstance);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static void removeFinal(Field field) throws NoSuchFieldException, IllegalAccessException
+  {
+    Field modifiersField = Field.class.getDeclaredField("modifiers");
+    modifiersField.setAccessible(true);
+    modifiersField.setInt(field, sVolumeManagerInstance.getModifiers() & ~Modifier.FINAL);
+  }
+  */
+
   public void cleanup() throws Exception
   {
     HSQLZimbraDatabase.clearDatabase();
+    //sVolumeManagerInstance.set(null, sVolumeManagerBuilder.newInstance());
+    //((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).shutdown();
   }
 
   public Provisioning getProvisioning() throws Exception
@@ -161,7 +194,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public MockProvisioning getMockProvisioning()
   {
-    return (MockProvisioning)com.zimbra.cs.account.Provisioning.getInstance();
+    return (MockProvisioning) com.zimbra.cs.account.Provisioning.getInstance();
   }
 
   public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
@@ -178,4 +211,10 @@ public class ZimbraSimulator extends ExternalResource
   {
     return new Zimbra();
   }
+
+  public void useMVCC(org.openzal.zal.Mailbox mbox) throws Exception
+  {
+    HSQLZimbraDatabase.useMVCC(mbox.toZimbra(Mailbox.class));
+  }
+
 }

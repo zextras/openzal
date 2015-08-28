@@ -1,22 +1,19 @@
-package com.zimbra.cs.store;
+package com.zimbra.cs.store.file;
 
 import com.zextras.lib.Error.MissingReadPermissions;
 import com.zextras.lib.Error.MissingWritePermissions;
 import com.zextras.lib.vfs.FileStreamWriter;
-import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.store.file.FileBlobStore;
-/* $if ZimbraVersion >= 8.0.0 $ */
-import com.zimbra.cs.volume.Volume;
-import com.zimbra.cs.volume.VolumeManager;
-/* $else$
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.store.*;
-import com.zimbra.cs.store.file.*;
- $endif$ */
+import com.zimbra.cs.store.Blob;
+import com.zimbra.cs.store.BlobBuilder;
+import com.zimbra.cs.store.BlobInputStream;
+import com.zimbra.cs.store.FileDescriptorCache;
+import com.zimbra.cs.store.MailboxBlob;
+import com.zimbra.cs.store.StagedBlob;
+import com.zimbra.cs.store.StoreManager;
 import io.netty.buffer.Unpooled;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -26,15 +23,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Exception;
-import java.lang.RuntimeException;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
+/* $if ZimbraVersion >= 8.0.0 $ */
+import com.zimbra.cs.volume.Volume;
+import com.zimbra.cs.volume.VolumeManager;
+/* $else$
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.store.*;
+import com.zimbra.cs.store.file.*;
+ $endif$ */
 
-public final class StoreManagerSimulator extends StoreManager {
 
-  private final RamFS mStoreRoot;
+public final class StoreManagerSimulator extends StoreManager
+{
+
+  private RamFS mStoreRoot;
 
   public RamFS getStoreRoot()
   {
@@ -67,18 +72,7 @@ public final class StoreManagerSimulator extends StoreManager {
 
   public void purge()
   {
-    try
-    {
-      ((RamFS)mStoreRoot).getRoot().removeRecursive();
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
-    catch (MissingWritePermissions missingWritePermissions)
-    {
-      throw new RuntimeException(missingWritePermissions);
-    }
+    mStoreRoot = new RamFS();
   }
 
   public BlobBuilder getBlobBuilder()
@@ -202,11 +196,21 @@ public final class StoreManagerSimulator extends StoreManager {
     sb.append(".msg");
 
     String finalPath = sb.toString();
-    return new RelativePath(finalPath.substring(1, finalPath.length()));
+    return new RelativePath(finalPath);
   }
 
   public RelativePath getBlobPath(MailboxBlob mboxBlob)
   {
+    if (mboxBlob instanceof MockVolumeMailboxBlob)
+    {
+      MockVolumeMailboxBlob blob = (MockVolumeMailboxBlob) mboxBlob;
+      return getBlobPath(
+        blob.getMailbox().getId(),
+        blob.getItemId(),
+        blob.getRevision(),
+        blob.getLocalBlob().getVolumeId()
+      );
+    }
     MockMailboxBlob blob = (MockMailboxBlob)mboxBlob;
     return getBlobPath(
       blob.getMailbox().getId(),
@@ -233,6 +237,7 @@ public final class StoreManagerSimulator extends StoreManager {
     int destRevision,
     String locator
   )
+    throws IOException
   {
     com.zextras.lib.vfs.File destinationFile = mStoreRoot.getRoot().resolveFile(
       getBlobPath(destMbox.getId(), destItemId, destRevision, currentVolume())
@@ -240,12 +245,12 @@ public final class StoreManagerSimulator extends StoreManager {
 
     try
     {
+      if (!src.getVirtualFile().exists())
+      {
+        throw new IOException();
+      }
       destinationFile.getParent().createRecursive();
       src.getVirtualFile().copy(destinationFile);
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
     }
     catch (MissingWritePermissions missingWritePermissions)
     {
@@ -275,6 +280,7 @@ public final class StoreManagerSimulator extends StoreManager {
   }
 
   public MailboxBlob copy(MailboxBlob srcOr, Mailbox destMbox, int destItemId, int destRevision)
+    throws IOException
   {
     return copy(
       ((MockMailboxBlob)srcOr).getMockStagedBlob().getMockBlob(),
@@ -286,9 +292,23 @@ public final class StoreManagerSimulator extends StoreManager {
   }
 
   public MailboxBlob link(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision)
+    throws IOException
   {
     MailboxBlob newBlob = copy(
       ((MockStagedBlob) src).getMockBlob(),
+      destMbox,
+      destItemId,
+      destRevision,
+      String.valueOf(currentVolume())
+    );
+    return newBlob;
+  }
+
+  public MailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision)
+    throws IOException, ServiceException
+  {
+    MailboxBlob newBlob = copy(
+      (MockBlob) src,
       destMbox,
       destItemId,
       destRevision,
@@ -301,7 +321,7 @@ public final class StoreManagerSimulator extends StoreManager {
     throws IOException, ServiceException
   {
     MailboxBlob newBlob = copy(
-      ((MockMailboxBlob) src).getMockStagedBlob().getMockBlob(),
+      (MockBlob) src.getLocalBlob(),
       destMbox,
       destItemId,
       destRevision,
@@ -311,6 +331,7 @@ public final class StoreManagerSimulator extends StoreManager {
   }
 
   public MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision)
+    throws IOException
   {
     MailboxBlob newBlob = copy(
       ((MockStagedBlob) src).getMockBlob(),
@@ -420,13 +441,13 @@ public final class StoreManagerSimulator extends StoreManager {
   }
  $endif$ */
 
-  static java.io.File sNonExistingPath = new java.io.File("/tmp/i/dont/exist");
+  static File sNonExistingPath = new File("/tmp/i/dont/exist");
 
-  private static class MockBlob extends Blob
+  public static class MockBlob extends Blob
   {
     private com.zextras.lib.vfs.File mFile;
 
-    MockBlob() throws IOException
+    public MockBlob() throws IOException
     {
       super(File.createTempFile("fakestore",".tmp"));
     }
@@ -459,7 +480,7 @@ public final class StoreManagerSimulator extends StoreManager {
     }
   }
 
-  private class MockStagedBlob extends StagedBlob
+  public static class MockStagedBlob extends StagedBlob
   {
     public MockBlob getMockBlob()
     {
@@ -468,7 +489,7 @@ public final class StoreManagerSimulator extends StoreManager {
 
     private final MockBlob mMockBlob;
 
-    MockStagedBlob(Mailbox mbox, MockBlob mockBlob)
+    public MockStagedBlob(Mailbox mbox, MockBlob mockBlob)
     {
       super(mbox, "xxx", 123);
       mMockBlob = mockBlob;
@@ -486,7 +507,7 @@ public final class StoreManagerSimulator extends StoreManager {
   }
 
   @SuppressWarnings("serial")
-  private class MockMailboxBlob extends MailboxBlob
+  public static class MockMailboxBlob extends MailboxBlob
   {
     public MockStagedBlob getMockStagedBlob()
     {
@@ -495,7 +516,7 @@ public final class StoreManagerSimulator extends StoreManager {
 
     private final MockStagedBlob mMockStagedBlob;
 
-    MockMailboxBlob(Mailbox mbox, int itemId, int revision, String locator, MockStagedBlob mockStagedBlob)
+    public MockMailboxBlob(Mailbox mbox, int itemId, int revision, String locator, MockStagedBlob mockStagedBlob)
     {
       super(mbox, itemId, revision, locator);
       mMockStagedBlob = mockStagedBlob;
@@ -524,6 +545,29 @@ public final class StoreManagerSimulator extends StoreManager {
     }
   }
 
+  public static class MockVolumeMailboxBlob extends VolumeMailboxBlob
+  {
+    public MockVolumeMailboxBlob(MailboxBlob blob, short volumeId) throws IOException
+    {
+      super(blob.getMailbox(), blob.getItemId(), blob.getRevision(), blob.getLocator(), new MockVolumeBlob(blob.getLocalBlob(), volumeId));
+    }
+  }
+
+  public static class MockVolumeBlob extends VolumeBlob
+  {
+    private final short mVolumeId;
+    MockVolumeBlob(Blob blob, short volumeId)
+    {
+      super(blob.getFile(), volumeId);
+      mVolumeId = volumeId;
+    }
+
+    public short getVolumeId()
+    {
+      return mVolumeId;
+    }
+  }
+
   private class MockBlobBuilder extends BlobBuilder
   {
     private ByteArrayOutputStream out;
@@ -533,7 +577,7 @@ public final class StoreManagerSimulator extends StoreManager {
       super(createMockBlob());
     }
 
-    protected OutputStream createOutputStream(java.io.File file) throws FileNotFoundException
+    protected OutputStream createOutputStream(File file) throws FileNotFoundException
     {
       assert out == null : "Output stream already created";
       out = new ByteArrayOutputStream();

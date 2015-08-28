@@ -1173,7 +1173,7 @@ public class Mailbox
     {
       if (! canWrite(octxt, calItemId))
       {
-        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getName() + " on " + mMbox.getAccount().getMail() + " mailbox");
       }
 
 
@@ -1344,7 +1344,8 @@ public class Mailbox
         params
       );
 
-      result.skipToHit(offset);
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
 
       return new QueryResults(
         result
@@ -1372,7 +1373,8 @@ $endif$
         params
       );
 
-      result.skipToHit(offset);
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
 
       return new QueryResults(
         result

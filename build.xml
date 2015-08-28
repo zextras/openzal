@@ -3881,6 +3881,7 @@
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
             <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+              <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
               <arg value="${lastZalPath}"/>
@@ -3893,6 +3894,7 @@
     </for>
 
     <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+      <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.6.0/zal.jar"/>
@@ -3951,3 +3953,4 @@
   </target>
 
 </project>
+
