@@ -20,10 +20,12 @@
 
 package org.openzal.zal.extension;
 
+import java.lang.ref.WeakReference;
+
 public interface ZalExtension
 {
-  public String getBuildId();
-  public String getName();
-  public void startup(ZalExtensionController extensionController, Zimbra zimbra);
-  public void shutdown();
+  String getBuildId();
+  String getName();
+  void startup(ZalExtensionController extensionController, WeakReference<ClassLoader> previousExtension);
+  void shutdown();
 }

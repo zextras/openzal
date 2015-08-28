@@ -230,9 +230,9 @@ public class ZimbraDatabase
     return myCv;
   }
 
-  public static interface ConnectionProvider
+  public interface ConnectionProvider
   {
-    public Connection getConnection() throws UnableToObtainDBConnectionException;
+    Connection getConnection() throws UnableToObtainDBConnectionException;
   }
 
   public static class CurrentVolumes {

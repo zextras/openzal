@@ -22,39 +22,25 @@ package org.openzal.zal.extension;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
-public class ZalExtensionControllerImpl implements ZalExtensionController
+public class StubZalExtensionController implements ZalExtensionController
 {
-  private final ExtensionManager mExtensionManager;
-  private final String mClassName;
-
-  ZalExtensionControllerImpl(ExtensionManager extensionManager, String className)
-  {
-    mExtensionManager = extensionManager;
-    mClassName = className;
-  }
-
   @Override
   public void shutdown()
   {
-    mExtensionManager.shutdownExtension( mClassName );
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public void reboot()
   {
-    mExtensionManager.rebootExtension( mClassName );
+    throw new UnsupportedOperationException();
   }
 
   @Override
-  public void reload(File directory) throws IOException
+  public void reload(File extensionDirectory, WeakReference<ClassLoader> previousClassLoader) throws IOException
   {
-    mExtensionManager.reloadExtension( mClassName, directory );
-  }
-
-  @Override
-  public void update(File directory) throws IOException
-  {
-    mExtensionManager.updateExtension( mClassName, directory );
+    throw new UnsupportedOperationException();
   }
 }

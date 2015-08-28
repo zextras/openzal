@@ -1024,7 +1024,7 @@ public class Account extends Entry
 
   public String getServerHostname()
   {
-    return mAccount.getAttr(Provisioning.A_zimbraMailHost,"localhost");
+    return mAccount.getAttr(ProvisioningImp.A_zimbraMailHost,"localhost");
   }
 
   public boolean checkAuthTokenValidityValue(AuthToken authToken)
