@@ -85,7 +85,7 @@ public final class StoreManagerSimulator extends StoreManager
     com.zextras.lib.vfs.File file = mStoreRoot.getRoot().resolveFile(
       UUID.randomUUID().toString()
     );
-    MockBlob mockblob = new MockBlob();
+    MockBlob mockblob = createMockBlob();
     mockblob.setFile(file);
 
     OutputStream writer;
@@ -260,7 +260,7 @@ public final class StoreManagerSimulator extends StoreManager
     MockBlob mockBlob;
     try
     {
-      mockBlob = new MockBlob();
+      mockBlob = createMockBlob();
     }
     catch (Exception e)
     {
@@ -400,7 +400,7 @@ public final class StoreManagerSimulator extends StoreManager
     MockBlob mockBlob;
     try
     {
-      mockBlob = new MockBlob();
+      mockBlob = createMockBlob();
     }
     catch (Exception e)
     {
@@ -447,9 +447,9 @@ public final class StoreManagerSimulator extends StoreManager
   {
     private com.zextras.lib.vfs.File mFile;
 
-    public MockBlob() throws IOException
+    public MockBlob(File tempFile) throws IOException
     {
-      super(File.createTempFile("fakestore",".tmp"));
+      super(tempFile);
     }
 
     public void setFile(com.zextras.lib.vfs.File file)
@@ -537,7 +537,9 @@ public final class StoreManagerSimulator extends StoreManager
   {
     try
     {
-      return new MockBlob();
+      File tmpFile = File.createTempFile("fakestore",".tmp");
+      tmpFile.deleteOnExit();
+      return new MockBlob(tmpFile);
     }
     catch (Exception e)
     {
