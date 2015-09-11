@@ -1,4 +1,4 @@
-package com.zimbra.cs.store.file;
+package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -7,6 +7,9 @@ import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.store.file.FileBlobStore;
+import com.zimbra.cs.store.file.VolumeMailboxBlob;
+import com.zimbra.cs.store.file.VolumeStagedBlob;
 /* $if ZimbraVersion < 8.0.0 $
 import com.zimbra.cs.store.StorageCallback;
 /* $endif $ */
@@ -35,13 +38,15 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
     mStore.shutdown();
   }
 
-  /* $if ZimbraVersion >= 7.2.0 $ */
   @Override
-  public boolean supports(StoreManager.StoreFeature feature)
+  public boolean supports(Object feature)
   {
-    return mStore.supports(feature);
+    /* $if ZimbraVersion >= 7.2.0 $ */
+    return mStore.supports((StoreManager.StoreFeature) feature);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $endif $ */
 
   @Override
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
@@ -50,35 +55,55 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public Blob storeIncoming(InputStream in, boolean storeAsIs) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 8.0.0 $ */
     return mStore.storeIncoming(in, storeAsIs);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $elseif ZimbraVersion >= 7.0.0 $
-  public Blob storeIncoming(InputStream in, StorageCallback callback, boolean storeAsIs) throws IOException, ServiceException
+
+  public Blob storeIncoming(InputStream in, Object callback, boolean storeAsIs) throws IOException, ServiceException
   {
-    return mStore.storeIncoming(in, callback, storeAsIs);
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    throw new UnsupportedOperationException();
+    /* $elseif ZimbraVersion >= 7.0.0 $
+    return mStore.storeIncoming(in, (StorageCallback) callback, storeAsIs);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $else $
-  public Blob storeIncoming(InputStream in, long sizeHint, StorageCallback callback, boolean storeAsIs) throws IOException, ServiceException
-  {
-    return mStore.storeIncoming(in, sizeHint, callback, storeAsIs);
-  }
-  /* $endif $ */
 
   @Override
-  /* $if ZimbraVersion >= 8.0.0 $ */
+  public Blob storeIncoming(InputStream in, long sizeHint, Object callback, boolean storeAsIs) throws IOException, ServiceException
+  {
+    /* $elseif ZimbraVersion >= 7.0.0 $ */
+    throw new UnsupportedOperationException();
+    /* $else $
+    return mStore.storeIncoming(in, sizeHint, (StorageCallback) callback, storeAsIs);
+    /* $endif $ */
+  }
+
+  @Override
   public VolumeStagedBlob stage(InputStream in, long actualSize, Mailbox mbox) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 8.0.0 $ */
     return mStore.stage(in, actualSize, mbox);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $else $
-  public VolumeStagedBlob stage(InputStream in, long actualSize, StorageCallback callback, Mailbox mbox) throws IOException, ServiceException
+
+  @Override
+  public VolumeStagedBlob stage(InputStream in, long actualSize, Object callback, Mailbox mbox) throws IOException, ServiceException
   {
-    return mStore.stage(in, actualSize, callback, mbox);
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    throw new UnsupportedOperationException();
+    /* $else $
+    return mStore.stage(in, actualSize, (StorageCallback) callback, mbox);
+    /* $endif $ */
   }
-  /* $endif $ */
 
   @Override
   public VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException
@@ -153,40 +178,31 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  /* $if ZimbraVersion >= 7.2.1 $ */
-  public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
+  public boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion >= 7.2.1 $ */
     return mStore.deleteStore(mbox, blobs);
-  }
-  /* $elseif ZimbraVersion >= 7.2.0 $
-  public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob> blobs) throws IOException, ServiceException
-  {
+    /* $elseif ZimbraVersion >= 7.2.0 $
     return mStore.deleteStore(mbox, blobs);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $else $
+
+  @Override
   public boolean deleteStore(Mailbox mbox) throws IOException, ServiceException
   {
+    /* $if ZimbraVersion < 7.2.0 $
     return mStore.deleteStore(mbox);
+    /* $else $ */
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $endif $ */
 
-  /*
-  public static String getBlobPath(int mboxId, int itemId, int revision, short volumeId) throws ServiceException
-  {
-    return FileBlobStore.getBlobPath(mboxId, itemId, revision, volumeId);
-  }
-  */
   public static String getBlobPath(Mailbox mbox, int itemId, int revision, short volumeId) throws ServiceException
   {
     return FileBlobStore.getBlobPath(mbox, itemId, revision, volumeId);
   }
-
-  /*
-  public static void appendFilename(StringBuilder sb, int itemId, int revision)
-  {
-    FileBlobStore.appendFilename(sb, itemId, revision);
-  }
-  */
 
   public FileBlobStoreWrapImpl(FileBlobStore store)
   {

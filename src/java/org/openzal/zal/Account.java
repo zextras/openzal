@@ -929,6 +929,7 @@ public class Account extends Entry
     return mAccount.isCalendarResource();
   }
 
+  @Nullable
   public String getMail()
   {
     return mAccount.getMail();

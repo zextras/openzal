@@ -196,14 +196,14 @@ public final class StoreManagerSimulator extends StoreManager
     sb.append(".msg");
 
     String finalPath = sb.toString();
-    return new RelativePath(finalPath.substring(1, finalPath.length()));
+    return new RelativePath(finalPath);
   }
 
   public RelativePath getBlobPath(MailboxBlob mboxBlob)
   {
-    if (mboxBlob instanceof FileBlobStoreSimulatorWrap.MockVolumeMailboxBlob)
+    if (mboxBlob instanceof MockVolumeMailboxBlob)
     {
-      FileBlobStoreSimulatorWrap.MockVolumeMailboxBlob blob = (FileBlobStoreSimulatorWrap.MockVolumeMailboxBlob) mboxBlob;
+      MockVolumeMailboxBlob blob = (MockVolumeMailboxBlob) mboxBlob;
       return getBlobPath(
         blob.getMailbox().getId(),
         blob.getItemId(),
@@ -542,6 +542,29 @@ public final class StoreManagerSimulator extends StoreManager
     catch (Exception e)
     {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static class MockVolumeMailboxBlob extends VolumeMailboxBlob
+  {
+    public MockVolumeMailboxBlob(MailboxBlob blob, short volumeId) throws IOException
+    {
+      super(blob.getMailbox(), blob.getItemId(), blob.getRevision(), blob.getLocator(), new MockVolumeBlob(blob.getLocalBlob(), volumeId));
+    }
+  }
+
+  public static class MockVolumeBlob extends VolumeBlob
+  {
+    private final short mVolumeId;
+    MockVolumeBlob(Blob blob, short volumeId)
+    {
+      super(blob.getFile(), volumeId);
+      mVolumeId = volumeId;
+    }
+
+    public short getVolumeId()
+    {
+      return mVolumeId;
     }
   }
 
