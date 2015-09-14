@@ -281,6 +281,15 @@ public interface Provisioning
   @NotNull
   GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit);
 
+  @NotNull
+  Domain assertDomainById(String domainId);
+
+  @NotNull
+  Domain assertDomainByName(String domainId);
+
+  @NotNull
+  Zimlet assertZimlet(String com_zextras_zextras);
+
   public static class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;

@@ -33,6 +33,8 @@ import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
 
+import javax.annotation.Nullable;
+
 /* $elseif MajorZimbraVersion >= 6 $
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource.Type;
@@ -184,6 +186,23 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     if (!attrs.containsKey(A_zimbraDumpsterEnabled))
     {
       attrs.put(A_zimbraDumpsterEnabled, TRUE);
+    }
+    if (!attrs.containsKey(A_zimbraDomainId))
+    {
+      int idx = email.indexOf("@");
+      if (idx >= 0)
+      {
+        String domainName = email.substring(idx+1);
+        if (domainName == null || domainName.isEmpty())
+          domainName = "unknown.com";
+
+        Domain domain = getDomainByName(domainName);
+        if (domain == null)
+        {
+          domain = createDomain(domainName, new HashMap<String, Object>());
+        }
+        attrs.put(A_zimbraDomainId, domain.getId());
+      }
     }
     attrs.put(A_zimbraBatchedIndexingSize, Integer.MAX_VALUE); // suppress indexing
     Account account = new Account(email, email, attrs, null, this);
@@ -443,6 +462,8 @@ $endif $
         map.remove(attr.getKey());
       }
     }
+
+    entry.setAttrs(map);
   }
   /* $else $
   public void modifyAttrs(Entry entry, Map<String, ? extends Object> attrs,
@@ -456,6 +477,8 @@ $endif $
         map.remove(attr.getKey());
       }
     }
+
+    entry.setAttrs(map);
   }
   /* $endif $ */
 
@@ -807,8 +830,17 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
+  @Nullable
   public Zimlet getZimlet(String name) {
-    throw new UnsupportedOperationException();
+    for( Zimlet current : id2zimlets.values() )
+    {
+      if( name.equalsIgnoreCase(current.getName()))
+      {
+        return current;
+      }
+    }
+
+    return null;
   }
 
   public List<Zimlet> listAllZimlets() {

@@ -20,7 +20,9 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,11 +39,6 @@ public class Zimlet extends Entry
     mZimlet = (com.zimbra.cs.account.Zimlet) zimlet;
   }
 
-  @NotNull
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mZimlet.getMultiAttrSet(name));
-  }
 
   public String getName()
   {
