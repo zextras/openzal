@@ -798,4 +798,9 @@ public class Invite
   {
     return mInvite.getPartStat();
   }
+
+  public boolean isPublic()
+  {
+    return mInvite.isPublic();
+  }
 }
