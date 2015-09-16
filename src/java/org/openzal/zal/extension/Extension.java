@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,6 +53,11 @@ class Extension implements Comparable<Extension>
     mExtensionClassName = extensionClassName;
     mClassLoader = classLoader;
     mZalExtension = createZalExtension();
+  }
+
+  public ClassLoader getClassLoader()
+  {
+    return mClassLoader;
   }
 
   private static BootstrapClassLoader createClassLoader(List<File> libraries)
@@ -160,11 +166,11 @@ class Extension implements Comparable<Extension>
     }
   }
 
-  public void start(ZalExtensionController controller)
+  public void start(ZalExtensionController controller, WeakReference<ClassLoader> previousExtension)
   {
     try
     {
-      mZalExtension.startup(controller);
+      mZalExtension.startup(controller, previousExtension);
     }
     catch (Throwable ex)
     {

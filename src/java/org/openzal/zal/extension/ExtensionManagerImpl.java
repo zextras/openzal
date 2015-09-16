@@ -27,6 +27,7 @@ import org.openzal.zal.log.ZimbraLog;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.jar.Manifest;
@@ -40,6 +41,11 @@ class ExtensionManagerImpl implements ExtensionManager
   private       Extension              mExtension;
   private       ZalExtensionController mCustomZalExtensionController;
   private       ClassLoader            mCustomClassLoader;
+
+  public Extension getExtension()
+  {
+    return mExtension;
+  }
 
   public ExtensionManagerImpl()
   {
@@ -121,11 +127,11 @@ class ExtensionManagerImpl implements ExtensionManager
   }
 
   @Override
-  public void startExtension()
+  public void startExtension(WeakReference<ClassLoader> previousExtension)
   {
     if( mExtension != null)
     {
-      mExtension.start(getController());
+      mExtension.start(getController(), previousExtension);
     }
   }
 

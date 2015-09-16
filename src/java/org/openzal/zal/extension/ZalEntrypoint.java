@@ -24,10 +24,12 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.extension.ZimbraExtensionPostInit;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 public interface ZalEntrypoint extends ZimbraExtension, ZimbraExtensionPostInit
 {
   void provideCustomClassLoader(ClassLoader classLoader);
   void provideCustomExtensionController(ZalExtensionController zalExtensionController);
   void provideCustomExtensionDirectory(File jarPathOfClass);
+  void providePreviousExtension(WeakReference<ClassLoader> previousExtension);
 }

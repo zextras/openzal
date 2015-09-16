@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.ZalBuildInfo;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -31,6 +32,7 @@ import org.openzal.zal.tools.ZeXtrasVersionValidator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.jar.JarInputStream;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
@@ -41,6 +43,9 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   private boolean          mExtensionPathExists;
   private ZalEntrypoint    mZalEntryPoint;
   private File             mCustomExtensionDirectory;
+
+  @Nullable
+  private WeakReference<ClassLoader> mPreviousExtension;
 
   private static final String ZAL_FILE     = "/zal.jar";
   private static final String ZEXTRAS_FILE = "/zextras.jar";
@@ -53,6 +58,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     mExtensionPathExists = false;
     mZalEntryPoint = null;
     mCustomExtensionDirectory = null;
+    mPreviousExtension = new WeakReference<ClassLoader>(null);
   }
 
   private ExtensionManager getExtensionManager()
@@ -94,6 +100,12 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   }
 
   @Override
+  public void providePreviousExtension(WeakReference<ClassLoader> previousExtension)
+  {
+    mPreviousExtension = previousExtension;
+  }
+
+  @Override
   public String getName()
   {
     return "Zimbra Abstraction Layer for: " + mDirectoryName;
@@ -131,6 +143,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
           mZalEntryPoint = new TinyBoot(extensionPathFile).createZalEntryPoint(new Controller());
         }
 
+        mZalEntryPoint.providePreviousExtension(mPreviousExtension);
         mZalEntryPoint.init();
       }
       else
@@ -196,10 +209,11 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     }
 
     @Override
-    public void reload(File extensionDirectory)
+    public void reload(File extensionDirectory, WeakReference<ClassLoader> previousClassLoader)
     {
       checkState();
       checkTargetExtension(extensionDirectory);
+      mPreviousExtension = previousClassLoader;
       destroy();
       mCustomExtensionDirectory = extensionDirectory;
       init();
@@ -218,7 +232,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     {
       if( mExtensionManager != null )
       {
-        mExtensionManager.startExtension();
+        mExtensionManager.startExtension(mPreviousExtension);
       }
     }
   }
@@ -236,6 +250,13 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       {
         mExtensionManager.shutdownExtension();
       }
+    }
+
+    WeakReference<Object> weakReference = new WeakReference<Object>(new Object());
+
+    while (weakReference.get() != null)
+    {
+      System.gc();
     }
 
     mZalEntryPoint = null;

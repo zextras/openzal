@@ -2,8 +2,6 @@ package com.zimbra.cs.mailbox;
 
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
-import com.zimbra.cs.store.file.FileBlobStoreSimulatorWrap;
-import com.zimbra.cs.store.file.FileBlobStoreWrap;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
 import org.openzal.zal.extension.Zimbra;
@@ -20,11 +18,6 @@ import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.dom4j.DocumentException;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.sql.SQLException;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 /* $else$
@@ -60,16 +53,7 @@ public class ZimbraSimulator extends ExternalResource
 
     init();
 
-    mStoreManager = new StoreManagerImp(
-      com.zimbra.cs.store.StoreManager.getInstance()
-    )
-    {
-      @Override
-      public FileBlobStoreWrap getFileBlobStore()
-      {
-        return new FileBlobStoreSimulatorWrap((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance());
-      }
-    };
+    mStoreManager = new StoreManagerTestUtil();
   }
 
   /*
@@ -223,13 +207,13 @@ public class ZimbraSimulator extends ExternalResource
     return mStoreManager;
   }
 
-  public void useMVCC(org.openzal.zal.Mailbox mbox) throws Exception
-  {
-    HSQLZimbraDatabase.useMVCC(mbox.toZimbra(Mailbox.class));
-  }
-
   public Zimbra getZimbra()
   {
     return new Zimbra();
+  }
+
+  public void useMVCC(org.openzal.zal.Mailbox mbox) throws Exception
+  {
+    HSQLZimbraDatabase.useMVCC(mbox.toZimbra(Mailbox.class));
   }
 }

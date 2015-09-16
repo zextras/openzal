@@ -20,8 +20,6 @@
 
 package org.openzal.zal;
 
-import com.zimbra.cs.store.file.FileBlobStoreWrap;
-import com.zimbra.cs.store.file.FileBlobStoreWrapImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;

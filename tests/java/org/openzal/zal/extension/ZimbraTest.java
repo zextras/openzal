@@ -1,11 +1,18 @@
 package org.openzal.zal.extension;
 import com.zimbra.cs.mailbox.ZimbraSimulator;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openzal.zal.lib.PermissiveMap;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -32,7 +39,7 @@ public class ZimbraTest
   @Test
   public void removing_extension_should_not_throw_concurrent_modification_exception()
   {
-    ConcurrentHashMap<String,String> map = new ConcurrentHashMap<String,String>();
+    Map<String,String> map = new PermissiveMap<String,String>();
 
     map.put("A","A");
     map.put("B","B");
@@ -47,7 +54,7 @@ public class ZimbraTest
     }
 
     assertEquals(
-      Arrays.asList("C","A"),
+      Arrays.asList("A","C"),
       result
     );
   }
