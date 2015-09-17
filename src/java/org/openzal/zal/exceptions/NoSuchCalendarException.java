@@ -20,7 +20,7 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchCalendarException extends ZimbraException
+public class NoSuchCalendarException extends NoSuchItemException
 {
   protected NoSuchCalendarException(Exception exception)
   {
