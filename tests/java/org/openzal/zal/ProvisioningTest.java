@@ -13,7 +13,7 @@ public class ProvisioningTest
   @Before
   public void setup()
   {
-    mProvisioning = new Provisioning(null);
+    mProvisioning = new ProvisioningImp(null);
   }
 
   @Test

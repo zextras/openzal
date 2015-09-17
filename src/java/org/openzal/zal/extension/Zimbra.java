@@ -23,6 +23,7 @@ package org.openzal.zal.extension;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
+import org.openzal.zal.lib.PermissiveMap;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
 import com.zimbra.cs.extension.ExtensionUtil;
@@ -39,12 +40,12 @@ public class Zimbra
   @NotNull private final ZimbraDatabase mZimbraDatabase;
   @NotNull private final StoreManager   mStoreManager;
 
-  Zimbra()
+  public Zimbra()
   {
     try
     {
-      mProvisioning = new Provisioning(com.zimbra.cs.account.Provisioning.getInstance());
-      mMailboxManager = new MailboxManager(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+      mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
+      mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mStoreManager = new StoreManagerImp();
     }
@@ -62,6 +63,19 @@ public class Zimbra
     {
       sIsMailboxd = com.zimbra.cs.util.Zimbra.class.getDeclaredField("sIsMailboxd");
       sIsMailboxd.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public void forceMailboxd()
+  {
+    try
+    {
+      sIsMailboxd.set(null, true);
     }
     catch (Throwable ex)
     {
@@ -163,7 +177,7 @@ public class Zimbra
       Map map = (Map)sInitializedExtensions.get(null);
       sInitializedExtensions.set(
         null,
-        new ConcurrentHashMap<String,String>(map)
+        new PermissiveMap<String,String>(map)
       );
     }
     catch (IllegalAccessException e)

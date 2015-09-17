@@ -25,8 +25,12 @@ import com.google.inject.Singleton;
 import com.zimbra.soap.*;
 import org.dom4j.QName;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.Utils;
+import org.openzal.zal.log.ZimbraLog;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Singleton
@@ -72,6 +76,15 @@ public class SoapServiceManager
       soapService.getServiceName(),
       new InternalUnregisterDocumentService(soapService)
     );
+
+    try
+    {
+      ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   public void overrideZimbraHandler(OverridenSoapService soapService)
@@ -93,5 +106,21 @@ public class SoapServiceManager
       soapService.getServiceName(),
       new InternalRestoreDocumentService(soapService,mOriginalHandlersMap)
     );
+  }
+
+  private static Field sExtraServices = null;
+
+  static
+  {
+    try
+    {
+      sExtraServices = com.zimbra.soap.SoapServlet.class.getDeclaredField("sExtraServices");
+      sExtraServices.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
   }
 }

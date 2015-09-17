@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 import com.zimbra.cs.account.Provisioning.CacheEntryType;
 $endif$ */
 
-public class ProvisioningSimulator extends Provisioning
+public class ProvisioningSimulator extends ProvisioningImp
 {
   private Map<String, Domain> mDomainMap;
   private Map<String, Account> mAccountMap;
@@ -63,7 +63,7 @@ public class ProvisioningSimulator extends Provisioning
 
     String[] arrayMembers = new String[ members.size() ];
     members.toArray(arrayMembers);
-    listAttrs.put(Provisioning.A_zimbraMailForwardingAddress, arrayMembers);
+    listAttrs.put(ProvisioningImp.A_zimbraMailForwardingAddress, arrayMembers);
     return new DistributionList( new com.zimbra.cs.account.DistributionList(name, name, listAttrs, null) {} );
   }
 
@@ -88,19 +88,19 @@ public class ProvisioningSimulator extends Provisioning
     return addUser(address, address);
   }
 
-  public Account addUser(String address, String name)
+  public Account addUser(String address, String displayName)
   {
-    return addUser(address, name, new HashMap<String, Object>());
+    return addUser(address, displayName, new HashMap<String, Object>());
   }
 
-  public Account addUserToHost(String address, String name, final String hostname)
+  public Account addUserToHost(String address, String displayName, final String hostname)
   {
-    return addUser(address, name, new HashMap<String, Object>(1) {{
-      put(Provisioning.A_zimbraMailHost, hostname);
+    return addUser(address, displayName, new HashMap<String, Object>(1) {{
+      put(ProvisioningImp.A_zimbraMailHost, hostname);
     }});
   }
 
-  public Account addUser(String address, String name, Map<String, Object> attrs)
+  public Account addUser(String address, String displayName, Map<String, Object> attrs)
   {
     if (mAccountMap.containsKey(address))
     {
@@ -116,7 +116,7 @@ public class ProvisioningSimulator extends Provisioning
     String domain = address.substring(domainIdx + 1);
     addDomain(domain);
 
-    Account account = createFakeAccount(address, name, attrs);
+    Account account = createFakeAccount(address, displayName, attrs);
     mAccountMap.put(address, account);
 
     return account;
@@ -135,37 +135,39 @@ public class ProvisioningSimulator extends Provisioning
     return createFakeAccount(accountStr, accountStr);
   }
 
-  public Account createFakeAccount(String name, String accountStr)
+  public Account createFakeAccount(String address, String displayName)
   {
-    return createFakeAccount(name,accountStr,Collections.<String,Object>emptyMap());
+    return createFakeAccount(address,displayName,Collections.<String,Object>emptyMap());
   }
 
-  public Account createFakeAccount(String address, String accountStr, Map<String,Object> extraAttr)
+  public Account createFakeAccount(String address, String displayName, Map<String,Object> extraAttr)
   {
     if( address == null ) {
       address = "mockito@example.com";
     }
 
-    if( accountStr == null ) {
-      accountStr = "mockito";
+    if( displayName == null ) {
+      displayName = "mockito";
     }
 
     Map<String,Object> attrs = new HashMap<String, Object>();
 
-    attrs.put(com.zimbra.cs.account.Provisioning.A_mail, accountStr);
+    attrs.put(com.zimbra.cs.account.Provisioning.A_mail, displayName);
 
     Map<String, Object> defaults = new HashMap<String, Object>();
     defaults.put(com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus,
                  com.zimbra.cs.account.Provisioning.ACCOUNT_STATUS_ACTIVE);
-    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, accountStr );
+    defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, displayName );
     attrs.putAll(extraAttr);
+    attrs.putAll(defaults);
 
-    defaults.put(Provisioning.A_zimbraMailHost,
+    defaults.put(
+      ProvisioningImp.A_zimbraMailHost,
                  "localhost");
 
     return new AccountSimulator(
       address,
-      accountStr,
+      "accountId",
       attrs,
       defaults,
       this
@@ -354,7 +356,7 @@ public class ProvisioningSimulator extends Provisioning
         "",
         new HashMap<String, Object>(),
         new HashMap<String, Object>(),
-        new Provisioning(mProvisioning)
+        new ProvisioningImp(mProvisioning)
       ));
   }
 
@@ -397,7 +399,7 @@ public class ProvisioningSimulator extends Provisioning
       new HashMap<String, Object>(){{
         put("key", "value");
       }},
-      new Provisioning(mProvisioning)
+      new ProvisioningImp(mProvisioning)
     );
   }
 
@@ -494,13 +496,13 @@ public class ProvisioningSimulator extends Provisioning
   /******************************************************/
   public static class AccountSimulator extends Account
   {
-    public AccountSimulator(String name,
+    public AccountSimulator(String address,
                             String id,
                             Map<String, Object> attrs,
                             Map<String, Object> defaults,
                             Provisioning prov)
     {
-      super(name, id, attrs, defaults, prov);
+      super(address, id, attrs, defaults, prov);
     }
 
     @NotNull
@@ -527,7 +529,13 @@ public class ProvisioningSimulator extends Provisioning
     @Override
     public String getDisplayName()
     {
-      return getAttr(com.zimbra.cs.account.Provisioning.A_displayName);
+      String displayName = getAttr("displayName");
+      if (displayName == null || displayName.isEmpty())
+      {
+        return getName();
+      }
+
+      return displayName;
     }
 
     @Override
