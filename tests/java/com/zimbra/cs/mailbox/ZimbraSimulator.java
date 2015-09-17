@@ -216,5 +216,4 @@ public class ZimbraSimulator extends ExternalResource
   {
     HSQLZimbraDatabase.useMVCC(mbox.toZimbra(Mailbox.class));
   }
-
 }
