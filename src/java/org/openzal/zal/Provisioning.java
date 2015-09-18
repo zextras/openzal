@@ -200,7 +200,7 @@ public interface Provisioning
     throws ZimbraException;
 
   @Nullable
-  Account createAccount(String dstAccount, String newPassword, Map<String, Object> attrs)
+  Account createAccount(String dstAccount, @Nullable String newPassword, Map<String, Object> attrs)
     throws ZimbraException;
 
   void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
@@ -289,6 +289,12 @@ public interface Provisioning
 
   @NotNull
   Zimlet assertZimlet(String com_zextras_zextras);
+
+  @NotNull
+  void deleteAccountByName(String id);
+
+  @NotNull
+  void deleteAccountById(String id);
 
   public static class CountAccountByCos
   {

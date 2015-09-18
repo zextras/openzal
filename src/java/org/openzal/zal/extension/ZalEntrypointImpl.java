@@ -23,26 +23,27 @@ package org.openzal.zal.extension;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.ZalBuildInfo;
 import org.openzal.zal.ZalVersion;
+import org.openzal.zal.lib.JarAccessor;
+import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
-import org.openzal.zal.tools.ZalVersionValidator;
-import org.openzal.zal.tools.ZeXtrasVersionValidator;
+import org.openzal.zal.lib.ZalJarValidator;
+import org.openzal.zal.lib.ExtensionJarValidator;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.jar.JarInputStream;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
-  private String           mDirectoryName;
-  private File             mDirectory;
-  private ExtensionManager mExtensionManager;
-  private boolean          mExtensionPathExists;
-  private ZalEntrypoint    mZalEntryPoint;
-  private File             mCustomExtensionDirectory;
+  private final ExtensionJarValidator mExtensionJarValidator;
+  private final ZalJarValidator       mZalJarValidator;
+  private       String                mDirectoryName;
+  private       File                  mDirectory;
+  private       ExtensionManager      mExtensionManager;
+  private       boolean               mExtensionPathExists;
+  private       ZalEntrypoint         mZalEntryPoint;
+  private       File                  mCustomExtensionDirectory;
 
   @Nullable
   private WeakReference<ClassLoader> mPreviousExtension;
@@ -59,6 +60,8 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     mZalEntryPoint = null;
     mCustomExtensionDirectory = null;
     mPreviousExtension = new WeakReference<ClassLoader>(null);
+    mZalJarValidator = new ZalJarValidator();
+    mExtensionJarValidator = new ExtensionJarValidator();
   }
 
   private ExtensionManager getExtensionManager()
@@ -172,21 +175,13 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     {
       try
       {
-        ZalVersionValidator zalVersionValidator = new ZalVersionValidator(
-          new JarInputStream(
-            new FileInputStream(extensionDirectory.getAbsolutePath() + ZAL_FILE)
-          )
-        );
-        ZeXtrasVersionValidator zeXtrasVersionValidator = new ZeXtrasVersionValidator(
-          new JarInputStream(
-            new FileInputStream(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE)
-          )
-        );
+        File zalJar = new File(extensionDirectory.getAbsolutePath() + ZAL_FILE);
+        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
 
-        zeXtrasVersionValidator.validateZalVersion(zalVersionValidator.getVersion());
-        zalVersionValidator.validateZimbraVersion(ZimbraVersion.current);
+        Version zalVersion = mZalJarValidator.validate(new JarAccessor(extensionJar), ZimbraVersion.current);
+        mExtensionJarValidator.validate(new JarAccessor(zalJar), zalVersion);
       }
-      catch (IOException e)
+      catch (Exception e)
       {
         throw new RuntimeException(e);
       }
