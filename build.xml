@@ -3875,7 +3875,7 @@
       </else>
     </if>
 
-    <for list="6.0.16,7.2.7,8.0.8,8.5.0,8.6.0" param="currentZimbraVersion">
+    <for list="6.0.16,7.2.7,8.0.9,8.5.1,8.6.0" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
