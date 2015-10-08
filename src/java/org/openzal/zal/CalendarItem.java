@@ -384,4 +384,9 @@ public class CalendarItem extends Item
 
     return replies;
   }
+
+  public boolean isPublic()
+  {
+    return mCalendarItem.isPublic();
+  }
 }

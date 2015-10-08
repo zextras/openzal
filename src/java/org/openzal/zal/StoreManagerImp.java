@@ -52,9 +52,9 @@ public class StoreManagerImp implements StoreManager
   }
 
   @NotNull
-  private FileBlobStore getFileBlobStore()
+  public FileBlobStoreWrap getFileBlobStore()
   {
-    return (FileBlobStore) sm;
+    return new FileBlobStoreWrapImpl((FileBlobStore) sm);
   }
 
   @Nullable
@@ -133,6 +133,40 @@ public class StoreManagerImp implements StoreManager
   public boolean delete(@NotNull MailboxBlob mblob) throws IOException
   {
     return sm.delete(mblob.toZimbra(com.zimbra.cs.store.MailboxBlob.class));
+  }
+
+  @Override
+  public StoreVolume getCurrentVolume()
+  {
+    Volume volume;
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    volume = VolumeManager.getInstance().getCurrentMessageVolume();
+    /* $else $
+    volume = Volume.getCurrentMessageVolume();
+    /* $endif $ */
+    if (volume == null)
+    {
+      return null;
+    }
+
+    return new StoreVolume(volume);
+  }
+
+  @Override
+  public StoreVolume getCurrentSecondaryVolume()
+  {
+    Volume volume;
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    volume = VolumeManager.getInstance().getCurrentSecondaryMessageVolume();
+    /* $else $
+    volume = Volume.getCurrentSecondaryMessageVolume();
+    /* $endif $ */
+    if (volume == null)
+    {
+      return null;
+    }
+
+    return new StoreVolume(volume);
   }
 
   /* $if ZimbraVersion >= 8.0.0 $*/

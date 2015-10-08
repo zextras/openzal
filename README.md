@@ -6,32 +6,44 @@ ZAL is distributed under the terms of GNU General Public License version 2 <http
 
 API documentation is available on <https://zextras.github.io/OpenZAL/>
 
-### ZAL Dependencies: ###
+### Download ###
 
-  - PreBob Java preprocessor - <http://prebop.sourceforge.net/>
+Latest ZAL branch is 1.9 downloadable from <http://openzal.org/1.9/>  
+You can download a precise ZAL version using this url:
+        
+        http://openzal.org/${branch}/zal-${version}-${zimbra-version}.jar
 
-    > Download and copy "preprocessor.jar" in "ant/"
+Where ${branch} is the ZAL branch, ${version} is ZAL full version (branch plus micro), ${zimbra-version} is the full zimbra version.  
+For example with this url you will download zal version 1.9.1 for zimbra 8.6.0:
+        
+        http://openzal.org/1.9/zal-1.9.1-8.6.0.jar
 
-  - Ant Contrib - <http://ant-contrib.sourceforge.net/>
+### Runtime Dependencies ###
 
-    > Download and copy "ant-contrib-1.0b3.jar" in "ant/"
+   Zimbra is all you need ;)
 
-  - Google Guice 3.0 - <https://code.google.com/p/google-guice/downloads/detail?name=guice-3.0.zip>
+### Build Dependencies ###
 
-    > Download and extract all files in "lib/"
+PreBob Java preprocessor - <http://prebop.sourceforge.net/>  
+Download and copy "preprocessor.jar" in "ant/"
 
-  - Zimbra Sources - <http://www.zimbra.com>
+Ant Contrib - <http://ant-contrib.sourceforge.net/>  
+Download and copy "ant-contrib-1.0b3.jar" in "ant/"
 
-    > For each version of zimbra copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+Google Guice 3.0 - <https://code.google.com/p/google-guice/downloads/detail?name=guice-3.0.zip>  
+Download and extract all files in "lib/"
 
-  - Download Intellij Annotations - <http://mvnrepository.com/artifact/com.intellij/annotations/12.0>
+Zimbra Sources - <http://www.zimbra.com>  
+For each version of zimbra copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
 
-    > Download and copy "annotations-12.jar" in "lib/"
+Download Intellij Annotations - <http://mvnrepository.com/artifact/com.intellij/annotations/12.0>  
+Download and copy "annotations-12.jar" in "lib/"
 
 
 ### How to build ###
 
-  * Resolve all ZAL dependencies then run:
+Resolve all ZAL dependencies then run:
 
-        tools/generate-build > build.xml
-        ant
+> tools/generate-build > build.xml  
+> ant
+

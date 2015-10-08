@@ -57,4 +57,19 @@ public class SearchHit
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public ZimbraItemId getZimbraItemId()
+  {
+    try
+    {
+      return new ZimbraItemId(
+        mZimbraHit.getParsedItemID().getAccountId(),
+        mZimbraHit.getParsedItemID().getId()
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }

@@ -26,4 +26,9 @@ public class NoSuchItemException extends MailServiceException
   {
     super(exception);
   }
+
+  public NoSuchItemException(String id)
+  {
+    super("no such item "+id);
+  }
 }

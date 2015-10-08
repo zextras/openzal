@@ -28,4 +28,9 @@ public class Appointment extends CalendarItem
   {
     super(item);
   }
+
+  public boolean isOwner(Account account)
+  {
+    return getMailbox().getAccountId().equals(account.getId());
+  }
 }

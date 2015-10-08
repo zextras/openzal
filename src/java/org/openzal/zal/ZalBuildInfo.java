@@ -22,6 +22,6 @@ package org.openzal.zal;
 
 public class ZalBuildInfo
 {
-    public static String COMMIT="9daf40a04f01f2c76f41f2c464c6d7f98faea0c0";
-    public static String VERSION="1.8.3";
+    public static String COMMIT="a6c99d4683ac0f3fb9fc962892479ebe658f5109";
+    public static String VERSION="1.9.1";
 }

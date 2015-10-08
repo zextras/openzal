@@ -27,6 +27,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
 
+import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.cs.index.*;
+import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.session.Session;
 import org.openzal.zal.calendar.CalendarItemData;
@@ -41,7 +44,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
-import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.util.*;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
@@ -72,8 +74,9 @@ import com.zimbra.cs.mailbox.MailItem.Color;
 import com.zimbra.cs.db.DbMailItem.SearchOpts;
 /* $endif$ */
 
-/* $if MajorZimbraVersion > 7$ */
-/* $endif$ */
+/* $if ZimbraVersion < 8.0.0 $
+import com.zimbra.cs.mailbox.Mailbox.SearchResultMode;
+ $endif$ */
 
 
 public class Mailbox
@@ -892,8 +895,7 @@ public class Mailbox
     try
     {
       MailItem item = mMbox.getItemById(octxt.getOperationContext(), itemId, Item.convertType(Item.TYPE_UNKNOWN));
-      mMbox.setTags(
-        octxt.getOperationContext(), itemId, Item.convertType(type), flags,
+      mMbox.setTags(octxt.getOperationContext(), itemId, Item.convertType(type), flags,
   /* $if MajorZimbraVersion >= 8 $ */
         item.getTags()
   /* $else$
@@ -1173,7 +1175,7 @@ public class Mailbox
     {
       if (! canWrite(octxt, calItemId))
       {
-        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getMail() + " on " + mMbox.getAccount().getMail() + " mailbox");
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getName() + " on " + mMbox.getAccount().getMail() + " mailbox");
       }
 
 
@@ -1291,13 +1293,29 @@ public class Mailbox
     mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
   }
 
+
   @NotNull
   public QueryResults search(
     @NotNull OperationContext octxt,
-                               String queryString,
-                               @NotNull byte[] types,
-                               @NotNull SortedBy sortBy,
-                               int chunkSize
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize
+  )
+    throws IOException, ZimbraException
+  {
+    return search(octxt, queryString, types, sortBy, chunkSize, 0, false);
+  }
+
+  @NotNull
+  public QueryResults search(
+    @NotNull OperationContext octxt,
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize,
+    int offset,
+    boolean onlyIds
   )
     throws IOException, ZimbraException
   {
@@ -1309,25 +1327,63 @@ public class Mailbox
       {
         typeList.add(Item.convertType(type));
       }
+
+      SearchParams.Fetch fetchMode = onlyIds ? SearchParams.Fetch.IDS : SearchParams.Fetch.NORMAL;
+
+      com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
+      params.setQueryString(queryString);
+      params.setTimeZone(null);
+      params.setLocale(null);
+      params.setTypes(typeList);
+      params.setSortBy(sortBy.toZimbra(SortBy.class));
+      params.setPrefetch(true);
+      params.setFetchMode(fetchMode);
+      params.setInDumpster(false);
+      params.setLimit(chunkSize + offset);
+      params.setOffset(offset);
+
+      ZimbraQueryResults result = mMbox.index.search(
+        SoapProtocol.Soap12,
+        octxt.getOperationContext(),
+        params
+      );
+
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
+
       return new QueryResults(
-        mMbox.index.search(
-          octxt.getOperationContext(),
-          queryString,
-          typeList,
-          sortBy.toZimbra(SortBy.class),
-          chunkSize,
-          false
-        )
+        result
       );
 /* $else$
+      com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
+
+ $if ZimbraVersion >= 7.0.0 $
+      params.setInDumpster(false);
+$endif$
+
+      com.zimbra.cs.mailbox.Mailbox.SearchResultMode fetchMode = onlyIds ? com.zimbra.cs.mailbox.Mailbox.SearchResultMode.IDS : com.zimbra.cs.mailbox.Mailbox.SearchResultMode.NORMAL;
+
+      params.setQueryStr(queryString);
+      params.setTimeZone(null);
+      params.setLocale(null);
+      params.setTypes(types);
+      params.setSortBy(sortBy.toZimbra(SortBy.class));
+      params.setMode(fetchMode);
+      params.setPrefetch(true);
+      params.setLimit(chunkSize + offset);
+      params.setOffset(offset);
+
+      ZimbraQueryResults result = mMbox.search(
+        SoapProtocol.Soap12,
+        octxt.getOperationContext(),
+        params
+      );
+
+      if( offset >= 1 )
+        result.skipToHit(offset-1);
+
       return new QueryResults(
-        mMbox.search(
-          octxt.getOperationContext(),
-          queryString,
-          types,
-          sortBy.toZimbra(SortBy.class),
-          chunkSize
-        )
+        result
       );
    $endif$ */
     }

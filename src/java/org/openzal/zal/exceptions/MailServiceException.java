@@ -26,4 +26,9 @@ public class MailServiceException extends ZimbraException
   {
     super(exception);
   }
+
+  public MailServiceException(String message)
+  {
+    super(message);
+  }
 }

@@ -29,6 +29,8 @@ import com.zimbra.cs.extension.ExtensionUtil;
 import com.zimbra.cs.extension.ZimbraExtension;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Zimbra
 {
@@ -116,5 +118,58 @@ public class Zimbra
     }
 
     return false;
+  }
+
+  private static Field sInitializedExtensions;
+
+  static
+  {
+    try
+    {
+      Class cls = com.zimbra.cs.extension.ExtensionUtil.class;
+      sInitializedExtensions = cls.getDeclaredField("sInitializedExtensions");
+      sInitializedExtensions.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public boolean removeExtension(String extensionName)
+  {
+    try
+    {
+      return ((Map) sInitializedExtensions.get(null)).remove(extensionName) != null;
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void overrideExtensionMap()
+  {
+/*
+  ZX-3303
+  avoid concurrent modification exception when disabling an extension
+  during extension postInit
+*/
+
+/* $if ZimbraVersion >= 7.0.0$ */
+    try
+    {
+      Map map = (Map)sInitializedExtensions.get(null);
+      sInitializedExtensions.set(
+        null,
+        new ConcurrentHashMap<String,String>(map)
+      );
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
+/* $endif$ */
   }
 }

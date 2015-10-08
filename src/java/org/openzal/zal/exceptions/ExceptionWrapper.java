@@ -206,7 +206,7 @@ public class ExceptionWrapper
       @Override
       public ZimbraException create(Exception exception)
       {
-        return new NoSuchAppointmentException(exception);
+        return new NoSuchCalendarException(exception);
       }
     });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB, new ExceptionWrapperCreator()

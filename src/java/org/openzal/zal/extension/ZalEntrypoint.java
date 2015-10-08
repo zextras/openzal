@@ -66,6 +66,8 @@ public class ZalEntrypoint implements ZimbraExtension, ZimbraExtensionPostInit
       throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
     }
 
+    Zimbra.overrideExtensionMap();
+
     try
     {
       mExtensionManager.loadExtensions();

@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.openzal.zal.Continuation;
+
 import javax.servlet.http.HttpServletRequest;
 
 
