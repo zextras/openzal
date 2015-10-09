@@ -20,25 +20,25 @@
 
 package org.openzal.zal.extension;
 
-import org.openzal.zal.tools.ExtensionLoader;
+import org.openzal.zal.tools.VersionChooser;
 
 import java.io.File;
 
 public class TinyBoot
 {
   private final static String sZalEntrypointName = "org.openzal.zal.extension.ZalEntrypointImpl";
-  private final ExtensionLoader mExtensionLoader;
-  private final File mExtensionPathFile;
+  private final VersionChooser mVersionChooser;
+  private final File           mExtensionPathFile;
 
   public TinyBoot(File extensionPathFile)
   {
     mExtensionPathFile = extensionPathFile;
-    mExtensionLoader = new ExtensionLoader();
+    mVersionChooser = new VersionChooser();
   }
 
   public ZalEntrypoint createZalEntryPoint(File extensionDirectory, ZalExtensionController zalExtensionController) throws Exception
   {
-    BootstrapClassLoader bootstrapClassLoader = mExtensionLoader.getBootstrapClassLoader(extensionDirectory);
+    BootstrapClassLoader bootstrapClassLoader = mVersionChooser.getBootstrapClassLoader(extensionDirectory);
 
     Class<ZalEntrypoint> zalEntrypoint = (Class<ZalEntrypoint>) bootstrapClassLoader.loadClass(sZalEntrypointName);
 
@@ -52,6 +52,6 @@ public class TinyBoot
 
   public ZalEntrypoint createZalEntryPoint(ZalExtensionController controller) throws Exception
   {
-    return createZalEntryPoint(mExtensionLoader.getBestVersionDirectory(mExtensionPathFile), controller);
+    return createZalEntryPoint(mVersionChooser.getBestVersionDirectory(mExtensionPathFile), controller);
   }
 }

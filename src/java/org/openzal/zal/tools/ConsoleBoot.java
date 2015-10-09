@@ -1,3 +1,23 @@
+/*
+ * ZAL - The abstraction layer for Zimbra.
+ * Copyright (C) 2014 ZeXtras S.r.l.
+ *
+ * This file is part of ZAL.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.openzal.zal.tools;
 
 import org.openzal.zal.lib.JarAccessor;
@@ -7,8 +27,8 @@ import java.io.IOException;
 
 public class ConsoleBoot
 {
-  private static final ExtensionLoader sExtensionLoader = new ExtensionLoader();
-  private static final String          EXTENSION_CLI_ATTRIBUTE = "ZAL-ExtensionCli-Class";
+  private static final VersionChooser S_VERSION_CHOOSER       = new VersionChooser();
+  private static final String         EXTENSION_CLI_ATTRIBUTE = "ZAL-ExtensionCli-Class";
 
   public static void main(String[] args) throws Exception
   {
@@ -17,7 +37,7 @@ public class ConsoleBoot
     BootCli bootCli;
     if (extensionPathFile.exists())
     {
-      File path = sExtensionLoader.getBestVersionDirectory(extensionPathFile);
+      File path = S_VERSION_CHOOSER.getBestVersionDirectory(extensionPathFile);
       bootCli = createBootCli(path);
     }
     else
@@ -30,7 +50,7 @@ public class ConsoleBoot
 
   private static BootCli createBootCli(File extensionDirectory) throws IOException
   {
-    return new BootCli(sExtensionLoader.getBootstrapClassLoader(extensionDirectory), getExtensionCli(extensionDirectory));
+    return new BootCli(S_VERSION_CHOOSER.getBootstrapClassLoader(extensionDirectory), getExtensionCli(extensionDirectory));
   }
 
   private static String getExtensionCli(File extensionDirectory) throws IOException
