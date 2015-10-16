@@ -393,4 +393,6 @@ public interface Provisioning
       return false;
     }
   }
+
+  Collection<Domain> getDomainAliases(Domain domain);
 }
