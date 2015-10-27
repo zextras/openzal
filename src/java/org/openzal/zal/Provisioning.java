@@ -1656,6 +1656,20 @@ public class Provisioning
     throw new RuntimeException("Unknown grantee type: "+grantee_type);
   }
 
+  @NotNull
+  public DistributionList assertDistributionListById(String targetId)
+  {
+    DistributionList distributionList = getDistributionListById(targetId);
+    if (distributionList == null)
+    {
+      throw new NoSuchDistributionListException(targetId);
+    }
+    else
+    {
+      return distributionList;
+    }
+  }
+
   public class CountAccountResult
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult mCountAccountResult;
