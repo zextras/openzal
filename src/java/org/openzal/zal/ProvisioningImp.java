@@ -1904,4 +1904,16 @@ public class ProvisioningImp implements Provisioning
       mSearchResult.setTotal(mCounter);
     }
   }
+
+  public Collection<Domain> getDomainAliases(Domain domain)
+  {
+    if (domain.isAliasDomain())
+    {
+      return Collections.emptyList();
+    }
+
+    DomainAliasesVisitor visitor = new DomainAliasesVisitor(domain);
+    visitAllDomains(visitor);
+    return visitor.getAliases();
+  }
 }

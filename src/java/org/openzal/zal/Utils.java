@@ -309,4 +309,19 @@ public abstract class Utils
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public static String getEmailNamePart(String address)
+  {
+    if (address.contains("@"))
+    {
+      String[] parts = address.split("@");
+
+      if (parts.length == 2)
+      {
+        return address.split("@")[0];
+      }
+    }
+
+    throw new RuntimeException("Invalid mail address " + address);
+  }
 }
