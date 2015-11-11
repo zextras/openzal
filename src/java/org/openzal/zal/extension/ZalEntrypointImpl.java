@@ -28,22 +28,22 @@ import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
-import org.openzal.zal.lib.ZalJarValidator;
-import org.openzal.zal.lib.ExtensionJarValidator;
+import org.openzal.zal.lib.ZalVersionValidator;
+import org.openzal.zal.lib.ExtensionVersionValidator;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
-  private final ExtensionJarValidator mExtensionJarValidator;
-  private final ZalJarValidator       mZalJarValidator;
-  private       String                mDirectoryName;
-  private       File                  mDirectory;
-  private       ExtensionManager      mExtensionManager;
-  private       boolean               mExtensionPathExists;
-  private       ZalEntrypoint         mZalEntryPoint;
-  private       File                  mCustomExtensionDirectory;
+  private final ExtensionVersionValidator mExtensionVersionValidator;
+  private final ZalVersionValidator       mZalVersionValidator;
+  private       String                    mDirectoryName;
+  private       File                      mDirectory;
+  private       ExtensionManager          mExtensionManager;
+  private       boolean                   mExtensionPathExists;
+  private       ZalEntrypoint             mZalEntryPoint;
+  private       File                      mCustomExtensionDirectory;
 
   @Nullable
   private WeakReference<ClassLoader> mPreviousExtension;
@@ -60,8 +60,8 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     mZalEntryPoint = null;
     mCustomExtensionDirectory = null;
     mPreviousExtension = new WeakReference<ClassLoader>(null);
-    mZalJarValidator = new ZalJarValidator();
-    mExtensionJarValidator = new ExtensionJarValidator();
+    mZalVersionValidator = new ZalVersionValidator();
+    mExtensionVersionValidator = new ExtensionVersionValidator();
   }
 
   private ExtensionManager getExtensionManager()
@@ -178,8 +178,8 @@ public class ZalEntrypointImpl implements ZalEntrypoint
         File zalJar = new File(extensionDirectory.getAbsolutePath() + ZAL_FILE);
         File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
 
-        Version zalVersion = mZalJarValidator.validate(new JarAccessor(extensionJar), ZimbraVersion.current);
-        mExtensionJarValidator.validate(new JarAccessor(zalJar), zalVersion);
+        Version zalVersion = mZalVersionValidator.validate(new JarAccessor(extensionJar), ZimbraVersion.current);
+        mExtensionVersionValidator.validate(new JarAccessor(zalJar), zalVersion);
       }
       catch (Exception e)
       {

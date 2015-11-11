@@ -90,6 +90,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -193,6 +195,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -296,6 +300,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -399,6 +405,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -502,6 +510,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -605,6 +615,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -708,6 +720,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -811,6 +825,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -914,6 +930,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1017,6 +1035,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1120,6 +1140,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1223,6 +1245,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1326,6 +1350,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1429,6 +1455,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1532,6 +1560,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1635,6 +1665,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1738,6 +1770,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1841,6 +1875,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -1944,6 +1980,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2047,6 +2085,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2150,6 +2190,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2253,6 +2295,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2356,6 +2400,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2459,6 +2505,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2562,6 +2610,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2665,6 +2715,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2768,6 +2820,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2871,6 +2925,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -2974,6 +3030,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3077,6 +3135,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3180,6 +3240,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3283,6 +3345,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3386,6 +3450,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3489,6 +3555,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3592,6 +3660,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3695,6 +3765,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
@@ -3798,6 +3870,8 @@
     <classpath>
       <pathelement location="${dist}/zal.jar.unsigned" />
     </classpath>
+    <arg value="${dist}/../../../res/certs/key.pkcs8" />
+    <arg value="${dist}/zal.jar.unsigned" />
     <arg value="${dist}/zal.jar" />
   </java>
 
