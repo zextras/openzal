@@ -176,10 +176,12 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       try
       {
         File zalJar = new File(extensionDirectory.getAbsolutePath() + ZAL_FILE);
-        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
+        JarAccessor zalJarAccessor = new JarAccessor(zalJar);
+        Version zalVersion = mZalVersionValidator.validate(zalJarAccessor, ZimbraVersion.current);
 
-        Version zalVersion = mZalVersionValidator.validate(new JarAccessor(extensionJar), ZimbraVersion.current);
-        mExtensionVersionValidator.validate(new JarAccessor(zalJar), zalVersion);
+        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
+        JarAccessor extensionJarAccessor = new JarAccessor(extensionJar);
+        mExtensionVersionValidator.validate(extensionJarAccessor, zalVersion);
       }
       catch (Exception e)
       {
