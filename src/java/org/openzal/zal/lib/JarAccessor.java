@@ -4,13 +4,15 @@ import org.openzal.zal.tools.JarUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class JarAccessor
 {
-  private static final String ATTR_DIGEST       = "Digest";
+  private static final String DIGEST      = "DIGEST";
 
   private final File     mFile;
   private       ZipFile  mZipFile;
@@ -67,19 +69,46 @@ public class JarAccessor
 
   public void validateDigest(boolean force) throws IOException, NoSuchAlgorithmException
   {
-    if (hasAttributeInManifest(ATTR_DIGEST) || force)
+    String digest = new String(getDigest());
+    if (!digest.isEmpty() || force)
     {
-      String digest = getAttributeInManifest(ATTR_DIGEST);
-      String computedDigest = "";
-      if (digest != null && !digest.isEmpty())
+      if (digest.isEmpty())
       {
-        computedDigest = JarUtils.computeDigest(getZipFile());
+        throw new RuntimeException("No digest found in archive " + getPath());
       }
 
-      if (computedDigest.isEmpty() || !computedDigest.equals(digest))
+      String actualMD5 = JarUtils.printableByteArray(JarUtils.computeDigest(getZipFile()));
+      if (! actualMD5.equals(digest))
       {
-        throw new RuntimeException("Digest mismatch for file " + getPath());
+        throw new RuntimeException("Digest mismatch for file " + getPath() + "\n" +
+                                   " expected " + digest + "\n" +
+                                   " actual   " + actualMD5);
       }
+    }
+  }
+
+  public byte[] getDigest() throws IOException
+  {
+    return getContent(DIGEST);
+  }
+
+  protected byte[] getContent(String entry) throws IOException
+  {
+    ZipEntry zipEntry = getZipFile().getEntry(entry);
+
+    if ( zipEntry == null )
+    {
+      return new byte[0];
+    }
+
+    InputStream digestContent = getZipFile().getInputStream(zipEntry);
+    try
+    {
+      return JarUtils.inputStreamToByteArray(digestContent);
+    }
+    finally
+    {
+      digestContent.close();
     }
   }
 }

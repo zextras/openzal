@@ -3,22 +3,11 @@ package org.openzal.zal.lib;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-public class ExtensionJarValidator
+public class ExtensionVersionValidator
 {
   public final static String ATTR_ZAL_REQUIRED = "ZAL-Required-Version";
 
-  public void validate(JarAccessor jar, Version zalVersion) throws IOException, NoSuchAlgorithmException
-  {
-    validate(jar, zalVersion, false);
-  }
-
-  public void validateForceDigestValidation(JarAccessor jar, Version zalVersion)
-    throws IOException, NoSuchAlgorithmException
-  {
-    validate(jar, zalVersion, true);
-  }
-
-  public void validate(JarAccessor jar, Version zalVersion, boolean forceDigestValidation)
+  public void validate(JarAccessor jar, Version zalVersion)
     throws IOException, NoSuchAlgorithmException
   {
     String requiredZalVersionString = jar.getAttributeInManifest(ATTR_ZAL_REQUIRED);
@@ -35,7 +24,5 @@ public class ExtensionJarValidator
         );
       }
     }
-
-    jar.validateDigest(forceDigestValidation);
   }
 }
