@@ -144,25 +144,25 @@ public interface Provisioning
     throws NoSuchAccountException;
 
   List<Account> getAllAdminAccounts()
-      throws ZimbraException;
+    throws ZimbraException;
 
   List<Account> getAllAccounts(@NotNull Domain domain)
-        throws ZimbraException;
+    throws ZimbraException;
 
   List<Server> getAllServers()
-          throws ZimbraException;
+    throws ZimbraException;
 
   List<Server> getAllServers(String service)
-            throws ZimbraException;
+    throws ZimbraException;
 
   List<CalendarResource> getAllCalendarResources(@NotNull Domain domain)
-              throws ZimbraException;
+    throws ZimbraException;
 
   List<Zimlet> listAllZimlets()
-                throws ZimbraException;
+    throws ZimbraException;
 
   List<XMPPComponent> getAllXMPPComponents()
-                  throws ZimbraException;
+    throws ZimbraException;
 
   @Nullable
   GlobalGrant getGlobalGrant()
@@ -281,11 +281,16 @@ public interface Provisioning
   @NotNull
   GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit);
 
+  @NotNull
+  DistributionList assertDistributionListById(String targetId);
+
   void deleteAccountByName(String id);
 
   void deleteAccountById(String id);
 
-  public static class CountAccountByCos
+  Collection<Domain> getDomainAliases(Domain domain);
+
+  class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;
 
@@ -310,7 +315,7 @@ public interface Provisioning
     }
   }
 
-  public static class GalSearchResult
+  class GalSearchResult
   {
     @NotNull private final LinkedList<ProvisioningImp.GalSearchResult.GalContact> mContactList;
     private                int                                                    mTotal;
@@ -394,5 +399,18 @@ public interface Provisioning
     }
   }
 
-  Collection<Domain> getDomainAliases(Domain domain);
+  class CountAccountResult
+  {
+    private final com.zimbra.cs.account.Provisioning.CountAccountResult mCountAccountResult;
+
+    protected CountAccountResult(com.zimbra.cs.account.Provisioning.CountAccountResult countAccountResult)
+    {
+      mCountAccountResult = countAccountResult;
+    }
+
+    public List<CountAccountByCos> getCountAccountByCos()
+    {
+      return ZimbraListWrapper.wrapCountAccountByCosList(mCountAccountResult.getCountAccountByCos());
+    }
+  }
 }

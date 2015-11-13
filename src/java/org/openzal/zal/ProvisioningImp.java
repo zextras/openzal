@@ -1726,22 +1726,6 @@ public class ProvisioningImp implements Provisioning
     throw new RuntimeException("Unknown grantee type: "+grantee_type);
   }
 
-  public class CountAccountResult
-  {
-    private final com.zimbra.cs.account.Provisioning.CountAccountResult mCountAccountResult;
-
-    protected CountAccountResult(com.zimbra.cs.account.Provisioning.CountAccountResult countAccountResult)
-    {
-      mCountAccountResult = countAccountResult;
-    }
-
-    public List<CountAccountByCos> getCountAccountByCos()
-    {
-      return ZimbraListWrapper.wrapCountAccountByCosList(mCountAccountResult.getCountAccountByCos());
-    }
-  }
-
-
   @Override
   @NotNull
   public GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit)
@@ -1781,6 +1765,20 @@ public class ProvisioningImp implements Provisioning
     }
 
     return result;
+  }
+
+  @NotNull
+  public DistributionList assertDistributionListById(String targetId)
+  {
+    DistributionList distributionList = getDistributionListById(targetId);
+    if (distributionList == null)
+    {
+      throw new NoSuchDistributionListException(targetId);
+    }
+    else
+    {
+      return distributionList;
+    }
   }
 
   @Override

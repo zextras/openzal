@@ -29,7 +29,11 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.service.ServiceException;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -802,5 +806,24 @@ public class Invite
   public boolean isPublic()
   {
     return mInvite.isPublic();
+  }
+
+  public InputStream toIcal()
+    throws ZimbraException, IOException, MessagingException
+  {
+    MimeBodyPart icalPart;
+    try {
+      ZCalendar.ZVCalendar cal = mInvite.newToICalendar(true);
+  /* $if ZimbraVersion <= 7.1.0 $
+      icalPart = CalendarMailSender.makeICalIntoMimePart(null, cal);
+  /* $else$ */
+      icalPart = CalendarMailSender.makeICalIntoMimePart(cal);
+  /* $endif $ */
+      return icalPart.getInputStream();
+    }
+    catch (ServiceException ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
   }
 }

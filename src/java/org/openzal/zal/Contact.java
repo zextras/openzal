@@ -20,12 +20,17 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.service.formatter.VCard;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +150,19 @@ public class Contact extends Item
     }
 
     return true;
+  }
+
+  public InputStream toVCardInputStream()
+    throws UnsupportedEncodingException
+  {
+    VCard vCard = VCard.formatContact(mContact);
+    String formatted;
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    formatted = vCard.getFormatted();
+    /* $else  $
+    formatted = vCard.formatted;
+    /* $endif$ */
+    return new ByteArrayInputStream(formatted.getBytes("UTF-8"));
   }
 
   @Override
