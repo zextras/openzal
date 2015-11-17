@@ -2763,4 +2763,49 @@ $endif$
       }
     }
   }
+
+  public void deleteMailbox()
+  {
+    try
+    {
+      mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  /* $if ZimbraVersion > 7.2.0 $ */
+  public void deleteMailbox(DeleteBlobs deleteBlobs)
+  {
+    try
+    {
+      mMbox.deleteMailbox(deleteBlobs.toZimbra());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public enum DeleteBlobs
+  {
+    ALWAYS(com.zimbra.cs.mailbox.Mailbox.DeleteBlobs.ALWAYS),
+    NEVER(com.zimbra.cs.mailbox.Mailbox.DeleteBlobs.NEVER),
+    IF_NOT_CENTRALIZED_STORE(com.zimbra.cs.mailbox.Mailbox.DeleteBlobs.UNLESS_CENTRALIZED);
+
+    private final com.zimbra.cs.mailbox.Mailbox.DeleteBlobs mDeleteBlobs;
+
+    public com.zimbra.cs.mailbox.Mailbox.DeleteBlobs toZimbra()
+    {
+      return mDeleteBlobs;
+    }
+
+    DeleteBlobs(com.zimbra.cs.mailbox.Mailbox.DeleteBlobs deleteBlobs)
+    {
+      mDeleteBlobs = deleteBlobs;
+    }
+  }
+  /* $endif $ */
 }
