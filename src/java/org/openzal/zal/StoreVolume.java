@@ -304,6 +304,7 @@ public class StoreVolume
       }
     }
 
+    @Deprecated
     @Nullable
     public static StoreVolume getVolumeByName(String volumeName)
     {

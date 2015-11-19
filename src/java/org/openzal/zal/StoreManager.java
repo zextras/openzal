@@ -47,4 +47,6 @@ public interface StoreManager
   StoreVolume getCurrentVolume();
 
   StoreVolume getCurrentSecondaryVolume();
+
+  StoreVolume getVolumeByName(String name);
 }
