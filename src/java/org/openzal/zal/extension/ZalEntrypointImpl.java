@@ -33,6 +33,7 @@ import org.openzal.zal.lib.ExtensionVersionValidator;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.net.URLClassLoader;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
