@@ -21,20 +21,22 @@
 package org.openzal.zal.extension;
 
 import org.jetbrains.annotations.NotNull;
-import sun.misc.Resource;
-import sun.misc.URLClassPath;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.security.AccessControlContext;
-import java.security.AccessController;
 import java.security.AllPermission;
 import java.security.CodeSigner;
 import java.security.CodeSource;
 import java.security.Permissions;
 import java.security.ProtectionDomain;
+import java.util.Arrays;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.zip.ZipFile;
 
 @SuppressWarnings({"SynchronizedMethod", "rawtypes", "CustomClassloader"})
 public class BootstrapClassLoader extends ClassLoader
@@ -45,16 +47,29 @@ public class BootstrapClassLoader extends ClassLoader
     sAllPermission.add(new AllPermission());
   }
 
-  private final boolean              mDelegateZalLoading;
-  private final URLClassPath         mUrlClassPath;
-  private final AccessControlContext mAccessControl;
+  private final boolean   mDelegateZalLoading;
+  private final JarFile[] mJarFileList;
+  private final URL[]     mUrls;
+  private       boolean   mInitialized;
 
   public BootstrapClassLoader(URL[] urls, ClassLoader parent, boolean delegateZalLoading)
   {
     super(parent);
-    mUrlClassPath = new URLClassPath(urls);
+    mUrls = urls;
+    mJarFileList = new JarFile[urls.length];
+    mInitialized = false;
     mDelegateZalLoading = delegateZalLoading;
-    mAccessControl = AccessController.getContext();
+  }
+
+  private void initilize() throws IOException
+  {
+    mInitialized = true;
+    for( int n=0; n < mUrls.length; ++n)
+    {
+      mJarFileList[n] = new JarFile(
+        new File(mUrls[n].getFile())
+      );
+    }
   }
 
   @Override
@@ -64,9 +79,21 @@ public class BootstrapClassLoader extends ClassLoader
   }
 
   @Override
-  protected synchronized Class loadClass(@NotNull String name, boolean resolve)
+  protected Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
+    if(!mInitialized)
+    {
+      try
+      {
+        initilize();
+      }
+      catch (IOException e)
+      {
+        throw new ClassNotFoundException(name,e);
+      }
+    }
+
     if (mDelegateZalLoading)
     {
       if (name.startsWith("org.openzal."))
@@ -110,22 +137,25 @@ public class BootstrapClassLoader extends ClassLoader
     throws ClassNotFoundException
   {
     String path = name.replace('.', '/').concat(".class");
-    Resource res = mUrlClassPath.getResource(path, false);
-    if (res != null)
+
+    for( int n=0; n < mJarFileList.length; ++n)
     {
-      try
+      JarFile jarFile = mJarFileList[n];
+      JarEntry entry = jarFile.getJarEntry(path);
+      if (entry != null)
       {
-        return defineClass(name, res);
-      }
-      catch (IOException e)
-      {
-        throw new ClassNotFoundException(name, e);
+        try
+        {
+          return defineClass(name, mUrls[n], jarFile, entry);
+        }
+        catch (IOException e)
+        {
+          throw new ClassNotFoundException(name, e);
+        }
       }
     }
-    else
-    {
-      throw new ClassNotFoundException(name);
-    }
+
+    throw new ClassNotFoundException(name);
   }
 
   private String secondIfNull(String str1, String str2)
@@ -137,17 +167,15 @@ public class BootstrapClassLoader extends ClassLoader
     return str1;
   }
 
-  protected Package definePackageIfMissing(
+  private void definePackageIfMissing(
     String packageName,
     Manifest man,
     URL url
   )
-    throws IllegalArgumentException
   {
-    Package pkg = getPackage(packageName);
-    if( pkg != null )
+    if( getPackage(packageName) != null )
     {
-      return pkg;
+      return;
     }
 
     String specTitle = null, specVersion = null, specVendor = null;
@@ -180,56 +208,70 @@ public class BootstrapClassLoader extends ClassLoader
       }
     }
 
-    return definePackage(
-      packageName,
-      specTitle,
-      specVersion,
-      specVendor,
-      implTitle,
-      implVersion,
-      implVendor,
-      null
-    );
+    try
+    {
+      definePackage(
+        packageName,
+        specTitle,
+        specVersion,
+        specVendor,
+        implTitle,
+        implVersion,
+        implVendor,
+        null
+      );
+    }
+    catch (IllegalArgumentException ignore){
+      //could happen in concurrent class loading
+      //another thread has already defined the package
+    }
   }
 
-  private Class<?> defineClass(String name, Resource res) throws IOException
+  private Class<?> defineClass(String name, URL url, JarFile jarFile, JarEntry entry) throws IOException
   {
     int lastIndexOf = name.lastIndexOf('.');
-    URL url = res.getCodeSourceURL();
     if (lastIndexOf != -1)
     {
       definePackageIfMissing(
         name.substring(0, lastIndexOf),
-        res.getManifest(),
+        jarFile.getManifest(),
         url
       );
     }
 
-    java.nio.ByteBuffer rawClassBuffer = res.getByteBuffer();
-    if (rawClassBuffer != null)
+    byte[] buffer = new byte[ 32 * 1024 ];
+    int idx = 0;
+    InputStream inputStream = jarFile.getInputStream(entry);
+    try
     {
-      CodeSource cs = new CodeSource(url, sEmptyCodeSigner);
-      ProtectionDomain domain = new ProtectionDomain(cs, sAllPermission);
-
-      return defineClass(
-        name,
-        rawClassBuffer,
-        domain
-      );
+      while( true )
+      {
+        int read = inputStream.read(buffer, idx, buffer.length - idx);
+        if (read < 0)
+        {
+          break;
+        }
+        idx += read;
+        if( buffer.length - idx == 0 )
+        {
+          buffer = Arrays.copyOf(buffer, buffer.length * 2);
+        }
+      }
     }
-    else
+    finally
     {
-      CodeSource cs = new CodeSource(url, sEmptyCodeSigner);
-      ProtectionDomain domain = new ProtectionDomain(cs, sAllPermission);
-
-      byte[] rawClass = res.getBytes();
-      return defineClass(
-        name,
-        rawClass,
-        0,
-        rawClass.length,
-        domain
-      );
+      inputStream.close();
     }
+
+    CodeSource cs = new CodeSource(url, sEmptyCodeSigner);
+    ProtectionDomain domain = new ProtectionDomain(cs, sAllPermission);
+
+    return defineClass(
+      name,
+      buffer,
+      0,
+      idx,
+      domain
+    );
   }
 }
