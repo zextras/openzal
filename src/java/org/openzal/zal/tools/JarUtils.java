@@ -68,6 +68,7 @@ public abstract class JarUtils
   public static void copyJar(ZipFile zipFile, File destination, byte[] digest, byte[] signature) throws IOException
   {
     ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(destination));
+    zipOutputStream.setLevel(ZipEntry.STORED);
 
     byte[] buffer = new byte[32*1024];
     Enumeration<? extends ZipEntry> it = zipFile.entries();
