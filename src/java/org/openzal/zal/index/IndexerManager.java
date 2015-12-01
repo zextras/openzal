@@ -46,14 +46,16 @@ import java.util.Set;
 @Singleton
 public class IndexerManager
 {
-  private static final Field                     sHandlersField;
+  private static final Field                     sMimeHandlerManagerHandlersField;
   private static final Class<MimeHandlerManager> sMimeHandlerManager;
+
   private static final Class<?>                  sHandlerInfo;
   private static final Constructor<?>            sHandlerInfoConstructor;
+  private static final Field                     sHandlerInfoClazzField;
+  private static final Field                     sHandlerInfoContentTypeField;
+  private static final Field                     sHandlerInfoRealMimeTypeField;
+
   private static final List<Indexer>             sIndexerList;
-  private static final Field                     sHandlerInfoClazz;
-  private static final Field                     sHandlerInfoContentType;
-  private static final Field                     sHandlerInfoRealMimeType;
 
   @Nullable
   private static       Map<String, Object>       sOriginalMap;
@@ -83,17 +85,17 @@ public class IndexerManager
       sHandlerInfoConstructor = sHandlerInfo.getDeclaredConstructors()[0];
       sHandlerInfoConstructor.setAccessible(true);
 
-      sHandlersField = sMimeHandlerManager.getDeclaredField("sHandlers");
-      sHandlersField.setAccessible(true);
+      sMimeHandlerManagerHandlersField = sMimeHandlerManager.getDeclaredField("sHandlers");
+      sMimeHandlerManagerHandlersField.setAccessible(true);
 
-      sHandlerInfoClazz = sHandlerInfo.getDeclaredField("clazz");
-      sHandlerInfoClazz.setAccessible(true);
+      sHandlerInfoClazzField = sHandlerInfo.getDeclaredField("clazz");
+      sHandlerInfoClazzField.setAccessible(true);
 
-      sHandlerInfoContentType = sHandlerInfo.getDeclaredField("realMimeType");
-      sHandlerInfoContentType.setAccessible(true);
+      sHandlerInfoContentTypeField = sHandlerInfo.getDeclaredField("realMimeType");
+      sHandlerInfoContentTypeField.setAccessible(true);
 
-      sHandlerInfoRealMimeType = sHandlerInfo.getDeclaredField("mimeType");
-      sHandlerInfoRealMimeType.setAccessible(true);
+      sHandlerInfoRealMimeTypeField = sHandlerInfo.getDeclaredField("mimeType");
+      sHandlerInfoRealMimeTypeField.setAccessible(true);
     }
     catch (Throwable ex)
     {
@@ -106,13 +108,13 @@ public class IndexerManager
   {
     try
     {
-      sOriginalMap = (Map<String,Object>)sHandlersField.get(null);
-      sHandlersField.set(
-        null,
-        new IndexerProxyMap(
-          sOriginalMap,
-          new MimeHandlerProviderImpl()
-        )
+      sOriginalMap = (Map<String,Object>) sMimeHandlerManagerHandlersField.get(null);
+      sMimeHandlerManagerHandlersField.set(
+              null,
+              new IndexerProxyMap(
+                      sOriginalMap,
+                      new MimeHandlerProviderImpl()
+              )
       );
     }
     catch (IllegalAccessException e)
@@ -127,7 +129,7 @@ public class IndexerManager
     {
       if( sOriginalMap != null )
       {
-        sHandlersField.set(null, sOriginalMap);
+        sMimeHandlerManagerHandlersField.set(null, sOriginalMap);
       }
     }
     catch (IllegalAccessException e)
@@ -174,50 +176,42 @@ public class IndexerManager
     {
       Object info = sHandlerInfoConstructor.newInstance();
 
-      sHandlerInfoContentType.set(info, contentType);
-      sHandlerInfoClazz.set(info, cls);
+      sHandlerInfoContentTypeField.set(info, contentType);
+      sHandlerInfoClazzField.set(info, cls);
 
-      sHandlerInfoRealMimeType.set(info, new MimeTypeInfo()
-      {
+      sHandlerInfoRealMimeTypeField.set(info, new MimeTypeInfo() {
         @Override
-        public String[] getMimeTypes()
-        {
+        public String[] getMimeTypes() {
           return new String[0];
         }
 
         @Override
-        public String getExtension()
-        {
+        public String getExtension() {
           return null;
         }
 
         @Override
-        public String getHandlerClass()
-        {
+        public String getHandlerClass() {
           return null;
         }
 
         @Override
-        public boolean isIndexingEnabled()
-        {
+        public boolean isIndexingEnabled() {
           return true;
         }
 
         @Override
-        public String getDescription()
-        {
+        public String getDescription() {
           return null;
         }
 
         @Override
-        public Set<String> getFileExtensions()
-        {
+        public Set<String> getFileExtensions() {
           return null;
         }
 
         @Override
-        public int getPriority()
-        {
+        public int getPriority() {
           return 0;
         }
       });
