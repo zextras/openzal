@@ -76,6 +76,7 @@ public class IndexerManager
   {
     try
     {
+      ZimbraLog.extensions.warn("inizio staticone");
       sOriginalMap = null;
       sIndexerList = Collections.synchronizedList(new LinkedList<Indexer>());
 
