@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -40,6 +39,7 @@ public abstract class JarUtils
   private static final String MANIFEST = "META-INF/MANIFEST.MF";
   private static final String DIGEST = "DIGEST";
   private static final String SIGNATURE = "SIGNATURE";
+  private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
   public static File getJarPathOfClass(Class cls)
   {
@@ -69,15 +69,21 @@ public abstract class JarUtils
   {
     ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(destination));
 
+    byte[] buffer = new byte[32*1024];
     Enumeration<? extends ZipEntry> it = zipFile.entries();
     while( it.hasMoreElements() )
     {
       ZipEntry zipEntry = it.nextElement();
-
-      zipOutputStream.putNextEntry(zipEntry);
-      zipOutputStream.write(
-        inputStreamToByteArray(zipFile.getInputStream(zipEntry))
-      );
+      InputStream inputStream = zipFile.getInputStream(zipEntry);
+      try
+      {
+        zipOutputStream.putNextEntry(zipEntry);
+        copyStream(buffer, inputStream, zipOutputStream);
+      }
+      finally
+      {
+        inputStream.close();
+      }
     }
 
     zipOutputStream.putNextEntry(new ZipEntry(DIGEST));
@@ -89,17 +95,26 @@ public abstract class JarUtils
     zipOutputStream.close();
   }
 
+  private static void copyStream(byte[] buffer, InputStream inputStream, ZipOutputStream zipOutputStream) throws IOException
+  {
+    int read;
+    while ( (read = inputStream.read(buffer, 0, buffer.length) ) > -1)
+    {
+      zipOutputStream.write(buffer, 0, read);
+    }
+  }
+
   public static String printableByteArray(byte[] buffer)
   {
-    StringBuilder sb = new StringBuilder(buffer.length*2);
-
+    char[] encoded = new char[2 * buffer.length];
     for( int i=0; i < buffer.length; ++i )
     {
-      if( (buffer[i] & 0xFF) < 0x10 ) sb.append('0');
-      sb.append(Integer.toHexString(buffer[i] & 0xFF));
+      int value = buffer[i] & 0xFF;
+      encoded[i*2] = HEX_ARRAY[value >>> 4];
+      encoded[i*2 + 1] = HEX_ARRAY[value & 0x0F];
     }
 
-    return sb.toString();
+    return new String(encoded);
   }
 
   public static Manifest getManifest(ZipFile zipFile) throws IOException
@@ -114,6 +129,7 @@ public abstract class JarUtils
 
   public static byte[] computeDigest(ZipFile zipFile) throws NoSuchAlgorithmException, IOException
   {
+    byte[] buffer = new byte[16*1024];
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
     while (zipEntries.hasMoreElements())
@@ -128,20 +144,27 @@ public abstract class JarUtils
       digest.update(
         entry.getName().getBytes("UTF-8")
       );
-      digest.update(
-        inputStreamToByteArray(zipFile.getInputStream(entry))
-      );
+      updateDigest(buffer, digest, zipFile.getInputStream(entry));
     }
 
     return digest.digest();
   }
 
-  public static byte[] inputStreamToByteArray(InputStream inputStream) throws IOException
+  private static void updateDigest(byte[] buffer, MessageDigest digest, InputStream inputStream) throws IOException
+  {
+    int read;
+    while ( (read = inputStream.read(buffer)) > -1 )
+    {
+     digest.update(buffer, 0, read);
+    }
+    inputStream.close();
+  }
+
+  public static byte[] inputStreamToByteArray(InputStream inputStream, byte[] buffer) throws IOException
   {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     int read;
-    byte[] buffer = new byte[1024];
     while ( (read = inputStream.read(buffer)) > -1 )
     {
       outputStream.write(buffer, 0, read);

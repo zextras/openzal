@@ -2763,4 +2763,16 @@ $endif$
       }
     }
   }
+
+  public void deleteMailbox()
+  {
+    try
+    {
+      mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }

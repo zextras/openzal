@@ -78,7 +78,7 @@ public class JarAccessor
       }
 
       String actualMD5 = JarUtils.printableByteArray(JarUtils.computeDigest(getZipFile()));
-      if (! actualMD5.equals(digest))
+      if (! actualMD5.equalsIgnoreCase(digest))
       {
         throw new RuntimeException("Digest mismatch for file " + getPath() + "\n" +
                                    " expected " + digest + "\n" +
@@ -96,6 +96,7 @@ public class JarAccessor
   {
     ZipEntry zipEntry = getZipFile().getEntry(entry);
 
+    byte[] buffer = new byte[1024*10];
     if ( zipEntry == null )
     {
       return new byte[0];
@@ -104,7 +105,7 @@ public class JarAccessor
     InputStream digestContent = getZipFile().getInputStream(zipEntry);
     try
     {
-      return JarUtils.inputStreamToByteArray(digestContent);
+      return JarUtils.inputStreamToByteArray(digestContent, buffer);
     }
     finally
     {

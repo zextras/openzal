@@ -110,7 +110,7 @@ public class VersionChooser
     {
       try
       {
-        urls.add(new URL("jar:file:" + file.getAbsolutePath() + "!/"));
+        urls.add(new URL("file:" + file.getAbsolutePath()));
       }
       catch (MalformedURLException e)
       {
