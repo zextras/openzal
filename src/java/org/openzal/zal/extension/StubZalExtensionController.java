@@ -43,4 +43,10 @@ public class StubZalExtensionController implements ZalExtensionController
   {
     throw new UnsupportedOperationException();
   }
+
+  @Override
+  public boolean canControlExtension()
+  {
+    return false;
+  }
 }
