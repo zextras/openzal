@@ -126,6 +126,20 @@ public class BootstrapClassLoader extends ClassLoader
           cls = super.getParent().loadClass(name);
         }
       }
+      catch (LinkageError ex)
+      {
+/*
+  to understand if it was a concurrent class definition issue, we search the class again,
+  if it's already loaded then we ignore the exception.
+  this solution is way more safe then breaking java locking mechanism which may arise
+  random deadlocks
+*/
+        cls = findLoadedClass(name);
+        if( cls == null )
+        {
+          throw ex;
+        }
+      }
     }
     if (resolve) {
       resolveClass(cls);
