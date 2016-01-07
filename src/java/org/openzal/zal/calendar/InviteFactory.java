@@ -313,16 +313,16 @@ public class InviteFactory
     }
 
     ParsedDateTime dateStart = null;
-    if( mUtcDateStart != 0 ) {
+    if( mUtcDateStart != 0L ) {
       dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
     }
 
     ParsedDateTime dateEnd = null;
-    if( mUtcDateEnd != 0 ) {
+    if( mUtcDateEnd != 0L ) {
       dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
     }
 
-    if (mAllDayEvent)
+    if (mAllDayEvent || task)
     {
       dateStart.setHasTime(false);
       dateEnd.setHasTime(false);
