@@ -324,8 +324,12 @@ public class InviteFactory
 
     if (mAllDayEvent || task)
     {
-      dateStart.setHasTime(false);
-      dateEnd.setHasTime(false);
+      if( dateStart != null ) {
+        dateStart.setHasTime(false);
+      }
+      if( dateEnd != null ) {
+        dateEnd.setHasTime(false);
+      }
     }
 
     Recurrence.RecurrenceRule mainRecurrenceRule = null;
