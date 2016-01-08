@@ -84,7 +84,7 @@ public enum FreeBusyStatus
       case BusyUnavailable:
         return GlobalInviteStatus.APPOINTMENT_CANCELLED;
       case NoData:
-        return GlobalInviteStatus.APPOINTMENT_NEED_ACTION;
+        return GlobalInviteStatus.NEED_ACTION;
     }
 
     throw new RuntimeException();

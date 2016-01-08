@@ -30,7 +30,7 @@ public enum GlobalInviteStatus
   APPOINTMENT_TENTATIVE("TENT", AttendeeInviteStatus.TENTATIVE),
   APPOINTMENT_CANCELLED("CANC", AttendeeInviteStatus.DECLINED),
   APPOINTMENT_CONFIRMED("CONF", AttendeeInviteStatus.ACCEPTED),
-  APPOINTMENT_NEED_ACTION("NEED", AttendeeInviteStatus.NEEDS_ACTION),
+  NEED_ACTION("NEED", AttendeeInviteStatus.NEEDS_ACTION),
   TASK_COMPLETED("COMP", AttendeeInviteStatus.COMPLETED),
   TASK_IN_PROGRESS("INPR", AttendeeInviteStatus.IN_PROCESS);
 
@@ -60,10 +60,10 @@ public enum GlobalInviteStatus
     sZimbra2Zal.put("TENT", APPOINTMENT_TENTATIVE);
     sZimbra2Zal.put("CANC", APPOINTMENT_CANCELLED);
     sZimbra2Zal.put("CONF", APPOINTMENT_CONFIRMED);
-    sZimbra2Zal.put("NEED", APPOINTMENT_NEED_ACTION);
-    sZimbra2Zal.put("WAITING", APPOINTMENT_NEED_ACTION);
-    sZimbra2Zal.put("DEFERRED", APPOINTMENT_NEED_ACTION);
-    sZimbra2Zal.put("",     APPOINTMENT_NEED_ACTION);
+    sZimbra2Zal.put("NEED", NEED_ACTION);
+    sZimbra2Zal.put("WAITING", NEED_ACTION);
+    sZimbra2Zal.put("DEFERRED", NEED_ACTION);
+    sZimbra2Zal.put("", NEED_ACTION);
     sZimbra2Zal.put("COMP", TASK_COMPLETED);
     sZimbra2Zal.put("INPR", TASK_IN_PROGRESS);
 
@@ -71,7 +71,7 @@ public enum GlobalInviteStatus
     sICal2Zimbra.put("TENTATIVE", APPOINTMENT_TENTATIVE);
     sICal2Zimbra.put("CANCELLED", APPOINTMENT_CANCELLED);
     sICal2Zimbra.put("CONFIRMED", APPOINTMENT_CONFIRMED);
-    sICal2Zimbra.put("NEEDS-ACTION", APPOINTMENT_NEED_ACTION);
+    sICal2Zimbra.put("NEEDS-ACTION", NEED_ACTION);
     sICal2Zimbra.put("COMPLETED", TASK_COMPLETED);
     sICal2Zimbra.put("IN-PROGRESS", TASK_IN_PROGRESS);
   }

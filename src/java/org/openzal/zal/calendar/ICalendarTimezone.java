@@ -53,6 +53,7 @@ public class ICalendarTimezone
     return cls.cast(mICalTimeZone);
   }
 
+  @Deprecated
   public static ICalendarTimezone getAccountTimeZone(@NotNull Account account)
   {
 /* $if MajorZimbraVersion <= 7 $
