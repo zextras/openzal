@@ -20,8 +20,13 @@
 
 package org.openzal.zal;
 
+/* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
+/* $else$
+import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
+ $endif$ */
+
 import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
