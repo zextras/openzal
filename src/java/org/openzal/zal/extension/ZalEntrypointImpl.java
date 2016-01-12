@@ -152,6 +152,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       }
       else
       {
+        Zimbra.overrideExtensionMap();
         ZimbraLog.mailbox.info("File "+extensionPathFile.getAbsolutePath()+" not present, using standard boot");
         getExtensionManager().loadExtension();
       }
