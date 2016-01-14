@@ -217,6 +217,12 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       init();
       postInit();
     }
+
+    @Override
+    public boolean canControlExtension()
+    {
+      return true;
+    }
   }
 
   @Override

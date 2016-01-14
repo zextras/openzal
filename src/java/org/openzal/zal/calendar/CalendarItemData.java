@@ -36,6 +36,16 @@ public class CalendarItemData
     mMessage = message;
   }
 
+  public ParsedMessage getMessage()
+  {
+    return mMessage;
+  }
+
+  public Invite getInvite()
+  {
+    return mInvite;
+  }
+
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
     Mailbox.SetCalendarItemData calendarItemData = new Mailbox.SetCalendarItemData();

@@ -20,7 +20,15 @@
 
 package org.openzal.zal;
 
+/* $if ZimbraVersion >= 8.0.0 $*/
+import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.cs.mailbox.calendar.Util;
+/* $else$
+import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
+ $endif$ */
+
 import org.apache.commons.lang3.StringUtils;
+import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -1065,6 +1073,20 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public ICalendarTimezone getAccountTimeZone()
+  {
+/* $if MajorZimbraVersion <= 7 $
+    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(
+      toZimbra(com.zimbra.cs.account.Account.class)
+    );
+  $else$ */
+    ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
+      toZimbra(com.zimbra.cs.account.Account.class)
+    );
+/* $endif$ */
+    return new ICalendarTimezone(accountTimeZone);
   }
 }
 

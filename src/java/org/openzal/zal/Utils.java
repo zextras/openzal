@@ -75,11 +75,11 @@ public abstract class Utils
       sb.append(elements[n].getClassName());
       sb.append(".");
       sb.append(elements[n].getMethodName());
-      sb.append(" ( ");
+      sb.append(" (");
       sb.append(elements[n].getFileName());
       sb.append(":");
       sb.append(elements[n].getLineNumber());
-      sb.append(" )");
+      sb.append(")");
 
       if (elements[n].isNativeMethod())
       {

@@ -20,6 +20,7 @@
 
 package org.openzal.zal.tools;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.extension.BootstrapClassLoader;
 import org.openzal.zal.lib.Version;
 
@@ -31,6 +32,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,6 +77,14 @@ public class VersionChooser
     return stringBuffer.toString().replaceAll("[\r\n]*", "");
   }
 
+  @Nullable
+  public Version getBestVersionFromExtensionPathFile(File extensionPathFile) throws IOException
+  {
+    File extensionRootDirectory = new File(readPath(extensionPathFile));
+    return getBestVersion(extensionRootDirectory);
+  }
+
+  @Nullable
   private Version getBestVersion(File realExtensionDirectory)
   {
     Version bestVersion = null;
@@ -141,5 +151,32 @@ public class VersionChooser
     }
 
     return createClassLoader(fileList);
+  }
+
+  public List<Version> getInstalledVersions(File extensionPathFile, Version currentVersion) throws IOException
+  {
+    File extensionRootDirectory = new File(readPath(extensionPathFile));
+    File[] dirs = extensionRootDirectory.listFiles();
+    if (dirs == null || dirs.length == 0)
+    {
+      return Collections.emptyList();
+    }
+
+    List<Version> versions = new ArrayList<Version>();
+    for (File dir : dirs)
+    {
+      try
+      {
+        Version version = new Version(dir.getName());
+        if (version.is(currentVersion.getMajor(), currentVersion.getMinor()))
+        {
+          versions.add(version);
+        }
+      }
+      catch (Exception ignore) {}
+    }
+
+    Collections.sort(versions);
+    return versions;
   }
 }

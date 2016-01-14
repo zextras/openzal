@@ -32,6 +32,8 @@ import java.security.CodeSource;
 import java.security.Permissions;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -126,6 +128,20 @@ public class BootstrapClassLoader extends ClassLoader
           cls = super.getParent().loadClass(name);
         }
       }
+      catch (LinkageError ex)
+      {
+/*
+  to understand if it was a concurrent class definition issue, we search the class again,
+  if it's already loaded then we ignore the exception.
+  this solution is way more safe then breaking java locking mechanism which may arise
+  random deadlocks
+*/
+        cls = findLoadedClass(name);
+        if( cls == null )
+        {
+          throw ex;
+        }
+      }
     }
     if (resolve) {
       resolveClass(cls);
@@ -156,6 +172,41 @@ public class BootstrapClassLoader extends ClassLoader
     }
 
     throw new ClassNotFoundException(name);
+  }
+
+  @Override
+  public Enumeration<URL> getResources(String name) throws IOException
+  {
+    final LinkedList<URL> urls = new LinkedList<URL>();
+
+    for( int n=0; n < mJarFileList.length; ++n)
+    {
+      JarFile jarFile = mJarFileList[n];
+      JarEntry entry = jarFile.getJarEntry(name);
+      if (entry != null)
+      {
+        //jar:file:/opt/zimbra/lib/ext/zextras/zextras.jar!/META-INF/services/com.hazelcast.instance.NodeExtension
+        URL url = new URL("jar:"+mUrls[n]+"!/"+name);
+        urls.add(url);
+      }
+    }
+
+    return new Enumeration<URL>()
+    {
+      int idx = 0;
+
+      @Override
+      public boolean hasMoreElements()
+      {
+        return urls.size() > idx;
+      }
+
+      @Override
+      public URL nextElement()
+      {
+        return urls.get(idx++);
+      }
+    };
   }
 
   private String secondIfNull(String str1, String str2)
