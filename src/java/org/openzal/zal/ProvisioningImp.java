@@ -1455,6 +1455,26 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Nullable
+  @Override
+  public Server getServerById(String id)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerById(id);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   public boolean onLocalServer(@NotNull Account userAccount)
     throws ZimbraException
