@@ -499,6 +499,12 @@ public class ProvisioningSimulator extends ProvisioningImp
     throw new RuntimeException("Provisioning method not implemented");
   }
 
+  public Server getServerByName(String name)
+    throws ZimbraException
+  {
+    throw new RuntimeException("Provisioning method not implemented");
+  }
+
   /******************************************************/
   public static class AccountSimulator extends Account
   {

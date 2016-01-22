@@ -242,6 +242,10 @@ public interface Provisioning
   Server getServerById(String id)
     throws ZimbraException;
 
+  @Nullable
+  Server getServerByName(String name)
+    throws ZimbraException;
+
   boolean onLocalServer(@NotNull Account userAccount)
       throws ZimbraException;
 
