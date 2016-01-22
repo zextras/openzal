@@ -23,9 +23,6 @@ package org.openzal.zal.index;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 class IndexerProxyMap implements Map<String, Object>
 {
@@ -149,71 +146,5 @@ class IndexerProxyMap implements Map<String, Object>
   public int hashCode()
   {
     return mMap.hashCode();
-  }
-
-  @Override
-  public Object getOrDefault(Object key, Object defaultValue)
-  {
-    return mMap.getOrDefault(key, defaultValue);
-  }
-
-  @Override
-  public void forEach(BiConsumer<? super String, ? super Object> action)
-  {
-    mMap.forEach(action);
-  }
-
-  @Override
-  public void replaceAll(BiFunction<? super String, ? super Object, ? extends Object> function)
-  {
-    mMap.replaceAll(function);
-  }
-
-  @Override
-  public Object putIfAbsent(String key, Object value)
-  {
-    return mMap.putIfAbsent(key, value);
-  }
-
-  @Override
-  public boolean remove(Object key, Object value)
-  {
-    return mMap.remove(key, value);
-  }
-
-  @Override
-  public boolean replace(String key, Object oldValue, Object newValue)
-  {
-    return mMap.replace(key, oldValue, newValue);
-  }
-
-  @Override
-  public Object replace(String key, Object value)
-  {
-    return mMap.replace(key, value);
-  }
-
-  @Override
-  public Object computeIfAbsent(String key, Function<? super String, ? extends Object> mappingFunction)
-  {
-    return mMap.computeIfAbsent(key, mappingFunction);
-  }
-
-  @Override
-  public Object computeIfPresent(String key, BiFunction<? super String, ? super Object, ? extends Object> remappingFunction)
-  {
-    return mMap.computeIfPresent(key, remappingFunction);
-  }
-
-  @Override
-  public Object compute(String key, BiFunction<? super String, ? super Object, ? extends Object> remappingFunction)
-  {
-    return mMap.compute(key, remappingFunction);
-  }
-
-  @Override
-  public Object merge(String key, Object value, BiFunction<? super Object, ? super Object, ? extends Object> remappingFunction)
-  {
-    return mMap.merge(key, value, remappingFunction);
   }
 }
