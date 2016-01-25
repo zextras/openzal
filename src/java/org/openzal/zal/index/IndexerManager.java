@@ -88,13 +88,26 @@ public class IndexerManager
       sMimeHandlerManagerHandlersField = sMimeHandlerManager.getDeclaredField("sHandlers");
       sMimeHandlerManagerHandlersField.setAccessible(true);
 
+      /* $if ZimbraVersion >= 7.0.0 $ */
       sHandlerInfoClazzField = sHandlerInfo.getDeclaredField("clazz");
+      /* $else $
+      sHandlerInfoClazzField = sHandlerInfo.getDeclaredField("mClass");
+      /* $endif $ */
       sHandlerInfoClazzField.setAccessible(true);
 
+      /* $if ZimbraVersion >= 7.0.0 $ */
       sHandlerInfoContentTypeField = sHandlerInfo.getDeclaredField("realMimeType");
+      /* $else $
+      sHandlerInfoContentTypeField = sHandlerInfo.getDeclaredField("mRealMimeType");
+      /* $endif $ */
+
       sHandlerInfoContentTypeField.setAccessible(true);
 
+      /* $if ZimbraVersion >= 7.0.0 $ */
       sHandlerInfoRealMimeTypeField = sHandlerInfo.getDeclaredField("mimeType");
+      /* $else $
+      sHandlerInfoRealMimeTypeField = sHandlerInfo.getDeclaredField("mMimeType");
+      /* $endif $ */
       sHandlerInfoRealMimeTypeField.setAccessible(true);
     }
     catch (Throwable ex)

@@ -22,7 +22,7 @@ package org.openzal.zal.index;
 
 import org.jetbrains.annotations.Nullable;
 
-interface MimeHandlerProvider
+public interface MimeHandlerProvider
 {
   @Nullable
   Object getMimeHandlerFor(String contentType, String fileExtension);

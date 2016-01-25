@@ -87,6 +87,4 @@ public class IndexerManagerTest {
         verify(mIndexer, times(0)).canHandle(anyString(), anyString());
         verify(mIndexer, times(0)).extractPlainText(any(DataSource.class), anyString(), anyString());
     }
-
-
 }
