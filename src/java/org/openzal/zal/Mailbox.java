@@ -28,6 +28,8 @@ import java.util.*;
 import java.io.*;
 
 import com.zimbra.common.soap.SoapProtocol;
+//import com.zimbra.cs.fb.FreeBusy;
+import com.zimbra.cs.fb.FreeBusyQuery;
 import com.zimbra.cs.index.*;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.mailbox.calendar.RecurId;
@@ -602,6 +604,28 @@ public class Mailbox
 
     return new CalendarItem(mailItem);
   }
+
+    //@NotNull
+    public FreeBusy getFreeBusy(@NotNull OperationContext octxt, long start, long end)
+    throws NoSuchItemException
+    {
+      com.zimbra.cs.fb.FreeBusy freeBusy;
+      try
+      {
+        freeBusy = mMbox.getFreeBusy(octxt.getOperationContext(),start,end,FreeBusyQuery.CALENDAR_FOLDER_ALL);
+      }
+      catch (com.zimbra.common.service.ServiceException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+
+      if (freeBusy == null)
+      {
+        throw new NoSuchItemException("getFreeBusy");
+      }
+
+      return new FreeBusy(freeBusy);
+    }
 
   public void copyCalendarReplyInfo(
     @NotNull CalendarItem fromCalendarItem,
