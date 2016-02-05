@@ -43,14 +43,18 @@ public class MPartInfo
     mMPartInfo = (com.zimbra.cs.mime.MPartInfo) mPartInfo;
   }
 
+  @NotNull
   public String getFilename()
   {
-    return mMPartInfo.getFilename();
+    String res = mMPartInfo.getFilename();
+    return res == null ? "" : res;
   }
 
+  @NotNull
   public String getDisposition()
   {
-    return mMPartInfo.getDisposition();
+    String res = mMPartInfo.getDisposition();
+    return res == null ? "" : res;
   }
 
   @Nullable
@@ -116,6 +120,12 @@ public class MPartInfo
   public String getContentType()
   {
     return mMPartInfo.getContentType();
+  }
+
+  @Override
+  public String toString()
+  {
+    return mMPartInfo.toString();
   }
 }
 
