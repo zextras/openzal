@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,9 +20,12 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.mime.ContentDisposition;
+import com.zimbra.common.mime.ContentType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimePart;
 import java.util.List;
 
@@ -50,11 +53,30 @@ public class MPartInfo
     return mMPartInfo.getDisposition();
   }
 
+  @Nullable
+  public String getDispositionParameter(String name)
+  {
+    try
+    {
+      String headers[] = mMPartInfo.getMimePart().getHeader("Content-Disposition");
+      if( headers == null || headers.length == 0 )
+      {
+        return null;
+      }
+      return new ContentDisposition(headers[0]).getParameter(name);
+    }
+    catch (MessagingException e)
+    {
+      return null;
+    }
+  }
+
   public MimePart getMimePart()
   {
     return mMPartInfo.getMimePart();
   }
 
+  @Nullable
   public String getContentTypeParameter(String name)
   {
     return mMPartInfo.getContentTypeParameter(name);

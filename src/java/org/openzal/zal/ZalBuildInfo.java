@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -22,6 +22,6 @@ package org.openzal.zal;
 
 public class ZalBuildInfo
 {
-    public static String COMMIT="a6c99d4683ac0f3fb9fc962892479ebe658f5109";
-    public static String VERSION="1.9.1";
+    public static String COMMIT="a6a99b17905081005491476784a26509e5fec924";
+    public static String VERSION="1.10.2";
 }

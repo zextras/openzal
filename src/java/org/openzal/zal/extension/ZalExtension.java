@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,10 +20,12 @@
 
 package org.openzal.zal.extension;
 
+import java.lang.ref.WeakReference;
+
 public interface ZalExtension
 {
-  public String getBuildId();
-  public String getName();
-  public void startup(ZalExtensionController extensionController, Zimbra zimbra);
-  public void shutdown();
+  String getBuildId();
+  String getName();
+  void startup(ZalExtensionController extensionController, WeakReference<ClassLoader> previousExtension);
+  void shutdown();
 }

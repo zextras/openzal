@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,164 +20,26 @@
 
 package org.openzal.zal;
 
-
-import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
-public class MailboxManager
+public interface MailboxManager
 {
-  private final          com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
-  @NotNull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
+  int[] getMailboxIds();
 
-  public MailboxManager()
-  {
-    try
-    {
-      mMailboxManager = com.zimbra.cs.mailbox.MailboxManager.getInstance();
-    }
-    catch (com.zimbra.common.service.ServiceException ex)
-    {
-      throw ExceptionWrapper.wrap(ex);
-    }
+  Set<Integer> getMailboxIdsSet();
 
-    mListenerMap = new HashMap<MailboxManagerListener, MailboxManagerListenerWrapper>();
-  }
+  Set<Integer> getMailboxGroupSet();
 
-  public MailboxManager(Object mailboxManager)
-  {
-    mMailboxManager = (com.zimbra.cs.mailbox.MailboxManager) mailboxManager;
-    mListenerMap = new HashMap<MailboxManagerListener, MailboxManagerListenerWrapper>();
-  }
+  Mailbox getMailboxById(long mailboxId) throws ZimbraException;
 
-  public int[] getMailboxIds()
-  {
-    try
-    {
-  /* $if MajorZimbraVersion >= 7 $ */
-      int ids[] = com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-  /* $else$
-      long longIds[] = com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-      int ids[] = new int[ longIds.length ];
+  Mailbox getMailboxByAccount(Account account) throws ZimbraException;
 
-      for( int idx=0; idx < longIds.length; ++idx ) {
-        ids[idx] = (int)longIds[idx];
-      }
-  /* $endif$ */
+  Mailbox getMailboxByAccountId(String accountId) throws ZimbraException;
 
-      return ids;
-    }
-    catch (com.zimbra.common.service.ServiceException ex)
-    {
-      throw new RuntimeException();
-    }
-  }
+  int getMailboxCount();
 
-  public Set<Integer> getMailboxIdsSet()
-  {
-    int[] ids = getMailboxIds();
-    Set<Integer> set = new HashSet<Integer>(ids.length);
+  void addListener(MailboxManagerListener listener);
 
-    for( int n=0; n < ids.length; ++n ) {
-      set.add(ids[n]);
-    }
-
-    return set;
-  }
-
-
-  public Set<Integer> getMailboxGroupSet()
-  {
-    int[] ids = getMailboxIds();
-    Set<Integer> set = new HashSet<Integer>(100);
-
-    for( int n=0; n < ids.length; ++n )
-    {
-      set.add( (ids[n]-1) % 100 + 1 );
-    }
-
-    return set;
-  }
-
-  public Mailbox getMailboxById(long mailboxId) throws ZimbraException
-  {
-    try
-    {
-      return new Mailbox(mMailboxManager.getMailboxById((int)mailboxId));
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public Mailbox getMailboxByAccount(Account account) throws ZimbraException
-  {
-    try
-    {
-      return new Mailbox(mMailboxManager.getMailboxByAccount(account.toZimbra(com.zimbra.cs.account.Account.class)));
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public Mailbox getMailboxByAccountId(String accountId) throws org.openzal.zal.exceptions.ZimbraException
-  {
-    try
-    {
-      return new Mailbox(mMailboxManager.getMailboxByAccountId(accountId));
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public int getMailboxCount()
-  {
-    return mMailboxManager.getMailboxCount();
-  }
-
-  public void addListener(MailboxManagerListener listener)
-  {
-    final MailboxManagerListenerWrapper wrapper = new MailboxManagerListenerWrapper(listener);
-    List<com.zimbra.cs.mailbox.Mailbox> mailboxList = mMailboxManager.getAllLoadedMailboxes();
-
-    mMailboxManager.addListener(wrapper);
-
-    final Set<Mailbox> set = new HashSet<Mailbox>();
-    for(com.zimbra.cs.mailbox.Mailbox mailbox : mailboxList )
-    {
-      set.add(new Mailbox(mailbox));
-    }
-
-/*
-    MailboxManager Listener should be added in the boot phase,
-    in the meanwhile some mailboxes could be already loaded,
-    here we call mailboxLoaded for each mailbox already loaded
-*/
-    new Thread(
-      new Runnable()
-      {
-        @Override
-        public void run()
-        {
-          wrapper.notifyExistingMailboxesAndStopTracking(set);
-        }
-      }
-    ).start();
-  }
-
-  public void removeListener(MailboxManagerListener listener)
-  {
-    mMailboxManager.removeListener(new MailboxManagerListenerWrapper(listener));
-  }
+  void removeListener(MailboxManagerListener listener);
 }

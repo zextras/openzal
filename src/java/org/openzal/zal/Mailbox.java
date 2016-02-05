@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -205,7 +205,7 @@ public class Mailbox
   {
     return new OperationContext(
       new com.zimbra.cs.mailbox.OperationContext(
-        new Provisioning(
+        new ProvisioningImp(
           com.zimbra.cs.account.Provisioning.getInstance()
         ).getZimbraUser().toZimbra(com.zimbra.cs.account.Account.class)
       )
@@ -2761,6 +2761,18 @@ $endif$
       {
         connection.close();
       }
+    }
+  }
+
+  public void deleteMailbox()
+  {
+    try
+    {
+      mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 }

@@ -1,0 +1,48 @@
+/*
+ * ZAL - The abstraction layer for Zimbra.
+ * Copyright (C) 2016 ZeXtras S.r.l.
+ *
+ * This file is part of ZAL.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.openzal.zal.lib;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
+public class ExtensionVersionValidator
+{
+  public final static String ATTR_ZAL_REQUIRED = "ZAL-Required-Version";
+
+  public void validate(JarAccessor jar, Version zalVersion)
+    throws IOException, NoSuchAlgorithmException
+  {
+    String requiredZalVersionString = jar.getAttributeInManifest(ATTR_ZAL_REQUIRED);
+    if (requiredZalVersionString != null && !requiredZalVersionString.isEmpty())
+    {
+      Version requiredZalVersion = new Version(requiredZalVersionString);
+      if (!zalVersion.truncate(2).equals(requiredZalVersion.truncate(2)) ||
+           requiredZalVersion.getMicro() > zalVersion.getMicro()
+        )
+      {
+        throw new RuntimeException(
+          "Unable to load extension " + jar.getPath() + ": it requires ZAL version " +
+            requiredZalVersion.toString() + " but current version is " + zalVersion.toString()
+        );
+      }
+    }
+  }
+}

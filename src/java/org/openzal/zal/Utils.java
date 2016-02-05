@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -75,11 +75,11 @@ public abstract class Utils
       sb.append(elements[n].getClassName());
       sb.append(".");
       sb.append(elements[n].getMethodName());
-      sb.append(" ( ");
+      sb.append(" (");
       sb.append(elements[n].getFileName());
       sb.append(":");
       sb.append(elements[n].getLineNumber());
-      sb.append(" )");
+      sb.append(")");
 
       if (elements[n].isNativeMethod())
       {
@@ -308,5 +308,20 @@ public abstract class Utils
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public static String getEmailNamePart(String address)
+  {
+    if (address.contains("@"))
+    {
+      String[] parts = address.split("@");
+
+      if (parts.length == 2)
+      {
+        return address.split("@")[0];
+      }
+    }
+
+    throw new RuntimeException("Invalid mail address " + address);
   }
 }

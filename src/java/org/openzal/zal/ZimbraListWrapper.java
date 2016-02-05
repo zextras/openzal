@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -274,7 +274,7 @@ public class ZimbraListWrapper
   }
 
   @NotNull
-  public static List<Provisioning.CountAccountByCos> wrapCountAccountByCosList(
+  public static List<ProvisioningImp.CountAccountByCos> wrapCountAccountByCosList(
     @Nullable List<com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos> countAccountByCosList
   )
   {
@@ -282,12 +282,12 @@ public class ZimbraListWrapper
     {
       return Collections.emptyList();
     }
-    List<Provisioning.CountAccountByCos> list =
-      new ArrayList<Provisioning.CountAccountByCos>(countAccountByCosList.size());
+    List<ProvisioningImp.CountAccountByCos> list =
+      new ArrayList<ProvisioningImp.CountAccountByCos>(countAccountByCosList.size());
 
     for (com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos countAccountByCos : countAccountByCosList)
     {
-      list.add(new Provisioning.CountAccountByCos(countAccountByCos));
+      list.add(new ProvisioningImp.CountAccountByCos(countAccountByCos));
     }
 
     return list;

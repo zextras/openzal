@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -47,4 +47,6 @@ public interface StoreManager
   StoreVolume getCurrentVolume();
 
   StoreVolume getCurrentSecondaryVolume();
+
+  StoreVolume getVolumeByName(String name);
 }

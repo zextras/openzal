@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -24,8 +24,11 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -127,9 +130,15 @@ public class Domain extends Entry
     }
   }
 
+  @Nullable
   public String getDomainAliasTargetId()
   {
     return mDomain.getDomainAliasTargetId();
+  }
+
+  public boolean isAliasDomain()
+  {
+    return mDomain.getDomainAliasTargetId() != null;
   }
 
   public int getDomainMaxAccounts()
@@ -191,7 +200,7 @@ public class Domain extends Entry
 
   public String getPublicHostname()
   {
-    return mDomain.getAttr(Provisioning.A_zimbraPublicServiceHostname, null);
+    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
   }
 }
 

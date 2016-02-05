@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,20 +20,18 @@
 
 package org.openzal.zal.tools;
 
-import java.util.jar.Manifest;
-import java.util.zip.ZipFile;
+import org.openzal.zal.lib.JarAccessor;
 
 public class ChecksumChecker
 {
-  public static void main(String ags[]) throws Exception
+  public static void main(String args[]) throws Exception
   {
-    ZipFile zipFile = new ZipFile(JarUtils.getCurrentJar());
+    JarAccessor jarAccessor = new JarAccessor(args[0]);
 
-    Manifest manifest = JarUtils.getManifest(zipFile);
-    String writtenDigest = manifest.getMainAttributes().getValue("Digest");
-    String currentDigest = JarUtils.computeDigest(zipFile);
+    String writtenDigest = new String(jarAccessor.getDigest());
+    String currentDigest = JarUtils.printableByteArray(JarUtils.computeDigest(jarAccessor.getZipFile()));
 
-    if( currentDigest.equals(writtenDigest) )
+    if( !writtenDigest.isEmpty() && !currentDigest.isEmpty() && currentDigest.equals(writtenDigest) )
     {
       System.out.println("OK");
       System.exit(0);
