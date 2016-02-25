@@ -298,7 +298,7 @@ public class InviteFactory
       recurId = null;
     }
 
-    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
+    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
     ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
 
     List<ZAttendee> zAttendeeList = new LinkedList<ZAttendee>();
