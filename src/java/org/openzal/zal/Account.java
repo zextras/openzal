@@ -1075,6 +1075,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public ICalendarTimezone getAccountTimeZone()
   {
 /* $if MajorZimbraVersion <= 7 $
