@@ -2775,4 +2775,30 @@ $endif$
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public void saveMetadata(Item item, String metadata)
+  {
+    saveMetadata(item, metadata, true);
+  }
+
+  public void saveMetadata(Item item, String metadata, boolean clearCache)
+  {
+    DbMailItem dbMailItem = new DbMailItem(mMbox);
+    try
+    {
+      beginTransaction("SaveMetadata", newOperationContext());
+      dbMailItem.update(item.toZimbra(MailItem.class), new com.zimbra.cs.mailbox.Metadata(metadata));
+    }
+    catch (ServiceException e)
+    {
+      endTransaction(false);
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    endTransaction(true);
+    if (clearCache)
+    {
+      clearItemCache();
+    }
+  }
 }
