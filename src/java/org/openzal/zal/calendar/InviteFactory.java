@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -298,7 +298,7 @@ public class InviteFactory
       recurId = null;
     }
 
-    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
+    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
     ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
 
     List<ZAttendee> zAttendeeList = new LinkedList<ZAttendee>();

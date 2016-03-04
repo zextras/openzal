@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -52,7 +52,7 @@ public class Identity implements Comparable<Identity>
 
   public InternetAddress getFriendlyEmailAddress() throws UnsupportedEncodingException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
+    /* $if ZimbraVersion >= 8.0.7 $ */
     return mIdentity.getFriendlyEmailAddress();
     /* $else $
     String address = mIdentity.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress);

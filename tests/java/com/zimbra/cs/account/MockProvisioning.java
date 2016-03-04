@@ -894,7 +894,7 @@ $endif $
   /* $endif $ */
 
   public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
-    throw new UnsupportedOperationException();
+    return new Identity(account, identityName, account.getId(), attrs, this);
   }
 
   public Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {

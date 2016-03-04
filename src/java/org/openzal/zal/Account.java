@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -1075,6 +1075,7 @@ public class Account extends Entry
     }
   }
 
+  @NotNull
   public ICalendarTimezone getAccountTimeZone()
   {
 /* $if MajorZimbraVersion <= 7 $
