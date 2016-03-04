@@ -49,4 +49,6 @@ public interface StoreManager
   StoreVolume getCurrentSecondaryVolume();
 
   StoreVolume getVolumeByName(String name);
+
+  boolean isValidVolume(short id);
 }
