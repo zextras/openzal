@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -206,7 +206,7 @@ public class ExceptionWrapper
       @Override
       public ZimbraException create(Exception exception)
       {
-        return new NoSuchAppointmentException(exception);
+        return new NoSuchCalendarException(exception);
       }
     });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB, new ExceptionWrapperCreator()

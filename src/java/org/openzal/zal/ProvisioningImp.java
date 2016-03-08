@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -223,6 +223,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailForwardingAddress                          = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddress;
   public static String A_zimbraGalLastSuccessfulSyncTimestamp                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLastSuccessfulSyncTimestamp;
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
+  public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
+  public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
 
   @NotNull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -1771,22 +1773,6 @@ public class ProvisioningImp implements Provisioning
     throw new RuntimeException("Unknown grantee type: "+grantee_type);
   }
 
-  public class CountAccountResult
-  {
-    private final com.zimbra.cs.account.Provisioning.CountAccountResult mCountAccountResult;
-
-    protected CountAccountResult(com.zimbra.cs.account.Provisioning.CountAccountResult countAccountResult)
-    {
-      mCountAccountResult = countAccountResult;
-    }
-
-    public List<CountAccountByCos> getCountAccountByCos()
-    {
-      return ZimbraListWrapper.wrapCountAccountByCosList(mCountAccountResult.getCountAccountByCos());
-    }
-  }
-
-
   @Override
   @NotNull
   public GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit)
@@ -1826,6 +1812,20 @@ public class ProvisioningImp implements Provisioning
     }
 
     return result;
+  }
+
+  @NotNull
+  public DistributionList assertDistributionListById(String targetId)
+  {
+    DistributionList distributionList = getDistributionListById(targetId);
+    if (distributionList == null)
+    {
+      throw new NoSuchDistributionListException(targetId);
+    }
+    else
+    {
+      return distributionList;
+    }
   }
 
   @Override
@@ -1948,5 +1948,17 @@ public class ProvisioningImp implements Provisioning
       mCounter += 1;
       mSearchResult.setTotal(mCounter);
     }
+  }
+
+  public Collection<Domain> getDomainAliases(Domain domain)
+  {
+    if (domain.isAliasDomain())
+    {
+      return Collections.emptyList();
+    }
+
+    DomainAliasesVisitor visitor = new DomainAliasesVisitor(domain);
+    visitAllDomains(visitor);
+    return visitor.getAliases();
   }
 }

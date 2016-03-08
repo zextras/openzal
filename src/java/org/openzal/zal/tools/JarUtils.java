@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,6 +20,7 @@
 
 package org.openzal.zal.tools;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,10 +28,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -39,6 +37,9 @@ import java.util.zip.ZipOutputStream;
 public abstract class JarUtils
 {
   private static final String MANIFEST = "META-INF/MANIFEST.MF";
+  private static final String DIGEST = "DIGEST";
+  private static final String SIGNATURE = "SIGNATURE";
+  private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
   public static File getJarPathOfClass(Class cls)
   {
@@ -64,114 +65,128 @@ public abstract class JarUtils
     return getJarPathOfClass(JarUtils.class);
   }
 
-  public static void copyJar(ZipFile zipFile, Manifest manifest, File destination) throws IOException
+  public static void copyJar(ZipFile zipFile, File destination, byte[] digest, byte[] signature) throws IOException
   {
     ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(destination));
 
+    byte[] buffer = new byte[32*1024];
     Enumeration<? extends ZipEntry> it = zipFile.entries();
     while( it.hasMoreElements() )
     {
       ZipEntry zipEntry = it.nextElement();
-
-      if( zipEntry.getName().equals(MANIFEST) )
-      {
-        zipOutputStream.putNextEntry(new ZipEntry(MANIFEST));
-        manifest.write(zipOutputStream);
-      }
-      else
+      InputStream inputStream = zipFile.getInputStream(zipEntry);
+      try
       {
         zipOutputStream.putNextEntry(zipEntry);
-        zipOutputStream.write(
-          readFile(
-            (int)zipEntry.getSize(),
-            zipFile.getInputStream(zipEntry)
-          )
-        );
+        copyStream(buffer, inputStream, zipOutputStream);
+      }
+      finally
+      {
+        inputStream.close();
       }
     }
+
+    zipOutputStream.putNextEntry(new ZipEntry(DIGEST));
+    zipOutputStream.write(printableByteArray(digest).getBytes("UTF-8"));
+
+    zipOutputStream.putNextEntry(new ZipEntry(SIGNATURE));
+    zipOutputStream.write(printableByteArray(signature).getBytes("UTF-8"));
 
     zipOutputStream.close();
   }
 
-  private static class NameComparator implements Comparator<ZipEntry>
+  private static void copyStream(byte[] buffer, InputStream inputStream, ZipOutputStream zipOutputStream) throws IOException
   {
-    @Override
-    public int compare(ZipEntry o1, ZipEntry o2)
+    int read;
+    while ( (read = inputStream.read(buffer, 0, buffer.length) ) > -1)
     {
-      return o1.getName().compareTo(o2.getName());
+      zipOutputStream.write(buffer, 0, read);
     }
   }
 
-  public static byte[] readFile(int size, InputStream inputStream) throws IOException
+  public static String printableByteArray(byte[] buffer)
   {
-    byte[] buffer = new byte[size];
-    int read = 0;
-
-    while( true )
-    {
-      int currentRead = inputStream.read(buffer, read, size-read);
-      if( currentRead < 0 ){
-        break;
-      }
-      read += currentRead;
-    }
-
-    inputStream.close();
-
-    if( read != size ) {
-      throw new IOException("invalid read size");
-    }
-
-    return buffer;
-  }
-
-  public static String printableDigest(MessageDigest digest)
-  {
-    byte [] buffer = digest.digest();
-    StringBuilder sb = new StringBuilder(buffer.length*2);
-
+    char[] encoded = new char[2 * buffer.length];
     for( int i=0; i < buffer.length; ++i )
     {
-      if( (buffer[i] & 0xFF) < 0x10 ) sb.append('0');
-      sb.append(Integer.toHexString(buffer[i] & 0xFF));
+      int value = buffer[i] & 0xFF;
+      encoded[i*2] = HEX_ARRAY[value >>> 4];
+      encoded[i*2 + 1] = HEX_ARRAY[value & 0x0F];
     }
 
-    return sb.toString();
+    return new String(encoded);
   }
 
   public static Manifest getManifest(ZipFile zipFile) throws IOException
   {
     ZipEntry manifestEntry = zipFile.getEntry(MANIFEST);
+    if (manifestEntry == null)
+    {
+      return new Manifest();
+    }
     return new Manifest(zipFile.getInputStream(manifestEntry));
   }
 
-  public static String computeDigest(ZipFile zipFile) throws NoSuchAlgorithmException, IOException
+  public static byte[] computeDigest(ZipFile zipFile) throws NoSuchAlgorithmException, IOException
   {
-    LinkedList<ZipEntry> zipEntries = new LinkedList<ZipEntry>();
-
-    Enumeration<? extends ZipEntry> it = zipFile.entries();
-    while( it.hasMoreElements() )
+    byte[] buffer = new byte[16*1024];
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+    while (zipEntries.hasMoreElements())
     {
-      ZipEntry zipEntry = it.nextElement();
-      if( zipEntry.getName().equals("META-INF/MANIFEST.MF") ) {
+      ZipEntry entry = zipEntries.nextElement();
+
+      if (DIGEST.equals(entry.getName()) || SIGNATURE.equals(entry.getName()))
+      {
         continue;
       }
-      zipEntries.add(zipEntry);
-    }
 
-    Collections.sort(zipEntries, new NameComparator());
-
-    MessageDigest digest = MessageDigest.getInstance("SHA1");
-    for( ZipEntry entry : zipEntries )
-    {
       digest.update(
         entry.getName().getBytes("UTF-8")
       );
-      digest.update(
-        readFile((int)entry.getSize(), zipFile.getInputStream(entry))
-      );
+      updateDigest(buffer, digest, zipFile.getInputStream(entry));
     }
 
-    return printableDigest(digest);
+    return digest.digest();
+  }
+
+  private static void updateDigest(byte[] buffer, MessageDigest digest, InputStream inputStream) throws IOException
+  {
+    int read;
+    while ( (read = inputStream.read(buffer)) > -1 )
+    {
+     digest.update(buffer, 0, read);
+    }
+    inputStream.close();
+  }
+
+  public static byte[] inputStreamToByteArray(InputStream inputStream, byte[] buffer) throws IOException
+  {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    int read;
+    while ( (read = inputStream.read(buffer)) > -1 )
+    {
+      outputStream.write(buffer, 0, read);
+    }
+    outputStream.close();
+
+    return  outputStream.toByteArray();
+  }
+
+  public static byte[] decodeHexStringToByteArray(String hexEncoded)
+  {
+    if (hexEncoded.length() % 2 != 0)
+    {
+      throw new RuntimeException("Not an HEX encoded string");
+    }
+
+    byte[] buffer = new byte[hexEncoded.length() / 2];
+    for (int i = 0; i < hexEncoded.length(); i += 2)
+    {
+      buffer[i/2] = (byte) Integer.parseInt(hexEncoded.substring(i, i + 2), 16);
+    }
+
+    return buffer;
   }
 }

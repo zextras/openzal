@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -63,7 +63,7 @@ public enum GlobalInviteStatus
     sZimbra2Zal.put("NEED", APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("WAITING", APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("DEFERRED", APPOINTMENT_NEED_ACTION);
-    sZimbra2Zal.put("",     APPOINTMENT_NEED_ACTION);
+    sZimbra2Zal.put("", APPOINTMENT_NEED_ACTION);
     sZimbra2Zal.put("COMP", TASK_COMPLETED);
     sZimbra2Zal.put("INPR", TASK_IN_PROGRESS);
 

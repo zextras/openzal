@@ -4,21 +4,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ExtensionJarValidatorTest
+public class ExtensionVersionValidatorTest
 {
-  private ExtensionJarValidator mValidator;
-  private JarAccessor           mJar;
+  private ExtensionVersionValidator mValidator;
+  private JarAccessor               mJar;
 
   @Before
   public void setup() throws Exception
   {
     mJar = mock(JarAccessor.class);
 
-    mValidator = new ExtensionJarValidator();
+    mValidator = new ExtensionVersionValidator();
   }
 
   @Test
@@ -67,19 +66,5 @@ public class ExtensionJarValidatorTest
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
     mValidator.validate(mJar, new Version(2,3,3));
-  }
-
-  @Test
-  public void validating_doesnt_force_digest_validation() throws Exception
-  {
-    mValidator.validate(mJar, new Version(1,2,3));
-    verify(mJar, times(1)).validateDigest(false);
-  }
-
-  @Test
-  public void validating_force_digest_validation() throws Exception
-  {
-    mValidator.validateForceDigestValidation(mJar, new Version(1,2,3));
-    verify(mJar, times(1)).validateDigest(true);
   }
 }

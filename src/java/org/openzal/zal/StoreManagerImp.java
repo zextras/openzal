@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -167,6 +167,20 @@ public class StoreManagerImp implements StoreManager
     }
 
     return new StoreVolume(volume);
+  }
+
+  @Override
+  public StoreVolume getVolumeByName(String volumeName)
+  {
+    for (StoreVolume storeVolume : StoreVolume.getAll())
+    {
+      if (storeVolume.getName().equals(volumeName))
+      {
+        return storeVolume;
+      }
+    }
+
+    return null;
   }
 
   /* $if ZimbraVersion >= 8.0.0 $*/

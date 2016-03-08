@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,7 +20,7 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchCalendarException extends ZimbraException
+public class NoSuchCalendarException extends NoSuchItemException
 {
   protected NoSuchCalendarException(Exception exception)
   {

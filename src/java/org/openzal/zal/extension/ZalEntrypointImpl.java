@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -28,22 +28,23 @@ import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
-import org.openzal.zal.lib.ZalJarValidator;
-import org.openzal.zal.lib.ExtensionJarValidator;
+import org.openzal.zal.lib.ZalVersionValidator;
+import org.openzal.zal.lib.ExtensionVersionValidator;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.net.URLClassLoader;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
-  private final ExtensionJarValidator mExtensionJarValidator;
-  private final ZalJarValidator       mZalJarValidator;
-  private       String                mDirectoryName;
-  private       File                  mDirectory;
-  private       ExtensionManager      mExtensionManager;
-  private       boolean               mExtensionPathExists;
-  private       ZalEntrypoint         mZalEntryPoint;
-  private       File                  mCustomExtensionDirectory;
+  private final ExtensionVersionValidator mExtensionVersionValidator;
+  private final ZalVersionValidator       mZalVersionValidator;
+  private       String                    mDirectoryName;
+  private       File                      mDirectory;
+  private       ExtensionManager          mExtensionManager;
+  private       boolean                   mExtensionPathExists;
+  private       ZalEntrypoint             mZalEntryPoint;
+  private       File                      mCustomExtensionDirectory;
 
   @Nullable
   private WeakReference<ClassLoader> mPreviousExtension;
@@ -60,8 +61,8 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     mZalEntryPoint = null;
     mCustomExtensionDirectory = null;
     mPreviousExtension = new WeakReference<ClassLoader>(null);
-    mZalJarValidator = new ZalJarValidator();
-    mExtensionJarValidator = new ExtensionJarValidator();
+    mZalVersionValidator = new ZalVersionValidator();
+    mExtensionVersionValidator = new ExtensionVersionValidator();
   }
 
   private ExtensionManager getExtensionManager()
@@ -151,6 +152,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       }
       else
       {
+        Zimbra.overrideExtensionMap();
         ZimbraLog.mailbox.info("File "+extensionPathFile.getAbsolutePath()+" not present, using standard boot");
         getExtensionManager().loadExtension();
       }
@@ -176,10 +178,12 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       try
       {
         File zalJar = new File(extensionDirectory.getAbsolutePath() + ZAL_FILE);
-        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
+        JarAccessor zalJarAccessor = new JarAccessor(zalJar);
+        Version zalVersion = mZalVersionValidator.validate(zalJarAccessor, ZimbraVersion.current);
 
-        Version zalVersion = mZalJarValidator.validate(new JarAccessor(extensionJar), ZimbraVersion.current);
-        mExtensionJarValidator.validate(new JarAccessor(zalJar), zalVersion);
+        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
+        JarAccessor extensionJarAccessor = new JarAccessor(extensionJar);
+        mExtensionVersionValidator.validate(extensionJarAccessor, zalVersion);
       }
       catch (Exception e)
       {
@@ -213,6 +217,12 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       mCustomExtensionDirectory = extensionDirectory;
       init();
       postInit();
+    }
+
+    @Override
+    public boolean canControlExtension()
+    {
+      return true;
     }
   }
 

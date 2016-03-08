@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -18,12 +18,15 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.exceptions;
+package org.openzal.zal;
 
-public class NoSuchAppointmentException extends NoSuchItemException
+import org.openzal.zal.Continuation;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+public interface ContinuationHttpServletRequest extends HttpServletRequest
 {
-  protected NoSuchAppointmentException(Exception exception)
-  {
-    super(exception);
-  }
+  void setContinuation(Continuation continuation);
+  Continuation getContinuation();
 }

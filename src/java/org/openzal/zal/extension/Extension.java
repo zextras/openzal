@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -68,7 +68,7 @@ class Extension implements Comparable<Extension>
     {
       try
       {
-        urls.add(new URL("jar:file:" + file.getAbsolutePath() + "!/"));
+        urls.add(new URL("file:" + file.getAbsolutePath()));
       }
       catch (MalformedURLException e)
       {

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,9 +20,12 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.mime.ContentDisposition;
+import com.zimbra.common.mime.ContentType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimePart;
 import java.util.List;
 
@@ -40,14 +43,36 @@ public class MPartInfo
     mMPartInfo = (com.zimbra.cs.mime.MPartInfo) mPartInfo;
   }
 
+  @NotNull
   public String getFilename()
   {
-    return mMPartInfo.getFilename();
+    String res = mMPartInfo.getFilename();
+    return res == null ? "" : res;
   }
 
+  @NotNull
   public String getDisposition()
   {
-    return mMPartInfo.getDisposition();
+    String res = mMPartInfo.getDisposition();
+    return res == null ? "" : res;
+  }
+
+  @Nullable
+  public String getDispositionParameter(String name)
+  {
+    try
+    {
+      String headers[] = mMPartInfo.getMimePart().getHeader("Content-Disposition");
+      if( headers == null || headers.length == 0 )
+      {
+        return null;
+      }
+      return new ContentDisposition(headers[0]).getParameter(name);
+    }
+    catch (MessagingException e)
+    {
+      return null;
+    }
   }
 
   public MimePart getMimePart()
@@ -55,6 +80,7 @@ public class MPartInfo
     return mMPartInfo.getMimePart();
   }
 
+  @Nullable
   public String getContentTypeParameter(String name)
   {
     return mMPartInfo.getContentTypeParameter(name);
@@ -94,6 +120,12 @@ public class MPartInfo
   public String getContentType()
   {
     return mMPartInfo.getContentType();
+  }
+
+  @Override
+  public String toString()
+  {
+    return mMPartInfo.toString();
   }
 }
 

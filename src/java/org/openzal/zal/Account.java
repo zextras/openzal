@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,7 +20,15 @@
 
 package org.openzal.zal;
 
+/* $if ZimbraVersion >= 8.0.0 $*/
+import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.cs.mailbox.calendar.Util;
+/* $else$
+import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
+ $endif$ */
+
 import org.apache.commons.lang3.StringUtils;
+import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -349,6 +357,29 @@ public class Account extends Entry
   public Collection<String> getAliases()
   {
     return Arrays.asList(mAccount.getMailAlias());
+  }
+
+  @NotNull
+  public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
+  {
+    Domain domain = provisioning.getDomainById(getDomainId());
+    if (domain == null)
+    {
+      throw new RuntimeException();
+    }
+
+    Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
+
+    List<String> addresses = new ArrayList<String>();
+    for (String address : getAllAddresses())
+    {
+      for (Domain domainAlias : domainAliases)
+      {
+        addresses.add(Utils.getEmailNamePart(address) + "@" + domainAlias.getName());
+      }
+    }
+
+    return addresses;
   }
 
   @NotNull
@@ -1014,6 +1045,21 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @NotNull
+  public ICalendarTimezone getAccountTimeZone()
+  {
+/* $if MajorZimbraVersion <= 7 $
+    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(
+      toZimbra(com.zimbra.cs.account.Account.class)
+    );
+  $else$ */
+    ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
+      toZimbra(com.zimbra.cs.account.Account.class)
+    );
+/* $endif$ */
+    return new ICalendarTimezone(accountTimeZone);
   }
 }
 

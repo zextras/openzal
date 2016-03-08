@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -21,8 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.ACL;
-import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -33,7 +32,7 @@ public class Folder extends Item
 {
   public Folder(@NotNull Object item)
   {
-    super((MailItem)item);
+    super((MailItem) item);
   }
 
   public Folder(@NotNull Item item)
@@ -75,6 +74,22 @@ public class Folder extends Item
     {
       return ((com.zimbra.cs.mailbox.Folder) mMailItem).isDescendant(
         folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean canAccess(Account account) throws ZimbraException
+  {
+    try
+    {
+      return com.zimbra.cs.mailbox.CalendarItem.allowPrivateAccess(
+        (com.zimbra.cs.mailbox.Folder) mMailItem,
+        (com.zimbra.cs.account.Account) account.toZimbra(),
+        false
       );
     }
     catch (ServiceException e)

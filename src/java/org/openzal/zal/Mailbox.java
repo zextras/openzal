@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -29,6 +29,7 @@ import java.io.*;
 
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.index.*;
+import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.session.Session;
 import org.openzal.zal.calendar.CalendarItemData;
@@ -73,8 +74,9 @@ import com.zimbra.cs.mailbox.MailItem.Color;
 import com.zimbra.cs.db.DbMailItem.SearchOpts;
 /* $endif$ */
 
-/* $if MajorZimbraVersion > 7$ */
-/* $endif$ */
+/* $if ZimbraVersion < 8.0.0 $
+import com.zimbra.cs.mailbox.Mailbox.SearchResultMode;
+ $endif$ */
 
 
 public class Mailbox
@@ -1302,7 +1304,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    return search(octxt, queryString, types, sortBy, chunkSize, 0);
+    return search(octxt, queryString, types, sortBy, chunkSize, 0, false);
   }
 
   @NotNull
@@ -1312,7 +1314,8 @@ public class Mailbox
     @NotNull byte[] types,
     @NotNull SortedBy sortBy,
     int chunkSize,
-    int offset
+    int offset,
+    boolean onlyIds
   )
     throws IOException, ZimbraException
   {
@@ -1325,17 +1328,18 @@ public class Mailbox
         typeList.add(Item.convertType(type));
       }
 
+      SearchParams.Fetch fetchMode = onlyIds ? SearchParams.Fetch.IDS : SearchParams.Fetch.NORMAL;
+
       com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
       params.setQueryString(queryString);
       params.setTimeZone(null);
       params.setLocale(null);
       params.setTypes(typeList);
       params.setSortBy(sortBy.toZimbra(SortBy.class));
-      params.setChunkSize(chunkSize);
       params.setPrefetch(true);
-      params.setFetchMode(com.zimbra.cs.index.SearchParams.Fetch.NORMAL);
+      params.setFetchMode(fetchMode);
       params.setInDumpster(false);
-      params.setLimit(chunkSize);
+      params.setLimit(chunkSize + offset);
       params.setOffset(offset);
 
       ZimbraQueryResults result = mMbox.index.search(
@@ -1357,14 +1361,16 @@ public class Mailbox
       params.setInDumpster(false);
 $endif$
 
+      com.zimbra.cs.mailbox.Mailbox.SearchResultMode fetchMode = onlyIds ? com.zimbra.cs.mailbox.Mailbox.SearchResultMode.IDS : com.zimbra.cs.mailbox.Mailbox.SearchResultMode.NORMAL;
+
       params.setQueryStr(queryString);
       params.setTimeZone(null);
       params.setLocale(null);
       params.setTypes(types);
       params.setSortBy(sortBy.toZimbra(SortBy.class));
-      params.setChunkSize(chunkSize);
+      params.setMode(fetchMode);
       params.setPrefetch(true);
-      params.setLimit(chunkSize);
+      params.setLimit(chunkSize + offset);
       params.setOffset(offset);
 
       ZimbraQueryResults result = mMbox.search(
@@ -2755,6 +2761,18 @@ $endif$
       {
         connection.close();
       }
+    }
+  }
+
+  public void deleteMailbox()
+  {
+    try
+    {
+      mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 }

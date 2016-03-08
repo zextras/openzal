@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -27,5 +27,10 @@ public class Appointment extends CalendarItem
   public Appointment(@NotNull Object item)
   {
     super(item);
+  }
+
+  public boolean isOwner(Account account)
+  {
+    return getMailbox().getAccountId().equals(account.getId());
   }
 }

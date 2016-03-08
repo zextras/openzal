@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -25,5 +25,10 @@ public class MailServiceException extends ZimbraException
   protected MailServiceException(Exception exception)
   {
     super(exception);
+  }
+
+  public MailServiceException(String message)
+  {
+    super(message);
   }
 }

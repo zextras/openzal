@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.CalendarItem;
+import com.zimbra.cs.mailbox.Metadata;
 import org.openzal.zal.Item;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
@@ -29,7 +30,11 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.service.ServiceException;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -797,5 +802,53 @@ public class Invite
   public String getPartStat()
   {
     return mInvite.getPartStat();
+  }
+
+  public boolean isPublic()
+  {
+    return mInvite.isPublic();
+  }
+
+  public InputStream toIcal()
+    throws ZimbraException, IOException, MessagingException
+  {
+    MimeBodyPart icalPart;
+    try {
+      ZCalendar.ZVCalendar cal = mInvite.newToICalendar(true);
+  /* $if ZimbraVersion <= 7.1.0 $
+      icalPart = CalendarMailSender.makeICalIntoMimePart(null, cal);
+  /* $else$ */
+      icalPart = CalendarMailSender.makeICalIntoMimePart(cal);
+  /* $endif $ */
+      return icalPart.getInputStream();
+    }
+    catch (ServiceException ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+  }
+
+  public void addAttendee(Map<String, Object> metadata)
+  {
+    try
+    {
+      mInvite.addAttendee(new ZAttendee(new Metadata(metadata)));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void addAlarm(Map<String, Object> metadata)
+  {
+    try
+    {
+      mInvite.addAlarm(com.zimbra.cs.mailbox.calendar.Alarm.decodeMetadata(new Metadata(metadata)));
+    }
+    catch (Exception e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
