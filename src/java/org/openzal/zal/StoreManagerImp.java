@@ -36,6 +36,7 @@ import com.zimbra.cs.store.file.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class StoreManagerImp implements StoreManager
 {
@@ -238,5 +239,19 @@ public class StoreManagerImp implements StoreManager
     com.zimbra.cs.store.StoreManager.getInstance().quietDelete(
       blob.toZimbra(com.zimbra.cs.store.MailboxBlob.class)
     );
+  }
+
+  public boolean isValidVolume(short id){
+    boolean valid = false;
+    List<Volume> volumeList = VolumeManager.getInstance().getAllVolumes();
+
+    for (Volume v:volumeList){
+      if (v.getId() == id){
+        valid = true;
+        break;
+      }
+    }
+
+    return valid;
   }
 }
