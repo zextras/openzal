@@ -243,9 +243,9 @@ public class StoreManagerImp implements StoreManager
 
   public boolean isValidVolume(short id){
     boolean valid = false;
-    List<Volume> volumeList = VolumeManager.getInstance().getAllVolumes();
+    List<StoreVolume> volumeList2 = StoreVolume.getAll();
 
-    for (Volume v:volumeList){
+    for (StoreVolume v:volumeList2){
       if (v.getId() == id){
         valid = true;
         break;
