@@ -59,8 +59,6 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_LINK                 = 18;
 
   public static final String FN_INDEX_ID = "idx";
-  private Long mBitmask;
-  private MailboxBlob mBlob;
 
   public Item(@NotNull Object item)
   {
