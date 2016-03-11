@@ -60,6 +60,7 @@ public class Item implements Comparable<Item>
 
   public static final String FN_INDEX_ID = "idx";
   private Long mBitmask;
+  private MailboxBlob mBlob;
 
   public Item(@NotNull Object item)
   {
@@ -288,6 +289,19 @@ public class Item implements Comparable<Item>
 /* $else$
     return mMailItem.getTagBitmask();
 $endif$ */
+  }
+
+  @Nullable
+  public MailboxBlob getBlob()
+  {
+    try
+    {
+      return new MailboxBlob(mMailItem.getBlob());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public static class CustomMetadata
