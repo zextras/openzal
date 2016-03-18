@@ -243,7 +243,12 @@ public class StoreManagerImp implements StoreManager
 
   public boolean isValidVolume(short id){
     boolean valid = false;
-    List<Volume> volumeList = VolumeManager.getInstance().getAllVolumes();
+    List<Volume> volumeList;
+    /* $if ZimbraVersion >= 8.0.0 $*/
+    volumeList = VolumeManager.getInstance().getAllVolumes();
+    /* $else$
+    volumeList = Volume.getAll();
+    /* $endif$ */
 
     for (Volume v:volumeList){
       if (v.getId() == id){
