@@ -250,7 +250,7 @@ public final class StoreManagerSimulator extends StoreManager
         throw new IOException();
       }
       destinationFile.getParent().createRecursive();
-      src.getVirtualFile().copy(destinationFile);
+      src.getVirtualFile().copyRewrite(destinationFile);
     }
     catch (MissingWritePermissions missingWritePermissions)
     {
