@@ -379,20 +379,29 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
-    Domain domain = provisioning.getDomainById(getDomainId());
-    if (domain == null)
-    {
-      throw new RuntimeException();
-    }
-
-    Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
-
-    List<String> addresses = new ArrayList<String>();
+    Set<String> addresses = new HashSet<String>();
     for (String address : getAllAddresses())
     {
-      for (Domain domainAlias : domainAliases)
+      addresses.add(address);
+      if (address.contains("@"))
       {
-        addresses.add(Utils.getEmailNamePart(address) + "@" + domainAlias.getName());
+        String[] parts = address.split("@");
+        if (parts.length == 2)
+        {
+          String aliasName = parts[0];
+          String domainName = parts[1];
+
+          Domain domain = provisioning.getDomainByName(domainName);
+          if (domain != null)
+          {
+            Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
+            for (Domain domainAlias : domainAliases)
+            {
+              String alias = aliasName + "@" + domainAlias.getName();
+              addresses.add(alias);
+            }
+          }
+        }
       }
     }
 

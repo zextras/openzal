@@ -125,4 +125,39 @@ public class AccountTest
       aliases.get(3)
     );
   }
+
+  @Test
+  public void alias_on_other_domain_returned() throws Exception
+  {
+    List<String> aliases;
+
+    mAccount.addAlias("alias@otherdomain.com");
+    mProvisioning.createDomain("otherdomain.com", new HashMap<String, Object>());
+    Domain aliasDomain = mProvisioning.createDomain("example-alias.com", new HashMap<String, Object>());
+    HashMap<String, Object> attrs = new HashMap<String, Object>();
+    attrs.put("zimbraDomainAliasTargetId", mMainDomain.getId());
+    mProvisioning.modifyAttrs(aliasDomain,attrs);
+
+    aliases = new LinkedList<String>(
+      mAccount.getAllAddressesIncludeDomainAliases(mProvisioning)
+    );
+    Collections.sort(aliases);
+
+    assertEquals(
+      3L,
+      (long) aliases.size()
+    );
+    assertEquals(
+      "alias@otherdomain.com",
+      aliases.get(0)
+    );
+    assertEquals(
+      "test@example-alias.com",
+      aliases.get(1)
+    );
+    assertEquals(
+      "test@example.com",
+      aliases.get(2)
+    );
+  }
 }
