@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -158,6 +157,32 @@ public class AccountTest
     assertEquals(
       "test@example.com",
       aliases.get(2)
+    );
+  }
+
+  @Test
+  public void include_allow_from_addresses() throws Exception
+  {
+    HashMap<String, Object> attrs = new HashMap<String, Object>();
+    attrs.put("zimbraAllowFromAddress", "other@domain123.com");
+    mProvisioning.modifyAttrs(mAccount,attrs);
+
+    LinkedList<String> aliases = new LinkedList<String>(
+      mAccount.getAllAddressesAllowedInFrom(mProvisioning)
+    );
+    Collections.sort(aliases);
+
+    assertEquals(
+      2L,
+      (long) aliases.size()
+    );
+    assertEquals(
+      "other@domain123.com",
+      aliases.get(0)
+    );
+    assertEquals(
+      "test@example.com",
+      aliases.get(1)
     );
   }
 }
