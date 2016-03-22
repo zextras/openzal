@@ -238,6 +238,14 @@ public interface Provisioning
   Server getServer(@NotNull Account acct)
     throws ZimbraException;
 
+  @Nullable
+  Server getServerById(String id)
+    throws ZimbraException;
+
+  @Nullable
+  Server getServerByName(String name)
+    throws ZimbraException;
+
   boolean onLocalServer(@NotNull Account userAccount)
       throws ZimbraException;
 
@@ -299,6 +307,7 @@ public interface Provisioning
   void deleteAccountById(String id);
 
   Collection<Domain> getDomainAliases(Domain domain);
+
 
   class CountAccountByCos
   {
