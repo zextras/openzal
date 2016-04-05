@@ -29,10 +29,12 @@ public class RightConstants
   public static String RT_loginAs = RightConsts.RT_loginAs;
   public static String RT_domainAdminRights = RightConsts.RT_domainAdminRights;
   public static String RT_adminLoginAs = RightConsts.RT_adminLoginAs;
+  public static String RT_configureQuota = RightConsts.RT_configureQuota;
   public static String RT_domainAdminConsoleAccountsFeaturesTabRights =
     RightConsts.RT_domainAdminConsoleAccountsFeaturesTabRights;
   public static String RT_listZimlet = RightConsts.RT_listZimlet;
   public static String RT_getZimlet = RightConsts.RT_getZimlet;
+  public static String RT_domainAdminZimletRights = RightConsts.RT_domainAdminZimletRights;
   public static String RT_setAdminSavedSearch = RightConsts.RT_setAdminSavedSearch;
   public static String RT_viewAdminSavedSearch = RightConsts.RT_viewAdminSavedSearch;
   public static String RT_domainAdminConsoleDLSharesTabRights = RightConsts.RT_domainAdminConsoleDLSharesTabRights;
