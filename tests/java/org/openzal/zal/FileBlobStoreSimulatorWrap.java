@@ -136,7 +136,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException
   {
-    return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy((StoreManagerSimulator.MockBlob) src, destMbox, destItemId, destRevision, String.valueOf(destVolumeId)), destVolumeId);
+    return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy(StoreManagerSimulator.MockBlob.getMockBlob(src), destMbox, destItemId, destRevision, String.valueOf(destVolumeId)), destVolumeId);
   }
 
   @Override

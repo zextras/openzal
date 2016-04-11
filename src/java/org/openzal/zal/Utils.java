@@ -237,6 +237,11 @@ public abstract class Utils
     return FileUtil.isGzipped(file);
   }
 
+  public static boolean isGzipped(InputStream inputStream) throws IOException
+  {
+    return ByteUtil.isGzipped(inputStream);
+  }
+
   public static byte[] getContent(InputStream stream, int sizeHint) throws IOException
   {
     return ByteUtil.getContent(stream, sizeHint);
@@ -323,5 +328,11 @@ public abstract class Utils
     }
 
     throw new RuntimeException("Invalid mail address " + address);
+  }
+
+  public static String computeDigest(InputStream inputStream)
+  {
+    // TODO!!
+    throw new UnsupportedOperationException();
   }
 }

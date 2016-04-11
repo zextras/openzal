@@ -39,7 +39,7 @@ import com.zimbra.cs.store.file.*;
 public final class StoreManagerSimulator extends StoreManager
 {
 
-  private RamFS mStoreRoot;
+  private static final RamFS mStoreRoot = new RamFS();
 
   public RamFS getStoreRoot()
   {
@@ -49,7 +49,6 @@ public final class StoreManagerSimulator extends StoreManager
   public StoreManagerSimulator()
   {
 //        DebugConfig.disableMessageStoreFsync = true;
-    mStoreRoot = new RamFS();
   }
 
   public void startup() throws IOException
@@ -72,7 +71,12 @@ public final class StoreManagerSimulator extends StoreManager
 
   public void purge()
   {
-    mStoreRoot = new RamFS();
+    try
+    {
+      mStoreRoot.emptyRamFS();
+    }
+    catch (Exception ignore)
+    {}
   }
 
   public BlobBuilder getBlobBuilder()
@@ -240,7 +244,7 @@ public final class StoreManagerSimulator extends StoreManager
     throws IOException
   {
     com.zextras.lib.vfs.File destinationFile = mStoreRoot.getRoot().resolveFile(
-      getBlobPath(destMbox.getId(), destItemId, destRevision, currentVolume())
+      getBlobPath(destMbox.getId(), destItemId, destRevision, Short.valueOf(locator))
     );
 
     try
@@ -477,6 +481,14 @@ public final class StoreManagerSimulator extends StoreManager
     public long getRawSize()
     {
       return mFile.size();
+    }
+
+    public static MockBlob getMockBlob(Blob src)
+    {
+      if (src instanceof InternalOverrideBlob)
+        return (MockBlob) ((InternalOverrideBlob) src).getWrappedObject();
+      else
+        return (MockBlob) src;
     }
   }
 

@@ -30,7 +30,8 @@ import com.zimbra.cs.index.MailboxIndex;
 // for testing purpose only
 public class ZimbraSimulator extends ExternalResource
 {
-  private final StoreManagerImp mStoreManager;
+  private final ZimbraStoreWrap mStoreManager;
+  private final VolumeManager   mVolumeManager;
 
   public RamFS getStoreRoot()
   {
@@ -53,7 +54,8 @@ public class ZimbraSimulator extends ExternalResource
 
     init();
 
-    mStoreManager = new StoreManagerTestUtil();
+    mStoreManager = new StoreAccessorTestUtil();
+    mVolumeManager = new VolumeManager();
   }
 
   /*
@@ -202,9 +204,14 @@ public class ZimbraSimulator extends ExternalResource
     return new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
   }
 
-  public StoreManager getStoreManager()
+  public StoreAccessor getStoreManager()
   {
     return mStoreManager;
+  }
+
+  public VolumeManager getVolumeManager()
+  {
+    return mVolumeManager;
   }
 
   public Zimbra getZimbra()

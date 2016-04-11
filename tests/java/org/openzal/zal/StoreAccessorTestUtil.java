@@ -2,11 +2,11 @@ package org.openzal.zal;
 
 import com.zimbra.cs.store.file.StoreManagerSimulator;
 
-public class StoreManagerTestUtil extends StoreManagerImp
+public class StoreAccessorTestUtil extends ZimbraStoreWrap
 {
-  public StoreManagerTestUtil()
+  public StoreAccessorTestUtil()
   {
-    super(com.zimbra.cs.store.StoreManager.getInstance());
+    super(com.zimbra.cs.store.StoreManager.getInstance(), new VolumeManager());
   }
 
   public FileBlobStoreWrap getFileBlobStore()

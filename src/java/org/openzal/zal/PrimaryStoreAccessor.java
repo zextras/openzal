@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2016 ZeXtras S.r.l.
+ * Copyright (C) 2014 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,16 +20,15 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 
-public interface StoreManager extends PrimaryStoreAccessor
+import org.openzal.zal.exceptions.ZimbraException;
+
+public interface PrimaryStoreAccessor extends StoreAccessor
 {
-  void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, short volumeId);
-  void invalidateStoreAccessor(Collection<Short> volumes);
-  @Nullable InputStream getContent(Blob blob, String volumeId) throws IOException;
-  boolean delete(Blob blob, String volumeId) throws IOException;
+  Blob storeIncoming(InputStream data, boolean storeAsIs) throws IOException, ZimbraException;
+  StagedBlob stage(Blob blob, Mailbox mbox) throws IOException;
 }
+
+

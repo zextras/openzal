@@ -23,6 +23,7 @@ package org.openzal.zal.extension;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
+import org.openzal.zal.StoreManager;
 import org.openzal.zal.lib.PermissiveMap;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
@@ -31,14 +32,15 @@ import com.zimbra.cs.extension.ZimbraExtension;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Zimbra
 {
-  @NotNull private final Provisioning   mProvisioning;
-  @NotNull private final MailboxManager mMailboxManager;
-  @NotNull private final ZimbraDatabase mZimbraDatabase;
-  @NotNull private final StoreManager   mStoreManager;
+  @NotNull private final Provisioning                     mProvisioning;
+  @NotNull private final MailboxManager                   mMailboxManager;
+  @NotNull private final ZimbraDatabase                   mZimbraDatabase;
+  @NotNull private       InternalOverrideStoreManager     mStoreManager;
+  @NotNull private final VolumeManager                    mVolumeManager;
+  @NotNull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
 
   public Zimbra()
   {
@@ -47,7 +49,8 @@ public class Zimbra
       mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
       mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
-      mStoreManager = new StoreManagerImp();
+      mVolumeManager = new VolumeManager();
+      mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
     }
     catch (Exception ex)
     {
@@ -118,7 +121,17 @@ public class Zimbra
   @NotNull
   public StoreManager getStoreManager()
   {
-    return mStoreManager;
+    if (mStoreManager == null)
+    {
+      return new ZimbraStoreWrap(com.zimbra.cs.store.StoreManager.getInstance(), mVolumeManager);
+    }
+    return mStoreManager.toZal();
+  }
+
+  @NotNull
+  public VolumeManager getVolumeManager()
+  {
+    return mVolumeManager;
   }
 
   public boolean shutdownExtension(String extensionName)
@@ -143,6 +156,22 @@ public class Zimbra
       Class cls = com.zimbra.cs.extension.ExtensionUtil.class;
       sInitializedExtensions = cls.getDeclaredField("sInitializedExtensions");
       sInitializedExtensions.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static Field sStoreManagerInstance;
+
+  static
+  {
+    try
+    {
+      sStoreManagerInstance = com.zimbra.cs.store.StoreManager.class.getDeclaredField("sInstance");
+      sStoreManagerInstance.setAccessible(true);
     }
     catch (Throwable ex)
     {
@@ -185,5 +214,46 @@ public class Zimbra
       throw new RuntimeException(e);
     }
 /* $endif$ */
+  }
+
+  public void overrideZimbraStoreManager()
+  {
+    ZimbraStoreWrap zimbraStoreAccessor = new ZimbraStoreWrap(
+      mZimbraStoreManager,
+      mVolumeManager
+    );
+    overrideZimbraStoreManager(zimbraStoreAccessor);
+  }
+
+  public void overrideZimbraStoreManager(
+    PrimaryStoreAccessor primaryStoreAccessor
+  )
+  {
+    ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
+    try
+    {
+      mStoreManager = new InternalOverrideStoreManager(mVolumeManager);
+      mStoreManager.setZALStoreManager(
+        new StoreManagerImpl(primaryStoreAccessor)
+      );
+      sStoreManagerInstance.set(null, mStoreManager);
+    }
+    catch (IllegalAccessException e)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(e));
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void restoreZimbraStoreManager()
+  {
+    try
+    {
+      sStoreManagerInstance.set(null, mZimbraStoreManager);
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 }

@@ -20,41 +20,15 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 
-public class Blob
+public interface Blob
 {
-  @NotNull private final com.zimbra.cs.store.Blob mBlob;
-
-  protected Blob(@NotNull Object blob)
-  {
-    if (blob == null)
-    {
-      throw new NullPointerException();
-    }
-    mBlob = (com.zimbra.cs.store.Blob) blob;
-  }
-
-  public File getFile()
-  {
-    return mBlob.getFile();
-  }
-
-  public void renameTo(String newPath) throws IOException
-  {
-    mBlob.renameTo(newPath);
-  }
-
-  public String getPath()
-  {
-    return mBlob.getPath();
-  }
-
-  protected <T> T toZimbra(Class<T> cls)
-  {
-    return cls.cast(mBlob);
-  }
+  void renameTo(String newPath) throws IOException;
+  String getPath();
+  File getFile();
+  <T> T toZimbra(Class<T> cls);
+  short getVolumeId();
 }
+
