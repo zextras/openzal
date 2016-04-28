@@ -65,6 +65,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   {{
       put("confKey", "configurationValue");
     }}, this);
+
   /* $if MajorZimbraVersion >= 8 $ */
   private final Map<String, ShareLocator> shareLocators = new HashMap<String, ShareLocator>();
 
@@ -465,6 +466,11 @@ $endif $
     return localhost;
   }
 
+  public Server getLocalServerIfDefined()
+  {
+    return null;
+  }
+
   public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs,
                           boolean checkImmutable, boolean allowCallback)
   {
@@ -693,6 +699,11 @@ $endif $
 
   public void deleteDomain(String zimbraId) {
     id2domain.remove(zimbraId);
+  }
+
+  public void deleteDomainAfterRename(String s) throws ServiceException
+  {
+    deleteDomain(s);
   }
 
   public Cos createCos(String name, Map<String, Object> attrs) throws ServiceException {
