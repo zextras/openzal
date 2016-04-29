@@ -953,6 +953,66 @@
     </exec>
   </target>
 
+  <target name="package-deb"
+          depends="clean, zal-all">
+    <local name="deb-dir-tmp"/>
+    <property name="deb-dir-tmp" location="deb"/>
+
+    <delete dir="${deb-dir-tmp}"/>
+
+    <mkdir dir="${deb-dir-tmp}"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.10"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.10/DEBIAN"/>
+
+    <copy file="tools/deb_control_template"
+          tofile="${deb-dir-tmp}/openzal-1.10/DEBIAN/control"/>
+    <replace file="${deb-dir-tmp}/openzal-1.10/DEBIAN/control">
+      <replacefilter
+              token="@VERSION@"
+              value="1.10.5"/>
+      <replacefilter
+              token="@VERSION_MAJOR@"
+              value="1"/>
+      <replacefilter
+              token="@VERSION_MINOR@"
+              value="10"/>
+      <replacefilter
+              token="@VERSION_MICRO@"
+               value="5"/>
+      <replacefilter
+              token="@FIRST_ZIMBRA_VERSION@"
+              value="6.0.7"/>
+      <replacefilter
+              token="@LAST_ZIMBRA_VERSION@"
+              value="8.6.0"/>
+    </replace>
+
+    <copy todir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10">
+      <fileset dir="dist">
+        <include name="**/zal.jar"/>
+      </fileset>
+    </copy>
+
+    <exec executable="dpkg-deb"
+          dir="${deb-dir-tmp}"
+          failonerror="true">
+      <arg value="--build"/>
+      <arg value="openzal-1.10"/>
+    </exec>
+    <move file="${deb-dir-tmp}/openzal-1.10.deb" todir="dist" />
+
+    <delete dir="${deb-dir-tmp}"/>
+  </target>
+
+  <target name="package-rpm">
+
+  </target>
+
+  <target name="package"
+    depends="package-deb, package-rpm">
+  </target>
+
   <target name="help">
     <echo>commands availables are:
       zal-all

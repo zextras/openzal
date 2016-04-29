@@ -91,6 +91,66 @@
     </exec>
   </target>
 
+  <target name="package-deb"
+          depends="clean, zal-all">
+    <local name="deb-dir-tmp"/>
+    <property name="deb-dir-tmp" location="deb"/>
+
+    <delete dir="${deb-dir-tmp}"/>
+
+    <mkdir dir="${deb-dir-tmp}"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN"/>
+
+    <copy file="tools/deb_control_template"
+          tofile="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN/control"/>
+    <replace file="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN/control">
+      <replacefilter
+              token="@VERSION@"
+              value="${VERSION}"/>
+      <replacefilter
+              token="@VERSION_MAJOR@"
+              value="${VERSION_MAJOR}"/>
+      <replacefilter
+              token="@VERSION_MINOR@"
+              value="${VERSION_MINOR}"/>
+      <replacefilter
+              token="@VERSION_MICRO@"
+               value="${VERSION_MICRO}"/>
+      <replacefilter
+              token="@FIRST_ZIMBRA_VERSION@"
+              value="${FIRST_ZIMBRA_VERSION}"/>
+      <replacefilter
+              token="@LAST_ZIMBRA_VERSION@"
+              value="${LAST_ZIMBRA_VERSION}"/>
+    </replace>
+
+    <copy todir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}">
+      <fileset dir="dist">
+        <include name="**/zal.jar"/>
+      </fileset>
+    </copy>
+
+    <exec executable="dpkg-deb"
+          dir="${deb-dir-tmp}"
+          failonerror="true">
+      <arg value="--build"/>
+      <arg value="openzal-${VERSION_MAJOR}.${VERSION_MINOR}"/>
+    </exec>
+    <move file="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}.deb" todir="dist" />
+
+    <delete dir="${deb-dir-tmp}"/>
+  </target>
+
+  <target name="package-rpm">
+
+  </target>
+
+  <target name="package"
+    depends="package-deb, package-rpm">
+  </target>
+
   <target name="help">
     <echo>commands availables are:
       zal-all

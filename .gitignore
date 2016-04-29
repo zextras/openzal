@@ -1,0 +1,6 @@
+build/
+deb/
+dist/
+doc/html/
+src/java/org/openzal/zal/ZalBuildInfo.java
+compat_reports/
