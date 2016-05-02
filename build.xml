@@ -869,6 +869,8 @@
       <fileset dir="dist/" includes="**/*" />
       <fileset dir="build/" includes="**/*" />
       <fileset dir="tmpsrc/" includes="**/*" />
+      <fileset dir="." includes="*.deb" />
+      <fileset dir="." includes="*.rpm" />
     </delete>
   </target>
 
@@ -953,6 +955,36 @@
     </exec>
   </target>
 
+  <macrodef name="prepare-build-template">
+    <attribute name="srcFile"/>
+    <attribute name="destFile"/>
+
+    <sequential>
+      <copy file="@{srcFile}"
+            tofile="@{destFile}"/>
+      <replace file="@{destFile}">
+        <replacefilter
+          token="@VERSION@"
+          value="1.10.5"/>
+        <replacefilter
+          token="@VERSION_MAJOR@"
+          value="1"/>
+        <replacefilter
+          token="@VERSION_MINOR@"
+          value="10"/>
+        <replacefilter
+          token="@VERSION_MICRO@"
+          value="5"/>
+        <replacefilter
+          token="@FIRST_ZIMBRA_VERSION@"
+          value="6.0.7"/>
+        <replacefilter
+          token="@LAST_ZIMBRA_VERSION@"
+          value="8.6.0"/>
+      </replace>
+    </sequential>
+  </macrodef>
+
   <target name="package-deb"
           depends="clean, zal-all">
     <local name="deb-dir-tmp"/>
@@ -965,28 +997,8 @@
     <mkdir dir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10"/>
     <mkdir dir="${deb-dir-tmp}/openzal-1.10/DEBIAN"/>
 
-    <copy file="tools/deb_control_template"
-          tofile="${deb-dir-tmp}/openzal-1.10/DEBIAN/control"/>
-    <replace file="${deb-dir-tmp}/openzal-1.10/DEBIAN/control">
-      <replacefilter
-              token="@VERSION@"
-              value="1.10.5"/>
-      <replacefilter
-              token="@VERSION_MAJOR@"
-              value="1"/>
-      <replacefilter
-              token="@VERSION_MINOR@"
-              value="10"/>
-      <replacefilter
-              token="@VERSION_MICRO@"
-               value="5"/>
-      <replacefilter
-              token="@FIRST_ZIMBRA_VERSION@"
-              value="6.0.7"/>
-      <replacefilter
-              token="@LAST_ZIMBRA_VERSION@"
-              value="8.6.0"/>
-    </replace>
+    <prepare-build-template srcFile="tools/deb_control_template"
+                            destFile="${deb-dir-tmp}/openzal-1.10/DEBIAN/control" />
 
     <copy todir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10">
       <fileset dir="dist">
@@ -1000,13 +1012,43 @@
       <arg value="--build"/>
       <arg value="openzal-1.10"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-1.10.deb" todir="dist" />
+    <move file="${deb-dir-tmp}/openzal-1.10.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
 
-  <target name="package-rpm">
+  <target name="package-rpm"
+          depends="clean, zal-all">
+    <local name="rpm-dir-tmp"/>
+    <property name="rpm-dir-tmp" location="rpm"/>
 
+    <delete dir="${rpm-dir-tmp}"/>
+
+    <mkdir dir="${rpm-dir-tmp}"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.10"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/buildroot/usr/share/openzal/1.10"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/RPMS"/>
+
+    <prepare-build-template srcFile="tools/rpm_spec_template"
+                            destFile="${rpm-dir-tmp}/openzal-1.10/SPEC/openzal-1.10.spec" />
+
+    <copy todir="${rpm-dir-tmp}/openzal-1.10/buildroot/usr/share/openzal/1.10">
+      <fileset dir="dist">
+        <include name="**/zal.jar"/>
+      </fileset>
+    </copy>
+
+    <exec executable="rpmbuild"
+          dir="${rpm-dir-tmp}"
+          failonerror="true">
+      <arg value="-bb"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-1.10/buildroot"/>
+      <arg value="openzal-1.10/SPEC/openzal-1.10.spec"/>
+    </exec>
+    <move file="${rpm-dir-tmp}/openzal-1.10/RPMS/noarch/openzal-1.10-5-0.noarch.rpm" todir="." />
+
+    <delete dir="${rpm-dir-tmp}"/>
   </target>
 
   <target name="package"

@@ -7,6 +7,8 @@
       <fileset dir="dist/" includes="**/*" />
       <fileset dir="build/" includes="**/*" />
       <fileset dir="tmpsrc/" includes="**/*" />
+      <fileset dir="." includes="*.deb" />
+      <fileset dir="." includes="*.rpm" />
     </delete>
   </target>
 
@@ -91,6 +93,36 @@
     </exec>
   </target>
 
+  <macrodef name="prepare-build-template">
+    <attribute name="srcFile"/>
+    <attribute name="destFile"/>
+
+    <sequential>
+      <copy file="@{srcFile}"
+            tofile="@{destFile}"/>
+      <replace file="@{destFile}">
+        <replacefilter
+          token="@VERSION@"
+          value="${VERSION}"/>
+        <replacefilter
+          token="@VERSION_MAJOR@"
+          value="${VERSION_MAJOR}"/>
+        <replacefilter
+          token="@VERSION_MINOR@"
+          value="${VERSION_MINOR}"/>
+        <replacefilter
+          token="@VERSION_MICRO@"
+          value="${VERSION_MICRO}"/>
+        <replacefilter
+          token="@FIRST_ZIMBRA_VERSION@"
+          value="${FIRST_ZIMBRA_VERSION}"/>
+        <replacefilter
+          token="@LAST_ZIMBRA_VERSION@"
+          value="${LAST_ZIMBRA_VERSION}"/>
+      </replace>
+    </sequential>
+  </macrodef>
+
   <target name="package-deb"
           depends="clean, zal-all">
     <local name="deb-dir-tmp"/>
@@ -103,28 +135,8 @@
     <mkdir dir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}"/>
     <mkdir dir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN"/>
 
-    <copy file="tools/deb_control_template"
-          tofile="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN/control"/>
-    <replace file="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN/control">
-      <replacefilter
-              token="@VERSION@"
-              value="${VERSION}"/>
-      <replacefilter
-              token="@VERSION_MAJOR@"
-              value="${VERSION_MAJOR}"/>
-      <replacefilter
-              token="@VERSION_MINOR@"
-              value="${VERSION_MINOR}"/>
-      <replacefilter
-              token="@VERSION_MICRO@"
-               value="${VERSION_MICRO}"/>
-      <replacefilter
-              token="@FIRST_ZIMBRA_VERSION@"
-              value="${FIRST_ZIMBRA_VERSION}"/>
-      <replacefilter
-              token="@LAST_ZIMBRA_VERSION@"
-              value="${LAST_ZIMBRA_VERSION}"/>
-    </replace>
+    <prepare-build-template srcFile="tools/deb_control_template"
+                            destFile="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/DEBIAN/control" />
 
     <copy todir="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}">
       <fileset dir="dist">
@@ -138,13 +150,43 @@
       <arg value="--build"/>
       <arg value="openzal-${VERSION_MAJOR}.${VERSION_MINOR}"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}.deb" todir="dist" />
+    <move file="${deb-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
 
-  <target name="package-rpm">
+  <target name="package-rpm"
+          depends="clean, zal-all">
+    <local name="rpm-dir-tmp"/>
+    <property name="rpm-dir-tmp" location="rpm"/>
 
+    <delete dir="${rpm-dir-tmp}"/>
+
+    <mkdir dir="${rpm-dir-tmp}"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/buildroot/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/RPMS"/>
+
+    <prepare-build-template srcFile="tools/rpm_spec_template"
+                            destFile="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/SPEC/openzal-${VERSION_MAJOR}.${VERSION_MINOR}.spec" />
+
+    <copy todir="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/buildroot/usr/share/openzal/${VERSION_MAJOR}.${VERSION_MINOR}">
+      <fileset dir="dist">
+        <include name="**/zal.jar"/>
+      </fileset>
+    </copy>
+
+    <exec executable="rpmbuild"
+          dir="${rpm-dir-tmp}"
+          failonerror="true">
+      <arg value="-bb"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/buildroot"/>
+      <arg value="openzal-${VERSION_MAJOR}.${VERSION_MINOR}/SPEC/openzal-${VERSION_MAJOR}.${VERSION_MINOR}.spec"/>
+    </exec>
+    <move file="${rpm-dir-tmp}/openzal-${VERSION_MAJOR}.${VERSION_MINOR}/RPMS/noarch/openzal-${VERSION_MAJOR}.${VERSION_MINOR}-${VERSION_MICRO}-0.noarch.rpm" todir="." />
+
+    <delete dir="${rpm-dir-tmp}"/>
   </target>
 
   <target name="package"
