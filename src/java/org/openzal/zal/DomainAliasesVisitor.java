@@ -42,7 +42,9 @@ class DomainAliasesVisitor implements SimpleVisitor<Domain>
   @Override
   public void visit(Domain entry)
   {
-    if (entry.isAliasDomain() && mDomain.getId().equals(entry.getDomainAliasTargetId()))
+    boolean isTheSame = mDomain.getId().equals(entry.getId());
+    boolean isAlias = entry.isAliasDomain() && mDomain.getId().equals(entry.getDomainAliasTargetId());
+    if (isTheSame || isAlias)
     {
       mAliases.add(entry);
     }

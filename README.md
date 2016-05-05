@@ -45,5 +45,5 @@ Download and copy "annotations-12.jar" in "lib/"
 Resolve all ZAL dependencies then run:
 
 > tools/generate-build > build.xml  
-> ant
+> ant zal-all
 

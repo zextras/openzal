@@ -1,3 +1,12 @@
 build/
 tmpsrc/
 dist/
+deb/
+rpm/                                                                                                                         
+private/
+src/java/org/openzal/zal/ZalBuildInfo.java                                                                                   
+openzal-*.deb                                                                                                                
+openzal-*.rpm 
+zimbra-jars/
+lib/
+ant/
