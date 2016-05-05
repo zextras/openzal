@@ -3,6 +3,7 @@ Version: @VERSION@
 Homepage: https://openzal.org
 Priority: standard
 Architecture: all
-Depends: zimbra-store (>= @FIRST_ZIMBRA_VERSION@), zimbra-store (<= @LAST_ZIMBRA_VERSION@)
+Depends: zimbra-store (>= @FIRST_ZIMBRA_VERSION@), zimbra-store (<= @LAST_ZIMBRA_VERSION@.X)
+License: GPL-2
 Maintainer: ZeXtras &lt;community@zextras.com&gt;
 Description: ZAL is the library that provides an Abstraction Layer for Zimbra Collaboration Server, allowing anyone to write highly maintainable Zimbra extensions that will run on any Zimbra server, regardless of the version.

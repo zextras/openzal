@@ -508,6 +508,7 @@
     <mkdir dir="${deb-dir-tmp}"/>
     <mkdir dir="${deb-dir-tmp}/openzal-1.10"/>
     <mkdir dir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.10/usr/share/doc/openzal-1.10"/>
     <mkdir dir="${deb-dir-tmp}/openzal-1.10/DEBIAN"/>
 
     <prepare-build-template srcFile="tools/deb_control_template"
@@ -518,6 +519,9 @@
         <include name="**/zal.jar"/>
       </fileset>
     </copy>
+
+    <copy file="tools/deb_copyright"
+        tofile="${deb-dir-tmp}/openzal-1.10/usr/share/doc/openzal-1.10/copyright"/>
 
     <exec executable="dpkg-deb"
           dir="${deb-dir-tmp}"

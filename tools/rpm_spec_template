@@ -5,7 +5,7 @@ BuildArch: noarch
 License: GPLv2
 Summary: ZAL is the library that provides an Abstraction Layer for Zimbra Collaboration Server.
 Release: 0
-Requires: zimbra-store >= @FIRST_ZIMBRA_VERSION@, zimbra-store <= @LAST_ZIMBRA_VERSION@
+Requires: zimbra-store >= @FIRST_ZIMBRA_VERSION@, zimbra-store <= @LAST_ZIMBRA_VERSION@.X
 
 %define _rpmdir openzal-@VERSION_MAJOR@.@VERSION_MINOR@/RPMS
 

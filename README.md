@@ -16,7 +16,7 @@ You can download a precise ZAL version using this url:
 Where ${branch} is the ZAL branch, ${version} is ZAL full version (branch plus micro), ${zimbra-version} is the full zimbra version.  
 For example with this url you will download zal version 1.9.1 for zimbra 8.6.0:
         
-        http://openzal.org/1.9/zal-1.9.1-8.6.0.jar
+        http://openzal.org/1.10/zal-1.10.5-8.6.0.jar
 
 ### Runtime Dependencies ###
 
@@ -30,15 +30,26 @@ Download and copy "preprocessor.jar" in "ant/"
 Ant Contrib - <http://ant-contrib.sourceforge.net/>  
 Download and copy "ant-contrib-1.0b3.jar" in "ant/"
 
+Intellij Annotations - <http://mvnrepository.com/artifact/com.intellij/annotations/12.0>
+Download and copy "annotations-12.jar" in "lib/"
+
+Apache Commons Lang 3 - <http://search.maven.org/#artifactdetails%7Corg.apache.commons%7Ccommons-lang3%7C3.1%7Cjar>
+Download and copy "commons-lang3-3.1.jar" in "lib/"
+
 Google Guice 3.0 - <https://code.google.com/p/google-guice/downloads/detail?name=guice-3.0.zip>  
 Download and extract all files in "lib/"
 
+Jackson Annotations 2.7 - <http://search.maven.org/#artifactdetails%7Ccom.fasterxml.jackson.core%7Cjackson-annotations%7C2.7.4%7Cbundle>
+Download and copy "jackson-annotations-2.7.4.jar" in "lib/"
+
+Jackson Core 2.7 - <http://search.maven.org/#artifactdetails%7Ccom.fasterxml.jackson.core%7Cjackson-core%7C2.7.4%7Cbundle>
+Download and copy "jackson-core-2.7.4.jar" in "lib/"
+
+Jackson Databind 2.7 - <http://search.maven.org/#artifactdetails%7Ccom.fasterxml.jackson.core%7Cjackson-databind%7C2.7.4%7Cbundle>
+Download and copy "jackson-databind-2.7.4.jar" in "lib/"
+
 Zimbra Sources - <http://www.zimbra.com>  
 For each version of zimbra copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
-
-Download Intellij Annotations - <http://mvnrepository.com/artifact/com.intellij/annotations/12.0>  
-Download and copy "annotations-12.jar" in "lib/"
-
 
 ### How to build ###
 
