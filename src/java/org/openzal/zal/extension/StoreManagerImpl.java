@@ -1,5 +1,8 @@
 package org.openzal.zal.extension;
 
+import com.zextras.lib.Promise;
+import com.zextras.lib.PromiseBooleanAggregator;
+import io.netty.util.concurrent.Future;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Blob;
 import org.openzal.zal.BlobBuilder;
@@ -17,15 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 
 public class StoreManagerImpl implements StoreManager
 {
-  private final PrimaryStoreAccessor                 mDefaultStoreAccessor;
-  private final HashMap<Short, StoreAccessor>        mStoreAccessors;
-  private final HashMap<Short, StoreAccessorFactory> mStoreAccessorFactories;
-  private final ReentrantLock                        mLock;
+  private final PrimaryStoreAccessor mDefaultStoreAccessor;
+  private final HashMap<String, StoreAccessor> mStoreAccessors;
+  private final HashMap<String, StoreAccessorFactory> mStoreAccessorFactories;
+
+  private final ReentrantLock mLock;
 
   public StoreManagerImpl(
     PrimaryStoreAccessor defaultStoreAccessor
@@ -33,26 +38,25 @@ public class StoreManagerImpl implements StoreManager
   {
     mLock = new ReentrantLock();
     mDefaultStoreAccessor = defaultStoreAccessor;
-    mStoreAccessorFactories = new HashMap<Short, StoreAccessorFactory>();
-    mStoreAccessors = new HashMap<Short, StoreAccessor>();
+    mStoreAccessorFactories = new HashMap<String, StoreAccessorFactory>();
+    mStoreAccessors = new HashMap<String, StoreAccessor>();
   }
 
-  private StoreAccessor selectStoreAccessor(String locator)
-  {
-    /* TODO handle primaryActive -> mDefaultStoreAccessor
-     * handle secondaryActive.. ??
-     */
-    return selectStoreAccessor(Short.parseShort(locator));
-  }
-
-  private StoreAccessor selectStoreAccessor(short id)
+  private StoreAccessor selectStoreAccessor(String id)
   {
     mLock.lock();
     try
     {
       if (!mStoreAccessors.containsKey(id))
       {
-        mStoreAccessors.put(id, mStoreAccessorFactories.get(id).make(id));
+        if (mStoreAccessorFactories.containsKey(id))
+        {
+          mStoreAccessors.put(id, mStoreAccessorFactories.get(id).make(id));
+        }
+        else
+        {
+          mStoreAccessors.put(id, mDefaultStoreAccessor);
+        }
       }
 
       return mStoreAccessors.get(id);
@@ -64,7 +68,7 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, short volumeId)
+  public void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, String volumeId)
   {
     mLock.lock();
     try
@@ -79,12 +83,12 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public void invalidateStoreAccessor(Collection<Short> volumes)
+  public void invalidateStoreAccessor(Collection<String> volumes)
   {
     mLock.lock();
     try
     {
-      for (short volumeId : volumes)
+      for (String volumeId : volumes)
       {
         mStoreAccessors.remove(volumeId);
       }
@@ -96,13 +100,13 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public Blob storeIncoming(InputStream data, boolean storeAsIs) throws IOException, ZimbraException
+  public Future<Blob> storeIncoming(InputStream data, boolean storeAsIs) throws ZimbraException
   {
     return mDefaultStoreAccessor.storeIncoming(data, storeAsIs);
   }
 
   @Override
-  public StagedBlob stage(Blob blob, Mailbox mbox) throws IOException
+  public Future<StagedBlob> stage(Blob blob, Mailbox mbox)
   {
     return mDefaultStoreAccessor.stage(blob, mbox);
   }
@@ -115,57 +119,73 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException, ZimbraException
+  public Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision)
   {
     return mDefaultStoreAccessor.copy(src, destMbox, destMsgId, destRevision);
   }
 
   @Override
-  public MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short volumeId) throws IOException, ZimbraException
+  public Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
   {
     return selectStoreAccessor(volumeId).copy(src, destMbox, destMsgId, destRevision, volumeId);
   }
 
   @Override
-  public MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException, ZimbraException
+  public Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision)
   {
     return mDefaultStoreAccessor.link(src, destMbox, destMsgId, destRevision);
   }
 
   @Override
-  public MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short volumeId) throws IOException, ZimbraException
+  public Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
   {
     return selectStoreAccessor(volumeId).link(src, destMbox, destMsgId, destRevision, volumeId);
   }
 
   @Override
-  public String getBlobPath(int mboxId, int itemId, int revision, short volumeId) throws ZimbraException
+  public String getBlobPath(int mboxId, int itemId, int revision, String volumeId) throws ZimbraException
   {
     return selectStoreAccessor(volumeId).getBlobPath(mboxId, itemId, revision, volumeId);
   }
 
   @Override
-  public boolean delete(Mailbox mailbox) throws IOException
+  public Future<Boolean> delete(Mailbox mailbox, Iterable blobs) throws IOException
   {
-    boolean deleted = false;
-    deleted |= mDefaultStoreAccessor.delete(mailbox);
-    for (StoreAccessor store : mStoreAccessors.values())
+    Promise<Boolean> future = new Promise<Boolean>();
+    PromiseBooleanAggregator futureListener = new PromiseBooleanAggregator(future);
+    for (Map.Entry<String, StoreAccessor> entry : mStoreAccessors.entrySet())
     {
-      deleted |= store.delete(mailbox);
+      entry.getValue().delete(mailbox, blobs, entry.getKey()).addListener(
+        futureListener.incWaitingCount()
+      );
     }
-    return deleted;
+    futureListener.requestsDone();
+
+    return future;
   }
 
   @Override
-  public boolean delete(Blob blob) throws IOException
+  public Future<Boolean> delete(Mailbox mailbox, Iterable blobs, String volumeId)
+  {
+    return selectStoreAccessor(volumeId).delete(mailbox, blobs, volumeId);
+  }
+
+  @Override
+  public Future<Boolean> delete(MailboxBlob blob)
   {
     return selectStoreAccessor(blob.getVolumeId()).delete(blob);
   }
 
   @Override
-  public boolean delete(Blob blob, String volumeId) throws IOException
+  public Future<Boolean> delete(StagedBlob blob)
   {
-    return selectStoreAccessor(volumeId).delete(blob);
+    return selectStoreAccessor(blob.getVolumeId()).delete(blob);
+  }
+
+  @Override
+  public Future<Boolean> delete(Blob blob)
+  {
+    return mDefaultStoreAccessor.delete(blob);
   }
 
   @Override
@@ -195,9 +215,9 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public BlobBuilder getBlobBuilder(short volumeId) throws IOException, ZimbraException
+  public BlobBuilder getBlobBuilder() throws IOException, ZimbraException
   {
-    return selectStoreAccessor(volumeId).getBlobBuilder(volumeId);
+    return mDefaultStoreAccessor.getBlobBuilder();
   }
 
   @Nullable
@@ -215,7 +235,7 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException
+  public Future<MailboxBlob> renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
   {
     return mDefaultStoreAccessor.renameTo(src, destMbox, destMsgId, destRevision);
   }

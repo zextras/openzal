@@ -23,12 +23,17 @@ package org.openzal.zal;
 import java.io.IOException;
 import java.io.InputStream;
 
+import io.netty.util.concurrent.Future;
 import org.openzal.zal.exceptions.ZimbraException;
 
 public interface PrimaryStoreAccessor extends StoreAccessor
 {
-  Blob storeIncoming(InputStream data, boolean storeAsIs) throws IOException, ZimbraException;
-  StagedBlob stage(Blob blob, Mailbox mbox) throws IOException;
+  Future<Blob> storeIncoming(InputStream data, boolean storeAsIs);
+  Future<StagedBlob> stage(Blob blob, Mailbox mbox);
+  Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision);
+  Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision);
+  Future<MailboxBlob> renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision);
+  BlobBuilder getBlobBuilder() throws IOException, ZimbraException;
 }
 
 

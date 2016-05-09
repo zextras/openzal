@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 public class BlobBuilderWrap implements BlobBuilder
 {
   private final com.zimbra.cs.store.BlobBuilder mBlobBuilder;
-  private final short mVolumeId;
+  private final String mVolumeId;
 
   @Override
   public BlobBuilder setSizeHint(long size)
@@ -107,7 +107,7 @@ public class BlobBuilderWrap implements BlobBuilder
   {
     try
     {
-      return BlobWrap.wrap(mBlobBuilder.finish(), mVolumeId);
+      return BlobWrap.wrapZimbraObject(mBlobBuilder.finish());
     }
     catch (ServiceException e)
     {
@@ -118,7 +118,7 @@ public class BlobBuilderWrap implements BlobBuilder
   @Override
   public Blob getBlob()
   {
-    return BlobWrap.wrap(mBlobBuilder.getBlob(), mVolumeId);
+    return BlobWrap.wrapZimbraObject(mBlobBuilder.getBlob());
   }
 
   @Override
@@ -127,7 +127,7 @@ public class BlobBuilderWrap implements BlobBuilder
     return cls.cast(this);
   }
 
-  BlobBuilderWrap(@NotNull Object blobBuilder, short volumeId)
+  BlobBuilderWrap(@NotNull Object blobBuilder, String volumeId)
   {
     if (blobBuilder == null)
     {
@@ -138,7 +138,7 @@ public class BlobBuilderWrap implements BlobBuilder
     mBlobBuilder = (com.zimbra.cs.store.BlobBuilder) blobBuilder;
   }
 
-  public static BlobBuilder wrap(Object blobBuilder, short volumeId)
+  public static BlobBuilder wrap(Object blobBuilder, String volumeId)
   {
     if (blobBuilder instanceof InternalOverrideBlobBuilder)
       return ((InternalOverrideBlobBuilder) blobBuilder).getWrappedObject();

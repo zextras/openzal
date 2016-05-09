@@ -65,7 +65,7 @@ public class StoreVolume
     mVolume = (Volume)vol;
   }
 
-  public short getId() { return mVolume.getId(); }
+  public String getId() { return String.valueOf(mVolume.getId()); }
   public short getType() { return mVolume.getType(); }
   public String getName() { return mVolume.getName(); }
   public String getLocator() { return mVolume.getLocator(); }
@@ -235,7 +235,7 @@ public class StoreVolume
     try
     {
 /* $if MajorZimbraVersion <= 7 $
-      vol = Volume.update(volumeToUpdate.getId(),
+      vol = Volume.update(Short.parseShort(volumeToUpdate.getId()),
                                  volumeToUpdate.getType(),
                                  volumeToUpdate.getName(),
                                  volumeToUpdate.getRootPath(),
@@ -248,7 +248,7 @@ public class StoreVolume
                                  false);
    $else$ */
       Volume.Builder builder = Volume.builder();
-      builder.setId(volumeToUpdate.getId());
+      builder.setId(Short.parseShort(volumeToUpdate.getId()));
       builder.setName(volumeToUpdate.getName());
       builder.setType(volumeToUpdate.getType());
       builder.setPath(volumeToUpdate.getRootPath(), true);

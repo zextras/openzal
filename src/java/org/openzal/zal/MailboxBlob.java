@@ -20,14 +20,9 @@
 
 package org.openzal.zal;
 
-import java.io.IOException;
-
-public interface MailboxBlob
+public interface MailboxBlob extends StagedBlob
 {
-  String getDigest() throws IOException;
-  Blob getLocalBlob() throws IOException;
   int getRevision();
   String toString();
   int getItemId();
-  <T> T toZimbra(Class<T> cls);
 }

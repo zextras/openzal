@@ -24,7 +24,9 @@ package org.openzal.zal;
 import com.zimbra.cs.store.file.BlobWrap;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MailboxBlobWrap implements MailboxBlob
@@ -42,16 +44,46 @@ public class MailboxBlobWrap implements MailboxBlob
 
   @Override
   public String getDigest()
-    throws IOException
   {
-    return mMailboxBlob.getDigest();
+    try
+    {
+      return mMailboxBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public long getRawSize()
+  {
+    return 0;
+  }
+
+  @Override
+  public InputStream getInputStream() throws IOException
+  {
+    return null;
   }
 
   @Override
   public Blob getLocalBlob()
-    throws IOException
   {
-    return BlobWrap.wrap(mMailboxBlob.getLocalBlob(), Short.parseShort(mMailboxBlob.getLocator()));
+    try
+    {
+      return BlobWrap.wrapZimbraObject(mMailboxBlob.getLocalBlob());
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public Mailbox getMailbox()
+  {
+    return new Mailbox(mMailboxBlob.getMailbox());
   }
 
   @Override
@@ -72,16 +104,42 @@ public class MailboxBlobWrap implements MailboxBlob
     return mMailboxBlob.getItemId();
   }
 
-  //@Override
-  public short getVolumeId()
+  @Override
+  public String getVolumeId()
   {
-    return Short.valueOf(mMailboxBlob.getLocator());
+    return mMailboxBlob.getLocator();
   }
 
-  //@Override
-  public long getSize() throws IOException
+  @Override
+  public void renameTo(String newPath) throws IOException
   {
-    return mMailboxBlob.getSize();
+    mMailboxBlob.getLocalBlob().renameTo(newPath);
+  }
+
+  @Override
+  public String getKey()
+  {
+    try
+    {
+      return mMailboxBlob.getLocalBlob().getPath();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public File getFile()
+  {
+    try
+    {
+      return mMailboxBlob.getLocalBlob().getFile();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
@@ -90,7 +148,7 @@ public class MailboxBlobWrap implements MailboxBlob
     return cls.cast(mMailboxBlob);
   }
 
-  public static MailboxBlob wrap(Object mailboxBlob)
+  public static MailboxBlob wrapZimbraObject(Object mailboxBlob)
   {
     if (mailboxBlob instanceof InternalOverrideMailboxBlob)
     {

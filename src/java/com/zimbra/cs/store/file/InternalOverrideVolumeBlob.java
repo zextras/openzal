@@ -2,6 +2,7 @@ package com.zimbra.cs.store.file;
 
 import org.apache.commons.io.IOUtils;
 import org.openzal.zal.Blob;
+import org.openzal.zal.StagedBlob;
 import org.openzal.zal.Utils;
 
 import java.io.File;
@@ -11,25 +12,26 @@ import java.io.InputStream;
 
 public class InternalOverrideVolumeBlob extends VolumeBlob
 {
-  private final Blob mBlob;
-  private final short mVolumeId;
   static File mFile = new File("/tmp/12345");
 
-  public InternalOverrideVolumeBlob(Blob blob, short volumeId)
+  private final StagedBlob   mBlob;
+  private final String mVolumeId;
+
+  public InternalOverrideVolumeBlob(StagedBlob blob)
   {
-    super(mFile, volumeId);
+    super(mFile, Short.parseShort(blob.getVolumeId()));
     mBlob = blob;
-    mVolumeId = volumeId;
+    mVolumeId = blob.getVolumeId();
   }
 
-  public Blob getWrappedObject()
+  public StagedBlob getWrappedObject()
   {
     return mBlob;
   }
 
   public short getVolumeId()
   {
-    return mVolumeId;
+    return Short.parseShort(mVolumeId);
   }
 
   @Override
@@ -43,7 +45,7 @@ public class InternalOverrideVolumeBlob extends VolumeBlob
   @Override
   public String getPath()
   {
-    return mBlob.getPath();
+    return mBlob.getKey();
   }
 
   @Override

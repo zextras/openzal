@@ -13,61 +13,66 @@ public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
   @Override
   public File getFile()
   {
-    throw new UnsupportedOperationException();
+    return mBlob.getFile();
   }
 
   @Override
   public String getPath()
   {
-    throw new UnsupportedOperationException();
+    return mBlob.getKey();
   }
 
   @Override
   public InputStream getInputStream() throws IOException
   {
-    throw new UnsupportedOperationException();
+    return mBlob.getInputStream();
   }
 
   @Override
   public boolean isCompressed() throws IOException
   {
+    // TODO check inputstream zipped?
     throw new UnsupportedOperationException();
   }
 
   @Override
   public String getDigest() throws IOException
   {
-    throw new UnsupportedOperationException();
+    return mBlob.getDigest();
   }
 
   @Override
   public long getRawSize() throws IOException
   {
-    throw new UnsupportedOperationException();
+    return mBlob.getRawSize();
   }
 
   @Override
   public Blob setCompressed(boolean isCompressed)
   {
     throw new UnsupportedOperationException();
+    //return this;
   }
 
   @Override
   public Blob setDigest(String digest)
   {
     throw new UnsupportedOperationException();
+    //return this;
   }
 
   @Override
   public Blob setRawSize(long rawSize)
   {
     throw new UnsupportedOperationException();
+    //return this;
   }
 
   @Override
   public Blob copyCachedDataFrom(Blob other)
   {
     throw new UnsupportedOperationException();
+    //return this;
   }
 
   @Override
@@ -121,7 +126,7 @@ public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
     mBlob = blob;
   }
 
-  public Object getWrappedObject()
+  public org.openzal.zal.Blob getWrappedObject()
   {
     return mBlob;
   }

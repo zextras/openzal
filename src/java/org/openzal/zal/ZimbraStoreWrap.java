@@ -23,11 +23,15 @@ package org.openzal.zal;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.file.BlobWrap;
 import com.zimbra.cs.store.file.InternalOverrideBlob;
 import com.zimbra.cs.store.file.InternalOverrideVolumeBlob;
+import com.zimbra.cs.store.file.VolumeMailboxBlob;
+import io.netty.util.concurrent.DefaultPromise;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.ImmediateEventExecutor;
+import io.netty.util.concurrent.Promise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
@@ -81,86 +85,92 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
       return null;
     }
 
-    return MailboxBlobWrap.wrap(mailboxBlob);
+    return MailboxBlobWrap.wrapZimbraObject(mailboxBlob);
   }
 
   @NotNull
-  public MailboxBlob copy(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ZimbraException
+  public Future<MailboxBlob> copy(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision)
   {
     return copy(src, destMbox, destMsgId, destRevision, mVolumeManager.getCurrentMessageVolume().getId());
   }
 
   @Override
-  public MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short volumeId)
-    throws IOException, ZimbraException
+  public Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
   {
+    Promise<MailboxBlob> future = new DefaultPromise<MailboxBlob>(ImmediateEventExecutor.INSTANCE);
     try
     {
-      return MailboxBlobWrap.wrap(
-        getFileBlobStore().copy(
-          com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(src)),
-          destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
-          destMsgId,
-          destRevision,
-          volumeId
-        )
+      VolumeMailboxBlob volumeMailboxBlob = getFileBlobStore().copy(
+        com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(src)),
+        destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
+        destMsgId,
+        destRevision,
+        volumeId
       );
+
+      return future.setSuccess(MailboxBlobWrap.wrapZimbraObject(volumeMailboxBlob));
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return future.setFailure(ExceptionWrapper.wrap(e));
+    }
+    catch (IOException e)
+    {
+      return future.setFailure(e);
     }
   }
 
   @NotNull
-  public MailboxBlob link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ZimbraException
+  public Future<MailboxBlob> link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision)
   {
     return link(src, destMbox, destMsgId, destRevision, mVolumeManager.getCurrentMessageVolume().getId());
   }
 
-  @NotNull
-  public MailboxBlob link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision, short volumeId)
-    throws IOException, ZimbraException
+  @Override
+  public Future<MailboxBlob> renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
   {
+    return null;
+  }
+
+  @NotNull
+  public Future<MailboxBlob> link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
+  {
+    Promise<MailboxBlob> future = new DefaultPromise<MailboxBlob>(ImmediateEventExecutor.INSTANCE);
     try
     {
-      return MailboxBlobWrap.wrap(
-        getFileBlobStore().link(
-          com.zimbra.cs.store.Blob.class.cast(new InternalOverrideVolumeBlob(src, volumeId)),
-          destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
-          destMsgId,
-          destRevision,
-          volumeId
-        )
+      VolumeMailboxBlob volumeMailboxBlob = getFileBlobStore().link(
+        com.zimbra.cs.store.Blob.class.cast(new InternalOverrideBlob(src)),
+        destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
+        destMsgId,
+        destRevision,
+        volumeId
       );
+
+      return future.setSuccess(MailboxBlobWrap.wrapZimbraObject(volumeMailboxBlob));
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return future.setFailure(ExceptionWrapper.wrap(e));
+    }
+    catch (IOException e)
+    {
+      return future.setFailure(e);
     }
   }
 
-  public boolean delete(@NotNull Mailbox mailbox) throws IOException
+  public Future<Boolean> delete(@NotNull Blob blob)
   {
+    Promise<Boolean> future = new DefaultPromise<Boolean>(ImmediateEventExecutor.INSTANCE);
     try
     {
-      /* $if ZimbraVersion >= 7.2.0 $ */
-      return sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class), null);
-      /* $else $
-      return sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class));
-      /* $endif $ */
+      return future.setSuccess(
+        sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(blob)))
+      );
     }
-    catch (ServiceException e)
+    catch (IOException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return future.setFailure(e);
     }
-  }
-
-  public boolean delete(@NotNull Blob blob) throws IOException
-  {
-    return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(blob)));
   }
 
   @Override
@@ -193,11 +203,11 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
   }
 
   @Override
-  public BlobBuilder getBlobBuilder(short volumeId) throws IOException, ZimbraException
+  public BlobBuilder getBlobBuilder() throws IOException, ZimbraException
   {
     try
     {
-      return BlobBuilderWrap.wrap(sm.getBlobBuilder(), volumeId);
+      return BlobBuilderWrap.wrap(sm.getBlobBuilder(), mVolumeManager.getCurrentMessageVolume().getId());
     }
     catch (ServiceException e)
     {
@@ -206,8 +216,9 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
   }
 
   @Override
-  public Blob storeIncoming(InputStream data, boolean storeAsIs) throws IOException, ZimbraException
+  public Future<Blob> storeIncoming(InputStream data, boolean storeAsIs)
   {
+    Promise<Blob> future = new DefaultPromise<Blob>(ImmediateEventExecutor.INSTANCE);
     try
     {
       com.zimbra.cs.store.Blob blob;
@@ -218,29 +229,42 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
       /* $else $
       blob = sm.storeIncoming(data, 0L, null, storeAsIs);
       /* $endif $ */
-      return BlobWrap.wrap(blob, mVolumeManager.getCurrentMessageVolume().getId());
+      return future.setSuccess(
+        BlobWrap.wrapZimbraObject(blob)
+      );
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return future.setFailure(ExceptionWrapper.wrap(e));
+    }
+    catch (IOException e)
+    {
+      return future.setFailure(e);
     }
   }
 
   @Override
-  public StagedBlobWrap stage(Blob blob, Mailbox mbox) throws IOException
+  public Future<StagedBlob> stage(Blob blob, Mailbox mbox)
   {
+    Promise<StagedBlob> future = new DefaultPromise<StagedBlob>(ImmediateEventExecutor.INSTANCE);
     try
     {
-      return StagedBlobWrap.wrap(
-        sm.stage(
-          blob.toZimbra(com.zimbra.cs.store.Blob.class),
-          mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class)
+      return future.setSuccess(
+        StagedBlobWrap.wrapZimbraObject(
+          sm.stage(
+            blob.toZimbra(com.zimbra.cs.store.Blob.class),
+            mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class)
+          )
         )
       );
     }
     catch (ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      return future.setFailure(ExceptionWrapper.wrap(e));
+    }
+    catch (IOException e)
+    {
+      return future.setFailure(e);
     }
   }
 
@@ -252,26 +276,12 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
   }
 
   @Override
-  public MailboxBlob renameTo(org.openzal.zal.StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException
+  public Future<Boolean> delete(Mailbox mailbox, @Nullable Iterable blobs, String volumeId)
   {
-    try
-    {
-      return MailboxBlobWrap.wrap(
-        sm.renameTo(
-          src.toZimbra(StagedBlob.class),
-          destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
-          destMsgId,
-          destRevision
-        )
-      );
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
+    return null;
   }
 
-  private String getBlobDir(short volumeId, int mboxId, int itemId )
+  private String getBlobDir(String volumeId, int mboxId, int itemId )
   {
     StoreVolume vol = mVolumeManager.getById(volumeId);
     return vol.getBlobDir(mboxId, itemId);
@@ -279,7 +289,7 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
 
   @NotNull
   public String getBlobPath(int mboxId, int itemId, int revision,
-                                  short volumeId) throws org.openzal.zal.exceptions.ZimbraException
+                                  String volumeId) throws org.openzal.zal.exceptions.ZimbraException
   {
     String path = getBlobDir(volumeId, mboxId, itemId);
 
@@ -303,13 +313,13 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
   }
 
   @Override
-  public void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, short volumeId)
+  public void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, String volumeId)
   {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void invalidateStoreAccessor(Collection<Short> volumes)
+  public void invalidateStoreAccessor(Collection volumes)
   {
     throw new UnsupportedOperationException();
   }
@@ -322,8 +332,38 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
   }
 
   @Override
-  public boolean delete(Blob blob, String volumeId) throws IOException
+  public Future<Boolean> delete(StagedBlob blob)
   {
-    return sm.delete(blob.toZimbra(com.zimbra.cs.store.Blob.class));
+    return null;
+  }
+
+  @Override
+  public Future<Boolean> delete(MailboxBlob blob)
+  {
+    return null;
+  }
+
+  @Override
+  public Future<Boolean> delete(Mailbox mailbox, @Nullable Iterable blobs)
+  {
+    Promise<Boolean> future = new DefaultPromise<Boolean>(ImmediateEventExecutor.INSTANCE);
+    try
+    {
+      return future.setSuccess(
+        /* $if ZimbraVersion >= 7.2.0 $ */
+        sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class), blobs)
+        /* $else $
+        sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class));
+        /* $endif $ */
+      );
+    }
+    catch (ServiceException e)
+    {
+      return future.setFailure(ExceptionWrapper.wrap(e));
+    }
+    catch (IOException e)
+    {
+      return future.setFailure(e);
+    }
   }
 }

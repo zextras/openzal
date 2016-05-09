@@ -232,7 +232,7 @@ public class Zimbra
     ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
     try
     {
-      mStoreManager = new InternalOverrideStoreManager(mVolumeManager);
+      mStoreManager = new InternalOverrideStoreManager();
       mStoreManager.setZALStoreManager(
         new StoreManagerImpl(primaryStoreAccessor)
       );

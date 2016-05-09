@@ -24,5 +24,3 @@ public interface BlobBuilder
   Blob getBlob();
   <T> T toZimbra(Class<T> cls);
 }
-
-

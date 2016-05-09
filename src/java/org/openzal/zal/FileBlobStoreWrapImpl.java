@@ -138,9 +138,9 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException, ServiceException
+  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException, ServiceException
   {
-    return mStore.copy(src, destMbox, destItemId, destRevision, destVolumeId);
+    return mStore.copy(src, destMbox, destItemId, destRevision, Short.parseShort(destVolumeId));
   }
 
   @Override
@@ -150,9 +150,9 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException, ServiceException
+  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException, ServiceException
   {
-    return mStore.link(src, destMbox, destItemId, destRevision, destVolumeId);
+    return mStore.link(src, destMbox, destItemId, destRevision, Short.parseShort(destVolumeId));
   }
 
   @Override

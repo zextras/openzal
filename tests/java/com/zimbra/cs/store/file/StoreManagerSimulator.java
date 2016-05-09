@@ -561,7 +561,7 @@ public final class StoreManagerSimulator extends StoreManager
 
   public static class MockVolumeMailboxBlob extends VolumeMailboxBlob
   {
-    public MockVolumeMailboxBlob(MailboxBlob blob, short volumeId) throws IOException
+    public MockVolumeMailboxBlob(MailboxBlob blob, String volumeId) throws IOException
     {
       super(blob.getMailbox(), blob.getItemId(), blob.getRevision(), blob.getLocator(), new MockVolumeBlob(blob.getLocalBlob(), volumeId));
     }
@@ -569,16 +569,16 @@ public final class StoreManagerSimulator extends StoreManager
 
   public static class MockVolumeBlob extends VolumeBlob
   {
-    private final short mVolumeId;
-    MockVolumeBlob(Blob blob, short volumeId)
+    private final String mVolumeId;
+    MockVolumeBlob(Blob blob, String volumeId)
     {
-      super(blob.getFile(), volumeId);
+      super(blob.getFile(), Short.parseShort(volumeId));
       mVolumeId = volumeId;
     }
 
     public short getVolumeId()
     {
-      return mVolumeId;
+      return Short.parseShort(mVolumeId);
     }
   }
 

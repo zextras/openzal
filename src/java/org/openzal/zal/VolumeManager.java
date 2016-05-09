@@ -41,7 +41,7 @@ public class VolumeManager
     return ZimbraListWrapper.wrapVolumes(list);
   }
 
-  public StoreVolume update(short id, short type,
+  public StoreVolume update(String id, short type,
                             String name, String path,
                             boolean compressBlobs, long compressionThreshold)
     throws ZimbraException
@@ -53,7 +53,7 @@ public class VolumeManager
     try
     {
       /* $if MajorZimbraVersion <= 7 $
-      vol = Volume.update(id, type, name, path,
+      vol = Volume.update(Short.parseShort(id), type, name, path,
                                  volumeToUpdate.getMboxGroupBits(),
                                  volumeToUpdate.getMboxBits(),
                                  volumeToUpdate.getFileGroupBits(),
@@ -61,7 +61,7 @@ public class VolumeManager
                                  compressBlobs, compressionThreshold, false);
       /* $else$ */
       Volume.Builder builder = Volume.builder();
-      builder.setId(id);
+      builder.setId(Short.parseShort(id));
       builder.setName(name);
       builder.setType(type);
       builder.setPath(path, true);
@@ -152,7 +152,7 @@ public class VolumeManager
     }
   }
 
-  public StoreVolume setDefaultBits(short id)
+  public StoreVolume setDefaultBits(String id)
     throws ZimbraException
   {
 
@@ -175,7 +175,7 @@ public class VolumeManager
                                  false);
       /* $else$ */
       Volume.Builder builder = Volume.builder();
-      builder.setId(volumeToUpdate.getId());
+      builder.setId(Short.parseShort(volumeToUpdate.getId()));
       builder.setName(volumeToUpdate.getName());
       builder.setType(volumeToUpdate.getType());
       builder.setPath(volumeToUpdate.getRootPath(), true);
@@ -220,7 +220,7 @@ public class VolumeManager
     }
   }
 
-  public StoreVolume getById(short vid) throws org.openzal.zal.exceptions.ZimbraException
+  public StoreVolume getById(String vid) throws org.openzal.zal.exceptions.ZimbraException
   {
     try
     {
@@ -301,13 +301,13 @@ public class VolumeManager
     return null;
   }
 
-  public boolean isValidVolume(short id)
+  public boolean isValidVolume(String id)
   {
     boolean valid = false;
     List<StoreVolume> volumeList = getAll();
 
     for (StoreVolume v:volumeList){
-      if (v.getId() == id){
+      if (v.getId().equals(id)){
         valid = true;
         break;
       }

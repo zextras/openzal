@@ -31,7 +31,7 @@ public class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public String getLocator()
   {
-    return String.valueOf(mZalMailboxBlob.getItemId());
+    return mZalMailboxBlob.getVolumeId();
   }
 
   @Override

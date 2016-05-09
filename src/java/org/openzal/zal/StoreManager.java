@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import io.netty.util.concurrent.Future;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -28,8 +29,10 @@ import java.util.Collection;
 
 public interface StoreManager extends PrimaryStoreAccessor
 {
-  void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, short volumeId);
-  void invalidateStoreAccessor(Collection<Short> volumes);
+  void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, String volumeId);
+  void invalidateStoreAccessor(Collection<String> volumes);
   @Nullable InputStream getContent(Blob blob, String volumeId) throws IOException;
-  boolean delete(Blob blob, String volumeId) throws IOException;
+  Future<Boolean> delete(StagedBlob blob);
+  Future<Boolean> delete(MailboxBlob blob);
+  Future<Boolean> delete(Mailbox mailbox, @Nullable Iterable blobs) throws IOException;
 }

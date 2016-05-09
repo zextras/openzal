@@ -22,13 +22,16 @@ package org.openzal.zal;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface Blob
 {
   void renameTo(String newPath) throws IOException;
-  String getPath();
+  String getKey();
   File getFile();
   <T> T toZimbra(Class<T> cls);
-  short getVolumeId();
+  String getDigest();
+  long getRawSize();
+  InputStream getInputStream() throws IOException;
 }
 

@@ -22,32 +22,25 @@ package com.zimbra.cs.store.file;
 
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Blob;
+import org.openzal.zal.InternalOverrideStagedBlob;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class BlobWrap implements Blob
 {
   @NotNull private final com.zimbra.cs.store.Blob mBlob;
-  private final short mVolumeId;
 
   public BlobWrap(
-    @NotNull Object blob,
-    short volumeId
+    @NotNull Object blob
   )
   {
-    mVolumeId = volumeId;
     if (blob == null)
     {
       throw new NullPointerException();
     }
     mBlob = (com.zimbra.cs.store.Blob) blob;
-  }
-
-  @Override
-  public short getVolumeId()
-  {
-    return mVolumeId;
   }
 
   public File getFile()
@@ -61,7 +54,32 @@ public class BlobWrap implements Blob
     return cls.cast(mBlob);
   }
 
-  public String getPath()
+  @Override
+  public String getDigest()
+  {
+    try
+    {
+      return mBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public long getRawSize()
+  {
+    return 0;
+  }
+
+  @Override
+  public InputStream getInputStream() throws IOException
+  {
+    return null;
+  }
+
+  public String getKey()
   {
     return mBlob.getPath();
   }
@@ -72,15 +90,18 @@ public class BlobWrap implements Blob
     mBlob.renameTo(newPath);
   }
 
-  public static Blob wrap(Object blob, short volumeId)
+  public static Blob wrapZimbraObject(Object blob)
   {
     if (blob instanceof Blob)
       return (Blob) blob;
 
     if (blob instanceof InternalOverrideBlob)
-      return (Blob) ((InternalOverrideBlob) blob).getWrappedObject();
+      return ((InternalOverrideBlob) blob).getWrappedObject();
 
-    return new BlobWrap(blob, volumeId);
+    if (blob instanceof InternalOverrideStagedBlob)
+      return ((InternalOverrideStagedBlob) blob).getWrappedObject();
+
+    return new BlobWrap(blob);
   }
 
   @Override
