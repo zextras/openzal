@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.CalendarItem;
+import com.zimbra.cs.mailbox.Metadata;
 import org.openzal.zal.Item;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
@@ -824,6 +825,30 @@ public class Invite
     catch (ServiceException ex)
     {
       throw ExceptionWrapper.wrap(ex);
+    }
+  }
+
+  public void addAttendee(Map<String, Object> metadata)
+  {
+    try
+    {
+      mInvite.addAttendee(new ZAttendee(new Metadata(metadata)));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void addAlarm(Map<String, Object> metadata)
+  {
+    try
+    {
+      mInvite.addAlarm(com.zimbra.cs.mailbox.calendar.Alarm.decodeMetadata(new Metadata(metadata)));
+    }
+    catch (Exception e)
+    {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 }
