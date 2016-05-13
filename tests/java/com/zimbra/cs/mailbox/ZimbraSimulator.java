@@ -7,6 +7,7 @@ import com.zextras.lib.vfs.blockingfs.BlockingFS;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zextras.powerstore.VfsPrimaryStoreAccessor;
 import com.zextras.powerstore.VfsStoreAccessor;
+import com.zextras.s3.RamBlobAccessor;
 import com.zextras.s3.VfsBlobAccessor;
 import com.zextras.utils.FSProvider;
 import org.junit.rules.ExternalResource;
@@ -144,7 +145,7 @@ public class ZimbraSimulator extends ExternalResource
     mStoreRoot = new RamFS();
 
     ActivityManager activityManager = new ActivityManager();
-    VfsBlobAccessor blobAccessor = new VfsBlobAccessor(new FSProvider(new BlockingFS(new AbsolutePath("/"))));
+    RamBlobAccessor blobAccessor = new RamBlobAccessor(new FSProvider(new BlockingFS(new AbsolutePath("/"))));
 
     mVolumeManager = new VolumeManager();
 

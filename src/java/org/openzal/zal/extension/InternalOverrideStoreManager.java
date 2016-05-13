@@ -129,6 +129,11 @@ class InternalOverrideStoreManager
         ),
         new org.openzal.zal.Mailbox(mbox)
       ).sync();
+
+      if (!futureStage.isSuccess())
+      {
+        throw futureStage.cause();
+      }
     }
     catch (Throwable t)
     {
