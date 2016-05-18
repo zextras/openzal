@@ -30,7 +30,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 1.10.5 </echo>
+    <echo> Building ZAL version 1.11.0 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -80,7 +80,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="1.10.5" />
+           <attribute name="Specification-Version" value="1.11.0" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -147,7 +147,7 @@
       <jar jarfile="${dist}/zal-itbase.jar" compress="false">
         <manifest>
           <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-          <attribute name="Specification-Version" value="1.10.5" />
+          <attribute name="Specification-Version" value="1.11.0" />
           <attribute name="Specification-Vendor" value="ZeXtras" />
           <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
           <attribute name="Created-By" value="ZeXtras" />
@@ -881,7 +881,7 @@
   <target name="fast-compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="5" arg2="0" />
+      <equals arg1="0" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -920,7 +920,7 @@
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="5" arg2="0" />
+      <equals arg1="0" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -965,16 +965,16 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="1.10.5"/>
+          value="1.11.0"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="1"/>
         <replacefilter
           token="@VERSION_MINOR@"
-          value="10"/>
+          value="11"/>
         <replacefilter
           token="@VERSION_MICRO@"
-          value="5"/>
+          value="0"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
           value="6.0.7"/>
@@ -993,14 +993,14 @@
     <delete dir="${deb-dir-tmp}"/>
 
     <mkdir dir="${deb-dir-tmp}"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-1.10"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-1.10/DEBIAN"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.11"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.11/usr/share/openzal/1.11"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-1.11/DEBIAN"/>
 
     <prepare-build-template srcFile="tools/deb_control_template"
-                            destFile="${deb-dir-tmp}/openzal-1.10/DEBIAN/control" />
+                            destFile="${deb-dir-tmp}/openzal-1.11/DEBIAN/control" />
 
-    <copy todir="${deb-dir-tmp}/openzal-1.10/usr/share/openzal/1.10">
+    <copy todir="${deb-dir-tmp}/openzal-1.11/usr/share/openzal/1.11">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1010,9 +1010,9 @@
           dir="${deb-dir-tmp}"
           failonerror="true">
       <arg value="--build"/>
-      <arg value="openzal-1.10"/>
+      <arg value="openzal-1.11"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-1.10.deb" todir="." />
+    <move file="${deb-dir-tmp}/openzal-1.11.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
@@ -1025,15 +1025,15 @@
     <delete dir="${rpm-dir-tmp}"/>
 
     <mkdir dir="${rpm-dir-tmp}"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-1.10"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/buildroot/usr/share/openzal/1.10"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/SPEC"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-1.10/RPMS"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.11"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.11/buildroot/usr/share/openzal/1.11"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.11/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-1.11/RPMS"/>
 
     <prepare-build-template srcFile="tools/rpm_spec_template"
-                            destFile="${rpm-dir-tmp}/openzal-1.10/SPEC/openzal-1.10.spec" />
+                            destFile="${rpm-dir-tmp}/openzal-1.11/SPEC/openzal-1.11.spec" />
 
-    <copy todir="${rpm-dir-tmp}/openzal-1.10/buildroot/usr/share/openzal/1.10">
+    <copy todir="${rpm-dir-tmp}/openzal-1.11/buildroot/usr/share/openzal/1.11">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1043,10 +1043,10 @@
           dir="${rpm-dir-tmp}"
           failonerror="true">
       <arg value="-bb"/>
-      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-1.10/buildroot"/>
-      <arg value="openzal-1.10/SPEC/openzal-1.10.spec"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-1.11/buildroot"/>
+      <arg value="openzal-1.11/SPEC/openzal-1.11.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-1.10/RPMS/noarch/openzal-1.10-5-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-1.11/RPMS/noarch/openzal-1.11-0-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
