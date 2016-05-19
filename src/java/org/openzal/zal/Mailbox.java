@@ -1304,7 +1304,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    return search(octxt, queryString, types, sortBy, chunkSize, 0, false);
+    return search(octxt, queryString, types, sortBy, chunkSize, 0, false, false);
   }
 
   @NotNull
@@ -1315,7 +1315,8 @@ public class Mailbox
     @NotNull SortedBy sortBy,
     int chunkSize,
     int offset,
-    boolean onlyIds
+    boolean onlyIds,
+    boolean inDumpster
   )
     throws IOException, ZimbraException
   {
@@ -1338,7 +1339,7 @@ public class Mailbox
       params.setSortBy(sortBy.toZimbra(SortBy.class));
       params.setPrefetch(true);
       params.setFetchMode(fetchMode);
-      params.setInDumpster(false);
+      params.setInDumpster(inDumpster);
       params.setLimit(chunkSize + offset);
       params.setOffset(offset);
 
@@ -1358,7 +1359,7 @@ public class Mailbox
       com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
 
  $if ZimbraVersion >= 7.0.0 $
-      params.setInDumpster(false);
+      params.setInDumpster(inDumpster);
 $endif$
 
       com.zimbra.cs.mailbox.Mailbox.SearchResultMode fetchMode = onlyIds ? com.zimbra.cs.mailbox.Mailbox.SearchResultMode.IDS : com.zimbra.cs.mailbox.Mailbox.SearchResultMode.NORMAL;
