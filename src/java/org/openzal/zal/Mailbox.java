@@ -1315,6 +1315,21 @@ public class Mailbox
     @NotNull SortedBy sortBy,
     int chunkSize,
     int offset,
+    boolean onlyIds
+  )
+          throws IOException, ZimbraException
+  {
+    return search(octxt, queryString, types, sortBy, chunkSize, offset, onlyIds, false);
+  }
+
+  @NotNull
+  public QueryResults search(
+    @NotNull OperationContext octxt,
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize,
+    int offset,
     boolean onlyIds,
     boolean inDumpster
   )
