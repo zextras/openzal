@@ -387,9 +387,17 @@ public final class StoreManagerSimulator extends StoreManager
   }
 
   public boolean delete(MailboxBlob mblob) throws IOException {
-    mStoreRoot.getRoot().resolveFile(
+    com.zextras.lib.vfs.File file = mStoreRoot.getRoot().resolveFile(
       getBlobPath(mblob)
     );
+    try
+    {
+      file.remove();
+    }
+    catch (MissingWritePermissions e)
+    {
+      throw new IOException(e);
+    }
     return true;
   }
 
