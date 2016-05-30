@@ -1,4 +1,4 @@
-package com.zimbra.cs.store.file;
+package org.openzal.zal;
 
 import com.zimbra.cs.store.Blob;
 

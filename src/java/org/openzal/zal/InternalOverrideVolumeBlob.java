@@ -1,9 +1,6 @@
-package com.zimbra.cs.store.file;
+package org.openzal.zal;
 
 import org.apache.commons.io.IOUtils;
-import org.openzal.zal.Blob;
-import org.openzal.zal.StagedBlob;
-import org.openzal.zal.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,19 +9,17 @@ import java.io.InputStream;
 
 public class InternalOverrideVolumeBlob extends VolumeBlob
 {
-  static File mFile = new File("/tmp/12345");
-
-  private final StagedBlob   mBlob;
+  private final Blob   mBlob;
   private final String mVolumeId;
 
-  public InternalOverrideVolumeBlob(StagedBlob blob)
+  public InternalOverrideVolumeBlob(Blob blob)
   {
-    super(mFile, Short.parseShort(blob.getVolumeId()));
+    super(blob.getFile(), Short.parseShort(blob.getVolumeId()));
     mBlob = blob;
     mVolumeId = blob.getVolumeId();
   }
 
-  public StagedBlob getWrappedObject()
+  public Blob getWrappedObject()
   {
     return mBlob;
   }
@@ -37,9 +32,7 @@ public class InternalOverrideVolumeBlob extends VolumeBlob
   @Override
   public File getFile()
   {
-    // TODO tmp file?
-    //return mBlob.getFile();
-    return null;
+    return mBlob.getFile();
   }
 
   @Override
@@ -85,8 +78,7 @@ public class InternalOverrideVolumeBlob extends VolumeBlob
   @Override
   public long getRawSize() throws IOException
   {
-    //return mBlob.getRawSize();
-    return 0;
+    return mBlob.getRawSize();
   }
 
   @Override
@@ -145,5 +137,17 @@ public class InternalOverrideVolumeBlob extends VolumeBlob
   public String toString()
   {
     return mBlob.toString();
+  }
+
+  public static Object wrap(Blob blob)
+  {
+    if (blob.getVolumeId() != null)
+    {
+      return new InternalOverrideVolumeBlob(blob);
+    }
+    else
+    {
+      return new InternalOverrideBlob(blob);
+    }
   }
 }

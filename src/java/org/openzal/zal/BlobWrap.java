@@ -20,9 +20,13 @@
 
 package com.zimbra.cs.store.file;
 
+import com.zimbra.cs.store.file.InternalOverrideVolumeBlob;
+import com.zimbra.cs.store.file.VolumeStagedBlob;
+import io.netty.util.concurrent.DefaultPromise;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.Blob;
-import org.openzal.zal.InternalOverrideStagedBlob;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +35,22 @@ import java.io.InputStream;
 public class BlobWrap implements Blob
 {
   @NotNull private final com.zimbra.cs.store.Blob mBlob;
+  private final String mVolumeId;
 
   public BlobWrap(
-    @NotNull Object blob
+    @NotNull Object blob,
+    String volumeId
   )
   {
     if (blob == null)
     {
       throw new NullPointerException();
     }
+    if (volumeId == null && blob instanceof VolumeStagedBlob)
+    {
+      volumeId = String.valueOf(((VolumeStagedBlob) blob).getLocator());
+    }
+    mVolumeId = volumeId;
     mBlob = (com.zimbra.cs.store.Blob) blob;
   }
 
@@ -74,6 +85,12 @@ public class BlobWrap implements Blob
   }
 
   @Override
+  public String getVolumeId()
+  {
+    return mVolumeId;
+  }
+
+  @Override
   public InputStream getInputStream() throws IOException
   {
     return null;
@@ -85,23 +102,39 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public void renameTo(String newPath) throws IOException
+  public Future<Void> renameTo(String newPath)
   {
-    mBlob.renameTo(newPath);
+    try
+    {
+      mBlob.renameTo(newPath);
+    }
+    catch (IOException e)
+    {
+      return new DefaultPromise<Void>(ImmediateEventExecutor.INSTANCE).setFailure(e);
+    }
+
+    return new DefaultPromise<Void>(ImmediateEventExecutor.INSTANCE).setSuccess(null);
   }
 
-  public static Blob wrapZimbraObject(Object blob)
+  public static Blob wrapZimbraObject(Object blob, @Nullable String volumeId)
   {
+    // TODO if volumeId == null check if blob instanceof VolumeBlob
     if (blob instanceof Blob)
       return (Blob) blob;
 
     if (blob instanceof InternalOverrideBlob)
       return ((InternalOverrideBlob) blob).getWrappedObject();
 
+    //if (blob instanceof InternalOverrideVolumeBlob)
+      //return ((InternalOverrideVolumeBlob) blob).getWrappedObject();
+
     if (blob instanceof InternalOverrideStagedBlob)
       return ((InternalOverrideStagedBlob) blob).getWrappedObject();
 
-    return new BlobWrap(blob);
+    if (blob instanceof VolumeStagedBlob)
+      return new BlobWrap(((VolumeStagedBlob) blob).getLocalBlob(), volumeId);
+
+    return new BlobWrap(blob, volumeId);
   }
 
   @Override
