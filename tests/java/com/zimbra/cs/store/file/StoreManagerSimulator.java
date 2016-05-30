@@ -1,7 +1,5 @@
 package com.zimbra.cs.store.file;
 
-import com.zextras.lib.Error.MissingReadPermissions;
-import com.zextras.lib.Error.MissingWritePermissions;
 import com.zextras.lib.vfs.FileStreamWriter;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
@@ -30,6 +28,7 @@ import java.util.UUID;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
+import org.openzal.zal.InternalOverrideBlob;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;

@@ -3,6 +3,7 @@ package com.zimbra.cs.mailbox;
 import com.zextras.lib.activities.ActivityManager;
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.AbsolutePath;
+import com.zextras.lib.vfs.RootPath;
 import com.zextras.lib.vfs.blockingfs.BlockingFS;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zextras.powerstore.VfsPrimaryStoreAccessor;
@@ -143,9 +144,14 @@ public class ZimbraSimulator extends ExternalResource
     //com.zimbra.cs.store.StoreManager.getInstance().startup();
     //mStoreRoot = ((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).getStoreRoot();
     mStoreRoot = new RamFS();
+    BlockingFS blockingFs = new BlockingFS(new RootPath());
 
     ActivityManager activityManager = new ActivityManager();
-    RamBlobAccessor blobAccessor = new RamBlobAccessor(new FSProvider(new BlockingFS(new AbsolutePath("/"))));
+    RamBlobAccessor blobAccessor = new RamBlobAccessor(
+      mStoreRoot,
+      new FSProvider(mStoreRoot),
+      blockingFs.getRoot().resolveDirectory("tmp").resolveDirectory("zimbraCache")
+    );
 
     mVolumeManager = new VolumeManager();
 
@@ -154,7 +160,6 @@ public class ZimbraSimulator extends ExternalResource
       mVolumeManager,
       blobAccessor,
       new VfsStoreAccessor(
-        activityManager,
         blobAccessor,
         mStoreRoot
       )

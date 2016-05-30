@@ -1,8 +1,10 @@
 package org.openzal.zal.extension;
 
-import com.zextras.lib.Promise;
-import com.zextras.lib.PromiseBooleanAggregator;
+import io.netty.util.concurrent.DefaultPromise;
 import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+import io.netty.util.concurrent.ImmediateEventExecutor;
+import io.netty.util.concurrent.Promise;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Blob;
 import org.openzal.zal.BlobBuilder;
@@ -21,6 +23,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -151,17 +155,19 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public Future<Boolean> delete(Mailbox mailbox, Iterable blobs) throws IOException
   {
-    Promise<Boolean> future = new Promise<Boolean>();
-    PromiseBooleanAggregator futureListener = new PromiseBooleanAggregator(future);
+    DefaultPromise<Boolean> promise = new DefaultPromise<Boolean>(ImmediateEventExecutor.INSTANCE);
+    FutureBooleanAggregator futureListener = new FutureBooleanAggregator(promise);
     for (Map.Entry<String, StoreAccessor> entry : mStoreAccessors.entrySet())
     {
-      entry.getValue().delete(mailbox, blobs, entry.getKey()).addListener(
-        futureListener.incWaitingCount()
-      );
+      if (!promise.isDone())
+      {
+        entry.getValue().delete(mailbox, blobs, entry.getKey()).addListener(
+          futureListener.incWaitingCount()
+        );
+      }
     }
-    futureListener.requestsDone();
 
-    return future;
+    return futureListener.requestDone();
   }
 
   @Override
@@ -238,5 +244,51 @@ public class StoreManagerImpl implements StoreManager
   public Future<MailboxBlob> renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
   {
     return mDefaultStoreAccessor.renameTo(src, destMbox, destMsgId, destRevision);
+  }
+
+  private static class FutureBooleanAggregator implements GenericFutureListener<Future<Boolean>>
+  {
+    private final Promise<Boolean> mPromise;
+    private final AtomicInteger mCount;
+    private final AtomicBoolean mResult;
+
+    FutureBooleanAggregator(Promise<Boolean> promise)
+    {
+      mPromise = promise;
+      mCount = new AtomicInteger(0);
+      mResult = new AtomicBoolean(false);
+    }
+
+    @Override
+    public void operationComplete(Future<Boolean> booleanFuture) throws Exception
+    {
+      if (!mPromise.isDone())
+      {
+        if (booleanFuture.isSuccess())
+        {
+          mCount.decrementAndGet();
+          mResult.getAndSet(true);
+          if (mCount.get() == 0)
+          {
+            mPromise.setSuccess(mResult.get());
+          }
+        }
+        else
+        {
+          mPromise.setFailure(booleanFuture.cause());
+        }
+      }
+    }
+
+    public FutureBooleanAggregator incWaitingCount()
+    {
+      mCount.intValue();
+      return this;
+    }
+
+    public Future<Boolean> requestDone()
+    {
+      return mPromise;
+    }
   }
 }

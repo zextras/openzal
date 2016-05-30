@@ -1,13 +1,13 @@
 package org.openzal.zal.extension;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.store.file.BlobWrap;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import io.netty.util.concurrent.Future;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,14 @@ import java.lang.reflect.Method;
 class InternalOverrideStoreManager
   extends com.zimbra.cs.store.StoreManager
 {
-  private org.openzal.zal.StoreManager mZALStoreManager;
+  private final VolumeManager mVolumeManager;
+  // TODO maybe PrimaryStoreAccessr?
+   private org.openzal.zal.StoreManager mZALStoreManager;
+
+  public InternalOverrideStoreManager(VolumeManager volumeManager)
+  {
+    mVolumeManager = volumeManager;
+  }
 
   public void startup() throws IOException, ServiceException
   {
@@ -45,7 +52,7 @@ class InternalOverrideStoreManager
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
-    return (BlobBuilder) mZALStoreManager.getBlobBuilder().toZimbra(BlobBuilder.class);
+    return InternalOverrideBlobBuilder.wrap(mZALStoreManager.getBlobBuilder());
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
@@ -125,7 +132,8 @@ class InternalOverrideStoreManager
     {
       futureStage = mZALStoreManager.stage(
         BlobWrap.wrapZimbraObject(
-          blob
+          blob,
+          mVolumeManager.getCurrentMessageVolume().getId()
         ),
         new org.openzal.zal.Mailbox(mbox)
       ).sync();
@@ -148,7 +156,8 @@ class InternalOverrideStoreManager
   {
     Future<org.openzal.zal.MailboxBlob> future = mZALStoreManager.copy(
       BlobWrap.wrapZimbraObject(
-        src.getLocalBlob()
+        src.getLocalBlob(),
+        src.getLocator()
       ),
       new org.openzal.zal.Mailbox(destMbox),
       destMsgId, destRevision
@@ -174,7 +183,7 @@ class InternalOverrideStoreManager
     throws IOException, ServiceException
   {
     Future<org.openzal.zal.MailboxBlob> future = mZALStoreManager.link(
-      BlobWrap.wrapZimbraObject(src),
+      BlobWrap.wrapZimbraObject(src, src.getLocator()),
       new org.openzal.zal.Mailbox(destMbox),
       destMsgId,
       destRevision
@@ -260,7 +269,7 @@ class InternalOverrideStoreManager
     try
     {
       future = mZALStoreManager.delete(
-        BlobWrap.wrapZimbraObject(blob)
+        BlobWrap.wrapZimbraObject(blob, null)
       ).sync();
 
       if (!future.isSuccess())
@@ -332,7 +341,8 @@ class InternalOverrideStoreManager
     {
       future = mZALStoreManager.delete(
         BlobWrap.wrapZimbraObject(
-          mblob
+          mblob,
+          mblob.getLocator()
         )
       );
 
@@ -361,6 +371,14 @@ class InternalOverrideStoreManager
   }
 
   @Nullable
+  public MailboxBlob getMailboxBlob(MailItem mailItem) throws ServiceException
+  {
+    return getMailboxBlob(
+      mailItem.getMailbox(), mailItem.getId(), mailItem.getSavedSequence(), mailItem.getLocator()
+    );
+  }
+
+  @Nullable
   public InputStream getContent(MailboxBlob mboxBlob) throws IOException
   {
     return getContent(mboxBlob.getLocalBlob());
@@ -370,7 +388,8 @@ class InternalOverrideStoreManager
   {
     return mZALStoreManager.getContent(
       BlobWrap.wrapZimbraObject(
-        blob
+        blob,
+        null
       )
     );
   }
@@ -409,6 +428,24 @@ class InternalOverrideStoreManager
     }
 
     return future.getNow();
+  }
+
+  public boolean quietDelete(Blob blob)
+  {
+    try
+    {
+      Future<Boolean> future = mZALStoreManager.delete(BlobWrap.wrapZimbraObject(blob, null));
+      future.sync();
+      if (!future.isSuccess())
+      {
+        return false;
+      }
+      return future.get();
+    }
+    catch (Throwable t)
+    {
+      return false;
+    }
   }
 
   public void setZALStoreManager(org.openzal.zal.StoreManager zalStoreManager)

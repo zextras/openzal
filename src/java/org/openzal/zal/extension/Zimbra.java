@@ -229,10 +229,11 @@ public class Zimbra
     PrimaryStoreAccessor primaryStoreAccessor
   )
   {
+    // TODO use only PrimaryStoreAccessor, StoreManager used in PowerStore Module
     ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
     try
     {
-      mStoreManager = new InternalOverrideStoreManager();
+      mStoreManager = new InternalOverrideStoreManager(mVolumeManager);
       mStoreManager.setZALStoreManager(
         new StoreManagerImpl(primaryStoreAccessor)
       );

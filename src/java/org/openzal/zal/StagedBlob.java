@@ -23,6 +23,5 @@ package org.openzal.zal;
 public interface StagedBlob extends Blob
 {
   Mailbox getMailbox();
-  String getVolumeId();
   Blob getLocalBlob();
 }

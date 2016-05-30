@@ -1,12 +1,10 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.store.file.InternalOverrideBlob;
-
 public class InternalOverrideFactory
 {
   public static Object wrapBlob(Blob blob)
   {
-    return InternalOverrideBlob.wrap(blob);
+    return InternalOverrideVolumeBlob.wrap(blob);
   }
 
   public static Object wrapMailboxBlob(MailboxBlob blob)

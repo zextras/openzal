@@ -120,4 +120,13 @@ public class InternalOverrideBlobBuilder extends com.zimbra.cs.store.BlobBuilder
   {
     mBlobBuilder.dispose();
   }
+
+  public static com.zimbra.cs.store.BlobBuilder wrap(BlobBuilder blobBuilder)
+  {
+    if (blobBuilder instanceof BlobBuilderWrap)
+    {
+      return (com.zimbra.cs.store.BlobBuilder) ((BlobBuilderWrap)blobBuilder).getWrappedObject();
+    }
+    return new InternalOverrideBlobBuilder(blobBuilder);
+  }
 }

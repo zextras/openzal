@@ -21,10 +21,15 @@
 package org.openzal.zal.extension;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.Utils;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.AllPermission;
 import java.security.CodeSigner;
@@ -38,7 +43,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.zip.ZipFile;
 
 @SuppressWarnings({"SynchronizedMethod", "rawtypes", "CustomClassloader"})
 public class BootstrapClassLoader extends ClassLoader
@@ -53,6 +57,50 @@ public class BootstrapClassLoader extends ClassLoader
   private final JarFile[] mJarFileList;
   private final URL[]     mUrls;
   private       boolean   mInitialized;
+
+  static
+  {
+    try
+    {
+      Field modifiersMethod = Method.class.getDeclaredField("modifiers");
+      modifiersMethod.setAccessible(true);
+      Method defineClassMethod = ClassLoader.class.getDeclaredMethod(
+        "defineClass", byte[].class, int.class, int.class
+      );
+      defineClassMethod.setAccessible(true);
+      modifiersMethod.setInt(
+        defineClassMethod,
+        (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
+      );
+
+      Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
+      ClassLoader parentClassLoader = parentClass.getClassLoader();
+
+      InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
+      byte[] buffer = new byte[6 * 1024];
+      int idx = 0;
+      int read = 0;
+      while (read > -1)
+      {
+        idx += read;
+        if (buffer.length == idx)
+        {
+          buffer = Arrays.copyOf(buffer, buffer.length * 2);
+        }
+        read = is.read(buffer, idx, buffer.length - idx);
+      }
+
+      defineClassMethod.invoke(
+        parentClassLoader,
+        buffer, 0, idx
+      );
+    }
+    catch (Exception e)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection error " + Utils.exceptionToString(e));
+      throw new RuntimeException(e);
+    }
+  }
 
   public BootstrapClassLoader(URL[] urls, ClassLoader parent, boolean delegateZalLoading)
   {

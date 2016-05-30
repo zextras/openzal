@@ -1,8 +1,8 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.store.file.BlobWrap;
-import com.zimbra.cs.store.file.InternalOverrideBlob;
-import com.zimbra.cs.store.file.InternalOverrideVolumeBlob;
+import io.netty.util.concurrent.DefaultPromise;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -62,11 +62,6 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
     return null;
   }
 
-  public Blob getBlob()
-  {
-    return BlobWrap.wrapZimbraObject(mStagedBlob.getLocalBlob());
-  }
-
   @Override
   public void renameTo(String newPath) throws IOException
   {
@@ -100,14 +95,14 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public Blob getLocalBlob()
   {
-    return BlobWrap.wrapZimbraObject(mStagedBlob.getLocalBlob());
+    return BlobWrap.wrapZimbraObject(mStagedBlob.getLocalBlob(), mStagedBlob.getLocator());
   }
 
   public static StagedBlob wrapZimbraObject(Object stagedBlob)
   {
-    if (stagedBlob instanceof InternalOverrideVolumeBlob)
+    if (stagedBlob instanceof InternalOverrideStagedBlob)
     {
-      return ((InternalOverrideVolumeBlob) stagedBlob).getWrappedObject();
+      return ((InternalOverrideStagedBlob) stagedBlob).getWrappedObject();
     }
 
     return new StagedBlobWrap(stagedBlob);

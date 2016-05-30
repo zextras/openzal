@@ -1,7 +1,6 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.store.file.BlobWrap;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -107,7 +106,7 @@ public class BlobBuilderWrap implements BlobBuilder
   {
     try
     {
-      return BlobWrap.wrapZimbraObject(mBlobBuilder.finish());
+      return BlobWrap.wrapZimbraObject(mBlobBuilder.finish(), mVolumeId);
     }
     catch (ServiceException e)
     {
@@ -118,13 +117,7 @@ public class BlobBuilderWrap implements BlobBuilder
   @Override
   public Blob getBlob()
   {
-    return BlobWrap.wrapZimbraObject(mBlobBuilder.getBlob());
-  }
-
-  @Override
-  public <T> T toZimbra(Class<T> cls)
-  {
-    return cls.cast(this);
+    return BlobWrap.wrapZimbraObject(mBlobBuilder.getBlob(), mVolumeId);
   }
 
   BlobBuilderWrap(@NotNull Object blobBuilder, String volumeId)
@@ -144,5 +137,10 @@ public class BlobBuilderWrap implements BlobBuilder
       return ((InternalOverrideBlobBuilder) blobBuilder).getWrappedObject();
 
     return new BlobBuilderWrap(blobBuilder, volumeId);
+  }
+
+  public Object getWrappedObject()
+  {
+    return mBlobBuilder;
   }
 }

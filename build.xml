@@ -72,6 +72,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -177,6 +178,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -282,6 +284,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -387,6 +390,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -492,6 +496,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -597,6 +602,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -702,6 +708,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -807,6 +814,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -912,6 +920,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1017,6 +1026,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1122,6 +1132,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1227,6 +1238,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1332,6 +1344,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1437,6 +1450,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1542,6 +1556,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1647,6 +1662,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1752,6 +1768,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1857,6 +1874,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -1962,6 +1980,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2067,6 +2086,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2172,6 +2192,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2277,6 +2298,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2382,6 +2404,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2487,6 +2510,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2592,6 +2616,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2697,6 +2722,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2802,6 +2828,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -2907,6 +2934,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3012,6 +3040,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3117,6 +3146,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3222,6 +3252,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3327,6 +3358,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3432,6 +3464,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3537,6 +3570,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3642,6 +3676,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3747,6 +3782,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
@@ -3852,6 +3888,7 @@
     </classpath>
    <compilerarg value="-Xlint:none" />
   </javac>
+  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
   <delete dir="${tmpsrc}/"/>
 
   <jar jarfile="${dist}/zal.jar.unsigned" compress="false">

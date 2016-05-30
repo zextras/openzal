@@ -24,9 +24,6 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.store.file.BlobWrap;
-import com.zimbra.cs.store.file.InternalOverrideBlob;
-import com.zimbra.cs.store.file.InternalOverrideVolumeBlob;
 import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import io.netty.util.concurrent.DefaultPromise;
 import io.netty.util.concurrent.Future;
@@ -101,7 +98,7 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
     try
     {
       VolumeMailboxBlob volumeMailboxBlob = getFileBlobStore().copy(
-        com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(src)),
+        com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(src)),
         destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
         destMsgId,
         destRevision,
@@ -139,7 +136,7 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
     try
     {
       VolumeMailboxBlob volumeMailboxBlob = getFileBlobStore().link(
-        com.zimbra.cs.store.Blob.class.cast(new InternalOverrideBlob(src)),
+        com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(src)),
         destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
         destMsgId,
         destRevision,
@@ -164,7 +161,7 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
     try
     {
       return future.setSuccess(
-        sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideBlob.wrap(blob)))
+        sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob)))
       );
     }
     catch (IOException e)
@@ -230,7 +227,7 @@ public class ZimbraStoreWrap implements org.openzal.zal.StoreManager
       blob = sm.storeIncoming(data, 0L, null, storeAsIs);
       /* $endif $ */
       return future.setSuccess(
-        BlobWrap.wrapZimbraObject(blob)
+        BlobWrap.wrapZimbraObject(blob, mVolumeManager.getCurrentMessageVolume().getId())
       );
     }
     catch (com.zimbra.common.service.ServiceException e)

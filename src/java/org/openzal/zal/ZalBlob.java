@@ -1,6 +1,9 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.store.file.InternalOverrideBlob;
+import io.netty.util.concurrent.DefaultPromise;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.ImmediateEventExecutor;
+import io.netty.util.concurrent.Promise;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,12 +13,14 @@ import java.io.InputStream;
 public class ZalBlob implements Blob
 {
   private final File mFile;
+  private final String mVolumeId;
   private final String mDigest;
   private final long mRawSize;
 
-  public ZalBlob(File file, String digest, long rawSize)
+  public ZalBlob(File file, String volumeId, String digest, long rawSize)
   {
     mFile = file;
+    mVolumeId = volumeId;
     mDigest = digest;
     mRawSize = rawSize;
   }
@@ -58,6 +63,12 @@ public class ZalBlob implements Blob
   public long getRawSize()
   {
     return mRawSize;
+  }
+
+  @Override
+  public String getVolumeId()
+  {
+    return mVolumeId;
   }
 
   @Override

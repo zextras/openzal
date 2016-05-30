@@ -18,9 +18,8 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.zimbra.cs.store.file;
+package org.openzal.zal;
 
-import com.zimbra.cs.store.file.InternalOverrideVolumeBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import io.netty.util.concurrent.DefaultPromise;
 import io.netty.util.concurrent.Future;
@@ -93,7 +92,7 @@ public class BlobWrap implements Blob
   @Override
   public InputStream getInputStream() throws IOException
   {
-    return null;
+    return mBlob.getInputStream();
   }
 
   public String getKey()
@@ -102,18 +101,9 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public Future<Void> renameTo(String newPath)
+  public void renameTo(String newPath) throws IOException
   {
-    try
-    {
-      mBlob.renameTo(newPath);
-    }
-    catch (IOException e)
-    {
-      return new DefaultPromise<Void>(ImmediateEventExecutor.INSTANCE).setFailure(e);
-    }
-
-    return new DefaultPromise<Void>(ImmediateEventExecutor.INSTANCE).setSuccess(null);
+    mBlob.renameTo(newPath);
   }
 
   public static Blob wrapZimbraObject(Object blob, @Nullable String volumeId)
@@ -125,11 +115,11 @@ public class BlobWrap implements Blob
     if (blob instanceof InternalOverrideBlob)
       return ((InternalOverrideBlob) blob).getWrappedObject();
 
-    //if (blob instanceof InternalOverrideVolumeBlob)
-      //return ((InternalOverrideVolumeBlob) blob).getWrappedObject();
-
     if (blob instanceof InternalOverrideStagedBlob)
       return ((InternalOverrideStagedBlob) blob).getWrappedObject();
+
+    if (blob instanceof InternalOverrideVolumeBlob)
+      return ((InternalOverrideVolumeBlob) blob).getWrappedObject();
 
     if (blob instanceof VolumeStagedBlob)
       return new BlobWrap(((VolumeStagedBlob) blob).getLocalBlob(), volumeId);
