@@ -1,5 +1,6 @@
 package org.openzal.zal;
 
+import com.zimbra.cs.store.*;
 import com.zimbra.cs.store.file.VolumeBlobProxy;
 import org.apache.commons.io.IOUtils;
 
@@ -142,6 +143,14 @@ public class InternalOverrideVolumeBlob extends VolumeBlobProxy
 
   public static Object wrap(Blob blob)
   {
+    if (blob instanceof BlobWrap)
+    {
+      return blob.toZimbra(com.zimbra.cs.store.Blob.class);
+    }
+    if (blob instanceof MailboxBlobWrap)
+    {
+      return InternalOverrideFactory.wrapBlob(((MailboxBlobWrap) blob).getLocalBlob());
+    }
     if (blob.getVolumeId() != null)
     {
       return new InternalOverrideVolumeBlob(blob);

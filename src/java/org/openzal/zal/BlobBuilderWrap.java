@@ -106,7 +106,7 @@ public class BlobBuilderWrap implements BlobBuilder
   {
     try
     {
-      return BlobWrap.wrapZimbraObject(mBlobBuilder.finish(), mVolumeId);
+      return BlobWrap.wrapZimbraBlob(mBlobBuilder.finish(), mVolumeId);
     }
     catch (ServiceException e)
     {
@@ -117,7 +117,7 @@ public class BlobBuilderWrap implements BlobBuilder
   @Override
   public Blob getBlob()
   {
-    return BlobWrap.wrapZimbraObject(mBlobBuilder.getBlob(), mVolumeId);
+    return BlobWrap.wrapZimbraBlob(mBlobBuilder.getBlob(), mVolumeId);
   }
 
   BlobBuilderWrap(@NotNull Object blobBuilder, String volumeId)

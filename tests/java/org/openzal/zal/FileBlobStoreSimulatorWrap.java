@@ -119,7 +119,12 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException
   {
-    throw new RuntimeException();
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
+    /* $else $
+    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
+    /* $endif $ */
+    return new StoreManagerSimulator.MockVolumeStagedBlob(mbox, (StoreManagerSimulator.MockBlob) blob, volumeId);
   }
 
   @Override

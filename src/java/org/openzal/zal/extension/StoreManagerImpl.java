@@ -1,69 +1,54 @@
 package org.openzal.zal.extension;
 
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
-import io.netty.util.concurrent.ImmediateEventExecutor;
-import io.netty.util.concurrent.Promise;
-import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.Blob;
-import org.openzal.zal.BlobBuilder;
-import org.openzal.zal.Mailbox;
-import org.openzal.zal.MailboxBlob;
-import org.openzal.zal.PrimaryStoreAccessor;
-import org.openzal.zal.StagedBlob;
-import org.openzal.zal.StoreAccessor;
-import org.openzal.zal.StoreAccessorFactory;
-import org.openzal.zal.StoreFeature;
+import org.openzal.zal.PrimaryStore;
+import org.openzal.zal.FileBlobPrimaryStore;
+import org.openzal.zal.Store;
+import org.openzal.zal.StoreFactory;
 import org.openzal.zal.StoreManager;
-import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.StoreVolume;
+import org.openzal.zal.VolumeManager;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 public class StoreManagerImpl implements StoreManager
 {
-  private final PrimaryStoreAccessor mDefaultStoreAccessor;
-  private final HashMap<String, StoreAccessor> mStoreAccessors;
-  private final HashMap<String, StoreAccessorFactory> mStoreAccessorFactories;
-
-  private final ReentrantLock mLock;
+  private final Map<String, Store>        mStores;
+  private final Map<String, StoreFactory> mStoreFactories;
+  private final ReentrantLock             mLock;
+  private final VolumeManager             mVolumeManager;
+  private final StoreFactory              mFileBlobStoreFactory;
 
   public StoreManagerImpl(
-    PrimaryStoreAccessor defaultStoreAccessor
+    final Object fileBlobStore,
+    VolumeManager volumeManager
   )
   {
+    mVolumeManager = volumeManager;
     mLock = new ReentrantLock();
-    mDefaultStoreAccessor = defaultStoreAccessor;
-    mStoreAccessorFactories = new HashMap<String, StoreAccessorFactory>();
-    mStoreAccessors = new HashMap<String, StoreAccessor>();
+    mStoreFactories = new HashMap<String, StoreFactory>();
+    mStores = new HashMap<String, Store>();
+    mFileBlobStoreFactory = new StoreFactory()
+    {
+      @Override
+      public Store make(String volumeId)
+      {
+        return new FileBlobPrimaryStore(fileBlobStore, mVolumeManager.getById(volumeId));
+      }
+    };
   }
 
-  private StoreAccessor selectStoreAccessor(String id)
+  @Override
+  public void register(StoreFactory storeFactory, String volumeId)
   {
     mLock.lock();
     try
     {
-      if (!mStoreAccessors.containsKey(id))
-      {
-        if (mStoreAccessorFactories.containsKey(id))
-        {
-          mStoreAccessors.put(id, mStoreAccessorFactories.get(id).make(id));
-        }
-        else
-        {
-          mStoreAccessors.put(id, mDefaultStoreAccessor);
-        }
-      }
-
-      return mStoreAccessors.get(id);
+      mStores.put(volumeId, storeFactory.make(volumeId));
+      mStoreFactories.put(volumeId, storeFactory);
     }
     finally
     {
@@ -72,13 +57,12 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public void registerStoreAccessor(StoreAccessorFactory storeAccessorFactory, String volumeId)
+  public void unregister(String volumeId)
   {
     mLock.lock();
     try
     {
-      mStoreAccessors.put(volumeId, storeAccessorFactory.make(volumeId));
-      mStoreAccessorFactories.put(volumeId, storeAccessorFactory);
+      mStores.remove(volumeId);
     }
     finally
     {
@@ -87,118 +71,15 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public void invalidateStoreAccessor(Collection<String> volumes)
+  public void makeActive(String volumeId)
   {
-    mLock.lock();
-    try
-    {
-      for (String volumeId : volumes)
-      {
-        mStoreAccessors.remove(volumeId);
-      }
-    }
-    finally
-    {
-      mLock.unlock();
-    }
+    mVolumeManager.setCurrentVolume(StoreVolume.TYPE_MESSAGE, Short.parseShort(volumeId));
   }
 
   @Override
-  public Future<Blob> storeIncoming(InputStream data, boolean storeAsIs) throws ZimbraException
+  public void startup() throws IOException
   {
-    return mDefaultStoreAccessor.storeIncoming(data, storeAsIs);
-  }
-
-  @Override
-  public Future<StagedBlob> stage(Blob blob, Mailbox mbox)
-  {
-    return mDefaultStoreAccessor.stage(blob, mbox);
-  }
-
-  @Nullable
-  @Override
-  public MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision, String locator) throws ZimbraException
-  {
-    return selectStoreAccessor(locator).getMailboxBlob(mbox, msgId, revision, locator);
-  }
-
-  @Override
-  public Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision)
-  {
-    return mDefaultStoreAccessor.copy(src, destMbox, destMsgId, destRevision);
-  }
-
-  @Override
-  public Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
-  {
-    return selectStoreAccessor(volumeId).copy(src, destMbox, destMsgId, destRevision, volumeId);
-  }
-
-  @Override
-  public Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision)
-  {
-    return mDefaultStoreAccessor.link(src, destMbox, destMsgId, destRevision);
-  }
-
-  @Override
-  public Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId)
-  {
-    return selectStoreAccessor(volumeId).link(src, destMbox, destMsgId, destRevision, volumeId);
-  }
-
-  @Override
-  public String getBlobPath(int mboxId, int itemId, int revision, String volumeId) throws ZimbraException
-  {
-    return selectStoreAccessor(volumeId).getBlobPath(mboxId, itemId, revision, volumeId);
-  }
-
-  @Override
-  public Future<Boolean> delete(Mailbox mailbox, Iterable blobs) throws IOException
-  {
-    DefaultPromise<Boolean> promise = new DefaultPromise<Boolean>(ImmediateEventExecutor.INSTANCE);
-    FutureBooleanAggregator futureListener = new FutureBooleanAggregator(promise);
-    for (Map.Entry<String, StoreAccessor> entry : mStoreAccessors.entrySet())
-    {
-      if (!promise.isDone())
-      {
-        entry.getValue().delete(mailbox, blobs, entry.getKey()).addListener(
-          futureListener.incWaitingCount()
-        );
-      }
-    }
-
-    return futureListener.requestDone();
-  }
-
-  @Override
-  public Future<Boolean> delete(Mailbox mailbox, Iterable blobs, String volumeId)
-  {
-    return selectStoreAccessor(volumeId).delete(mailbox, blobs, volumeId);
-  }
-
-  @Override
-  public Future<Boolean> delete(MailboxBlob blob)
-  {
-    return selectStoreAccessor(blob.getVolumeId()).delete(blob);
-  }
-
-  @Override
-  public Future<Boolean> delete(StagedBlob blob)
-  {
-    return selectStoreAccessor(blob.getVolumeId()).delete(blob);
-  }
-
-  @Override
-  public Future<Boolean> delete(Blob blob)
-  {
-    return mDefaultStoreAccessor.delete(blob);
-  }
-
-  @Override
-  public void startup() throws IOException, ZimbraException
-  {
-    mDefaultStoreAccessor.startup();
-    for (StoreAccessor store : mStoreAccessors.values())
+    for (Store store : mStores.values())
     {
       store.startup();
     }
@@ -207,88 +88,42 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public void shutdown()
   {
-    mDefaultStoreAccessor.shutdown();
-    for (StoreAccessor store : mStoreAccessors.values())
+    for (Store store : mStores.values())
     {
       store.shutdown();
     }
   }
 
   @Override
-  public boolean supports(StoreFeature feature)
+  public PrimaryStore getPrimaryStore()
   {
-    return mDefaultStoreAccessor.supports(feature);
+    Store store = getStore(mVolumeManager.getCurrentMessageVolume().getId());
+    return store.toPrimaryStore();
   }
 
   @Override
-  public BlobBuilder getBlobBuilder() throws IOException, ZimbraException
+  public Store getStore(String volumeId)
   {
-    return mDefaultStoreAccessor.getBlobBuilder();
-  }
-
-  @Nullable
-  @Override
-  public InputStream getContent(Blob blob, String volumeId) throws IOException
-  {
-    return selectStoreAccessor(volumeId).getContent(blob);
-  }
-
-  @Nullable
-  @Override
-  public InputStream getContent(Blob blob) throws IOException
-  {
-    return mDefaultStoreAccessor.getContent(blob);
-  }
-
-  @Override
-  public Future<MailboxBlob> renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
-  {
-    return mDefaultStoreAccessor.renameTo(src, destMbox, destMsgId, destRevision);
-  }
-
-  private static class FutureBooleanAggregator implements GenericFutureListener<Future<Boolean>>
-  {
-    private final Promise<Boolean> mPromise;
-    private final AtomicInteger mCount;
-    private final AtomicBoolean mResult;
-
-    FutureBooleanAggregator(Promise<Boolean> promise)
+    if (!mStores.containsKey(volumeId))
     {
-      mPromise = promise;
-      mCount = new AtomicInteger(0);
-      mResult = new AtomicBoolean(false);
-    }
-
-    @Override
-    public void operationComplete(Future<Boolean> booleanFuture) throws Exception
-    {
-      if (!mPromise.isDone())
+      Store store;
+      if (mStoreFactories.containsKey(volumeId))
       {
-        if (booleanFuture.isSuccess())
-        {
-          mCount.decrementAndGet();
-          mResult.getAndSet(true);
-          if (mCount.get() == 0)
-          {
-            mPromise.setSuccess(mResult.get());
-          }
-        }
-        else
-        {
-          mPromise.setFailure(booleanFuture.cause());
-        }
+        store = mStoreFactories.get(volumeId).make(volumeId);
       }
+      else
+      {
+        store = mFileBlobStoreFactory.make(volumeId);
+      }
+      mStores.put(volumeId, store);
     }
+    return mStores.get(volumeId);
+  }
 
-    public FutureBooleanAggregator incWaitingCount()
-    {
-      mCount.intValue();
-      return this;
-    }
-
-    public Future<Boolean> requestDone()
-    {
-      return mPromise;
-    }
+  @Override
+  public Collection<Store> getAllStores()
+  {
+    // TODO mVolumeManager.getAll()
+    return mStores.values();
   }
 }

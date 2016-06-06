@@ -35,7 +35,7 @@ import com.zimbra.cs.store.StorageCallback;
 import java.io.IOException;
 import java.io.InputStream;
 
-interface FileBlobStoreWrap
+public interface FileBlobStoreWrap
 {
     void startup() throws IOException, ServiceException;
 

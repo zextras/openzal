@@ -9,7 +9,6 @@ import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import io.netty.util.concurrent.Future;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -21,38 +20,42 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-class InternalOverrideStoreManager
+public class InternalOverrideStoreManager
   extends com.zimbra.cs.store.StoreManager
 {
+  private final org.openzal.zal.StoreManager mStoreManager;
   private final VolumeManager mVolumeManager;
   // TODO maybe PrimaryStoreAccessr?
-   private org.openzal.zal.StoreManager mZALStoreManager;
 
-  public InternalOverrideStoreManager(VolumeManager volumeManager)
+  public InternalOverrideStoreManager(
+    org.openzal.zal.StoreManager storeManager,
+    VolumeManager volumeManager
+  )
   {
+    mStoreManager = storeManager;
     mVolumeManager = volumeManager;
   }
 
-  public void startup() throws IOException, ServiceException
+  public void startup() throws IOException
   {
-    mZALStoreManager.startup();
+    mStoreManager.startup();
   }
 
   public void shutdown()
   {
-    mZALStoreManager.shutdown();
+    mStoreManager.shutdown();
   }
 
   /* $if ZimbraVersion >= 7.2.0 $ */
   public boolean supports(StoreManager.StoreFeature feature)
   {
-    return mZALStoreManager.supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
+    return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
   }
   /* $endif $ */
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
-    return InternalOverrideBlobBuilder.wrap(mZALStoreManager.getBlobBuilder());
+    throw new UnsupportedOperationException();
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
@@ -65,21 +68,7 @@ class InternalOverrideStoreManager
   /* $endif $ */
     throws IOException, ServiceException
   {
-    try
-    {
-      Future<org.openzal.zal.Blob> future = mZALStoreManager.storeIncoming(data, storeAsIs).sync();
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-
-      return future.getNow().toZimbra(Blob.class);
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(e);
-    }
+    return mStoreManager.getPrimaryStore().storeIncoming(data, storeAsIs).toZimbra(Blob.class);
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
@@ -89,200 +78,121 @@ class InternalOverrideStoreManager
   /* $endif $   */
     throws IOException, ServiceException
   {
-    Future<org.openzal.zal.Blob> futureStoreIncoming;
-    try
-    {
-      futureStoreIncoming = mZALStoreManager.storeIncoming(data, false).sync();
-
-      if (!futureStoreIncoming.isSuccess())
-      {
-        throw futureStoreIncoming.cause();
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(e);
-    }
-
-    Future<org.openzal.zal.StagedBlob> futureStage;
-    try
-    {
-      futureStage = mZALStoreManager.stage(
-        futureStoreIncoming.getNow(),
-        new org.openzal.zal.Mailbox(mbox)
-      ).sync();
-
-      if (!futureStage.isSuccess())
-      {
-        throw futureStage.cause();
-      }
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
-
-    return futureStage.getNow().toZimbra(StagedBlob.class);
+    return mStoreManager.getPrimaryStore().storeIncoming(data, false).toZimbra(StagedBlob.class);
   }
 
   public StagedBlob stage(Blob blob, Mailbox mbox) throws IOException, ServiceException
   {
-    Future<org.openzal.zal.StagedBlob> futureStage;
-    try
-    {
-      futureStage = mZALStoreManager.stage(
-        BlobWrap.wrapZimbraObject(
-          blob,
-          mVolumeManager.getCurrentMessageVolume().getId()
-        ),
-        new org.openzal.zal.Mailbox(mbox)
-      ).sync();
-
-      if (!futureStage.isSuccess())
-      {
-        throw futureStage.cause();
-      }
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
-
-    return futureStage.getNow().toZimbra(StagedBlob.class);
+    return mStoreManager.getPrimaryStore().stage(
+      BlobWrap.wrapZimbraBlob(blob),
+      new org.openzal.zal.Mailbox(mbox)
+    ).toZimbra(StagedBlob.class);
   }
 
   public MailboxBlob copy(MailboxBlob src, Mailbox destMbox, int destMsgId, int destRevision)
     throws IOException, ServiceException
   {
-    Future<org.openzal.zal.MailboxBlob> future = mZALStoreManager.copy(
-      BlobWrap.wrapZimbraObject(
-        src.getLocalBlob(),
-        src.getLocator()
-      ),
-      new org.openzal.zal.Mailbox(destMbox),
-      destMsgId, destRevision
-    );
     try
     {
-      future.sync();
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
-
-    return future.getNow().toZimbra(MailboxBlob.class);
-  }
-
-  /* $if ZimbraVersion >= 8.0.0 $ */
-  public MailboxBlob link(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ServiceException
-  {
-    Future<org.openzal.zal.MailboxBlob> future = mZALStoreManager.link(
-      BlobWrap.wrapZimbraObject(src, src.getLocator()),
-      new org.openzal.zal.Mailbox(destMbox),
-      destMsgId,
-      destRevision
-    );
-  /* $else $
-  public MailboxBlob link(MailboxBlob src, Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ServiceException
-  {
-    Future<org.openzal.zal.MailboxBlob> future = mZALStoreManager.link(
-      BlobWrap.wrapZimbraObject(src),
-      new org.openzal.zal.Mailbox(destMbox),
-      destMsgId,
-      destRevision
-    );
-  /* $endif $ */
-
-    try
-    {
-      future.sync();
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-    }
-    catch (IOException e)
-    {
-      throw e;
-    }
-    catch (ServiceException e)
-    {
-      throw e;
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
-
-    return future.getNow().toZimbra(MailboxBlob.class);
-  }
-
-  public MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ServiceException
-  {
-    Future<org.openzal.zal.MailboxBlob> future;
-    try
-    {
-      future = mZALStoreManager.renameTo(
-        StagedBlobWrap.wrapZimbraObject(src),
+      return mStoreManager.getPrimaryStore().copy(
+        BlobWrap.wrapZimbraBlob(
+          src.getLocalBlob(),
+          src.getLocator()
+        ),
         new org.openzal.zal.Mailbox(destMbox),
         destMsgId,
         destRevision
-      ).sync();
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-    }
-    catch (IOException e)
-    {
-      throw e;
+      ).toZimbra(MailboxBlob.class);
     }
     catch (ZimbraException e)
     {
       throw ServiceException.FAILURE("zal", e);
     }
-    catch (InterruptedException e)
-    {
-      throw new RuntimeException(e);
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
+  }
 
-    return future.getNow().toZimbra(MailboxBlob.class);
+  /* $if ZimbraVersion < 8.0.0 $
+  public MailboxBlob link(MailboxBlob src, Mailbox destMbox, int destMsgId, int destRevision)
+    throws IOException, ServiceException
+  {
+    try
+    {
+      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getLocator());
+      return link(
+        blob, new org.openzal.zal.Mailbox(destMbox), destMsgId, destRevision
+      );
+    }
+    catch (ZimbraException e)
+    {
+      throw ServiceException.FAILURE("zal", e);
+    }
+  }
+  /* $endif $ */
+
+  public MailboxBlob link(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
+    throws IOException, ServiceException
+  {
+    try
+    {
+      /* $if ZimbraVersion >= 7.0.0 $ */
+      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getLocator());
+      /* $else $
+      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getStagedLocator());
+      /* $endif $ */
+      return link(
+        blob,
+        new org.openzal.zal.Mailbox(destMbox),
+        destMsgId,
+        destRevision
+      );
+    }
+    catch (ZimbraException e)
+    {
+      throw ServiceException.FAILURE("zal", e);
+    }
+  }
+
+  private MailboxBlob link(org.openzal.zal.Blob blob, org.openzal.zal.Mailbox destMbox, int destMsgId, int destRevision)
+    throws IOException, ServiceException
+  {
+    try
+    {
+      return mStoreManager.getPrimaryStore().link(
+        blob,
+        destMbox,
+        destMsgId,
+        destRevision
+      ).toZimbra(MailboxBlob.class);
+    }
+    catch (ZimbraException e)
+    {
+      throw ServiceException.FAILURE("zal", e);
+    }
+  }
+
+  public MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
+    throws IOException, ServiceException
+  {
+    try
+    {
+      return mStoreManager.getPrimaryStore().renameTo(
+        StagedBlobWrap.wrapZimbraObject(src),
+        new org.openzal.zal.Mailbox(destMbox),
+        destMsgId,
+        destRevision
+      ).toZimbra(MailboxBlob.class);
+
+    }
+    catch (ZimbraException e)
+    {
+      throw ServiceException.FAILURE("zal", e);
+    }
   }
 
   public boolean delete(Blob blob) throws IOException
   {
-    Future<Boolean> future;
-    try
-    {
-      future = mZALStoreManager.delete(
-        BlobWrap.wrapZimbraObject(blob, null)
-      ).sync();
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new IOException(e);
-    }
-
-    return future.getNow();
+    return mStoreManager.getPrimaryStore().delete(
+      BlobWrap.wrapZimbraBlob(blob, null)
+    );
   }
 
   private static final Method mVolumeStagedBlobWasStagedDirectlyMethod;
@@ -300,7 +210,7 @@ class InternalOverrideStoreManager
     }
     catch (NoSuchMethodException e)
     {
-      throw new RuntimeException(e);
+      throw new RuntimeException("ZAL reflection error " + Utils.exceptionToString(e));
     }
   }
 
@@ -334,39 +244,22 @@ class InternalOverrideStoreManager
     }
   }
 
-  public boolean delete(MailboxBlob mblob) throws IOException
+  public boolean delete(MailboxBlob blob) throws IOException
   {
-    Future<Boolean> future;
-    try
-    {
-      future = mZALStoreManager.delete(
-        BlobWrap.wrapZimbraObject(
-          mblob,
-          mblob.getLocator()
-        )
-      );
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
-    }
-    catch (Throwable t)
-    {
-      throw new IOException(t);
-    }
-
-    return future.getNow();
+    return mStoreManager.getStore(blob.getLocator()).delete(
+      BlobWrap.wrapZimbraBlob(
+        blob
+      )
+    );
   }
 
   @Nullable
   public MailboxBlob getMailboxBlob(Mailbox mbox, int itemId, int revision, String locator) throws ServiceException
   {
-    return mZALStoreManager.getMailboxBlob(
+    return mStoreManager.getStore(locator).getMailboxBlob(
       new org.openzal.zal.Mailbox(mbox),
       itemId,
-      revision,
-      locator
+      revision
     ).toZimbra(MailboxBlob.class);
   }
 
@@ -381,17 +274,14 @@ class InternalOverrideStoreManager
   @Nullable
   public InputStream getContent(MailboxBlob mboxBlob) throws IOException
   {
-    return getContent(mboxBlob.getLocalBlob());
+    org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(mboxBlob.getLocalBlob(), mboxBlob.getLocator());
+    return mStoreManager.getStore(mboxBlob.getLocator()).getContent(zalBlob);
   }
 
   public InputStream getContent(Blob blob) throws IOException
   {
-    return mZALStoreManager.getContent(
-      BlobWrap.wrapZimbraObject(
-        blob,
-        null
-      )
-    );
+    org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
+    return mStoreManager.getStore(zalBlob.getVolumeId()).getContent(zalBlob);
   }
 
   /* $if ZimbraVersion >= 7.2.1 $ */
@@ -408,39 +298,19 @@ class InternalOverrideStoreManager
     Iterable blobsCollection = null;
   /* $endif $ */
     org.openzal.zal.Mailbox mailbox = new org.openzal.zal.Mailbox(mbox);
-    Future<Boolean> future;
-    try
+    for (StoreVolume volume : mVolumeManager.getAll())
     {
-      future = mZALStoreManager.delete(mailbox, blobsCollection).sync();
-
-      if (!future.isSuccess())
-      {
-        throw future.cause();
-      }
+      mStoreManager.getStore(volume.getId()).delete(mailbox, blobsCollection);
     }
-    catch (IOException e)
-    {
-      throw e;
-    }
-    catch (Throwable t)
-    {
-      throw new RuntimeException(t);
-    }
-
-    return future.getNow();
+    return true;
   }
 
   public boolean quietDelete(Blob blob)
   {
+    org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
     try
     {
-      Future<Boolean> future = mZALStoreManager.delete(BlobWrap.wrapZimbraObject(blob, null));
-      future.sync();
-      if (!future.isSuccess())
-      {
-        return false;
-      }
-      return future.get();
+      return mStoreManager.getStore(zalBlob.getVolumeId()).delete(zalBlob);
     }
     catch (Throwable t)
     {
@@ -448,13 +318,8 @@ class InternalOverrideStoreManager
     }
   }
 
-  public void setZALStoreManager(org.openzal.zal.StoreManager zalStoreManager)
+  public Object getWrapped()
   {
-    mZALStoreManager = zalStoreManager;
-  }
-
-  public org.openzal.zal.StoreManager toZal()
-  {
-    return mZALStoreManager;
+    return mStoreManager;
   }
 }

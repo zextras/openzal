@@ -25,10 +25,10 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
+import org.openzal.zal.InternalOverrideBlob;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
-import org.openzal.zal.InternalOverrideBlob;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
@@ -311,6 +311,10 @@ public final class StoreManagerSimulator extends StoreManager
   public MailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision)
     throws IOException, ServiceException
   {
+    if (src instanceof MockVolumeBlob)
+    {
+      src = ((MockVolumeBlob) src).getMockBlob();
+    }
     MailboxBlob newBlob = copy(
       (MockBlob) src,
       destMbox,
@@ -338,7 +342,7 @@ public final class StoreManagerSimulator extends StoreManager
     throws IOException
   {
     MailboxBlob newBlob = copy(
-      ((MockStagedBlob) src).getMockBlob(),
+      ((MockVolumeBlob)((MockVolumeStagedBlob) src).getLocalBlob()).getMockBlob(),
       destMbox,
       destItemId,
       destRevision,
@@ -347,7 +351,7 @@ public final class StoreManagerSimulator extends StoreManager
 
     try
     {
-      ((MockStagedBlob) src).getMockBlob().getVirtualFile().remove().syncAndGet();
+      ((MockVolumeBlob)((MockVolumeStagedBlob) src).getLocalBlob()).getMockBlob().getVirtualFile().remove().syncAndGet();
     }
     catch (VfsError e)
     {
@@ -569,15 +573,31 @@ public final class StoreManagerSimulator extends StoreManager
   public static class MockVolumeBlob extends VolumeBlob
   {
     private final String mVolumeId;
+    private final MockBlob mMockBlob;
+
     MockVolumeBlob(Blob blob, String volumeId)
     {
       super(blob.getFile(), Short.parseShort(volumeId));
+      mMockBlob = (MockBlob) blob;
       mVolumeId = volumeId;
+    }
+
+    public MockBlob getMockBlob()
+    {
+      return mMockBlob;
     }
 
     public short getVolumeId()
     {
       return Short.parseShort(mVolumeId);
+    }
+  }
+
+  public static class MockVolumeStagedBlob extends VolumeStagedBlob
+  {
+    public MockVolumeStagedBlob(Mailbox mbox, MockBlob blob, String volumeId) throws IOException
+    {
+      super(mbox, new MockVolumeBlob(blob, volumeId));
     }
   }
 

@@ -1,18 +1,12 @@
 package com.zimbra.cs.mailbox;
 
-import com.zextras.lib.activities.ActivityManager;
 import com.zextras.lib.log.ZELog;
-import com.zextras.lib.vfs.AbsolutePath;
-import com.zextras.lib.vfs.RootPath;
-import com.zextras.lib.vfs.blockingfs.BlockingFS;
 import com.zextras.lib.vfs.ramvfs.RamFS;
-import com.zextras.powerstore.VfsPrimaryStoreAccessor;
-import com.zextras.powerstore.VfsStoreAccessor;
-import com.zextras.s3.RamBlobAccessor;
-import com.zextras.s3.VfsBlobAccessor;
-import com.zextras.utils.FSProvider;
+import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
+import org.openzal.zal.extension.InternalOverrideStoreManager;
+import org.openzal.zal.extension.StoreManagerImpl;
 import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.Provisioning;
@@ -25,7 +19,6 @@ import com.zimbra.cs.account.MockProvisioning;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
-import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.dom4j.DocumentException;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -39,8 +32,9 @@ import com.zimbra.cs.index.MailboxIndex;
 // for testing purpose only
 public class ZimbraSimulator extends ExternalResource
 {
-  private       PrimaryStoreAccessor mStoreManager;
-  private       VolumeManager mVolumeManager;
+  private VolumeManager mVolumeManager;
+  private StoreManager  mStoreManager;
+  private StoreManagerSimulator mStoreSimulator;
 
   public RamFS getStoreRoot()
   {
@@ -142,27 +136,13 @@ public class ZimbraSimulator extends ExternalResource
   {
     //LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
     //com.zimbra.cs.store.StoreManager.getInstance().startup();
-    //mStoreRoot = ((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).getStoreRoot();
-    mStoreRoot = new RamFS();
-    BlockingFS blockingFs = new BlockingFS(new RootPath());
-
-    ActivityManager activityManager = new ActivityManager();
-    RamBlobAccessor blobAccessor = new RamBlobAccessor(
-      mStoreRoot,
-      new FSProvider(mStoreRoot),
-      blockingFs.getRoot().resolveDirectory("tmp").resolveDirectory("zimbraCache")
-    );
-
     mVolumeManager = new VolumeManager();
-
-    mStoreManager = new VfsPrimaryStoreAccessor(
-      activityManager,
-      mVolumeManager,
-      blobAccessor,
-      new VfsStoreAccessor(
-        blobAccessor,
-        mStoreRoot
-      )
+    mStoreSimulator = new StoreManagerSimulator();
+    mStoreRoot = mStoreSimulator.getStoreRoot();
+    FileBlobStoreWrap storeManagerSimulator = new FileBlobStoreSimulatorWrap(mStoreSimulator);
+    mStoreManager = new StoreManagerImpl(
+      storeManagerSimulator,
+      mVolumeManager
     );
 
     mZimbra.overrideZimbraStoreManager(mStoreManager);
@@ -237,7 +217,7 @@ public class ZimbraSimulator extends ExternalResource
     return new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
   }
 
-  public StoreAccessor getStoreManager()
+  public StoreManager getStoreManager()
   {
     return mStoreManager;
   }

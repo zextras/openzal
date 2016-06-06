@@ -152,6 +152,7 @@ public class VolumeManager
     }
   }
 
+  /*
   public StoreVolume setDefaultBits(String id)
     throws ZimbraException
   {
@@ -161,7 +162,7 @@ public class VolumeManager
     Volume vol;
     try
     {
-      /* $if MajorZimbraVersion <= 7 $
+      /* if MajorZimbraVersion <= 7 $
       vol = Volume.update(volumeToUpdate.getId(),
                                  volumeToUpdate.getType(),
                                  volumeToUpdate.getName(),
@@ -173,7 +174,7 @@ public class VolumeManager
                                  volumeToUpdate.getCompressBlobs(),
                                  volumeToUpdate.getCompressionThreshold(),
                                  false);
-      /* $else$ */
+      /* else$
       Volume.Builder builder = Volume.builder();
       builder.setId(Short.parseShort(volumeToUpdate.getId()));
       builder.setName(volumeToUpdate.getName());
@@ -187,13 +188,13 @@ public class VolumeManager
       builder.setCompressionThreshold(volumeToUpdate.getCompressionThreshold());
       vol = builder.build();
       vol = mVolumeManager.update(vol);
-      /* $endif$ */
+      /* $endif$
     }
-    /* $if MajorZimbraVersion <= 7 $
+    /* if MajorZimbraVersion <= 7 $
     catch (com.zimbra.cs.store.file.VolumeServiceException e)
-    /* $else$ */
+    /* else$
     catch (com.zimbra.cs.volume.VolumeServiceException e)
-    /* $endif$ */
+    /* endif$
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -203,6 +204,7 @@ public class VolumeManager
     }
     return new StoreVolume(vol);
   }
+  */
 
   public boolean delete(short id) throws ZimbraException
   {

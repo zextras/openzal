@@ -1,8 +1,5 @@
 package org.openzal.zal;
 
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -95,7 +92,11 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public Blob getLocalBlob()
   {
-    return BlobWrap.wrapZimbraObject(mStagedBlob.getLocalBlob(), mStagedBlob.getLocator());
+    /* $if ZimbraVersion >= 7.0.0 $ */
+    return BlobWrap.wrapZimbraBlob(mStagedBlob.getLocalBlob(), mStagedBlob.getLocator());
+    /* $else $
+    return BlobWrap.wrapZimbraBlob(mStagedBlob.getLocalBlob(), mStagedBlob.getStagedLocator());
+    /* $endif $ */
   }
 
   public static StagedBlob wrapZimbraObject(Object stagedBlob)

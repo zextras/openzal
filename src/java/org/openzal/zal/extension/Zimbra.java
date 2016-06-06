@@ -38,19 +38,20 @@ public class Zimbra
   @NotNull private final Provisioning                     mProvisioning;
   @NotNull private final MailboxManager                   mMailboxManager;
   @NotNull private final ZimbraDatabase                   mZimbraDatabase;
-  @NotNull private       InternalOverrideStoreManager     mStoreManager;
+  @NotNull private       InternalOverrideStoreManager     mInternalOverrideStoreManager;
   @NotNull private final VolumeManager                    mVolumeManager;
   @NotNull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
+  @NotNull private       StoreManager                     mStoreManager;
 
   public Zimbra()
   {
     try
     {
+      mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
       mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
       mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mVolumeManager = new VolumeManager();
-      mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
     }
     catch (Exception ex)
     {
@@ -121,11 +122,7 @@ public class Zimbra
   @NotNull
   public StoreManager getStoreManager()
   {
-    if (mStoreManager == null)
-    {
-      return new ZimbraStoreWrap(com.zimbra.cs.store.StoreManager.getInstance(), mVolumeManager);
-    }
-    return mStoreManager.toZal();
+    return mStoreManager;
   }
 
   @NotNull
@@ -218,26 +215,17 @@ public class Zimbra
 
   public void overrideZimbraStoreManager()
   {
-    ZimbraStoreWrap zimbraStoreAccessor = new ZimbraStoreWrap(
-      mZimbraStoreManager,
-      mVolumeManager
-    );
-    overrideZimbraStoreManager(zimbraStoreAccessor);
+    overrideZimbraStoreManager(new StoreManagerImpl(mZimbraStoreManager, mVolumeManager));
   }
 
-  public void overrideZimbraStoreManager(
-    PrimaryStoreAccessor primaryStoreAccessor
-  )
+  public void overrideZimbraStoreManager(StoreManager storeManager)
   {
-    // TODO use only PrimaryStoreAccessor, StoreManager used in PowerStore Module
+    mStoreManager = storeManager;
+    mInternalOverrideStoreManager = new InternalOverrideStoreManager(mStoreManager, mVolumeManager);
     ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
     try
     {
-      mStoreManager = new InternalOverrideStoreManager(mVolumeManager);
-      mStoreManager.setZALStoreManager(
-        new StoreManagerImpl(primaryStoreAccessor)
-      );
-      sStoreManagerInstance.set(null, mStoreManager);
+      sStoreManagerInstance.set(null, mInternalOverrideStoreManager);
     }
     catch (IllegalAccessException e)
     {

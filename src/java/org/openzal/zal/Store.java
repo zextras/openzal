@@ -20,24 +20,24 @@
 
 package org.openzal.zal;
 
-import io.netty.util.concurrent.Future;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface StoreAccessor
+public interface Store
 {
-  //boolean hasVolume(short volumeId);
-  MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision, String locator);
-  Future<MailboxBlob> copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId);
-  Future<MailboxBlob> link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, String volumeId);
-  String getBlobPath(int mboxId, int itemId, int revision, String volumeId);
-  Future<Boolean> delete(Blob blob);
+  MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
+  MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
+  boolean delete(Blob blob) throws IOException;
   void startup() throws IOException, ZimbraException;
   void shutdown();
   boolean supports(StoreFeature feature);
-  @Nullable InputStream getContent(Blob blob) throws IOException;
-  Future<Boolean> delete(Mailbox mailbox, @Nullable Iterable blobs, String volumeId);
+  InputStream getContent(Blob blob) throws IOException;
+  MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision);
+  boolean delete(Mailbox mailbox, @Nullable Iterable blobs) throws IOException, ZimbraException;
+  PrimaryStore toPrimaryStore();
+  String getVolumeId();
+  String getBlobPath(int mboxId, int itemId, int modContent);
 }

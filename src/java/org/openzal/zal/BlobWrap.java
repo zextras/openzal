@@ -21,9 +21,6 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +33,12 @@ public class BlobWrap implements Blob
   @NotNull private final com.zimbra.cs.store.Blob mBlob;
   private final String mVolumeId;
 
+  @NotNull
+  public Object getWrappedObject()
+  {
+    return mBlob;
+  }
+
   public BlobWrap(
     @NotNull Object blob,
     String volumeId
@@ -47,7 +50,11 @@ public class BlobWrap implements Blob
     }
     if (volumeId == null && blob instanceof VolumeStagedBlob)
     {
+      /* $if ZimbraVersion >= 7.0.0 $ */
       volumeId = String.valueOf(((VolumeStagedBlob) blob).getLocator());
+      /* $else $
+      volumeId = String.valueOf(((VolumeStagedBlob) blob).getStagedLocator());
+      /* $endif $ */
     }
     mVolumeId = volumeId;
     mBlob = (com.zimbra.cs.store.Blob) blob;
@@ -106,7 +113,12 @@ public class BlobWrap implements Blob
     mBlob.renameTo(newPath);
   }
 
-  public static Blob wrapZimbraObject(Object blob, @Nullable String volumeId)
+  public static Blob wrapZimbraBlob(Object blob)
+  {
+    return wrapZimbraBlob(blob, null);
+  }
+
+  public static Blob wrapZimbraBlob(Object blob, @Nullable String volumeId)
   {
     // TODO if volumeId == null check if blob instanceof VolumeBlob
     if (blob instanceof Blob)

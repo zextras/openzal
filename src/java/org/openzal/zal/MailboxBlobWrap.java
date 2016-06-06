@@ -21,10 +21,6 @@
 package org.openzal.zal;
 
 
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.ImmediateEventExecutor;
-import io.netty.util.concurrent.Promise;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -43,6 +39,12 @@ public class MailboxBlobWrap implements MailboxBlob
       throw new NullPointerException();
     }
     mMailboxBlob = (com.zimbra.cs.store.MailboxBlob) mailboxBlob;
+  }
+
+  @NotNull
+  public Object getWrappedObject()
+  {
+    return mMailboxBlob;
   }
 
   @Override
@@ -75,7 +77,7 @@ public class MailboxBlobWrap implements MailboxBlob
   {
     try
     {
-      return BlobWrap.wrapZimbraObject(mMailboxBlob.getLocalBlob(), mMailboxBlob.getLocator());
+      return BlobWrap.wrapZimbraBlob(mMailboxBlob.getLocalBlob(), mMailboxBlob.getLocator());
     }
     catch (IOException e)
     {
