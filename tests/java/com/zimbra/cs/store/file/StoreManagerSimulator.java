@@ -2,7 +2,9 @@ package com.zimbra.cs.store.file;
 
 import com.zextras.lib.Error.MissingReadPermissions;
 import com.zextras.lib.Error.MissingWritePermissions;
+import com.zextras.lib.Future;
 import com.zextras.lib.vfs.FileStreamWriter;
+import com.zextras.lib.vfs.Null;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
@@ -380,9 +382,17 @@ public final class StoreManagerSimulator extends StoreManager
   }
 
   public boolean delete(MailboxBlob mblob) throws IOException {
-    mStoreRoot.getRoot().resolveFile(
+    com.zextras.lib.vfs.File file = mStoreRoot.getRoot().resolveFile(
       getBlobPath(mblob)
     );
+    try
+    {
+      file.remove().syncAndGet();
+    }
+    catch (VfsError vfsError)
+    {
+      throw new IOException(vfsError);
+    }
     return true;
   }
 
