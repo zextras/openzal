@@ -1,105 +1,18 @@
-
-<path id="zimbra-jars-${ZimbraVersion}">
-    <fileset dir="../build-commons/zimbra-jars/zimbra-jars-${ZimbraVersion}/" >
-        <include name="*.jar"/>
-    </fileset>
-</path>
-
-<target name="zal-${ZimbraVersion}"  description="create jar" depends="init">
-
-  <var name="tmpsrc"  value="tmpsrc/${ZimbraVersion}/jar/" />
-  <var name="build" value="build/${ZimbraVersion}/jar/" />
-  <var name="dist"  value="dist/${ZimbraVersion}/"/>
-
-  <mkdir dir="${tmpsrc}"/>
-  <mkdir dir="${build}"/>
-  <mkdir dir="${dist}"/>
-
-  <echo>Creating zal JAR for zimbra ${ZimbraVersion} ...</echo>
-
-  <echo>Preprocessing...</echo>
-  <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}" />
-    <var name="MajorZimbraVersion"  value="${MajorZimbraVersion}" />
-    <var name="MiddleZimbraVersion" value="${MiddleZimbraVersion}" />
-    <var name="MinorZimbraVersion"  value="${MinorZimbraVersion}" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-${ZimbraVersion}" />
-      <path refid="libraries" />
-      <pathelement path="${build}" />
-    </classpath>
-   <compilerarg value="${COMPILER_ARGS}" />
-  </javac>
-  <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
-  <delete dir="${tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="${VERSION}" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="${ZimbraVersion}" />
-      <attribute name="Created-By" value="ZeXtras" />
-      <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypointImpl" />
-    </manifest>
-    <fileset dir="${build}" />
-  </jar>
-
-  <java dir="." fork="true" classname="org.openzal.zal.tools.ChecksumWriter">
-    <classpath>
-      <pathelement location="${dist}/zal.jar.unsigned" />
-    </classpath>
-    <arg value="${dist}/../../../private/key.pkcs8" />
-    <arg value="${dist}/zal.jar.unsigned" />
-    <arg value="${dist}/zal.jar" />
-  </java>
-
-  <delete file="${dist}/zal.jar.unsigned" />
+<target name="zal-${ZimbraVersion}"
+        description="Create jar for Zimbra ${ZimbraVersion}"
+        depends="init">
+  <build-zal ZimbraVersion="${ZimbraVersion}"
+             MajorZimbraVersion = "${MajorZimbraVersion}"
+             MiddleZimbraVersion = "${MiddleZimbraVersion}"
+             MinorZimbraVersion = "${MinorZimbraVersion}" />
 </target>
 
 
-<target name="zal-${ZimbraVersion}-itbase"  description="create test jar" depends="init">
-
-  <var name="itbase_tmpsrc"  value="tmpsrc/${ZimbraVersion}/itbase/" />
-  <var name="itbase_build" value="build/${ZimbraVersion}/itbase/" />
-  <var name="dist"  value="dist/${ZimbraVersion}/"/>
-
-  <mkdir dir="${itbase_tmpsrc}"/>
-  <mkdir dir="${itbase_build}"/>
-
-  <echo>Preprocessing ZAL test library...</echo>
-  <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
-    <var name="ZimbraVersion" value="${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}" />
-    <var name="MajorZimbraVersion"  value="${MajorZimbraVersion}" />
-    <var name="MiddleZimbraVersion" value="${MiddleZimbraVersion}" />
-    <var name="MinorZimbraVersion"  value="${MinorZimbraVersion}" />
-    <filetype commentend="*/" commentbegin="/*" extensions="java"/>
-  </preprocess>
-
-  <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
-    <classpath>
-      <path refid="zimbra-jars-${ZimbraVersion}" />
-      <path refid="libraries" />
-      <pathelement location="${dist}/zal.jar" />
-      <pathelement location="../dist/zextras.jar" />
-    </classpath>
-   <compilerarg value="${COMPILER_ARGS}" />
-  </javac>
-
-  <delete dir="${itbase_tmpsrc}/"/>
-
-  <jar jarfile="${dist}/zal-itbase.jar" compress="false">
-    <manifest>
-      <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-      <attribute name="Specification-Version" value="${VERSION}" />
-      <attribute name="Specification-Vendor" value="ZeXtras" />
-      <attribute name="Implementation-Version" value="${ZimbraVersion}" />
-      <attribute name="Created-By" value="ZeXtras" />
-    </manifest>
-    <fileset dir="${itbase_build}" />
-  </jar>
+<target name="zal-${ZimbraVersion}-itbase"
+        description="Create test jar for Zimbra ${ZimbraVersion}"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="${ZimbraVersion}"
+                    MajorZimbraVersion = "${MajorZimbraVersion}"
+                    MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                    MinorZimbraVersion = "${MinorZimbraVersion}" />
 </target>
