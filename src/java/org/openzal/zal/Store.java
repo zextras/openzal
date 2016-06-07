@@ -35,7 +35,7 @@ public interface Store
   void shutdown();
   boolean supports(StoreFeature feature);
   InputStream getContent(Blob blob) throws IOException;
-  MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision);
+  MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision) throws IOException;
   boolean delete(Mailbox mailbox, @Nullable Iterable blobs) throws IOException, ZimbraException;
   PrimaryStore toPrimaryStore();
   String getVolumeId();

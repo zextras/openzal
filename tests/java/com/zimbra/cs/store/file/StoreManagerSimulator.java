@@ -392,11 +392,11 @@ public final class StoreManagerSimulator extends StoreManager
     );
     try
     {
-      file.remove();
+      file.remove().syncAndGet();
     }
-    catch (MissingWritePermissions e)
+    catch (VfsError vfsError)
     {
-      throw new IOException(e);
+      throw vfsError.toIOException();
     }
     return true;
   }

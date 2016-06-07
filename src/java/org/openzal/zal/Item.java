@@ -294,7 +294,7 @@ $endif$ */
   {
     try
     {
-      return new MailboxBlob(mMailItem.getBlob());
+      return new MailboxBlobWrap(mMailItem.getBlob());
     }
     catch (ServiceException e)
     {

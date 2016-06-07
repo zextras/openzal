@@ -59,7 +59,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
     int buflen = path.length() + 15 + (revision < 0 ? 0 : 11);
     StringBuilder sb = new StringBuilder(buflen);
 
-    sb.append(path).append(File.pathSeparator).append(itemId);
+    sb.append(path).append("/").append(itemId);
     if( revision >= 0 ) {
       sb.append('-').append(revision);
     }
