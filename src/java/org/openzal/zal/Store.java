@@ -38,6 +38,7 @@ public interface Store
   MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision) throws IOException;
   boolean delete(Mailbox mailbox, @Nullable Iterable blobs) throws IOException, ZimbraException;
   PrimaryStore toPrimaryStore();
+  boolean canBePrimary();
   String getVolumeId();
   String getBlobPath(int mboxId, int itemId, int modContent);
 }

@@ -2,6 +2,8 @@ package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.Mailbox;
 
+import java.io.IOException;
+
 public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
 {
   private final StagedBlob mBlob;
@@ -25,7 +27,14 @@ public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
   public long getStagedSize()
   /* $endif $ */
   {
-    return mBlob.getRawSize();
+    try
+    {
+      return mBlob.getRawSize();
+    }
+    catch (IOException e)
+    {
+      return -1;
+    }
   }
 
   @Override
@@ -35,7 +44,14 @@ public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
   public String getStagedDigest()
   /* $endif $ */
   {
-    return mBlob.getDigest();
+    try
+    {
+      return mBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      return "";
+    }
   }
 
   @Override

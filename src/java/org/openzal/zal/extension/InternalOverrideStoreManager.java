@@ -256,11 +256,18 @@ public class InternalOverrideStoreManager
   @Nullable
   public MailboxBlob getMailboxBlob(Mailbox mbox, int itemId, int revision, String locator) throws ServiceException
   {
-    return mStoreManager.getStore(locator).getMailboxBlob(
-      new org.openzal.zal.Mailbox(mbox),
-      itemId,
-      revision
-    ).toZimbra(MailboxBlob.class);
+    try
+    {
+      return mStoreManager.getStore(locator).getMailboxBlob(
+        new org.openzal.zal.Mailbox(mbox),
+        itemId,
+        revision
+      ).toZimbra(MailboxBlob.class);
+    }
+    catch (IOException e)
+    {
+      return null;
+    }
   }
 
   @Nullable

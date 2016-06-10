@@ -21,7 +21,6 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.AccountServiceException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ContinuationThrowable;
 import org.openzal.zal.Utils;

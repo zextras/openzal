@@ -27,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -258,5 +257,11 @@ public class FileBlobPrimaryStore implements PrimaryStore
   public PrimaryStore toPrimaryStore()
   {
     return this;
+  }
+
+  @Override
+  public boolean canBePrimary()
+  {
+    return true;
   }
 }

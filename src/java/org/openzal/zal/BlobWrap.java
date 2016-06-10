@@ -72,22 +72,15 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public String getDigest()
+  public String getDigest() throws IOException
   {
-    try
-    {
-      return mBlob.getDigest();
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
+    return mBlob.getDigest();
   }
 
   @Override
-  public long getRawSize()
+  public long getRawSize() throws IOException
   {
-    return 0;
+    return mBlob.getRawSize();
   }
 
   @Override

@@ -75,6 +75,7 @@
          </classpath>
          <compilerarg value="${COMPILER_ARGS}" />
        </javac>
+       <move file="${build}/com/zimbra/cs/store/file/VolumeBlobProxy.class" tofile="${build}/com/zimbra/cs/store/file/VolumeBlobProxy" />
        <delete dir="${tmpsrc}/"/>
 
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">

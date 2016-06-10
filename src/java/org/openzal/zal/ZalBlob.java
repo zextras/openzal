@@ -1,10 +1,5 @@
 package org.openzal.zal;
 
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.ImmediateEventExecutor;
-import io.netty.util.concurrent.Promise;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,12 +7,22 @@ import java.io.InputStream;
 
 public class ZalBlob implements Blob
 {
-  private final File mFile;
+  private final File   mFile;
   private final String mVolumeId;
   private final String mDigest;
-  private final long mRawSize;
+  private       Long   mRawSize;
 
-  public ZalBlob(File file, String volumeId, String digest, long rawSize)
+  public ZalBlob(File file, String volumeId)
+  {
+    this(file, volumeId, null, null);
+  }
+
+  public ZalBlob(File file, String volumeId, String digest)
+  {
+    this(file, volumeId, digest, null);
+  }
+
+  public ZalBlob(File file, String volumeId, String digest, Long rawSize)
   {
     mFile = file;
     mVolumeId = volumeId;
@@ -31,7 +36,7 @@ public class ZalBlob implements Blob
     boolean success = mFile.renameTo(new File(newPath));
     if (!success)
     {
-      throw new IOException();
+      throw new IOException("Cannot rename " + mFile.getPath() + " to " + newPath);
     }
   }
 
@@ -62,6 +67,10 @@ public class ZalBlob implements Blob
   @Override
   public long getRawSize()
   {
+    if (mRawSize == null)
+    {
+      mRawSize = mFile.length();
+    }
     return mRawSize;
   }
 

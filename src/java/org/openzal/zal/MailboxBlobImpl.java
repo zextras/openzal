@@ -69,13 +69,13 @@ public class MailboxBlobImpl implements MailboxBlob
   }
 
   @Override
-  public String getDigest()
+  public String getDigest() throws IOException
   {
     return mBlob.getDigest();
   }
 
   @Override
-  public long getRawSize()
+  public long getRawSize() throws IOException
   {
     return mBlob.getRawSize();
   }
