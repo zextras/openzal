@@ -23,6 +23,8 @@ import com.zimbra.cs.mime.handler.TextHtmlHandler;
 import com.zimbra.cs.mime.handler.TextPlainHandler;
 import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 
+import javax.annotation.Nullable;
+
 /* $if MajorZimbraVersion >= 8 $ */
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.ProvisioningConstants;
@@ -32,8 +34,6 @@ import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
-
-import javax.annotation.Nullable;
 
 /* $elseif MajorZimbraVersion >= 6 $
 import com.zimbra.common.service.ServiceException;
