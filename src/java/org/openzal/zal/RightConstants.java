@@ -29,7 +29,6 @@ public class RightConstants
   public static String RT_loginAs = RightConsts.RT_loginAs;
   public static String RT_domainAdminRights = RightConsts.RT_domainAdminRights;
   public static String RT_adminLoginAs = RightConsts.RT_adminLoginAs;
-  public static String RT_configureQuota = RightConsts.RT_configureQuota;
   public static String RT_domainAdminConsoleAccountsFeaturesTabRights =
     RightConsts.RT_domainAdminConsoleAccountsFeaturesTabRights;
   public static String RT_listZimlet = RightConsts.RT_listZimlet;
@@ -39,6 +38,7 @@ public class RightConstants
   public static String RT_viewAdminSavedSearch = RightConsts.RT_viewAdminSavedSearch;
   public static String RT_domainAdminConsoleDLSharesTabRights = RightConsts.RT_domainAdminConsoleDLSharesTabRights;
   /* $if ZimbraVersion >= 8.0.0 $ */
+  public static String RT_configureQuota = RightConsts.RT_configureQuota;
   public static String RT_sendOnBehalfOf = RightConsts.RT_sendOnBehalfOf;
   public static String RT_sendOnBehalfOfDistList = RightConsts.RT_sendOnBehalfOfDistList;
   public static String RT_sendAsDistList = RightConsts.RT_sendAsDistList;
