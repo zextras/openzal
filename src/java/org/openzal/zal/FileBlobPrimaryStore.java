@@ -67,6 +67,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
     return sb.toString();
   }
 
+  @Override
+  public String getMailboxDirPath(int mboxId)
+  {
+    return mVolume.getMailboxDir(mboxId, (short) 1);
+  }
+
   @Nullable
   @Override
   public MailboxBlob getMailboxBlob(@NotNull Mailbox mbox, int msgId, int revision)
@@ -159,10 +165,16 @@ public class FileBlobPrimaryStore implements PrimaryStore
     }
   }
 
-  public boolean delete(@NotNull Blob blob)
-    throws IOException
+  @Override
+  public boolean delete(Blob blob) throws IOException
   {
     return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob)));
+  }
+
+  public boolean delete(@NotNull MailboxBlob blob)
+    throws IOException
+  {
+    return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob.getLocalBlob())));
   }
 
   @Override
@@ -192,6 +204,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
     /* $else $
     return false;
     /* $endif $ */
+  }
+
+  @Override
+  public InputStream getContent(MailboxBlob blob) throws IOException
+  {
+    return sm.getContent(blob.toZimbra(com.zimbra.cs.store.MailboxBlob.class));
   }
 
   @Override

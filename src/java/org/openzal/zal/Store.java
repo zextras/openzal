@@ -30,15 +30,16 @@ public interface Store
 {
   MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
   MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
-  boolean delete(Blob blob) throws IOException;
+  boolean delete(MailboxBlob blob) throws IOException;
   void startup() throws IOException, ZimbraException;
   void shutdown();
   boolean supports(StoreFeature feature);
-  InputStream getContent(Blob blob) throws IOException;
+  InputStream getContent(MailboxBlob blob) throws IOException;
   MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision) throws IOException;
   boolean delete(Mailbox mailbox, @Nullable Iterable blobs) throws IOException, ZimbraException;
   PrimaryStore toPrimaryStore();
   boolean canBePrimary();
   String getVolumeId();
   String getBlobPath(int mboxId, int itemId, int modContent);
+  String getMailboxDirPath(int mboxId);
 }

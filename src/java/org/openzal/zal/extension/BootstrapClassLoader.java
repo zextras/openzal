@@ -22,7 +22,6 @@ package org.openzal.zal.extension;
 
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Utils;
-import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,31 +72,35 @@ public class BootstrapClassLoader extends ClassLoader
         (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
       );
 
-      Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
-      ClassLoader parentClassLoader = parentClass.getClassLoader();
-
-      InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
-      byte[] buffer = new byte[6 * 1024];
-      int idx = 0;
-      int read = 0;
-      while (read > -1)
+      try
       {
-        idx += read;
-        if (buffer.length == idx)
-        {
-          buffer = Arrays.copyOf(buffer, buffer.length * 2);
-        }
-        read = is.read(buffer, idx, buffer.length - idx);
-      }
+        Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
+        ClassLoader parentClassLoader = parentClass.getClassLoader();
 
-      defineClassMethod.invoke(
-        parentClassLoader,
-        buffer, 0, idx
-      );
+        InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
+        byte[] buffer = new byte[6 * 1024];
+        int idx = 0;
+        int read = 0;
+        while (read > -1)
+        {
+          idx += read;
+          if (buffer.length == idx)
+          {
+            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+          }
+          read = is.read(buffer, idx, buffer.length - idx);
+        }
+
+        defineClassMethod.invoke(
+          parentClassLoader,
+          buffer, 0, idx
+        );
+      }
+      catch (Exception ignore) {}
     }
     catch (Exception e)
     {
-      ZimbraLog.extensions.fatal("ZAL Reflection error " + Utils.exceptionToString(e));
+      //ZimbraLog.extensions.fatal("ZAL Reflection error " + Utils.exceptionToString(e));
       throw new RuntimeException(e);
     }
   }
@@ -132,6 +135,8 @@ public class BootstrapClassLoader extends ClassLoader
   protected Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
+    //System.out.printf("#### Loading class %s ",name);
+
     if(!mInitialized)
     {
       try

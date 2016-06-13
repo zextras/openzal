@@ -4,6 +4,7 @@ import com.zimbra.cs.store.*;
 import com.zimbra.cs.store.file.VolumeBlobProxy;
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class InternalOverrideVolumeBlob extends VolumeBlobProxy
   @Override
   public boolean isCompressed() throws IOException
   {
-    InputStream inputStream = new FileInputStream(mBlob.getFile());
+    InputStream inputStream = new BufferedInputStream(new FileInputStream(mBlob.getFile()));
     try
     {
       return Utils.isGzipped(inputStream);

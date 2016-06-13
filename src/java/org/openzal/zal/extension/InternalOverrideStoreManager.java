@@ -247,7 +247,7 @@ public class InternalOverrideStoreManager
   public boolean delete(MailboxBlob blob) throws IOException
   {
     return mStoreManager.getStore(blob.getLocator()).delete(
-      BlobWrap.wrapZimbraBlob(
+      MailboxBlobWrap.wrapZimbraObject(
         blob
       )
     );
@@ -281,14 +281,14 @@ public class InternalOverrideStoreManager
   @Nullable
   public InputStream getContent(MailboxBlob mboxBlob) throws IOException
   {
-    org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(mboxBlob.getLocalBlob(), mboxBlob.getLocator());
-    return mStoreManager.getStore(mboxBlob.getLocator()).getContent(zalBlob);
+    org.openzal.zal.MailboxBlob zalMailboxBlob = MailboxBlobWrap.wrapZimbraObject(mboxBlob);
+    return mStoreManager.getStore(mboxBlob.getLocator()).getContent(zalMailboxBlob);
   }
 
   public InputStream getContent(Blob blob) throws IOException
   {
     org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
-    return mStoreManager.getStore(zalBlob.getVolumeId()).getContent(zalBlob);
+    return mStoreManager.getStore(zalBlob.getVolumeId()).toPrimaryStore().getContent(zalBlob);
   }
 
   /* $if ZimbraVersion >= 7.2.1 $ */
@@ -314,15 +314,28 @@ public class InternalOverrideStoreManager
 
   public boolean quietDelete(Blob blob)
   {
+    if (blob == null)
+    {
+      return false;
+    }
     org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
     try
     {
-      return mStoreManager.getStore(zalBlob.getVolumeId()).delete(zalBlob);
+      return toPrimaryStore(mStoreManager.getStore(zalBlob.getVolumeId())).delete(zalBlob);
     }
     catch (Throwable t)
     {
       return false;
     }
+  }
+
+  private PrimaryStore toPrimaryStore(Store store)
+  {
+    if (! store.canBePrimary())
+    {
+      throw new RuntimeException("Store " + store.getVolumeId() + " cannot be primary");
+    }
+    return store.toPrimaryStore();
   }
 
   public Object getWrapped()

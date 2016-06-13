@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import com.zimbra.cs.store.file.FileBlobStore;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
@@ -215,7 +216,12 @@ public class Zimbra
 
   public void overrideZimbraStoreManager()
   {
-    overrideZimbraStoreManager(new StoreManagerImpl(mZimbraStoreManager, mVolumeManager));
+    overrideZimbraStoreManager(
+      new StoreManagerImpl(
+        new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
+        mVolumeManager
+      )
+    );
   }
 
   public void overrideZimbraStoreManager(StoreManager storeManager)

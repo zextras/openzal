@@ -28,6 +28,8 @@ public interface PrimaryStore extends Store
   Blob storeIncoming(InputStream data, boolean storeAsIs) throws IOException;
   StagedBlob stage(Blob blob, Mailbox mbox) throws IOException;
   MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
+  boolean delete(Blob blob) throws IOException;
+  InputStream getContent(Blob blob) throws IOException;
 }
 
 

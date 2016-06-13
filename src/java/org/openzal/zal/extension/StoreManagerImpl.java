@@ -1,5 +1,6 @@
 package org.openzal.zal.extension;
 
+import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.FileBlobPrimaryStore;
 import org.openzal.zal.Store;
@@ -9,8 +10,10 @@ import org.openzal.zal.StoreVolume;
 import org.openzal.zal.VolumeManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -36,7 +39,10 @@ public class StoreManagerImpl implements StoreManager
       @Override
       public Store make(String volumeId)
       {
-        return new FileBlobPrimaryStore(fileBlobStore, mVolumeManager.getById(volumeId));
+        return new FileBlobPrimaryStore(
+          (FileBlobStoreWrap) fileBlobStore,
+          mVolumeManager.getById(volumeId)
+        );
       }
     };
   }
@@ -47,6 +53,14 @@ public class StoreManagerImpl implements StoreManager
     mLock.lock();
     try
     {
+      /*mVolumeManager.create(
+        StoreVolume.ID_AUTO_INCREMENT,
+        StoreVolume.TYPE_MESSAGE_SECONDARY,
+        "vfsStore",
+        "/opt/zimbra/vfsStore",
+        false,
+        0L
+      );*/
       mStores.put(volumeId, storeFactory.make(volumeId));
       mStoreFactories.put(volumeId, storeFactory);
     }
@@ -123,7 +137,11 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public Collection<Store> getAllStores()
   {
-    // TODO mVolumeManager.getAll()
-    return mStores.values();
+    List<Store> stores = new ArrayList<Store>();
+    for (StoreVolume volume : mVolumeManager.getAll())
+    {
+      stores.add(getStore(volume.getId()));
+    }
+    return stores;
   }
 }
