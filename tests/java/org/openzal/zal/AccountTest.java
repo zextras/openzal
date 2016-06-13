@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -123,6 +122,67 @@ public class AccountTest
     assertEquals(
       "test@example.com",
       aliases.get(3)
+    );
+  }
+
+  @Test
+  public void alias_on_other_domain_returned() throws Exception
+  {
+    List<String> aliases;
+
+    mAccount.addAlias("alias@otherdomain.com");
+    mProvisioning.createDomain("otherdomain.com", new HashMap<String, Object>());
+    Domain aliasDomain = mProvisioning.createDomain("example-alias.com", new HashMap<String, Object>());
+    HashMap<String, Object> attrs = new HashMap<String, Object>();
+    attrs.put("zimbraDomainAliasTargetId", mMainDomain.getId());
+    mProvisioning.modifyAttrs(aliasDomain,attrs);
+
+    aliases = new LinkedList<String>(
+      mAccount.getAllAddressesIncludeDomainAliases(mProvisioning)
+    );
+    Collections.sort(aliases);
+
+    assertEquals(
+      3L,
+      (long) aliases.size()
+    );
+    assertEquals(
+      "alias@otherdomain.com",
+      aliases.get(0)
+    );
+    assertEquals(
+      "test@example-alias.com",
+      aliases.get(1)
+    );
+    assertEquals(
+      "test@example.com",
+      aliases.get(2)
+    );
+  }
+
+  @Test
+  public void include_allow_from_addresses() throws Exception
+  {
+    HashMap<String, Object> attrs = new HashMap<String, Object>();
+    attrs.put("zimbraAllowFromAddress", "other@domain123.com");
+    mProvisioning.modifyAttrs(mAccount,attrs);
+
+    LinkedList<String> aliases = new LinkedList<String>(
+      mAccount.getAllAddressesAllowedInFrom(mProvisioning)
+    );
+    Collections.sort(aliases);
+
+    assertEquals(
+      2L,
+      (long) aliases.size()
+    );
+    assertEquals(
+      "other@domain123.com",
+      aliases.get(0)
+    );
+    assertEquals(
+      "test@example.com",
+      aliases.get(1)
     );
   }
 }

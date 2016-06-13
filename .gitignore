@@ -1,0 +1,9 @@
+build/
+deb/
+dist/
+doc/html/
+rpm/
+src/java/org/openzal/zal/ZalBuildInfo.java
+compat_reports/
+openzal-*.deb
+openzal-*.rpm
