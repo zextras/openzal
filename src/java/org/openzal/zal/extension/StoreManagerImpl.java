@@ -61,7 +61,6 @@ public class StoreManagerImpl implements StoreManager
         false,
         0L
       );*/
-      mStores.put(volumeId, storeFactory.make(volumeId));
       mStoreFactories.put(volumeId, storeFactory);
     }
     finally
@@ -76,6 +75,7 @@ public class StoreManagerImpl implements StoreManager
     mLock.lock();
     try
     {
+      mStoreFactories.remove(volumeId);
       mStores.remove(volumeId);
     }
     finally
