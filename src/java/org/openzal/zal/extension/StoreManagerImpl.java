@@ -4,7 +4,7 @@ import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.FileBlobPrimaryStore;
 import org.openzal.zal.Store;
-import org.openzal.zal.StoreFactory;
+import org.openzal.zal.StoreBuilder;
 import org.openzal.zal.StoreManager;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.VolumeManager;
@@ -20,10 +20,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class StoreManagerImpl implements StoreManager
 {
   private final Map<String, Store>        mStores;
-  private final Map<String, StoreFactory> mStoreFactories;
+  private final Map<String, StoreBuilder> mStoreFactories;
   private final ReentrantLock             mLock;
   private final VolumeManager             mVolumeManager;
-  private final StoreFactory              mFileBlobStoreFactory;
+  private final StoreBuilder              mFileBlobStoreBuilder;
 
   public StoreManagerImpl(
     final Object fileBlobStore,
@@ -32,9 +32,9 @@ public class StoreManagerImpl implements StoreManager
   {
     mVolumeManager = volumeManager;
     mLock = new ReentrantLock();
-    mStoreFactories = new HashMap<String, StoreFactory>();
+    mStoreFactories = new HashMap<String, StoreBuilder>();
     mStores = new HashMap<String, Store>();
-    mFileBlobStoreFactory = new StoreFactory()
+    mFileBlobStoreBuilder = new StoreBuilder()
     {
       @Override
       public Store make(String volumeId)
@@ -48,7 +48,7 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public void register(StoreFactory storeFactory, String volumeId)
+  public void register(StoreBuilder storeBuilder, String volumeId)
   {
     mLock.lock();
     try
@@ -61,7 +61,7 @@ public class StoreManagerImpl implements StoreManager
         false,
         0L
       );*/
-      mStoreFactories.put(volumeId, storeFactory);
+      mStoreFactories.put(volumeId, storeBuilder);
     }
     finally
     {
@@ -127,7 +127,7 @@ public class StoreManagerImpl implements StoreManager
       }
       else
       {
-        store = mFileBlobStoreFactory.make(volumeId);
+        store = mFileBlobStoreBuilder.make(volumeId);
       }
       mStores.put(volumeId, store);
     }

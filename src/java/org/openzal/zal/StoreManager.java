@@ -25,7 +25,7 @@ import java.util.Collection;
 
 public interface StoreManager
 {
-  void register(StoreFactory storeFactory, String volumeId);
+  void register(StoreBuilder storeBuilder, String volumeId);
   void unregister(String volumeId);
   void makeActive(String volumeId);
   void startup() throws IOException;

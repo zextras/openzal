@@ -1,6 +1,6 @@
 package org.openzal.zal;
 
-public interface StoreFactory
+public interface StoreBuilder
 {
   Store make(String volumeId);
 }
