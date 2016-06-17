@@ -92,6 +92,14 @@ public class VolumeManager
   }
 
   public StoreVolume create(short id, short type,
+                            String name, boolean compressBlobs,
+                            long compressionThreshold)
+    throws ZimbraException
+  {
+    return create(id, type, name, "", compressBlobs, compressionThreshold);
+  }
+
+  public StoreVolume create(short id, short type,
                             String name, String path,
                             boolean compressBlobs, long compressionThreshold)
     throws ZimbraException
@@ -108,7 +116,14 @@ public class VolumeManager
       builder.setId(id);
       builder.setType(type);
       builder.setName(name);
-      builder.setPath(path, true);
+      if (path.isEmpty())
+      {
+        builder.setPath("vfs" + id, false);
+      }
+      else
+      {
+        builder.setPath(path, true);
+      }
       builder.setMboxGroupBits(sMboxGroupBits);
       builder.setMboxBit(sMboxBits);
       builder.setFileGroupBits(sFileGroupBits);
@@ -305,16 +320,15 @@ public class VolumeManager
 
   public boolean isValidVolume(String id)
   {
-    boolean valid = false;
     List<StoreVolume> volumeList = getAll();
 
     for (StoreVolume v:volumeList){
-      if (v.getId().equals(id)){
-        valid = true;
-        break;
+      if (v.getId().equals(id))
+      {
+        return true;
       }
     }
 
-    return valid;
+    return false;
   }
 }

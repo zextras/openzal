@@ -8,6 +8,7 @@ import org.openzal.zal.StoreBuilder;
 import org.openzal.zal.StoreManager;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.VolumeManager;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,15 +54,14 @@ public class StoreManagerImpl implements StoreManager
     mLock.lock();
     try
     {
-      /*mVolumeManager.create(
-        StoreVolume.ID_AUTO_INCREMENT,
-        StoreVolume.TYPE_MESSAGE_SECONDARY,
-        "vfsStore",
-        "/opt/zimbra/vfsStore",
-        false,
-        0L
-      );*/
-      mStoreFactories.put(volumeId, storeBuilder);
+      if (mVolumeManager.isValidVolume(volumeId))
+      {
+        mStoreFactories.put(volumeId, storeBuilder);
+      }
+      else
+      {
+        ZimbraLog.extensions.warn("Cannot register custom store for unknown volume " + volumeId);
+      }
     }
     finally
     {
