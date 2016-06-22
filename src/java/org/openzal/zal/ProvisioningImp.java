@@ -1899,6 +1899,19 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Override
+  public void deleteDomainById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteDomain(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   private static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;

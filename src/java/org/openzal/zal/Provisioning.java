@@ -306,6 +306,9 @@ public interface Provisioning
   @NotNull
   void deleteAccountById(String id);
 
+  @NotNull
+  void deleteDomainById(String id);
+
   Collection<Domain> getDomainAliases(Domain domain);
 
 
