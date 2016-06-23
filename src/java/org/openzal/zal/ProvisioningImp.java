@@ -1912,6 +1912,19 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Override
+  public void deleteCosById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteCos(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   private static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;
