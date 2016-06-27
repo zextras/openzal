@@ -605,7 +605,7 @@ public class Mailbox
     return new CalendarItem(mailItem);
   }
 
-    //@NotNull
+    @NotNull
     public FreeBusy getFreeBusy(@NotNull OperationContext octxt, long start, long end)
     throws NoSuchItemException
     {
