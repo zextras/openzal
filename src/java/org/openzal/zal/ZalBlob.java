@@ -64,8 +64,7 @@ public class ZalBlob implements Blob
     return mDigest;
   }
 
-  @Override
-  public long getRawSize()
+  public long getSize()
   {
     if (mRawSize == null)
     {

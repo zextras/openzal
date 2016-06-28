@@ -48,12 +48,6 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
-  public long getRawSize()
-  {
-    return 0;
-  }
-
-  @Override
   public InputStream getInputStream() throws IOException
   {
     return null;

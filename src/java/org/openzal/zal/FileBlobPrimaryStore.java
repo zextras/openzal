@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -51,9 +52,16 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
+  public String getVolumeName()
+  {
+    return mVolume.getName();
+  }
+
+  @Override
   public String getBlobPath(int mboxId, int itemId, int revision)
   {
     String path = mVolume.getBlobDir(mboxId, itemId);
+    path = path.startsWith(File.separator)?path:File.separator+path;
 
     int buflen = path.length() + 15 + (revision < 0 ? 0 : 11);
     StringBuilder sb = new StringBuilder(buflen);
@@ -71,6 +79,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
   public String getMailboxDirPath(int mboxId)
   {
     return mVolume.getMailboxDir(mboxId, (short) 1);
+  }
+
+  @Override
+  public String getRootPath()
+  {
+    return mVolume.getRootPath();
   }
 
   @Nullable

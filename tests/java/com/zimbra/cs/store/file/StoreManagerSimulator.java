@@ -594,6 +594,11 @@ public final class StoreManagerSimulator extends StoreManager
       mVolumeId = volumeId;
     }
 
+    public String getDigest() throws IOException
+    {
+      return mMockBlob.getDigest();
+    }
+
     public MockBlob getMockBlob()
     {
       return mMockBlob;
@@ -610,6 +615,19 @@ public final class StoreManagerSimulator extends StoreManager
     public MockVolumeStagedBlob(Mailbox mbox, MockBlob blob, String volumeId) throws IOException
     {
       super(mbox, new MockVolumeBlob(blob, volumeId));
+    }
+
+    @Override
+    public String getDigest()
+    {
+      try
+      {
+        return getLocalBlob().getDigest();
+      }
+      catch (Exception e)
+      {
+        return "";
+      }
     }
   }
 

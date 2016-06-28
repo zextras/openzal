@@ -60,8 +60,7 @@ public class MailboxBlobWrap implements MailboxBlob
     }
   }
 
-  @Override
-  public long getRawSize()
+  public long getSize()
   {
     return 0;
   }

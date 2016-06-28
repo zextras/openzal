@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.store.file.VolumeBlobProxy;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,10 @@ public class BlobWrap implements Blob
     if (blob == null)
     {
       throw new NullPointerException();
+    }
+    if (VolumeBlobProxy.isVolumeBlob(blob))
+    {
+      volumeId = String.valueOf(new VolumeBlobProxy(blob).getVolumeId());
     }
     if (volumeId == null && blob instanceof VolumeStagedBlob)
     {
@@ -77,8 +82,7 @@ public class BlobWrap implements Blob
     return mBlob.getDigest();
   }
 
-  @Override
-  public long getRawSize() throws IOException
+  public long getSize() throws IOException
   {
     return mBlob.getRawSize();
   }

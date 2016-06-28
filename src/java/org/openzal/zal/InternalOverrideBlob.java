@@ -44,7 +44,7 @@ public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
   @Override
   public long getRawSize() throws IOException
   {
-    return mBlob.getRawSize();
+    return mBlob.getSize();
   }
 
   @Override

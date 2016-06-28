@@ -29,7 +29,7 @@ public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
   {
     try
     {
-      return mBlob.getRawSize();
+      return mBlob.getSize();
     }
     catch (IOException e)
     {

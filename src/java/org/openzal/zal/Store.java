@@ -40,6 +40,8 @@ public interface Store
   PrimaryStore toPrimaryStore();
   boolean canBePrimary();
   String getVolumeId();
+  String getVolumeName();
   String getBlobPath(int mboxId, int itemId, int modContent);
   String getMailboxDirPath(int mboxId);
+  String getRootPath();
 }

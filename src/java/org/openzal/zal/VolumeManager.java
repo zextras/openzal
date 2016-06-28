@@ -320,6 +320,7 @@ public class VolumeManager
 
   public boolean isValidVolume(String id)
   {
+    // check type message?
     List<StoreVolume> volumeList = getAll();
 
     for (StoreVolume v:volumeList){

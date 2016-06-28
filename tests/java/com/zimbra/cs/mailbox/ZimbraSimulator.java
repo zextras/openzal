@@ -198,6 +198,7 @@ public class ZimbraSimulator extends ExternalResource
   {
     HSQLZimbraDatabase.clearDatabase();
     mZimbra.restoreZimbraStoreManager();
+    mStoreRoot.emptyRamFS();
     //sVolumeManagerInstance.set(null, sVolumeManagerBuilder.newInstance());
     //((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).shutdown();
   }

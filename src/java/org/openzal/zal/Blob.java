@@ -31,7 +31,7 @@ public interface Blob
   File getFile();
   <T> T toZimbra(Class<T> cls);
   String getDigest() throws IOException;
-  long getRawSize() throws IOException;
+  long getSize() throws IOException;
   String getVolumeId();
   InputStream getInputStream() throws IOException;
 }

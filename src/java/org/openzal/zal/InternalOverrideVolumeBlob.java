@@ -1,6 +1,5 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.store.*;
 import com.zimbra.cs.store.file.VolumeBlobProxy;
 import org.apache.commons.io.IOUtils;
 
@@ -81,7 +80,7 @@ public class InternalOverrideVolumeBlob extends VolumeBlobProxy
   @Override
   public long getRawSize() throws IOException
   {
-    return mBlob.getRawSize();
+    return mBlob.getSize();
   }
 
   @Override
