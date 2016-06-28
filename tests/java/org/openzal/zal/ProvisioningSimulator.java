@@ -158,6 +158,7 @@ public class ProvisioningSimulator extends ProvisioningImp
     defaults.put(com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus,
                  com.zimbra.cs.account.Provisioning.ACCOUNT_STATUS_ACTIVE);
     defaults.put(com.zimbra.cs.account.Provisioning.A_displayName, displayName );
+    defaults.put(com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId, "UTC");
     attrs.putAll(extraAttr);
     attrs.putAll(defaults);
 
@@ -488,6 +489,18 @@ public class ProvisioningSimulator extends ProvisioningImp
 
 
   public Server getServer(Account acct)
+    throws ZimbraException
+  {
+    throw new RuntimeException("Provisioning method not implemented");
+  }
+
+  public Server getServerById(String id)
+    throws ZimbraException
+  {
+    throw new RuntimeException("Provisioning method not implemented");
+  }
+
+  public Server getServerByName(String name)
     throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");

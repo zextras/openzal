@@ -616,7 +616,16 @@ $endif $
   }
 
   public void addAlias(Account acct, String alias) {
-    throw new UnsupportedOperationException();
+    try
+    {
+      ArrayList<String> list = new ArrayList<String>(Arrays.asList(acct.getMailAlias()));
+      list.add(alias);
+      acct.setMailAlias(list.toArray(new String[0]));
+    }
+    catch (ServiceException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   public void removeAlias(Account acct, String alias) {
@@ -672,6 +681,14 @@ $endif $
 
   public List<Domain> getAllDomains() {
     return new ArrayList<Domain>(id2domain.values());
+  }
+
+  public void getAllDomains(NamedEntry.Visitor visitor, String[] retAttrs) throws ServiceException
+  {
+    for( Domain domain : getAllDomains() )
+    {
+      visitor.visit(domain);
+    }
   }
 
   public void deleteDomain(String zimbraId) {
@@ -894,7 +911,7 @@ $endif $
   /* $endif $ */
 
   public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
-    throw new UnsupportedOperationException();
+    return new Identity(account, identityName, account.getId(), attrs, this);
   }
 
   public Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {

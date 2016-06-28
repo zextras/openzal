@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -44,6 +44,10 @@ public class ZimbraExceptionFactory
     else if (code.equals(com.zimbra.cs.account.AccountServiceException.NO_SUCH_DOMAIN))
     {
       return new NoSuchDomainException(accountServiceException);
+    }
+    else if (code.equals(com.zimbra.cs.account.AccountServiceException.NO_SUCH_SERVER))
+    {
+      return new NoSuchServerException(accountServiceException);
     }
 
     return new ZimbraException(accountServiceException);

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -224,6 +224,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraGalLastSuccessfulSyncTimestamp                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLastSuccessfulSyncTimestamp;
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
+  public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -1448,6 +1450,46 @@ public class ProvisioningImp implements Provisioning
       {
         return new Server(server);
       }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  @Override
+  public Server getServerById(String id)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerById(id);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  @Override
+  public Server getServerByName(String name)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerByName(name);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +68,18 @@ public class ParsedMessage
   public List<MPartInfo> getMessageParts()
   {
     return ZimbraListWrapper.wrapMPartInfos(mParsedMessage.getMessageParts());
+  }
+
+  public void generateInternalIndexing()
+  {
+    try
+    {
+      mParsedMessage.analyzeFully();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @NotNull

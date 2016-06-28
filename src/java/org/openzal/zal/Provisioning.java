@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2014 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -238,6 +238,14 @@ public interface Provisioning
   Server getServer(@NotNull Account acct)
     throws ZimbraException;
 
+  @Nullable
+  Server getServerById(String id)
+    throws ZimbraException;
+
+  @Nullable
+  Server getServerByName(String name)
+    throws ZimbraException;
+
   boolean onLocalServer(@NotNull Account userAccount)
       throws ZimbraException;
 
@@ -289,6 +297,7 @@ public interface Provisioning
   void deleteAccountById(String id);
 
   Collection<Domain> getDomainAliases(Domain domain);
+
 
   class CountAccountByCos
   {
