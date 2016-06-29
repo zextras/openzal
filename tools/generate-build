@@ -67,11 +67,14 @@ joined_zimbra_versions = join(ZimbraVersions, '')
 joined_major_zimbra_versions = join(MajorZimbraVersions, '')
 
 zal_version = file("../version").read().replace("\n","").replace("\r","")
-zal_version_micro = zal_version[zal_version.rindex('.')+1:]
+version_pattern = re.compile("([0-9]+)\.([0-9]+)\.([0-9]+)")
+version_matches = version_pattern.search(zal_version)
 
 Parameters = {
   "VERSION": zal_version,
-  "VERSION_MICRO": zal_version_micro,
+  "VERSION_MAJOR": version_matches.group(1),
+  "VERSION_MINOR": version_matches.group(2),
+  "VERSION_MICRO": version_matches.group(3),
   "DEBUG_ENABLED": "true",
   "DEBUG_LEVEL": "lines,vars,source",
   "COMPILER_ARGS": "-Xlint:none",
