@@ -34,5 +34,7 @@ public interface Blob
   long getSize() throws IOException;
   String getVolumeId();
   InputStream getInputStream() throws IOException;
+  boolean hasMailboxInfo();
+  MailboxBlob toMailboxBlob();
 }
 

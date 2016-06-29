@@ -99,6 +99,18 @@ public class BlobWrap implements Blob
     return mBlob.getInputStream();
   }
 
+  @Override
+  public boolean hasMailboxInfo()
+  {
+    return false;
+  }
+
+  @Override
+  public MailboxBlob toMailboxBlob()
+  {
+    throw new UnsupportedOperationException();
+  }
+
   public String getKey()
   {
     return mBlob.getPath();

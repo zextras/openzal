@@ -64,7 +64,8 @@ public class VolumeManager
       builder.setId(Short.parseShort(id));
       builder.setName(name);
       builder.setType(type);
-      builder.setPath(path, true);
+      // TODO avoid path validation just for s3 store?
+      builder.setPath(path, false);
       builder.setMboxGroupBits(volumeToUpdate.getMboxGroupBits());
       builder.setMboxBit(volumeToUpdate.getMboxBits());
       builder.setFileGroupBits(volumeToUpdate.getFileGroupBits());

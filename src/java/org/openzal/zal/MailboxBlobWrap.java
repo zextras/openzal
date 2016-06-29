@@ -72,6 +72,18 @@ public class MailboxBlobWrap implements MailboxBlob
   }
 
   @Override
+  public boolean hasMailboxInfo()
+  {
+    return true;
+  }
+
+  @Override
+  public MailboxBlob toMailboxBlob()
+  {
+    return this;
+  }
+
+  @Override
   public Blob getLocalBlob()
   {
     try

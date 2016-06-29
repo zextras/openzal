@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MailboxBlobImpl implements MailboxBlob
+public class MailboxBlobImpl extends ZalBlob implements MailboxBlob
 {
   private final Blob mBlob;
   private final Mailbox mMbox;
@@ -13,7 +13,7 @@ public class MailboxBlobImpl implements MailboxBlob
 
   public MailboxBlobImpl(Blob blob, Mailbox mbox, int msgId, int revision)
   {
-
+    super(blob.getFile(), blob.getVolumeId());
     mBlob = blob;
     mMbox = mbox;
     mMsgId = msgId;
@@ -41,7 +41,7 @@ public class MailboxBlobImpl implements MailboxBlob
   @Override
   public Blob getLocalBlob()
   {
-    return mBlob;
+    return this;
   }
 
   @Override
@@ -65,6 +65,10 @@ public class MailboxBlobImpl implements MailboxBlob
   @Override
   public <T> T toZimbra(Class<T> cls)
   {
+    if (cls.equals(com.zimbra.cs.store.Blob.class))
+    {
+      return cls.cast(new InternalOverrideBlob(this));
+    }
     return cls.cast(new InternalOverrideMailboxBlob(this));
   }
 
@@ -89,5 +93,17 @@ public class MailboxBlobImpl implements MailboxBlob
   public InputStream getInputStream() throws IOException
   {
     return mBlob.getInputStream();
+  }
+
+  @Override
+  public boolean hasMailboxInfo()
+  {
+    return true;
+  }
+
+  @Override
+  public MailboxBlob toMailboxBlob()
+  {
+    return this;
   }
 }

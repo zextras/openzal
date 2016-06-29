@@ -1,5 +1,6 @@
 package org.openzal.zal;
 
+import com.zimbra.cs.store.file.VolumeBlobProxy;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -50,7 +51,19 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public InputStream getInputStream() throws IOException
   {
-    return null;
+    return new VolumeBlobProxy(mStagedBlob.getLocalBlob()).getInputStream();
+  }
+
+  @Override
+  public boolean hasMailboxInfo()
+  {
+    return false;
+  }
+
+  @Override
+  public MailboxBlob toMailboxBlob()
+  {
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -80,7 +93,7 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public String getVolumeId()
   {
-    return null;
+    return mStagedBlob.getLocator();
   }
 
   @Override

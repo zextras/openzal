@@ -288,7 +288,14 @@ public class InternalOverrideStoreManager
   public InputStream getContent(Blob blob) throws IOException
   {
     org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
-    return mStoreManager.getStore(zalBlob.getVolumeId()).toPrimaryStore().getContent(zalBlob);
+    if (zalBlob.hasMailboxInfo())
+    {
+      return mStoreManager.getStore(zalBlob.getVolumeId()).getContent(zalBlob.toMailboxBlob());
+    }
+    else
+    {
+      return mStoreManager.getStore(zalBlob.getVolumeId()).toPrimaryStore().getContent(zalBlob);
+    }
   }
 
   /* $if ZimbraVersion >= 7.2.1 $ */

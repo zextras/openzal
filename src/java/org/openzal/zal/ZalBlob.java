@@ -59,12 +59,12 @@ public class ZalBlob implements Blob
   }
 
   @Override
-  public String getDigest()
+  public String getDigest() throws IOException
   {
     return mDigest;
   }
 
-  public long getSize()
+  public long getSize() throws IOException
   {
     if (mRawSize == null)
     {
@@ -83,5 +83,17 @@ public class ZalBlob implements Blob
   public InputStream getInputStream() throws IOException
   {
     return new FileInputStream(mFile);
+  }
+
+  @Override
+  public boolean hasMailboxInfo()
+  {
+    return false;
+  }
+
+  @Override
+  public MailboxBlob toMailboxBlob()
+  {
+    throw new UnsupportedOperationException();
   }
 }
