@@ -441,7 +441,7 @@ public class ProvisioningImp implements Provisioning
     throws ZimbraException
   {
     final List<Account> allAccounts = new ArrayList<Account>();
-    SimpleVisitor<Account> accountListBuilder = new SimpleVisitor<Account>()
+    SimpleVisitor<Account> accountListBuilder = new AbstractVisitor<Account>()
     {
       @Override
       public void visit(Account entry)
@@ -455,9 +455,13 @@ public class ProvisioningImp implements Provisioning
     );
     visitAllLocalAccountsNoDefaults(accountListBuilderVisitor);
 
-    for (Account account : allAccounts)
-    {
-      visitor.visit(account);
+    visitor.init();
+    try {
+      for (Account account : allAccounts) {
+        visitor.visit(account);
+      }
+    } finally {
+      visitor.finish();
     }
   }
 

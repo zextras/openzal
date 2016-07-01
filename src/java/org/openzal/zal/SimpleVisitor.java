@@ -22,5 +22,8 @@ package org.openzal.zal;
 
 public interface SimpleVisitor<T>
 {
+  void init();
+  void finish();
+
   void visit( T entry );
 }

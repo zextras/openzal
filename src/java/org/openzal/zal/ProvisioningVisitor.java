@@ -23,7 +23,7 @@ package org.openzal.zal;
 import org.openzal.zal.lib.Filter;
 import org.jetbrains.annotations.NotNull;
 
-public class ProvisioningVisitor<T> implements SimpleVisitor<T>
+public class ProvisioningVisitor<T> extends AbstractVisitor<T>
 {
   @NotNull private final SimpleVisitor<T> mVisitor;
   @NotNull private final Filter<T>        mFilter;

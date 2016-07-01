@@ -23,7 +23,7 @@ package org.openzal.zal;
 import java.util.HashSet;
 import java.util.Set;
 
-class DomainAliasesVisitor implements SimpleVisitor<Domain>
+class DomainAliasesVisitor extends AbstractVisitor<Domain>
 {
   private final Domain      mDomain;
   private final Set<Domain> mAliases;
