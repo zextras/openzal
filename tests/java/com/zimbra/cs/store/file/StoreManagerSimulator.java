@@ -1,37 +1,23 @@
 package com.zimbra.cs.store.file;
 
-import com.zextras.lib.Error.MissingReadPermissions;
-import com.zextras.lib.Error.MissingWritePermissions;
-import com.zextras.lib.Future;
 import com.zextras.lib.vfs.FileStreamWriter;
-import com.zextras.lib.vfs.Null;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.store.Blob;
-import com.zimbra.cs.store.BlobBuilder;
-import com.zimbra.cs.store.BlobInputStream;
-import com.zimbra.cs.store.FileDescriptorCache;
-import com.zimbra.cs.store.MailboxBlob;
-import com.zimbra.cs.store.StagedBlob;
-import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.store.*;
+import com.zimbra.cs.volume.Volume;
+import com.zimbra.cs.volume.VolumeManager;
 import io.netty.buffer.Unpooled;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
-import com.zimbra.cs.volume.Volume;
-import com.zimbra.cs.volume.VolumeManager;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
@@ -199,7 +185,7 @@ public final class StoreManagerSimulator extends StoreManager
     sb.append(".msg");
 
     String finalPath = sb.toString();
-    return new RelativePath(finalPath);
+    return new RelativePath(finalPath.substring(1,finalPath.length()));
   }
 
   public RelativePath getBlobPath(MailboxBlob mboxBlob)
