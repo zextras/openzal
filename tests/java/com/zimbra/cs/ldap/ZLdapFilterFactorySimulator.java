@@ -2,6 +2,7 @@ package com.zimbra.cs.ldap;
 
 import org.mockito.Mockito;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -156,6 +157,11 @@ public class ZLdapFilterFactorySimulator {
         return "";
       }
     };
+  }
+
+  public ZLdapFilter allAccountsOnlyByCos(String s)
+  {
+    ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
 
   @Override
@@ -436,6 +442,11 @@ public class ZLdapFilterFactorySimulator {
   @Override
   public ZLdapFilter domainById(String id) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
+  }
+
+  public ZLdapFilter domainsByIds(Collection<String> collection)
+  {
+    ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
 
   @Override
