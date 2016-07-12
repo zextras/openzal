@@ -172,6 +172,11 @@ public boolean databaseExists(DbPool.DbConnection connection, String dbname)
     return "BITAND(" + expr1 + ", " + expr2 + ")";
   }
 
+  public String bitANDNOT(String expr1, String expr2)
+  {
+    return expr1 + " & ~" + expr2;
+  }
+
   public void flushToDisk() {
   }
 
