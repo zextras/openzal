@@ -9,6 +9,7 @@ import java.io.InputStream;
 public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
 {
   private final org.openzal.zal.Blob mBlob;
+  private final boolean mHasMailboxInfo;
 
   @Override
   public File getFile()
@@ -124,10 +125,22 @@ public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
   {
     super(new File("/tmp/fake"));
     mBlob = blob;
+    mHasMailboxInfo = false;
+  }
+
+  public InternalOverrideBlob(org.openzal.zal.MailboxBlob blob)
+  {
+    super(new File("/tmp/fake"));
+    mBlob = blob;
+    mHasMailboxInfo = true;
   }
 
   public org.openzal.zal.Blob getWrappedObject()
   {
+    if (mHasMailboxInfo)
+    {
+      return (MailboxBlob) mBlob;
+    }
     return mBlob;
   }
 

@@ -1,6 +1,5 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.store.file.VolumeBlobProxy;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
@@ -9,14 +8,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InternalOverrideVolumeBlob extends VolumeBlobProxy
+public class InternalOverrideBlobWithMailboxInfo extends com.zimbra.cs.store.Blob
 {
   private final Blob   mBlob;
   private final String mVolumeId;
 
-  public InternalOverrideVolumeBlob(Blob blob)
+  public InternalOverrideBlobWithMailboxInfo(Blob blob)
   {
-    super();
+    super(new File("/tmp/fake"));
     mBlob = blob;
     mVolumeId = blob.getVolumeId();
   }
@@ -139,29 +138,5 @@ public class InternalOverrideVolumeBlob extends VolumeBlobProxy
   public String toString()
   {
     return mBlob.toString();
-  }
-
-  public static Object wrap(Blob blob)
-  {
-    if (blob instanceof BlobWrap)
-    {
-      return blob.toZimbra(com.zimbra.cs.store.Blob.class);
-    }
-    if (blob instanceof MailboxBlobWrap)
-    {
-      return InternalOverrideFactory.wrapBlob(((MailboxBlobWrap) blob).getLocalBlob());
-    }
-    if (blob.getVolumeId() != null)
-    {
-      if (blob.hasMailboxInfo())
-      {
-        return new InternalOverrideBlobWithMailboxInfo(blob);
-      }
-      return new InternalOverrideVolumeBlob(blob);
-    }
-    else
-    {
-      return new InternalOverrideBlob(blob);
-    }
   }
 }

@@ -168,6 +168,24 @@ public class VolumeManager
     }
   }
 
+  public void setCurrentSecondaryVolume(String id)
+    throws ZimbraException
+  {
+    Short volType = Short.valueOf("2");
+    try
+    {
+      /* $if MajorZimbraVersion <= 7 $
+      Volume.setCurrentVolume(volType, Short.valueOf(id));
+      /* $else$ */
+      mVolumeManager.setCurrentVolume(volType, Short.valueOf(id));
+      /* $endif$ */
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   /*
   public StoreVolume setDefaultBits(String id)
     throws ZimbraException
@@ -222,14 +240,14 @@ public class VolumeManager
   }
   */
 
-  public boolean delete(short id) throws ZimbraException
+  public boolean delete(String id) throws ZimbraException
   {
     try
     {
       /* $if MajorZimbraVersion <= 7 $
-      return Volume.delete(id);
+      return Volume.delete(Short.valueOf(id));
       /* $else$ */
-      return mVolumeManager.delete(id);
+      return mVolumeManager.delete(Short.valueOf(id));
       /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)

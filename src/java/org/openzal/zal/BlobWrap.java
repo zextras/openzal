@@ -145,6 +145,9 @@ public class BlobWrap implements Blob
     if (blob instanceof VolumeStagedBlob)
       return new BlobWrap(((VolumeStagedBlob) blob).getLocalBlob(), volumeId);
 
+    if (blob instanceof InternalOverrideBlobWithMailboxInfo)
+      return ((InternalOverrideBlobWithMailboxInfo) blob).getWrappedObject();
+
     return new BlobWrap(blob, volumeId);
   }
 
