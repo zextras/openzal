@@ -183,6 +183,7 @@ public class ZimbraSimulator extends ExternalResource
   public void cleanup() throws Exception
   {
     HSQLZimbraDatabase.clearDatabase();
+    mStoreRoot.getRoot().removeContent();
     //sVolumeManagerInstance.set(null, sVolumeManagerBuilder.newInstance());
     //((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).shutdown();
   }
