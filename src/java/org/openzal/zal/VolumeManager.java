@@ -1,5 +1,6 @@
 package org.openzal.zal;
 
+import java.io.File;
 import java.util.*;
 
 import org.jetbrains.annotations.Nullable;
@@ -64,8 +65,14 @@ public class VolumeManager
       builder.setId(Short.parseShort(id));
       builder.setName(name);
       builder.setType(type);
-      // TODO avoid path validation just for s3 store?
-      builder.setPath(path, false);
+      if (path.startsWith(File.separator))
+      {
+        builder.setPath(path, false);
+      }
+      else
+      {
+        builder.setPath(path, true);
+      }
       builder.setMboxGroupBits(volumeToUpdate.getMboxGroupBits());
       builder.setMboxBit(volumeToUpdate.getMboxBits());
       builder.setFileGroupBits(volumeToUpdate.getFileGroupBits());
@@ -93,14 +100,6 @@ public class VolumeManager
   }
 
   public StoreVolume create(short id, short type,
-                            String name, boolean compressBlobs,
-                            long compressionThreshold)
-    throws ZimbraException
-  {
-    return create(id, type, name, "", compressBlobs, compressionThreshold);
-  }
-
-  public StoreVolume create(short id, short type,
                             String name, String path,
                             boolean compressBlobs, long compressionThreshold)
     throws ZimbraException
@@ -117,9 +116,9 @@ public class VolumeManager
       builder.setId(id);
       builder.setType(type);
       builder.setName(name);
-      if (path.isEmpty())
+      if (!path.startsWith(File.separator))
       {
-        builder.setPath("vfs" + id, false);
+        builder.setPath(path, false);
       }
       else
       {
@@ -321,6 +320,15 @@ public class VolumeManager
     return new StoreVolume(Volume.getCurrentMessageVolume());
     /* $else$ */
     return new StoreVolume(mVolumeManager.getCurrentMessageVolume());
+    /* $endif$ */
+  }
+
+  public StoreVolume getCurrentIndex()
+  {
+    /* $if MajorZimbraVersion <= 7 $
+    return new StoreVolume(Volume.getCurrentIndexVolume());
+    /* $else$ */
+    return new StoreVolume(mVolumeManager.getCurrentIndexVolume());
     /* $endif$ */
   }
 
