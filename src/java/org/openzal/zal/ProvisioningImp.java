@@ -455,13 +455,8 @@ public class ProvisioningImp implements Provisioning
     );
     visitAllLocalAccountsNoDefaults(accountListBuilderVisitor);
 
-    visitor.init();
-    try {
-      for (Account account : allAccounts) {
-        visitor.visit(account);
-      }
-    } finally {
-      visitor.finish();
+    for (Account account : allAccounts) {
+      visitor.visit(account);
     }
   }
 
