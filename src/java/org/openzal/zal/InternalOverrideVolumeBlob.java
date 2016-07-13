@@ -151,12 +151,12 @@ public class InternalOverrideVolumeBlob extends VolumeBlobProxy
     {
       return InternalOverrideFactory.wrapBlob(((MailboxBlobWrap) blob).getLocalBlob());
     }
+    if (blob.hasMailboxInfo())
+    {
+      return new InternalOverrideBlobWithMailboxInfo(blob);
+    }
     if (blob.getVolumeId() != null)
     {
-      if (blob.hasMailboxInfo())
-      {
-        return new InternalOverrideBlobWithMailboxInfo(blob);
-      }
       return new InternalOverrideVolumeBlob(blob);
     }
     else

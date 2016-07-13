@@ -44,4 +44,6 @@ public interface Store
   String getBlobPath(int mboxId, int itemId, int modContent);
   String getMailboxDirPath(int mboxId);
   String getRootPath();
+  boolean isCompressed();
+  long getCompressionThreshold();
 }

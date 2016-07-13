@@ -89,6 +89,18 @@ public class FileBlobPrimaryStore implements PrimaryStore
     return mVolume.getRootPath();
   }
 
+  @Override
+  public boolean isCompressed()
+  {
+    return mVolume.getCompressBlobs();
+  }
+
+  @Override
+  public long getCompressionThreshold()
+  {
+    return mVolume.getCompressionThreshold();
+  }
+
   @Nullable
   @Override
   public MailboxBlob getMailboxBlob(@NotNull Mailbox mbox, int msgId, int revision)

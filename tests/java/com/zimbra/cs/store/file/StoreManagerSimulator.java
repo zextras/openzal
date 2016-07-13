@@ -644,7 +644,6 @@ public final class StoreManagerSimulator extends StoreManager
       super(mbox, new MockVolumeBlob(blob, volumeId));
     }
 
-    @Override
     public String getDigest()
     {
       try

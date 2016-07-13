@@ -93,7 +93,11 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public String getVolumeId()
   {
+    /* $if ZimbraVersion >= 7.0.0 $ */
     return mStagedBlob.getLocator();
+    /* $else $
+    return mStagedBlob.getStagedLocator();
+    /* $endif $ */
   }
 
   @Override
