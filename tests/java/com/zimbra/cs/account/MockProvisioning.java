@@ -176,8 +176,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     {
       attrs.put(A_zimbraDumpsterEnabled, TRUE);
     }
-//    attrs.put(A_zimbraBatchedIndexingSize, Integer.MAX_VALUE); // suppress indexing
-    attrs.put(A_zimbraBatchedIndexingSize, Integer.toString(Integer.MAX_VALUE)); // suppress indexing
+    attrs.put(A_zimbraBatchedIndexingSize, Integer.MAX_VALUE); // suppress indexing
     Account account = new Account(email, email, attrs, null, this);
     try
     {
