@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.QuotaUsage;
 import org.openzal.zal.ZimbraListWrapper;
@@ -39,7 +40,7 @@ public class RemoteSoapProvisioning
     {
       return new GetQuotaResponse(
           SoapProvisioning.getAdminInstance().invokeJaxb(
-            getQuotaUsageRequest.toZimbra(GetQuotaRequest.class),
+            getQuotaUsageRequest.toZimbra(GetQuotaUsageRequest.class),
           server
         )
       );
