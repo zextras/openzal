@@ -239,9 +239,9 @@ public final class StoreManagerSimulator extends StoreManager
         throw new IOException();
       }
       destinationFile.getParent().createRecursive();
-      src.getVirtualFile().copy(destinationFile);
+      src.getVirtualFile().copy(destinationFile).sync();
     }
-    catch (VfsError e)
+    catch (VfsError | InterruptedException e)
     {
       throw new RuntimeException(e);
     }
