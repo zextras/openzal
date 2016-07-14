@@ -65,7 +65,7 @@ public class VolumeManager
       builder.setId(Short.parseShort(id));
       builder.setName(name);
       builder.setType(type);
-      if (path.startsWith(File.separator))
+      if (!path.startsWith(File.separator))
       {
         builder.setPath(path, false);
       }
