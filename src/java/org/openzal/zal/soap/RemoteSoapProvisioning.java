@@ -20,7 +20,6 @@
 
 package org.openzal.zal.soap;
 
-import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.QuotaUsage;
 import org.openzal.zal.ZimbraListWrapper;
@@ -29,6 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import java.util.Collection;
 /* $if ZimbraVersion >= 8.0.0 $ */
+import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
 /* $endif $ */
 
 public class RemoteSoapProvisioning
