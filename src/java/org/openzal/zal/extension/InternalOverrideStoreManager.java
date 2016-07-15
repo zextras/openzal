@@ -275,6 +275,13 @@ public class InternalOverrideStoreManager
     return null;
   }
 
+  @Override
+  public MailboxBlob getMailboxBlob(Mailbox mailbox, int itemId, int revision, String locator, boolean validate)
+    throws ServiceException
+  {
+    return getMailboxBlob(mailbox, itemId, revision, locator);
+  }
+
   @Nullable
   public MailboxBlob getMailboxBlob(MailItem mailItem) throws ServiceException
   {
