@@ -38,7 +38,7 @@ public class RightConstants
   public static String RT_viewAdminSavedSearch = RightConsts.RT_viewAdminSavedSearch;
   public static String RT_domainAdminConsoleDLSharesTabRights = RightConsts.RT_domainAdminConsoleDLSharesTabRights;
 
-  /* $if ZimbraVersion < 7.0.1 || ZimbraVersion > 7.1.0 $ */
+  /* $if ZimbraVersion != 7.0.1 && ZimbraVersion != 7.1.0 $ */
   public static String RT_configureQuota = RightConsts.RT_configureQuota;
   /* $else $
   public static String RT_configureQuota = "configureQuota";
