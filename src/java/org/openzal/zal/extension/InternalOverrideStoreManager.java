@@ -275,7 +275,6 @@ public class InternalOverrideStoreManager
     return null;
   }
 
-  @Override
   public MailboxBlob getMailboxBlob(Mailbox mailbox, int itemId, int revision, String locator, boolean validate)
     throws ServiceException
   {
