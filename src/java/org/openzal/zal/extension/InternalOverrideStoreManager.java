@@ -258,16 +258,21 @@ public class InternalOverrideStoreManager
   {
     try
     {
-      return mStoreManager.getStore(locator).getMailboxBlob(
+      org.openzal.zal.MailboxBlob blob = mStoreManager.getStore(locator).getMailboxBlob(
         new org.openzal.zal.Mailbox(mbox),
         itemId,
         revision
-      ).toZimbra(MailboxBlob.class);
+      );
+
+      if (blob != null)
+      {
+        return blob.toZimbra(MailboxBlob.class);
+      }
     }
     catch (IOException e)
-    {
-      return null;
-    }
+    {}
+
+    return null;
   }
 
   @Nullable

@@ -98,7 +98,7 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   @Override
   public Blob storeIncoming(InputStream in, long sizeHint, Object callback, boolean storeAsIs) throws IOException, ServiceException
   {
-    /* $elseif ZimbraVersion >= 7.0.0 $ */
+    /* $if ZimbraVersion >= 7.0.0 $ */
     throw new UnsupportedOperationException();
     /* $else $
     return mStore.storeIncoming(in, sizeHint, (StorageCallback) callback, storeAsIs);
