@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InternalOverrideBlobWithMailboxInfo extends com.zimbra.cs.store.Blob
+class InternalOverrideBlobWithMailboxInfo extends com.zimbra.cs.store.Blob
 {
   private final Blob   mBlob;
   private final String mVolumeId;

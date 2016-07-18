@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class InternalOverrideBlobBuilder extends com.zimbra.cs.store.BlobBuilder
+class InternalOverrideBlobBuilder extends com.zimbra.cs.store.BlobBuilder
 {
   private final BlobBuilder mBlobBuilder;
 

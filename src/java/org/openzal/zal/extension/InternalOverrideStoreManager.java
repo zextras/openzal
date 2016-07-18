@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
-public class InternalOverrideStoreManager
+class InternalOverrideStoreManager
   extends com.zimbra.cs.store.StoreManager
 {
   private final org.openzal.zal.StoreManager mStoreManager;
