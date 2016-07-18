@@ -26,5 +26,5 @@ import javax.activation.DataSource;
 public interface Indexer
 {
   boolean canHandle(String contentType, String fileExtension);
-  String extractPlainText(DataSource dataSource, String contentType, String fileExtension);
+  String extractPlainText(DataSource dataSource, String contentType, String fileExtension, String fileName);
 }
