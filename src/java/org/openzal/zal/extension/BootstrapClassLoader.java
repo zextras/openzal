@@ -57,54 +57,6 @@ public class BootstrapClassLoader extends ClassLoader
   private final URL[]     mUrls;
   private       boolean   mInitialized;
 
-  static
-  {
-    try
-    {
-      Field modifiersMethod = Method.class.getDeclaredField("modifiers");
-      modifiersMethod.setAccessible(true);
-      Method defineClassMethod = ClassLoader.class.getDeclaredMethod(
-        "defineClass", byte[].class, int.class, int.class
-      );
-      defineClassMethod.setAccessible(true);
-      modifiersMethod.setInt(
-        defineClassMethod,
-        (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
-      );
-
-      try
-      {
-        Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
-        ClassLoader parentClassLoader = parentClass.getClassLoader();
-
-        InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
-        byte[] buffer = new byte[6 * 1024];
-        int idx = 0;
-        int read = 0;
-        while (read > -1)
-        {
-          idx += read;
-          if (buffer.length == idx)
-          {
-            buffer = Arrays.copyOf(buffer, buffer.length * 2);
-          }
-          read = is.read(buffer, idx, buffer.length - idx);
-        }
-
-        defineClassMethod.invoke(
-          parentClassLoader,
-          buffer, 0, idx
-        );
-      }
-      catch (Exception ignore) {}
-    }
-    catch (Exception e)
-    {
-      //ZimbraLog.extensions.fatal("ZAL Reflection error " + Utils.exceptionToString(e));
-      throw new RuntimeException(e);
-    }
-  }
-
   public BootstrapClassLoader(URL[] urls, ClassLoader parent, boolean delegateZalLoading)
   {
     super(parent);

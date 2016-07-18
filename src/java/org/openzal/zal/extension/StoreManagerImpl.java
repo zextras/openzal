@@ -11,7 +11,12 @@ import org.openzal.zal.VolumeManager;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +30,53 @@ public class StoreManagerImpl implements StoreManager
   private final ReentrantLock             mLock;
   private final VolumeManager             mVolumeManager;
   private final StoreBuilder              mFileBlobStoreBuilder;
+
+  static
+  {
+    try
+    {
+      Field modifiersMethod = Method.class.getDeclaredField("modifiers");
+      modifiersMethod.setAccessible(true);
+      Method defineClassMethod = ClassLoader.class.getDeclaredMethod(
+        "defineClass", byte[].class, int.class, int.class
+      );
+      defineClassMethod.setAccessible(true);
+      modifiersMethod.setInt(
+        defineClassMethod,
+        (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
+      );
+
+      try
+      {
+        Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
+        ClassLoader parentClassLoader = parentClass.getClassLoader();
+
+        InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
+        byte[] buffer = new byte[6 * 1024];
+        int idx = 0;
+        int read = 0;
+        while (read > -1)
+        {
+          idx += read;
+          if (buffer.length == idx)
+          {
+            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+          }
+          read = is.read(buffer, idx, buffer.length - idx);
+        }
+
+        defineClassMethod.invoke(
+          parentClassLoader,
+          buffer, 0, idx
+        );
+      }
+      catch (Exception ignore) {}
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
 
   public StoreManagerImpl(
     final Object fileBlobStore,
