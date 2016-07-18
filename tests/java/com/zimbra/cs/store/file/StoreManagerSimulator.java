@@ -29,7 +29,6 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
-import org.openzal.zal.InternalOverrideBlob;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
@@ -527,10 +526,7 @@ public final class StoreManagerSimulator extends StoreManager
 
     public static MockBlob getMockBlob(Blob src)
     {
-      if (src instanceof InternalOverrideBlob)
-        return (MockBlob) ((InternalOverrideBlob) src).getWrappedObject();
-      else
-        return (MockBlob) src;
+      return (MockBlob) src;
     }
   }
 

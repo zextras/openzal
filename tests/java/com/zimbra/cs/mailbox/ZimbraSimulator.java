@@ -5,7 +5,6 @@ import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
-import org.openzal.zal.extension.InternalOverrideStoreManager;
 import org.openzal.zal.extension.StoreManagerImpl;
 import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
