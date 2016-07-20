@@ -49,7 +49,7 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public long getSize() throws IOException
   {
-    return 0L;
+    return mZalMailboxBlob.getSize();
   }
 
   @Override
@@ -61,7 +61,7 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public Mailbox getMailbox()
   {
-    return null;
+    return mZalMailboxBlob.getMailbox().toZimbra(Mailbox.class);
   }
 
   @Override

@@ -2,6 +2,7 @@ package org.openzal.zal.extension;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.BlobBuilder;
@@ -12,12 +13,16 @@ import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.*;
 import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lib.AnyThrow;
+import org.openzal.zal.log.ZimbraLog;
 /* $if ZimbraVersion < 8.0.0 $
 import com.zimbra.cs.store.StorageCallback;
 /* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 class InternalOverrideStoreManager
@@ -196,6 +201,7 @@ class InternalOverrideStoreManager
   }
 
   private static final Method mVolumeStagedBlobWasStagedDirectlyMethod;
+  private static final Constructor mMailServiceException;
   //private static final Method mExternalStagedBlobIsInsertedMethod;
 
   static
@@ -203,9 +209,13 @@ class InternalOverrideStoreManager
     try
     {
       mVolumeStagedBlobWasStagedDirectlyMethod = VolumeStagedBlob.class.getDeclaredMethod("wasStagedDirectly");
+      mMailServiceException = MailServiceException.class.getDeclaredConstructor(
+        String.class, String.class, boolean.class, Throwable.class, MailServiceException.Argument[].class
+      );
       //mExternalStagedBlobIsInsertedMethod = ExternalStagedBlob.class.getDeclaredMethod("isInserted");
 
       mVolumeStagedBlobWasStagedDirectlyMethod.setAccessible(true);
+      mMailServiceException.setAccessible(true);
       //mExternalStagedBlobIsInsertedMethod.setAccessible(true);
     }
     catch (NoSuchMethodException e)
@@ -269,8 +279,10 @@ class InternalOverrideStoreManager
         return blob.toZimbra(MailboxBlob.class);
       }
     }
-    catch (IOException e)
-    {}
+    catch (Exception e)
+    {
+      ZimbraLog.mailbox.error(Utils.exceptionToString(e));
+    }
 
     return null;
   }
@@ -293,7 +305,18 @@ class InternalOverrideStoreManager
   public InputStream getContent(MailboxBlob mboxBlob) throws IOException
   {
     org.openzal.zal.MailboxBlob zalMailboxBlob = MailboxBlobWrap.wrapZimbraObject(mboxBlob);
-    return mStoreManager.getStore(mboxBlob.getLocator()).getContent(zalMailboxBlob);
+    try
+    {
+      Store store = mStoreManager.getStore(mboxBlob.getLocator());
+      return store.getContent(zalMailboxBlob);
+    }
+    catch (Exception e)
+    {
+      AnyThrow.throwUnchecked(
+        MailServiceException.NO_SUCH_BLOB(zalMailboxBlob.getMailbox().getId(), zalMailboxBlob.getItemId(), zalMailboxBlob.getRevision())
+      );
+      return null;
+    }
   }
 
   public InputStream getContent(Blob blob) throws IOException
@@ -301,11 +324,49 @@ class InternalOverrideStoreManager
     org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
     if (zalBlob.hasMailboxInfo())
     {
-      return mStoreManager.getStore(zalBlob.getVolumeId()).getContent(zalBlob.toMailboxBlob());
+      try
+      {
+        Store store = mStoreManager.getStore(zalBlob.getVolumeId());
+        return store.getContent(zalBlob.toMailboxBlob());
+      }
+      catch (Exception e)
+      {
+        AnyThrow.throwUnchecked(
+          MailServiceException.NO_SUCH_BLOB(
+            zalBlob.toMailboxBlob().getMailbox().getId(),
+            zalBlob.toMailboxBlob().getItemId(),
+            zalBlob.toMailboxBlob().getRevision()
+          )
+        );
+        return null;
+      }
     }
     else
     {
-      return mStoreManager.getStore(zalBlob.getVolumeId()).toPrimaryStore().getContent(zalBlob);
+      try
+      {
+        PrimaryStore store = mStoreManager.getStore(zalBlob.getVolumeId()).toPrimaryStore();
+        return store.getContent(zalBlob);
+      }
+      catch (Exception e)
+      {
+        try
+        {
+          AnyThrow.throwUnchecked(
+            (Throwable) mMailServiceException.newInstance(
+              "No such blob: " + zalBlob.getKey() + ", volume=" + zalBlob.getVolumeId(),
+              MailServiceException.NO_SUCH_BLOB,
+              false,
+              new MailServiceException.Argument[0]
+            )
+          );
+        }
+        catch (Exception e1)
+        {
+          throw new RuntimeException(e1);
+        }
+        return null;
+      }
     }
   }
 
