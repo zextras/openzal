@@ -106,4 +106,16 @@ public class MailboxBlobImpl extends ZalBlob implements MailboxBlob
   {
     return this;
   }
+
+  @Override
+  public void setDigest(String digest)
+  {
+    mBlob.setDigest(digest);
+  }
+
+  @Override
+  public void setSize(long size)
+  {
+    mBlob.setSize(size);
+  }
 }

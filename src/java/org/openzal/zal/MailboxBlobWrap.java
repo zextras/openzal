@@ -84,6 +84,18 @@ public class MailboxBlobWrap implements MailboxBlob
   }
 
   @Override
+  public void setDigest(String digest)
+  {
+    mMailboxBlob.setDigest(digest);
+  }
+
+  @Override
+  public void setSize(long size)
+  {
+    mMailboxBlob.setSize(size);
+  }
+
+  @Override
   public Blob getLocalBlob()
   {
     try

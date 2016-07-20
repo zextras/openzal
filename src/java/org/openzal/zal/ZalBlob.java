@@ -9,7 +9,7 @@ public class ZalBlob implements Blob
 {
   private final File   mFile;
   private final String mVolumeId;
-  private final String mDigest;
+  private       String mDigest;
   private       Long   mRawSize;
 
   public ZalBlob(File file, String volumeId)
@@ -95,5 +95,17 @@ public class ZalBlob implements Blob
   public MailboxBlob toMailboxBlob()
   {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void setDigest(String digest)
+  {
+    mDigest = digest;
+  }
+
+  @Override
+  public void setSize(long size)
+  {
+    mRawSize = size;
   }
 }

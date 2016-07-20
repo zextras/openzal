@@ -36,5 +36,7 @@ public interface Blob
   InputStream getInputStream() throws IOException;
   boolean hasMailboxInfo();
   MailboxBlob toMailboxBlob();
+  void setDigest(String digest);
+  void setSize(long size);
 }
 

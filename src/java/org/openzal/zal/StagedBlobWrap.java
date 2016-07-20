@@ -67,6 +67,14 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
+  public void setDigest(String digest)
+  {}
+
+  @Override
+  public void setSize(long size)
+  {}
+
+  @Override
   public void renameTo(String newPath) throws IOException
   {
     wrapZimbraObject(mStagedBlob).renameTo(newPath);

@@ -111,6 +111,14 @@ public class BlobWrap implements Blob
     throw new UnsupportedOperationException();
   }
 
+  @Override
+  public void setDigest(String digest)
+  {}
+
+  @Override
+  public void setSize(long size)
+  {}
+
   public String getKey()
   {
     return mBlob.getPath();
