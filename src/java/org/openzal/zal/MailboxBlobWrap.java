@@ -60,15 +60,15 @@ public class MailboxBlobWrap implements MailboxBlob
     }
   }
 
-  public long getSize()
+  public long getSize() throws IOException
   {
-    return 0;
+    return mMailboxBlob.getSize();
   }
 
   @Override
   public InputStream getInputStream() throws IOException
   {
-    return null;
+    return mMailboxBlob.getLocalBlob().getInputStream();
   }
 
   @Override
@@ -84,15 +84,17 @@ public class MailboxBlobWrap implements MailboxBlob
   }
 
   @Override
-  public void setDigest(String digest)
+  public MailboxBlobWrap setDigest(String digest)
   {
     mMailboxBlob.setDigest(digest);
+    return this;
   }
 
   @Override
-  public void setSize(long size)
+  public MailboxBlobWrap setSize(long size)
   {
     mMailboxBlob.setSize(size);
+    return this;
   }
 
   @Override

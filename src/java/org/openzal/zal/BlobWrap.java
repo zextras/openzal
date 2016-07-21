@@ -24,6 +24,7 @@ import com.zimbra.cs.store.file.VolumeBlobProxy;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,9 +78,17 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public String getDigest() throws IOException
+  public String getDigest()
   {
-    return mBlob.getDigest();
+    try
+    {
+      return mBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      ZimbraLog.mailbox.error(Utils.exceptionToString(e));
+      return null;
+    }
   }
 
   public long getSize() throws IOException
@@ -112,12 +121,18 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public void setDigest(String digest)
-  {}
+  public BlobWrap setDigest(String digest)
+  {
+    mBlob.setDigest(digest);
+    return this;
+  }
 
   @Override
-  public void setSize(long size)
-  {}
+  public BlobWrap setSize(long size)
+  {
+    mBlob.setRawSize(size);
+    return this;
+  }
 
   public String getKey()
   {

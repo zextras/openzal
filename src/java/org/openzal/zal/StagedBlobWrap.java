@@ -67,12 +67,16 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
-  public void setDigest(String digest)
-  {}
+  public StagedBlobWrap setDigest(String digest)
+  {
+    return this;
+  }
 
   @Override
-  public void setSize(long size)
-  {}
+  public StagedBlobWrap setSize(long size)
+  {
+    return this;
+  }
 
   @Override
   public void renameTo(String newPath) throws IOException

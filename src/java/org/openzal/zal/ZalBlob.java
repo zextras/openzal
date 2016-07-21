@@ -59,7 +59,7 @@ public class ZalBlob implements Blob
   }
 
   @Override
-  public String getDigest() throws IOException
+  public String getDigest()
   {
     return mDigest;
   }
@@ -98,14 +98,16 @@ public class ZalBlob implements Blob
   }
 
   @Override
-  public void setDigest(String digest)
+  public ZalBlob setDigest(String digest)
   {
     mDigest = digest;
+    return this;
   }
 
   @Override
-  public void setSize(long size)
+  public ZalBlob setSize(long size)
   {
     mRawSize = size;
+    return this;
   }
 }

@@ -73,7 +73,7 @@ public class MailboxBlobImpl extends ZalBlob implements MailboxBlob
   }
 
   @Override
-  public String getDigest() throws IOException
+  public String getDigest()
   {
     return mBlob.getDigest();
   }
@@ -105,17 +105,5 @@ public class MailboxBlobImpl extends ZalBlob implements MailboxBlob
   public MailboxBlob toMailboxBlob()
   {
     return this;
-  }
-
-  @Override
-  public void setDigest(String digest)
-  {
-    mBlob.setDigest(digest);
-  }
-
-  @Override
-  public void setSize(long size)
-  {
-    mBlob.setSize(size);
   }
 }

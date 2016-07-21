@@ -30,13 +30,13 @@ public interface Blob
   String getKey();
   File getFile();
   <T> T toZimbra(Class<T> cls);
-  String getDigest() throws IOException;
+  String getDigest();
   long getSize() throws IOException;
   String getVolumeId();
   InputStream getInputStream() throws IOException;
   boolean hasMailboxInfo();
   MailboxBlob toMailboxBlob();
-  void setDigest(String digest);
-  void setSize(long size);
+  Blob setDigest(String digest);
+  Blob setSize(long size);
 }
 
