@@ -108,6 +108,13 @@ public class ZimbraSimulator extends ExternalResource
   private void initProperties()
     throws ConfigException, DocumentException
   {
+    System.setProperty("mail.mime.decodetext.strict",       "false");
+    System.setProperty("mail.mime.encodefilename",          "true");
+    System.setProperty("mail.mime.charset",                 "utf-8");
+    System.setProperty("mail.mime.base64.ignoreerrors",     "true");
+    System.setProperty("mail.mime.ignoremultipartencoding", "false");
+    System.setProperty("mail.mime.multipart.allowempty",    "true");
+
     System.setProperty("zimbra.native.required", "false");
     System.setProperty("log4j.configuration", "it/data/zimbra-config/log4j-test.properties");
     System.setProperty("zimbra.config", "it/data/zimbra-config/localconfig-test.xml");

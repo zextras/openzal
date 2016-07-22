@@ -20,9 +20,12 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class GlobalGrant extends Entry

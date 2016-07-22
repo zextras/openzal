@@ -302,6 +302,19 @@ $endif$ */
     }
   }
 
+  @NotNull
+  public String getBlobPath() throws IOException
+  {
+    try
+    {
+      return mMailItem.getBlob().getLocalBlob().getPath();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public static class CustomMetadata
   {
     private MailItem.CustomMetadata mCustomMetadata;

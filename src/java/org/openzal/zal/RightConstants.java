@@ -33,9 +33,17 @@ public class RightConstants
     RightConsts.RT_domainAdminConsoleAccountsFeaturesTabRights;
   public static String RT_listZimlet = RightConsts.RT_listZimlet;
   public static String RT_getZimlet = RightConsts.RT_getZimlet;
+  public static String RT_domainAdminZimletRights = RightConsts.RT_domainAdminZimletRights;
   public static String RT_setAdminSavedSearch = RightConsts.RT_setAdminSavedSearch;
   public static String RT_viewAdminSavedSearch = RightConsts.RT_viewAdminSavedSearch;
   public static String RT_domainAdminConsoleDLSharesTabRights = RightConsts.RT_domainAdminConsoleDLSharesTabRights;
+
+  /* $if ZimbraVersion != 7.0.1 && ZimbraVersion != 7.1.0 $ */
+  public static String RT_configureQuota = RightConsts.RT_configureQuota;
+  /* $else $
+  public static String RT_configureQuota = "configureQuota";
+  /* $endif $ */
+
   /* $if ZimbraVersion >= 8.0.0 $ */
   public static String RT_sendOnBehalfOf = RightConsts.RT_sendOnBehalfOf;
   public static String RT_sendOnBehalfOfDistList = RightConsts.RT_sendOnBehalfOfDistList;

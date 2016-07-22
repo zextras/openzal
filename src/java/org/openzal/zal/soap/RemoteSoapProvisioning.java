@@ -28,6 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import java.util.Collection;
 /* $if ZimbraVersion >= 8.0.0 $ */
+import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
 /* $endif $ */
 
 public class RemoteSoapProvisioning
@@ -39,7 +40,7 @@ public class RemoteSoapProvisioning
     {
       return new GetQuotaResponse(
           SoapProvisioning.getAdminInstance().invokeJaxb(
-            getQuotaUsageRequest.toZimbra(GetQuotaRequest.class),
+            getQuotaUsageRequest.toZimbra(GetQuotaUsageRequest.class),
           server
         )
       );

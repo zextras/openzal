@@ -290,11 +290,27 @@ public interface Provisioning
   GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit);
 
   @NotNull
+  Domain assertDomainById(String domainId);
+
+  @NotNull
+  Domain assertDomainByName(String domainId);
+
+  @NotNull
+  Zimlet assertZimlet(String com_zextras_zextras);
+
+  @NotNull
   DistributionList assertDistributionListById(String targetId);
 
   void deleteAccountByName(String id);
 
+  @NotNull
   void deleteAccountById(String id);
+
+  @NotNull
+  void deleteDomainById(String id);
+
+  @NotNull
+  void deleteCosById(String id);
 
   Collection<Domain> getDomainAliases(Domain domain);
 

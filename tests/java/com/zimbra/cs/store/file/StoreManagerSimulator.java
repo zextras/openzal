@@ -423,6 +423,33 @@ public final class StoreManagerSimulator extends StoreManager
     return new MockMailboxBlob(mbox, itemId, revision, locator, mockStagedBlob);
   }
 
+  public MailboxBlob getMailboxBlob(Mailbox mbox, int itemId, int revision, String locator, boolean checkFileExistance) throws ServiceException
+  {
+    MailboxBlob mailboxBlob = getMailboxBlob(mbox,itemId,revision,locator);
+
+    InputStream inputStream = null;
+    try
+    {
+      inputStream = mailboxBlob.getLocalBlob().getInputStream();
+    }
+    catch (IOException ex)
+    {
+      return null;
+    }
+    finally
+    {
+      if( inputStream != null)
+      {
+        try
+        {
+          inputStream.close();
+        }
+        catch (IOException ignore){}
+      }
+    }
+    return mailboxBlob;
+  }
+
   public InputStream getContent(MailboxBlob mblob) throws IOException {
     return mblob.getLocalBlob().getInputStream();
   }
