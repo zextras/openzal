@@ -18,29 +18,16 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.exceptions;
 
-import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-public class GlobalGrant extends Entry
+public class NoSuchServerException extends ZimbraException
 {
-  @NotNull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
-
-  public GlobalGrant(@NotNull Object globalGrant)
+  public NoSuchServerException(String serverName)
   {
-    super(globalGrant);
-    mGlobalGrant = (com.zimbra.cs.account.GlobalGrant) globalGrant;
+    super("no such server "+serverName);
   }
-
-  @NotNull
-  public Set<String> getMultiAttrSet(String name)
+  protected NoSuchServerException(Exception exception)
   {
-    return new HashSet<String>(mGlobalGrant.getMultiAttrSet(name));
+    super(exception);
   }
 }
