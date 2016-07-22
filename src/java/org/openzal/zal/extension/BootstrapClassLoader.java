@@ -84,6 +84,8 @@ public class BootstrapClassLoader extends ClassLoader
   protected Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
+    //System.out.printf("#### Loading class %s ",name);
+
     if(!mInitialized)
     {
       try

@@ -38,6 +38,9 @@ import java.util.Collections;
 /* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.util.AccountUtil;
+import com.zimbra.cs.account.accesscontrol.ACLAccessManager;
+import com.zimbra.cs.account.accesscontrol.Right;
+import com.zimbra.cs.account.accesscontrol.generated.UserRights;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,11 +189,6 @@ public class Account extends Entry
     }
   }
 
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mAccount.getMultiAttrSet(name));
-  }
-
   @NotNull
   public Collection<String> getMultiAttr(String name)
   {
@@ -271,18 +269,6 @@ public class Account extends Entry
     }
 
     return new Identity(identity);
-  }
-
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mAccount.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
   }
 
   @NotNull
@@ -379,22 +365,76 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
-    Domain domain = provisioning.getDomainById(getDomainId());
-    if (domain == null)
-    {
-      throw new RuntimeException();
-    }
-
-    Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
-
-    List<String> addresses = new ArrayList<String>();
+    Set<String> addresses = new HashSet<String>();
     for (String address : getAllAddresses())
     {
-      for (Domain domainAlias : domainAliases)
+      addresses.add(address);
+      if (address.contains("@"))
       {
-        addresses.add(Utils.getEmailNamePart(address) + "@" + domainAlias.getName());
+        String[] parts = address.split("@");
+        if (parts.length == 2)
+        {
+          String aliasName = parts[0];
+          String domainName = parts[1];
+
+          Domain domain = provisioning.getDomainByName(domainName);
+          if (domain != null)
+          {
+            Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
+            for (Domain domainAlias : domainAliases)
+            {
+              String alias = aliasName + "@" + domainAlias.getName();
+              addresses.add(alias);
+            }
+          }
+        }
       }
     }
+
+    return addresses;
+  }
+
+  @NotNull
+  public Collection<String> getAllAddressesAllowedInFrom(Provisioning provisioning)
+  {
+    Set<String> addresses = new HashSet<String>();
+    addresses.addAll(getAllAddressesIncludeDomainAliases(provisioning));
+
+    addresses.addAll(getAllowFromAddress());
+
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    Map<Right, Set<com.zimbra.cs.account.Entry>>  rights;
+    try
+    {
+      rights = new ACLAccessManager().discoverUserRights(mAccount, new HashSet<Right>(){{add(UserRights.R_sendAs);add(UserRights.R_sendAsDistList);}}, false);
+    }
+    catch (Exception e)
+    {
+      return addresses;
+    }
+    if (rights.containsKey(UserRights.R_sendAs))
+    {
+      Set<com.zimbra.cs.account.Entry> allowed = rights.get(UserRights.R_sendAs);
+      for (com.zimbra.cs.account.Entry entry : allowed)
+      {
+        if (entry instanceof com.zimbra.cs.account.Account)
+        {
+          addresses.addAll(Arrays.asList(((com.zimbra.cs.account.Account) entry).getPrefAllowAddressForDelegatedSender()));
+        }
+      }
+    }
+    if (rights.containsKey(UserRights.R_sendAsDistList))
+    {
+      Set<com.zimbra.cs.account.Entry> allowed = rights.get(UserRights.R_sendAsDistList);
+      for (com.zimbra.cs.account.Entry entry : allowed)
+      {
+        if (entry instanceof com.zimbra.cs.account.DistributionList)
+        {
+          addresses.addAll(Arrays.asList((((com.zimbra.cs.account.DistributionList)entry).getPrefAllowAddressForDelegatedSender())));
+        }
+      }
+    }
+    /* $endif $ */
 
     return addresses;
   }
@@ -506,27 +546,16 @@ public class Account extends Entry
     {
       return false;
     }
-    if (!super.equals(o))
-    {
-      return false;
-    }
 
-    Account account = (Account) o;
-
-    if (mAccount != null ? !mAccount.equals(account.mAccount) : account.mAccount != null)
-    {
-      return false;
-    }
-
-    return true;
+   return getId().equals(
+     ((Account) o).getId()
+   );
   }
 
   @Override
   public int hashCode()
   {
-    int result = super.hashCode();
-    result = 31 * result + (mAccount != null ? mAccount.hashCode() : 0);
-    return result;
+    return mAccount.getId().hashCode();
   }
 
   public String getPrefOutOfOfficeExternalReply()

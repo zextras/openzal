@@ -59,7 +59,6 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_LINK                 = 18;
 
   public static final String FN_INDEX_ID = "idx";
-  private Long mBitmask;
 
   public Item(@NotNull Object item)
   {
@@ -288,6 +287,32 @@ public class Item implements Comparable<Item>
 /* $else$
     return mMailItem.getTagBitmask();
 $endif$ */
+  }
+
+  @Nullable
+  public MailboxBlob getBlob()
+  {
+    try
+    {
+      return new MailboxBlob(mMailItem.getBlob());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @NotNull
+  public String getBlobPath() throws IOException
+  {
+    try
+    {
+      return mMailItem.getBlob().getLocalBlob().getPath();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public static class CustomMetadata

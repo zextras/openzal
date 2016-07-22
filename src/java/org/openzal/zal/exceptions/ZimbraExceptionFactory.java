@@ -45,6 +45,10 @@ public class ZimbraExceptionFactory
     {
       return new NoSuchDomainException(accountServiceException);
     }
+    else if (code.equals(com.zimbra.cs.account.AccountServiceException.NO_SUCH_SERVER))
+    {
+      return new NoSuchServerException(accountServiceException);
+    }
 
     return new ZimbraException(accountServiceException);
   }

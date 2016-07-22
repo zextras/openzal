@@ -115,18 +115,6 @@ public class DistributionList extends Entry
     /* $endif $ */
   }
 
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mDistributionList.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
   public String getId()
   {
     return mDistributionList.getId();

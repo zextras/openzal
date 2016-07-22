@@ -225,6 +225,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -659,6 +660,74 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  @Nullable
+  public Domain getDomainById(String domainId)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
+      if (domain == null)
+      {
+        throw new NoSuchDomainException(domainId);
+      }
+      else
+      {
+        return new Domain(domain);
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+
+  @NotNull
+  @Override
+  public Domain assertDomainById(String domainId)
+  {
+    Domain domain = getDomainById(domainId);
+    if( domain == null )
+    {
+      throw new NoSuchDomainException(domainId);
+    }
+    else
+    {
+      return domain;
+    }
+  }
+
+  @NotNull
+  @Override
+  public Domain assertDomainByName(String domainName)
+  {
+    Domain domain = getDomainByName(domainName);
+    if( domain == null )
+    {
+      throw new NoSuchDomainException(domainName);
+    }
+    else
+    {
+      return domain;
+    }
+  }
+
+  @Override
+  public Zimlet assertZimlet(String zimletName)
+  {
+    Zimlet zimlet = getZimlet(zimletName);
+    if( zimlet == null )
+    {
+      throw new NoSuchZimletException(zimletName);
+    }
+    else
+    {
+      return zimlet;
+    }
+  }
+
+  @Override
   public List<Domain> getAllDomains()
     throws ZimbraException
   {
@@ -702,29 +771,6 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.modifyAttrs(entry.toZimbra(), attrs);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  @Nullable
-  public Domain getDomainById(String domainId)
-    throws ZimbraException
-  {
-    try
-    {
-      com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
-      if (domain == null)
-      {
-        return null;
-      }
-      else
-      {
-        return new Domain(domain);
-      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1456,6 +1502,46 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Nullable
+  @Override
+  public Server getServerById(String id)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerById(id);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  @Override
+  public Server getServerByName(String name)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerByName(name);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   public boolean onLocalServer(@NotNull Account userAccount)
     throws ZimbraException
@@ -1806,6 +1892,32 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.deleteAccount(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void deleteDomainById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteDomain(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void deleteCosById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteCos(id);
     }
     catch (ServiceException e)
     {
