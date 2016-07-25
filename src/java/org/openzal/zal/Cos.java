@@ -76,18 +76,6 @@ public class Cos extends Entry
     return new HashSet<String>(mCos.getMultiAttrSet(name));
   }
 
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mCos.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
   public String getId()
   {
     return mCos.getId();
