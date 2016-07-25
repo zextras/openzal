@@ -83,7 +83,10 @@ class InternalOverrideStoreManager
   /* $endif $   */
     throws IOException, ServiceException
   {
-    return mStoreManager.getPrimaryStore().storeIncoming(data, false).toZimbra(StagedBlob.class);
+    return mStoreManager.getPrimaryStore().stage(
+      mStoreManager.getPrimaryStore().storeIncoming(data, false),
+      new org.openzal.zal.Mailbox(mbox)
+    ).toZimbra(StagedBlob.class);
   }
 
   public StagedBlob stage(Blob blob, Mailbox mbox) throws IOException, ServiceException

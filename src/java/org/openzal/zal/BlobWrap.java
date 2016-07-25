@@ -46,6 +46,10 @@ public class BlobWrap implements Blob
     String volumeId
   )
   {
+    if (!com.zimbra.cs.store.Blob.class.isAssignableFrom(blob.getClass()) || com.zimbra.cs.store.file.VolumeBlobProxy.class.isAssignableFrom(blob.getClass()))
+    {
+      throw new RuntimeException("Cannot handle blob of type " + blob.getClass());
+    }
     if (blob == null)
     {
       throw new NullPointerException();
