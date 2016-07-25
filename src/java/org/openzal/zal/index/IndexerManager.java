@@ -263,7 +263,8 @@ public class IndexerManager
       return getIndexer().extractPlainText(
         getDataSource(),
         getContentType(),
-        getExtension()
+        getExtension(),
+        getFilename()
       );
     }
 
@@ -309,7 +310,10 @@ public class IndexerManager
       }
 
       @Override
-      public String extractPlainText(DataSource dataSource, String contentType, String fileExtension)
+      public String extractPlainText(DataSource dataSource,
+                                     String contentType,
+                                     String fileExtension,
+                                     String fileName)
       {
         return "";
       }

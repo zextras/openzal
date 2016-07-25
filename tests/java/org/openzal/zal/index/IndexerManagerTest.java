@@ -73,7 +73,7 @@ public class IndexerManagerTest {
         mParsedMessage.generateInternalIndexing();
 
         verify(mIndexer, times(6)).canHandle(anyString(), anyString());
-        verify(mIndexer, times(4)).extractPlainText(any(DataSource.class), anyString(), anyString());
+        verify(mIndexer, times(4)).extractPlainText(any(DataSource.class), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -85,6 +85,6 @@ public class IndexerManagerTest {
         mParsedMessage.generateInternalIndexing();
 
         verify(mIndexer, times(0)).canHandle(anyString(), anyString());
-        verify(mIndexer, times(0)).extractPlainText(any(DataSource.class), anyString(), anyString());
+        verify(mIndexer, times(0)).extractPlainText(any(DataSource.class), anyString(), anyString(), anyString());
     }
 }
