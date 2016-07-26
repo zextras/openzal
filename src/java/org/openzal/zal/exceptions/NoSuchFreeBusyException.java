@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2015 ZeXtras S.r.l.
+ * Copyright (C) 2016 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -18,13 +18,14 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.index;
+package org.openzal.zal.exceptions;
 
+public class NoSuchFreeBusyException extends NoSuchItemException {
+  protected NoSuchFreeBusyException(Exception exception) {
+    super(exception);
+  }
 
-import javax.activation.DataSource;
-
-public interface Indexer
-{
-  boolean canHandle(String contentType, String fileExtension);
-  String extractPlainText(DataSource dataSource, String contentType, String fileExtension, String fileName);
+  public NoSuchFreeBusyException(long start, long end) {
+    super("from " + start + " to " + end);
+  }
 }
