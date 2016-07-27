@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2016 ZeXtras S.r.l.
+ * Copyright (C) 2015 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -18,29 +18,13 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.index;
 
-import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.activation.DataSource;
 
-public class GlobalGrant extends Entry
+public interface Indexer
 {
-  @NotNull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
-
-  public GlobalGrant(@NotNull Object globalGrant)
-  {
-    super(globalGrant);
-    mGlobalGrant = (com.zimbra.cs.account.GlobalGrant) globalGrant;
-  }
-
-  @NotNull
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mGlobalGrant.getMultiAttrSet(name));
-  }
+  boolean canHandle(String contentType, String fileExtension);
+  String extractPlainText(DataSource dataSource, String contentType, String fileExtension, String fileName);
 }

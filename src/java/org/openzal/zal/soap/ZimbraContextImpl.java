@@ -90,26 +90,12 @@ class ZimbraContextImpl implements ZimbraContext
     for (Element element : request.listElements())
     {
       String key = element.getName();
-      if(key.equals("a")){
-        Set<Element.Attribute> attributeSet = element.listAttributes();
-        for (Element.Attribute attribute : attributeSet)
-        {
-          String aKey = attribute.getValue();
-          String value = element.getText();
-          if (value.isEmpty())
-          {
-            value = null;
-          }
-          mMap.put(aKey, value);
-        }
-      }else {
-        String value = element.getText();
-        if (value.isEmpty())
-        {
-          value = null;
-        }
-        mMap.put(key, value);
+      String value = element.getText();
+      if (value.isEmpty())
+      {
+        value = null;
       }
+      mMap.put(key, value);
     }
   }
 

@@ -18,29 +18,14 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.exceptions;
 
-import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-public class GlobalGrant extends Entry
-{
-  @NotNull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
-
-  public GlobalGrant(@NotNull Object globalGrant)
-  {
-    super(globalGrant);
-    mGlobalGrant = (com.zimbra.cs.account.GlobalGrant) globalGrant;
+public class NoSuchFreeBusyException extends NoSuchItemException {
+  protected NoSuchFreeBusyException(Exception exception) {
+    super(exception);
   }
 
-  @NotNull
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mGlobalGrant.getMultiAttrSet(name));
+  public NoSuchFreeBusyException(long start, long end) {
+    super("from " + start + " to " + end);
   }
 }
