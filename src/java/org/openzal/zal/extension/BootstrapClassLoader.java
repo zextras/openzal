@@ -177,6 +177,26 @@ public class BootstrapClassLoader extends ClassLoader
   }
 
   @Override
+  protected URL findResource(String name) {
+    try
+    {
+      Enumeration<URL> enumation = getResources(name);
+      if( enumation.hasMoreElements() )
+      {
+        return enumation.nextElement();
+      }
+      else
+      {
+        return null;
+      }
+    }
+    catch (IOException ex)
+    {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @Override
   public Enumeration<URL> getResources(String name) throws IOException
   {
     final LinkedList<URL> urls = new LinkedList<URL>();
