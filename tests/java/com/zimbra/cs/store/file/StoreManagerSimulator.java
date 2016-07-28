@@ -1,9 +1,12 @@
 package com.zimbra.cs.store.file;
 
 import com.zextras.lib.vfs.FileStreamWriter;
+import com.zextras.lib.vfs.FileStreamWriterDigestCalculator;
+import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
+import com.zextras.utils.TextUtils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
@@ -23,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -92,17 +97,34 @@ public final class StoreManagerSimulator extends StoreManager
     mockblob.setFile(file);
 
     OutputStream writer;
+    FileStreamWriterDigestCalculator streamWriter;
     try
     {
-      writer = file.openOutputStreamWrapper();
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+      MessageDigest legacyMessageDigest = MessageDigest.getInstance("SHA-1");
+      streamWriter = new FileStreamWriterDigestCalculator(
+        file.openWriterStream(),
+        messageDigest,
+        legacyMessageDigest
+      );
+      writer = new OutputStreamFileWriterWrapper(
+        streamWriter
+      );
     }
     catch (VfsError e)
     {
       throw new IOException(e);
     }
+    catch (NoSuchAlgorithmException e)
+    {
+      throw new RuntimeException(e);
+    }
     try
     {
-      IOUtils.copy(data, writer);
+      int size = IOUtils.copy(data, writer);
+
+      mockblob.setDigest(streamWriter.digest());
+      mockblob.setRawSize(size);
     }
     finally
     {
