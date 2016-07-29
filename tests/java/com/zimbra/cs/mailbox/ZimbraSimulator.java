@@ -137,6 +137,7 @@ public class ZimbraSimulator extends ExternalResource
   private void initStorageManager() throws Exception
   {
     LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
+    com.zimbra.cs.store.StoreManager.setInstance(new StoreManagerSimulator());
     com.zimbra.cs.store.StoreManager.getInstance().startup();
     mStoreRoot = ((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).getStoreRoot();
   }

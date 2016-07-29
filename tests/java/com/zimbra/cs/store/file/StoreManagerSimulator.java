@@ -514,7 +514,7 @@ public final class StoreManagerSimulator extends StoreManager
       }
       catch (Exception ex)
       {
-        throw new RuntimeException(ex);
+        return null;
       }
     }
 
