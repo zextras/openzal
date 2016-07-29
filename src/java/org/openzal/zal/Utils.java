@@ -50,6 +50,7 @@ import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
 import com.zimbra.cs.zimlet.ZimletUtil;
+import org.openzal.zal.lib.ZimbraVersion;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -337,7 +338,15 @@ public abstract class Utils
   {
     try
     {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      MessageDigest digest;
+      if (ZimbraVersion.current.isAtLeast(8))
+      {
+        digest = MessageDigest.getInstance("SHA-256");
+      }
+      else
+      {
+        digest = MessageDigest.getInstance("SHA-1");
+      }
       byte[] buffer = new byte[1024];
       int read;
       while ( (read = inputStream.read(buffer)) >= 0)
