@@ -86,18 +86,6 @@ public class Domain extends Entry
     return mDomain.getId();
   }
 
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mDomain.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
   public String getName()
   {
     return mDomain.getName();
@@ -170,12 +158,6 @@ public class Domain extends Entry
   }
 
   @NotNull
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mDomain.getMultiAttrSet(name));
-  }
-
-  @NotNull
   public List<Account> getAllAccounts()
   {
     try
@@ -201,6 +183,28 @@ public class Domain extends Entry
   public String getPublicHostname()
   {
     return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    if (!super.equals(o))
+      return false;
+
+    Domain domain = (Domain) o;
+
+    return mDomain.getId().equals(domain.mDomain.getId());
+
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return mDomain.getId().hashCode();
   }
 }
 

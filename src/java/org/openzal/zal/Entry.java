@@ -20,11 +20,18 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.NamedEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
-public class Entry
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public abstract class Entry
 {
   private final com.zimbra.cs.account.Entry mEntry;
 
@@ -83,10 +90,48 @@ public class Entry
     return true;
   }
 
-  @Override
-  public int hashCode()
+  @NotNull
+  public Set<String> getMultiAttrSet(String name)
   {
-    return mEntry != null ? mEntry.hashCode() : 0;
+    return new HashSet<String>(mEntry.getMultiAttrSet(name));
+  }
+
+  public void addMultiAttrValue(String key, String value)
+  {
+    Set<String> values = getMultiAttrSet(key);
+    values.add(value);
+
+    modify(
+      Collections.<String, Object>singletonMap(
+        key,
+        values.toArray(new String[values.size()])
+      )
+    );
+  }
+
+  public void removeMultiAttrValue(String key, String value)
+  {
+    Set<String> values = getMultiAttrSet(key);
+    values.remove(value);
+
+    modify(
+      Collections.<String, Object>singletonMap(
+        key,
+        values.toArray(new String[values.size()])
+      )
+    );
+  }
+
+  public void modify(Map<String, Object> attrs)
+  {
+    try
+    {
+      mEntry.getProvisioning().modifyAttrs(mEntry, attrs);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public class EntryType
