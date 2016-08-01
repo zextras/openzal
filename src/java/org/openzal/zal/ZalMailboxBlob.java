@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MailboxBlobImpl extends ZalBlob implements MailboxBlob
+public class ZalMailboxBlob extends ZalBlob implements MailboxBlob
 {
   private final Blob mBlob;
   private final Mailbox mMbox;
   private final int mMsgId;
   private final int mRevision;
 
-  public MailboxBlobImpl(Blob blob, Mailbox mbox, int msgId, int revision)
+  public ZalMailboxBlob(Blob blob, Mailbox mbox, int msgId, int revision)
   {
     super(blob.getFile(), blob.getVolumeId());
     mBlob = blob;
