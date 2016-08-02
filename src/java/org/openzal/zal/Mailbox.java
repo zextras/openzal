@@ -20,42 +20,46 @@
 
 package org.openzal.zal;
 
-import java.lang.reflect.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.io.*;
-
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapProtocol;
-import com.zimbra.cs.index.*;
+import com.zimbra.cs.db.DbMailItem;
+import com.zimbra.cs.db.DbMailbox;
+import com.zimbra.cs.db.DbPool;
+import com.zimbra.cs.fb.FreeBusyQuery;
 import com.zimbra.cs.index.SearchParams;
+import com.zimbra.cs.index.SortBy;
+import com.zimbra.cs.index.ZimbraQueryResults;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
+import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
+import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.service.FileUploadServlet.Upload;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.CalendarItemData;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.*;
-import org.openzal.zal.exceptions.NoSuchItemException;
-import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.db.DbMailItem;
-import com.zimbra.cs.db.DbMailbox;
-import com.zimbra.cs.db.DbPool;
-import com.zimbra.cs.mailbox.*;
-import com.zimbra.cs.mailbox.util.*;
-import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
-import com.zimbra.cs.service.util.ItemId;
+import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.internet.MimeMessage;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
-import com.zimbra.cs.service.FileUploadServlet.Upload;
-
-import org.openzal.zal.log.ZimbraLog;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+//import com.zimbra.cs.fb.FreeBusy;
 
 /* $if MajorZimbraVersion == 6 $
 import com.zimbra.cs.index.queryparser.ParseException;
@@ -602,6 +606,28 @@ public class Mailbox
 
     return new CalendarItem(mailItem);
   }
+
+    @NotNull
+    public FreeBusy getFreeBusy(@NotNull OperationContext octxt, long start, long end)
+    throws NoSuchItemException
+    {
+      com.zimbra.cs.fb.FreeBusy freeBusy;
+      try
+      {
+        freeBusy = mMbox.getFreeBusy(octxt.getOperationContext(),start,end,FreeBusyQuery.CALENDAR_FOLDER_ALL);
+      }
+      catch (com.zimbra.common.service.ServiceException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+
+      if (freeBusy == null)
+      {
+        throw new NoSuchFreeBusyException(start, end);
+      }
+
+      return new FreeBusy(freeBusy);
+    }
 
   public void copyCalendarReplyInfo(
     @NotNull CalendarItem fromCalendarItem,
@@ -1304,7 +1330,7 @@ public class Mailbox
   )
     throws IOException, ZimbraException
   {
-    return search(octxt, queryString, types, sortBy, chunkSize, 0, false);
+    return search(octxt, queryString, types, sortBy, chunkSize, 0, false, false);
   }
 
   @NotNull
@@ -1316,6 +1342,22 @@ public class Mailbox
     int chunkSize,
     int offset,
     boolean onlyIds
+  )
+          throws IOException, ZimbraException
+  {
+    return search(octxt, queryString, types, sortBy, chunkSize, offset, onlyIds, false);
+  }
+
+  @NotNull
+  public QueryResults search(
+    @NotNull OperationContext octxt,
+    String queryString,
+    @NotNull byte[] types,
+    @NotNull SortedBy sortBy,
+    int chunkSize,
+    int offset,
+    boolean onlyIds,
+    boolean inDumpster
   )
     throws IOException, ZimbraException
   {
@@ -1338,7 +1380,7 @@ public class Mailbox
       params.setSortBy(sortBy.toZimbra(SortBy.class));
       params.setPrefetch(true);
       params.setFetchMode(fetchMode);
-      params.setInDumpster(false);
+      params.setInDumpster(inDumpster);
       params.setLimit(chunkSize + offset);
       params.setOffset(offset);
 
@@ -1358,7 +1400,7 @@ public class Mailbox
       com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
 
  $if ZimbraVersion >= 7.0.0 $
-      params.setInDumpster(false);
+      params.setInDumpster(inDumpster);
 $endif$
 
       com.zimbra.cs.mailbox.Mailbox.SearchResultMode fetchMode = onlyIds ? com.zimbra.cs.mailbox.Mailbox.SearchResultMode.IDS : com.zimbra.cs.mailbox.Mailbox.SearchResultMode.NORMAL;

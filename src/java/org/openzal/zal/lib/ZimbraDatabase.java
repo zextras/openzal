@@ -243,12 +243,28 @@ public class ZimbraDatabase
 
   public static String getItemTableName(Mailbox mbox)
   {
-    return "mboxgroup" + mbox.getSchemaGroupId() + ".mail_item";
+    return getItemTableName(mbox,false);
+  }
+
+  public static String getItemTableName(Mailbox mbox,boolean dumpster)
+  {
+    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".mail_item";
+    if (dumpster)
+      s += "_dumpster";
+    return s;
   }
 
   public static String getCalendarTableName(Mailbox mbox)
   {
-    return "mboxgroup" + mbox.getSchemaGroupId() + ".appointment";
+    return getCalendarTableName(mbox, false);
+  }
+
+  public static String getCalendarTableName(Mailbox mbox,boolean dumpster)
+  {
+    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".appointment";
+    if (dumpster)
+      s += "_dumpster";
+    return s;
   }
 
   public static String getTombstoneTable(Mailbox mbox)
@@ -258,7 +274,14 @@ public class ZimbraDatabase
 
   public static String getRevisionTableName(Mailbox mbox)
   {
-    return "mboxgroup" + mbox.getSchemaGroupId() + ".revision";
+    return getRevisionTableName(mbox,false);
   }
 
+  public static String getRevisionTableName(Mailbox mbox,boolean dumpster)
+  {
+    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".revision";
+    if (dumpster)
+      s += "_dumpster";
+    return s;
+  }
 }
