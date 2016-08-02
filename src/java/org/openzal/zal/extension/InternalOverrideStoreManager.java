@@ -25,6 +25,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.zimbra.common.service.ServiceException.SENDERS_FAULT;
+import static com.zimbra.cs.mailbox.MailServiceException.ITEM_ID;
+import static com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB;
+import static com.zimbra.cs.mailbox.MailServiceException.REVISION;
+
 class InternalOverrideStoreManager
   extends com.zimbra.cs.store.StoreManager
 {
@@ -315,9 +320,25 @@ class InternalOverrideStoreManager
     }
     catch (Exception e)
     {
-      AnyThrow.throwUnchecked(
-        MailServiceException.NO_SUCH_BLOB(zalMailboxBlob.getMailbox().getId(), zalMailboxBlob.getItemId(), zalMailboxBlob.getRevision())
-      );
+      try
+      {
+        ServiceException.Argument[] arguments = new ServiceException.Argument[2];
+        arguments[0] = new ServiceException.Argument(ITEM_ID, zalMailboxBlob.getItemId(), ServiceException.Argument.Type.IID);
+        arguments[1] = new ServiceException.Argument(REVISION, zalMailboxBlob.getRevision(), ServiceException.Argument.Type.NUM);
+        AnyThrow.throwUnchecked(
+          (Throwable) mMailServiceException.newInstance(
+            "No such blob: mailbox=" + zalMailboxBlob.getMailbox().getId() + "," + " item=" + zalMailboxBlob.getItemId() + ", change=" + zalMailboxBlob.getRevision(),
+            NO_SUCH_BLOB,
+            SENDERS_FAULT,
+            e,
+            arguments
+          )
+        );
+      }
+      catch (Exception e1)
+      {
+        throw new RuntimeException(e1);
+      }
       return null;
     }
   }
@@ -327,20 +348,41 @@ class InternalOverrideStoreManager
     org.openzal.zal.Blob zalBlob = BlobWrap.wrapZimbraBlob(blob);
     if (zalBlob.hasMailboxInfo())
     {
+      org.openzal.zal.MailboxBlob zalMailboxBlob = null;
       try
       {
+        zalMailboxBlob = zalBlob.toMailboxBlob();
         Store store = mStoreManager.getStore(zalBlob.getVolumeId());
         return store.getContent(zalBlob.toMailboxBlob());
       }
       catch (Exception e)
       {
-        AnyThrow.throwUnchecked(
-          MailServiceException.NO_SUCH_BLOB(
-            zalBlob.toMailboxBlob().getMailbox().getId(),
-            zalBlob.toMailboxBlob().getItemId(),
-            zalBlob.toMailboxBlob().getRevision()
-          )
-        );
+        if (zalMailboxBlob != null)
+        {
+          try
+          {
+            ServiceException.Argument[] arguments = new ServiceException.Argument[2];
+            arguments[0] = new ServiceException.Argument(ITEM_ID, zalMailboxBlob.getItemId(), ServiceException.Argument.Type.IID);
+            arguments[1] = new ServiceException.Argument(REVISION, zalMailboxBlob.getRevision(), ServiceException.Argument.Type.NUM);
+            AnyThrow.throwUnchecked(
+              (Throwable) mMailServiceException.newInstance(
+                "No such blob: mailbox=" + zalMailboxBlob.getMailbox().getId() + "," + " item=" + zalMailboxBlob.getItemId() + ", change=" + zalMailboxBlob.getRevision(),
+                NO_SUCH_BLOB,
+                SENDERS_FAULT,
+                e,
+                arguments
+              )
+            );
+          }
+          catch (Exception e1)
+          {
+            throw new RuntimeException(e1);
+          }
+        }
+        else
+        {
+          AnyThrow.throwUnchecked(e);
+        }
         return null;
       }
     }
@@ -355,12 +397,16 @@ class InternalOverrideStoreManager
       {
         try
         {
+          ServiceException.Argument[] arguments = new ServiceException.Argument[2];
+          arguments[0] = new ServiceException.Argument("volumeId", zalBlob.getVolumeId(), ServiceException.Argument.Type.STR);
+          arguments[1] = new ServiceException.Argument("blobPath", zalBlob.getKey(), ServiceException.Argument.Type.STR);
           AnyThrow.throwUnchecked(
             (Throwable) mMailServiceException.newInstance(
               "No such blob: " + zalBlob.getKey() + ", volume=" + zalBlob.getVolumeId(),
-              MailServiceException.NO_SUCH_BLOB,
+              NO_SUCH_BLOB,
               false,
-              new MailServiceException.Argument[0]
+              e,
+              arguments
             )
           );
         }
