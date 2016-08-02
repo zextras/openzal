@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.UUID;
 
@@ -485,6 +486,31 @@ public final class StoreManagerSimulator extends StoreManager
     public void setFile(com.zextras.lib.vfs.File file)
     {
       mFile = file;
+    }
+
+    @Override
+    public File getFile()
+    {
+      try
+      {
+        File tmpFile = super.getFile();
+        InputStream inputStream = mFile.openInputStreamWrapper();
+        OutputStream outputStream = new FileOutputStream(tmpFile);
+        try
+        {
+          IOUtils.copy(inputStream, outputStream);
+        }
+        finally
+        {
+          outputStream.close();
+          inputStream.close();
+        }
+        return tmpFile;
+      }
+      catch (Exception ex)
+      {
+        return null;
+      }
     }
 
     public com.zextras.lib.vfs.File getVirtualFile()
