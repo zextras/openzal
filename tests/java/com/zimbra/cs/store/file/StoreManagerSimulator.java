@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +34,10 @@ import java.util.UUID;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
+import org.openzal.zal.BlobWrap;
+import org.openzal.zal.InternalOverrideBlob;
+import org.openzal.zal.ZalBlob;
+import org.openzal.zal.ZalMailboxBlob;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
@@ -513,6 +518,31 @@ public final class StoreManagerSimulator extends StoreManager
       mFile = file;
     }
 
+    @Override
+    public File getFile()
+    {
+      try
+      {
+        File tmpFile = super.getFile();
+        InputStream inputStream = mFile.openInputStreamWrapper();
+        OutputStream outputStream = new FileOutputStream(tmpFile);
+        try
+        {
+          IOUtils.copy(inputStream, outputStream);
+        }
+        finally
+        {
+          outputStream.close();
+          inputStream.close();
+        }
+        return tmpFile;
+      }
+      catch (Exception ex)
+      {
+        return sNonExistingPath;
+      }
+    }
+
     public com.zextras.lib.vfs.File getVirtualFile()
     {
       return mFile;
@@ -592,7 +622,25 @@ public final class StoreManagerSimulator extends StoreManager
 
     public Blob getLocalBlob() throws IOException
     {
-      return mMockStagedBlob.getMockBlob();
+      return new ZalMailboxBlob(
+        BlobWrap.wrapZimbraBlob(mMockStagedBlob.getMockBlob()),
+        new org.openzal.zal.Mailbox(mMockStagedBlob.getMailbox()),
+        getItemId(),
+        getRevision()
+      )
+      {
+        @Override
+        public org.openzal.zal.Blob getLocalBlob()
+        {
+          return getLocalBlob(false);
+        }
+
+        @Override
+        public String getVolumeId()
+        {
+          return "1";
+        }
+      }.toZimbra(Blob.class);
     }
 
     public short volumeId()
@@ -631,7 +679,18 @@ public final class StoreManagerSimulator extends StoreManager
     MockVolumeBlob(Blob blob, String volumeId)
     {
       super(blob.getFile(), Short.parseShort(volumeId));
-      mMockBlob = (MockBlob) blob;
+      if (blob instanceof MockBlob)
+      {
+        mMockBlob = (MockBlob) blob;
+      }
+      else if (blob instanceof MockVolumeBlob)
+      {
+        mMockBlob = (MockBlob) blob;
+      }
+      else
+      {
+        mMockBlob = (MockBlob) ((BlobWrap)((ZalMailboxBlob)((InternalOverrideBlob) blob).getWrappedObject()).getLocalBlob(false)).getWrappedObject();
+      }
       mVolumeId = volumeId;
     }
 

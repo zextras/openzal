@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-class InternalOverrideBlob extends com.zimbra.cs.store.Blob
+public class InternalOverrideBlob extends com.zimbra.cs.store.Blob
 {
   private final org.openzal.zal.Blob mBlob;
   private final boolean mHasMailboxInfo;

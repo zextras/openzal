@@ -41,7 +41,16 @@ public class ZalMailboxBlob extends ZalBlob implements MailboxBlob
   @Override
   public Blob getLocalBlob()
   {
-    return this;
+    return getLocalBlob(true);
+  }
+
+  public Blob getLocalBlob(boolean mailboxBlob)
+  {
+    if (mailboxBlob)
+    {
+      return this;
+    }
+    return mBlob;
   }
 
   @Override
