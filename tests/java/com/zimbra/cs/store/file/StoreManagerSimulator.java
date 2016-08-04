@@ -35,7 +35,7 @@ import java.util.UUID;
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
 import org.openzal.zal.BlobWrap;
-import org.openzal.zal.InternalOverrideBlob;
+import org.openzal.zal.InternalOverrideBlobProxy;
 import org.openzal.zal.ZalBlob;
 import org.openzal.zal.ZalMailboxBlob;
 /* $else$
@@ -689,7 +689,7 @@ public final class StoreManagerSimulator extends StoreManager
       }
       else
       {
-        mMockBlob = (MockBlob) ((BlobWrap)((ZalMailboxBlob)((InternalOverrideBlob) blob).getWrappedObject()).getLocalBlob(false)).getWrappedObject();
+        mMockBlob = (MockBlob) ((BlobWrap)((ZalMailboxBlob)(new InternalOverrideBlobProxy(blob).getWrappedObject())).getLocalBlob(false)).getWrappedObject();
       }
       mVolumeId = volumeId;
     }
