@@ -24,46 +24,37 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
-public class TargetBy
+/* $if ZimbraVersion >= 8.0.0 $*/
+import com.zimbra.soap.type.TargetBy;
+/* $endif$ */
+
+/* $if ZimbraVersion < 8.0.0 $
+import com.zimbra.cs.account.Provisioning.TargetBy;
+   $endif$ */
+
+public class Targetby
 {
-  /* $if MajorZimbraVersion >= 8 $ */
-  @NotNull private final com.zimbra.soap.type.TargetBy mTargetBy;
-  /* $else $
-  private final Object mTargetBy;
-  /* $endif $ */
+  @NotNull private final TargetBy mTargetBy;
 
-  /* $if MajorZimbraVersion >= 8 $ */
-  public static TargetBy id   = new TargetBy(com.zimbra.soap.type.TargetBy.id);
-  public static TargetBy name = new TargetBy(com.zimbra.soap.type.TargetBy.name);
-  /* $else $
-  public static TargetBy id   = null;
-  public static TargetBy name = null;
-  /* $endif $ */
+  public static Targetby id   = new Targetby(TargetBy.id);
+  public static Targetby name = new Targetby(TargetBy.name);
 
-  TargetBy(@NotNull Object targetBy)
+  Targetby(@NotNull Object targetBy)
   {
-  /* $if MajorZimbraVersion >= 8 $ */
-    mTargetBy = (com.zimbra.soap.type.TargetBy) targetBy;
-/* $else $
-    throw new UnsupportedOperationException();
-  /* $endif $ */
+    mTargetBy = (TargetBy) targetBy;
   }
 
   <T> T toZimbra(Class<T> cls)
   {
-  /* $if MajorZimbraVersion >= 8 $ */
     return cls.cast(mTargetBy);
-  /* $else $
-    throw new UnsupportedOperationException();
-  /* $endif $ */
   }
 
-  public static TargetBy fromString(String s)
+  public static Targetby fromString(String s)
   {
-    /* $if MajorZimbraVersion >= 8 $ */
+    /* $if ZimbraVersion >= 8.0.0 $*/
     try
     {
-      return new TargetBy(com.zimbra.soap.type.TargetBy.fromString(s));
+      return new Targetby(com.zimbra.soap.type.TargetBy.fromString(s));
     }
     catch (ServiceException e)
     {
