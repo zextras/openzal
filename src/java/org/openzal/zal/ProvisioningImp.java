@@ -39,6 +39,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.soap.type.GalSearchType;
+import com.zimbra.soap.type.TargetBy;
 /* $else $
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import javax.naming.NamingEnumeration;
@@ -51,6 +52,8 @@ import java.io.IOException;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.LdapFilter;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Provisioning.TargetBy;
+import com.zimbra.cs.account.Provisioning.GranteeBy;
 /* $endif $ */
 
 /* $if ZimbraVersion >= 8.0.0 && ZimbraVersion < 8.0.6 $
@@ -1303,12 +1306,12 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void grantRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, @NotNull Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException
   {
-    /* $if MajorZimbraVersion == 8 $ */
+    /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.grantRight(
@@ -1334,12 +1337,12 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void revokeRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, @NotNull Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException
   {
-    /* $if MajorZimbraVersion == 8 $ */
+    /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.revokeRight(
@@ -1360,6 +1363,38 @@ public class ProvisioningImp implements Provisioning
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
+  }
+
+  //only it works if the specified target is compatible with the target of the right
+  //It does not work with combo rights
+  //you can see the tests in provisioningTest(AT)
+  @Override
+  public boolean checkRight(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    GrantedBy granteeBy,
+    String granteeVal,
+    String right
+                            )
+  {
+    try
+    {
+      return mProvisioning.checkRight(
+        targetType,
+        targetBy.toZimbra(TargetBy.class),
+        target,
+        granteeBy.toZimbra(GranteeBy.class),
+        granteeVal,
+        right,
+        null,
+        null
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Override
@@ -1755,7 +1790,7 @@ public class ProvisioningImp implements Provisioning
   @Nullable
   public Grants getGrants(
     @NotNull org.openzal.zal.provisioning.TargetType targetType,
-    @NotNull TargetBy name,
+    @NotNull Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
   )
