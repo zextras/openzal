@@ -1365,6 +1365,39 @@ public class ProvisioningImp implements Provisioning
     /* $endif $ */
   }
 
+  @Override
+  public void revokeRight(String targetType,
+                          Targetby targetBy,
+                          String target,
+                          String granteeType,
+                          @NotNull GrantedBy granteeBy,
+                          String grantee,
+                          String right,
+                          RightModifier rightModifier) throws NoSuchGrantException
+  {
+      /* $if ZimbraVersion >= 8.0.0 $  */
+    try
+    {
+      mProvisioning.revokeRight(
+        targetType,
+        targetBy!=null?targetBy.toZimbra(com.zimbra.soap.type.TargetBy.class):null,
+        target!=null?target:null,
+        granteeType,
+        granteeBy.toZimbra(GranteeBy.class),
+        grantee,
+        right,
+        rightModifier!=null?rightModifier.toZimbra():null
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
   //only it works if the specified target is compatible with the target of the right
   //It does not work with combo rights
   //you can see the tests in provisioningTest(AT)
@@ -1838,7 +1871,7 @@ public class ProvisioningImp implements Provisioning
     {
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType.getCode(),
-        name.toZimbra(com.zimbra.soap.type.TargetBy.class),
+        name!=null?name.toZimbra(com.zimbra.soap.type.TargetBy.class):null,
         targetName,
         null,
         null,

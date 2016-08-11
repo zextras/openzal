@@ -218,6 +218,12 @@ public interface Provisioning
     String right
   ) throws NoSuchGrantException;
 
+  void revokeRight(
+    String targetType, Targetby targetBy, String target,
+    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws NoSuchGrantException;
+
   boolean checkRight(
     String targetType,
     Targetby targetBy,
