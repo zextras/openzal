@@ -213,9 +213,15 @@ public interface Provisioning
   ) throws ZimbraException;
 
   void revokeRight(
-    String targetType, @NotNull Targetby targetBy, String target,
+    String targetType, Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
+  ) throws NoSuchGrantException;
+
+  void revokeRight(
+    String targetType, Targetby targetBy, String target,
+    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
   ) throws NoSuchGrantException;
 
   boolean checkRight(
@@ -225,6 +231,17 @@ public interface Provisioning
     GrantedBy granteeBy,
     String granteeVal,
     String right
+  );
+
+  @Nullable
+  Grants getGrants(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    String granteeType,
+    GrantedBy granteeBy,
+    String grantee,
+    boolean granteeIncludeGroupsGranteeBelongs
   );
 
   <T> T toZimbra(@NotNull Class<T> cls);
@@ -285,7 +302,7 @@ public interface Provisioning
   @Nullable
   Grants getGrants(
     @NotNull org.openzal.zal.provisioning.TargetType targetType,
-    @NotNull Targetby name,
+    Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
   );
