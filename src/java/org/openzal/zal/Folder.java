@@ -82,6 +82,33 @@ public class Folder extends Item
     }
   }
 
+  public boolean isRoot()
+  {
+    int id = getId();
+    return (id == Mailbox.ID_FOLDER_ROOT || id == Mailbox.ID_FOLDER_USER_ROOT);
+  }
+
+  public Folder getParent()
+    throws ZimbraException
+  {
+    try
+    {
+      MailItem item = ((com.zimbra.cs.mailbox.Folder) mMailItem).getParent();
+      if( item == null )
+      {
+        throw new RuntimeException("Root does not have a parent");
+      }
+      else
+      {
+        return new Folder(item);
+      }
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public boolean canAccess(Account account) throws ZimbraException
   {
     try
