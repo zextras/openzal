@@ -124,9 +124,9 @@ public class ZimbraSimulator extends ExternalResource
     ZimbraLog.toolSetupLog4j("INFO", "it/data/zimbra-config/log4j-test.properties");
   }
 
-  private void initMailboxManager() throws ServiceException
+  private void initMailboxManager() throws Exception
   {
-    LC.zimbra_class_mboxmanager.setDefault(MailboxManager.class.getName());
+    com.zimbra.cs.mailbox.MailboxManager.setInstance((MailboxManager) Class.forName(LC.zimbra_class_mboxmanager.value()).newInstance());
   }
 
   private void initIndexing()
@@ -190,6 +190,7 @@ public class ZimbraSimulator extends ExternalResource
   public void cleanup() throws Exception
   {
     HSQLZimbraDatabase.clearDatabase();
+    mStoreRoot.getRoot().removeContent();
     //sVolumeManagerInstance.set(null, sVolumeManagerBuilder.newInstance());
     //((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).shutdown();
   }

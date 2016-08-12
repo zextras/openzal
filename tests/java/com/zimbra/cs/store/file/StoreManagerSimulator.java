@@ -200,7 +200,7 @@ public final class StoreManagerSimulator extends StoreManager
     sb.append(".msg");
 
     String finalPath = sb.toString();
-    return new RelativePath(finalPath);
+    return new RelativePath(finalPath.substring(1,finalPath.length()));
   }
 
   public RelativePath getBlobPath(MailboxBlob mboxBlob)
@@ -254,9 +254,13 @@ public final class StoreManagerSimulator extends StoreManager
         throw new IOException();
       }
       destinationFile.getParent().createRecursive();
-      src.getVirtualFile().copy(destinationFile);
+      src.getVirtualFile().copy(destinationFile).sync();
     }
     catch (VfsError e)
+    {
+      throw new RuntimeException(e);
+    }
+    catch (InterruptedException e)
     {
       throw new RuntimeException(e);
     }
