@@ -1311,12 +1311,11 @@ public class ProvisioningImp implements Provisioning
     String right
   ) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.grantRight(
         targetType,
-        targetBy.toZimbra(com.zimbra.soap.type.TargetBy.class),
+        targetBy.toZimbra(TargetBy.class),
         target,
         granteeType,
         granteeBy.toZimbra(GranteeBy.class),
@@ -1330,9 +1329,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1375,12 +1371,11 @@ public class ProvisioningImp implements Provisioning
                           String right,
                           RightModifier rightModifier) throws NoSuchGrantException
   {
-      /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.revokeRight(
         targetType,
-        targetBy!=null?targetBy.toZimbra(com.zimbra.soap.type.TargetBy.class):null,
+        targetBy!=null?targetBy.toZimbra(TargetBy.class):null,
         target!=null?target:null,
         granteeType,
         granteeBy.toZimbra(GranteeBy.class),
@@ -1393,9 +1388,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   //only it works if the specified target is compatible with the target of the right
@@ -1866,12 +1858,11 @@ public class ProvisioningImp implements Provisioning
     boolean granteeIncludeGroupsGranteeBelongs
   )
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType.getCode(),
-        name!=null?name.toZimbra(com.zimbra.soap.type.TargetBy.class):null,
+        name!=null?name.toZimbra(TargetBy.class):null,
         targetName,
         null,
         null,
@@ -1891,9 +1882,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
