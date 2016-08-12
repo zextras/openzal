@@ -88,6 +88,7 @@ public class Folder extends Item
     return (id == Mailbox.ID_FOLDER_ROOT || id == Mailbox.ID_FOLDER_USER_ROOT);
   }
 
+  @NotNull
   public Folder getParent()
     throws ZimbraException
   {
