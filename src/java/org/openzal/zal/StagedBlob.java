@@ -20,9 +20,10 @@
 
 package org.openzal.zal;
 
-public interface MailboxBlob extends StagedBlob
+import java.io.IOException;
+
+public interface StagedBlob extends Blob
 {
-  int getRevision();
-  String toString();
-  int getItemId();
+  Mailbox getMailbox();
+  Blob getLocalBlob();
 }

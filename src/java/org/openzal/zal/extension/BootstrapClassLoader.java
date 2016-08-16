@@ -21,10 +21,14 @@
 package org.openzal.zal.extension;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.AllPermission;
 import java.security.CodeSigner;
@@ -38,7 +42,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.zip.ZipFile;
 
 @SuppressWarnings({"SynchronizedMethod", "rawtypes", "CustomClassloader"})
 public class BootstrapClassLoader extends ClassLoader

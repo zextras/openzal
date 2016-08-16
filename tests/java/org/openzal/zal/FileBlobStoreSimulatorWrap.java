@@ -119,39 +119,44 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException
   {
-    throw new RuntimeException();
+    /* $if ZimbraVersion >= 8.0.0 $ */
+    String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
+    /* $else $
+    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
+    /* $endif $ */
+    return new StoreManagerSimulator.MockVolumeStagedBlob(mbox, (StoreManagerSimulator.MockBlob) blob, volumeId);
   }
 
   @Override
   public VolumeMailboxBlob copy(MailboxBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
     /* $else $
-    short volumeId = Volume.getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
     /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy(src, destMbox, destItemId, destRevision), volumeId);
   }
 
   @Override
-  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException
+  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException
   {
-    return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy((StoreManagerSimulator.MockBlob) src, destMbox, destItemId, destRevision, String.valueOf(destVolumeId)), destVolumeId);
+    return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy(StoreManagerSimulator.MockBlob.getMockBlob(src), destMbox, destItemId, destRevision, String.valueOf(destVolumeId)), destVolumeId);
   }
 
   @Override
   public VolumeMailboxBlob link(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
     /* $else $
-    short volumeId = Volume.getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
     /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.link(src, destMbox, destItemId, destRevision), volumeId);
   }
 
   @Override
-  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException
+  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException
   {
     try
     {
@@ -167,9 +172,9 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   public VolumeMailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
-    short volumeId = VolumeManager.getInstance().getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
     /* $else $
-    short volumeId = Volume.getCurrentMessageVolume().getId();
+    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
     /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.renameTo(src, destMbox, destItemId, destRevision), volumeId);
   }

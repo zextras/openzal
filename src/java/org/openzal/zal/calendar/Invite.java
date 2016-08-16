@@ -50,8 +50,6 @@ import com.zimbra.cs.mailbox.calendar.*;
 import com.zimbra.common.calendar.*;
 /* $endif$ */
 
-import org.openzal.zal.log.ZimbraLog;
-
 public class Invite
 {
   private static String TRIGGER_TYPE_FIELD    = "mTriggerType";

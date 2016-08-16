@@ -294,7 +294,12 @@ $endif$ */
   {
     try
     {
-      return new MailboxBlob(mMailItem.getBlob());
+      com.zimbra.cs.store.MailboxBlob blob = mMailItem.getBlob();
+      if (blob == null)
+      {
+        return null;
+      }
+      return new MailboxBlobWrap(blob);
     }
     catch (ServiceException e)
     {

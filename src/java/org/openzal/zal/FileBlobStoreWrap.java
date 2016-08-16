@@ -35,7 +35,7 @@ import com.zimbra.cs.store.StorageCallback;
 import java.io.IOException;
 import java.io.InputStream;
 
-interface FileBlobStoreWrap
+public interface FileBlobStoreWrap
 {
     void startup() throws IOException, ServiceException;
 
@@ -60,13 +60,13 @@ interface FileBlobStoreWrap
     VolumeMailboxBlob copy(MailboxBlob src, Mailbox destMbox, int destItemId, int destRevision)
     throws IOException, ServiceException;
 
-    VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId)
+    VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId)
     throws IOException, ServiceException;
 
     VolumeMailboxBlob link(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision)
     throws IOException, ServiceException;
 
-    VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId)
+    VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId)
     throws IOException, ServiceException;
 
     VolumeMailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision)

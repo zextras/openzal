@@ -85,6 +85,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     attrs.put(A_zimbraId, UUID.randomUUID().toString());
     attrs.put(A_zimbraMailMode, MailMode.http.toString());
     attrs.put(A_zimbraSmtpPort, "7025");
+    attrs.put(A_zimbraMessageCacheSize, "0");
     localhost = new Server("localhost", "localhost", attrs, Collections.<String, Object>emptyMap(), this);
     mDefaultCos = new Cos("test", "id", new HashMap<String, Object>(), this);
 

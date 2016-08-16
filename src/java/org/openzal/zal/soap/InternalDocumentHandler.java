@@ -22,7 +22,6 @@ package org.openzal.zal.soap;
 
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
 

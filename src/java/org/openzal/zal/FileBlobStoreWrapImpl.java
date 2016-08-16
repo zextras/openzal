@@ -98,7 +98,7 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   @Override
   public Blob storeIncoming(InputStream in, long sizeHint, Object callback, boolean storeAsIs) throws IOException, ServiceException
   {
-    /* $elseif ZimbraVersion >= 7.0.0 $ */
+    /* $if ZimbraVersion >= 7.0.0 $ */
     throw new UnsupportedOperationException();
     /* $else $
     return mStore.storeIncoming(in, sizeHint, (StorageCallback) callback, storeAsIs);
@@ -138,9 +138,9 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException, ServiceException
+  public VolumeMailboxBlob copy(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException, ServiceException
   {
-    return mStore.copy(src, destMbox, destItemId, destRevision, destVolumeId);
+    return mStore.copy(src, destMbox, destItemId, destRevision, Short.valueOf(destVolumeId));
   }
 
   @Override
@@ -150,9 +150,9 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
   }
 
   @Override
-  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, short destVolumeId) throws IOException, ServiceException
+  public VolumeMailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision, String destVolumeId) throws IOException, ServiceException
   {
-    return mStore.link(src, destMbox, destItemId, destRevision, destVolumeId);
+    return mStore.link(src, destMbox, destItemId, destRevision, Short.valueOf(destVolumeId));
   }
 
   @Override

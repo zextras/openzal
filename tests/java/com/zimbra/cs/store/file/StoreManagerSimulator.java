@@ -1,13 +1,12 @@
 package com.zimbra.cs.store.file;
 
-import com.zextras.lib.Error.MissingReadPermissions;
-import com.zextras.lib.Error.MissingWritePermissions;
-import com.zextras.lib.Future;
 import com.zextras.lib.vfs.FileStreamWriter;
-import com.zextras.lib.vfs.Null;
+import com.zextras.lib.vfs.FileStreamWriterDigestCalculator;
+import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
+import com.zextras.utils.TextUtils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
@@ -28,11 +27,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
+import org.openzal.zal.BlobWrap;
+import org.openzal.zal.InternalOverrideBlobProxy;
+import org.openzal.zal.ZalBlob;
+import org.openzal.zal.ZalMailboxBlob;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
@@ -43,7 +48,7 @@ import com.zimbra.cs.store.file.*;
 public final class StoreManagerSimulator extends StoreManager
 {
 
-  private RamFS mStoreRoot;
+  private static final RamFS mStoreRoot = new RamFS();
 
   public RamFS getStoreRoot()
   {
@@ -53,7 +58,6 @@ public final class StoreManagerSimulator extends StoreManager
   public StoreManagerSimulator()
   {
 //        DebugConfig.disableMessageStoreFsync = true;
-    mStoreRoot = new RamFS();
   }
 
   public void startup() throws IOException
@@ -76,7 +80,12 @@ public final class StoreManagerSimulator extends StoreManager
 
   public void purge()
   {
-    mStoreRoot = new RamFS();
+    try
+    {
+      mStoreRoot.emptyRamFS();
+    }
+    catch (Exception ignore)
+    {}
   }
 
   public BlobBuilder getBlobBuilder()
@@ -93,17 +102,34 @@ public final class StoreManagerSimulator extends StoreManager
     mockblob.setFile(file);
 
     OutputStream writer;
+    FileStreamWriterDigestCalculator streamWriter;
     try
     {
-      writer = file.openOutputStreamWrapper();
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+      MessageDigest legacyMessageDigest = MessageDigest.getInstance("SHA-1");
+      streamWriter = new FileStreamWriterDigestCalculator(
+        file.openWriterStream(),
+        messageDigest,
+        legacyMessageDigest
+      );
+      writer = new OutputStreamFileWriterWrapper(
+        streamWriter
+      );
     }
     catch (VfsError e)
     {
       throw new IOException(e);
     }
+    catch (NoSuchAlgorithmException e)
+    {
+      throw new RuntimeException(e);
+    }
     try
     {
-      IOUtils.copy(data, writer);
+      int size = IOUtils.copy(data, writer);
+
+      mockblob.setDigest(streamWriter.digest());
+      mockblob.setRawSize(size);
     }
     finally
     {
@@ -244,7 +270,7 @@ public final class StoreManagerSimulator extends StoreManager
     throws IOException
   {
     com.zextras.lib.vfs.File destinationFile = mStoreRoot.getRoot().resolveFile(
-      getBlobPath(destMbox.getId(), destItemId, destRevision, currentVolume())
+      getBlobPath(destMbox.getId(), destItemId, destRevision, Short.valueOf(locator))
     );
 
     try
@@ -315,6 +341,10 @@ public final class StoreManagerSimulator extends StoreManager
   public MailboxBlob link(Blob src, Mailbox destMbox, int destItemId, int destRevision)
     throws IOException, ServiceException
   {
+    if (src instanceof MockVolumeBlob)
+    {
+      src = ((MockVolumeBlob) src).getMockBlob();
+    }
     MailboxBlob newBlob = copy(
       (MockBlob) src,
       destMbox,
@@ -342,7 +372,7 @@ public final class StoreManagerSimulator extends StoreManager
     throws IOException
   {
     MailboxBlob newBlob = copy(
-      ((MockStagedBlob) src).getMockBlob(),
+      ((MockVolumeBlob)((MockVolumeStagedBlob) src).getLocalBlob()).getMockBlob(),
       destMbox,
       destItemId,
       destRevision,
@@ -351,7 +381,7 @@ public final class StoreManagerSimulator extends StoreManager
 
     try
     {
-      ((MockStagedBlob) src).getMockBlob().getVirtualFile().remove().syncAndGet();
+      ((MockVolumeBlob)((MockVolumeStagedBlob) src).getLocalBlob()).getMockBlob().getVirtualFile().remove().syncAndGet();
     }
     catch (VfsError e)
     {
@@ -396,7 +426,7 @@ public final class StoreManagerSimulator extends StoreManager
     }
     catch (VfsError vfsError)
     {
-      throw new IOException(vfsError);
+      throw vfsError.toIOException();
     }
     return true;
   }
@@ -513,7 +543,7 @@ public final class StoreManagerSimulator extends StoreManager
       }
       catch (Exception ex)
       {
-        return null;
+        return sNonExistingPath;
       }
     }
 
@@ -544,6 +574,11 @@ public final class StoreManagerSimulator extends StoreManager
       {
         throw new RuntimeException(vfsError);
       }
+    }
+
+    public static MockBlob getMockBlob(Blob src)
+    {
+      return (MockBlob) src;
     }
   }
 
@@ -591,7 +626,25 @@ public final class StoreManagerSimulator extends StoreManager
 
     public Blob getLocalBlob() throws IOException
     {
-      return mMockStagedBlob.getMockBlob();
+      return new ZalMailboxBlob(
+        BlobWrap.wrapZimbraBlob(mMockStagedBlob.getMockBlob()),
+        new org.openzal.zal.Mailbox(mMockStagedBlob.getMailbox()),
+        getItemId(),
+        getRevision()
+      )
+      {
+        @Override
+        public org.openzal.zal.Blob getLocalBlob()
+        {
+          return getLocalBlob(false);
+        }
+
+        @Override
+        public String getVolumeId()
+        {
+          return "1";
+        }
+      }.toZimbra(Blob.class);
     }
 
     public short volumeId()
@@ -616,7 +669,7 @@ public final class StoreManagerSimulator extends StoreManager
 
   public static class MockVolumeMailboxBlob extends VolumeMailboxBlob
   {
-    public MockVolumeMailboxBlob(MailboxBlob blob, short volumeId) throws IOException
+    public MockVolumeMailboxBlob(MailboxBlob blob, String volumeId) throws IOException
     {
       super(blob.getMailbox(), blob.getItemId(), blob.getRevision(), blob.getLocator(), new MockVolumeBlob(blob.getLocalBlob(), volumeId));
     }
@@ -624,16 +677,60 @@ public final class StoreManagerSimulator extends StoreManager
 
   public static class MockVolumeBlob extends VolumeBlob
   {
-    private final short mVolumeId;
-    MockVolumeBlob(Blob blob, short volumeId)
+    private final String mVolumeId;
+    private final MockBlob mMockBlob;
+
+    MockVolumeBlob(Blob blob, String volumeId)
     {
-      super(blob.getFile(), volumeId);
+      super(blob.getFile(), Short.parseShort(volumeId));
+      if (blob instanceof MockBlob)
+      {
+        mMockBlob = (MockBlob) blob;
+      }
+      else if (blob instanceof MockVolumeBlob)
+      {
+        mMockBlob = (MockBlob) blob;
+      }
+      else
+      {
+        mMockBlob = (MockBlob) ((BlobWrap)((ZalMailboxBlob)(new InternalOverrideBlobProxy(blob).getWrappedObject())).getLocalBlob(false)).getWrappedObject();
+      }
       mVolumeId = volumeId;
+    }
+
+    public String getDigest() throws IOException
+    {
+      return mMockBlob.getDigest();
+    }
+
+    public MockBlob getMockBlob()
+    {
+      return mMockBlob;
     }
 
     public short getVolumeId()
     {
-      return mVolumeId;
+      return Short.parseShort(mVolumeId);
+    }
+  }
+
+  public static class MockVolumeStagedBlob extends VolumeStagedBlob
+  {
+    public MockVolumeStagedBlob(Mailbox mbox, MockBlob blob, String volumeId) throws IOException
+    {
+      super(mbox, new MockVolumeBlob(blob, volumeId));
+    }
+
+    public String getDigest()
+    {
+      try
+      {
+        return getLocalBlob().getDigest();
+      }
+      catch (Exception e)
+      {
+        return "";
+      }
     }
   }
 
