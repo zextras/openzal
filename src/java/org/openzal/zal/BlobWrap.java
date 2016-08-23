@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.store.file.VolumeBlobProxy;
+import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,10 @@ public class BlobWrap implements Blob
     String volumeId
   )
   {
-    if (!com.zimbra.cs.store.Blob.class.isAssignableFrom(blob.getClass()) || com.zimbra.cs.store.file.VolumeBlobProxy.class.isAssignableFrom(blob.getClass()))
+    if (!com.zimbra.cs.store.Blob.class.isAssignableFrom(blob.getClass())
+      && !com.zimbra.cs.store.file.VolumeBlobProxy.class.isAssignableFrom(blob.getClass())
+      && !com.zimbra.cs.store.file.VolumeMailboxBlob.class.isAssignableFrom(blob.getClass())
+      )
     {
       throw new RuntimeException("Cannot handle blob of type " + blob.getClass());
     }
@@ -57,6 +61,10 @@ public class BlobWrap implements Blob
     if (VolumeBlobProxy.isVolumeBlob(blob))
     {
       volumeId = String.valueOf(new VolumeBlobProxy(blob).getVolumeId());
+    }
+    if (volumeId == null && blob instanceof VolumeMailboxBlob)
+    {
+      volumeId = ((VolumeMailboxBlob) blob).getLocator();
     }
     if (volumeId == null && blob instanceof VolumeStagedBlob)
     {
