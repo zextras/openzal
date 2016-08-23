@@ -219,6 +219,12 @@ public class FileBlobStoreWrapImpl implements FileBlobStoreWrap
     /* $endif $ */
   }
 
+  @Override
+  public Object getWrappedObject()
+  {
+    return mStore;
+  }
+
   public static String getBlobPath(Mailbox mbox, int itemId, int revision, short volumeId) throws ServiceException
   {
     return FileBlobStore.getBlobPath(mbox, itemId, revision, volumeId);

@@ -87,4 +87,6 @@ public interface FileBlobStoreWrap
     boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException, ServiceException;
 
     boolean deleteStore(Mailbox mbox) throws IOException, ServiceException;
+
+    Object getWrappedObject();
 }
