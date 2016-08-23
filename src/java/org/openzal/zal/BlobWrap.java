@@ -47,33 +47,19 @@ public class BlobWrap implements Blob
     String volumeId
   )
   {
-    if (!com.zimbra.cs.store.Blob.class.isAssignableFrom(blob.getClass())
-      && !com.zimbra.cs.store.file.VolumeBlobProxy.class.isAssignableFrom(blob.getClass())
-      && !com.zimbra.cs.store.file.VolumeMailboxBlob.class.isAssignableFrom(blob.getClass())
-      )
-    {
-      throw new RuntimeException("Cannot handle blob of type " + blob.getClass());
-    }
     if (blob == null)
     {
       throw new NullPointerException();
+    }
+    if (!com.zimbra.cs.store.Blob.class.isAssignableFrom(blob.getClass()))
+    {
+      throw new RuntimeException("Cannot handle blob of type " + blob.getClass());
     }
     if (VolumeBlobProxy.isVolumeBlob(blob))
     {
       volumeId = String.valueOf(new VolumeBlobProxy(blob).getVolumeId());
     }
-    if (volumeId == null && blob instanceof VolumeMailboxBlob)
-    {
-      volumeId = ((VolumeMailboxBlob) blob).getLocator();
-    }
-    if (volumeId == null && blob instanceof VolumeStagedBlob)
-    {
-      /* $if ZimbraVersion >= 7.0.0 $ */
-      volumeId = String.valueOf(((VolumeStagedBlob) blob).getLocator());
-      /* $else $
-      volumeId = String.valueOf(((VolumeStagedBlob) blob).getStagedLocator());
-      /* $endif $ */
-    }
+
     mVolumeId = volumeId;
     mBlob = (com.zimbra.cs.store.Blob) blob;
   }
@@ -179,6 +165,9 @@ public class BlobWrap implements Blob
 
     if (blob instanceof VolumeStagedBlob)
       return new BlobWrap(((VolumeStagedBlob) blob).getLocalBlob(), volumeId);
+
+    if (blob instanceof VolumeMailboxBlob)
+      return new BlobWrap(((VolumeMailboxBlob) blob).getLocalBlob(), volumeId);
 
     if (blob instanceof InternalOverrideBlobWithMailboxInfo)
       return ((InternalOverrideBlobWithMailboxInfo) blob).getWrappedObject();
