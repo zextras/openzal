@@ -282,6 +282,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
+  public <T> T toZimbra(Class<T> claz)
+  {
+    return claz.cast(sm);
+  }
+
+  @Override
   public boolean delete(Mailbox mailbox, @Nullable Iterable blobs)
     throws IOException
   {
