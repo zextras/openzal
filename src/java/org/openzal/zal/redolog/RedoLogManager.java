@@ -58,4 +58,9 @@ public class RedoLogManager
   {
     return mRedoLogManager.getCurrentLogSequence();
   }
+
+  public void checkpointRedoLogManager()
+  {
+    mRedoLogManager.forceRollover(true);
+  }
 }
