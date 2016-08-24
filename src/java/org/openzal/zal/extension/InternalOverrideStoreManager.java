@@ -29,6 +29,7 @@ import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.store.file.FileBlobStore;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.*;
@@ -44,6 +45,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 
 import static com.zimbra.common.service.ServiceException.SENDERS_FAULT;
 import static com.zimbra.cs.mailbox.MailServiceException.ITEM_ID;
@@ -85,7 +87,7 @@ class InternalOverrideStoreManager
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
-    throw new UnsupportedOperationException();
+    return mStoreManager.getPrimaryStore().toZimbra(FileBlobStore.class).getBlobBuilder();
   }
 
   /* $if ZimbraVersion >= 8.0.0 $ */
