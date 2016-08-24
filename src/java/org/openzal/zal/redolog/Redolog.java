@@ -138,4 +138,6 @@ public class Redolog
   public static final int OP_REFRESH_MOUNTPOINT = 89;
   public static final int OP_EXPIRE_ACCESS = 90;
   public static final int OP_SET_DISABLE_ACTIVE_SYNC = 91;
+  public static final int OP_SET_WEB_OFFLINE_SYNC_DAYS = 92;
+  public static final int OP_DELETE_CONFIG = 93;
 }
