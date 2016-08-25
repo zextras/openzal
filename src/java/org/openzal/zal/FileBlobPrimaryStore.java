@@ -284,7 +284,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
   @Override
   public <T> T toZimbra(Class<T> claz)
   {
-    return claz.cast(sm);
+    return claz.cast(sm.getWrappedObject());
   }
 
   @Override

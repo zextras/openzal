@@ -227,6 +227,12 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
     throw new UnsupportedOperationException();
   }
 
+  @Override
+  public Object getWrappedObject()
+  {
+    throw new UnsupportedOperationException();
+  }
+
   public RelativePath getBlobPath(
     long mboxId,
     int itemId,

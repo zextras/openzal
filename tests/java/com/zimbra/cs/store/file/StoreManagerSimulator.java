@@ -34,16 +34,16 @@ import java.util.UUID;
 /* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
-import org.openzal.zal.BlobWrap;
-import org.openzal.zal.InternalOverrideBlobProxy;
-import org.openzal.zal.ZalBlob;
-import org.openzal.zal.ZalMailboxBlob;
 /* $else$
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
 import com.zimbra.cs.store.file.*;
  $endif$ */
 
+import org.openzal.zal.BlobWrap;
+import org.openzal.zal.InternalOverrideBlobProxy;
+import org.openzal.zal.ZalBlob;
+import org.openzal.zal.ZalMailboxBlob;
 
 public final class StoreManagerSimulator extends StoreManager
 {

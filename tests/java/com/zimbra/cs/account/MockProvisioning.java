@@ -2,6 +2,9 @@ package com.zimbra.cs.account;
 
 import java.util.UUID;
 
+import com.zimbra.cs.account.accesscontrol.RightModifier;
+import com.zimbra.soap.admin.type.GranteeSelector;
+import com.zimbra.soap.type.TargetBy;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 /**
@@ -1153,4 +1156,31 @@ $endif $
   }
 
   /* $endif $ */
+
+  @Override
+  public void grantRight(String targetType,
+                         TargetBy targetBy,
+                         String target,
+                         String granteeType,
+                         GranteeSelector.GranteeBy granteeBy,
+                         String grantee,
+                         String secret,
+                         String right,
+                         RightModifier rightModifier) throws ServiceException
+  {
+    //TODO implement mocking system
+  }
+
+  @Override
+  public void revokeRight(String targetType,
+                          TargetBy targetBy,
+                          String target,
+                          String granteeType,
+                          GranteeSelector.GranteeBy granteeBy,
+                          String grantee,
+                          String right,
+                          RightModifier rightModifier) throws ServiceException
+  {
+    //TODO implement mocking system
+  }
 }
