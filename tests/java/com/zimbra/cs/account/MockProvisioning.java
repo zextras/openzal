@@ -3,8 +3,6 @@ package com.zimbra.cs.account;
 import java.util.UUID;
 
 import com.zimbra.cs.account.accesscontrol.RightModifier;
-import com.zimbra.soap.admin.type.GranteeSelector;
-import com.zimbra.soap.type.TargetBy;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 /**
@@ -37,6 +35,8 @@ import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
+import com.zimbra.soap.type.TargetBy;
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 
 /* $elseif MajorZimbraVersion >= 6 $
 import com.zimbra.common.service.ServiceException;
@@ -46,6 +46,8 @@ import com.zimbra.cs.account.auth.AuthContext.Protocol;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.cs.mime.handler.UnknownTypeHandler;
+import com.zimbra.cs.account.Provisioning.TargetBy;
+import com.zimbra.cs.account.Provisioning.GranteeBy;
 
 /* $if MajorZimbraVersion >= 7 $
 import com.zimbra.cs.account.auth.AuthContext;
@@ -1162,7 +1164,7 @@ $endif $
                          TargetBy targetBy,
                          String target,
                          String granteeType,
-                         GranteeSelector.GranteeBy granteeBy,
+                         GranteeBy granteeBy,
                          String grantee,
                          String secret,
                          String right,
@@ -1176,7 +1178,7 @@ $endif $
                           TargetBy targetBy,
                           String target,
                           String granteeType,
-                          GranteeSelector.GranteeBy granteeBy,
+                          GranteeBy granteeBy,
                           String grantee,
                           String right,
                           RightModifier rightModifier) throws ServiceException
