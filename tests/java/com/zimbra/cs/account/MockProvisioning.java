@@ -1159,7 +1159,6 @@ $endif $
 
   /* $endif $ */
 
-  @Override
   public void grantRight(String targetType,
                          TargetBy targetBy,
                          String target,
@@ -1172,8 +1171,7 @@ $endif $
   {
     //TODO implement mocking system
   }
-
-  @Override
+  
   public void revokeRight(String targetType,
                           TargetBy targetBy,
                           String target,
