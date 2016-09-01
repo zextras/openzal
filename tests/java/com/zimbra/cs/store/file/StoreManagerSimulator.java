@@ -128,7 +128,11 @@ public final class StoreManagerSimulator extends StoreManager
     {
       int size = IOUtils.copy(data, writer);
 
+/* $if ZimbraVersion >= 8.0.0 $ */
       mockblob.setDigest(streamWriter.digest());
+/* $else $
+      mockblob.setDigest(streamWriter.legacyDigest());
+ $endif$ */
       mockblob.setRawSize(size);
     }
     finally

@@ -144,6 +144,7 @@ public class ZimbraSimulator extends ExternalResource
     //com.zimbra.cs.store.StoreManager.getInstance().startup();
     mVolumeManager = new VolumeManager();
     mStoreSimulator = new StoreManagerSimulator();
+    mStoreSimulator.startup();
     mStoreRoot = mStoreSimulator.getStoreRoot();
     FileBlobStoreWrap storeManagerSimulator = new FileBlobStoreSimulatorWrap(mStoreSimulator);
     mStoreManager = new StoreManagerImpl(
