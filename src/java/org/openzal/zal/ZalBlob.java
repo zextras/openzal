@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.apache.commons.compress.utils.IOUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,11 +37,6 @@ public class ZalBlob implements Blob
   public ZalBlob(File file, String volumeId)
   {
     this(file, volumeId, null, null);
-  }
-
-  public ZalBlob(File file, String volumeId, String digest)
-  {
-    this(file, volumeId, digest, null);
   }
 
   public ZalBlob(File file, String volumeId, String digest, Long rawSize)
@@ -79,14 +76,27 @@ public class ZalBlob implements Blob
   }
 
   @Override
-  public String getDigest()
+  public String getDigest() throws IOException
   {
+    if (mDigest == null || mDigest.isEmpty())
+    {
+      FileInputStream inputStream = null;
+      try
+      {
+        inputStream = new FileInputStream(mFile);
+        mDigest = Utils.computeDigest(inputStream);
+      }
+      finally
+      {
+        IOUtils.closeQuietly(inputStream);
+      }
+    }
     return mDigest;
   }
 
   public long getSize() throws IOException
   {
-    if (mRawSize == null)
+    if (mRawSize == null || mRawSize == 0)
     {
       mRawSize = mFile.length();
     }

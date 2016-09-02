@@ -64,7 +64,14 @@ class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
   public String getStagedDigest()
   /* $endif $ */
   {
-    return mBlob.getDigest();
+    try
+    {
+      return mBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
