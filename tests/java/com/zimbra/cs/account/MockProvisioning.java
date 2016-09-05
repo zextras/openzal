@@ -36,7 +36,13 @@ import com.zimbra.cs.mime.MockMimeTypeInfo;
 import com.zimbra.soap.admin.type.CacheEntryType;
 import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.soap.type.TargetBy;
+/* $if ZimbraVersion < 8.0.6 $
+import com.zimbra.common.account.Key.GranteeBy;
+   $endif$ */
+
+/* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
+/* $endif$ */
 
 /* $elseif MajorZimbraVersion >= 6 $
 import com.zimbra.common.service.ServiceException;
