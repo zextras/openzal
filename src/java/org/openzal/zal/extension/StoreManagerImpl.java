@@ -126,6 +126,7 @@ public class StoreManagerImpl implements StoreManager
     mLock.lock();
     try
     {
+      mStores.remove(volumeId);
       if (mVolumeManager.isValidVolume(volumeId))
       {
         mStoreFactories.put(volumeId, storeBuilder);
