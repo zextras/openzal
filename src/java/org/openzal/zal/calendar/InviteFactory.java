@@ -20,7 +20,9 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.common.mime.ContentType;
 import com.zimbra.cs.mailbox.MailItem;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
@@ -38,7 +40,9 @@ import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
 import com.zimbra.common.calendar.*;
 /* $endif$ */
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -432,6 +436,18 @@ public class InviteFactory
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
+//      try
+//      {
+//        invite.addIcalendarAttach(Attach.fromUnencodedAndContentType(IOUtils.toByteArray(mMimeMessage.getInputStream()), "image/png"));
+//      }
+//      catch (IOException e)
+//      {
+//        e.printStackTrace();
+//      }
+//      catch (MessagingException e)
+//      {
+//        e.printStackTrace();
+//      }
       return new Invite(invite, mMimeMessage);
     }
     else
