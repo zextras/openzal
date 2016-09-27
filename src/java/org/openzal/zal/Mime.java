@@ -23,8 +23,8 @@ package org.openzal.zal;
 import com.zimbra.cs.mime.ExpandMimeMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.log.ZimbraLog;
 
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -41,34 +41,18 @@ public class Mime
   public static List<MPartInfo> getParts(MimeMessage mimeMessage) throws IOException, MessagingException
   {
     List<MPartInfo> parts = ZimbraListWrapper.wrapMPartInfos(com.zimbra.cs.mime.Mime.getParts(mimeMessage));
-//    if (partsDuplicated(parts))
-//    {
-//      throw new RuntimeException("Duplicated parts");
-//    }
 
-
-//    List<MPartInfo> bodyParts = new ArrayList<MPartInfo>();
-//
-//    Iterator<MPartInfo> it = parts.iterator();
-//    while (it.hasNext())
-//    {
-//      MPartInfo info = it.next();
-//      if (info.getMimePart().getContent() instanceof MimeMultipart)
-//      {
-//        //MimeMultipart mp = Mime.getMultipartContent(info.getMimePart(),"");
-//        //bodyParts.add(mp.);
-//        MimeMultipart mp = (MimeMultipart)info.getMimePart().getContent();
-//        BodyPart part = mp.getBodyPart(0);
-//
-//        //bodyParts.add()
-//        //ParsedMessage pm = new ParsedMessage( new MimeMessage(mp), true );
-////        MimeMessage mime = new MimeMessage((Session)null);
-////        mime.setContent(mp);
-////
-////        bodyParts = Mime.getParts(mime);
-//        )
-//      }
-    //}
+    if (partsDuplicated(parts))
+    {
+      try
+      {
+        throw new Exception("MimeParts duplicated");
+      }
+      catch (Exception e)
+      {
+        ZimbraLog.mailbox.info(Utils.exceptionToString(e));
+      }
+    }
 
     return parts;
   }

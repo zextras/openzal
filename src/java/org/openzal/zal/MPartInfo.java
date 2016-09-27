@@ -138,71 +138,56 @@ public class MPartInfo // implements Comparable<MPartInfo>
   }
 
 
-  public static boolean equals(Part mp1,Part mp2)
+  public static boolean equals(Part p1,Part p2)
   {
-    boolean same = false;
+    boolean same;
 
     try
     {
-      if (mp1.getCount() == mp2.getCount())
+      String ct1 = p1.getContentType();
+      String ct2 = p2.getContentType();
+      new javax.mail.internet.ContentType(ct1); // check content type correctness
+      new javax.mail.internet.ContentType(ct2);
+
+      String filename1 = p1.getFileName();
+      String filename2 = p2.getFileName();
+
+      same = (filename1 == null && filename2 == null) || (filename1 != null && filename2 != null && filename1.equals(filename2));
+
+      if (p1.isMimeType("text/plain") && p2.isMimeType("text/plain"))
       {
-        int i = 0;
-        while (i<mp1.getCount() && same)
+        same = (p1.getContent()).equals(p2.getContent());
+      }
+      else if (p1.isMimeType("multipart/*") && p2.isMimeType("multipart/*"))
+      {
+        Multipart mmp1 = (Multipart) p1.getContent();
+        Multipart mmp2 = (Multipart) p2.getContent();
+        int count = mmp1.getCount();
+
+        int j = 0;
+        while (j < count && same)
         {
-          BodyPart p1 = mp1.getBodyPart(i);
-          BodyPart p2 = mp2.getBodyPart(i);
+          same = equals(mmp1.getBodyPart(j), mmp2.getBodyPart(j));
+          j++;
+        }
 
-          String ct1 = p1.getContentType();
-          String ct2 = p2.getContentType();
+      }
+      else if (p1.isMimeType("message/rfc822") && p2.isMimeType("message/rfc822"))
+      {
+        same = equals((Part) p1.getContent(), (Part) p2.getContent());
+      }
+      else
+      {
+        Object o1 = p1.getContent();
+        Object o2 = p2.getContent();
 
-          try {
-            //pr("CONTENT-TYPE: " + (new ContentType(ct)).toString());
-            new javax.mail.internet.ContentType(ct1);
-            new javax.mail.internet.ContentType(ct2);
-          } catch (ParseException pex) {
-            same = false;
-          }
-          String filename1 = p1.getFileName();
-          String filename2 = p2.getFileName();
-
-          same = filename1 != null && filename2 != null && filename1.equals(filename2);
-
-          if (p1.isMimeType("text/plain") && p2.isMimeType("text/plain")) {
-            same = (p1.getContent()).equals(p2.getContent());
-          } else if (p1.isMimeType("multipart/*") && p2.isMimeType("multipart/*")) {
-            Multipart mmp1 = (Multipart) p1.getContent();
-            Multipart mmp2 = (Multipart) p2.getContent();
-            int count = mmp1.getCount();
-            for (int j = 0; j < count; j++)
-              same = equals(mmp1.getBodyPart(j),mmp2.getBodyPart(j));
-
-          } else if (p.isMimeType("message/rfc822")) {
-            pr("This is a Nested Message");
-            pr("---------------------------");
-            mLevel++;
-            dumpPart((Part) p.getContent());
-            mLevel--;
-          } else {
-            Object o = p.getContent();
-            if (o instanceof String) {
-              pr("This is a string");
-              pr("---------------------------");
-              pr((String) o);
-            } else if (o instanceof InputStream) {
-              pr("This is just an input stream");
-              pr("---------------------------");
-              InputStream is = (InputStream) o;
-              int c;
-              while ((c = is.read()) != -1)
-                pr(c);
-            } else {
-              pr("This is an unknown type");
-              pr("---------------------------");
-              pr(o.toString());
-            }
-          }
-
-          i++;
+        if (o1 instanceof InputStream && o2 instanceof InputStream)
+        {
+          same = IOUtils.contentEquals((InputStream)o1,(InputStream)o2);
+        }
+        else
+        {
+          same = o1.equals(o2);
         }
       }
     }
@@ -212,8 +197,11 @@ public class MPartInfo // implements Comparable<MPartInfo>
     }
     catch (IOException e)
     {
-      e.printStackTrace();
+      same = false;
     }
+
+    return same;
+  }
 
     @Override
   public boolean equals(Object anObject)
@@ -245,20 +233,26 @@ public class MPartInfo // implements Comparable<MPartInfo>
           Object o2 = o.getMimePart().getContent();
           if (o1 != o2)
           {
-            /*if (o1 instanceof String && o2 instanceof String)
-            {
-              String s1 = (String) o1;
-              String s2 = (String) o2;
-
-              if (s1.isEmpty() && s2.isEmpty())
-                return false;
-            }
-            else*/
             if (o1 instanceof MimeMultipart && o2 instanceof MimeMultipart)
             {
               MimeMultipart mp1 = (MimeMultipart)o1;
               MimeMultipart mp2 = (MimeMultipart)o2;
+              int n1 = mp1.getCount();
+              int n2 = mp2.getCount();
 
+              if (n1 == n2)
+              {
+                boolean same = true;
+                int i = 0;
+
+                while (i < n1 && same)
+                {
+                  same = equals(mp1.getBodyPart(i),mp2.getBodyPart(i));
+                  i++;
+                }
+
+                return same;
+              }
             }
             else if (o1 instanceof InputStream && o2 instanceof InputStream)
             {
@@ -267,8 +261,10 @@ public class MPartInfo // implements Comparable<MPartInfo>
 
               return IOUtils.contentEquals(is1,is2);
             }
-
-            return o1.equals(o2);
+            else
+            {
+              return o1.equals(o2);
+            }
           }
         }
         catch (IOException e)
