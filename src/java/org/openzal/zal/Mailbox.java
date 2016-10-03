@@ -48,7 +48,6 @@ import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -759,59 +758,12 @@ public class Mailbox
     throws ZimbraException
   {
     /* $if MajorZimbraVersion >= 8 $ */
-    try
-    {
-      if (Mime.partsDuplicated(Mime.getParts(defaultInv.getMessage().getMimeMessage())))
-      {
-        try
-        {
-          throw new Exception("MimeParts duplicated");
-        }
-        catch (Exception e)
-        {
-          ZimbraLog.misc.info(Utils.exceptionToString(e));
-        }
-      }
-    }
-    catch (IOException e)
-    {
-      ZimbraLog.misc.info(Utils.exceptionToString(e));
-    }
-    catch (MessagingException e)
-    {
-      ZimbraLog.misc.info((Utils.exceptionToString(e)));
-    }
-
-
     com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[] zimbraExceptions = null;
     if( exceptions.size() > 0 )
     {
       zimbraExceptions = new com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[exceptions.size()];
       for (int i = 0; i < exceptions.size(); i++)
       {
-        try
-        {
-          if (Mime.partsDuplicated(Mime.getParts(exceptions.get(i).getMessage().getMimeMessage())))
-          {
-            try
-            {
-              throw new Exception("MimeParts duplicated");
-            }
-            catch (Exception e)
-            {
-              ZimbraLog.misc.info(Utils.exceptionToString(e));
-            }
-          }
-        }
-        catch (IOException e)
-        {
-          ZimbraLog.misc.info(Utils.exceptionToString(e));
-        }
-        catch (MessagingException e)
-        {
-          ZimbraLog.misc.info((Utils.exceptionToString(e)));
-        }
-
         zimbraExceptions[i] = exceptions.get(i).toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
       }
     }

@@ -23,7 +23,6 @@ package org.openzal.zal;
 import com.zimbra.cs.mime.ExpandMimeMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -31,8 +30,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePart;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Mime
@@ -40,21 +37,7 @@ public class Mime
   @NotNull
   public static List<MPartInfo> getParts(MimeMessage mimeMessage) throws IOException, MessagingException
   {
-    List<MPartInfo> parts = ZimbraListWrapper.wrapMPartInfos(com.zimbra.cs.mime.Mime.getParts(mimeMessage));
-
-    if (partsDuplicated(parts))
-    {
-      try
-      {
-        throw new Exception("MimeParts duplicated");
-      }
-      catch (Exception e)
-      {
-        ZimbraLog.mailbox.info(Utils.exceptionToString(e));
-      }
-    }
-
-    return parts;
+    return ZimbraListWrapper.wrapMPartInfos(com.zimbra.cs.mime.Mime.getParts(mimeMessage));
   }
 
   @NotNull
@@ -110,68 +93,5 @@ public class Mime
     {
       return original;
     }
-  }
-
-  public static boolean partsDuplicated(List<MPartInfo> parts)
-  {
-    boolean duplicated = false;
-    Iterator<MPartInfo> it1 = parts.iterator();
-    while (it1.hasNext() && !duplicated)
-    {
-      Iterator<MPartInfo> it2 = parts.iterator();
-      MPartInfo ref = it1.next();
-      boolean b = false;
-
-      while (it2.hasNext() && !b) // skip until it2 reaches it
-      {
-        MPartInfo check = it2.next();
-        b = ref == check;
-      }
-
-      while (it2.hasNext() && !duplicated)
-      {
-        MPartInfo check = it2.next();
-        duplicated = ref.equals(check);
-      }
-    }
-
-    return duplicated;
-  }
-
-  public static List<MPartInfo> partsDeDuplication(List<MPartInfo> parts)
-  {
-    List<MPartInfo> partsCleaned = new ArrayList<MPartInfo>();
-    List<MPartInfo> partsDuplicated = new ArrayList<MPartInfo>();
-
-    Iterator<MPartInfo> it1 = parts.iterator();
-    while (it1.hasNext())
-    {
-      Iterator<MPartInfo> it2 = parts.iterator();
-      MPartInfo ref = it1.next();
-      boolean b = false;
-      boolean duplicated = false;
-
-      while (it2.hasNext() && !b) // skip until it2 reaches it
-      {
-        MPartInfo check = it2.next();
-        b = ref == check;
-      }
-
-      while (it2.hasNext() && !duplicated)
-      {
-        MPartInfo check = it2.next();
-        duplicated = ref.equals(check);
-      }
-
-      if (!duplicated)
-      {
-        if (!partsDuplicated.contains(ref))
-          partsCleaned.add(ref);
-      }
-      else
-        partsDuplicated.add(ref);
-    }
-
-    return partsCleaned;
   }
 }
