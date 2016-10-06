@@ -36,10 +36,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
 import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
 
 /* $if MajorZimbraVersion <= 7 $
@@ -94,7 +92,7 @@ public class CalendarMime
     String descHtml = inv.getDescriptionHtml();
     ZCalendar.ZVCalendar cal = inv.newToICalendar(true);
 
-    return createCalendarMessage(subject, desc, descHtml, cal, new ArrayList<BodyPart>());
+    return createCalendarMessage(subject, desc, descHtml, cal, Collections.<BodyPart>emptyList());
   }
 
   private List<BodyPart> extractAttachmentFromOriginalMime(MimeMessage mimeMessage, int inviteId) throws MessagingException, IOException
