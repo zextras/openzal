@@ -26,13 +26,13 @@ public class ZimbraTest
   @Test
   public void reflection_initialization()
   {
-    Zimbra zimbra = new Zimbra();
+    Zimbra zimbra = mZimbraSimulator.getZimbra();
   }
 
   @Test
   public void remove_extension()
   {
-    Zimbra zimbra = new Zimbra();
+    Zimbra zimbra = mZimbraSimulator.getZimbra();
     assertFalse(zimbra.removeExtension("not_existing_extension"));
   }
 
