@@ -53,6 +53,9 @@ public class ParsedMessage
     }
   }
 
+  /*
+   * This triggers MimeMessage.parse(InputStream) to set internal headers and DataSources
+   */
   public ParsedMessage(MimeMessage msg, boolean indexAttachments) throws ZimbraException
   {
     try
