@@ -238,7 +238,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public Zimbra getZimbra()
   {
-    return new Zimbra();
+    return mZimbra;
   }
 
   public void useMVCC(org.openzal.zal.Mailbox mbox) throws Exception

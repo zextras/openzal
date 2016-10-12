@@ -36,7 +36,6 @@ import java.util.zip.ZipFile;
 
 class ExtensionManagerImpl implements ExtensionManager
 {
-  private final Zimbra                 mZimbra;
   private       File                   mExtensionDirectory;
   private       Extension              mExtension;
   private       ZalExtensionController mCustomZalExtensionController;
@@ -53,7 +52,6 @@ class ExtensionManagerImpl implements ExtensionManager
     mCustomZalExtensionController = null;
     mExtension = null;
     mExtensionDirectory = getCurrentJarDirectory();
-    mZimbra = new Zimbra();
   }
 
   @Override
