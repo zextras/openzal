@@ -31,13 +31,4 @@ public class Tag extends Item
     super(item);
     mTag = (com.zimbra.cs.mailbox.Tag) item;
   }
-
-  public long getBitmask()
-  {
-/* $if ZimbraVersion >= 8.0.0 $ */
-    throw new UnsupportedOperationException();
-/* $else$
-    return mTag.getBitmask();
-$endif$ */
-  }
 }

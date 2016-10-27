@@ -51,11 +51,7 @@ public abstract class Entry
 
   public EntryType getEntryType()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return new EntryType(mEntry.getEntryType());
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public String getName()
@@ -136,7 +132,6 @@ public abstract class Entry
 
   public class EntryType
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     EntryType ENTRY                     = new EntryType(com.zimbra.cs.account.Entry.EntryType.ENTRY);
     EntryType ACCOUNT                   = new EntryType(com.zimbra.cs.account.Entry.EntryType.ACCOUNT);
     EntryType ALIAS                     = new EntryType(com.zimbra.cs.account.Entry.EntryType.ALIAS);
@@ -174,13 +169,6 @@ public abstract class Entry
     {
       return mEntryType.getName();
     }
-    /* $else$
-    public String getName()
-    {
-      throw new UnsupportedOperationException();
-    }
-    private EntryType(){}
-    /* $endif $ */
   }
 }
 

@@ -22,9 +22,5 @@ package org.openzal.zal;
 
 public class AttributeClass
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static String OC_zimbraAccount = com.zimbra.cs.account.AttributeClass.OC_zimbraAccount;
-  /* $else $
-  public static String OC_zimbraAccount = "";
-  /* $endif$ */
 }

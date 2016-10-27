@@ -28,9 +28,6 @@ import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.store.StorageCallback;
-/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,13 +44,7 @@ public interface FileBlobStoreWrap
 
     Blob storeIncoming(InputStream in, boolean storeAsIs) throws IOException, ServiceException;
 
-    Blob storeIncoming(InputStream in, Object callback, boolean storeAsIs) throws IOException, ServiceException;
-
-    Blob storeIncoming(InputStream in, long sizeHint, Object callback, boolean storeAsIs) throws IOException, ServiceException;
-
     VolumeStagedBlob stage(InputStream in, long actualSize, Mailbox mbox) throws IOException, ServiceException;
-
-    VolumeStagedBlob stage(InputStream in, long actualSize, Object callback, Mailbox mbox) throws IOException, ServiceException;
 
     VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException;
 
@@ -85,8 +76,6 @@ public interface FileBlobStoreWrap
     InputStream getContent(Blob blob) throws IOException;
 
     boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException, ServiceException;
-
-    boolean deleteStore(Mailbox mbox) throws IOException, ServiceException;
 
     Object getWrappedObject();
 }

@@ -20,19 +20,13 @@
 
 package org.openzal.zal;
 
-import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
 
 public class UCService extends Entry
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final com.zimbra.cs.account.UCService mUCService;
 
   protected UCService(@NotNull Object ucService)
@@ -55,28 +49,4 @@ public class UCService extends Entry
   {
     return cls.cast(mUCService);
   }
-/* $else$
-
-  protected UCService(@NotNull Object ucService)
-  {
-    super(ucService);
-    throw new UnsupportedOperationException();
-  }
-
-  public Set<String> getMultiAttrSet(String name)
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  public String getName()
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  public <T> T toZimbra(Class<T> cls)
-  {
-    throw new UnsupportedOperationException();
-  }
-  $endif $ */
-
 }

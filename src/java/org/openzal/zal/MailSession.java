@@ -29,10 +29,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import java.util.List;
-/* $if ZimbraVersion < 8.0.0 $
-import java.util.ArrayList;
-import java.util.Set;
-/* $endif $ */
 
 public class MailSession
 {
@@ -68,19 +64,11 @@ public class MailSession
     {
       if (domain != null)
       {
-        /* $if ZimbraVersion >= 8.0.0 $ */
         return JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class));
-        /* $else $
-        return new ArrayList<String>(JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class)));
-        /* $endif $ */
       }
       else
       {
-        /* $if ZimbraVersion >= 8.0.0 $ */
         return JMSession.getSmtpHosts(null);
-        /* $else $
-        return new ArrayList<String>(JMSession.getSmtpHosts(null));
-        /* $endif $ */
       }
     }
     catch (ServiceException e)

@@ -158,462 +158,6 @@
     </sequential>
   </macrodef>
 
-<target name="zal-6.0.7"
-        description="Create jar for Zimbra 6.0.7"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.7"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "7" />
-</target>
-
-
-<target name="zal-6.0.7-itbase"
-        description="Create test jar for Zimbra 6.0.7"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.7"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "7" />
-</target>
-
-<target name="zal-6.0.8"
-        description="Create jar for Zimbra 6.0.8"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.8"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "8" />
-</target>
-
-
-<target name="zal-6.0.8-itbase"
-        description="Create test jar for Zimbra 6.0.8"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.8"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "8" />
-</target>
-
-<target name="zal-6.0.9"
-        description="Create jar for Zimbra 6.0.9"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.9"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "9" />
-</target>
-
-
-<target name="zal-6.0.9-itbase"
-        description="Create test jar for Zimbra 6.0.9"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.9"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "9" />
-</target>
-
-<target name="zal-6.0.10"
-        description="Create jar for Zimbra 6.0.10"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.10"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "10" />
-</target>
-
-
-<target name="zal-6.0.10-itbase"
-        description="Create test jar for Zimbra 6.0.10"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.10"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "10" />
-</target>
-
-<target name="zal-6.0.12"
-        description="Create jar for Zimbra 6.0.12"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.12"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "12" />
-</target>
-
-
-<target name="zal-6.0.12-itbase"
-        description="Create test jar for Zimbra 6.0.12"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.12"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "12" />
-</target>
-
-<target name="zal-6.0.13"
-        description="Create jar for Zimbra 6.0.13"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.13"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "13" />
-</target>
-
-
-<target name="zal-6.0.13-itbase"
-        description="Create test jar for Zimbra 6.0.13"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.13"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "13" />
-</target>
-
-<target name="zal-6.0.14"
-        description="Create jar for Zimbra 6.0.14"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.14"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "14" />
-</target>
-
-
-<target name="zal-6.0.14-itbase"
-        description="Create test jar for Zimbra 6.0.14"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.14"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "14" />
-</target>
-
-<target name="zal-6.0.15"
-        description="Create jar for Zimbra 6.0.15"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.15"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "15" />
-</target>
-
-
-<target name="zal-6.0.15-itbase"
-        description="Create test jar for Zimbra 6.0.15"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.15"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "15" />
-</target>
-
-<target name="zal-6.0.16"
-        description="Create jar for Zimbra 6.0.16"
-        depends="init">
-  <build-zal ZimbraVersion="6.0.16"
-             MajorZimbraVersion = "6"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "16" />
-</target>
-
-
-<target name="zal-6.0.16-itbase"
-        description="Create test jar for Zimbra 6.0.16"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="6.0.16"
-                    MajorZimbraVersion = "6"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "16" />
-</target>
-
-<target name="zal-7.0.0"
-        description="Create jar for Zimbra 7.0.0"
-        depends="init">
-  <build-zal ZimbraVersion="7.0.0"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "0" />
-</target>
-
-
-<target name="zal-7.0.0-itbase"
-        description="Create test jar for Zimbra 7.0.0"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.0.0"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "0" />
-</target>
-
-<target name="zal-7.0.1"
-        description="Create jar for Zimbra 7.0.1"
-        depends="init">
-  <build-zal ZimbraVersion="7.0.1"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "1" />
-</target>
-
-
-<target name="zal-7.0.1-itbase"
-        description="Create test jar for Zimbra 7.0.1"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.0.1"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "0"
-                    MinorZimbraVersion = "1" />
-</target>
-
-<target name="zal-7.1.0"
-        description="Create jar for Zimbra 7.1.0"
-        depends="init">
-  <build-zal ZimbraVersion="7.1.0"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "0" />
-</target>
-
-
-<target name="zal-7.1.0-itbase"
-        description="Create test jar for Zimbra 7.1.0"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.1.0"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "1"
-                    MinorZimbraVersion = "0" />
-</target>
-
-<target name="zal-7.1.1"
-        description="Create jar for Zimbra 7.1.1"
-        depends="init">
-  <build-zal ZimbraVersion="7.1.1"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "1" />
-</target>
-
-
-<target name="zal-7.1.1-itbase"
-        description="Create test jar for Zimbra 7.1.1"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.1.1"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "1"
-                    MinorZimbraVersion = "1" />
-</target>
-
-<target name="zal-7.1.2"
-        description="Create jar for Zimbra 7.1.2"
-        depends="init">
-  <build-zal ZimbraVersion="7.1.2"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "2" />
-</target>
-
-
-<target name="zal-7.1.2-itbase"
-        description="Create test jar for Zimbra 7.1.2"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.1.2"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "1"
-                    MinorZimbraVersion = "2" />
-</target>
-
-<target name="zal-7.1.3"
-        description="Create jar for Zimbra 7.1.3"
-        depends="init">
-  <build-zal ZimbraVersion="7.1.3"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "3" />
-</target>
-
-
-<target name="zal-7.1.3-itbase"
-        description="Create test jar for Zimbra 7.1.3"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.1.3"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "1"
-                    MinorZimbraVersion = "3" />
-</target>
-
-<target name="zal-7.1.4"
-        description="Create jar for Zimbra 7.1.4"
-        depends="init">
-  <build-zal ZimbraVersion="7.1.4"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "4" />
-</target>
-
-
-<target name="zal-7.1.4-itbase"
-        description="Create test jar for Zimbra 7.1.4"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.1.4"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "1"
-                    MinorZimbraVersion = "4" />
-</target>
-
-<target name="zal-7.2.0"
-        description="Create jar for Zimbra 7.2.0"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.0"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "0" />
-</target>
-
-
-<target name="zal-7.2.0-itbase"
-        description="Create test jar for Zimbra 7.2.0"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.0"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "0" />
-</target>
-
-<target name="zal-7.2.1"
-        description="Create jar for Zimbra 7.2.1"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.1"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "1" />
-</target>
-
-
-<target name="zal-7.2.1-itbase"
-        description="Create test jar for Zimbra 7.2.1"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.1"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "1" />
-</target>
-
-<target name="zal-7.2.2"
-        description="Create jar for Zimbra 7.2.2"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.2"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "2" />
-</target>
-
-
-<target name="zal-7.2.2-itbase"
-        description="Create test jar for Zimbra 7.2.2"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.2"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "2" />
-</target>
-
-<target name="zal-7.2.3"
-        description="Create jar for Zimbra 7.2.3"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.3"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "3" />
-</target>
-
-
-<target name="zal-7.2.3-itbase"
-        description="Create test jar for Zimbra 7.2.3"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.3"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "3" />
-</target>
-
-<target name="zal-7.2.4"
-        description="Create jar for Zimbra 7.2.4"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.4"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "4" />
-</target>
-
-
-<target name="zal-7.2.4-itbase"
-        description="Create test jar for Zimbra 7.2.4"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.4"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "4" />
-</target>
-
-<target name="zal-7.2.5"
-        description="Create jar for Zimbra 7.2.5"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.5"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "5" />
-</target>
-
-
-<target name="zal-7.2.5-itbase"
-        description="Create test jar for Zimbra 7.2.5"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.5"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "5" />
-</target>
-
-<target name="zal-7.2.6"
-        description="Create jar for Zimbra 7.2.6"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.6"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "6" />
-</target>
-
-
-<target name="zal-7.2.6-itbase"
-        description="Create test jar for Zimbra 7.2.6"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.6"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "6" />
-</target>
-
-<target name="zal-7.2.7"
-        description="Create jar for Zimbra 7.2.7"
-        depends="init">
-  <build-zal ZimbraVersion="7.2.7"
-             MajorZimbraVersion = "7"
-             MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "7" />
-</target>
-
-
-<target name="zal-7.2.7-itbase"
-        description="Create test jar for Zimbra 7.2.7"
-        depends="init">
-  <build-zal-itbase ZimbraVersion="7.2.7"
-                    MajorZimbraVersion = "7"
-                    MiddleZimbraVersion = "2"
-                    MinorZimbraVersion = "7" />
-</target>
-
 <target name="zal-8.0.0"
         description="Create jar for Zimbra 8.0.0"
         depends="init">
@@ -881,8 +425,8 @@
 </target>
 
 
-  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.0" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0" />
+  <target name="zal-common" depends="zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.0" />
+  <target name="zal-all" depends="zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -910,7 +454,7 @@
       </else>
     </if>
 
-    <for list="6.0.16,7.2.7,8.0.9,8.5.1,8.6.0,8.7.0" param="currentZimbraVersion">
+    <for list="8.0.9,8.5.1,8.6.0,8.7.0" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -933,7 +477,7 @@
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.7.0/zal.jar"/>
-      <arg value="dist/6.0.7/zal.jar"/>
+      <arg value="dist/8.0.0/zal.jar"/>
     </exec>
   </target>
 
@@ -949,7 +493,7 @@
       </else>
     </if>
 
-    <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0" param="currentZimbraVersion">
+    <for list="8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -971,7 +515,7 @@
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.7.0/zal.jar"/>
-      <arg value="dist/6.0.7/zal.jar"/>
+      <arg value="dist/8.0.0/zal.jar"/>
     </exec>
   </target>
 
@@ -997,7 +541,7 @@
           value="1"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
-          value="6.0.7"/>
+          value="8.0.0"/>
         <replacefilter
           token="@LAST_ZIMBRA_VERSION@"
           value="8.7.0"/>

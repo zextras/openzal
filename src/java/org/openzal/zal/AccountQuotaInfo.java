@@ -20,12 +20,6 @@
 
 package org.openzal.zal;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
-/* $else $
-import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.common.soap.Element;
-/* $endif $ */
-
 public class AccountQuotaInfo
 {
   private final String mId;

@@ -47,16 +47,9 @@ class InternalUnregisterDocumentService implements DocumentService
         Namespace.get(qName.getNamespace())
       );
 
-/* $if ZimbraVersion >= 7.0.0 $ */
       dispatcher.unRegisterHandler(
         zimbraQName
       );
-/* $else$
-      dispatcher.unRegisterHandler(
-        zimbraQName,
-        null
-      );
- $endif$ */
     }
   }
 }

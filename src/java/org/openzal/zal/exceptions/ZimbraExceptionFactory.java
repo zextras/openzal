@@ -116,11 +116,7 @@ public class ZimbraExceptionFactory
   }
 
   static ZimbraException wrapVolumeServiceException(
-/* $if MajorZimbraVersion <= 7 $
-    com.zimbra.cs.store.file.VolumeServiceException volumeServiceException
-  $else$ */
-com.zimbra.cs.volume.VolumeServiceException volumeServiceException
-/* $endif$ */
+    com.zimbra.cs.volume.VolumeServiceException volumeServiceException
   )
   {
     return new VolumeServiceException(volumeServiceException);

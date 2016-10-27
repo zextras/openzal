@@ -61,18 +61,7 @@ public class MailboxManagerImp implements MailboxManager
   {
     try
     {
-  /* $if MajorZimbraVersion >= 7 $ */
-      int ids[] = com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-  /* $else$
-      long longIds[] = com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-      int ids[] = new int[ longIds.length ];
-
-      for( int idx=0; idx < longIds.length; ++idx ) {
-        ids[idx] = (int)longIds[idx];
-      }
-  /* $endif$ */
-
-      return ids;
+      return com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
     }
     catch (com.zimbra.common.service.ServiceException ex)
     {

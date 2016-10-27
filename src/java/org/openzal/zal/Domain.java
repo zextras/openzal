@@ -99,11 +99,7 @@ public class Domain extends Entry
 
   public long getMailDomainQuota()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mDomain.getMailDomainQuota();
-    /* $else $
-    return -1L;
-    /* $endif$ */
   }
 
   public void setDomainCOSMaxAccounts(@NotNull Collection<String> zimbraDomainCOSMaxAccounts)

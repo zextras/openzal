@@ -45,11 +45,6 @@ import java.util.Set;
 
 import com.zimbra.cs.db.*;
 
-/* $if MajorZimbraVersion >= 8 $ */
-/* $else$
-import com.zimbra.cs.store.file.Volume;
-$endif$ */
-
 public class ZimbraDatabase
 {
   @Nullable
@@ -60,11 +55,7 @@ public class ZimbraDatabase
     {
       list = DbMailItem.getByType(
         mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
-  /* $if MajorZimbraVersion >= 8 $ */
         Item.convertType(MailItem.Type.class, type),
-  /* $else$
-        Item.convertType(Byte.class, type),
-  /* $endif$ */
         sort
       );
     }
@@ -116,32 +107,6 @@ public class ZimbraDatabase
     }
   }
 
-  @NotNull
-  public static Object getSynchronizer( Mailbox mbox )
-  {
-/* $if MajorZimbraVersion >= 8 $ */
-    return new Object();
-/* $else$
-    return DbMailItem.getSynchronizer(mbox.getMailbox());
-   $endif$ */
-  }
-
-  @NotNull
-  public static Object getSynchronizer()
-  {
-    return getMailboxSynchronizer();
-  }
-
-  @NotNull
-  public static Object getMailboxSynchronizer()
-  {
-  /* $if MajorZimbraVersion >= 8 $ */
-    return new Object();
-  /* $else$
-    return DbMailbox.getSynchronizer();
-   $endif$ $ */
-  }
-
   public static int setMailboxId(PreparedStatement stmt, Mailbox mbox, int pos) throws SQLException
   {
     return DbMailItem.setMailboxId(stmt,
@@ -154,11 +119,7 @@ public class ZimbraDatabase
   {
     try
     {
-    /* $if ZimbraVersion >= 8.0.0 $ */
       return DbMailbox.listAccountIds(conn.toZimbra(DbPool.DbConnection.class));
-    /* $else $
-      return DbMailbox.listAccountIds(conn.toZimbra(DbPool.Connection.class));
-    /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -211,11 +172,7 @@ public class ZimbraDatabase
     DbVolume.CurrentVolumes cv;
     try
     {
-      /* $if ZimbraVersion >= 8.0.0 $ */
       cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.DbConnection.class));
-      /* $else $
-      cv = DbVolume.getCurrentVolumes(conn.toZimbra(DbPool.Connection.class));
-      /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

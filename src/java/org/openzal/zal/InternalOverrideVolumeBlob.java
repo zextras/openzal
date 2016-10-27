@@ -131,29 +131,10 @@ class InternalOverrideVolumeBlob extends VolumeBlobProxy
     return this;
   }
 
-  /* $if ZimbraVersion >= 7.1.3 $ */
   public void renameTo(String newPath) throws IOException
   {
     mBlob.renameTo(newPath);
   }
-  /* $elseif ZimbraVersion >= 7.0.0 $
-  public boolean renameTo(String newPath)
-  {
-    renameTo(newPath);
-    return true;
-  }
-  /* $elseif ZimbraVersion >= 6.0.15 $
-  public void renameTo(String newPath) throws IOException
-  {
-    mBlob.renameTo(newPath);
-  }
-  /* $slse $
-  public boolean renameTo(String newPath)
-  {
-    renameTo(newPath);
-    return true;
-  }
-  /* $endif $ */
 
   @Override
   public String toString()

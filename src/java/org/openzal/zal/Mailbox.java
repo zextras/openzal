@@ -61,26 +61,9 @@ import java.util.*;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
-/* $if MajorZimbraVersion == 6 $
-import com.zimbra.cs.index.queryparser.ParseException;
-$endif$ $*/
-
-/* $if MajorZimbraVersion <= 7 $
-import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import com.zimbra.cs.mailbox.MailItem.Color;
-  $endif$ $*/
-
-/* $if ZimbraVersion >= 7.2.2 && ZimbraVersion != 8.0.1 && ZimbraVersion != 8.0.0 && ZimbraVersion < 8.5.0 $
+/* $if ZimbraVersion != 8.0.1 && ZimbraVersion != 8.0.0 && ZimbraVersion < 8.5.0 $
 import com.zimbra.cs.db.DbMailItem.SearchOpts;
 /* $endif$ */
-
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.mailbox.Mailbox.SearchResultMode;
- $endif$ */
 
 
 public class Mailbox
@@ -166,7 +149,6 @@ public class Mailbox
 
   public void migrateContactGroup()
   {
-/* $if MajorZimbraVersion >= 8 $ */
     try
     {
       com.zimbra.cs.mailbox.ContactGroup.MigrateContactGroup contactGroup =
@@ -177,9 +159,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(ex);
     }
-/* $else$
-      throw new UnsupportedOperationException();
-   $endif$ */
   }
 
   public Mailbox(@Nullable Object mbox)
@@ -280,68 +259,10 @@ public class Mailbox
     mMbox.removeListener(session.toZimbra(Session.class));
   }
 
-  /* $if MajorZimbraVersion < 8 $
-  static final String sCurrentChangeName = "mCurrentChange";
-
-  private static Field sMailboxChange = null;
-  private static Field sMailboxChangeSync = null;
-  private static Field sMailboxData = null;
-  static
-  {
-    try
-    {
-      sMailboxChange = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredField(sCurrentChangeName);
-      sMailboxChange.setAccessible(true);
-
-      sMailboxData = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredField("mData");
-      sMailboxData.setAccessible(true);
-
-      Class mailboxChangeClass = null;
-      for( Class cls : com.zimbra.cs.mailbox.Mailbox.class.getDeclaredClasses() )
-      {
-        if( cls.getName().equals("com.zimbra.cs.mailbox.Mailbox$MailboxChange") )
-        {
-          mailboxChangeClass = cls;
-          break;
-        }
-      }
-      sMailboxChangeSync = mailboxChangeClass.getDeclaredField("sync");
-      sMailboxChangeSync.setAccessible(true);
-    }
-    catch( Throwable ex ){
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: "+Utils.exceptionToString(ex));
-      throw new RuntimeException(ex);
-    }
-  }
-
-  private static int getMailboxSyncCutoff(com.zimbra.cs.mailbox.Mailbox mMbox)
-  {
-    try
-    {
-      Object obj = sMailboxChange.get( mMbox );
-
-      Integer sync = (Integer)sMailboxChangeSync.get(obj);
-      if( sync == null )
-      {
-        return ((com.zimbra.cs.mailbox.Mailbox.MailboxData)sMailboxData.get(mMbox)).trackSync;
-      }
-      else
-      {
-        return sync;
-      }
-    }
-    catch( Throwable ex )
-    {
-      ZimbraLog.extensions.fatal("ZAL Reflection Exception: "+Utils.exceptionToString(ex));
-      throw new RuntimeException(ex);
-    }
-  }
-  $else$ */
   private static int getMailboxSyncCutoff(@NotNull com.zimbra.cs.mailbox.Mailbox mMbox)
   {
     return mMbox.getSyncCutoff();
   }
-/*  $endif$ */
 
   public boolean isTombstoneValid(int sequence)
   {
@@ -697,55 +618,13 @@ public class Mailbox
         octxt.getOperationContext(),
         itemIds,
         Item.convertType(type),
-    /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class)
-       $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class)
-    /* $endif$ */
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
-  }
-
-  @NotNull
-  public CalendarItem setCalendarItem(OperationContext octxt, int folderId, int flags, long tags,
-                                      CalendarItemData defaultInv,
-                                      List<CalendarItemData> exceptions,
-                                      List<ReplyInfo> replies, long nextAlarm
-  )
-    throws ZimbraException
-  {
-    /* $if MajorZimbraVersion <= 7 $
-    com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[] zimbraExceptions =
-      new com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[exceptions.size()];
-    for (int i=0; i<exceptions.size(); i++)
-    {
-      zimbraExceptions[i] = exceptions.get(i).toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
-    }
-
-    try
-    {
-      return new CalendarItem(mMbox.setCalendarItem(
-        octxt.getOperationContext(),
-        folderId,
-        flags,
-        tags,
-        defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class),
-        zimbraExceptions,
-        replies,
-        nextAlarm
-      ));
-    }
-    catch(com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @NotNull
@@ -757,7 +636,6 @@ public class Mailbox
   )
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData[] zimbraExceptions = null;
     if( exceptions.size() > 0 )
     {
@@ -787,9 +665,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public
@@ -850,11 +725,7 @@ public class Mailbox
   {
     try
     {
-  /* $if MajorZimbraVersion <= 7 $
-        mMbox.alterTag(octxt.getOperationContext(), itemId, Item.convertType(type), tagId, addTag, null);
-     $else$ */
       mMbox.alterTag(octxt.getOperationContext(), itemId, Item.convertType(type), Flag.of(tagId), addTag, null);
-  /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -865,7 +736,6 @@ public class Mailbox
   public void setTags(@NotNull OperationContext octxt, int itemId, byte type, @Nullable Collection<String> tags)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     String[] tagsArray;
     if (tags == null)
     {
@@ -892,27 +762,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-       $endif $ */
-  }
-
-  public void setTags(OperationContext octxt, int itemId, byte type, long tags)
-  {
-    /* $if ZimbraVersion < 8.0.0 $
-    MailItem item;
-    try
-    {
-      item = mMbox.getItemById(octxt.getOperationContext(), itemId, Item.convertType(Item.TYPE_UNKNOWN));
-      mMbox.setTags(octxt.getOperationContext(), itemId, Item.convertType(type), item.getFlagBitmask(), tags);
-    }
-    catch(com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public void setFlags(@NotNull OperationContext octxt, int itemId, byte type, int flags)
@@ -922,11 +771,7 @@ public class Mailbox
     {
       MailItem item = mMbox.getItemById(octxt.getOperationContext(), itemId, Item.convertType(Item.TYPE_UNKNOWN));
       mMbox.setTags(octxt.getOperationContext(), itemId, Item.convertType(type), flags,
-  /* $if MajorZimbraVersion >= 8 $ */
         item.getTags()
-  /* $else$
-        item.getTagBitmask()
-    $endif$ */
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -972,32 +817,11 @@ public class Mailbox
 
     try
     {
-  /* $if MajorZimbraVersion == 6 $
-      newItemId = mMbox.getMailSender().sendMimeMessage(
-        octxt.getOperationContext(), mMbox,
-        saveToSent, mm,
-        (List<InternetAddress>)null,
-        uploads, itemId, replyType,
-        null, true, replyToSender
-      );
-    $endif$ */
-
-  /* $if MajorZimbraVersion == 7 $
-      newItemId = mMbox.getMailSender().sendMimeMessage(
-        octxt.getOperationContext(), mMbox, saveToSent, mm,
-        (List<InternetAddress>)null,
-        uploads, itemId, replyType,
-        null, replyToSender
-      );
-    $endif$ */
-
-  /* $if MajorZimbraVersion == 8 $ */
       newItemId = mMbox.getMailSender().sendMimeMessage(
         octxt.getOperationContext(), mMbox, saveToSent, mm,
         uploads, itemId, replyType,
         null, replyToSender
       );
-  /* $endif$ */
 
       if( newItemId == null ) {
         return null;
@@ -1071,7 +895,7 @@ public class Mailbox
 
     try
     {
-/* $if ZimbraVersion < 7.2.2 |! ZimbraVersion == 8.0.0 |! ZimbraVersion == 8.0.1 $
+/* $if ZimbraVersion == 8.0.0 |! ZimbraVersion == 8.0.1 $
     itemIds = mMbox.getItemListByDates(octxt.getOperationContext(), Item.convertType(type),
                                       start, end, folderId, descending);
   $elseif ZimbraVersion < 8.5.0 $
@@ -1122,7 +946,6 @@ public class Mailbox
   {
     try
     {
-    /* $if MajorZimbraVersion >= 8 $ */
       Map<Byte, List<Integer>> map = new HashMap<Byte, List<Integer>>();
       Iterator<Map.Entry<MailItem.Type, List<TypedIdList.ItemInfo>>> iterator
         = mMbox.getItemIds(octxt.getOperationContext(), folderId).iterator();
@@ -1137,10 +960,6 @@ public class Mailbox
         map.put(entry.getKey().toByte(), list);
       }
       return map.entrySet().iterator();
-    /* $else$
-    TypedIdList typedIdList = mMbox.getItemIds(octxt.getOperationContext(), folderId);
-      return typedIdList.iterator();
-       $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1154,11 +973,7 @@ public class Mailbox
 
     try
     {
-    /* $if ZimbraVersion >= 8.0.0 $ */
       rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
-    /* $else $
-      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
-    /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -1174,11 +989,7 @@ public class Mailbox
 
     try
     {
-    /* $if ZimbraVersion >= 8.0.0 $ */
       rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.Type.UNKNOWN);
-    /* $else $
-      rights = mMbox.getEffectivePermissions(octxt.getOperationContext(), itemId, com.zimbra.cs.mailbox.MailItem.TYPE_UNKNOWN);
-    /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -1246,11 +1057,7 @@ public class Mailbox
   {
     try
     {
-/* $if MajorZimbraVersion >= 8 $ */
       return new Tag(mMbox.getTagByName(octxt.getOperationContext(), name));
-/* $else$
-      return new Tag(mMbox.getTagByName(name));
-   $endif */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1363,7 +1170,6 @@ public class Mailbox
   {
     try
     {
-/* $if MajorZimbraVersion >= 8 $ */
       Set<MailItem.Type> typeList = new HashSet(types.length);
       for (byte type : types)
       {
@@ -1396,38 +1202,6 @@ public class Mailbox
       return new QueryResults(
         result
       );
-/* $else$
-      com.zimbra.cs.index.SearchParams params = new com.zimbra.cs.index.SearchParams();
-
- $if ZimbraVersion >= 7.0.0 $
-      params.setInDumpster(inDumpster);
-$endif$
-
-      com.zimbra.cs.mailbox.Mailbox.SearchResultMode fetchMode = onlyIds ? com.zimbra.cs.mailbox.Mailbox.SearchResultMode.IDS : com.zimbra.cs.mailbox.Mailbox.SearchResultMode.NORMAL;
-
-      params.setQueryStr(queryString);
-      params.setTimeZone(null);
-      params.setLocale(null);
-      params.setTypes(types);
-      params.setSortBy(sortBy.toZimbra(SortBy.class));
-      params.setMode(fetchMode);
-      params.setPrefetch(true);
-      params.setLimit(chunkSize + offset);
-      params.setOffset(offset);
-
-      ZimbraQueryResults result = mMbox.search(
-        SoapProtocol.Soap12,
-        octxt.getOperationContext(),
-        params
-      );
-
-      if( offset >= 1 )
-        result.skipToHit(offset-1);
-
-      return new QueryResults(
-        result
-      );
-   $endif$ */
     }
     catch (Exception e)
     {
@@ -1441,10 +1215,6 @@ $endif$
   {
     List<Item> result = new LinkedList<Item>();
 
-/* $if MajorZimbraVersion <= 7 $
-    synchronized( mMbox )
-    {
- $endif$ */
     beginTransaction("ZxGetItemList", zContext.getOperationContext());
     try
     {
@@ -1507,9 +1277,6 @@ $endif$
     {
       endTransaction(true);
     }
-/* $if MajorZimbraVersion <= 7 $
-    }
- $endif$ */
 
     return result;
   }
@@ -1530,17 +1297,9 @@ $endif$
         name,
         parentId,
         attrs,
-  /* $if MajorZimbraVersion >= 7 $ */
         Item.convertType(defaultView == Item.TYPE_WIKI ? Item.TYPE_DOCUMENT : defaultView),
-  /* $else$
-        Item.convertType(defaultView),
-    $endif $ */
         flags,
-  /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class),
-     $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class),
-  /* $endif$ */
         url
       );
     }
@@ -1571,11 +1330,7 @@ $endif$
         types,
         sort,
         flags,
-    /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class)
-       $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class)
-    /* $endif$ */
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1596,11 +1351,7 @@ $endif$
       tag = mMbox.createTag(
         octxt.getOperationContext(),
         name,
-    /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class)
-       $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class)
-    /* $endif$ */
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1612,63 +1363,6 @@ $endif$
   }
 
   @NotNull
-  public Message addMessage(OperationContext octxt, InputStream in, int sizeHint, Long receivedDate,
-                            int folderId, boolean noIcal,
-                            int flags, long tags, int conversationId, String rcptEmail,
-                            Item.CustomMetadata customData
-  )
-    throws IOException, ZimbraException
-  {
-    /* $if ZimbraVersion < 8.0.0 $
-    return addMessage(octxt, in,
-                      sizeHint, receivedDate,
-                      folderId, noIcal,
-                      flags, com.zimbra.cs.mailbox.Tag.bitmaskToTags(tags),
-                      conversationId, rcptEmail,
-                      customData);
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  @NotNull
-  public Message addMessage(OperationContext octxt, InputStream in, int sizeHint, Long receivedDate,
-                            int folderId, boolean noIcal,
-                            int flags, String tags, int conversationId, String rcptEmail,
-                            Item.CustomMetadata customData
-  )
-    throws IOException, ZimbraException
-  {
-    /* $if ZimbraVersion < 8.0.0 $
-    MailItem message;
-    try
-    {
-      message = mMbox.addMessage(octxt.getOperationContext(),
-                             in,
-                             sizeHint,
-                             receivedDate,
-                             folderId,
-                             noIcal,
-                             flags,
-                             tags,
-                             conversationId,
-                             rcptEmail,
-                             customData != null ? customData.toZimbra(MailItem.CustomMetadata.class) : null,
-                             null
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Message(message);
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  @NotNull
   public Message addMessage(
     @NotNull OperationContext octxt, InputStream in, int sizeHint, Long receivedDate,
                             int folderId, boolean noIcal,
@@ -1677,7 +1371,6 @@ $endif$
   )
     throws IOException, ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     DeliveryOptions opts = new DeliveryOptions();
     opts.setFolderId(folderId);
     opts.setNoICal(noIcal);
@@ -1707,9 +1400,6 @@ $endif$
     }
 
     return new Message(message);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @NotNull
@@ -1723,7 +1413,6 @@ $endif$
     MailItem message;
     try
     {
-/* $if ZimbraVersion >= 8.0.0 $ */
       DeliveryOptions opts = new DeliveryOptions();
       opts.setFolderId(folderId);
       opts.setDraftInfo(null);
@@ -1735,24 +1424,6 @@ $endif$
         opts,
         null
       );
-/* $else$
-
-      message = mMbox.addMessage(
-        octxt.getOperationContext(),
-        in,
-        0,
-        null,
-        folderId,
-        false,
-        0,
-        null,
-        -1,
-        null,
-        null,
-        null
-      );
-
-   $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1777,44 +1448,13 @@ $endif$
   @NotNull
   public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId)
   {
-    /* $if MajorZimbraVersion <= 7 $
-    return createContact(octxt, pc, folderId, "");
-    $else $ */
     return createContact(octxt, pc, folderId, Collections.<String>emptyList());
-    /* $endif $ */
-  }
-
-  @NotNull
-  public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId, String tags)
-    throws ZimbraException
-  {
-    /* $if MajorZimbraVersion <= 7 $
-    MailItem contact;
-    try
-    {
-      contact = mMbox.createContact(
-        octxt.getOperationContext(),
-        pc.toZimbra(com.zimbra.cs.mime.ParsedContact.class),
-        folderId,
-        tags
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Contact(contact);
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @NotNull
   public Contact createContact(@NotNull OperationContext octxt, @NotNull ParsedContact pc, int folderId, @NotNull Collection<String> tags)
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     MailItem contact;
     try
     {
@@ -1831,9 +1471,6 @@ $endif$
     }
 
     return new Contact(contact);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @NotNull
@@ -1848,7 +1485,6 @@ $endif$
     MailItem document;
     try
     {
-/* $if MajorZimbraVersion >= 8 $ */
       document = mMbox.createDocument(
         octxt.getOperationContext(),
         folderId,
@@ -1856,14 +1492,6 @@ $endif$
         Item.convertType(type),
         flags
       );
-/* $else$
-      document = mMbox.createDocument(
-        octxt.getOperationContext(),
-        folderId,
-        pd.toZimbra(com.zimbra.cs.mime.ParsedDocument.class),
-        Item.convertType(type)
-      );
-  $endif$  */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1916,7 +1544,6 @@ $endif$
     MailItem document;
     try
     {
-/* $if ZimbraVersion >= 7.0.0$ */
       document = mMbox.addDocumentRevision(
         octxt.getOperationContext(),
         docId,
@@ -1925,15 +1552,6 @@ $endif$
         description,
         data
       );
-/* $else$
-      document = mMbox.addDocumentRevision(
-        octxt.getOperationContext(),
-        docId,
-        data,
-        author,
-        name
-      );
- $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1962,18 +1580,10 @@ $endif$
         filename,
         mimeType,
         author,
-  /* $if MajorZimbraVersion >= 7 $ */
-  description,
-  /* $endif$ */
-  /* $if ZimbraVersion >= 7.0.1 $ */
-  descEnabled,
-  /* $endif$ */
-  data,
-  /* $if MajorZimbraVersion >= 7 $ */
-  Item.convertType(Item.TYPE_DOCUMENT)
-  /* $else$
-        Item.convertType(type)
-    $endif$ */
+        description,
+        descEnabled,
+        data,
+        Item.convertType(Item.TYPE_DOCUMENT)
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1999,11 +1609,7 @@ $endif$
         octxt.getOperationContext(),
         content,
         rectangle.toZimbra(com.zimbra.cs.mailbox.Note.Rectangle.class),
-    /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class),
-       $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class),
-    /* $endif$ */
         folderId);
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -2037,13 +1643,7 @@ $endif$
         preserveExistingAlarms,
         discardExistingInvites,
         addRevision
-      )
-/* $if MajorZimbraVersion >= 7 $ */
-        .calItemId
-/* $else$
-      [0]
-  $endif$ */
-        ;
+      ).calItemId;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -2051,36 +1651,6 @@ $endif$
     }
   }
 
-  /* $if MajorZimbraVersion <= 7 $
-    public Mountpoint createMountpoint(OperationContext octxt, int folderId,
-                                       String name, String ownerId,
-                                       int remoteId, String remoteUuid,
-                                       byte view, int flags,
-                                       Item.Color color)
-      throws ZimbraException
-    {
-      MailItem mountPoint;
-      try
-      {
-        mountPoint = mMbox.createMountpoint(octxt.getOperationContext(),
-                                           folderId,
-                                           name,
-                                           ownerId,
-                                           remoteId,
-                                           view,
-                                           flags,
-                                           color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class)
-
-        );
-      }
-      catch (com.zimbra.common.service.ServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
-
-      return new Mountpoint(mountPoint);
-    }
-    $else$ */
   @NotNull
   public Mountpoint createMountpoint(
     @NotNull OperationContext octxt, int folderId,
@@ -2101,11 +1671,7 @@ $endif$
         remoteUuid,
         Item.convertType(view),
         flags,
-    /* $if MajorZimbraVersion <= 7 $
-        color.toZimbra(com.zimbra.cs.mailbox.MailItem.Color.class),
-       $else$ */
         color.toZimbra(com.zimbra.common.mailbox.Color.class),
-    /* $endif$ */
         false
       );
     }
@@ -2116,7 +1682,6 @@ $endif$
 
     return new Mountpoint(mountPoint);
   }
-/* $endif$ */
 
 
   @NotNull
@@ -2131,7 +1696,6 @@ $endif$
     MailItem chat;
     try
     {
-      /* $if MajorZimbraVersion >= 8 $ */
       chat = mMbox.createChat(
         octxt.getOperationContext(),
         pm.toZimbra(com.zimbra.cs.mime.ParsedMessage.class),
@@ -2139,14 +1703,6 @@ $endif$
         flags,
         tags.getTags()
       );
-      /* $else $
-      chat = mMbox.createChat(
-        octxt.getOperationContext(),
-        pm.toZimbra(com.zimbra.cs.mime.ParsedMessage.class),
-        folderId,flags,
-        com.zimbra.cs.mailbox.Tag.bitmaskToTags(tags.getLongTags())
-        );
-      /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -2191,7 +1747,6 @@ $endif$
   )
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     MailItem comment;
     try
     {
@@ -2203,9 +1758,6 @@ $endif$
     }
 
     return new Comment(comment);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif$ */
   }
 
   @NotNull
@@ -2218,7 +1770,6 @@ $endif$
   )
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     MailItem link;
     try
     {
@@ -2230,9 +1781,6 @@ $endif$
     }
 
     return new Link(link);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif$ */
   }
 
   @Nullable private static Method sEndTransactionMethod = null;
@@ -2360,11 +1908,7 @@ $endif$
       Class partypes[] = new Class[1];
       partypes[0] = com.zimbra.cs.mailbox.Mailbox.class;
 
-/* $if MajorZimbraVersion < 8 $
-      sGetAllFlags = com.zimbra.cs.mailbox.Flag.class.getDeclaredMethod("getAllFlags", partypes);
-  $else$ */
       sGetAllFlags = com.zimbra.cs.mailbox.Flag.class.getDeclaredMethod("allOf", partypes);
-/* $endif$ */
       sGetAllFlags.setAccessible(true);
     }
     catch (Throwable ex)
@@ -2451,7 +1995,6 @@ $endif$
     }
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   private static Field sFolderCacheMap;
 
   static
@@ -2490,7 +2033,6 @@ $endif$
       throw new RuntimeException(ex);
     }
   }
-/* $endif$ */
 
   /*
    * Warning: unsynchronized private access to mailbox
@@ -2501,13 +2043,8 @@ $endif$
     try
     {
 
-/* $if MajorZimbraVersion >= 8 $ */
       Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
         .get(sFolderCache.get(mMbox))).values());
-/* $else$
-      Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>)
-        ((Map<Integer,com.zimbra.cs.mailbox.Folder>)sFolderCache.get(mMbox)).values();
-  $endif$ */
 
       ArrayList<Folder> newList = new ArrayList<Folder>(list.size());
 
@@ -2631,19 +2168,7 @@ $endif$
     Map<String, Integer> accountsAndMailboxes = new HashMap<String, Integer>();
     try
     {
-  /* $if ZimbraVersion >= 8.0.0 $*/
       accountsAndMailboxes = DbMailbox.listMailboxes(conn.toZimbra(DbPool.DbConnection.class));
-  /* $else $
-    /* $if ZimbraVersion >= 7.0.0 $
-          accountsAndMailboxes = DbMailbox.listMailboxes(conn.toZimbra(DbPool.Connection.class));
-    /* $else$
-      Map<String, Long> result = DbMailbox.listMailboxes(conn.toZimbra(DbPool.Connection.class));
-      for (Map.Entry<String, Long> entry : result.entrySet())
-      {
-        accountsAndMailboxes.put(entry.getKey(), entry.getValue().intValue());
-      }
-      /* $endif $ */
-  /* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -2657,11 +2182,7 @@ $endif$
   public Connection getOperationConnection()
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion < 8 $
-    DbPool.Connection connection;
-    $else$ */
     DbPool.DbConnection connection;
-    /* $endif$ */
     try
     {
       connection = mMbox.getOperationConnection();
@@ -2696,7 +2217,6 @@ $endif$
     }
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public void reindexItem(@NotNull Item item)
     throws ZimbraException
   {
@@ -2712,10 +2232,6 @@ $endif$
       throw ExceptionWrapper.wrap(e);
     }
   }
-
-/* $else$
-  public void reindexItem(Item item) throws ZimbraException {}
-  $endif$ */
 
   public String rawGetConfig(
     @NotNull String key

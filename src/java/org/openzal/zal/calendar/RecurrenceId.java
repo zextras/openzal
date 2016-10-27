@@ -20,11 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ParsedDateTime;
-/* $else $
-import com.zimbra.cs.mailbox.calendar.ParsedDateTime;
-/* $endif $ */
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import org.jetbrains.annotations.NotNull;
 

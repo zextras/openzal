@@ -49,19 +49,11 @@ public class CalendarItemData
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
     Mailbox.SetCalendarItemData calendarItemData = new Mailbox.SetCalendarItemData();
-    /* $if ZimbraVersion >= 8.0.0 $ */
     calendarItemData.invite = mInvite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class);
     if (mMessage != null)
     {
       calendarItemData.message = mMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class);
     }
-    /* $else $
-    calendarItemData.mInv = mInvite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class);
-    if(mMessage != null)
-    {
-      calendarItemData.mPm = mMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class);
-    }
-    /* $endif $ */
 
     return cls.cast(calendarItemData);
   }

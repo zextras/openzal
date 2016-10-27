@@ -48,22 +48,14 @@ public class DataSourceType
       throw new NullPointerException();
     }
 
-    /* $if ZimbraVersion >= 8.0.0 $ */
     mDataSourceType = ((com.zimbra.soap.admin.type.DataSourceType) type).name();
-    /* $else $
-    mDataSourceType = ((com.zimbra.cs.account.DataSource.Type)type).name();
-    /* $endif $ */
   }
 
   public static DataSourceType fromString(String dataSourceType)
   {
     try
     {
-      /* $if ZimbraVersion >= 8.0.0 $ */
       return new DataSourceType(com.zimbra.soap.admin.type.DataSourceType.fromString(dataSourceType));
-      /* $else $
-      return new DataSourceType(com.zimbra.cs.account.DataSource.Type.fromString(dataSourceType));
-      /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -93,11 +85,7 @@ public class DataSourceType
   {
     try
     {
-      /* $if ZimbraVersion >= 8.0.0 $ */
       return cls.cast(com.zimbra.soap.admin.type.DataSourceType.fromString(mDataSourceType));
-      /* $else $
-      return cls.cast(com.zimbra.cs.account.DataSource.Type.fromString(mDataSourceType));
-      /* $endif $ */
     }
     catch (ServiceException e)
     {

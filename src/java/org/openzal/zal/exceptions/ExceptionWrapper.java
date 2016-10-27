@@ -332,12 +332,10 @@ public class ExceptionWrapper
     {
       return mExceptionMap.get(LDAP_EXCEPTION).create(ldapException);
     }
-    /* $if ZimbraVersion >= 7.1.3 $ */
     catch(com.zimbra.cs.extension.ExtensionException extensionException)
     {
       return mExceptionMap.get(EXTENSION_EXCEPTION).create(extensionException);
     }
-    /* $endif $ */
     catch(com.zimbra.cs.zimlet.ZimletException zimletException)
     {
       return mExceptionMap.get(ZIMLET_EXCEPTION).create(zimletException);
