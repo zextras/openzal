@@ -73,6 +73,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   private final Map<String, List<MimeTypeInfo>> mimeConfig   = new HashMap<String, List<MimeTypeInfo>>();
   private final Map<String, DistributionList>   id2Dlist     = new HashMap<String, DistributionList>();
   private final Map<String, Zimlet>             id2zimlets   = new HashMap<String, Zimlet>();
+  private final Map<String, Signature>          id2signatue  = new HashMap<String, Signature>();
 
   private final Config                    config        = new Config(new HashMap<String, Object>()
   {{
@@ -995,7 +996,9 @@ $endif $
   }
 
   public Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) {
-    throw new UnsupportedOperationException();
+    Signature signature = new Signature(account, signatureName, signatureName, attrs, this);
+    id2signatue.put(account.getId() + "\\" + signatureName, signature);
+    return signature;
   }
 
   public Signature restoreSignature(Account account, String signatureName, Map<String, Object> attrs) {
@@ -1020,7 +1023,7 @@ $endif $
   public Signature get(Account account, SignatureBy keyType, String key)
   /* $endif $ */
   {
-    throw new UnsupportedOperationException();
+    return id2signatue.get(account.getId() + "\\" + key);
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
@@ -1098,7 +1101,7 @@ $endif $
   }
 
   public void flushCache(CacheEntryType type, CacheEntry[] entries) {
-    throw new UnsupportedOperationException();
+    //throw new UnsupportedOperationException();
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
