@@ -23,10 +23,7 @@ package org.openzal.zal.index;
 import com.google.inject.Singleton;
 import com.zimbra.cs.convert.AttachmentInfo;
 import com.zimbra.cs.convert.ConversionException;
-import com.zimbra.cs.mime.MimeHandler;
-import com.zimbra.cs.mime.MimeHandlerException;
-import com.zimbra.cs.mime.MimeHandlerManager;
-import com.zimbra.cs.mime.MimeTypeInfo;
+import com.zimbra.cs.mime.*;
 import org.apache.lucene.document.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -152,7 +149,7 @@ public class IndexerManager
   }
 
   @Nullable
-  private static Indexer getBestIndexer(String contentType, String fileExtension)
+  public static Indexer getBestIndexer(String contentType, String fileExtension)
   {
     for (Indexer indexer : sIndexerList)
     {
@@ -237,9 +234,10 @@ public class IndexerManager
     }
   }
 
-
   public static class InternalMimeHandler extends MimeHandler
   {
+    private String content;
+
     @Override
     protected boolean runsExternally()
     {
@@ -260,12 +258,17 @@ public class IndexerManager
     @Override
     protected String getContentImpl() throws MimeHandlerException
     {
-      return getIndexer().extractPlainText(
-        getDataSource(),
-        getContentType(),
-        getExtension(),
-        getFilename()
-      );
+      if (content == null)
+      {
+        content = getIndexer().extractPlainText(
+                getDataSource(),
+                getContentType(),
+                getExtension(),
+                getFilename()
+        );
+      }
+
+      return content;
     }
 
     @NotNull
@@ -303,6 +306,11 @@ public class IndexerManager
 
     private class EmptyIndexer implements Indexer
     {
+      @Override
+      public void init()
+      {
+      }
+
       @Override
       public boolean canHandle(String contentType, String fileExtension)
       {
