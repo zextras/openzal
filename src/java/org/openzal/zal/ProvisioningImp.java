@@ -228,6 +228,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
