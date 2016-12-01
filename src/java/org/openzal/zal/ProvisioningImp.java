@@ -251,6 +251,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
   public static String A_zimbraMailWhitelistMaxNumEntries                     = com.zimbra.cs.account.Provisioning.A_zimbraMailWhitelistMaxNumEntries;
   public static String A_zimbraSignatureMaxNumEntries                         = com.zimbra.cs.account.Provisioning.A_zimbraSignatureMaxNumEntries;
+  public static String A_zimbraAttachmentsIndexingEnabled                     = com.zimbra.cs.account.Provisioning.A_zimbraAttachmentsIndexingEnabled;
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
