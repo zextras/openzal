@@ -77,6 +77,13 @@ $endif$ */
 
 public class ProvisioningImp implements Provisioning
 {
+  /* $if ZimbraVersion >= 8.7.0 $ */
+  public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
+  /* $else $
+  public static String A_zimbraMaxAppSpecificPasswords                        = "";
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
+  /* $endif $ */
 
   /* $if ZimbraVersion >= 8.0.0 $ */
   public static String A_zimbraMailDomainQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailDomainQuota;
@@ -148,8 +155,10 @@ public class ProvisioningImp implements Provisioning
 
   /* $if ZimbraVersion >= 7.0.0 $ */
   public static String A_zimbraMailOutgoingSieveScript = com.zimbra.cs.account.Provisioning.A_zimbraMailOutgoingSieveScript;
+  public static String A_zimbraMailTrustedSenderListMaxNumEntries             = com.zimbra.cs.account.Provisioning.A_zimbraMailTrustedSenderListMaxNumEntries;
   /* $else $
-  public static       String A_zimbraMailOutgoingSieveScript            = "";
+  public static String A_zimbraMailOutgoingSieveScript = "";
+  public static String A_zimbraMailTrustedSenderListMaxNumEntries = "";
   /* $endif $ */
 
   public static String A_zimbraACE                                            = com.zimbra.cs.account.Provisioning.A_zimbraACE;
@@ -228,6 +237,10 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
+  public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
