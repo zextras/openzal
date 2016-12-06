@@ -239,19 +239,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
   public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
-  public static String A_zimbraCalendarRecurrenceDailyMaxDays                 = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceDailyMaxDays;
-  public static String A_zimbraCalendarRecurrenceMaxInstances                 = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceMaxInstances;
-  public static String A_zimbraCalendarRecurrenceMonthlyMaxMonths             = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceMonthlyMaxMonths;
-  public static String A_zimbraCalendarRecurrenceOtherFrequencyMaxYears       = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceOtherFrequencyMaxYears;
-  public static String A_zimbraCalendarRecurrenceWeeklyMaxWeeks               = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceWeeklyMaxWeeks;
-  public static String A_zimbraCalendarRecurrenceYearlyMaxYears               = com.zimbra.cs.account.Provisioning.A_zimbraCalendarRecurrenceYearlyMaxYears;
-  public static String A_zimbraDataSourceMaxNumEntries                        = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceMaxNumEntries;
-  public static String A_zimbraIdentityMaxNumEntries                          = com.zimbra.cs.account.Provisioning.A_zimbraIdentityMaxNumEntries;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
-  public static String A_zimbraMailWhitelistMaxNumEntries                     = com.zimbra.cs.account.Provisioning.A_zimbraMailWhitelistMaxNumEntries;
-  public static String A_zimbraSignatureMaxNumEntries                         = com.zimbra.cs.account.Provisioning.A_zimbraSignatureMaxNumEntries;
-  public static String A_zimbraAttachmentsIndexingEnabled                     = com.zimbra.cs.account.Provisioning.A_zimbraAttachmentsIndexingEnabled;
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
