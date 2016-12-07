@@ -382,9 +382,9 @@ public interface Provisioning
     {
       private final com.zimbra.cs.account.GalContact mGalContact;
 
-      public GalContact(com.zimbra.cs.account.GalContact galContact)
+      public GalContact(Object galContact)
       {
-        mGalContact = galContact;
+        mGalContact = (com.zimbra.cs.account.GalContact)galContact;
       }
 
       public String getSingleAttr(String key)
