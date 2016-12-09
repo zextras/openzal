@@ -2032,14 +2032,14 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  private static class GalSearchCallback extends GalSearchResultCallback
+  public static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;
     private final GalSearchResult mSearchResult;
     private int mCounter = 0;
 
 
-    GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
+    public GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
     {
       super(params);
       mSkip = skip;

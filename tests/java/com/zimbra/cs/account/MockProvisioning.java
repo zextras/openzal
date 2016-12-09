@@ -1,10 +1,19 @@
 package com.zimbra.cs.account;
 
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
+import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
+import com.zextras.mobile.v2.engine.actions.GALSearchAction;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
+import com.zimbra.cs.account.ldap.entry.LdapDomain;
+import com.zimbra.cs.gal.GalSearchParams;
+import com.zimbra.cs.gal.GalSearchResultCallback;
+import com.zimbra.cs.ldap.*;
+import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
+
 /**
  * Mock implementation of {@link ProvisioningImp} for testing.
  *
@@ -12,13 +21,9 @@ import org.openzal.zal.redolog.MockRedoLogProvider;
  * Zimbra Collaboration Suite Server
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.zimbra.cs.mime.handler.TextEnrichedHandler;
 import com.zimbra.cs.mime.handler.TextHtmlHandler;
 import com.zimbra.cs.mime.handler.TextPlainHandler;
@@ -59,6 +64,43 @@ import com.zimbra.cs.account.Provisioning.GranteeBy;
 import com.zimbra.cs.account.auth.AuthContext;
 /* $endif $ */
 /* $endif $ */
+
+class MockDistributionList extends DistributionList
+{
+  private Set<String> mMembers;
+
+  public MockDistributionList(String name, String id, Map<String, Object> attrs, Provisioning prov)
+  {
+    super(name, id, attrs, prov);
+    mMembers = new HashSet<String>();
+  }
+
+  @Override
+  public void addMembers(String[] members) throws ServiceException {
+    for (String member: members)
+    {
+      mMembers.add(member);
+    }
+  }
+
+  @Override
+  public void removeMembers(String[] members) throws ServiceException {
+    for (String member: members)
+    {
+      mMembers.remove(member);
+    }
+  }
+
+  @Override
+  public String[] getAllMembers() throws ServiceException {
+    return mMembers.toArray(new String[0]);
+  }
+
+  public Set<String> getAllMembersSet() throws ServiceException {
+    return mMembers;
+  }
+
+}
 
 public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 {
@@ -218,7 +260,11 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
         attrs.put(A_zimbraDomainId, domain.getId());
       }
     }
-    attrs.put(A_zimbraBatchedIndexingSize, Integer.MAX_VALUE); // suppress indexing
+    if (!attrs.containsKey("email"))
+    {
+      attrs.put("email",email);
+    }
+    attrs.put(A_zimbraBatchedIndexingSize, Integer.toString(Integer.MAX_VALUE)); // suppress indexing
     Account account = new Account(email, email, attrs, null, this);
     try
     {
@@ -682,21 +728,82 @@ $endif $
     }
 
     String id = (String) attrs.get(A_zimbraId);
-    if (id == null) {
+    if (id == null)
+    {
       attrs.put(A_zimbraId, id = UUID.randomUUID().toString());
     }
-    if (!attrs.containsKey(A_zimbraSmtpHostname)) {
+    if (!attrs.containsKey(A_zimbraSmtpHostname))
+    {
       attrs.put(A_zimbraSmtpHostname, "localhost");
     }
+    if (!attrs.containsKey("zimbraDomainName)"))
+    {
+      attrs.put("zimbraDomainName",name);
+    }
+    MockZAttributes zAttributes = new MockZAttributes(attrs);
 
-    Domain domain = new Domain(name, id, attrs, null, this){
+    Domain domain = new LdapDomain(name,zAttributes,attrs,this){
+      @Override
       public String getGalSearchBase(String searchBaseSpec) throws ServiceException {
         return searchBaseSpec;
       }
+
+      @Override
+      public ZLdapFilter getDnSubtreeMatchFilter() throws ServiceException {
+        return ZLdapFilterFactorySimulator.getInstance().dnSubtreeMatch("example.com");
+      }
     };
+
     id2domain.put(id, domain);
     name2domain.put(name, domain);
     return domain;
+  }
+
+  @Override
+  public void searchGal(GalSearchParams params) throws ServiceException {
+    String query = params.getQuery().toLowerCase();
+    SearchGalResult result = params.getResult();
+    GalSearchResultCallback callback = params.createResultCallback();
+
+    String regex = RegexUtil.sqlPatternToRegex(query);
+    for (String name:name2account.keySet())
+    {
+      {
+        Account account = name2account.get(name);
+        GalContact zimbraContact = new GalContact(account.getName(), account.getAttrs());
+        ProvisioningImp.GalSearchResult.GalContact contact = new ProvisioningImp.GalSearchResult.GalContact(zimbraContact);
+        try
+        {
+          boolean found = name.toLowerCase().matches(regex);
+
+          if (!found)
+          {
+            List<SearchGalProperty> properties = GALSearchAction.getGalProperties(contact);
+
+            for (SearchGalProperty property : properties)
+            {
+              if (property.getValue().toLowerCase().matches(regex))
+              {
+                found = true;
+                break;
+              }
+            }
+          }
+
+          if (found)
+          {
+            callback.visit(zimbraContact);
+            result.addMatch(zimbraContact);
+          }
+        }
+        catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    callback.setHasMoreResult(false);
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
@@ -838,7 +945,7 @@ $endif $
   public DistributionList createDistributionList(String name, Map<String, Object> listAttrs) throws AccountServiceException
   {
      /* $if MajorZimbraVersion >= 8 $ */
-    DistributionList list = new DistributionList(name, name, listAttrs, this) {};
+    DistributionList list = new MockDistributionList(name, name, listAttrs, this);
     id2Dlist.put(name, list);
     return list;
     /* $else $
@@ -949,8 +1056,10 @@ $endif $
     return new ArrayList(id2Dlist.values());
   }
 
-  public void addMembers(DistributionList list, String[] members) {
-    throw new UnsupportedOperationException();
+  public void addMembers(DistributionList list, String[] members) throws ServiceException
+  {
+    DistributionList dlist = id2Dlist.get(list.getName());
+    dlist.addMembers(members);
   }
 
   public void removeMembers(DistributionList list, String[] member) {
@@ -1192,4 +1301,140 @@ $endif $
   {
     //TODO implement mocking system
   }
+}
+
+class MockZAttributes extends ZAttributes {
+  private Map<String, Object> mAttrs;
+
+  public MockZAttributes(Map<String, Object> attrs)
+  {
+    mAttrs = attrs;
+  }
+
+  @Override
+  public Map<String, Object> getAttrs(Set<String> set) throws LdapException
+  {
+    return mAttrs;
+  }
+
+  @Override
+  protected String getAttrString(String s, boolean b) throws LdapException
+  {
+    return (String)mAttrs.get(s);
+  }
+
+  @Override
+  protected String[] getMultiAttrString(String s, boolean b) throws LdapException
+  {
+    return (String[])mAttrs.get(s);
+  }
+
+  @Override
+  public boolean hasAttribute(String s)
+  {
+    return mAttrs.containsKey(s);
+  }
+
+  @Override
+  public boolean hasAttributeValue(String s, String s1)
+  {
+    String attr = (String)mAttrs.get(s);
+    if (attr != null)
+    {
+      return attr.equals(s1);
+    }
+    return false;
+  }
+}
+
+
+class RegexUtil {
+
+  static final Pattern BACKSLASH = Pattern.compile("\\\\");
+  static final Pattern DOT = Pattern.compile("\\.");
+
+  /**
+   * Replaces all backslashes "\" with forward slashes "/". Convenience method to
+   * convert path Strings to URI format.
+   */
+  static String substBackslashes(String string) {
+    if (string == null) {
+      return null;
+    }
+
+    Matcher matcher = BACKSLASH.matcher(string);
+    return matcher.find() ? matcher.replaceAll("\\/") : string;
+  }
+
+  /**
+   * Returns package name for the Java class as a path separated with forward slash
+   * ("/"). Method is used to lookup resources that are located in package
+   * subdirectories. For example, a String "a/b/c" will be returned for class name
+   * "a.b.c.ClassName".
+   */
+  static String getPackagePath(String className) {
+    if (className == null) {
+      return "";
+    }
+
+    Matcher matcher = DOT.matcher(className);
+    if (matcher.find()) {
+      String path = matcher.replaceAll("\\/");
+      return path.substring(0, path.lastIndexOf("/"));
+    }
+    else {
+      return "";
+    }
+  }
+
+  /**
+   * Converts a SQL-style pattern to a valid Perl regular expression. E.g.:
+   * <p>
+   * <code>"billing_%"</code> will become <code>^billing_.*$</code>
+   * <p>
+   * <code>"user?"</code> will become <code>^user.?$</code>
+   */
+  static String sqlPatternToRegex(String pattern) {
+    if (pattern == null) {
+      throw new NullPointerException("Null pattern.");
+    }
+
+    if (pattern.length() == 0) {
+      throw new IllegalArgumentException("Empty pattern.");
+    }
+
+    StringBuffer buffer = new StringBuffer();
+
+    // convert * into regex syntax
+    // e.g. abc*x becomes ^abc.*x$
+    // or abc?x becomes ^abc.?x$
+    buffer.append("^");
+    for (int j = 0; j < pattern.length(); j++) {
+      char nextChar = pattern.charAt(j);
+      if (nextChar == '%') {
+        nextChar = '*';
+      }
+
+      if (nextChar == '*' || nextChar == '?') {
+        buffer.append('.');
+      }
+      // escape special chars
+      else if (nextChar == '.'
+              || nextChar == '/'
+              || nextChar == '$'
+              || nextChar == '^') {
+        buffer.append('\\');
+      }
+
+      buffer.append(nextChar);
+    }
+
+    buffer.append("$");
+    return buffer.toString();
+  }
+
+  private RegexUtil() {
+    super();
+  }
+
 }

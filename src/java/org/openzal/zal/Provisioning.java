@@ -29,11 +29,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
 import org.openzal.zal.provisioning.Group;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface Provisioning
 {
@@ -386,14 +382,30 @@ public interface Provisioning
     {
       private final com.zimbra.cs.account.GalContact mGalContact;
 
-      GalContact(com.zimbra.cs.account.GalContact galContact)
+      public GalContact(Object galContact)
       {
-        mGalContact = galContact;
+        mGalContact = (com.zimbra.cs.account.GalContact)galContact;
       }
 
       public String getSingleAttr(String key)
       {
         return mGalContact.getSingleAttr(key);
+      }
+
+      public List<String> match(String regex)
+      {
+        Map<String,Object> attr = mGalContact.getAttrs();
+        List<String> values = new ArrayList<String>();
+
+        for (String key : attr.keySet())
+        {
+          if (key.matches(regex))
+          {
+            values.add(getSingleAttr(key));
+          }
+        }
+
+        return values;
       }
 
       public String getId()
@@ -402,7 +414,7 @@ public interface Provisioning
       }
     }
 
-    GalSearchResult()
+    public GalSearchResult()
     {
       mContactList = new LinkedList<ProvisioningImp.GalSearchResult.GalContact>();
     }
@@ -423,7 +435,7 @@ public interface Provisioning
       return mTotal;
     }
 
-    void addContact(ProvisioningImp.GalSearchResult.GalContact galContact)
+    public void addContact(ProvisioningImp.GalSearchResult.GalContact galContact)
     {
       if (!alreadyAddedByEmail(galContact))
       {
