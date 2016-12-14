@@ -6,11 +6,9 @@ import java.util.*;
 import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
 import com.zextras.mobile.v2.engine.actions.GALSearchAction;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
-import com.zimbra.cs.account.ldap.entry.LdapDomain;
+import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
-import com.zimbra.cs.ldap.*;
-import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 
@@ -31,7 +29,10 @@ import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 
 import javax.annotation.Nullable;
 
-/* $if MajorZimbraVersion >= 8 $ */
+/* $if ZimbraVersion >= 8.0.0 $ */
+import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
+import com.zimbra.cs.ldap.ZAttributes;
+import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.service.ServiceException;
@@ -49,7 +50,9 @@ import com.zimbra.common.account.Key.GranteeBy;
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $endif$ */
 
-/* $elseif MajorZimbraVersion >= 6 $
+/* $elseif ZimbraVersion >= 6.0.0 $
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.Attributes;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource.Type;
 import com.zimbra.cs.account.NamedEntry.Visitor;
@@ -60,7 +63,8 @@ import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 import com.zimbra.cs.account.Provisioning.TargetBy;
 import com.zimbra.cs.account.Provisioning.GranteeBy;
 
-/* $if MajorZimbraVersion >= 7 $
+
+/* $if ZimbraVersion >= 7.0.0 $
 import com.zimbra.cs.account.auth.AuthContext;
 /* $endif $ */
 /* $endif $ */
@@ -75,7 +79,6 @@ class MockDistributionList extends DistributionList
     mMembers = new HashSet<String>();
   }
 
-  @Override
   public void addMembers(String[] members) throws ServiceException {
     for (String member: members)
     {
@@ -83,7 +86,6 @@ class MockDistributionList extends DistributionList
     }
   }
 
-  @Override
   public void removeMembers(String[] members) throws ServiceException {
     for (String member: members)
     {
@@ -91,7 +93,6 @@ class MockDistributionList extends DistributionList
     }
   }
 
-  @Override
   public String[] getAllMembers() throws ServiceException {
     return mMembers.toArray(new String[0]);
   }
@@ -438,7 +439,6 @@ $endif $
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
-  @Override
   public List<MimeTypeInfo> getMimeTypes(String mime)
   {
     List<MimeTypeInfo> result = mimeConfig.get(mime);
@@ -459,7 +459,6 @@ $endif $
   }
   /* $endif $ */
 
-  @Override
   public List<MimeTypeInfo> getAllMimeTypes()
   {
     List<MimeTypeInfo> result = new ArrayList<MimeTypeInfo>();
@@ -626,7 +625,6 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  @Override
   public Cos getCOS(Account acct) throws ServiceException
   {
     return mDefaultCos;
@@ -742,24 +740,34 @@ $endif $
     }
     MockZAttributes zAttributes = new MockZAttributes(attrs);
 
-    Domain domain = new LdapDomain(name,zAttributes,attrs,this){
-      @Override
-      public String getGalSearchBase(String searchBaseSpec) throws ServiceException {
-        return searchBaseSpec;
-      }
+    Domain domain;
+    try
+    {
+      domain = new LdapDomainProxy(name, zAttributes, attrs, this)
+      {
+        public String getGalSearchBase(String searchBaseSpec) throws ServiceException
+        {
+          return searchBaseSpec;
+        }
 
-      @Override
-      public ZLdapFilter getDnSubtreeMatchFilter() throws ServiceException {
-        return ZLdapFilterFactorySimulator.getInstance().dnSubtreeMatch("example.com");
-      }
-    };
+/* $if ZimbraVersion >= 8.0.0 $*/
+        public ZLdapFilter getDnSubtreeMatchFilter() throws ServiceException
+        {
+          return ZLdapFilterFactorySimulator.getInstance().dnSubtreeMatch("example.com");
+        }
+/* $endif$*/
+      };
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
 
     id2domain.put(id, domain);
     name2domain.put(name, domain);
     return domain;
   }
 
-  @Override
   public void searchGal(GalSearchParams params) throws ServiceException {
     String query = params.getQuery().toLowerCase();
     SearchGalResult result = params.getResult();
@@ -1303,7 +1311,13 @@ $endif $
   }
 }
 
-class MockZAttributes extends ZAttributes {
+class MockZAttributes
+/* $if ZimbraVersion >= 8.0.0 $ */
+  extends ZAttributes
+/* $else$
+  extends BasicAttributes
+   $endif$ */
+{
   private Map<String, Object> mAttrs;
 
   public MockZAttributes(Map<String, Object> attrs)
@@ -1311,31 +1325,26 @@ class MockZAttributes extends ZAttributes {
     mAttrs = attrs;
   }
 
-  @Override
-  public Map<String, Object> getAttrs(Set<String> set) throws LdapException
+  public Map<String, Object> getAttrs(Set<String> set)
   {
     return mAttrs;
   }
 
-  @Override
-  protected String getAttrString(String s, boolean b) throws LdapException
+  protected String getAttrString(String s, boolean b)
   {
     return (String)mAttrs.get(s);
   }
 
-  @Override
-  protected String[] getMultiAttrString(String s, boolean b) throws LdapException
+  protected String[] getMultiAttrString(String s, boolean b)
   {
     return (String[])mAttrs.get(s);
   }
 
-  @Override
   public boolean hasAttribute(String s)
   {
     return mAttrs.containsKey(s);
   }
 
-  @Override
   public boolean hasAttributeValue(String s, String s1)
   {
     String attr = (String)mAttrs.get(s);
