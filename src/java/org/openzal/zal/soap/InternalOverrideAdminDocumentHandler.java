@@ -169,4 +169,8 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
   {
     mOriginalDocumentHandler.logAuditAccess(delegatingAcctId, authedAcctId, targetAcctId);
   }
+
+  public boolean defendsAgainstDelegateAdminAccountHarvesting() {
+    return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
+  }
 }
