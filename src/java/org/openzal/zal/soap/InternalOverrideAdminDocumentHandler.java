@@ -170,7 +170,10 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
     mOriginalDocumentHandler.logAuditAccess(delegatingAcctId, authedAcctId, targetAcctId);
   }
 
+  /* $if ZimbraVersion >= 8.7.0 $ */
   public boolean defendsAgainstDelegateAdminAccountHarvesting() {
     return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
   }
+  /* $endif $ */
+
 }
