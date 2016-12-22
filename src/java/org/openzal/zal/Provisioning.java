@@ -336,6 +336,8 @@ public interface Provisioning
 
   Collection<Domain> getDomainAliases(Domain domain);
 
+  void invalidateAllCache();
+
 
   class CountAccountByCos
   {
