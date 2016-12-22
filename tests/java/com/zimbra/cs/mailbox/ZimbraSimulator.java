@@ -3,9 +3,10 @@ package com.zimbra.cs.mailbox;
 import com.zextras.lib.log.ZELog;
 import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.cs.store.file.StoreManagerSimulator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
-import org.openzal.zal.ProvisioningSimulator;
+import org.openzal.zal.ProvisioningImpProxy;
 import org.openzal.zal.extension.StoreManagerImpl;
 import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -254,7 +255,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public Provisioning getProvisioning() throws Exception
   {
-    return new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
+    return new ProvisioningImpProxy(com.zimbra.cs.account.Provisioning.getInstance());
   }
 
   public MockProvisioning getMockProvisioning()
