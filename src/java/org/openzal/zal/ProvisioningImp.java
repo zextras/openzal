@@ -2135,4 +2135,12 @@ public class ProvisioningImp implements Provisioning
     visitAllDomains(visitor);
     return visitor.getAliases();
   }
+
+  public void invalidateAllCache()
+  {
+    /* $if ZimbraVersion >= 7.1.1 $ */
+    com.zimbra.cs.account.accesscontrol.PermissionCache.invalidateAllCache();
+    /* $endif $ */
+  }
+
 }
