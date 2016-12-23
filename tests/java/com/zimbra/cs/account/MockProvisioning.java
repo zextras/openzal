@@ -1349,7 +1349,7 @@ class MockZAttributes
     mAttrs = attrs;
   }
 
-  /* $if ZimbraVersion < 8.0.0 $ */
+  /* $if ZimbraVersion < 8.0.0 $
   public Attribute get(String key)
   {
     return new BasicAttribute(key,mAttrs.get(key));
@@ -1364,7 +1364,7 @@ class MockZAttributes
     }
     return ba.getAll();
   }
-  /* $endif$ */
+   $endif$ */
 
   public Map<String, Object> getAttrs(Set<String> set)
   {
