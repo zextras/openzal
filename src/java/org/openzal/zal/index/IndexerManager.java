@@ -307,11 +307,6 @@ public class IndexerManager
     private class EmptyIndexer implements Indexer
     {
       @Override
-      public void init()
-      {
-      }
-
-      @Override
       public boolean canHandle(String contentType, String fileExtension)
       {
         return false;
