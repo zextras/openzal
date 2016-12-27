@@ -9,6 +9,7 @@ import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 
@@ -121,6 +122,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   private final Map<String, Cos>                name2cos     = new HashMap<String, Cos>();
   private final Map<String, List<MimeTypeInfo>> mimeConfig   = new HashMap<String, List<MimeTypeInfo>>();
   private final Map<String, DistributionList>   id2Dlist     = new HashMap<String, DistributionList>();
+  private final Map<String, DistributionList>   name2Dlist   = new HashMap<String, DistributionList>();
   private final Map<String, Zimlet>             id2zimlets   = new HashMap<String, Zimlet>();
   private final Map<String, Signature>          id2signatue  = new HashMap<String, Signature>();
 
@@ -981,7 +983,8 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   public DistributionList createDistributionList(String name, Map<String, Object> listAttrs) throws AccountServiceException
   {
     DistributionList list = new MockDistributionList(name, name, listAttrs, this);
-    id2Dlist.put(name, list);
+    name2Dlist.put(name, list);
+    id2Dlist.put(list.getId(), list);
     return list;
   }
 
@@ -991,8 +994,30 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   public DistributionList get(DistributionListBy keyType, String key)
   /* $endif $ */
   {
-    return id2Dlist.get(key);
+    if( keyType.toString().equalsIgnoreCase("id") )
+    {
+      return id2Dlist.get(key);
+    }
+    else
+    {
+      return name2Dlist.get(key);
+    }
   }
+
+  /* $if MajorZimbraVersion >= 8 $ */
+  public Group getGroupBasic(Key.DistributionListBy keyType, String key) throws ServiceException
+  {
+    if( keyType.toString().equalsIgnoreCase("id") )
+    {
+      return id2Dlist.get(key);
+    }
+    else
+    {
+      return name2Dlist.get(key);
+    }
+  }
+  /* $endif $ */
+
 
   public void deleteDistributionList(String zimbraId) {
     throw new UnsupportedOperationException();
@@ -1309,6 +1334,36 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   /* $endif $ */
 
+  private Entry getEntry(String entryKey, boolean isId, String type)
+  {
+    if( type.equalsIgnoreCase("usr") || type.equalsIgnoreCase("account") )
+    {
+      if( isId )
+      {
+        return id2account.get(entryKey);
+      }
+      else
+      {
+        return name2account.get(entryKey);
+      }
+    }
+    else if( type.equalsIgnoreCase("grp") )
+    {
+      if( isId )
+      {
+        return id2Dlist.get(entryKey);
+      }
+      else
+      {
+        return name2Dlist.get(entryKey);
+      }
+    }
+    else
+    {
+      throw new UnsupportedOperationException();
+    }
+  }
+
   public void grantRight(String targetType,
                          TargetBy targetBy,
                          String target,
@@ -1319,9 +1374,27 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
                          String right,
                          RightModifier rightModifier) throws ServiceException
   {
-    //TODO implement mocking system
+    Entry granteeEntry = getEntry(grantee, granteeBy.equals(GranteeBy.id), granteeType);
+    Entry targetEntry = getEntry(target, targetBy.equals(TargetBy.id), targetType);
+
+    Set<String> aceSet = targetEntry.getMultiAttrSet("zimbraACE");
+    aceSet.add(
+      createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
+    );
+
+    Map<String, Object> attrs = granteeEntry.getAttrs();
+    attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
+
+    targetEntry.setAttrs(attrs);
   }
-  
+
+  @NotNull
+  private String createAceString(String targetType, String target, String right, RightModifier rightModifier)
+  {
+    String modifier = rightModifier != null ? ""+rightModifier.getModifier() : "";
+    return target+" "+targetType+" "+modifier+right;
+  }
+
   public void revokeRight(String targetType,
                           TargetBy targetBy,
                           String target,
@@ -1331,7 +1404,18 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
                           String right,
                           RightModifier rightModifier) throws ServiceException
   {
-    //TODO implement mocking system
+    Entry granteeEntry = getEntry(grantee, granteeBy.equals(GranteeBy.id), granteeType);
+    Entry targetEntry = getEntry(target, targetBy.equals(TargetBy.id), targetType);
+
+    Set<String> aceSet = targetEntry.getMultiAttrSet("zimbraACE");
+    aceSet.remove(
+      createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
+    );
+
+    Map<String, Object> attrs = granteeEntry.getAttrs();
+    attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
+
+    targetEntry.setAttrs(attrs);
   }
 }
 
