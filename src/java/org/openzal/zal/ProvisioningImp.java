@@ -1824,12 +1824,27 @@ public class ProvisioningImp implements Provisioning
     try
     {
       // target
-      com.zimbra.cs.account.Entry targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
-        mProvisioning,
-        com.zimbra.cs.account.accesscontrol.TargetType.dl,
-        com.zimbra.soap.type.TargetBy.name,
-        target
-      );
+      com.zimbra.cs.account.Entry targetEntry = null;
+      try
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.account,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
+      catch (Exception ignore) {}
+
+      if( targetEntry == null )
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.dl,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
 
       Right r = RightManager.getInstance().getRight(right);
 
