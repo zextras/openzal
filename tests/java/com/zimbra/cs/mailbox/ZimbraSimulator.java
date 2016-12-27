@@ -5,20 +5,20 @@ import com.zextras.lib.vfs.ramvfs.RamFS;
 import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.*;
+import org.openzal.zal.ProvisioningSimulator;
 import org.openzal.zal.extension.StoreManagerImpl;
 import org.openzal.zal.extension.Zimbra;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.Provisioning;
 
-import com.zimbra.common.localconfig.ConfigException;
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.MockProvisioning;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
-import org.dom4j.DocumentException;
+
+import java.io.File;
 
 /* $if ZimbraVersion >= 8.0.0 $ */
 /* $else$
@@ -41,6 +41,7 @@ public class ZimbraSimulator extends ExternalResource
   }
 
   private RamFS mStoreRoot;
+  protected File mTmpDir;
 
   public ZimbraSimulator()
   {
@@ -107,10 +108,14 @@ public class ZimbraSimulator extends ExternalResource
     {
       throw new RuntimeException(e);
     }
+    catch (Throwable throwable)
+    {
+      throw new RuntimeException(throwable);
+    }
   }
 
   private void initProperties()
-    throws ConfigException, DocumentException
+          throws Throwable
   {
     System.setProperty("mail.mime.decodetext.strict",       "false");
     System.setProperty("mail.mime.encodefilename",          "true");
@@ -126,6 +131,41 @@ public class ZimbraSimulator extends ExternalResource
     LC.zimbra_attrs_directory.setDefault("it/data/zimbra-attrs/" + ZimbraVersion.current.toString());
     LC.zimbra_rights_directory.setDefault("it/data/zimbra-rights/" + ZimbraVersion.current.toString());
     ZimbraLog.toolSetupLog4j("INFO", "it/data/zimbra-config/log4j-test.properties");
+
+    mTmpDir = createTmpDir("junit_tmp_");
+    LC.calendar_cache_directory.setDefault(mTmpDir.getAbsolutePath());
+  }
+
+  public static File createTmpDir(String name) throws Throwable
+  {
+    File createdFolder = File.createTempFile(name, "", null);
+    createdFolder.delete();
+    if( createdFolder.exists() )
+    {
+      throw new RuntimeException("Not empty temporary directory: "+createdFolder.getAbsolutePath());
+    }
+    createdFolder.mkdir();
+    if( !createdFolder.exists() )
+    {
+      throw new RuntimeException("Unable to create temporary directory: "+createdFolder.getAbsolutePath());
+    }
+    return createdFolder;
+  }
+  
+  private static void recursiveDelete(File file)
+  {
+    File[] files = file.listFiles();
+    if (files != null)
+    {
+      for (File each : files)
+      {
+        recursiveDelete(each);
+      }
+    }
+    if (!file.delete())
+    {
+      throw new RuntimeException("Unable to delete file " + file.getAbsolutePath());
+    }
   }
 
   private void initMailboxManager() throws Exception
@@ -207,6 +247,7 @@ public class ZimbraSimulator extends ExternalResource
     mStoreRoot.getRoot().removeContent();
     mZimbra.restoreZimbraStoreManager();
     mStoreRoot.emptyRamFS();
+    recursiveDelete(mTmpDir);
     //sVolumeManagerInstance.set(null, sVolumeManagerBuilder.newInstance());
     //((StoreManagerSimulator) com.zimbra.cs.store.StoreManager.getInstance()).shutdown();
   }
