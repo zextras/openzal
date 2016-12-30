@@ -1,24 +1,32 @@
 package org.openzal.zal;
 
-import java.util.*;
-
-import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.exceptions.ZimbraException;
-import com.zimbra.cs.account.*;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.SearchAccountsOptions;
+import com.zimbra.cs.account.SearchDirectoryOptions;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.auth.AuthContext;
+import com.zimbra.soap.admin.type.CacheEntryType;
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
+import com.zimbra.soap.type.TargetBy;
+import org.jetbrains.annotations.NotNull;
+import org.mockito.Mockito;
+import org.openzal.zal.exceptions.ZimbraException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /* $if MajorZimbraVersion >= 8 $ */
 /* $if ZimbraVersion >= 8.0.6 $*/
-import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $else$
  import com.zimbra.common.account.Key.GranteeBy;
 /* $endif$ */
-
-import com.zimbra.common.account.Key;
-import com.zimbra.soap.admin.type.CacheEntryType;
-import com.zimbra.soap.type.TargetBy;
-import org.mockito.Mockito;
 /* $else$
 import org.mockito.Mockito;
 import com.zimbra.cs.account.Provisioning.CacheEntryType;
@@ -70,6 +78,30 @@ public class ProvisioningSimulator extends ProvisioningImp
   public Collection<String> getGroupMembers(String list)
   {
     return getDistributionListById(list).getAllMembersSet();
+  }
+  
+  public List<DistributionList> getDistributionLists(Account userAccount,
+                                                     boolean
+    directOnly, Map<String, String> mapDLInDL) throws ServiceException
+  {
+    List<DistributionList> distributionListsWithInTargetUser = new ArrayList<DistributionList>();
+    Collection<DistributionList>
+                                                distributionLists =
+      mDistributionListMap
+    .values();
+    for (DistributionList distributionList : distributionLists){
+      Collection<String> distributionListMembers = distributionList
+        .getAllMembersSet();
+      Collection<String> userAccountAllAddresses = userAccount
+        .getAllAddresses();
+      for( String userAddress : userAccountAllAddresses){
+        if(distributionListMembers.contains(userAddress)){
+          distributionListsWithInTargetUser.add(distributionList);
+          break;
+        }
+      }
+    }
+    return distributionListsWithInTargetUser;
   }
 
   public void addUserWithAliases(String address, List<String> aliases)
@@ -509,6 +541,8 @@ public class ProvisioningSimulator extends ProvisioningImp
   /******************************************************/
   public static class AccountSimulator extends Account
   {
+    private static Provisioning mProvisioning;
+    
     public AccountSimulator(String address,
                             String id,
                             Map<String, Object> attrs,
@@ -516,6 +550,7 @@ public class ProvisioningSimulator extends ProvisioningImp
                             Provisioning prov)
     {
       super(address, id, attrs, defaults, prov);
+      mProvisioning = prov;
     }
 
     @NotNull
@@ -538,6 +573,22 @@ public class ProvisioningSimulator extends ProvisioningImp
       setAttr(com.zimbra.cs.account.Provisioning.A_zimbraIsDelegatedAdminAccount, String.valueOf(value).toUpperCase());
     }
 
+   @NotNull
+   public List<DistributionList> getDistributionLists(boolean directOnly, Map<String, String> via)
+   {
+     try
+     {
+       return ((ProvisioningSimulator) mProvisioning).getDistributionLists //TODO
+         (this,
+          directOnly,
+          via);
+     }
+     catch (ServiceException e)
+     {
+       e.printStackTrace();
+     }
+     return  null;
+   }
 
     @Override
     public String getDisplayName()
@@ -566,4 +617,6 @@ public class ProvisioningSimulator extends ProvisioningImp
   {
     return new Cos("test", "id", new HashMap<String, Object>(), this);
   }
+  
+
 }
