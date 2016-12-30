@@ -31,12 +31,7 @@ import com.zimbra.common.service.ServiceException;
 
 import com.zimbra.cs.mailbox.calendar.*;
 
-/* $if MajorZimbraVersion <= 7 $
-import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
-import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
-   $else$ */
 import com.zimbra.common.calendar.*;
-/* $endif$ */
 
 import javax.mail.internet.MimeMessage;
 import java.util.*;
@@ -351,11 +346,7 @@ public class InviteFactory
 
     com.zimbra.cs.mailbox.calendar.Invite invite = com.zimbra.cs.mailbox.calendar.Invite.createInvite(
       mbox.getId(),
-  /* $if MajorZimbraVersion >= 8 $ */
       Item.convertType(MailItem.Type.class, type),
-  /* $else$
-      Item.convertType(Byte.class, type),
-  /* $endif$ */
       mMethod,
       mTimeZoneMap.toZimbra(TimeZoneMap.class),
       mUid,
@@ -385,13 +376,11 @@ public class InviteFactory
       null,
       null,
       mLastModifyTimeUtc,
-/* $if ZimbraVersion >= 7.0.1 $ */
       mLastModifyTimeUtc,
-/* $endif$ */
       mSequence,
-/* $if ZimbraVersion > 8.0.1 |! ZimbraVersion > 7.2.3  && ZimbraVersion != 8.0.0 && ZimbraVersion != 8.0.1 $ */
+      /* $if ZimbraVersion >= 8.0.2 $ */
       mSequence,
-/* $endif$ */
+      /* $endif$ */
       AttendeeInviteStatus.TENTATIVE.getRawStatus(),
       true,
       true

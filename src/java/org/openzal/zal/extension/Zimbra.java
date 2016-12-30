@@ -202,7 +202,6 @@ public class Zimbra
   during extension postInit
 */
 
-/* $if ZimbraVersion >= 7.0.0$ */
     try
     {
       Map map = (Map)sInitializedExtensions.get(null);
@@ -215,7 +214,6 @@ public class Zimbra
     {
       throw new RuntimeException(e);
     }
-/* $endif$ */
   }
 
   public void overrideZimbraStoreManager()

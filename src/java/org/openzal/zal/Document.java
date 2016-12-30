@@ -46,19 +46,11 @@ public class Document extends Item
 
   public String getDescription()
   {
-/* $if MajorZimbraVersion >= 7 $ */
     return ((com.zimbra.cs.mailbox.Document)mMailItem).getDescription();
-/* $else$
-    return new String();
-   $endif$ */
   }
 
   public boolean isDescriptionEnabled()
   {
-/* $if ZimbraVersion >= 7.0.1 $ */
     return ((com.zimbra.cs.mailbox.Document)mMailItem).isDescriptionEnabled();
-/* $else$
-    return (getDescription().length() > 0 );
-   $endif$ */
   }
 }

@@ -36,9 +36,6 @@ import org.openzal.zal.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.AnyThrow;
 import org.openzal.zal.log.ZimbraLog;
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.store.StorageCallback;
-/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,36 +75,23 @@ class InternalOverrideStoreManager
     mStoreManager.shutdown();
   }
 
-  /* $if ZimbraVersion >= 7.2.0 $ */
   public boolean supports(StoreManager.StoreFeature feature)
   {
     return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
   }
-  /* $endif $ */
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
     return mStoreManager.getPrimaryStore().toZimbra(FileBlobStore.class).getBlobBuilder();
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public Blob storeIncoming(InputStream data, boolean storeAsIs)
-  /* $elseif ZimbraVersion >= 7.0.0 $
-  public Blob storeIncoming(InputStream data, StorageCallback callback, boolean storeAsIs)
-  /* $else $
-  public Blob storeIncoming(InputStream data, long actualSize, StorageCallback callback, boolean storeAsIs)
-  //TODO check callback not null -> RuntimeException
-  /* $endif $ */
     throws IOException, ServiceException
   {
     return mStoreManager.getPrimaryStore().storeIncoming(data, storeAsIs).toZimbra(Blob.class);
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public StagedBlob stage(InputStream data, long actualSize, Mailbox mbox)
-  /* $else $
-  public StagedBlob stage(InputStream data, long actualSize, StorageCallback callback, Mailbox mbox)
-  /* $endif $   */
     throws IOException, ServiceException
   {
     return mStoreManager.getPrimaryStore().stage(
@@ -145,36 +129,13 @@ class InternalOverrideStoreManager
     }
   }
 
-  /* $if ZimbraVersion < 8.0.0 $
-  public MailboxBlob link(MailboxBlob src, Mailbox destMbox, int destMsgId, int destRevision)
-    throws IOException, ServiceException
-  {
-    try
-    {
-      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getLocator());
-      return link(
-        blob, new org.openzal.zal.Mailbox(destMbox), destMsgId, destRevision
-      );
-    }
-    catch (ZimbraException e)
-    {
-      throw ServiceException.FAILURE("zal", e);
-    }
-  }
-  /* $endif $ */
-
   public MailboxBlob link(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision)
     throws IOException, ServiceException
   {
     try
     {
-      /* $if ZimbraVersion >= 7.0.0 $ */
-      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getLocator());
-      /* $else $
-      org.openzal.zal.Blob blob = BlobWrap.wrapZimbraBlob(src, src.getStagedLocator());
-      /* $endif $ */
       return link(
-        blob,
+        BlobWrap.wrapZimbraBlob(src, src.getLocator()),
         new org.openzal.zal.Mailbox(destMbox),
         destMsgId,
         destRevision
@@ -441,23 +402,12 @@ class InternalOverrideStoreManager
     }
   }
 
-  /* $if ZimbraVersion >= 7.2.1 $ */
   public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
   {
-    Iterable blobsCollection = blobs;
-  /* $elseif ZimbraVersion >= 7.2.0 $
-  public boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException, ServiceException
-  {
-    Iterable blobsCollection = blobs;
-  /* $else $
-  public boolean deleteStore(Mailbox mbox) throws IOException, ServiceException
-  {
-    Iterable blobsCollection = null;
-  /* $endif $ */
     org.openzal.zal.Mailbox mailbox = new org.openzal.zal.Mailbox(mbox);
     for (StoreVolume volume : mVolumeManager.getAll())
     {
-      mStoreManager.getStore(volume.getId()).delete(mailbox, blobsCollection);
+      mStoreManager.getStore(volume.getId()).delete(mailbox, blobs);
     }
     return true;
   }

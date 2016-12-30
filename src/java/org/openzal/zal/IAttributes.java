@@ -28,7 +28,6 @@ import java.util.List;
 
 public class IAttributes
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final com.zimbra.cs.ldap.IAttributes mIAttributes;
 
   protected IAttributes(@NotNull Object iattributes)
@@ -40,19 +39,8 @@ public class IAttributes
     mIAttributes = (com.zimbra.cs.ldap.IAttributes) iattributes;
   }
 
-  /* $else $
-  private final Object mIAttributes;
-
-  protected IAttributes(@NotNull Object iattributes)
-  {
-    throw new UnsupportedOperationException();
-  }
-  /* $endif $ */
-
-
   public List<String> getMultiAttrStringAsList(String attrName, boolean checkbinaryBoolean)
   {
-  /* $if ZimbraVersion >= 8.0.0 $ */
     com.zimbra.cs.ldap.IAttributes.CheckBinary checkBinary;
     if (checkbinaryBoolean)
     {
@@ -70,14 +58,10 @@ public class IAttributes
     {
       throw ExceptionWrapper.wrap(e);
     }
-  /* $else $
-    throw new UnsupportedOperationException();
-  /* $endif $ */
   }
 
   public String getAttrString(String attrName)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return mIAttributes.getAttrString(attrName);
@@ -86,8 +70,5 @@ public class IAttributes
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-      throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 }

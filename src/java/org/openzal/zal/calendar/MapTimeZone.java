@@ -21,15 +21,8 @@
 package org.openzal.zal.calendar;
 
 import org.jetbrains.annotations.NotNull;
-/* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.calendar.ICalTimeZone;
-/* $else$
-import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
-import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
-import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
-import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
- $endif$ */
 
 public class MapTimeZone
 {

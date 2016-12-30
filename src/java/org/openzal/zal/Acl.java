@@ -123,7 +123,6 @@ public class Acl
   }
 
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Grant grantAccess(String zimbraId, byte type, short rights, String secret, long expiry)
     throws org.openzal.zal.exceptions.ZimbraException
   {
@@ -146,31 +145,6 @@ public class Acl
   {
     return mAcl.getGuestGrantExpiry();
   }
-/* $else$
-
-  public Grant grantAccess(String zimbraId, byte type, short rights, String secret, long expiry)
-    throws org.openzal.zal.exceptions.ZimbraException
-  {
-    try
-    {
-      return new Grant(mAcl.grantAccess(zimbraId, type, rights, secret));
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public long getInternalGrantExpiry()
-  {
-    return 0L;
-  }
-
-  public long getGuestGrantExpiry()
-  {
-    return 0L;
-  }
-/* $endif$ */
 
   public <T> T toZimbra(Class<T> cls)
   {

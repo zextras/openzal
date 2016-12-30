@@ -27,12 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 import java.util.TimeZone;
 
-/* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
-/* $else$
-import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
- $endif$ */
 
 public class ICalendarTimezone
 {
@@ -56,15 +52,9 @@ public class ICalendarTimezone
   @Deprecated
   public static ICalendarTimezone getAccountTimeZone(@NotNull Account account)
   {
-/* $if MajorZimbraVersion <= 7 $
-    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(
-      account.toZimbra(com.zimbra.cs.account.Account.class)
-    );
-  $else$ */
     ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
       account.toZimbra(com.zimbra.cs.account.Account.class)
     );
-/* $endif$ */
     return new ICalendarTimezone(accountTimeZone);
   }
 

@@ -91,33 +91,18 @@ public class Item implements Comparable<Item>
 
   static byte byteType(@NotNull Object type)
   {
-/* $if MajorZimbraVersion >= 8 $ */
     return ((MailItem.Type)type).toByte();
-/* $else$
-    return (Byte)type;
-/* $endif$ */
   }
 
   public static <T> T convertType(@NotNull Class<T> cls, byte type)
   {
-/* $if MajorZimbraVersion >= 8 $ */
     return cls.cast(MailItem.Type.of(type));
-/* $else$
-    return cls.cast(type);
-/* $endif$ */
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   static MailItem.Type convertType(byte type)
   {
     return MailItem.Type.of(type);
   }
-/* $else$
-  static byte convertType(byte type)
-  {
-    return type;
-  }
- $endif$ */
 
   @NotNull
   public static Item constructItem(@NotNull Mailbox mbox, @NotNull UnderlyingData data) throws ZimbraException
@@ -263,30 +248,13 @@ public class Item implements Comparable<Item>
   @NotNull
   public Comment toComment()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return new Comment(mMailItem);
-    /* $else$
-    throw new UnsupportedOperationException();
-    /* $endif$ */
   }
 
   @NotNull
   public Link toLink()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return new Link(mMailItem);
-    /* $else$
-    throw new UnsupportedOperationException();
-    /* $endif$ */
-  }
-
-  public long getTagBitmask()
-  {
-/* $if ZimbraVersion >= 8.0.0 $ */
-    throw new UnsupportedOperationException();
-/* $else$
-    return mMailItem.getTagBitmask();
-$endif$ */
   }
 
   @Nullable
@@ -385,29 +353,17 @@ $endif$ */
 
     public void setFlag(int flag)
     {
-/* $if MajorZimbraVersion >= 8 $ */
       mUnderlyingData.setFlags(flag | mUnderlyingData.getFlags());
-/* $else$
-      mUnderlyingData.flags |= flag;
-  $endif$ */
     }
 
     public void unsetFlag(int flag)
     {
-/* $if MajorZimbraVersion >= 8 $ */
       mUnderlyingData.setFlags((~flag) & mUnderlyingData.getFlags());
-/* $else$
-      mUnderlyingData.flags &= ~flag;
-   $endif$ */
     }
 
     public boolean isSet(int flag)
     {
-/* $if MajorZimbraVersion >= 8 $ */
       return (mUnderlyingData.getFlags() & flag) != 0;
-/* $else$
-      return (mUnderlyingData.flags & flag) != 0;
-  $endif$ */
     }
 
     public String toString()
@@ -451,122 +407,99 @@ $endif$ */
     public static final Color RED    = new Color(0xFF0000L);
     public static final Color YELLOW = new Color(0xFFFF00L);
 
-    /* $if MajorZimbraVersion <= 7 $
-        private com.zimbra.cs.mailbox.MailItem.Color mColor;
-       $else$ */
-        private com.zimbra.common.mailbox.Color mColor;
-    /* $endif$ */
+    private com.zimbra.common.mailbox.Color mColor;
 
-        public Color(Object color)
-        {
-    /* $if MajorZimbraVersion <= 7 $
-          mColor = (com.zimbra.cs.mailbox.MailItem.Color) color;
-       $else$ */
-          mColor = (com.zimbra.common.mailbox.Color) color;
-    /* $endif$ */
-        }
+    public Color(Object color)
+    {
+      mColor = (com.zimbra.common.mailbox.Color) color;
+    }
 
-        public Color(long color)
-        {
-    /* $if MajorZimbraVersion <= 7 $
-          mColor = new com.zimbra.cs.mailbox.MailItem.Color(color);
-       $else$ */
-          mColor = new com.zimbra.common.mailbox.Color(color);
-    /* $endif$ */
-        }
+    public Color(long color)
+    {
+      mColor = new com.zimbra.common.mailbox.Color(color);
+    }
 
-        public Color(String color)
-        {
-    /* $if MajorZimbraVersion <= 7 $
-          mColor = new com.zimbra.cs.mailbox.MailItem.Color(color);
-       $else$ */
-          mColor = new com.zimbra.common.mailbox.Color(color);
-    /* $endif$ */
-        }
+    public Color(String color)
+    {
+      mColor = new com.zimbra.common.mailbox.Color(color);
+    }
 
-        public <T> T toZimbra(@NotNull Class<T> cls)
-        {
-          return cls.cast(mColor);
-        }
-      }
+    public <T> T toZimbra(@NotNull Class<T> cls)
+    {
+      return cls.cast(mColor);
+    }
+  }
 
-      @NotNull
-      public Color getColor()
-      {
-        return new Color(mMailItem.getRgbColor());
-      }
+  @NotNull
+  public Color getColor()
+  {
+    return new Color(mMailItem.getRgbColor());
+  }
 
-      public String getName()
-      {
-        String name = mMailItem.getName();
-        return name.isEmpty() ? String.valueOf(getId()) : name;
-      }
+  public String getName()
+  {
+    String name = mMailItem.getName();
+    return name.isEmpty() ? String.valueOf(getId()) : name;
+  }
 
-      public String getPath()
-        throws ZimbraException
-      {
-        try
-        {
-          return mMailItem.getPath();
-        }
-        catch (com.zimbra.common.service.ServiceException e)
-        {
-          throw ExceptionWrapper.wrap(e);
-        }
-      }
+  public String getPath()
+    throws ZimbraException
+  {
+    try
+    {
+      return mMailItem.getPath();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 
-      public int getFolderId()
-      {
-        return mMailItem.getFolderId();
-      }
+  public int getFolderId()
+  {
+    return mMailItem.getFolderId();
+  }
 
-      public int getParentId()
-      {
-        return mMailItem.getParentId();
-      }
+  public int getParentId()
+  {
+    return mMailItem.getParentId();
+  }
 
-      public InputStream getContentStream()
-        throws ZimbraException
-      {
-        try
-        {
-          return mMailItem.getContentStream();
-        }
-        catch (com.zimbra.common.service.ServiceException e)
-        {
-          throw ExceptionWrapper.wrap(e);
-        }
-      }
+  public InputStream getContentStream()
+    throws ZimbraException
+  {
+    try
+    {
+      return mMailItem.getContentStream();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 
-      public byte[] getContent()
-        throws ZimbraException
-      {
-        try
-        {
-          return mMailItem.getContent();
-        }
-        catch (com.zimbra.common.service.ServiceException e)
-        {
-          throw ExceptionWrapper.wrap(e);
-        }
-      }
+  public byte[] getContent()
+    throws ZimbraException
+  {
+    try
+    {
+      return mMailItem.getContent();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 
-      public long getSize()
-      {
-        return mMailItem.getSize();
-      }
+  public long getSize()
+  {
+    return mMailItem.getSize();
+  }
 
-      /* $if MajorZimbraVersion <= 7 $
-        public static String getNameForType(byte type)
-        {
-          return MailItem.getNameForType( convertType(type) );
-        }
-        $else$ */
   public static String getNameForType(byte type)
   {
     return convertType(type).toString();
   }
-/* $endif$ */
 
   public static String getNameForType(@NotNull Item item)
   {
@@ -575,23 +508,6 @@ $endif$ */
 
   private static final HashMap<String, String> sTypeMap = new HashMap<String, String>();
 
-  /* $if MajorZimbraVersion <= 7 $
-    static
-    {
-      sTypeMap.put("mountpoint", "remote folder");
-      sTypeMap.put("searchfolder", "search folder");
-      sTypeMap.put("mountpoint", "remote folder");
-      sTypeMap.put("virtual_conversation","virtual conversation");
-    }
-
-    public static byte getTypeForName(String name)
-    {
-      if( sTypeMap.containsKey(name) ) {
-        name = sTypeMap.get(name);
-      }
-      return byteType(MailItem.getTypeForName(name));
-    }
-    $else$ */
   static
   {
     sTypeMap.put("remote folder", "mountpoint");
@@ -607,7 +523,6 @@ $endif$ */
     }
     return byteType(MailItem.Type.of(name));
   }
-/* $endif$ */
 
   public boolean inSpam()
   {
@@ -782,25 +697,7 @@ $endif$ */
 
   public String[] getTags()
   {
-/* $if MajorZimbraVersion >= 8 $ */
-      return mMailItem.getTags();
-/* $else$
-      OperationContext operationContext = getMailbox().newOperationContext();
-      int i = 0;
-      long tagBitmask = getTagBitmask();
-      List<String> tagList = new ArrayList<String>();
-      while (tagBitmask > 0)
-      {
-        if ((tagBitmask & (1L << i)) != 0)
-        {
-          Tag tag = getMailbox().getTagById(operationContext, i + 64);
-          tagList.add(tag.getName());
-        }
-        tagBitmask &= ~(1L << i);
-        i += 1;
-      }
-      return tagList.toArray(new String[tagList.size()]);
-   $endif$ */
+    return mMailItem.getTags();
   }
 
   public String getSubject()
@@ -811,7 +708,6 @@ $endif$ */
   @NotNull
   public Acl getEffectiveACL()
   {
-/* $if MajorZimbraVersion >= 8 $ */
     ACL acl = mMailItem.getEffectiveACL();
     if( acl == null )
     {
@@ -821,9 +717,6 @@ $endif$ */
     {
       return new Acl(acl);
     }
-/* $else$
-      throw new UnsupportedOperationException();
-   $endif$ */
   }
 
   public long getChangeDate()

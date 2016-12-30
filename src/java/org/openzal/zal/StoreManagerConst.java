@@ -24,11 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class StoreManagerConst
 {
-/* $if MajorZimbraVersion <= 7 $
-  private final static String VOLUME_FIELD = "volume_id";
-$else$ */
   private final static String VOLUME_FIELD = "locator";
-/* $endif$ */
 
   @NotNull
   public static String getVolumeField()

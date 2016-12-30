@@ -21,17 +21,10 @@
 package org.openzal.zal;
 
 import com.zimbra.common.soap.AdminConstants;
-/* $if ZimbraVersion < 8.0.0 $
-import org.dom4j.QName;
-/* $endif $ */
 
 public class AdministrationConstants
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static String GET_QUOTA_USAGE_REQUEST = AdminConstants.E_GET_QUOTA_USAGE_REQUEST;
-  /* $else$
-  public static String GET_QUOTA_USAGE_REQUEST = AdminConstants.GET_QUOTA_USAGE_REQUEST.getName();
-  /* $endif $ */
   public static String A_OFFSET                = AdminConstants.A_OFFSET;
   public static String A_LIMIT                 = AdminConstants.A_LIMIT;
   public static String A_SORT_BY               = AdminConstants.A_SORT_BY;

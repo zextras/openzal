@@ -80,22 +80,11 @@ public class QueryResults
   {
     try
     {
-      /* $if MajorZimbraVersion >= 8 $ */
       mZimbraQueryResults.close();
-      /* $else$
-      mZimbraQueryResults.doneWithSearchResults();
-      /* $endif $ */
     }
-    /* $if MajorZimbraVersion >= 8 $ */
     catch (IOException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else$
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif$ */
   }
 }

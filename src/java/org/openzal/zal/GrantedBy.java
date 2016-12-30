@@ -24,15 +24,9 @@ import org.jetbrains.annotations.NotNull;
 
 /* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
-/* $endif$ */
-
-/* $if ZimbraVersion >= 8.0.0 && ZimbraVersion < 8.0.6 $
+/* $else $
 import com.zimbra.common.account.Key.GranteeBy;
-   $endif$ */
-
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.account.Provisioning.GranteeBy;
-   $endif$ */
+/* $endif$ */
 
 public class GrantedBy
 {
