@@ -1,12 +1,7 @@
 package org.openzal.zal.calendar;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.ParsedDuration;
-/* $else $
-import com.zimbra.cs.mailbox.calendar.ParsedDateTime;
-import com.zimbra.cs.mailbox.calendar.ParsedDuration;
-/* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.calendar.Alarm;
 import org.junit.Test;

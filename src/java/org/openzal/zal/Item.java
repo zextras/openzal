@@ -594,16 +594,6 @@ public class Item implements Comparable<Item>
     try
     {
       Metadata meta = new Metadata(encodedString);
-      if (originVersion != null)
-      {
-        if (ZimbraVersion.current.lessThan(8))
-        {
-          if (originVersion.isAtLeast(8))
-          {
-            meta.put("tg", "0");
-          }
-        }
-      }
 
       UnderlyingData underlyingData = new UnderlyingData();
       Object parameters[] = new Object[1];

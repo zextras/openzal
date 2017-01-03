@@ -18,11 +18,6 @@ import java.util.Properties;
 
 import org.hsqldb.cmdline.SqlFile;
 
-/* $if MajorZimbraVersion >= 8 $ */
-/* $else$
-  import com.zimbra.cs.db.DbPool.Connection;
-/* $endif$ */
-
 public final class HSQLZimbraDatabase extends Db
 {
   //
@@ -40,12 +35,7 @@ public final class HSQLZimbraDatabase extends Db
   public static void createDatabase(boolean isOctopus) throws Exception {
     PreparedStatement stmt = null;
     ResultSet rs = null;
-/* $if MajorZimbraVersion >= 8 $ */
-    com.zimbra.cs.db.DbPool.DbConnection
-/* $else$
-    com.zimbra.cs.db.DbPool.Connection
-/* $endif$ */
-    conn = DbPool.getConnection();
+    com.zimbra.cs.db.DbPool.DbConnection  conn = DbPool.getConnection();
 
     try {
       stmt = conn.prepareStatement("SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name = ?");
@@ -75,12 +65,7 @@ public final class HSQLZimbraDatabase extends Db
   // @throws Exception
   //
   public static void clearDatabase() throws Exception {
-/* $if MajorZimbraVersion >= 8 $ */
-    com.zimbra.cs.db.DbPool.DbConnection
-/* $else$
-    com.zimbra.cs.db.DbPool.Connection
-/* $endif$ */
-      conn = DbPool.getConnection();
+    com.zimbra.cs.db.DbPool.DbConnection conn = DbPool.getConnection();
     try {
       executeForAllGroups(
         conn,
@@ -93,20 +78,12 @@ public final class HSQLZimbraDatabase extends Db
     }
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   private static void executeForAllGroups(com.zimbra.cs.db.DbPool.DbConnection conn, String file) throws Exception
-  /* $else$
-  private static void executeForAllGroups(DbPool.Connection conn, String file) throws Exception
-  /* $endif$ */
   {
     for( int i=1; i <= 100; ++i ) execute(conn, file, i);
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   private static void execute(DbPool.DbConnection conn, String file, int mboxId) throws Exception
-  /* $else$
-  private static void execute(DbPool.Connection conn, String file, int mboxId) throws Exception
-  /* $endif$ */
   {
     Map<String, String> vars = Collections.singletonMap("DATABASE_NAME", DbMailbox.getDatabaseName(mboxId));
     SqlFile sql = new SqlFile(new File(file));
@@ -116,11 +93,7 @@ public final class HSQLZimbraDatabase extends Db
     conn.commit();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   private static void execute(DbPool.DbConnection conn, String file) throws Exception
-  /* $else$
-  private static void execute(DbPool.Connection conn, String file) throws Exception
-  /* $endif$ */
   {
     execute(conn,file,1);
   }
@@ -150,11 +123,7 @@ public final class HSQLZimbraDatabase extends Db
     }
   }
 
-/* $if MajorZimbraVersion >= 8 $ */
-public boolean databaseExists(DbPool.DbConnection connection, String dbname)
-/* $else$
-  public boolean databaseExists(DbPool.Connection connection, String dbname)
-/* $endif$ */
+  public boolean databaseExists(DbPool.DbConnection connection, String dbname)
   {
     return true;
   }
@@ -226,11 +195,7 @@ public boolean databaseExists(DbPool.DbConnection connection, String dbname)
     //tell HSQLDB to use multiversion so our asserts can read while write is open
     PreparedStatement stmt = null;
     ResultSet rs = null;
-/* $if MajorZimbraVersion >= 8 $ */
     com.zimbra.cs.db.DbPool.DbConnection
-/* $else$
-    com.zimbra.cs.db.DbPool.Connection
-/* $endif$ */
       conn = DbPool.getConnection();
     try {
       stmt = conn.prepareStatement("SET DATABASE TRANSACTION CONTROL MVCC");

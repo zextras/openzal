@@ -1998,9 +1998,7 @@ public class ProvisioningImp implements Provisioning
 
   public void invalidateAllCache()
   {
-    /* $if ZimbraVersion >= 7.1.1 $ */
     com.zimbra.cs.account.accesscontrol.PermissionCache.invalidateAllCache();
-    /* $endif $ */
   }
 
 }

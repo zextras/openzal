@@ -6,12 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-/* $if MajorZimbraVersion >= 8 $*/
 public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
-/* $else $
-public class ZLdapFilterFactorySimulator {
-/* $endif $ */
-  /* $if MajorZimbraVersion >= 8 $*/
   public static void setInstance()
   {
     try {
@@ -19,9 +14,7 @@ public class ZLdapFilterFactorySimulator {
     }
     catch (java.lang.AssertionError ex){
     }
-
   }
-
 
   /* $if ZimbraVersion >= 8.5.0 $ */
 

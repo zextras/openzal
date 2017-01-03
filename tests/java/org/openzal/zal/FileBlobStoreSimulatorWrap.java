@@ -11,12 +11,7 @@ import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.VolumeManager;
-/* $else $
-import com.zimbra.cs.store.StorageCallback;
-import com.zimbra.cs.store.file.Volume;
-/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;

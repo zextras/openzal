@@ -49,9 +49,15 @@ public class RedoLogManager
     return cls.cast(mRedoLogManager);
   }
 
+  @Nullable
   public RedologLogWriter getCurrentLogWriter()
   {
-    return new RedologLogWriter(mRedoLogManager.getCurrentLogWriter());
+    Object writer = mRedoLogManager.getCurrentLogWriter();
+    if( writer == null )
+    {
+      return null;
+    }
+    return new RedologLogWriter(writer);
   }
 
   public long getCurrentLogSequence()

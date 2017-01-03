@@ -32,7 +32,7 @@ public class RedologLogWriter
   {
     if (logWriter == null )
     {
-      throw new NullPointerException("Volume is null");
+      throw new NullPointerException("RedologWriter is null");
     }
     mLogWriter = (LogWriter)logWriter;
   }
