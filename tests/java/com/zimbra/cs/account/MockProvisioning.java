@@ -3,8 +3,8 @@ package com.zimbra.cs.account;
 import java.io.IOException;
 import java.util.*;
 
-import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
-import com.zextras.mobile.v2.engine.actions.GALSearchAction;
+import com.zextras.modules.mobile.v2.as.events.utils.SearchGalProperty;
+import com.zextras.modules.mobile.v2.engine.actions.GALSearchAction;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
@@ -29,9 +29,6 @@ import com.zimbra.cs.mime.handler.TextPlainHandler;
 import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 
 import javax.annotation.Nullable;
-import javax.naming.NamingEnumeration;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.BasicAttributes;
 
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import com.zimbra.cs.ldap.ZAttributes;
