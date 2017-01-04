@@ -24,6 +24,17 @@ import com.zimbra.cs.account.accesscontrol.generated.RightConsts;
 
 public class RightConstants
 {
+  public static String RT_addGroupAlias = RightConsts.RT_addGroupAlias;
+  public static String RT_addGroupMember = RightConsts.RT_addGroupMember;
+  public static String RT_createGroup = RightConsts.RT_createGroup;
+  public static String RT_deleteGroup = RightConsts.RT_deleteGroup;
+  public static String RT_getGroup = RightConsts.RT_getGroup;
+  public static String RT_listGroup = RightConsts.RT_listGroup;
+  public static String RT_modifyGroup = RightConsts.RT_modifyGroup;
+  public static String RT_removeGroupAlias = RightConsts.RT_removeGroupAlias;
+  public static String RT_removeGroupMember = RightConsts.RT_removeGroupMember;
+  public static String RT_renameGroup = RightConsts.RT_renameGroup;
+
   public static String RT_sendAs = RightConsts.RT_sendAs;
   public static String RT_domainAdminCosRights = RightConsts.RT_domainAdminCosRights;
   public static String RT_loginAs = RightConsts.RT_loginAs;
