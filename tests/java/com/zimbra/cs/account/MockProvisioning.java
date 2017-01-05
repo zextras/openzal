@@ -1358,6 +1358,17 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
         return name2Dlist.get(entryKey);
       }
     }
+    else if( type.equalsIgnoreCase("domain") )
+    {
+      if( isId )
+      {
+        return id2domain.get(entryKey);
+      }
+      else
+      {
+        return name2domain.get(entryKey);
+      }
+    }
     else
     {
       throw new UnsupportedOperationException();
