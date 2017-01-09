@@ -11,12 +11,7 @@ import com.zimbra.cs.store.file.StoreManagerSimulator;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.VolumeManager;
-/* $else $
-import com.zimbra.cs.store.StorageCallback;
-import com.zimbra.cs.store.file.Volume;
-/* $endif $ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,11 +40,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public boolean supports(Object feature)
   {
-    /* $if ZimbraVersion >= 7.2.0 $ */
     return mStore.supports((StoreManager.StoreFeature) feature);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -61,47 +52,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public Blob storeIncoming(InputStream in, boolean storeAsIs) throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mStore.storeIncoming(in, storeAsIs);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  @Override
-  public Blob storeIncoming(InputStream in, Object callback, boolean storeAsIs) throws IOException
-  {
-    /* $if ZimbraVersion >= 8.0.0 $ */
-    throw new UnsupportedOperationException();
-    /* $elseif ZimbraVersion >= 7.0.0 $
-    try
-    {
-      return mStore.storeIncoming(in, (StorageCallback) callback, storeAsIs);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  @Override
-  public Blob storeIncoming(InputStream in, long sizeHint, Object callback, boolean storeAsIs) throws IOException
-  {
-    /* $if ZimbraVersion >= 7.0.0 $ */
-    throw new UnsupportedOperationException();
-    /* $else $
-    try
-    {
-      return mStore.storeIncoming(in, sizeHint, (StorageCallback) callback, storeAsIs);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
   }
 
   @Override
@@ -111,30 +62,16 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   }
 
   @Override
-  public VolumeStagedBlob stage(InputStream in, long actualSize, Object callback, Mailbox mbox) throws IOException
-  {
-    throw new RuntimeException();
-  }
-
-  @Override
   public VolumeStagedBlob stage(Blob blob, Mailbox mbox) throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
-    /* $else $
-    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
-    /* $endif $ */
     return new StoreManagerSimulator.MockVolumeStagedBlob(mbox, (StoreManagerSimulator.MockBlob) blob, volumeId);
   }
 
   @Override
   public VolumeMailboxBlob copy(MailboxBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
-    /* $else $
-    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
-    /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.copy(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -147,11 +84,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob link(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
-    /* $else $
-    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
-    /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.link(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -171,11 +104,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public VolumeMailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destItemId, int destRevision) throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     String volumeId = String.valueOf(VolumeManager.getInstance().getCurrentMessageVolume().getId());
-    /* $else $
-    String volumeId = String.valueOf(Volume.getCurrentMessageVolume().getId());
-    /* $endif $ */
     return new StoreManagerSimulator.MockVolumeMailboxBlob(mStore.renameTo(src, destMbox, destItemId, destRevision), volumeId);
   }
 
@@ -217,12 +146,6 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
 
   @Override
   public boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean deleteStore(Mailbox mbox) throws IOException
   {
     throw new UnsupportedOperationException();
   }

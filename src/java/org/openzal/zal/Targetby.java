@@ -24,13 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
-/* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.soap.type.TargetBy;
-/* $endif$ */
-
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.account.Provisioning.TargetBy;
-   $endif$ */
 
 public class Targetby
 {
@@ -51,7 +45,6 @@ public class Targetby
 
   public static Targetby fromString(String s)
   {
-    /* $if ZimbraVersion >= 8.0.0 $*/
     try
     {
       return new Targetby(com.zimbra.soap.type.TargetBy.fromString(s));
@@ -60,8 +53,5 @@ public class Targetby
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 }

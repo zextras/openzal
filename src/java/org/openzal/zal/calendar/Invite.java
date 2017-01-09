@@ -44,11 +44,7 @@ import com.zimbra.cs.mailbox.calendar.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/* $if MajorZimbraVersion <= 7 $
-import com.zimbra.cs.mailbox.calendar.*;
-   $else$ */
 import com.zimbra.common.calendar.*;
-/* $endif$ */
 
 public class Invite
 {
@@ -735,19 +731,7 @@ public class Invite
 
   public Invite newCopy()
   {
-    /* $if ZimbraVersion >= 6.0.13 && ZimbraVersion != 7.0.0 && ZimbraVersion < 8.0.0 $
-    try
-    {
-      return new Invite(mInvite.newCopy());
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $ */
     return new Invite(mInvite.newCopy());
-    /* $endif $ */
-
   }
 
   public void setMailItemId(int id)
@@ -813,11 +797,7 @@ public class Invite
     MimeBodyPart icalPart;
     try {
       ZCalendar.ZVCalendar cal = mInvite.newToICalendar(true);
-  /* $if ZimbraVersion <= 7.1.0 $
-      icalPart = CalendarMailSender.makeICalIntoMimePart(null, cal);
-  /* $else$ */
       icalPart = CalendarMailSender.makeICalIntoMimePart(cal);
-  /* $endif $ */
       return icalPart.getInputStream();
     }
     catch (ServiceException ex)

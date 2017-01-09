@@ -54,12 +54,6 @@ public class Metadata
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $if ZimbraVersion < 8.0.0 $
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
   }
 
   public Metadata()

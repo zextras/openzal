@@ -101,7 +101,6 @@ public class Contact extends Item
 
   public String getSortName()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return mContact.getSortName();
@@ -110,9 +109,6 @@ public class Contact extends Item
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else  $
-    return new String();
-    /* $endif$ */
   }
 
   public List<String> getEmailAddresses()

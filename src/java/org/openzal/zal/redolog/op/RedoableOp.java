@@ -98,11 +98,7 @@ public class RedoableOp
 
   public int getMailboxId()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return mRedoableOp.getMailboxId();
-    /* $else $
-    return (int) mRedoableOp.getMailboxId();
-    /* $endif $ */
   }
 
   @NotNull
@@ -152,10 +148,6 @@ public class RedoableOp
 
   public int getOpCode()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mRedoableOp.getOperation().getCode();
-    /* $else $
-    return mRedoableOp.getOpCode();
-    /* $endif $ */
   }
 }

@@ -6,11 +6,10 @@ import java.util.*;
 import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
 import com.zextras.mobile.v2.engine.actions.GALSearchAction;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
-import com.zimbra.cs.account.ldap.entry.LdapDomain;
+import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
-import com.zimbra.cs.ldap.*;
-import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 
@@ -30,8 +29,13 @@ import com.zimbra.cs.mime.handler.TextPlainHandler;
 import com.zimbra.cs.mime.handler.UnknownTypeHandler;
 
 import javax.annotation.Nullable;
+import javax.naming.NamingEnumeration;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.BasicAttributes;
 
-/* $if MajorZimbraVersion >= 8 $ */
+import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
+import com.zimbra.cs.ldap.ZAttributes;
+import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.service.ServiceException;
@@ -49,22 +53,6 @@ import com.zimbra.common.account.Key.GranteeBy;
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $endif$ */
 
-/* $elseif MajorZimbraVersion >= 6 $
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.DataSource.Type;
-import com.zimbra.cs.account.NamedEntry.Visitor;
-import com.zimbra.cs.account.auth.AuthContext.Protocol;
-import com.zimbra.cs.mime.MimeTypeInfo;
-import com.zimbra.cs.mime.MockMimeTypeInfo;
-import com.zimbra.cs.mime.handler.UnknownTypeHandler;
-import com.zimbra.cs.account.Provisioning.TargetBy;
-import com.zimbra.cs.account.Provisioning.GranteeBy;
-
-/* $if MajorZimbraVersion >= 7 $
-import com.zimbra.cs.account.auth.AuthContext;
-/* $endif $ */
-/* $endif $ */
-
 class MockDistributionList extends DistributionList
 {
   private Set<String> mMembers;
@@ -75,7 +63,6 @@ class MockDistributionList extends DistributionList
     mMembers = new HashSet<String>();
   }
 
-  @Override
   public void addMembers(String[] members) throws ServiceException {
     for (String member: members)
     {
@@ -83,7 +70,6 @@ class MockDistributionList extends DistributionList
     }
   }
 
-  @Override
   public void removeMembers(String[] members) throws ServiceException {
     for (String member: members)
     {
@@ -91,7 +77,6 @@ class MockDistributionList extends DistributionList
     }
   }
 
-  @Override
   public String[] getAllMembers() throws ServiceException {
     return mMembers.toArray(new String[0]);
   }
@@ -114,6 +99,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   private final Map<String, Cos>                name2cos     = new HashMap<String, Cos>();
   private final Map<String, List<MimeTypeInfo>> mimeConfig   = new HashMap<String, List<MimeTypeInfo>>();
   private final Map<String, DistributionList>   id2Dlist     = new HashMap<String, DistributionList>();
+  private final Map<String, DistributionList>   name2Dlist   = new HashMap<String, DistributionList>();
   private final Map<String, Zimlet>             id2zimlets   = new HashMap<String, Zimlet>();
   private final Map<String, Signature>          id2signatue  = new HashMap<String, Signature>();
 
@@ -122,10 +108,8 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       put("confKey", "configurationValue");
     }}, this);
 
-  /* $if MajorZimbraVersion >= 8 $ */
   private final Map<String, ShareLocator> shareLocators = new HashMap<String, ShareLocator>();
 
-  /* $endif $ */
   private final Server localhost;
   private final Cos    mDefaultCos;
 
@@ -213,7 +197,6 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 /* $endif$ */
 
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Account createAccount(String name)
     throws ServiceException
   {
@@ -278,154 +261,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     }
   }
 
-  /* $else $
-  public List<Zimlet> getObjectTypes() {
-    return Collections.emptyList();
-  }
-
-  public List<NamedEntry> searchAccounts(String query, String[] returnAttrs,
-                                         String sortAttr, boolean sortAscending, int flags) {
-    throw new UnsupportedOperationException();
-  }
-
-  public List<NamedEntry> searchCalendarResources(EntrySearchFilter filter,
-                                                  String[] returnAttrs, String sortAttr, boolean sortAscending) {
-    throw new UnsupportedOperationException();
-  }
-
-  public List<NamedEntry> searchAccounts(Domain d, String query,
-                                         String[] returnAttrs, String sortAttr, boolean sortAscending,
-                                         int flags) {
-    throw new UnsupportedOperationException();
-  }
-
-  public List<NamedEntry> searchDirectory(SearchOptions options) {
-    List<Account> accounts = getAllAccounts(null);
-    List<NamedEntry> namedEntries = new ArrayList<NamedEntry>();
-    String searchId = null;
-    String query = options.getQuery();
-    if ( query != null && query.startsWith("("+Provisioning.A_zimbraId+"=") )
-    {
-      searchId = query.replace("(" + Provisioning.A_zimbraId + "=", "").replace(")", "");
-    }
-    for (Account account : accounts)
-    {
-      if (searchId == null || searchId.equals(account.getId()))
-      {
-        namedEntries.add(account);
-      }
-    }
-    return namedEntries;
-  }
-
-  public void searchAccountsOnServer(Server server, Provisioning.SearchOptions searchOptions, NamedEntry.Visitor visitor)
-   throws ServiceException
-  {
-    for( Account account : getAllAccounts(null))
-    {
-      String serverName = account.getAttr(Provisioning.A_zimbraMailHost);
-      if ( serverName != null && ! serverName.equals("localhost"))
-      {
-        continue;
-      }
-      visitor.visit(account);
-    }
-  }
-
-$if ZimbraVersion >= 7.0.0$
-  public SearchGalResult searchGal(Domain d, String query,
-                                   GalSearchType type, String token) {
-    throw new UnsupportedOperationException();
-  }
-
-  public SearchGalResult autoCompleteGal(Domain d, String query,
-                                         GalSearchType type, int limit) {
-    throw new UnsupportedOperationException();
-  }
-$else $
-    public SearchGalResult searchGal(Domain d, String query, GAL_SEARCH_TYPE type, String token) throws ServiceException
-    {
-      throw new UnsupportedOperationException();
-    }
-    public SearchGalResult autoCompleteGal(Domain d, String query, Provisioning.GAL_SEARCH_TYPE type, int limit) throws ServiceException
-    {
-      throw new UnsupportedOperationException();
-    }
-$endif $
-
-  public List<NamedEntry> searchCalendarResources(Domain d,
-                                                  EntrySearchFilter filter, String[] returnAttrs, String sortAttr,
-                                                  boolean sortAscending) {
-    throw new UnsupportedOperationException();
-  }
-
-  private void addBasicAccountAttrs( Map<String,Object> attrs )
-  {
-    if (!attrs.containsKey(A_zimbraId))
-    {
-      attrs.put(A_zimbraId, UUID.randomUUID().toString());
-      //attrs.put(A_zimbraId, DEFAULT_ACCOUNT_ID);
-    }
-    if (!attrs.containsKey(A_zimbraMailHost))
-    {
-      attrs.put(A_zimbraMailHost, "localhost");
-    }
-    if (!attrs.containsKey(A_zimbraAccountStatus))
-    {
-      attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-    }
-    attrs.put(A_zimbraBatchedIndexingSize, Integer.MAX_VALUE); // suppress indexing
-  }
-
-  $if MajorZimbraVersion >= 7 $
-  public Account createAccount(
-    String email,
-    String password,
-    Map<String, Object> attrs
-  )
-    throws ServiceException
-  {
-    validate(ProvisioningValidator.CREATE_ACCOUNT, email, null, attrs);
-
-    addBasicAccountAttrs( attrs );
-    attrs.put("password",password);
-    Account account = new Account(email, email, attrs, null, this);
-    try {
-      name2account.put(email, account);
-      id2account.put(account.getId(), account);
-      return account;
-    } finally {
-      validate(ProvisioningValidator.CREATE_ACCOUNT_SUCCEEDED, email, account);
-    }
-  }
-  $else $
-  public Account createAccount(String email, String password,
-                               Map<String, Object> attrs) throws ServiceException
-  {
-
-    // validate("createAccount", email, Collections.emptySet(), attrs);
-    // validate("createAccountCheckDomainCosAndFeature", email, attrs);
-
-    addBasicAccountAttrs( attrs );
-    attrs.put("password",password);
-
-    Account account = new Account(email, email, attrs, null, this);
-    try {
-      name2account.put(email, account);
-      id2account.put(account.getId(), account);
-      return account;
-    } finally {
-      // validate("createAccountSucceeded", email, account);
-    }
-  }
-  $endif $
-  $endif $ */
-
-  /* $if MajorZimbraVersion >= 8 $ */
   public Account get(Key.AccountBy keyType, String key)
-  /* $else $
-  public Account get(AccountBy keyType, String key)
-  /* $endif $ */
   {
     switch (keyType)
     {
@@ -437,8 +273,6 @@ $endif $
     }
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
-  @Override
   public List<MimeTypeInfo> getMimeTypes(String mime)
   {
     List<MimeTypeInfo> result = mimeConfig.get(mime);
@@ -453,13 +287,7 @@ $endif $
       return Collections.<MimeTypeInfo>singletonList(info);
     }
   }
-  /* $else $
-  public List<MimeTypeInfo> getMimeTypes(String mime) {
-    return mimeConfig.get(mime);
-  }
-  /* $endif $ */
 
-  @Override
   public List<MimeTypeInfo> getAllMimeTypes()
   {
     List<MimeTypeInfo> result = new ArrayList<MimeTypeInfo>();
@@ -496,7 +324,6 @@ $endif $
     return config;
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public void modifyAttrs(Entry entry, Map<String, ? extends Object> attrs, boolean checkImmutable)
   {
     Map<String, Object> map = entry.getAttrs(false);
@@ -525,22 +352,6 @@ $endif $
 
     entry.setAttrs(map);
   }
-  /* $else $
-  public void modifyAttrs(Entry entry, Map<String, ? extends Object> attrs,
-                          boolean checkImmutable) {
-
-    Map<String, Object> map = entry.getAttrs(false);
-    for (Map.Entry<String, ? extends Object> attr : attrs.entrySet()) {
-      if (attr.getValue() != null) {
-        map.put(attr.getKey(), attr.getValue());
-      } else {
-        map.remove(attr.getKey());
-      }
-    }
-
-    entry.setAttrs(map);
-  }
-  /* $endif $ */
 
 
   public Server getLocalServer()
@@ -626,7 +437,6 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  @Override
   public Cos getCOS(Account acct) throws ServiceException
   {
     return mDefaultCos;
@@ -642,11 +452,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public void authAccount(Account acct, String password, AuthContext.Protocol proto)
-  /* $else $
-  public void authAccount(Account acct, String password, Protocol proto)
-  /* $endif $ */
   {
     if( password.equals(acct.getAttr("password")) ) {
       return;
@@ -654,11 +460,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public void authAccount(Account acct, String password, AuthContext.Protocol proto, Map<String, Object> authCtxt)
-  /* $else $
-  public void authAccount(Account acct, String password, Protocol proto, Map<String, Object> authCtxt)
-  /* $endif $ */
   {
     if( password.equals(acct.getAttr("password")) ) {
       return;
@@ -675,7 +477,6 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public SetPasswordResult setPassword(Account acct, String newPassword) {
     throw new UnsupportedOperationException();
   }
@@ -683,21 +484,6 @@ $endif $
   public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) {
     throw new UnsupportedOperationException();
   }
-
-  /* $elseif ZimbraVersion >= 7.0.1 $
-  public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) {
-    throw new UnsupportedOperationException();
-  }
-
-  public SetPasswordResult setPassword(Account acct, String newPassword) {
-    throw new UnsupportedOperationException();
-  }
-  $else $
-  public void setPassword(Account acct, String newPassword) {
-    throw new UnsupportedOperationException();
-  }
-  $endif $ */
-
 
   public void checkPasswordStrength(Account acct, String password) {
     throw new UnsupportedOperationException();
@@ -742,24 +528,32 @@ $endif $
     }
     MockZAttributes zAttributes = new MockZAttributes(attrs);
 
-    Domain domain = new LdapDomain(name,zAttributes,attrs,this){
-      @Override
-      public String getGalSearchBase(String searchBaseSpec) throws ServiceException {
-        return searchBaseSpec;
-      }
+    Domain domain;
+    try
+    {
+      domain = new LdapDomainProxy(name, zAttributes, attrs, this)
+      {
+        public String getGalSearchBase(String searchBaseSpec) throws ServiceException
+        {
+          return searchBaseSpec;
+        }
 
-      @Override
-      public ZLdapFilter getDnSubtreeMatchFilter() throws ServiceException {
-        return ZLdapFilterFactorySimulator.getInstance().dnSubtreeMatch("example.com");
-      }
-    };
+        public ZLdapFilter getDnSubtreeMatchFilter() throws ServiceException
+        {
+          return ZLdapFilterFactorySimulator.getInstance().dnSubtreeMatch("example.com");
+        }
+      };
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
 
     id2domain.put(id, domain);
     name2domain.put(name, domain);
     return domain;
   }
 
-  @Override
   public void searchGal(GalSearchParams params) throws ServiceException {
     String query = params.getQuery().toLowerCase();
     SearchGalResult result = params.getResult();
@@ -806,11 +600,7 @@ $endif $
     callback.setHasMoreResult(false);
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Domain get(Key.DomainBy keyType, String key)
-  /* $else $
-  public Domain get(DomainBy keyType, String key)
-  /* $endif $ */
   {
     switch (keyType) {
       case id:
@@ -875,11 +665,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Cos get(Key.CosBy keyType, String key)
-  /* $else $
-  public Cos get(CosBy keyType, String key)
-  /* $endif $ */
   {
     switch (keyType) {
       case id:
@@ -909,11 +695,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Server get(Key.ServerBy keyName, String key)
-  /* $else $
-  public Server get(ServerBy keyName, String key)
-  /* $endif $ */
   {
     switch (keyName) {
       case id:
@@ -944,23 +726,36 @@ $endif $
 
   public DistributionList createDistributionList(String name, Map<String, Object> listAttrs) throws AccountServiceException
   {
-     /* $if MajorZimbraVersion >= 8 $ */
     DistributionList list = new MockDistributionList(name, name, listAttrs, this);
-    id2Dlist.put(name, list);
+    name2Dlist.put(name, list);
+    id2Dlist.put(list.getId(), list);
     return list;
-    /* $else $
-    throw new UnsupportedOperationException();
-    $endif $ */
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public DistributionList get(Key.DistributionListBy keyType, String key)
-  /* $else $
-  public DistributionList get(DistributionListBy keyType, String key)
-  /* $endif $ */
   {
-    return id2Dlist.get(key);
+    if( keyType.toString().equalsIgnoreCase("id") )
+    {
+      return id2Dlist.get(key);
+    }
+    else
+    {
+      return name2Dlist.get(key);
+    }
   }
+
+  public Group getGroupBasic(Key.DistributionListBy keyType, String key) throws ServiceException
+  {
+    if( keyType.toString().equalsIgnoreCase("id") )
+    {
+      return id2Dlist.get(key);
+    }
+    else
+    {
+      return name2Dlist.get(key);
+    }
+  }
+
 
   public void deleteDistributionList(String zimbraId) {
     throw new UnsupportedOperationException();
@@ -1019,11 +814,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public CalendarResource get(Key.CalendarResourceBy keyType, String key)
-  /* $else $
-  public CalendarResource get(CalendarResourceBy keyType, String key)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
@@ -1066,14 +857,12 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Identity getDefaultIdentity(Account account) {
     Map<String, Object> attrs = new HashMap<String, Object>();
     attrs.put(A_zimbraPrefIdentityName, ProvisioningConstants.DEFAULT_IDENTITY_NAME);
     attrs.put(A_zimbraPrefIdentityId, account.getId());
     return new Identity(account, ProvisioningConstants.DEFAULT_IDENTITY_NAME, account.getId(), attrs, this);
   }
-  /* $endif $ */
 
   public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
     return new Identity(account, identityName, account.getId(), attrs, this);
@@ -1095,11 +884,7 @@ $endif $
     return Collections.<Identity>emptyList();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Identity get(Account account, Key.IdentityBy keyType, String key)
-  /* $else $
-  public Identity get(Account account, IdentityBy keyType, String key)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
@@ -1126,40 +911,23 @@ $endif $
     return Collections.<Signature>emptyList();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public Signature get(Account account, Key.SignatureBy keyType, String key)
-  /* $else $
-  public Signature get(Account account, SignatureBy keyType, String key)
-  /* $endif $ */
   {
     return id2signatue.get(account.getId() + "\\" + key);
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public DataSource createDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs)
-  /* $else $
-  public DataSource createDataSource(Account account, Type type, String dataSourceName, Map<String, Object> attrs)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public DataSource createDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs,
                                      boolean passwdAlreadyEncrypted)
-  /* $else $
-  public DataSource createDataSource(Account account, Type type, String dataSourceName, Map<String, Object> attrs,
-                                     boolean passwdAlreadyEncrypted)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public DataSource restoreDataSource(Account account, DataSourceType type, String dataSourceName, Map<String, Object> attrs)
-  /* $else $
-  public DataSource restoreDataSource(Account account, Type type, String dataSourceName, Map<String, Object> attrs)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
@@ -1179,11 +947,7 @@ $endif $
     return Collections.emptyList();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public DataSource get(Account account, Key.DataSourceBy keyType, String key)
-  /* $else $
-  public DataSource get(Account account, DataSourceBy keyType, String key)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
@@ -1192,11 +956,7 @@ $endif $
     throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public XMPPComponent get(Key.XMPPComponentBy keyName, String key)
-  /* $else $
-  public XMPPComponent get(XMPPComponentBy keyName, String key)
-  /* $endif $ */
   {
     throw new UnsupportedOperationException();
   }
@@ -1213,7 +973,6 @@ $endif $
     //throw new UnsupportedOperationException();
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public ShareLocator get(Key.ShareLocatorBy keyType, String key) throws ServiceException {
     return shareLocators.get(key);
   }
@@ -1275,7 +1034,35 @@ $endif $
     }
   }
 
-  /* $endif $ */
+  private Entry getEntry(String entryKey, boolean isId, String type)
+  {
+    if( type.equalsIgnoreCase("usr") || type.equalsIgnoreCase("account") )
+    {
+      if( isId )
+      {
+        return id2account.get(entryKey);
+      }
+      else
+      {
+        return name2account.get(entryKey);
+      }
+    }
+    else if( type.equalsIgnoreCase("grp") )
+    {
+      if( isId )
+      {
+        return id2Dlist.get(entryKey);
+      }
+      else
+      {
+        return name2Dlist.get(entryKey);
+      }
+    }
+    else
+    {
+      throw new UnsupportedOperationException();
+    }
+  }
 
   public void grantRight(String targetType,
                          TargetBy targetBy,
@@ -1287,9 +1074,27 @@ $endif $
                          String right,
                          RightModifier rightModifier) throws ServiceException
   {
-    //TODO implement mocking system
+    Entry granteeEntry = getEntry(grantee, granteeBy.equals(GranteeBy.id), granteeType);
+    Entry targetEntry = getEntry(target, targetBy.equals(TargetBy.id), targetType);
+
+    Set<String> aceSet = targetEntry.getMultiAttrSet("zimbraACE");
+    aceSet.add(
+      createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
+    );
+
+    Map<String, Object> attrs = granteeEntry.getAttrs();
+    attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
+
+    targetEntry.setAttrs(attrs);
   }
-  
+
+  @NotNull
+  private String createAceString(String targetType, String target, String right, RightModifier rightModifier)
+  {
+    String modifier = rightModifier != null ? ""+rightModifier.getModifier() : "";
+    return target+" "+targetType+" "+modifier+right;
+  }
+
   public void revokeRight(String targetType,
                           TargetBy targetBy,
                           String target,
@@ -1299,11 +1104,24 @@ $endif $
                           String right,
                           RightModifier rightModifier) throws ServiceException
   {
-    //TODO implement mocking system
+    Entry granteeEntry = getEntry(grantee, granteeBy.equals(GranteeBy.id), granteeType);
+    Entry targetEntry = getEntry(target, targetBy.equals(TargetBy.id), targetType);
+
+    Set<String> aceSet = targetEntry.getMultiAttrSet("zimbraACE");
+    aceSet.remove(
+      createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
+    );
+
+    Map<String, Object> attrs = granteeEntry.getAttrs();
+    attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
+
+    targetEntry.setAttrs(attrs);
   }
 }
 
-class MockZAttributes extends ZAttributes {
+class MockZAttributes
+  extends ZAttributes
+{
   private Map<String, Object> mAttrs;
 
   public MockZAttributes(Map<String, Object> attrs)
@@ -1311,31 +1129,26 @@ class MockZAttributes extends ZAttributes {
     mAttrs = attrs;
   }
 
-  @Override
-  public Map<String, Object> getAttrs(Set<String> set) throws LdapException
+  public Map<String, Object> getAttrs(Set<String> set)
   {
     return mAttrs;
   }
 
-  @Override
-  protected String getAttrString(String s, boolean b) throws LdapException
+  protected String getAttrString(String s, boolean b)
   {
     return (String)mAttrs.get(s);
   }
 
-  @Override
-  protected String[] getMultiAttrString(String s, boolean b) throws LdapException
+  protected String[] getMultiAttrString(String s, boolean b)
   {
     return (String[])mAttrs.get(s);
   }
 
-  @Override
   public boolean hasAttribute(String s)
   {
     return mAttrs.containsKey(s);
   }
 
-  @Override
   public boolean hasAttributeValue(String s, String s1)
   {
     String attr = (String)mAttrs.get(s);

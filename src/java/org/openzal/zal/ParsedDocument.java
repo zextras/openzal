@@ -44,11 +44,7 @@ public class ParsedDocument
   {
     try
     {
-      /* $if MajorZimbraVersion >= 7 $ */
       mParsedDocument = new com.zimbra.cs.mime.ParsedDocument(stream, filename, ctype, createdDate, creator, description);
-    /* $else$
-      mParsedDocument = new com.zimbra.cs.mime.ParsedDocument(stream, filename, ctype, createdDate, creator);
-    /* $endif$*/
     }
     catch (ServiceException e)
     {

@@ -20,40 +20,26 @@
 
 package org.openzal.zal.soap;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
 import org.jetbrains.annotations.NotNull;
-/* $endif $ */
 
 public class GetQuotaRequest
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final GetQuotaUsageRequest mGetQuotaUsageRequest;
-  /* $else $
-  private final Object mGetQuotaUsageRequest;
-  /* $endif $ */
 
   public GetQuotaRequest(
     String domain, Boolean allServers, Integer limit, Integer offset,
     String sortBy, Boolean sortAscending, Boolean refresh
   )
   {
-  /* $if ZimbraVersion >= 8.0.0 $ */
     mGetQuotaUsageRequest = new GetQuotaUsageRequest(
       domain, allServers, limit, offset, sortBy, sortAscending, refresh
     );
-  /* $else $
-    mGetQuotaUsageRequest = null;
-  /* $endif $ */
   }
 
   protected <T> T toZimbra(Class<T> cls)
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     return cls.cast(mGetQuotaUsageRequest);
-/* $else $
-    throw new UnsupportedOperationException();
-   $endif $ */
   }
 
 }

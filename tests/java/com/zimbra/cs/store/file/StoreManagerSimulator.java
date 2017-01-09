@@ -31,14 +31,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
 import com.zimbra.cs.volume.VolumeManager;
-/* $else$
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.store.*;
-import com.zimbra.cs.store.file.*;
- $endif$ */
 
 import org.openzal.zal.BlobWrap;
 import org.openzal.zal.InternalOverrideBlobProxy;
@@ -71,12 +65,10 @@ public final class StoreManagerSimulator extends StoreManager
     BlobInputStream.setFileDescriptorCache(null);
   }
 
-  /* $if ZimbraVersion >= 7.2.0 $ */
   public boolean supports(StoreFeature feature)
   {
     return false;
   }
-/* $endif$ */
 
   public void purge()
   {
@@ -128,11 +120,7 @@ public final class StoreManagerSimulator extends StoreManager
     {
       int size = IOUtils.copy(data, writer);
 
-/* $if ZimbraVersion >= 8.0.0 $ */
       mockblob.setDigest(streamWriter.digest());
-/* $else $
-      mockblob.setDigest(streamWriter.legacyDigest());
- $endif$ */
       mockblob.setRawSize(size);
     }
     finally
@@ -142,32 +130,6 @@ public final class StoreManagerSimulator extends StoreManager
 
     return mockblob;
   }
-
-/* $if ZimbraVersion < 8.0.0 $
-  public Blob storeIncoming(InputStream data, long sizeHint, StorageCallback callback, boolean storeAsIs)
-    throws IOException, ServiceException
-  {
-    return storeIncoming(data, storeAsIs);
-  }
-
-  public Blob storeIncoming(InputStream data, StorageCallback callback, boolean storeAsIs)
-    throws IOException, ServiceException
-  {
-    return storeIncoming(data, storeAsIs);
-  }
-
-  public StagedBlob stage(InputStream data, long actualSize, StorageCallback callback, Mailbox mbox)
-    throws IOException, ServiceException
-  {
-    return stage(data, actualSize, mbox );
-  }
-
-  public StagedBlob stage(InputStream data, StorageCallback callback, Mailbox mbox)
-    throws IOException, ServiceException
-  {
-    return stage(data, 0, mbox );
-  }
- $endif$ */
 
   public StagedBlob stage(InputStream data, long actualSize, Mailbox mbox) throws IOException
   {
@@ -179,7 +141,6 @@ public final class StoreManagerSimulator extends StoreManager
     return new MockStagedBlob(mbox,(MockBlob)blob);
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $*/
   private String getBlobDir(short volumeId, int mboxId, int itemId )
   {
     Volume vol;
@@ -193,23 +154,6 @@ public final class StoreManagerSimulator extends StoreManager
       throw new RuntimeException(e);
     }
   }
-/* $else$
-
-  private String getBlobDir(short volumeId, long mboxId, int itemId )
-  {
-    try
-    {
-      Volume vol = Volume.getById(volumeId);
-      return vol.getBlobDir((int)mboxId, itemId);
-    }
-    catch(ServiceException e)
-    {
-      throw new RuntimeException(e);
-    }
-  }
-
-  $endif$ */
-
 
   public RelativePath getBlobPath(
     long mboxId,
@@ -256,11 +200,7 @@ public final class StoreManagerSimulator extends StoreManager
 
   public short currentVolume()
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     return VolumeManager.getInstance().getCurrentMessageVolume().getId();
-/* $else$
-    return Volume.getCurrentMessageVolume().getId();
-   $endif$ */
   }
 
 
@@ -498,18 +438,10 @@ public final class StoreManagerSimulator extends StoreManager
     throw new UnsupportedOperationException();
   }
 
-/* $if ZimbraVersion >= 7.2.1 $ */
   public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> mblobs) throws IOException
   {
     throw new UnsupportedOperationException();
   }
-/* $else$
-  public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob> blobs)
-  {
-    throw new UnsupportedOperationException();
-  }
- $endif$ */
-
   static File sNonExistingPath = new File("/tmp/i/dont/exist");
 
   public static class MockBlob extends Blob

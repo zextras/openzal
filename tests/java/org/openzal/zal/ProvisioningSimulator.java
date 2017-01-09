@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/* $if MajorZimbraVersion >= 8 $ */
 /* $if ZimbraVersion >= 8.0.6 $*/
 /* $else$
  import com.zimbra.common.account.Key.GranteeBy;
 /* $endif$ */
-/* $else$
+
+import com.zimbra.common.account.Key;
+import com.zimbra.soap.admin.type.CacheEntryType;
+import com.zimbra.soap.type.TargetBy;
 import org.mockito.Mockito;
-import com.zimbra.cs.account.Provisioning.CacheEntryType;
-$endif$ */
 
 public class ProvisioningSimulator extends ProvisioningImp
 {
@@ -252,11 +252,7 @@ public class ProvisioningSimulator extends ProvisioningImp
   public void visitAllAccounts( NamedEntry.Visitor visitor )
       throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     throw new RuntimeException("Provisioning method not implemented");
-    /* $else$
-    throw new RuntimeException("Provisioning method not implemented");
-    $endif$ */
   }
 
   public void visitAllDomains(NamedEntry.Visitor visitor)
@@ -289,13 +285,11 @@ public class ProvisioningSimulator extends ProvisioningImp
     throw new RuntimeException("Provisioning method not implemented");
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public List<NamedEntry> searchAccountsOnServer(Server localServer, SearchAccountsOptions searchOpts)
       throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
   }
-  /* $endif$ */
 
   public List<Domain> getAllDomains()
       throws ZimbraException
@@ -341,14 +335,7 @@ public class ProvisioningSimulator extends ProvisioningImp
     throw new RuntimeException("Provisioning method not implemented");
   }
 
-/* $if MajorZimbraVersion < 8 $
-  public List<NamedEntry> searchAccounts(String query, String returnAttrs[], String sortAttr, boolean sortAscending, int flags) throws ZimbraException
-  {
-    throw new RuntimeException("Provisioning method not implemented");
-  }
- $endif$ */
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public List<Account> searchDirectory(SearchDirectoryOptions opts)
       throws ZimbraException
   {
@@ -366,7 +353,6 @@ public class ProvisioningSimulator extends ProvisioningImp
   {
     throw new RuntimeException("Provisioning method not implemented");
   }
-  /* $endif$ */
 
   public List<Account> getAllAdminAccounts()
       throws ZimbraException
@@ -393,19 +379,11 @@ public class ProvisioningSimulator extends ProvisioningImp
       ));
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public List<CalendarResource> getAllCalendarResources(Domain domain)
       throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
   }
-  /* $else$
-  public List getAllCalendarResources(Domain domain)
-      throws ZimbraException
-  {
-    throw new RuntimeException("Provisioning method not implemented");
-  }
-  $endif$ */
 
   public List<Zimlet> listAllZimlets()
       throws ZimbraException
@@ -436,13 +414,11 @@ public class ProvisioningSimulator extends ProvisioningImp
     );
   }
 
-  /* $if MajorZimbraVersion >= 8 $ */
   public List<UCService> getAllUCServices()
       throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
   }
-  /* $endif$ */
 
   public CalendarResource getCalendarResourceByName(String resourceName)
       throws ZimbraException
@@ -492,14 +468,12 @@ public class ProvisioningSimulator extends ProvisioningImp
     throw new RuntimeException("Provisioning method not implemented");
   }
 
-  /* $if MajorZimbraVersion == 8 $ */
   public void grantRight(String targetType, TargetBy targetBy, String target,
                          String granteeType, GranteeBy granteeBy, String grantee, String secret,
                          String right, RightModifier rightModifier) throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
   }
-  /* $endif$ */
 
   public Domain getDomain(Account account)
     throws ZimbraException

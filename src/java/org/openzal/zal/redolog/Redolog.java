@@ -23,9 +23,7 @@ package org.openzal.zal.redolog;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.redolog.op.RedoableOp;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.mailbox.MailboxOperation;
-/* $endif $ */
 
 public class Redolog
 {
@@ -36,12 +34,8 @@ public class Redolog
 
   public static String getOpClassName( RedoableOp op )
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     MailboxOperation mop = MailboxOperation.fromInt(getOpCode(op));
     return mop.name();
-   /* $else $
-    return com.zimbra.cs.redolog.op.RedoableOp.getOpClassName(getOpCode(op));
-/* $endif$ */
   }
 
   public static String toString( RedoableOp op )

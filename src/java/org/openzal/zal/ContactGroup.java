@@ -27,26 +27,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class ContactGroup
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   private final com.zimbra.cs.mailbox.ContactGroup mContactGroup;
-  /* $endif $ */
 
   ContactGroup(@NotNull Object contactGroup)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     if (contactGroup == null)
     {
       throw new NullPointerException();
     }
     mContactGroup = (com.zimbra.cs.mailbox.ContactGroup) contactGroup;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public ContactGroup()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mContactGroup = com.zimbra.cs.mailbox.ContactGroup.init();
@@ -55,14 +48,10 @@ public class ContactGroup
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public enum Type
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     CONTACT_REFERENCE(com.zimbra.cs.mailbox.ContactGroup.Member.Type.CONTACT_REF),
     GAL_REFEFERENCE(com.zimbra.cs.mailbox.ContactGroup.Member.Type.GAL_REF),
     INLINE(com.zimbra.cs.mailbox.ContactGroup.Member.Type.INLINE);
@@ -78,35 +67,13 @@ public class ContactGroup
     {
       mZimbraType = zimbraType;
     }
-    /* $else $
-    CONTACT_REFERENCE(null),
-    GAL_REFEFERENCE(null),
-    INLINE(null);
-
-    private final Object mZimbraType;
-
-    <T> T toZimbra(Class<T> cls)
-    {
-      return cls.cast(mZimbraType);
-    }
-
-    Type(Object zimbraType)
-    {
-      mZimbraType = zimbraType;
-    }
-    /* $endif $ */
   }
 
   public String encode()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mContactGroup.encode();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   com.zimbra.cs.mailbox.ContactGroup init()
   {
     try
@@ -118,16 +85,9 @@ public class ContactGroup
       throw ExceptionWrapper.wrap(e);
     }
   }
-  /* $else $
-  Object init()
-  {
-    throw new UnsupportedOperationException();
-  }
-  /* $endif $ */
 
   public void addMember(@NotNull Type type, String value)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mContactGroup.addMember(
@@ -139,8 +99,5 @@ public class ContactGroup
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 }

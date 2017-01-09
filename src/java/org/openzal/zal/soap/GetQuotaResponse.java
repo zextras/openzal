@@ -24,17 +24,13 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.AccountQuotaInfo;
 import org.openzal.zal.ZimbraListWrapper;
 import com.zimbra.cs.service.admin.GetQuotaUsage;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.soap.admin.message.GetQuotaUsageResponse;
-/* $endif $ */
 
 import java.util.List;
 
 public class GetQuotaResponse
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final GetQuotaUsageResponse mGetQuotaUsageResponse;
-  /* $endif $ */
 
   public static final String SORT_TOTAL_USED   = GetQuotaUsage.SORT_TOTAL_USED;
   public static final String SORT_QUOTA_LIMIT  = GetQuotaUsage.SORT_QUOTA_LIMIT;
@@ -43,19 +39,11 @@ public class GetQuotaResponse
 
   protected GetQuotaResponse(Object getQuotaUsageResponse)
   {
-  /* $if ZimbraVersion >= 8.0.0 $ */
     mGetQuotaUsageResponse = (GetQuotaUsageResponse) getQuotaUsageResponse;
-  /* $else $
-    throw new UnsupportedOperationException();
-  /* $endif $ */
   }
 
   public List<AccountQuotaInfo> getAccountQuotas()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return ZimbraListWrapper.wrapAccountQuotaInfos(mGetQuotaUsageResponse.getAccountQuotas());
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 }

@@ -43,29 +43,17 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
 
   public long getSize()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return mStagedBlob.getSize();
-    /* $else $
-    return mStagedBlob.getStagedSize();
-    /* $endif $ */
   }
 
   public String getLocator()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return mStagedBlob.getLocator();
-    /* $else $
-    return mStagedBlob.getStagedLocator();
-    /* $endif $ */
   }
 
   public String getDigest()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return mStagedBlob.getDigest();
-    /* $else $
-    return mStagedBlob.getStagedDigest();
-    /* $endif $ */
   }
 
   @Override
@@ -125,21 +113,13 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   @Override
   public String getVolumeId()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return mStagedBlob.getLocator();
-    /* $else $
-    return mStagedBlob.getStagedLocator();
-    /* $endif $ */
   }
 
   @Override
   public Blob getLocalBlob()
   {
-    /* $if ZimbraVersion >= 7.0.0 $ */
     return BlobWrap.wrapZimbraBlob(mStagedBlob.getLocalBlob(), mStagedBlob.getLocator());
-    /* $else $
-    return BlobWrap.wrapZimbraBlob(mStagedBlob.getLocalBlob(), mStagedBlob.getStagedLocator());
-    /* $endif $ */
   }
 
   public static StagedBlob wrapZimbraObject(Object stagedBlob)

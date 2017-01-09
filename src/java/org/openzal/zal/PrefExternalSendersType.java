@@ -22,34 +22,20 @@ package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
-/* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
 public class PrefExternalSendersType
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull public static PrefExternalSendersType ALLNOTINAB =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
   @NotNull public static PrefExternalSendersType ALL        =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
 
   private ZAttrProvisioning.PrefExternalSendersType mValue;
-  /* $else $
 
-  public static PrefExternalSendersType ALLNOTINAB = new PrefExternalSendersType("ALLNOTINAB");
-  public static PrefExternalSendersType ALL        = new PrefExternalSendersType("ALL");
-
-  private String mValue;
-  /* $endif $ */
-
-  /* $if ZimbraVersion >= 8.0.0 $ */
   PrefExternalSendersType(@NotNull ZAttrProvisioning.PrefExternalSendersType value)
-  /* $else $
-  PrefExternalSendersType(@NotNull String value)
-  /* $endif $ */
   {
     if (value == null)
     {
@@ -60,18 +46,13 @@ public class PrefExternalSendersType
 
   public String toString()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mValue.toString();
-    /* $else $
-    return mValue;
-    /* $endif $ */
   }
 
   @NotNull
   public static PrefExternalSendersType fromString(String s)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.fromString(s));
@@ -80,9 +61,6 @@ public class PrefExternalSendersType
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    return new PrefExternalSendersType(s);
-    /* $endif $ */
   }
 
   public boolean isALLNOTINAB() { return this == ALLNOTINAB;}
@@ -90,10 +68,6 @@ public class PrefExternalSendersType
 
   protected <T> T toZimbra(@NotNull Class<T> cls)
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     return cls.cast(mValue);
-/* $else $
-    throw new UnsupportedOperationException();
-/* $endif $ */
   }
 }

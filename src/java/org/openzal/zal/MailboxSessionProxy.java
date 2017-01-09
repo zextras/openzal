@@ -57,12 +57,10 @@ public class MailboxSessionProxy
   {
     byte type = Item.TYPE_UNKNOWN;
 
-/* $if MajorZimbraVersion >= 8 $ */
     if (what instanceof MailItem.Type)
     {
       type = ((MailItem.Type) what).toByte();
     }
-/* $endif$ */
 
     if (what instanceof MailItem)
     {
@@ -203,13 +201,8 @@ public class MailboxSessionProxy
       {
         for( PendingModifications.ModificationKey mod : pns.deleted.keySet() )
         {
-  /* $if MajorZimbraVersion >= 8 $ */
           PendingModifications.Change change = pns.deleted.get(mod);
           if( areChangesForMobile( change.what ))
-  /* $else$
-          Object what = pns.deleted.get(mod);
-          if( areChangesForMobile( what ))
-     $endif$ */
           {
             ItemChange itemChange = new ItemChange(
               true,

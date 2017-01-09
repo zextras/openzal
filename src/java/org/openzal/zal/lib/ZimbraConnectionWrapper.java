@@ -33,11 +33,7 @@ import java.sql.Statement;
 
 public class ZimbraConnectionWrapper implements Connection
 {
-  /* $if MajorZimbraVersion >= 8 $ */
   private DbPool.DbConnection mConnection;
-  /* $else$
-  private DbPool.Connection mConnection;
-  $endif$ */
 
   public ZimbraConnectionWrapper(@NotNull Object connection)
   {
@@ -45,11 +41,7 @@ public class ZimbraConnectionWrapper implements Connection
     {
       throw new NullPointerException();
     }
-  /* $if MajorZimbraVersion >= 8 $ */
     mConnection = (DbPool.DbConnection)connection;
-  /* $else$
-    mConnection = (DbPool.Connection)connection;
-  $endif$ */
   }
 
   @Override

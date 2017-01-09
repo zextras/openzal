@@ -20,13 +20,10 @@
 
 package org.openzal.zal;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
-/* $endif $ */
 import org.jetbrains.annotations.NotNull;
 
 public class Link extends Document
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final com.zimbra.cs.mailbox.Link mLink;
 
   public Link(@NotNull Object item)
@@ -44,21 +41,4 @@ public class Link extends Document
   {
     return mLink.getOwnerId();
   }
-/* $else$
-  public Link(@NotNull Object item)
-  {
-    super(item);
-    throw new UnsupportedOperationException("Link MailItem doesn't exist in zimbra < 8.0.0");
-  }
-
-  public int getRemoteId()
-  {
-    throw new UnsupportedOperationException("Link MailItem doesn't exist in zimbra < 8.0.0");
-  }
-
-  public String getOwnerId()
-  {
-    throw new UnsupportedOperationException("Link MailItem doesn't exist in zimbra < 8.0.0");
-  }
- $endif $ */
 }

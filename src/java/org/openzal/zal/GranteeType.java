@@ -30,11 +30,7 @@ public class GranteeType
 {
   public static GranteeType GT_USER      = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_USER);
   public static GranteeType GT_GROUP     = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_GROUP);
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static GranteeType GT_EXT_GROUP = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_EXT_GROUP);
-  /* $else $
-  public static GranteeType GT_EXT_GROUP = new GranteeType(null);
-  /* $endif $ */
   public static GranteeType GT_DOMAIN    = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_DOMAIN);
 
   private final com.zimbra.cs.account.accesscontrol.GranteeType mGranteeType;

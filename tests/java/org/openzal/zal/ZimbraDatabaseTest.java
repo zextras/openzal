@@ -31,18 +31,11 @@ public class ZimbraDatabaseTest
     );
 /*$endif $*/
 
-/*$if ZimbraVersion >= 7.0.0 && ZimbraVersion < 8.0.2 $
+/*$if ZimbraVersion < 8.0.2 $
     zimbraTableName = DbMailItem.getMailItemTableName(
       32,
       32,
       false
-    );
-/*$endif $*/
-
-/*$if ZimbraVersion < 7.0.0 $
-    zimbraTableName = DbMailItem.getMailItemTableName(
-      32,
-      32
     );
 /*$endif $*/
 
@@ -83,18 +76,11 @@ public class ZimbraDatabaseTest
     );
 /*$endif $*/
 
-/*$if ZimbraVersion >= 7.0.0 && ZimbraVersion < 8.0.2 $
+/*$if ZimbraVersion < 8.0.2 $
     zimbraTableName = DbMailItem.getRevisionTableName(
       32,
       32,
       false
-    );
-/*$endif $*/
-
-/*$if ZimbraVersion < 7.0.0 $
-    zimbraTableName = DbMailItem.getRevisionTableName(
-      32,
-      32
     );
 /*$endif $*/
 
