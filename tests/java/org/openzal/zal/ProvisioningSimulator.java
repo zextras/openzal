@@ -1,28 +1,16 @@
 package org.openzal.zal;
 
-import com.zimbra.common.account.Key;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.SearchAccountsOptions;
-import com.zimbra.cs.account.SearchDirectoryOptions;
+import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ZimbraException;
+import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.auth.AuthContext;
-import com.zimbra.soap.admin.type.CacheEntryType;
-import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
-import com.zimbra.soap.type.TargetBy;
-import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
-import org.openzal.zal.exceptions.ZimbraException;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.zimbra.common.service.ServiceException;
 
 /* $if ZimbraVersion >= 8.0.6 $*/
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $else$
  import com.zimbra.common.account.Key.GranteeBy;
 /* $endif$ */
