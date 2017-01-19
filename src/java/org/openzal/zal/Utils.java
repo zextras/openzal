@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
@@ -49,10 +50,13 @@ import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
 import com.zimbra.cs.zimlet.ZimletUtil;
+import org.openzal.zal.lib.ZimbraVersion;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +241,11 @@ public abstract class Utils
     return FileUtil.isGzipped(file);
   }
 
+  public static boolean isGzipped(InputStream inputStream) throws IOException
+  {
+    return ByteUtil.isGzipped(inputStream);
+  }
+
   public static byte[] getContent(InputStream stream, int sizeHint) throws IOException
   {
     return ByteUtil.getContent(stream, sizeHint);
@@ -323,5 +332,32 @@ public abstract class Utils
     }
 
     throw new RuntimeException("Invalid mail address " + address);
+  }
+
+  public static String computeDigest(InputStream inputStream) throws IOException
+  {
+    try
+    {
+      MessageDigest digest;
+      if (ZimbraVersion.current.isAtLeast(8))
+      {
+        digest = MessageDigest.getInstance("SHA-256");
+      }
+      else
+      {
+        digest = MessageDigest.getInstance("SHA-1");
+      }
+      byte[] buffer = new byte[1024];
+      int read;
+      while ( (read = inputStream.read(buffer)) >= 0)
+      {
+        digest.update(buffer, 0, read);
+      }
+      return encodeFSSafeBase64(digest.digest());
+    }
+    catch (NoSuchAlgorithmException e)
+    {
+      throw new IOException(e);
+    }
   }
 }

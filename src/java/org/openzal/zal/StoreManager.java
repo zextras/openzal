@@ -21,34 +21,16 @@
 package org.openzal.zal;
 
 import java.io.IOException;
-
-import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.exceptions.ZimbraException;
+import java.util.Collection;
 
 public interface StoreManager
 {
-  @Nullable
-  MailboxBlob getMailboxBlob(Mailbox mbox, int msgId, int revision, String locator)
-    throws ZimbraException;
-
-  MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
-    throws IOException, ZimbraException;
-
-  MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision, short destVolumeId)
-    throws IOException, ZimbraException;
-
-  String getBlobPath(int mboxId, int itemId, int revision,
-                     short volumeId) throws org.openzal.zal.exceptions.ZimbraException;
-
-  boolean delete(Blob blob) throws IOException;
-
-  boolean delete(MailboxBlob mblob) throws IOException;
-
-  StoreVolume getCurrentVolume();
-
-  StoreVolume getCurrentSecondaryVolume();
-
-  StoreVolume getVolumeByName(String name);
-
-  boolean isValidVolume(short id);
+  void register(StoreBuilder storeBuilder, String volumeId);
+  void unregister(String volumeId);
+  void makeActive(String volumeId);
+  void startup() throws IOException;
+  void shutdown();
+  PrimaryStore getPrimaryStore();
+  Store getStore(String locator);
+  Collection<Store> getAllStores();
 }

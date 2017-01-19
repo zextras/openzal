@@ -24,53 +24,39 @@ import org.openzal.zal.lib.JarAccessor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ConsoleBoot
 {
-  private static final VersionChooser S_VERSION_CHOOSER       = new VersionChooser();
-  private static final String         EXTENSION_CLI_ATTRIBUTE = "ZAL-ExtensionCli-Class";
+  private static final VersionChooser sVersionChooser = new VersionChooser();
 
   public static void main(String[] args) throws Exception
   {
+    if( args.length == 0 )
+    {
+      throw new RuntimeException("Missing CLI class");
+    }
+
+    String cliClassName = args[0];
+
     File directory = JarUtils.getCurrentJar().getParentFile();
     File extensionPathFile = new File(directory, "extension-path");
     BootCli bootCli;
     if (extensionPathFile.exists())
     {
-      File path = S_VERSION_CHOOSER.getBestVersionDirectory(extensionPathFile);
-      bootCli = createBootCli(path);
+      File path = sVersionChooser.getBestVersionDirectory(extensionPathFile);
+      bootCli = createBootCli(path, cliClassName);
     }
     else
     {
-      bootCli = createBootCli(directory);
+      bootCli = createBootCli(directory, cliClassName);
     }
 
-    bootCli.run(args);
+    bootCli.run(Arrays.copyOfRange(args,1,args.length));
   }
 
-  private static BootCli createBootCli(File extensionDirectory) throws IOException
+  private static BootCli createBootCli(File extensionDirectory, String cliClassName) throws IOException
   {
-    return new BootCli(S_VERSION_CHOOSER.getBootstrapClassLoader(extensionDirectory), getExtensionCli(extensionDirectory));
+    return new BootCli(sVersionChooser.getBootstrapClassLoader(extensionDirectory), cliClassName);
   }
-
-  private static String getExtensionCli(File extensionDirectory) throws IOException
-  {
-    File[] nodes = extensionDirectory.listFiles();
-    if (nodes != null)
-    {
-      for (File jar : nodes)
-      {
-        JarAccessor jarAccessor = new JarAccessor(jar);
-
-        String extensionClass = jarAccessor.getAttributeInManifest(EXTENSION_CLI_ATTRIBUTE);
-        if (extensionClass != null && !extensionClass.isEmpty())
-        {
-          return extensionClass;
-        }
-      }
-    }
-
-    throw new RuntimeException("No CLI found");
-  }
-
 }

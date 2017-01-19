@@ -168,4 +168,13 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
   {
     mOriginalDocumentHandler.logAuditAccess(delegatingAcctId, authedAcctId, targetAcctId);
   }
+
+  public boolean defendsAgainstDelegateAdminAccountHarvesting() {
+    /* $if ZimbraVersion >= 8.7.0 $ */
+    return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
 }

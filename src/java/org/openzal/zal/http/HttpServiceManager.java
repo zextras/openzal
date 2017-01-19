@@ -63,10 +63,10 @@ public class HttpServiceManager
     }
   }
 
-  public void replaceHandler(@NotNull HttpHandler activesyncBackend)
+  public void replaceHandler(@NotNull HttpHandler httpHandler)
   {
-    unregisterHandler(activesyncBackend);
-    registerHandler(activesyncBackend);
+    unregisterHandler(httpHandler);
+    registerHandler(httpHandler);
   }
 
   public void unregisterHandler(@NotNull HttpHandler httpHandler )

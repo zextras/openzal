@@ -39,6 +39,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.soap.type.GalSearchType;
+import com.zimbra.soap.type.TargetBy;
 /* $else $
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import javax.naming.NamingEnumeration;
@@ -51,6 +52,8 @@ import java.io.IOException;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.LdapFilter;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Provisioning.TargetBy;
+import com.zimbra.cs.account.Provisioning.GranteeBy;
 /* $endif $ */
 
 /* $if ZimbraVersion >= 8.0.0 && ZimbraVersion < 8.0.6 $
@@ -74,6 +77,13 @@ $endif$ */
 
 public class ProvisioningImp implements Provisioning
 {
+  /* $if ZimbraVersion >= 8.7.0 $ */
+  public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
+  /* $else $
+  public static String A_zimbraMaxAppSpecificPasswords                        = "";
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
+  /* $endif $ */
 
   /* $if ZimbraVersion >= 8.0.0 $ */
   public static String A_zimbraMailDomainQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailDomainQuota;
@@ -145,8 +155,10 @@ public class ProvisioningImp implements Provisioning
 
   /* $if ZimbraVersion >= 7.0.0 $ */
   public static String A_zimbraMailOutgoingSieveScript = com.zimbra.cs.account.Provisioning.A_zimbraMailOutgoingSieveScript;
+  public static String A_zimbraMailTrustedSenderListMaxNumEntries             = com.zimbra.cs.account.Provisioning.A_zimbraMailTrustedSenderListMaxNumEntries;
   /* $else $
-  public static       String A_zimbraMailOutgoingSieveScript            = "";
+  public static String A_zimbraMailOutgoingSieveScript = "";
+  public static String A_zimbraMailTrustedSenderListMaxNumEntries = "";
   /* $endif $ */
 
   public static String A_zimbraACE                                            = com.zimbra.cs.account.Provisioning.A_zimbraACE;
@@ -225,6 +237,10 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
+  public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
@@ -660,6 +676,74 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  @Nullable
+  public Domain getDomainById(String domainId)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
+      if (domain == null)
+      {
+        throw new NoSuchDomainException(domainId);
+      }
+      else
+      {
+        return new Domain(domain);
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+
+  @NotNull
+  @Override
+  public Domain assertDomainById(String domainId)
+  {
+    Domain domain = getDomainById(domainId);
+    if( domain == null )
+    {
+      throw new NoSuchDomainException(domainId);
+    }
+    else
+    {
+      return domain;
+    }
+  }
+
+  @NotNull
+  @Override
+  public Domain assertDomainByName(String domainName)
+  {
+    Domain domain = getDomainByName(domainName);
+    if( domain == null )
+    {
+      throw new NoSuchDomainException(domainName);
+    }
+    else
+    {
+      return domain;
+    }
+  }
+
+  @Override
+  public Zimlet assertZimlet(String zimletName)
+  {
+    Zimlet zimlet = getZimlet(zimletName);
+    if( zimlet == null )
+    {
+      throw new NoSuchZimletException(zimletName);
+    }
+    else
+    {
+      return zimlet;
+    }
+  }
+
+  @Override
   public List<Domain> getAllDomains()
     throws ZimbraException
   {
@@ -703,29 +787,6 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.modifyAttrs(entry.toZimbra(), attrs);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  @Nullable
-  public Domain getDomainById(String domainId)
-    throws ZimbraException
-  {
-    try
-    {
-      com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
-      if (domain == null)
-      {
-        return null;
-      }
-      else
-      {
-        return new Domain(domain);
-      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1258,17 +1319,16 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void grantRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, @NotNull Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException
   {
-    /* $if MajorZimbraVersion == 8 $ */
     try
     {
       mProvisioning.grantRight(
         targetType,
-        targetBy.toZimbra(com.zimbra.soap.type.TargetBy.class),
+        targetBy.toZimbra(TargetBy.class),
         target,
         granteeType,
         granteeBy.toZimbra(GranteeBy.class),
@@ -1282,19 +1342,16 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
   public void revokeRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException
   {
-    /* $if MajorZimbraVersion == 8 $ */
+    /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.revokeRight(
@@ -1315,6 +1372,105 @@ public class ProvisioningImp implements Provisioning
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
+  }
+
+  @Override
+  public void revokeRight(String targetType,
+                          Targetby targetBy,
+                          String target,
+                          String granteeType,
+                          @NotNull GrantedBy granteeBy,
+                          String grantee,
+                          String right,
+                          RightModifier rightModifier) throws NoSuchGrantException
+  {
+    try
+    {
+      mProvisioning.revokeRight(
+        targetType,
+        targetBy!=null?targetBy.toZimbra(TargetBy.class):null,
+        target!=null?target:null,
+        granteeType,
+        granteeBy.toZimbra(GranteeBy.class),
+        grantee,
+        right,
+        rightModifier!=null?rightModifier.toZimbra():null
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  //only it works if the specified target is compatible with the target of the right
+  //It does not work with combo rights
+  //you can see the tests in provisioningTest(AT)
+  @Override
+  public boolean checkRight(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    GrantedBy granteeBy,
+    String granteeVal,
+    String right
+                            )
+  {
+    try
+    {
+      return mProvisioning.checkRight(
+        targetType,
+        targetBy.toZimbra(TargetBy.class),
+        target,
+        granteeBy.toZimbra(GranteeBy.class),
+        granteeVal,
+        right,
+        null,
+        null
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  @Nullable
+  public Grants getGrants(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    String granteeType,
+    GrantedBy granteeBy,
+    String grantee,
+    boolean granteeIncludeGroupsGranteeBelongs
+  )
+  {
+    try
+    {
+      RightCommand.Grants grants = mProvisioning.getGrants(
+        targetType,
+        targetBy.toZimbra(TargetBy.class),
+        target,
+        granteeType,
+        granteeBy.toZimbra(GranteeBy.class),
+        grantee,
+        granteeIncludeGroupsGranteeBelongs
+        );
+      if (grants == null)
+      {
+        return null;
+      }
+      else
+      {
+        return new Grants(grants);
+      }
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Override
@@ -1450,6 +1606,46 @@ public class ProvisioningImp implements Provisioning
       {
         return new Server(server);
       }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  @Override
+  public Server getServerById(String id)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerById(id);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  @Override
+  public Server getServerByName(String name)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getServerByName(name);
+      if(server == null)
+      {
+        return null;
+      }
+      return new Server(server);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1628,12 +1824,27 @@ public class ProvisioningImp implements Provisioning
     try
     {
       // target
-      com.zimbra.cs.account.Entry targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
-        mProvisioning,
-        com.zimbra.cs.account.accesscontrol.TargetType.dl,
-        com.zimbra.soap.type.TargetBy.name,
-        target
-      );
+      com.zimbra.cs.account.Entry targetEntry = null;
+      try
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.account,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
+      catch (Exception ignore) {}
+
+      if( targetEntry == null )
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.dl,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
 
       Right r = RightManager.getInstance().getRight(right);
 
@@ -1670,17 +1881,16 @@ public class ProvisioningImp implements Provisioning
   @Nullable
   public Grants getGrants(
     @NotNull org.openzal.zal.provisioning.TargetType targetType,
-    @NotNull TargetBy name,
+    Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
   )
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType.getCode(),
-        name.toZimbra(com.zimbra.soap.type.TargetBy.class),
+        name!=null?name.toZimbra(TargetBy.class):null,
         targetName,
         null,
         null,
@@ -1700,9 +1910,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1814,14 +2021,40 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  private static class GalSearchCallback extends GalSearchResultCallback
+  @Override
+  public void deleteDomainById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteDomain(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void deleteCosById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteCos(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;
     private final GalSearchResult mSearchResult;
     private int mCounter = 0;
 
 
-    GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
+    public GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
     {
       super(params);
       mSkip = skip;
@@ -1917,4 +2150,12 @@ public class ProvisioningImp implements Provisioning
     visitAllDomains(visitor);
     return visitor.getAliases();
   }
+
+  public void invalidateAllCache()
+  {
+    /* $if ZimbraVersion >= 7.1.1 $ */
+    com.zimbra.cs.account.accesscontrol.PermissionCache.invalidateAllCache();
+    /* $endif $ */
+  }
+
 }

@@ -1,0 +1,110 @@
+/*
+ * ZAL - The abstraction layer for Zimbra.
+ * Copyright (C) 2016 ZeXtras S.r.l.
+ *
+ * This file is part of ZAL.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.openzal.zal;
+
+import com.zimbra.cs.mailbox.Mailbox;
+
+import java.io.IOException;
+
+class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
+{
+  private final StagedBlob mBlob;
+
+  protected InternalOverrideStagedBlob(StagedBlob blob)
+  {
+    super(null, null, 0);
+    mBlob = blob;
+  }
+
+  @Override
+  public Mailbox getMailbox()
+  {
+    return mBlob.getMailbox().toZimbra(Mailbox.class);
+  }
+
+  @Override
+  /* $if ZimbraVersion >= 7.0.0 $ */
+  public long getSize()
+  /* $else $
+  public long getStagedSize()
+  /* $endif $ */
+  {
+    try
+    {
+      return mBlob.getSize();
+    }
+    catch (IOException e)
+    {
+      return -1;
+    }
+  }
+
+  @Override
+  /* $if ZimbraVersion >= 7.0.0 $ */
+  public String getDigest()
+  /* $else $
+  public String getStagedDigest()
+  /* $endif $ */
+  {
+    try
+    {
+      return mBlob.getDigest();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  /* $if ZimbraVersion >= 7.0.0 $ */
+  public String getLocator()
+  /* $else $
+  public String getStagedLocator()
+  /* $endif $ */
+  {
+    return mBlob.getVolumeId();
+  }
+
+  /* $if ZimbraVersion < 7.0.0 $
+  @Override
+  public long getOriginalSize()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String getOriginalDigest()
+  {
+    throw new UnsupportedOperationException();
+  }
+  /* $endif $ */
+
+  public static Object wrap(StagedBlob stagedBlob)
+  {
+    return new InternalOverrideStagedBlob(stagedBlob);
+  }
+
+  public StagedBlob getWrappedObject()
+  {
+    return mBlob;
+  }
+}

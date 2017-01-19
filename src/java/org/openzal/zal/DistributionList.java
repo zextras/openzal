@@ -83,6 +83,21 @@ public class DistributionList extends Entry
     }
   }
 
+  public void removeMembers(@Nullable Collection<String> members)
+  {
+    if (members != null)
+    {
+      try
+      {
+        mDistributionList.removeMembers(members.toArray(new String[members.size()]));
+      }
+      catch (ServiceException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+    }
+  }
+
   public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> zimbraPrefAllowAddressForDelegatedSender)
   {
     /* $if ZimbraVersion >= 8.0.0 $ */
@@ -113,18 +128,6 @@ public class DistributionList extends Entry
     /* $else $
     return Collections.emptyList();
     /* $endif $ */
-  }
-
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mDistributionList.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
   }
 
   public String getId()

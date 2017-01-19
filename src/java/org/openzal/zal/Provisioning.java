@@ -29,11 +29,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
 import org.openzal.zal.provisioning.Group;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface Provisioning
 {
@@ -207,16 +203,42 @@ public interface Provisioning
       throws ZimbraException;
 
   void grantRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, @NotNull Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException;
 
   void revokeRight(
-    String targetType, @NotNull TargetBy targetBy, String target,
+    String targetType, Targetby targetBy, String target,
     String granteeType, @NotNull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException;
+
+  void revokeRight(
+    String targetType, Targetby targetBy, String target,
+    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws NoSuchGrantException;
+
+  boolean checkRight(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    GrantedBy granteeBy,
+    String granteeVal,
+    String right
+  );
+
+  @Nullable
+  Grants getGrants(
+    String targetType,
+    Targetby targetBy,
+    String target,
+    String granteeType,
+    GrantedBy granteeBy,
+    String grantee,
+    boolean granteeIncludeGroupsGranteeBelongs
+  );
 
   <T> T toZimbra(@NotNull Class<T> cls);
 
@@ -236,6 +258,14 @@ public interface Provisioning
 
   @Nullable
   Server getServer(@NotNull Account acct)
+    throws ZimbraException;
+
+  @Nullable
+  Server getServerById(String id)
+    throws ZimbraException;
+
+  @Nullable
+  Server getServerByName(String name)
     throws ZimbraException;
 
   boolean onLocalServer(@NotNull Account userAccount)
@@ -268,7 +298,7 @@ public interface Provisioning
   @Nullable
   Grants getGrants(
     @NotNull org.openzal.zal.provisioning.TargetType targetType,
-    @NotNull TargetBy name,
+    Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
   );
@@ -282,13 +312,32 @@ public interface Provisioning
   GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit);
 
   @NotNull
+  Domain assertDomainById(String domainId);
+
+  @NotNull
+  Domain assertDomainByName(String domainId);
+
+  @NotNull
+  Zimlet assertZimlet(String com_zextras_zextras);
+
+  @NotNull
   DistributionList assertDistributionListById(String targetId);
 
   void deleteAccountByName(String id);
 
+  @NotNull
   void deleteAccountById(String id);
 
+  @NotNull
+  void deleteDomainById(String id);
+
+  @NotNull
+  void deleteCosById(String id);
+
   Collection<Domain> getDomainAliases(Domain domain);
+
+  void invalidateAllCache();
+
 
   class CountAccountByCos
   {
@@ -335,14 +384,30 @@ public interface Provisioning
     {
       private final com.zimbra.cs.account.GalContact mGalContact;
 
-      GalContact(com.zimbra.cs.account.GalContact galContact)
+      public GalContact(Object galContact)
       {
-        mGalContact = galContact;
+        mGalContact = (com.zimbra.cs.account.GalContact)galContact;
       }
 
       public String getSingleAttr(String key)
       {
         return mGalContact.getSingleAttr(key);
+      }
+
+      public List<String> match(String regex)
+      {
+        Map<String,Object> attr = mGalContact.getAttrs();
+        List<String> values = new ArrayList<String>();
+
+        for (String key : attr.keySet())
+        {
+          if (key.matches(regex))
+          {
+            values.add(getSingleAttr(key));
+          }
+        }
+
+        return values;
       }
 
       public String getId()
@@ -351,7 +416,7 @@ public interface Provisioning
       }
     }
 
-    GalSearchResult()
+    public GalSearchResult()
     {
       mContactList = new LinkedList<ProvisioningImp.GalSearchResult.GalContact>();
     }
@@ -372,7 +437,7 @@ public interface Provisioning
       return mTotal;
     }
 
-    void addContact(ProvisioningImp.GalSearchResult.GalContact galContact)
+    public void addContact(ProvisioningImp.GalSearchResult.GalContact galContact)
     {
       if (!alreadyAddedByEmail(galContact))
       {

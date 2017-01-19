@@ -20,54 +20,9 @@
 
 package org.openzal.zal;
 
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
-
-public class MailboxBlob
+public interface MailboxBlob extends StagedBlob
 {
-  @NotNull private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
-
-  protected MailboxBlob(@NotNull com.zimbra.cs.store.MailboxBlob mailboxBlob)
-  {
-    if (mailboxBlob == null)
-    {
-      throw new NullPointerException();
-    }
-    mMailboxBlob = mailboxBlob;
-  }
-
-  public String getDigest()
-    throws IOException
-  {
-    return mMailboxBlob.getDigest();
-  }
-
-  public Blob getLocalBlob()
-    throws IOException
-  {
-    return new Blob(mMailboxBlob.getLocalBlob());
-  }
-
-  public int getRevision()
-  {
-    return mMailboxBlob.getRevision();
-  }
-
-  public String toString()
-  {
-    return mMailboxBlob.toString();
-  }
-
-  public int getItemId()
-  {
-    return mMailboxBlob.getItemId();
-  }
-
-  protected <T> T toZimbra(Class<T> cls)
-  {
-    return cls.cast(mMailboxBlob);
-  }
+  int getRevision();
+  String toString();
+  int getItemId();
 }

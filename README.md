@@ -8,7 +8,7 @@ API documentation is available on <https://zextras.github.io/OpenZAL/>
 
 ### Download ###
 
-Latest ZAL branch is 1.10 downloadable from <http://openzal.org/1.10/>
+Latest ZAL branch is 1.11 downloadable from <http://openzal.org/1.11/>
 You can download a precise ZAL version using this url:
         
         http://openzal.org/${branch}/zal-${version}-${zimbra-version}.jar
@@ -16,7 +16,7 @@ You can download a precise ZAL version using this url:
 Where ${branch} is the ZAL branch, ${version} is ZAL full version (branch plus micro), ${zimbra-version} is the full zimbra version.  
 For example with this url you will download zal version 1.9.1 for zimbra 8.6.0:
         
-        http://openzal.org/1.10/zal-1.10.5-8.6.0.jar
+        http://openzal.org/1.11/zal-1.11.3-8.7.0.jar
 
 ### Runtime Dependencies ###
 

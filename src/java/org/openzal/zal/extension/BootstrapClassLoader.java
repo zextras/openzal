@@ -21,10 +21,14 @@
 package org.openzal.zal.extension;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.AllPermission;
 import java.security.CodeSigner;
@@ -38,7 +42,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.zip.ZipFile;
 
 @SuppressWarnings({"SynchronizedMethod", "rawtypes", "CustomClassloader"})
 public class BootstrapClassLoader extends ClassLoader
@@ -84,6 +87,8 @@ public class BootstrapClassLoader extends ClassLoader
   protected Class loadClass(@NotNull String name, boolean resolve)
     throws ClassNotFoundException
   {
+    //System.out.printf("#### Loading class %s ",name);
+
     if(!mInitialized)
     {
       try
@@ -172,6 +177,26 @@ public class BootstrapClassLoader extends ClassLoader
     }
 
     throw new ClassNotFoundException(name);
+  }
+
+  @Override
+  protected URL findResource(String name) {
+    try
+    {
+      Enumeration<URL> enumation = getResources(name);
+      if( enumation.hasMoreElements() )
+      {
+        return enumation.nextElement();
+      }
+      else
+      {
+        return null;
+      }
+    }
+    catch (IOException ex)
+    {
+      throw new RuntimeException(ex);
+    }
   }
 
   @Override

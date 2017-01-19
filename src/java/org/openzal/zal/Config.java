@@ -97,5 +97,16 @@ public class Config extends Entry
     return mConfig.getAttr(name, defaultValue);
   }
 
+  public void setMessageIdDedupeCacheSize(int messageIdDedupeCacheSize)
+  {
+    try
+    {
+      mConfig.setMessageIdDedupeCacheSize(messageIdDedupeCacheSize);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 

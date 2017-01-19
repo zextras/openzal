@@ -21,7 +21,6 @@
 package org.openzal.zal.exceptions;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,6 +126,14 @@ public class ExceptionWrapper
       public ZimbraException create(Exception exception)
       {
         return new NoSuchDomainException(exception);
+      }
+    });
+    mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.NO_SUCH_SERVER, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchServerException(exception);
       }
     });
     mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.NO_SUCH_ALIAS, new ExceptionWrapperCreator()

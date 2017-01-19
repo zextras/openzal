@@ -22,6 +22,6 @@ package org.openzal.zal.lib;
 
 public interface Filter<T>
 {
-  public boolean filterOut(T itemInfo);
-  public void setChildFilter(Filter<T> filter);
+  boolean filterOut(T itemInfo);
+  void setChildFilter(Filter<T> filter);
 }

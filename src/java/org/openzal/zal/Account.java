@@ -27,7 +27,6 @@ import com.zimbra.cs.mailbox.calendar.Util;
 import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
  $endif$ */
 
-import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
 /* $if ZimbraVersion >= 8.0.0 $ */
@@ -189,11 +188,6 @@ public class Account extends Entry
     }
   }
 
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mAccount.getMultiAttrSet(name));
-  }
-
   @NotNull
   public Collection<String> getMultiAttr(String name)
   {
@@ -276,18 +270,6 @@ public class Account extends Entry
     return new Identity(identity);
   }
 
-  public void modify(Map<String, Object> attrs)
-  {
-    try
-    {
-      mAccount.modify(attrs);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
   @NotNull
   public String getId()
   {
@@ -337,10 +319,15 @@ public class Account extends Entry
 
   public String getDisplayName()
   {
-    return StringUtils.defaultIfEmpty(
-      mAccount.getDisplayName(),
-      getName()
-    );
+    String displayName = mAccount.getDisplayName();
+    if( displayName == null || displayName.isEmpty() )
+    {
+      return getName();
+    }
+    else
+    {
+      return displayName;
+    }
   }
 
   public void unsetSignatureId()
@@ -563,27 +550,16 @@ public class Account extends Entry
     {
       return false;
     }
-    if (!super.equals(o))
-    {
-      return false;
-    }
 
-    Account account = (Account) o;
-
-    if (mAccount != null ? !mAccount.equals(account.mAccount) : account.mAccount != null)
-    {
-      return false;
-    }
-
-    return true;
+   return getId().equals(
+     ((Account) o).getId()
+   );
   }
 
   @Override
   public int hashCode()
   {
-    int result = super.hashCode();
-    result = 31 * result + (mAccount != null ? mAccount.hashCode() : 0);
-    return result;
+    return mAccount.getId().hashCode();
   }
 
   public String getPrefOutOfOfficeExternalReply()
