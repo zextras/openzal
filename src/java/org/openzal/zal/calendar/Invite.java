@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.cs.mailbox.Metadata;
 import org.openzal.zal.Item;
@@ -280,6 +281,25 @@ public class Invite
       return null;
     }
     return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
+  }
+
+  @VisibleForTesting
+  public void setOrganizer(String address, String cn)
+  {
+    if (address != null || cn != null)
+    {
+      mInvite.setOrganizer(new ZOrganizer(address, cn));
+    }
+    else
+    {
+      mInvite.setOrganizer(null);
+    }
+  }
+
+  @VisibleForTesting
+  public void setIsOrganizer(boolean b)
+  {
+    mInvite.setIsOrganizer(b);
   }
 
   public long getUtcLastModify()
