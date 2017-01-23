@@ -285,6 +285,9 @@ public class Invite
 
   @VisibleForTesting
   public void setOrganizer(String address, String cn)
+    /* $if ZimbraVersion < 8.0.0 $
+    throws Exception
+    $endif$ */
   {
     if (address != null || cn != null)
     {
