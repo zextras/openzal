@@ -43,8 +43,8 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
   private final DocumentHandler        mOriginalDocumentHandler;
 
   /* $if ZimbraVersion == 8.6.0 $ */
-  static public boolean p7=false;
-  static public Method sDefendsAgainstDelegateAdminAccountHarvesting;
+  static boolean p7=false;
+  static Method sDefendsAgainstDelegateAdminAccountHarvesting;
 
   static
   {
