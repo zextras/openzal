@@ -41,34 +41,6 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
   private final SoapHandler            mSoapHandler;
   private final DocumentHandler        mOriginalDocumentHandler;
 
-  /* $if ZimbraVersion == 8.6.0 $ */
-  static private boolean p7=false;
-  static private Method sDefendsAgainstDelegateAdminAccountHarvesting;
-
-  static
-  {
-    try
-    {
-      Class<?> c = Class.forName("com.zimbra.soap.DocumentHandler");
-      Method[] allMethods = c.getDeclaredMethods();
-
-      for (final Method declaredMethod : allMethods)
-      {
-        if (declaredMethod.getName().contains("defendsAgainstDelegateAdminAccountHarvesting")) {
-          p7 = true;
-          sDefendsAgainstDelegateAdminAccountHarvesting = declaredMethod;
-          break;
-        }
-      }
-    }
-    catch (Throwable ex)
-    {
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
-      throw new RuntimeException(ex);
-    }
-  }
-  /* $endif $ */
-
   public InternalOverrideDocumentHandler(
     SoapHandler soapHandler,
     DocumentHandler originalDocumentHandler
@@ -201,9 +173,9 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
     /* $if ZimbraVersion >= 8.7.0 $ */
     return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
     /* $elseif ZimbraVersion == 8.6.0 $
-    if (p7){
+    if (InternalOverrideAdminDocumentHandler.p7){
       try {
-        return (Boolean)sDefendsAgainstDelegateAdminAccountHarvesting.invoke(mOriginalDocumentHandler);
+        return (Boolean)InternalOverrideAdminDocumentHandler.sDefendsAgainstDelegateAdminAccountHarvesting.invoke(mOriginalDocumentHandler);
       }
       catch (InvocationTargetException x) {
         ZimbraLog.extensions.fatal("ZAL Reflection Exception: " + Utils.exceptionToString(x));
