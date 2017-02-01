@@ -120,7 +120,11 @@ public class ExceptionWrapper
         return new ChangePasswordAccountException(exception);
       }
     });
+    /* $if ZimbraVersion >= 8.7.2 $ */
+    mExceptionMap.put("account.NO_SUCH_DOMAIN", new ExceptionWrapperCreator()
+    /* $else $
     mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.NO_SUCH_DOMAIN, new ExceptionWrapperCreator()
+    /* $endif $ */
     {
       @Override
       public ZimbraException create(Exception exception)
