@@ -49,30 +49,9 @@ public class RightConstants
   public static String RT_sendOnBehalfOf = RightConsts.RT_sendOnBehalfOf;
   public static String RT_sendOnBehalfOfDistList = RightConsts.RT_sendOnBehalfOfDistList;
   public static String RT_sendAsDistList = RightConsts.RT_sendAsDistList;
-  public static String RT_addGroupAlias = RightConsts.RT_addGroupAlias;
-  public static String RT_addGroupMember = RightConsts.RT_addGroupMember;
-  public static String RT_createGroup = RightConsts.RT_createGroup;
-  public static String RT_deleteGroup = RightConsts.RT_deleteGroup;
-  public static String RT_getGroup = RightConsts.RT_getGroup;
-  public static String RT_listGroup = RightConsts.RT_listGroup;
-  public static String RT_modifyGroup = RightConsts.RT_modifyGroup;
-  public static String RT_removeGroupAlias = RightConsts.RT_removeGroupAlias;
-  public static String RT_removeGroupMember = RightConsts.RT_removeGroupMember;
-  public static String RT_renameGroup = RightConsts.RT_renameGroup;
   /* $else $
   public static String RT_sendOnBehalfOf = null;
   public static String RT_sendOnBehalfOfDistList = null;
   public static String RT_sendAsDistList = null;
-
-  public static String RT_addGroupAlias = null;
-  public static String RT_addGroupMember = null;
-  public static String RT_createGroup = null;
-  public static String RT_deleteGroup = null;
-  public static String RT_getGroup = null;
-  public static String RT_listGroup = null;
-  public static String RT_modifyGroup = null;
-  public static String RT_removeGroupAlias = null;
-  public static String RT_removeGroupMember = null;
-  public static String RT_renameGroup = null;
   /* $endif $ */
 }
