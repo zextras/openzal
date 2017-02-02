@@ -201,18 +201,21 @@ public class CalendarMime
     textPart.setText(desc, MimeConstants.P_CHARSET_UTF8);
     multipart.addBodyPart(textPart);
 
-    MimeBodyPart htmlPart = new MimeBodyPart();
     if (descHtml == null || descHtml.isEmpty())
     {
       descHtml = mPlainTextToHtmlConverter.plainText2HTML(desc);
     }
 
-    ContentType ct = new ContentType(MimeConstants.CT_TEXT_HTML);
-    ct.setParameter(MimeConstants.P_CHARSET, MimeConstants.P_CHARSET_UTF8);
-    htmlPart.setText(descHtml, MimeConstants.P_CHARSET_UTF8);
-    htmlPart.setHeader("Content-Type", ct.toString());
+    if (!descHtml.isEmpty())
+    {
+      MimeBodyPart htmlPart = new MimeBodyPart();
+      ContentType ct = new ContentType(MimeConstants.CT_TEXT_HTML);
+      ct.setParameter(MimeConstants.P_CHARSET, MimeConstants.P_CHARSET_UTF8);
+      htmlPart.setText(descHtml, MimeConstants.P_CHARSET_UTF8);
+      htmlPart.setHeader("Content-Type", ct.toString());
 
-    multipart.addBodyPart(htmlPart);
+      multipart.addBodyPart(htmlPart);
+    }
 
     MimeBodyPart icalPart;
     try {
