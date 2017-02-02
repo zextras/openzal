@@ -21,6 +21,7 @@
 package org.openzal.zal.exceptions;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
 
@@ -121,7 +122,7 @@ public class ExceptionWrapper
       }
     });
     /* $if ZimbraVersion >= 8.7.2 $ */
-    mExceptionMap.put("account.NO_SUCH_DOMAIN", new ExceptionWrapperCreator()
+    mExceptionMap.put(Constants.ERROR_CODE_NO_SUCH_DOMAIN, new ExceptionWrapperCreator()
     /* $else $
     mExceptionMap.put(com.zimbra.cs.account.AccountServiceException.NO_SUCH_DOMAIN, new ExceptionWrapperCreator()
     /* $endif $ */
