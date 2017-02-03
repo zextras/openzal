@@ -98,28 +98,34 @@ public abstract class Entry
 
   public void addMultiAttrValue(String key, String value)
   {
-    Set<String> values = getMultiAttrSet(key);
-    values.add(value);
+    if (value != null && !value.isEmpty())
+    {
+      Set<String> values = getMultiAttrSet(key);
+      values.add(value);
 
-    modify(
-      Collections.<String, Object>singletonMap(
-        key,
-        values.toArray(new String[values.size()])
-      )
-    );
+      modify(
+        Collections.<String, Object>singletonMap(
+          key,
+          values.toArray(new String[values.size()])
+        )
+      );
+    }
   }
 
   public void removeMultiAttrValue(String key, String value)
   {
-    Set<String> values = getMultiAttrSet(key);
-    values.remove(value);
+    if (value != null && !value.isEmpty())
+    {
+      Set<String> values = getMultiAttrSet(key);
+      values.remove(value);
 
-    modify(
-      Collections.<String, Object>singletonMap(
-        key,
-        values.toArray(new String[values.size()])
-      )
-    );
+      modify(
+        Collections.<String, Object>singletonMap(
+          key,
+          values.toArray(new String[values.size()])
+        )
+      );
+    }
   }
 
   public void modify(Map<String, Object> attrs)
