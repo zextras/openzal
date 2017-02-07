@@ -161,6 +161,13 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailTrustedSenderListMaxNumEntries = "";
   /* $endif $ */
 
+/* $if ZimbraVersion >= 8.5.0 $ */
+  public static String A_zimbraAuthTokens                                     = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
+/* $else$
+  public static String A_zimbraAuthTokens                                     = "";
+/* $endif$ */
+
+
   public static String A_zimbraACE                                            = com.zimbra.cs.account.Provisioning.A_zimbraACE;
   public static String A_zimbraDomainCOSMaxAccounts                           = com.zimbra.cs.account.Provisioning.A_zimbraDomainCOSMaxAccounts;
   public static String A_zimbraAdminConsoleUIComponents                       = com.zimbra.cs.account.Provisioning.A_zimbraAdminConsoleUIComponents;
@@ -241,6 +248,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
+
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
@@ -697,7 +705,6 @@ public class ProvisioningImp implements Provisioning
       throw ExceptionWrapper.wrap(e);
     }
   }
-
 
   @NotNull
   @Override

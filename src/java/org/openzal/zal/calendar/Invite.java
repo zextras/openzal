@@ -285,17 +285,21 @@ public class Invite
 
   @VisibleForTesting
   public void setOrganizer(String address, String cn)
-    /* $if ZimbraVersion < 8.0.0 $
-    throws Exception
-    $endif$ */
   {
-    if (address != null || cn != null)
+    try
     {
-      mInvite.setOrganizer(new ZOrganizer(address, cn));
+      if (address != null || cn != null)
+      {
+        mInvite.setOrganizer(new ZOrganizer(address, cn));
+      }
+      else
+      {
+        mInvite.setOrganizer(null);
+      }
     }
-    else
+    catch (Exception ex)
     {
-      mInvite.setOrganizer(null);
+      throw ExceptionWrapper.wrap(ex);
     }
   }
 
