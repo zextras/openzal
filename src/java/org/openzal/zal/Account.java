@@ -309,6 +309,11 @@ public class Account extends Entry
     }
   }
 
+/**
+ * @param via If not null, in it will set a Map<distributionList1,
+ *            distributionList2> of distribution list which the user is a member
+ *            (indirectly), where distributionList2 is in distributionList1,
+ */
   @NotNull
   public List<DistributionList> getDistributionLists(boolean directOnly, Map<String, String> via)
   {
