@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.httpclient.URLUtil;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -172,6 +173,18 @@ public class Server extends Entry
     StringBuffer sb = new StringBuffer(128);
     sb.append(LC.zimbra_admin_service_scheme.value()).append(hostname).append(":").append(port).append(path);
     return sb.toString();
+  }
+
+  public String getServiceURL(String path)
+  {
+    try
+    {
+      return URLUtil.getServiceURL(mServer,path,false);
+    }
+    catch (ServiceException ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
   }
 }
 

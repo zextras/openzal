@@ -23,7 +23,6 @@ package org.openzal.zal;
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -291,10 +290,15 @@ public class Account extends Entry
 
   public String getDisplayName()
   {
-    return StringUtils.defaultIfEmpty(
-      mAccount.getDisplayName(),
-      getName()
-    );
+    String displayName = mAccount.getDisplayName();
+    if( displayName == null || displayName.isEmpty() )
+    {
+      return getName();
+    }
+    else
+    {
+      return displayName;
+    }
   }
 
   public void unsetSignatureId()
