@@ -20,22 +20,12 @@
 
 package org.openzal.zal;
 
-/* $if ZimbraVersion >= 8.0.0 $*/
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
-/* $else$
-import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
- $endif$ */
 
-import org.apache.commons.lang3.StringUtils;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
-/* $else $
-import com.zimbra.cs.account.ZAttrProvisioning;
-import java.util.Collections;
-/* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.cs.account.accesscontrol.ACLAccessManager;
@@ -146,26 +136,17 @@ public class Account extends Entry
 
   public boolean isIsExternalVirtualAccount()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isIsExternalVirtualAccount();
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   public boolean isMobileSmartForwardRFC822Enabled()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isMobileSmartForwardRFC822Enabled();
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> addresses)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mAccount.setPrefAllowAddressForDelegatedSender(addresses.toArray(new String[addresses.size()]));
@@ -174,7 +155,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   public List<Identity> getAllIdentities() throws NoSuchAccountException
@@ -198,11 +178,7 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return Arrays.asList(mAccount.getPrefAllowAddressForDelegatedSender());
-    /* $else $
-    return Collections.emptyList();
-    /* $endif $ */
   }
 
   public boolean isIsSystemResource()
@@ -236,7 +212,6 @@ public class Account extends Entry
 
   public boolean isAccountExternal()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return mAccount.isAccountExternal();
@@ -245,9 +220,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   @Nullable
@@ -296,7 +268,6 @@ public class Account extends Entry
 
   public void setIsSystemAccount(boolean zimbraIsSystemAccount)
   {
-    /* $if ZimbraVersion  >= 8.0.0 $ */
     try
     {
       mAccount.setIsSystemAccount(zimbraIsSystemAccount);
@@ -305,7 +276,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   public String getDomainId()
@@ -320,10 +290,15 @@ public class Account extends Entry
 
   public String getDisplayName()
   {
-    return StringUtils.defaultIfEmpty(
-      mAccount.getDisplayName(),
-      getName()
-    );
+    String displayName = mAccount.getDisplayName();
+    if( displayName == null || displayName.isEmpty() )
+    {
+      return getName();
+    }
+    else
+    {
+      return displayName;
+    }
   }
 
   public void unsetSignatureId()
@@ -402,7 +377,6 @@ public class Account extends Entry
 
     addresses.addAll(getAllowFromAddress());
 
-    /* $if ZimbraVersion >= 8.0.0 $ */
     Map<Right, Set<com.zimbra.cs.account.Entry>>  rights;
     try
     {
@@ -434,7 +408,6 @@ public class Account extends Entry
         }
       }
     }
-    /* $endif $ */
 
     return addresses;
   }
@@ -467,11 +440,7 @@ public class Account extends Entry
   @NotNull
   public PrefExternalSendersType getPrefExternalSendersType()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return new PrefExternalSendersType(mAccount.getPrefExternalSendersType());
-    /* $else $
-    return PrefExternalSendersType.ALL;
-    /* $endif $ */
   }
 
   @Nullable
@@ -560,11 +529,7 @@ public class Account extends Entry
 
   public String getPrefOutOfOfficeExternalReply()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.getPrefOutOfOfficeExternalReply();
-    /* $else $
-    return mAccount.getPrefOutOfOfficeReply();
-    /* $endif $ */
   }
 
   public Date getPrefOutOfOfficeFromDate()
@@ -574,11 +539,7 @@ public class Account extends Entry
 
   public boolean isIsSystemAccount()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isIsSystemAccount();
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   public String getUid()
@@ -638,7 +599,6 @@ public class Account extends Entry
 
   public void setPrefOutOfOfficeExternalReply(String zimbraPrefOutOfOfficeExternalReply)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
@@ -647,7 +607,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   @NotNull
@@ -698,7 +657,6 @@ public class Account extends Entry
 
   public void setPrefExternalSendersType(@NotNull PrefExternalSendersType zimbraPrefExternalSendersType)
   {
-    /* $if MajorZimbraVersion >= 8$ */
     try
     {
       mAccount.setPrefExternalSendersType(
@@ -709,7 +667,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif$ */
   }
 
   public void deleteAccount() throws NoSuchAccountException
@@ -801,11 +758,7 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getMobilePolicyUnapprovedInROMApplication()
   {
-    /* $if MajorZimbraVersion >= 8$ */
     return Arrays.asList(mAccount.getMobilePolicyUnapprovedInROMApplication());
-    /* $else$
-    return Collections.emptyList();
-    $endif$ */
   }
 
   public void setPrefOutOfOfficeFromDate(Date zimbraPrefOutOfOfficeFromDate)
@@ -860,11 +813,7 @@ public class Account extends Entry
   @NotNull
   public Collection<String> getMobilePolicyApprovedApplicationList()
   {
-    /* $if MajorZimbraVersion >= 8$ */
     return Arrays.asList(mAccount.getMobilePolicyApprovedApplicationList());
-    /* $else$
-    return Collections.emptyList();
-    $endif$ */
   }
 
   @NotNull
@@ -879,19 +828,11 @@ public class Account extends Entry
     try
     {
       return new DataSource(
-  /* $if ZimbraVersion >= 8.0.0 $ */
       mAccount.createDataSource(
         sourceType.toZimbra(com.zimbra.soap.admin.type.DataSourceType.class),
         sourceName,
         attrs,
         passwdAlreadyEncrypted)
-  /* $else $
-      mAccount.createDataSource(
-      sourceType.toZimbra(com.zimbra.cs.account.DataSource.Type.class),
-      sourceName,
-      attrs,
-      passwdAlreadyEncrypted)
-  /* $endif $ */
       );
     }
     catch (ServiceException e)
@@ -931,7 +872,6 @@ public class Account extends Entry
 
   public void setPrefOutOfOfficeExternalReplyEnabled(boolean prefOutOfOfficeExternalReplyEnabled)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mAccount.setPrefOutOfOfficeExternalReplyEnabled(prefOutOfOfficeExternalReplyEnabled);
@@ -940,16 +880,11 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   public boolean isPrefOutOfOfficeExternalReplyEnabled()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
-    /* $else $
-    return mAccount.isPrefOutOfOfficeReplyEnabled();
-    /* $endif $ */
   }
 
   public void removeAlias(String alias)
@@ -1024,7 +959,6 @@ public class Account extends Entry
 
   public long getMailQuota()
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     try
     {
       return AccountUtil.getEffectiveQuota(mAccount);
@@ -1033,10 +967,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else$
-    return mAccount.getMailQuota();
-    $endif$ */
-
   }
 
   public boolean hasAddress(String address)
@@ -1092,11 +1022,7 @@ public class Account extends Entry
   {
     try
     {
-      /* $if ZimbraVersion > 6.0.7 $ */
       return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
-      /* $else $
-      return com.zimbra.cs.service.AuthProvider.checkAuthTokenValidityValue(mAccount.getProvisioning(), mAccount, authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
-      /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -1107,15 +1033,9 @@ public class Account extends Entry
   @NotNull
   public ICalendarTimezone getAccountTimeZone()
   {
-/* $if MajorZimbraVersion <= 7 $
-    ICalTimeZone accountTimeZone = ICalTimeZone.getAccountTimeZone(
-      toZimbra(com.zimbra.cs.account.Account.class)
-    );
-  $else$ */
     ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
       toZimbra(com.zimbra.cs.account.Account.class)
     );
-/* $endif$ */
     return new ICalendarTimezone(accountTimeZone);
   }
 }

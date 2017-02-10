@@ -36,11 +36,7 @@ public class Mountpoint extends Folder
   @Nullable
   public String getRemoteUuid()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mMountpoint.getRemoteUuid();
-    /* $else $
-    return null;
-    /* $endif $ */
   }
 
   public int getRemoteId()

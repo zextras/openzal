@@ -168,4 +168,30 @@ public class InternalOverrideDocumentHandler extends DocumentHandler
   {
     mOriginalDocumentHandler.logAuditAccess(delegatingAcctId, authedAcctId, targetAcctId);
   }
+
+  public boolean defendsAgainstDelegateAdminAccountHarvesting() {
+    /* $if ZimbraVersion >= 8.7.0 $ */
+    return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
+    /* $elseif ZimbraVersion == 8.6.0 $
+    if (InternalOverrideAdminDocumentHandler.p7){
+      try {
+        return (Boolean)InternalOverrideAdminDocumentHandler.sDefendsAgainstDelegateAdminAccountHarvesting.invoke(mOriginalDocumentHandler);
+      }
+      catch (InvocationTargetException x) {
+        ZimbraLog.extensions.fatal("ZAL Reflection Exception: " + Utils.exceptionToString(x));
+        throw new RuntimeException(x);
+      }
+      catch (IllegalAccessException x) {
+        ZimbraLog.extensions.fatal("ZAL Reflection Exception: " + Utils.exceptionToString(x));
+        throw new RuntimeException(x);
+      }
+    }else
+    {
+      throw new UnsupportedOperationException();
+    }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
 }

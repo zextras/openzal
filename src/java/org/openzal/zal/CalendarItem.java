@@ -246,7 +246,6 @@ public class CalendarItem extends Item
       );
     }
 
-    /* $if MajorZimbraVersion >= 8 $ */
     mailbox.setCalendarItem(
       operationContext,
       getFolderId(),
@@ -257,18 +256,6 @@ public class CalendarItem extends Item
       updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
       0L
     );
-    /* $else $
-    mailbox.setCalendarItem(
-      operationContext,
-      getFolderId(),
-      getFlagBitmask(),
-      getTagBitmask(),
-      defaultCalendarItemData,
-      newExceptions,
-      updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
-      0L
-    );
-    /* $endif $ */
   }
 
   @Nullable

@@ -38,11 +38,9 @@ public class SearchParams
     mParams.setTimeZone(null);
     mParams.setLocale(null);
 
-/* $if MajorZimbraVersion >= 8 $ */
     mParams.setSortBy(SortBy.DATE_DESC);
     mParams.setFetchMode(com.zimbra.cs.index.SearchParams.Fetch.NORMAL);
     mParams.setInDumpster(false);
-/* $endif$ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> cls)
@@ -52,16 +50,11 @@ public class SearchParams
 
   public void setQueryString( String query )
   {
-/* $if MajorZimbraVersion >= 8 $ */
     mParams.setQueryString(query);
-/* $else$
-    mParams.setQueryStr(query);
- $endif$ */
   }
 
   public void setTypes( byte[] types )
   {
-/* $if MajorZimbraVersion >= 8 $ */
     Set<MailItem.Type> set = new HashSet<MailItem.Type>();
 
     for( byte type : types )
@@ -70,10 +63,6 @@ public class SearchParams
     }
 
     mParams.setTypes(set);
-
-/* $else$
-    mParams.setTypes(types);
- $endif$ */
   }
 
 

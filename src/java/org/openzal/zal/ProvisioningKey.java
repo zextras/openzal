@@ -23,7 +23,6 @@ package org.openzal.zal;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.Key.CacheEntryBy;
 import com.zimbra.common.account.Key.CalendarResourceBy;
@@ -38,20 +37,6 @@ import com.zimbra.common.account.Key.SignatureBy;
 import com.zimbra.common.account.Key.UCServiceBy;
 import com.zimbra.common.account.Key.XMPPComponentBy;
 import com.zimbra.common.account.Key.ZimletBy;
-/* $else$
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.CacheEntryBy;
-import com.zimbra.cs.account.Provisioning.CalendarResourceBy;
-import com.zimbra.cs.account.Provisioning.CosBy;
-import com.zimbra.cs.account.Provisioning.DataSourceBy;
-import com.zimbra.cs.account.Provisioning.DistributionListBy;
-import com.zimbra.cs.account.Provisioning.DomainBy;
-import com.zimbra.cs.account.Provisioning.IdentityBy;
-import com.zimbra.cs.account.Provisioning.ServerBy;
-import com.zimbra.cs.account.Provisioning.SignatureBy;
-import com.zimbra.cs.account.Provisioning.XMPPComponentBy;
-import com.zimbra.cs.account.Provisioning.ZimletBy;
-/* $endif $ */
 
 public class ProvisioningKey
 {
@@ -166,11 +151,7 @@ public class ProvisioningKey
     @NotNull public static ByDomain name            = new ByDomain(DomainBy.name);
     @NotNull public static ByDomain virtualHostname = new ByDomain(DomainBy.virtualHostname);
     @NotNull public static ByDomain krb5Realm       = new ByDomain(DomainBy.krb5Realm);
-    /* $if ZimbraVersion >= 8.0.0 $ */
     @NotNull public static ByDomain foreignName     = new ByDomain(DomainBy.foreignName);
-    /* $else$
-    public static ByDomain foreignName     = new ByDomain(DomainBy.name);
-    /* $endif $ */
 
     ByDomain(DomainBy domainBy)
     {
@@ -458,7 +439,6 @@ public class ProvisioningKey
     }
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   static class ByUCService
   {
     private final UCServiceBy mUCServiceBy;
@@ -521,5 +501,4 @@ public class ProvisioningKey
       }
     }
   }
-  /* $endif $ */
 }

@@ -27,15 +27,12 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import java.util.Collection;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
-/* $endif $ */
 
 public class RemoteSoapProvisioning
 {
   public static GetQuotaResponse invokeJaxb(@NotNull GetQuotaRequest getQuotaUsageRequest, String server)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return new GetQuotaResponse(
@@ -49,14 +46,10 @@ public class RemoteSoapProvisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public static Collection<QuotaUsage> getQuotaUsage(String server)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return ZimbraListWrapper.wrapQuotaUsages(SoapProvisioning.getAdminInstance().getQuotaUsage(server));
@@ -65,8 +58,5 @@ public class RemoteSoapProvisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 }

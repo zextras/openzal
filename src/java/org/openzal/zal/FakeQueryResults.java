@@ -40,90 +40,67 @@ public class FakeQueryResults extends QueryResults
     super(
       new ZimbraQueryResults(){
 
-            @Override
-            public void resetIterator() throws ServiceException
-            {
+        @Override
+        public void resetIterator() throws ServiceException
+        {
 
-            }
+        }
 
-            @Override
-            public ZimbraHit getNext() throws ServiceException
-            {
-              return null;
-            }
+        @Override
+        public ZimbraHit getNext() throws ServiceException
+        {
+          return null;
+        }
 
-            @Override
-            public ZimbraHit peekNext() throws ServiceException
-            {
-              return null;
-            }
+        @Override
+        public ZimbraHit peekNext() throws ServiceException
+        {
+          return null;
+        }
 
-            @Override
-            public ZimbraHit skipToHit(int hitNo) throws ServiceException
-            {
-              return null;
-            }
+        @Override
+        public ZimbraHit skipToHit(int hitNo) throws ServiceException
+        {
+          return null;
+        }
 
-            @Override
-            public boolean hasNext() throws ServiceException
-            {
-              return false;
-            }
+        @Override
+        public boolean hasNext() throws ServiceException
+        {
+          return false;
+        }
 
-            @Override
-            public SortBy getSortBy()
-            {
-              return null;
-            }
+        @Override
+        public SortBy getSortBy()
+        {
+          return null;
+        }
 
-            @Override
-            public List<QueryInfo> getResultInfo()
-            {
-              return null;
-            }
+        @Override
+        public List<QueryInfo> getResultInfo()
+        {
+          return null;
+        }
 
-        /* $if ZimbraVersion >= 8.0.0 $ */
-            @Override
-            public long getCursorOffset()
-            {
-              return 0;
-            }
+        @Override
+        public long getCursorOffset()
+        {
+          return 0;
+        }
 
-            @Override
-            public void close() throws IOException
-            {
+        @Override
+        public void close() throws IOException
+        {
 
-            }
-        /* $endif $ */
-
+        }
 
         /* $if ZimbraVersion >= 8.0.2 $ */
-            @Override
-            public boolean isPreSorted()
-            {
-              return false;
-            }
-      /* $endif $ */
-
-      /* $if ZimbraVersion < 8.0.0 $
-
-            @Override
-            public ZimbraHit getFirstHit() throws ServiceException
-            {
-              return null;
-            }
-
-            @Override
-            public void doneWithSearchResults() throws ServiceException
-            {
-
-            }
-            @Override
-            public int estimateResultSize() throws ServiceException
-            {
-              return 0;
-            }
-         $endif $*/
+        @Override
+        public boolean isPreSorted()
+        {
+          return false;
+        }
+        /* $endif $ */
       }
     );
     mZimbraQueryResults = zimbraQueryResults;

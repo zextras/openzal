@@ -20,13 +20,10 @@
 
 package org.openzal.zal;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
-/* $endif $ */
 import org.jetbrains.annotations.NotNull;
 
 public class Comment extends Item
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final com.zimbra.cs.mailbox.Comment mComment;
 
   public Comment(@NotNull Object item)
@@ -44,21 +41,4 @@ public class Comment extends Item
   {
     return mComment.getCreatorAccountId();
   }
-/* $else$
-  public Comment(@NotNull Object item)
-  {
-    super(item);
-    throw new UnsupportedOperationException();
-  }
-
-  public String getText()
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  public String getCreatorAccountId()
-  {
-    throw new UnsupportedOperationException();
-  }
- $endif $ */
 }

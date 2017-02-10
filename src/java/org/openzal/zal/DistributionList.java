@@ -100,7 +100,6 @@ public class DistributionList extends Entry
 
   public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> zimbraPrefAllowAddressForDelegatedSender)
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       mDistributionList.setPrefAllowAddressForDelegatedSender(
@@ -111,7 +110,6 @@ public class DistributionList extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   @NotNull
@@ -123,11 +121,7 @@ public class DistributionList extends Entry
   @NotNull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return Arrays.asList(mDistributionList.getPrefAllowAddressForDelegatedSender());
-    /* $else $
-    return Collections.emptyList();
-    /* $endif $ */
   }
 
   public String getId()

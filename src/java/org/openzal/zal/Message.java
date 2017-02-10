@@ -61,11 +61,11 @@ public class Message extends Item
 
     public int getCalendarItemId()
     {
-/* $if ZimbraVersion >= 8.0.5$ */
+      /* $if ZimbraVersion >= 8.0.5 $ */
       return mCalendarItemInfo.getCalendarItemId().getId();
-/* $else$
+      /* $else$
       return mCalendarItemInfo.getCalendarItemId();
-$endif$ */
+      /* $endif$ */
     }
   }
 
@@ -83,11 +83,7 @@ $endif$ */
 
   public String getSortRecipients()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mMessage.getSortRecipients();
-    /* $else $
-    return mMessage.getRecipients();
-    /* $endif $ */
   }
 
   public MimeMessage getMimeMessage(boolean runConverters)

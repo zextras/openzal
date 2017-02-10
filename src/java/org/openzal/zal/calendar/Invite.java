@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.cs.mailbox.Metadata;
 import org.openzal.zal.Item;
@@ -44,11 +45,7 @@ import com.zimbra.cs.mailbox.calendar.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/* $if MajorZimbraVersion <= 7 $
-import com.zimbra.cs.mailbox.calendar.*;
-   $else$ */
 import com.zimbra.common.calendar.*;
-/* $endif$ */
 
 public class Invite
 {
@@ -280,6 +277,32 @@ public class Invite
       return null;
     }
     return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
+  }
+
+  @VisibleForTesting
+  public void setOrganizer(String address, String cn)
+  {
+    try
+    {
+      if (address != null || cn != null)
+      {
+        mInvite.setOrganizer(new ZOrganizer(address, cn));
+      }
+      else
+      {
+        mInvite.setOrganizer(null);
+      }
+    }
+    catch (Exception ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+  }
+
+  @VisibleForTesting
+  public void setIsOrganizer(boolean b)
+  {
+    mInvite.setIsOrganizer(b);
   }
 
   public long getUtcLastModify()
@@ -735,19 +758,7 @@ public class Invite
 
   public Invite newCopy()
   {
-    /* $if ZimbraVersion >= 6.0.13 && ZimbraVersion != 7.0.0 && ZimbraVersion < 8.0.0 $
-    try
-    {
-      return new Invite(mInvite.newCopy());
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else $ */
     return new Invite(mInvite.newCopy());
-    /* $endif $ */
-
   }
 
   public void setMailItemId(int id)
@@ -813,11 +824,7 @@ public class Invite
     MimeBodyPart icalPart;
     try {
       ZCalendar.ZVCalendar cal = mInvite.newToICalendar(true);
-  /* $if ZimbraVersion <= 7.1.0 $
-      icalPart = CalendarMailSender.makeICalIntoMimePart(null, cal);
-  /* $else$ */
       icalPart = CalendarMailSender.makeICalIntoMimePart(cal);
-  /* $endif $ */
       return icalPart.getInputStream();
     }
     catch (ServiceException ex)

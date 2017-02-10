@@ -51,11 +51,7 @@ public class RedoLogInput
   public String[] readUTFArray()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mRedoLogInput.readUTFArray();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   public long readLong()

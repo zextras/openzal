@@ -37,11 +37,7 @@ public class AttributeInfo
   {
     try
     {
-      /* $if ZimbraVersion > 6.0.7 $ */
       mAttributeInfo.checkValue(value, checkImmutable, null);
-      /* $else $
-      mAttributeInfo.checkValue(value, checkImmutable);
-      /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -51,11 +47,7 @@ public class AttributeInfo
 
   public boolean isDeprecated()
   {
-    /* $if ZimbraVersion >= 7.0.1 $ */
     return mAttributeInfo.isDeprecated();
-    /* $else $
-    return mAttributeInfo.getDeprecatedSince() != null;
-    /* $endif $ */
   }
 
   @Nullable

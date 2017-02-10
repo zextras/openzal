@@ -28,11 +28,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.mailbox.ACL;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.Volume;
-/* $else $
-import com.zimbra.cs.store.file.Volume;
-/* $endif $ */
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -222,7 +218,6 @@ public class ZimbraListWrapper
   @NotNull
   public static List<UCService> wrapUCServices(@Nullable List ucServices)
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     if (ucServices == null || ucServices.size() == 0)
     {
       return Collections.emptyList();
@@ -235,9 +230,6 @@ public class ZimbraListWrapper
     }
 
     return list;
-/* $else$
-    throw new UnsupportedOperationException();
-/* $endif $ */
   }
 
 
@@ -293,14 +285,9 @@ public class ZimbraListWrapper
     return list;
   }
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull
   public static List<AccountQuotaInfo> wrapAccountQuotaInfos(@Nullable List<com.zimbra.soap.admin.type.AccountQuotaInfo> accountQuotas)
-  /* $else $
-  public static List<AccountQuotaInfo> wrapAccountQuotaInfos(List<Object> accountQuotas)
-  /* $endif $ */
   {
-/* $if ZimbraVersion >= 8.0.0 $ */
     if (accountQuotas == null || accountQuotas.size() == 0)
     {
       return Collections.emptyList();
@@ -320,9 +307,6 @@ public class ZimbraListWrapper
     }
 
     return list;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @NotNull

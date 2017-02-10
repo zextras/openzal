@@ -33,32 +33,15 @@ import com.zimbra.cs.gal.GalSearchControl;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
 import com.zimbra.common.soap.Element;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.Key;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.soap.type.GalSearchType;
 import com.zimbra.soap.type.TargetBy;
-/* $else $
-import com.zimbra.cs.account.ldap.LdapProvisioning;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-import java.io.IOException;
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
-import com.zimbra.cs.account.ldap.LdapFilter;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.Provisioning.TargetBy;
-import com.zimbra.cs.account.Provisioning.GranteeBy;
-/* $endif $ */
-
-/* $if ZimbraVersion >= 8.0.0 && ZimbraVersion < 8.0.6 $
+/* $if ZimbraVersion < 8.0.6 $
 import com.zimbra.common.account.Key.GranteeBy;
-   $endif$ */
+/* $endif$ */
 
 /* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
@@ -69,16 +52,16 @@ import com.zimbra.cs.mailbox.Contact;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.provisioning.Group;
 
-/* $if MajorZimbraVersion >= 8 $ */
-
-/* $elseif MajorZimbraVersion >= 7 $
-import com.zimbra.cs.account.Provisioning.GalSearchType;
-$endif$ */
-
 public class ProvisioningImp implements Provisioning
 {
+  /* $if ZimbraVersion >= 8.7.0 $ */
+  public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
+  /* $else $
+  public static String A_zimbraMaxAppSpecificPasswords                        = "";
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
+  /* $endif $ */
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static String A_zimbraMailDomainQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailDomainQuota;
   public static String A_zimbraPrefAllowAddressForDelegatedSender                   = com.zimbra.cs.account.Provisioning.A_zimbraPrefAllowAddressForDelegatedSender;
   public static String DEFAULT_COS_NAME                                             = com.zimbra.cs.account.Provisioning.DEFAULT_COS_NAME;
@@ -111,46 +94,15 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMobilePolicyRequireSignedSMIMEAlgorithm              = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyRequireSignedSMIMEAlgorithm;
   public static String A_zimbraMobilePolicyRequireSignedSMIMEMessages               = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyRequireSignedSMIMEMessages;
   public static String A_zimbraMobilePolicySuppressDeviceEncryption                 = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicySuppressDeviceEncryption;
-  /* $else $
-  public static       String A_zimbraMailDomainQuota                    = "";
-  public static       String A_zimbraPrefAllowAddressForDelegatedSender = "";
-  public static       String DEFAULT_COS_NAME                           = "";
-  public static       String DEFAULT_EXTERNAL_COS_NAME                  = "";
-  public static       String A_zimbraMobilePolicyAllowBluetooth = "";
-  public static       String A_zimbraMobilePolicyAllowBrowser = "";
-  public static       String A_zimbraMobilePolicyAllowCamera = "";
-  public static       String A_zimbraMobilePolicyAllowConsumerEmail = "";
-  public static       String A_zimbraMobilePolicyAllowDesktopSync = "";
-  public static       String A_zimbraMobilePolicyAllowHTMLEmail = "";
-  public static       String A_zimbraMobilePolicyAllowInternetSharing = "";
-  public static       String A_zimbraMobilePolicyAllowIrDA = "";
-  public static       String A_zimbraMobilePolicyAllowPOPIMAPEmail = "";
-  public static       String A_zimbraMobilePolicyAllowRemoteDesktop = "";
-  public static       String A_zimbraMobilePolicyAllowSMIMEEncryptionAlgorithmNegotiation = "";
-  public static       String A_zimbraMobilePolicyAllowSMIMESoftCerts = "";
-  public static       String A_zimbraMobilePolicyAllowStorageCard = "";
-  public static       String A_zimbraMobilePolicyAllowTextMessaging = "";
-  public static       String A_zimbraMobilePolicyAllowUnsignedApplications = "";
-  public static       String A_zimbraMobilePolicyAllowUnsignedInstallationPackages = "";
-  public static       String A_zimbraMobilePolicyAllowWiFi = "";
-  public static       String A_zimbraMobilePolicyMaxCalendarAgeFilter = "";
-  public static       String A_zimbraMobilePolicyMaxEmailAgeFilter = "";
-  public static       String A_zimbraMobilePolicyMaxEmailBodyTruncationSize = "";
-  public static       String A_zimbraMobilePolicyMaxEmailHTMLBodyTruncationSize = "";
-  public static       String A_zimbraMobilePolicyRequireDeviceEncryption = "";
-  public static       String A_zimbraMobilePolicyRequireEncryptedSMIMEMessages = "";
-  public static       String A_zimbraMobilePolicyRequireEncryptionSMIMEAlgorithm = "";
-  public static       String A_zimbraMobilePolicyRequireManualSyncWhenRoaming = "";
-  public static       String A_zimbraMobilePolicyRequireSignedSMIMEAlgorithm = "";
-  public static       String A_zimbraMobilePolicyRequireSignedSMIMEMessages = "";
-  public static       String A_zimbraMobilePolicySuppressDeviceEncryption = "";
-  /* $endif $ */
+  public static String A_zimbraMailOutgoingSieveScript                              = com.zimbra.cs.account.Provisioning.A_zimbraMailOutgoingSieveScript;
+  public static String A_zimbraMailTrustedSenderListMaxNumEntries                   = com.zimbra.cs.account.Provisioning.A_zimbraMailTrustedSenderListMaxNumEntries;
 
-  /* $if ZimbraVersion >= 7.0.0 $ */
-  public static String A_zimbraMailOutgoingSieveScript = com.zimbra.cs.account.Provisioning.A_zimbraMailOutgoingSieveScript;
-  /* $else $
-  public static       String A_zimbraMailOutgoingSieveScript            = "";
-  /* $endif $ */
+/* $if ZimbraVersion >= 8.5.0 $ */
+  public static String A_zimbraAuthTokens                                     = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
+/* $else$
+  public static String A_zimbraAuthTokens                                     = "";
+/* $endif$ */
+
 
   public static String A_zimbraACE                                            = com.zimbra.cs.account.Provisioning.A_zimbraACE;
   public static String A_zimbraDomainCOSMaxAccounts                           = com.zimbra.cs.account.Provisioning.A_zimbraDomainCOSMaxAccounts;
@@ -228,6 +180,11 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
+  public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
+  public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
+  public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
+
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
@@ -310,12 +267,7 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = null;
-/* $if MajorZimbraVersion >= 8 $ */
-      distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.id.toZimbra(), id);
-/* $else$
-      distributionList = mProvisioning.getDistributionListById(id);
-   $endif$ */
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.id.toZimbra(), id);
       if (distributionList == null)
       {
         return null;
@@ -338,12 +290,7 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = null;
-/* $if MajorZimbraVersion >= 8 $ */
-      distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.name.toZimbra(), name);
-/* $else$
-      distributionList = mProvisioning.getDistributionListByName(name);
-   $endif$ */
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.name.toZimbra(), name);
       if (distributionList == null)
       {
         return null;
@@ -366,7 +313,6 @@ public class ProvisioningImp implements Provisioning
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
     try
     {
-    /* $if MajorZimbraVersion >= 8 $ */
       com.zimbra.cs.account.SearchDirectoryOptions searchOptions = new com.zimbra.cs.account.SearchDirectoryOptions();
       ZLdapFilterFactory zldapFilterFactory = ZLdapFilterFactory.getInstance();
       searchOptions.setTypes(com.zimbra.cs.account.SearchDirectoryOptions.ObjectType.accounts);
@@ -375,18 +321,6 @@ public class ProvisioningImp implements Provisioning
         com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS
       );
       mProvisioning.searchDirectory(searchOptions, namedEntryVisitor);
-    /* $else$
-      com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-      searchOptions.setFlags(
-        com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
-        com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
-        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
-      );
-      for(com.zimbra.cs.account.Server server : mProvisioning.getAllServers())
-      {
-        mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
-      }
-    $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -403,18 +337,9 @@ public class ProvisioningImp implements Provisioning
     {
       com.zimbra.cs.account.Server server = mProvisioning.getLocalServer();
 
-      /* $if MajorZimbraVersion >= 8 $ */
       com.zimbra.cs.account.SearchAccountsOptions searchOptions = new com.zimbra.cs.account.SearchAccountsOptions();
       searchOptions.setIncludeType(com.zimbra.cs.account.SearchAccountsOptions.IncludeType.ACCOUNTS_AND_CALENDAR_RESOURCES);
       searchOptions.setMakeObjectOpt(com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
-      /* $else$
-      com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-      searchOptions.setFlags(
-        com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
-        com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
-        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
-      );
-      $endif$ */
 
       mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
     }
@@ -471,7 +396,6 @@ public class ProvisioningImp implements Provisioning
     {
       ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
 
-/* $if ZimbraVersion >= 8.0.0 $ */
       SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
       searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
       searchOptions.setTypes(
@@ -481,24 +405,6 @@ public class ProvisioningImp implements Provisioning
       searchOptions.setFilter(ZLdapFilterFactory.getInstance().accountById(accountId.getId()));
 
       mProvisioning.searchDirectory(searchOptions, zimbraVisitor);
-/* $else $
-      String query = "(" + com.zimbra.cs.account.Provisioning.A_zimbraId + "=" + accountId.getId() + ")";
-      com.zimbra.cs.account.Provisioning.SearchOptions searchOptions = new com.zimbra.cs.account.Provisioning.SearchOptions();
-      searchOptions.setFlags(
-          com.zimbra.cs.account.Provisioning.SO_NO_ACCOUNT_DEFAULTS |
-          com.zimbra.cs.account.Provisioning.SA_CALENDAR_RESOURCE_FLAG |
-          com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
-      );
-      searchOptions.setQuery(query);
-      List<NamedEntry> accounts = mProvisioning.searchDirectory(searchOptions);
-
-      if (accounts.size() != 1)
-      {
-        return;
-      }
-
-      zimbraVisitor.visit(accounts.get(0));
-/* $endif $ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -540,7 +446,6 @@ public class ProvisioningImp implements Provisioning
   @Override
   public Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       com.zimbra.cs.account.Group distributionList =
@@ -555,9 +460,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.createUnableToFindDistributionList(list, e);
     }
-    /* $else $
-    return getDistributionListByName(list).getAllMembersSet();
-    /* $endif $ */
   }
 
   @Override
@@ -684,7 +586,6 @@ public class ProvisioningImp implements Provisioning
       throw ExceptionWrapper.wrap(e);
     }
   }
-
 
   @NotNull
   @Override
@@ -1111,7 +1012,6 @@ public class ProvisioningImp implements Provisioning
   public List<UCService> getAllUCServices()
     throws ZimbraException
   {
-    /* $if MajorZimbraVersion >= 8 $ */
     try
     {
       return ZimbraListWrapper.wrapUCServices(mProvisioning.getAllUCServices());
@@ -1120,9 +1020,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1338,7 +1235,6 @@ public class ProvisioningImp implements Provisioning
     String right
   ) throws NoSuchGrantException
   {
-    /* $if ZimbraVersion >= 8.0.0 $  */
     try
     {
       mProvisioning.revokeRight(
@@ -1356,9 +1252,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1713,13 +1606,10 @@ public class ProvisioningImp implements Provisioning
   public List<Account> getAllDelegatedAdminAccounts() throws ZimbraException
   {
     List<NamedEntry> entryList;
-    /* $if MajorZimbraVersion >= 8 $ */
     SearchDirectoryOptions opts = new SearchDirectoryOptions();
     ZLdapFilterFactory zLdapFilterFactory = ZLdapFilterFactory.getInstance();
-    /* $endif $ */
     try
     {
-      /* $if MajorZimbraVersion >= 8 $ */
       ZLdapFilter filter = ZLdapFilterFactory.getInstance().fromFilterString(
         ZLdapFilterFactory.FilterId.ALL_ACCOUNTS_ONLY,
         zLdapFilterFactory.equalityFilter(A_zimbraIsDelegatedAdminAccount, "TRUE", true)
@@ -1727,15 +1617,6 @@ public class ProvisioningImp implements Provisioning
       opts.setFilter(filter);
       opts.setTypes(SearchDirectoryOptions.ObjectType.accounts);
       entryList = mProvisioning.searchDirectory(opts);
-      /* $else$
-      entryList = mProvisioning.searchAccounts(
-        "(" + com.zimbra.cs.account.Provisioning.A_zimbraIsDelegatedAdminAccount + "=TRUE)",
-        new String[] { com.zimbra.cs.account.Provisioning.A_zimbraId },
-        null,
-        false,
-        com.zimbra.cs.account.Provisioning.SA_ACCOUNT_FLAG
-      );
-      $endif$ */
     }
     catch (ServiceException e)
     {
@@ -1750,7 +1631,6 @@ public class ProvisioningImp implements Provisioning
   public Group getGroupById(String dlStr)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.id, dlStr);
@@ -1767,9 +1647,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1777,7 +1654,6 @@ public class ProvisioningImp implements Provisioning
   public Group getGroupByName(String dlStr)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.name, dlStr);
@@ -1794,9 +1670,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1807,16 +1680,30 @@ public class ProvisioningImp implements Provisioning
     String right
   ) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       // target
-      com.zimbra.cs.account.Entry targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
-        mProvisioning,
-        com.zimbra.cs.account.accesscontrol.TargetType.dl,
-        com.zimbra.soap.type.TargetBy.name,
-        target
-      );
+      com.zimbra.cs.account.Entry targetEntry = null;
+      try
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.account,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
+      catch (Exception ignore) {}
+
+      if( targetEntry == null )
+      {
+        targetEntry = com.zimbra.cs.account.accesscontrol.TargetType.lookupTarget(
+          mProvisioning,
+          TargetType.dl,
+          com.zimbra.soap.type.TargetBy.name,
+          target
+        );
+      }
 
       Right r = RightManager.getInstance().getRight(right);
 
@@ -1844,9 +1731,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(ex);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Override
@@ -1919,11 +1803,7 @@ public class ProvisioningImp implements Provisioning
     searchParams.setLimit(limit);
     searchParams.setIdOnly(false);
 
-/* $if MajorZimbraVersion >= 7 $ */
     searchParams.setType(GalSearchType.all);
-/* $else$
-    searchParams.setType(com.zimbra.cs.account.Provisioning.GAL_SEARCH_TYPE.ALL);
-   $endif$ */
 
     GalSearchResult result = new GalSearchResult();
     GalSearchCallback callback = new GalSearchCallback(skip, searchParams, result);
@@ -2019,14 +1899,14 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  private static class GalSearchCallback extends GalSearchResultCallback
+  public static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;
     private final GalSearchResult mSearchResult;
     private int mCounter = 0;
 
 
-    GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
+    public GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
     {
       super(params);
       mSkip = skip;
@@ -2122,4 +2002,10 @@ public class ProvisioningImp implements Provisioning
     visitAllDomains(visitor);
     return visitor.getAliases();
   }
+
+  public void invalidateAllCache()
+  {
+    com.zimbra.cs.account.accesscontrol.PermissionCache.invalidateAllCache();
+  }
+
 }

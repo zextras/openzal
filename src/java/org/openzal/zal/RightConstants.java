@@ -38,20 +38,18 @@ public class RightConstants
   public static String RT_viewAdminSavedSearch = RightConsts.RT_viewAdminSavedSearch;
   public static String RT_domainAdminConsoleDLSharesTabRights = RightConsts.RT_domainAdminConsoleDLSharesTabRights;
   public static String RT_getAccountInfo = RightConsts.RT_getAccountInfo;
-
-  /* $if ZimbraVersion != 7.0.1 && ZimbraVersion != 7.1.0 $ */
   public static String RT_configureQuota = RightConsts.RT_configureQuota;
-  /* $else $
-  public static String RT_configureQuota = "configureQuota";
-  /* $endif $ */
-
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static String RT_sendOnBehalfOf = RightConsts.RT_sendOnBehalfOf;
   public static String RT_sendOnBehalfOfDistList = RightConsts.RT_sendOnBehalfOfDistList;
   public static String RT_sendAsDistList = RightConsts.RT_sendAsDistList;
-  /* $else $
-  public static String RT_sendOnBehalfOf = null;
-  public static String RT_sendOnBehalfOfDistList = null;
-  public static String RT_sendAsDistList = null;
-  /* $endif $ */
+  public static String RT_addGroupAlias = RightConsts.RT_addGroupAlias;
+  public static String RT_addGroupMember = RightConsts.RT_addGroupMember;
+  public static String RT_createGroup = RightConsts.RT_createGroup;
+  public static String RT_deleteGroup = RightConsts.RT_deleteGroup;
+  public static String RT_getGroup = RightConsts.RT_getGroup;
+  public static String RT_listGroup = RightConsts.RT_listGroup;
+  public static String RT_modifyGroup = RightConsts.RT_modifyGroup;
+  public static String RT_removeGroupAlias = RightConsts.RT_removeGroupAlias;
+  public static String RT_removeGroupMember = RightConsts.RT_removeGroupMember;
+  public static String RT_renameGroup = RightConsts.RT_renameGroup;
 }

@@ -28,9 +28,7 @@ import java.util.Set;
 
 public class Group
 {
-  /* $if ZimbraVersion >= 8.0.0 $ */
   @NotNull private final com.zimbra.cs.account.Group mGroup;
-  /* $endif $ */
 
   public Group(@NotNull Object group)
   {
@@ -38,18 +36,12 @@ public class Group
     {
       throw new NullPointerException();
     }
-  /* $if ZimbraVersion >= 8.0.0 $ */
     mGroup = (com.zimbra.cs.account.Group) group;
-  /* $else $
-    throw new UnsupportedOperationException();
-   $endif $ */
-
   }
 
   @NotNull
   public Set<String> getAllMembersSet()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       return mGroup.getAllMembersSet();
@@ -58,9 +50,6 @@ public class Group
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
 }

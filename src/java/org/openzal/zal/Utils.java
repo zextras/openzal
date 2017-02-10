@@ -27,17 +27,8 @@ import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
 import org.openzal.zal.exceptions.ExceptionWrapper;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.common.calendar.WellKnownTimeZones;
-/* $else $
-import com.zimbra.cs.mailbox.calendar.WellKnownTimeZones;
-import com.zimbra.cs.mailbox.calendar.ZCalendar;
-import com.zimbra.cs.mailbox.calendar.ICalTimeZone;
-/* $endif $ */
-/* $if ZimbraVersion < 8.0.0 $
-import com.zimbra.cs.mailbox.Tag;
-/* $endif $ */
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.BEncoding;
 import com.zimbra.common.util.ByteUtil;
@@ -161,15 +152,6 @@ public abstract class Utils
     }
   }
 
-  public static String bitmaskToTags(long tagBitmask)
-  {
-    /* $if ZimbraVersion < 8.0.0 $
-    return Tag.bitmaskToTags(tagBitmask);
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
   public static String encodeFSSafeBase64(byte[] data)
   {
     return ByteUtil.encodeFSSafeBase64(data);
@@ -184,15 +166,11 @@ public abstract class Utils
   {
     try
     {
-/* $if ZimbraVersion < 6.0.8 $
-      ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, null, null);
-   $endif$ */
-
-/* $if ZimbraVersion >= 6.0.8 && ZimbraVersion <= 8.0.9$
+      /* $if ZimbraVersion <= 8.0.9$
       ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, true);
-   $endif$ */
+      /* $endif$ */
 
-/* $if ZimbraVersion >= 8.5.0 $ */
+      /* $if ZimbraVersion >= 8.5.0 $ */
       provisioning.flushCache(CacheEntryType.zimlet, null);
       ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
 
@@ -220,20 +198,19 @@ public abstract class Utils
       }
       // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
       provisioning.flushCache(CacheEntryType.zimlet, null);
-/* $endif$ */
+      /* $endif$ */
     }
     catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
-/* $if ZimbraVersion >= 8.5.0 $ */
+    /* $if ZimbraVersion >= 8.5.0 $ */
     catch (ZimletException e)
     {
-      // In Zimbra >= 8.5.0 if something fails, flush the cache.
       provisioning.flushCache(CacheEntryType.zimlet, null);
       throw ExceptionWrapper.wrap(e);
     }
-/* $endif$ */
+    /* $endif$ */
   }
 
   public static boolean isGzipped(File file) throws IOException
@@ -338,15 +315,7 @@ public abstract class Utils
   {
     try
     {
-      MessageDigest digest;
-      if (ZimbraVersion.current.isAtLeast(8))
-      {
-        digest = MessageDigest.getInstance("SHA-256");
-      }
-      else
-      {
-        digest = MessageDigest.getInstance("SHA-1");
-      }
+      MessageDigest digest= MessageDigest.getInstance("SHA-256");
       byte[] buffer = new byte[1024];
       int read;
       while ( (read = inputStream.read(buffer)) >= 0)

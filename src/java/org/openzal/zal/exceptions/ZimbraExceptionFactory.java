@@ -41,7 +41,11 @@ public class ZimbraExceptionFactory
     {
       return new ChangePasswordAccountException(accountServiceException);
     }
+    /* $if ZimbraVersion >= 8.7.2 $ */
+    else if (code.equals("account.NO_SUCH_DOMAIN"))
+    /* $else $
     else if (code.equals(com.zimbra.cs.account.AccountServiceException.NO_SUCH_DOMAIN))
+    /* $endif $ */
     {
       return new NoSuchDomainException(accountServiceException);
     }
@@ -116,11 +120,7 @@ public class ZimbraExceptionFactory
   }
 
   static ZimbraException wrapVolumeServiceException(
-/* $if MajorZimbraVersion <= 7 $
-    com.zimbra.cs.store.file.VolumeServiceException volumeServiceException
-  $else$ */
-com.zimbra.cs.volume.VolumeServiceException volumeServiceException
-/* $endif$ */
+    com.zimbra.cs.volume.VolumeServiceException volumeServiceException
   )
   {
     return new VolumeServiceException(volumeServiceException);

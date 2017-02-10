@@ -40,17 +40,7 @@ import java.util.*;
 
 import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
 
-/* $if MajorZimbraVersion <= 7 $
-import com.zimbra.cs.mailbox.calendar.TimeZoneMap;
-import com.zimbra.cs.mailbox.calendar.ZRecur.ZWeekDay;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ICalTok;
-import com.zimbra.cs.mailbox.calendar.ZCalendar;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZComponent;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZProperty;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZVCalendar;
-   $else$ */
 import com.zimbra.common.calendar.*;
-/* $endif$ */
 
 
 public class CalendarMime
@@ -216,11 +206,7 @@ public class CalendarMime
 
     MimeBodyPart icalPart;
     try {
-  /* $if ZimbraVersion <= 7.1.0 $
-      icalPart = CalendarMailSender.makeICalIntoMimePart(null, cal);
-  /* $else$ */
       icalPart = CalendarMailSender.makeICalIntoMimePart(cal);
-  /* $endif $ */
     }
     catch (ServiceException ex)
     {

@@ -42,6 +42,34 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
   private final SoapHandler            mSoapHandler;
   private final DocumentHandler        mOriginalDocumentHandler;
 
+  /* $if ZimbraVersion == 8.6.0 $ */
+  static boolean p7=false;
+  static Method sDefendsAgainstDelegateAdminAccountHarvesting;
+
+  static
+  {
+    try
+    {
+      Class<?> c = Class.forName("com.zimbra.soap.DocumentHandler");
+      Method[] allMethods = c.getDeclaredMethods();
+
+      for (final Method declaredMethod : allMethods)
+      {
+        if (declaredMethod.getName().contains("defendsAgainstDelegateAdminAccountHarvesting")) {
+          p7 = true;
+          sDefendsAgainstDelegateAdminAccountHarvesting = declaredMethod;
+          break;
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+  /* $endif $ */
+
   public InternalOverrideAdminDocumentHandler(
     SoapHandler soapHandler,
     DocumentHandler originalDocumentHandler
@@ -169,4 +197,30 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
   {
     mOriginalDocumentHandler.logAuditAccess(delegatingAcctId, authedAcctId, targetAcctId);
   }
+
+  public boolean defendsAgainstDelegateAdminAccountHarvesting() {
+    /* $if ZimbraVersion >= 8.7.0 $ */
+    return mOriginalDocumentHandler.defendsAgainstDelegateAdminAccountHarvesting();
+    /* $elseif ZimbraVersion == 8.6.0 $
+    if (p7){
+      try {
+        return (Boolean)sDefendsAgainstDelegateAdminAccountHarvesting.invoke(mOriginalDocumentHandler);
+      }
+      catch (InvocationTargetException x) {
+        ZimbraLog.extensions.fatal("ZAL Reflection Exception: " + Utils.exceptionToString(x));
+        throw new RuntimeException(x);
+      }
+      catch (IllegalAccessException x) {
+        ZimbraLog.extensions.fatal("ZAL Reflection Exception: " + Utils.exceptionToString(x));
+        throw new RuntimeException(x);
+      }
+    }else
+    {
+      throw new UnsupportedOperationException();
+    }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
 }

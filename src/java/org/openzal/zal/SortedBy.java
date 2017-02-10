@@ -28,11 +28,7 @@ public class SortedBy
   private final SortBy mSortBy;
 
   @NotNull public static SortedBy NONE      = new SortedBy(SortBy.NONE);
-  /* $if ZimbraVersion >= 8.0.0 $ */
   public static          SortedBy DATE_DESC = new SortedBy(SortBy.DATE_DESC);
-  /* $else $
-  public static SortedBy DATE_DESC = new SortedBy(SortBy.DATE_DESCENDING);
-  /* $endif $ */
 
   protected SortedBy(SortBy sortBy)
   {

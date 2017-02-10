@@ -227,11 +227,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
   @Override
   public boolean supports(StoreFeature feature)
   {
-    /* $if ZimbraVersion >= 7.2.0 $ */
     return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   @Override
@@ -246,14 +242,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
   {
     try
     {
-      com.zimbra.cs.store.Blob blob;
-      /* $if ZimbraVersion >= 8.0.0 $ */
-      blob = sm.storeIncoming(data, storeAsIs);
-      /* $elseif ZimbraVersion >= 7.0.0 $
-      blob = sm.storeIncoming(data, null, storeAsIs);
-      /* $else $
-      blob = sm.storeIncoming(data, 0L, null, storeAsIs);
-      /* $endif $ */
+      com.zimbra.cs.store.Blob blob = sm.storeIncoming(data, storeAsIs);
       return BlobWrap.wrapZimbraBlob(blob, mVolume.getId());
     }
     catch (ServiceException e)
@@ -293,11 +282,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
   {
     try
     {
-      /* $if ZimbraVersion >= 7.2.0 $ */
       return sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class), blobs);
-      /* $else $
-      return sm.deleteStore(mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class));
-      /* $endif $ */
     }
     catch (ServiceException e)
     {

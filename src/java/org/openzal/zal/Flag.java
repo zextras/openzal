@@ -29,49 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class Flag extends Item
 {
-  /* $if ZimbraVersion < 8.0.0 $
-    public static int ID_FROM_ME = com.zimbra.cs.mailbox.Flag.ID_FLAG_FROM_ME;
-    public static int ID_ATTACHED = com.zimbra.cs.mailbox.Flag.ID_FLAG_ATTACHED;
-    public static int ID_REPLIED = com.zimbra.cs.mailbox.Flag.ID_FLAG_REPLIED;
-    public static int ID_FORWARDED = com.zimbra.cs.mailbox.Flag.ID_FLAG_FORWARDED;
-    public static int ID_COPIED = com.zimbra.cs.mailbox.Flag.ID_FLAG_COPIED;
-    public static int ID_FLAGGED = com.zimbra.cs.mailbox.Flag.ID_FLAG_FLAGGED;
-    public static int ID_DRAFT = com.zimbra.cs.mailbox.Flag.ID_FLAG_DRAFT;
-    public static int ID_DELETED = com.zimbra.cs.mailbox.Flag.ID_FLAG_DELETED;
-    public static int ID_NOTIFIED = com.zimbra.cs.mailbox.Flag.ID_FLAG_NOTIFIED;
-    public static int ID_UNREAD = com.zimbra.cs.mailbox.Flag.ID_FLAG_UNREAD;
-    public static int ID_HIGH_PRIORITY = com.zimbra.cs.mailbox.Flag.ID_FLAG_HIGH_PRIORITY;
-    public static int ID_LOW_PRIORITY = com.zimbra.cs.mailbox.Flag.ID_FLAG_LOW_PRIORITY;
-    public static int ID_VERSIONED = com.zimbra.cs.mailbox.Flag.ID_FLAG_VERSIONED;
-    public static int ID_INDEXING_DEFERRED = com.zimbra.cs.mailbox.Flag.ID_FLAG_INDEXING_DEFERRED;
-    public static int ID_SUBSCRIBED = com.zimbra.cs.mailbox.Flag.ID_FLAG_SUBSCRIBED;
-    public static int ID_EXCLUDE_FREEBUSY = com.zimbra.cs.mailbox.Flag.ID_FLAG_EXCLUDE_FREEBUSY;
-    public static int ID_CHECKED = com.zimbra.cs.mailbox.Flag.ID_FLAG_CHECKED;
-    public static int ID_NO_INHERIT = com.zimbra.cs.mailbox.Flag.ID_FLAG_NO_INHERIT;
-    public static int ID_INVITE = com.zimbra.cs.mailbox.Flag.ID_FLAG_INVITE;
-    public static int ID_SYNCFOLDER = com.zimbra.cs.mailbox.Flag.ID_FLAG_SYNCFOLDER;
-    public static int ID_SYNC = com.zimbra.cs.mailbox.Flag.ID_FLAG_SYNC;
-    public static int ID_NO_INFERIORS = com.zimbra.cs.mailbox.Flag.ID_FLAG_NO_INFERIORS;
-    public static int ID_GLOBAL = com.zimbra.cs.mailbox.Flag.ID_FLAG_GLOBAL;
-    public static int ID_UNCACHED = com.zimbra.cs.mailbox.Flag.ID_FLAG_UNCACHED;
-
-    public static int ID_ARCHIVED         = 0;
-    public static int ID_IN_DUMPSTER      = 0;
-    public static int ID_MUTED            = 0;
-    public static int ID_NOTE             = 0;
-    public static int ID_POPPED           = 0;
-    public static int ID_POST             = 0;
-    public static int ID_PRIORITY         = 0;
-
-    public static int BITMASK_POPPED      = 0;
-    public static int BITMASK_NOTE        = 0;
-    public static int BITMASK_PRIORITY    = 0;
-    public static int BITMASK_POST        = 0;
-    public static int BITMASK_MUTED       = 0;
-    public static int BITMASK_ARCHIVED    = 0;
-    public static int BITMASK_IN_DUMPSTER = 0;
-
-   $else$ */
   public static int ID_FROM_ME           = com.zimbra.cs.mailbox.Flag.ID_FROM_ME;
   public static int ID_ATTACHED          = com.zimbra.cs.mailbox.Flag.ID_ATTACHED;
   public static int ID_REPLIED           = com.zimbra.cs.mailbox.Flag.ID_REPLIED;
@@ -186,11 +143,7 @@ public final class Flag extends Item
 
   public boolean isSystemFlag()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     return mFlag.isSystemFlag();
-    /* $else $
-    return false;
-    /* $endif $ */
   }
 
   public String getName()

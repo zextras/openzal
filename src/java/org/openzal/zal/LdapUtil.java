@@ -20,32 +20,6 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
-/* $if ZimbraVersion < 8.0.0 $
-import org.openzal.zal.exceptions.ExceptionWrapper;
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
-import com.zimbra.cs.account.ldap.LdapEntry;
-/* $endif $ */
-
 public class LdapUtil
 {
-  public static void modifyAttrs(@NotNull Account account, Map<String, Object> attrs )
-  {
-    /* $if ZimbraVersion < 8.0.0 $
-    try
-    {
-      ZimbraLdapContext zlc = new ZimbraLdapContext(true);
-      com.zimbra.cs.account.Account zimbraAccount = account.toZimbra(com.zimbra.cs.account.Account.class);
-      com.zimbra.cs.account.ldap.LdapUtil.modifyAttrs(zlc, ((LdapEntry) zimbraAccount).getDN(), attrs, zimbraAccount);
-    }
-    catch (Exception t)
-    {
-      throw ExceptionWrapper.wrap(t);
-    }
-    /* $else $ */
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
 }

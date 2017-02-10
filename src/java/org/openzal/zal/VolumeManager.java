@@ -27,12 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.cs.volume.*;
-/* $else$
-import com.zimbra.cs.store.file.*;
-import com.zimbra.cs.db.*;
-/* $endif$ */
 import com.google.inject.Singleton;
 
 @Singleton
@@ -43,22 +38,16 @@ public class VolumeManager
   private static final short sFileGroupBits = 8;
   private static final short sFileBits = 12;
 
-  /* $if ZimbraVersion >= 8.0.0 $ */
   private final com.zimbra.cs.volume.VolumeManager  mVolumeManager;
 
   public VolumeManager()
   {
     mVolumeManager = com.zimbra.cs.volume.VolumeManager.getInstance();
   }
-  /* $endif $ */
 
   public List<StoreVolume> getAll()
   {
-    /* $if ZimbraVersion >= 8.0.0 $ */
     List<Volume> list = mVolumeManager.getAllVolumes();
-    /* $else$
-    List<Volume> list = Volume.getAll();
-    /* $endif$ */
 
     return ZimbraListWrapper.wrapVolumes(list);
   }
@@ -72,7 +61,6 @@ public class VolumeManager
     StoreVolume volumeToUpdate = getById(id);
 
     Volume vol;
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       Volume.Builder builder = Volume.builder();
@@ -104,54 +92,6 @@ public class VolumeManager
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    //TODO check synchronize.. check sVolumeMap..
-    if (path.startsWith(File.separator))
-    {
-      try
-      {
-        vol = Volume.update(Short.parseShort(id), type, name, path,
-                                   volumeToUpdate.getMboxGroupBits(),
-                                   volumeToUpdate.getMboxBits(),
-                                   volumeToUpdate.getFileGroupBits(),
-                                   volumeToUpdate.getFileBits(),
-                                   compressBlobs, compressionThreshold, false);
-        Volume.reloadVolumes();
-      }
-      catch (com.zimbra.cs.store.file.VolumeServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
-      catch (com.zimbra.common.service.ServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
-    }
-    else
-    {
-      com.zimbra.cs.db.DbPool.Connection conn = null;
-      try
-      {
-        conn = com.zimbra.cs.db.DbPool.getConnection();
-        vol = DbVolume.update(conn, Short.parseShort(id), type, name, path,
-                                 volumeToUpdate.getMboxGroupBits(),
-                                 volumeToUpdate.getMboxBits(),
-                                 volumeToUpdate.getFileGroupBits(),
-                                 volumeToUpdate.getFileBits(),
-                                 compressBlobs, compressionThreshold
-        );
-        conn.commit();
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-      finally
-      {
-        com.zimbra.cs.db.DbPool.quietClose(conn);
-      }
-    }
-    /* $endif$ */
     return new StoreVolume(vol);
   }
 
@@ -161,7 +101,6 @@ public class VolumeManager
     throws ZimbraException
   {
     Volume vol;
-    /* $if ZimbraVersion >= 8.0.0 $ */
     try
     {
       Volume.Builder builder = Volume.builder();
@@ -194,48 +133,6 @@ public class VolumeManager
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else$
-    //TODO check synchronize.. check sVolumeMap..
-    if (path.startsWith(File.separator))
-    {
-      try
-      {
-        vol = Volume.create(id, type, name, path,
-                            sMboxGroupBits, sMboxBits, sFileGroupBits, sFileBits,
-                            compressBlobs, compressionThreshold, false);
-      }
-      catch (com.zimbra.cs.store.file.VolumeServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
-      catch (com.zimbra.common.service.ServiceException e)
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
-    }
-    else
-    {
-      com.zimbra.cs.db.DbPool.Connection conn = null;
-      try
-      {
-        conn = com.zimbra.cs.db.DbPool.getConnection();
-        vol = DbVolume.create(conn, id, type, name, path,
-                              sMboxGroupBits, sMboxBits, sFileGroupBits, sFileBits,
-                              compressBlobs, compressionThreshold
-        );
-        conn.commit();
-        Volume.reloadVolumes();
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-      finally
-      {
-        com.zimbra.cs.db.DbPool.quietClose(conn);
-      }
-    }
-    /* $endif$ */
     return new StoreVolume(vol);
   }
 
@@ -244,11 +141,7 @@ public class VolumeManager
   {
     try
     {
-      /* $if MajorZimbraVersion <= 7 $
-      Volume.setCurrentVolume(volType, id);
-      /* $else$ */
       mVolumeManager.setCurrentVolume(volType, id);
-      /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -262,81 +155,19 @@ public class VolumeManager
     Short volType = Short.valueOf("2");
     try
     {
-      /* $if MajorZimbraVersion <= 7 $
-      Volume.setCurrentVolume(volType, Short.valueOf(id));
-      /* $else$ */
       mVolumeManager.setCurrentVolume(volType, Short.valueOf(id));
-      /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
-
-  /*
-  public StoreVolume setDefaultBits(String id)
-    throws ZimbraException
-  {
-
-    StoreVolume volumeToUpdate = getById(id);
-
-    Volume vol;
-    try
-    {
-      /* if MajorZimbraVersion <= 7 $
-      vol = Volume.update(volumeToUpdate.getId(),
-                                 volumeToUpdate.getType(),
-                                 volumeToUpdate.getName(),
-                                 volumeToUpdate.getRootPath(),
-                                 sMboxGroupBits,
-                                 sMboxBits,
-                                 sFileGroupBits,
-                                 sFileBits,
-                                 volumeToUpdate.getCompressBlobs(),
-                                 volumeToUpdate.getCompressionThreshold(),
-                                 false);
-      /* else$
-      Volume.Builder builder = Volume.builder();
-      builder.setId(Short.parseShort(volumeToUpdate.getId()));
-      builder.setName(volumeToUpdate.getName());
-      builder.setType(volumeToUpdate.getType());
-      builder.setPath(volumeToUpdate.getRootPath(), true);
-      builder.setMboxGroupBits(sMboxGroupBits);
-      builder.setMboxBit(sMboxBits);
-      builder.setFileGroupBits(sFileGroupBits);
-      builder.setFileBits(sFileBits);
-      builder.setCompressBlobs(volumeToUpdate.getCompressBlobs());
-      builder.setCompressionThreshold(volumeToUpdate.getCompressionThreshold());
-      vol = builder.build();
-      vol = mVolumeManager.update(vol);
-      /* $endif$
-    }
-    /* if MajorZimbraVersion <= 7 $
-    catch (com.zimbra.cs.store.file.VolumeServiceException e)
-    /* else$
-    catch (com.zimbra.cs.volume.VolumeServiceException e)
-    /* endif$
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    return new StoreVolume(vol);
-  }
-  */
 
   public boolean delete(String id) throws ZimbraException
   {
     try
     {
-      /* $if MajorZimbraVersion <= 7 $
-      return Volume.delete(Short.valueOf(id));
-      /* $else$ */
       return mVolumeManager.delete(Short.valueOf(id));
-      /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -348,11 +179,7 @@ public class VolumeManager
   {
     try
     {
-      /* $if MajorZimbraVersion <= 7 $
-      return new StoreVolume(Volume.getById(vid));
-      /* $else$ */
       return new StoreVolume(mVolumeManager.getVolume(vid));
-      /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -363,12 +190,7 @@ public class VolumeManager
   @Nullable
   public StoreVolume getCurrentSecondaryMessageVolume()
   {
-    Volume vol;
-    /* $if MajorZimbraVersion <= 7 $
-    vol = Volume.getCurrentSecondaryMessageVolume();
-    /* $else$ */
-    vol = mVolumeManager.getCurrentSecondaryMessageVolume();
-    /* $endif$ */
+    Volume vol = mVolumeManager.getCurrentSecondaryMessageVolume();
 
     if( vol != null )
     {
@@ -387,11 +209,7 @@ public class VolumeManager
 
   public List<StoreVolume> getByType(short type)
   {
-    /* $if MajorZimbraVersion <= 7 $
-    List<Volume> list = Volume.getByType(type);
-    /* $else$ */
     List<Volume> list = mVolumeManager.getAllVolumes();
-    /*  $endif$ */
 
     ArrayList<StoreVolume> newList = new ArrayList<StoreVolume>(list.size());
     for( Volume vol : list )
@@ -405,20 +223,12 @@ public class VolumeManager
 
   public StoreVolume getCurrentMessageVolume()
   {
-    /* $if MajorZimbraVersion <= 7 $
-    return new StoreVolume(Volume.getCurrentMessageVolume());
-    /* $else$ */
     return new StoreVolume(mVolumeManager.getCurrentMessageVolume());
-    /* $endif$ */
   }
 
   public StoreVolume getCurrentIndex()
   {
-    /* $if MajorZimbraVersion <= 7 $
-    return new StoreVolume(Volume.getCurrentIndexVolume());
-    /* $else$ */
     return new StoreVolume(mVolumeManager.getCurrentIndexVolume());
-    /* $endif$ */
   }
 
   public StoreVolume getVolumeByName(String volumeName)

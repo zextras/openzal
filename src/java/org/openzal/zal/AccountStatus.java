@@ -22,11 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.cs.account.Provisioning;
 import org.jetbrains.annotations.NotNull;
-/* $if ZimbraVersion >= 8.0.0 $ */
 import com.zimbra.common.account.ZAttrProvisioning;
-/* $else $
-import com.zimbra.cs.account.ZAttrProvisioning;
-/* $endif $ */
 
 public class AccountStatus
 {
