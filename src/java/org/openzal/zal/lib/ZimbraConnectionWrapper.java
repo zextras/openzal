@@ -26,7 +26,10 @@ import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.db.DbPool;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ZimbraConnectionWrapper implements Connection
 {
@@ -132,6 +135,12 @@ public class ZimbraConnectionWrapper implements Connection
     {
       //
     }
+  }
+
+  @Override
+  public java.sql.Connection getConnection()
+  {
+    return mConnection.getConnection();
   }
 
   @Override

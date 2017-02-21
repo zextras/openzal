@@ -47,6 +47,8 @@ public interface Connection
 
   void closeStatement(Statement statement);
 
+  java.sql.Connection getConnection();
+
   void disableForeignKeyConstraints();
 
   void enableForeignKeyConstraints();
