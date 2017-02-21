@@ -46,4 +46,8 @@ public interface Connection
   void closeResults(ResultSet resultSet);
 
   void closeStatement(Statement statement);
+
+  void disableForeignKeyConstraints();
+
+  void enableForeignKeyConstraints();
 }

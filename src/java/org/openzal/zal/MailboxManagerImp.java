@@ -21,10 +21,13 @@
 package org.openzal.zal;
 
 
+import com.zimbra.cs.mailbox.*;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -177,5 +180,21 @@ public class MailboxManagerImp implements MailboxManager
   public void removeListener(MailboxManagerListener listener)
   {
     mMailboxManager.removeListener(new MailboxManagerListenerWrapper(listener));
+  }
+
+  @Override
+  public Mailbox getMailboxByAccountId(String accountId,boolean autoCreate) throws ZimbraException
+  {
+    try
+    {
+      return new Mailbox(mMailboxManager.getMailboxByAccountId(
+              accountId,
+              com.zimbra.cs.mailbox.MailboxManager.FetchMode.AUTOCREATE,
+              true));
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }

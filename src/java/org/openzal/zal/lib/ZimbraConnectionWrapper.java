@@ -26,10 +26,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.db.DbPool;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ZimbraConnectionWrapper implements Connection
 {
@@ -136,4 +133,31 @@ public class ZimbraConnectionWrapper implements Connection
       //
     }
   }
+
+  @Override
+  public void disableForeignKeyConstraints()
+  {
+    try
+    {
+      mConnection.disableForeignKeyConstraints();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      //
+    }
+  }
+
+  @Override
+  public void enableForeignKeyConstraints()
+  {
+    try
+    {
+      mConnection.enableForeignKeyConstraints();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      //
+    }
+  }
+
 }

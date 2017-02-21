@@ -42,4 +42,6 @@ public interface MailboxManager
   void addListener(MailboxManagerListener listener);
 
   void removeListener(MailboxManagerListener listener);
+
+  Mailbox getMailboxByAccountId(String mailboxId,boolean autoCreate) throws ZimbraException;
 }

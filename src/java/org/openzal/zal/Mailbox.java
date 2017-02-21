@@ -1137,6 +1137,11 @@ public class Mailbox
     return mMbox.getLastChangeID();
   }
 
+  public int getLastItemId()
+  {
+    return mMbox.getLastItemId();
+  }
+
   public void clearItemCache()
   {
     mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
@@ -2343,6 +2348,18 @@ public class Mailbox
     try
     {
       mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void recalculateFolderAndTagCounts()
+  {
+    try
+    {
+      mMbox.recalculateFolderAndTagCounts();
     }
     catch (ServiceException e)
     {

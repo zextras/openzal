@@ -153,7 +153,7 @@ public final class HSQLZimbraDatabase extends Db
 // mRootUrl = null;
 // mConnectionUrl = "jdbc:hsqldb:file:/tmp/zimbra-it/zimbra";
 
-  private static final class Config extends DbPool.PoolConfig
+  public static class Config extends DbPool.PoolConfig
   {
     Config() {
       mDriverClassName = "org.hsqldb.jdbcDriver";

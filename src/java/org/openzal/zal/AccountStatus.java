@@ -20,9 +20,11 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
 import org.jetbrains.annotations.NotNull;
 import com.zimbra.common.account.ZAttrProvisioning;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public class AccountStatus
 {
@@ -45,6 +47,18 @@ public class AccountStatus
     mAccountStatus = (ZAttrProvisioning.AccountStatus) accountStatus;
   }
 
+  public AccountStatus(@NotNull String status)
+  {
+    try
+    {
+      mAccountStatus = ZAttrProvisioning.AccountStatus.fromString(status);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   public int hashCode()
   {
@@ -55,5 +69,16 @@ public class AccountStatus
   public boolean equals(Object object)
   {
     return mAccountStatus.equals(object);
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mAccountStatus);
+  }
+
+  @Override
+  public String toString()
+  {
+    return mAccountStatus.toString();
   }
 }
