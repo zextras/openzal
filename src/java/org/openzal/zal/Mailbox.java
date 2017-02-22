@@ -902,7 +902,7 @@ public class Mailbox
       {
         throw new NoSuchItemException(Integer.toString(itemId));
       }
-      com.zimbra.cs.service.util.ItemId newZimbraItemId = com.zimbra.cs.service.util.ItemId.createFromEncoded(createdIds.get(0),null);
+      com.zimbra.cs.service.util.ItemId newZimbraItemId = new com.zimbra.cs.service.util.ItemId(createdIds.get(0),(String)null);
       return newZimbraItemId.getId();
     }
     catch (com.zimbra.common.service.ServiceException e)
