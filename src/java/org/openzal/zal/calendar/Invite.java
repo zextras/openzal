@@ -424,6 +424,50 @@ public class Invite
     return inviteList;
   }
 
+  public List<Invite> getCancellationInstances()
+  {
+    List<Invite> inviteList = new LinkedList<Invite>();
+
+    CalendarItem calendarItem;
+    try
+    {
+      calendarItem = mInvite.getCalendarItem();
+    }
+    catch( Exception ex )
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+
+    if(calendarItem == null || (!calendarItem.isRecurring())) {
+      return Collections.emptyList();
+    }
+
+    Recurrence.RecurrenceRule recurrence;
+    recurrence = (Recurrence.RecurrenceRule) calendarItem.getRecurrence();
+
+    Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
+    while (it.hasNext())
+    {
+      Recurrence.IException exception = it.next();
+      if (exception.getType() != Recurrence.TYPE_CANCELLATION)
+      {
+        continue;
+      }
+
+      try
+      {
+        com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
+        inviteList.add(new Invite(invite));
+      }
+      catch (Exception ex)
+      {
+        throw ExceptionWrapper.wrap(ex);
+      }
+    }
+
+    return inviteList;
+  }
+
   public List<Long> getStartTimeUtcOfDeletedInstances()
   {
     List<Long> startTimeOfDeletedInstances = new LinkedList<Long>();
