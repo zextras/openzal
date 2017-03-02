@@ -55,6 +55,8 @@ public class Invite
 {
   private static String TRIGGER_TYPE_FIELD    = "mTriggerType";
   private static String TRIGGER_RELATED_FIELD = "mTriggerRelated";
+  public static int TYPE_EXCEPTION = Recurrence.TYPE_EXCEPTION;
+  public static int TYPE_CANCELLATION = Recurrence.TYPE_CANCELLATION;
 
   public MimeMessage getAttachment()
   {
@@ -380,7 +382,11 @@ public class Invite
   /*
     warning: it only works AFTER you added the calendar to the mailbox (it uses calendar item)
   */
-  public List<Invite> getExceptionInstances()
+  public List<Invite> getExceptionInstances(){
+    return getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
+  }
+  
+  public List<Invite> getRecurrencesInvitees(int recurrenceType)
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
@@ -405,7 +411,7 @@ public class Invite
     while (it.hasNext())
     {
       Recurrence.IException exception = it.next();
-      if (exception.getType() != Recurrence.TYPE_EXCEPTION)
+      if (exception.getType() != recurrenceType)
       {
         continue;
       }
