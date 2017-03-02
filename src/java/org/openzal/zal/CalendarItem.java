@@ -36,13 +36,10 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.Recurrence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -183,7 +180,7 @@ public class CalendarItem extends Item
       mimeMessage = getMimeMessage();
     }
 
-    List<Invite> exceptions = defaultInvite.getInstancesOfSelectedRecurrenceType(Invite.TYPE_EXCEPTION);
+    List<Invite> exceptions = defaultInvite.getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
 
     List<CalendarItemData> newExceptions = new ArrayList<CalendarItemData>(exceptions.size());
     for (Invite exception : exceptions)

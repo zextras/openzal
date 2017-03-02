@@ -382,7 +382,11 @@ public class Invite
   /*
     warning: it only works AFTER you added the calendar to the mailbox (it uses calendar item)
   */
-  public List<Invite> getInstancesOfSelectedRecurrenceType(int recurrenceType)
+  public List<Invite> getExceptionInstances(){
+    return getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
+  }
+  
+  public List<Invite> getRecurrencesInvitees(int recurrenceType)
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
