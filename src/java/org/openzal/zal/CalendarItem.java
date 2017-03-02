@@ -183,7 +183,7 @@ public class CalendarItem extends Item
       mimeMessage = getMimeMessage();
     }
 
-    List<Invite> exceptions = defaultInvite.getExceptionInstances();
+    List<Invite> exceptions = defaultInvite.getInstancesOfSelectedRecurrenceType(Invite.TYPE_EXCEPTION);
 
     List<CalendarItemData> newExceptions = new ArrayList<CalendarItemData>(exceptions.size());
     for (Invite exception : exceptions)
