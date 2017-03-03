@@ -6,7 +6,6 @@ import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
-import com.zextras.utils.TextUtils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
@@ -40,10 +39,7 @@ import com.zimbra.cs.store.*;
 import com.zimbra.cs.store.file.*;
  $endif$ */
 
-import org.openzal.zal.BlobWrap;
-import org.openzal.zal.InternalOverrideBlobProxy;
-import org.openzal.zal.ZalBlob;
-import org.openzal.zal.ZalMailboxBlob;
+import org.openzal.zal.*;
 
 public final class StoreManagerSimulator extends StoreManager
 {
@@ -398,7 +394,10 @@ public final class StoreManagerSimulator extends StoreManager
   {
     try
     {
-      ((MockBlob)blob).getVirtualFile().remove().syncAndGet();
+      if (blob instanceof MockBlob)
+      {
+        ((MockBlob)blob).getVirtualFile().remove().syncAndGet();
+      }
     }
     catch (VfsError e)
     {
