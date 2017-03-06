@@ -63,7 +63,12 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public MailboxBlob setDigest(String digest)
   {
-    throw new UnsupportedOperationException();
+    return new ZalMailboxBlob(
+      mZalMailboxBlob.setDigest(digest),
+      mZalMailboxBlob.getMailbox(),
+      mZalMailboxBlob.getItemId(),
+      mZalMailboxBlob.getRevision()
+    ).toZimbra(MailboxBlob.class);
   }
 
   @Override
