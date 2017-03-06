@@ -75,7 +75,12 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public MailboxBlob setSize(long size)
   {
-    throw new UnsupportedOperationException();
+    return new ZalMailboxBlob(
+      mZalMailboxBlob.setSize(size),
+      mZalMailboxBlob.getMailbox(),
+      mZalMailboxBlob.getItemId(),
+      mZalMailboxBlob.getRevision()
+    ).toZimbra(MailboxBlob.class);
   }
 
   @Override
