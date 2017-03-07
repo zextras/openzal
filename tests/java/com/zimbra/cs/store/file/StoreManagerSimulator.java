@@ -396,8 +396,9 @@ public final class StoreManagerSimulator extends StoreManager
     {
       if (blob instanceof MockBlob)
       {
-        ((MockBlob)blob).getVirtualFile().remove().syncAndGet();
+        ((MockBlob) blob).getVirtualFile().remove().syncAndGet();
       }
+      // TODO: blob can be instanceof InternalOverrideBlobWithMailboxInfo but it's not accessible from here (zimbra 8.0.3)
     }
     catch (VfsError e)
     {
