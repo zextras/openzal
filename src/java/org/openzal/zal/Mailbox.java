@@ -877,13 +877,13 @@ public class Mailbox
     }
   }
 
-  public int move(@NotNull Mailbox dstMailbox,@NotNull OperationContext octxt, int itemId, byte type, int targetId)
+  public int move(@NotNull Account dstAccount,@NotNull OperationContext octxt, int itemId, byte type, int targetId)
     throws ZimbraException
   {
     try
     {
       com.zimbra.cs.service.util.ItemId zimbraItemId = new com.zimbra.cs.service.util.ItemId(
-              dstMailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
+              dstAccount.getId(),
               targetId
       );
       List<String> createdIds = ItemActionHelper.MOVE(octxt.getOperationContext(),

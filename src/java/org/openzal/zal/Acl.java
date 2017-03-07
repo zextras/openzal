@@ -47,6 +47,7 @@ public class Acl
   public static final short RIGHT_ADMIN    = ACL.RIGHT_ADMIN;
   public static final short RIGHT_PRIVATE  = ACL.RIGHT_PRIVATE;
   public static final short RIGHT_FREEBUSY = ACL.RIGHT_FREEBUSY;
+  public static final short ROLE_MANAGER   = ACL.RIGHT_READ | ACL.RIGHT_WRITE | ACL.RIGHT_DELETE | ACL.RIGHT_INSERT | ACL.RIGHT_ACTION;
 
   @NotNull private final ACL mAcl;
 
