@@ -136,4 +136,10 @@ public class ZimbraConnectionWrapper implements Connection
       //
     }
   }
+
+  @Override
+  public java.sql.Connection getConnection()
+  {
+    return mConnection.getConnection();
+  }
 }

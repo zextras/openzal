@@ -46,4 +46,6 @@ public interface Connection
   void closeResults(ResultSet resultSet);
 
   void closeStatement(Statement statement);
+
+  java.sql.Connection getConnection();
 }
