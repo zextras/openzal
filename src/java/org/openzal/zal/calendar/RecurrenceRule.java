@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+import com.zextras.modules.mobile.v2.engine.actions.utils.WeekOfMonth;
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.service.ServiceException;
@@ -160,15 +161,21 @@ public class RecurrenceRule
     return list;
   }
 
-  public int getByWeekOfMonth()
+  public List<WeekOfMonth> getByWeekOfMonth()
   {
-    List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
-    if (! byDayList.isEmpty())
-    {
-      return byDayList.get(0).mOrdinal;
-    }
+    List<Integer> weeklist = mZRecur.getByWeekNoList();
+    List<WeekOfMonth> weekOfMonthList = new ArrayList<WeekOfMonth>(weeklist.size());
 
-    throw new RuntimeException("Recurrence not supported");
+    for( Integer weekno : weeklist )
+    {
+      weekOfMonthList.add(WeekOfMonth.fromZimbra(weekno));
+    }
+    return weekOfMonthList;
+  }
+
+  public void setWeekOfMonth(List<Integer> weekOfMonth)
+  {
+    mZRecur.setByWeekNoList(weekOfMonth);
   }
 
   public List<Integer> getByOffsetDayList()
