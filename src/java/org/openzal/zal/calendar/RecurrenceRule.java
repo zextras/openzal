@@ -20,7 +20,6 @@
 
 package org.openzal.zal.calendar;
 
-import com.zextras.modules.mobile.v2.engine.actions.utils.WeekOfMonth;
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.service.ServiceException;
@@ -29,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
