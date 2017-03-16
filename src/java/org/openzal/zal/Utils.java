@@ -223,6 +223,11 @@ public abstract class Utils
     return ByteUtil.isGzipped(inputStream);
   }
 
+  public static boolean isGzipped(byte[] data) throws IOException
+  {
+    return ByteUtil.isGzipped(data);
+  }
+
   public static byte[] getContent(InputStream stream, int sizeHint) throws IOException
   {
     return ByteUtil.getContent(stream, sizeHint);

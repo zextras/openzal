@@ -2366,4 +2366,16 @@ public class Mailbox
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public void startReIndex()
+  {
+    try
+    {
+      mMbox.index.startReIndex();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
