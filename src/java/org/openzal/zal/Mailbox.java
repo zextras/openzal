@@ -287,6 +287,22 @@ public class Mailbox
   }
 
   @NotNull
+  public Item getItemRevisionById(@NotNull OperationContext zContext, int id, byte type, int revision)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getItemRevision(zContext.getOperationContext(), id, Item.convertType(type), revision);
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    return new Item(item);
+  }
+
+  @NotNull
   public Message getMessageById(@NotNull OperationContext zContext, int id)
     throws NoSuchMessageException
   {

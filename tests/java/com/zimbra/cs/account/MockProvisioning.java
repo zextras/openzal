@@ -1055,6 +1055,17 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
         return name2Dlist.get(entryKey);
       }
     }
+    else if( type.equalsIgnoreCase("domain") )
+    {
+      if( isId )
+      {
+        return id2domain.get(entryKey);
+      }
+      else
+      {
+        return name2domain.get(entryKey);
+      }
+    }
     else
     {
       throw new UnsupportedOperationException();
@@ -1079,7 +1090,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
     );
 
-    Map<String, Object> attrs = granteeEntry.getAttrs();
+    Map<String, Object> attrs = targetEntry.getAttrs();
     attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
 
     targetEntry.setAttrs(attrs);
@@ -1109,7 +1120,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       createAceString(granteeType, granteeEntry.getAttr("zimbraId"), right, rightModifier)
     );
 
-    Map<String, Object> attrs = granteeEntry.getAttrs();
+    Map<String, Object> attrs = targetEntry.getAttrs();
     attrs.put("zimbraACE", aceSet.toArray(new String[aceSet.size()]));
 
     targetEntry.setAttrs(attrs);
