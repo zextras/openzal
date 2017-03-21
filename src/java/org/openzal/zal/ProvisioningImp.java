@@ -1184,6 +1184,29 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  @Nullable
+  public Server createServer(String name, Map<String, Object> attrs)
+          throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.createServer(name, attrs);
+      if (server == null)
+      {
+        return null;
+      }
+      else
+      {
+        return new Server(server);
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
     throws ZimbraException
   {
