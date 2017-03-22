@@ -53,10 +53,17 @@ public class Zimbra
       mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mVolumeManager = new VolumeManager();
-      mStoreManager = new StoreManagerImpl(
-        new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
-        mVolumeManager
-      );
+      if (mZimbraStoreManager instanceof InternalOverrideStoreManager)
+      {
+        mStoreManager = (StoreManager) ((InternalOverrideStoreManager) mZimbraStoreManager).getWrapped();
+      }
+      else
+      {
+        mStoreManager = new StoreManagerImpl(
+          new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
+          mVolumeManager
+        );
+      }
     }
     catch (Exception ex)
     {
