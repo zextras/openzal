@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -88,6 +87,7 @@ public class RecurrenceRule
     return cls.cast(mZRecur);
   }
 
+  @NotNull
   public Frequency getFrequency()
   {
     Frequency frequency = sZimbra2Zal.get(mZRecur.getFrequency());
@@ -119,6 +119,26 @@ public class RecurrenceRule
     return getByCalendarDayList(null, null);
   }
 
+  @NotNull
+  public List<WeekDayNum> getByDayList()
+  {
+    List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
+    List<WeekDayNum> list = new ArrayList<WeekDayNum>(byDayList.size());
+
+    for( ZRecur.ZWeekDayNum weekDayNum : byDayList )
+    {
+      list.add(
+        new WeekDayNum(
+          weekDayNum.mDay.getCalendarDay(),
+          weekDayNum.mOrdinal
+        )
+      );
+    }
+
+    return list;
+  }
+
+  @Deprecated
   public List<Integer> getByCalendarDayList(Long startTime, TimeZone timezone)
   {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
@@ -139,15 +159,21 @@ public class RecurrenceRule
     return list;
   }
 
-  public int getByWeekOfMonth()
+  public List<WeekOfMonth> getByWeekOfMonth()
   {
-    List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();
-    if (! byDayList.isEmpty())
-    {
-      return byDayList.get(0).mOrdinal;
-    }
+    List<Integer> weeklist = mZRecur.getByWeekNoList();
+    List<WeekOfMonth> weekOfMonthList = new ArrayList<WeekOfMonth>(weeklist.size());
 
-    throw new RuntimeException("Recurrence not supported");
+    for( Integer weekno : weeklist )
+    {
+      weekOfMonthList.add(WeekOfMonth.fromZimbra(weekno));
+    }
+    return weekOfMonthList;
+  }
+
+  public void setWeekOfMonth(List<Integer> weekOfMonth)
+  {
+    mZRecur.setByWeekNoList(weekOfMonth);
   }
 
   public List<Integer> getByOffsetDayList()
@@ -181,6 +207,10 @@ public class RecurrenceRule
   public List<Integer> getBySetPosList()
   {
     return mZRecur.getBySetPosList();
+  }
+
+  public void setBySetPosList(List<Integer> bySetPosList) {
+    mZRecur.setBySetPosList(bySetPosList);
   }
 
   public void setFrequency(Frequency frequency)
