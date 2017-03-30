@@ -426,7 +426,15 @@ public final class StoreManagerSimulator extends StoreManager
 
   public boolean deleteStore(Mailbox mbox) throws IOException
   {
-    throw new UnsupportedOperationException();
+    try
+    {
+      mStoreRoot.getRoot().removeContent().syncAndGet();
+      return true;
+    }
+    catch (VfsError vfsError)
+    {
+      throw new IOException(vfsError);
+    }
   }
 
   public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> mblobs) throws IOException

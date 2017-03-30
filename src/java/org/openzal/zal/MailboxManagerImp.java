@@ -197,4 +197,36 @@ public class MailboxManagerImp implements MailboxManager
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  @Override
+  public MailboxMaintenance beginMaintenance(String accountId, int mailboxId) throws ZimbraException
+  {
+    try
+    {
+      MailboxMaintenance maintenance = new MailboxMaintenance(mMailboxManager.beginMaintenance(
+              accountId,
+              mailboxId));
+      return maintenance;
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void endMaintenance(MailboxMaintenance maintenance, boolean success, boolean removeFromCache) throws ZimbraException
+  {
+    try
+    {
+      mMailboxManager.endMaintenance(maintenance.getMailboxMaintenance(),
+              success,
+              removeFromCache);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
 }

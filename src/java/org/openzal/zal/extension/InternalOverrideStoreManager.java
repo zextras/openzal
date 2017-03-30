@@ -287,9 +287,12 @@ class InternalOverrideStoreManager
   @Nullable
   public MailboxBlob getMailboxBlob(MailItem mailItem) throws ServiceException
   {
-    return getMailboxBlob(
+    MailboxBlob blob = getMailboxBlob(
       mailItem.getMailbox(), mailItem.getId(), mailItem.getSavedSequence(), mailItem.getLocator()
     );
+    blob.setDigest(mailItem.getDigest());
+    blob.setSize(mailItem.getSize());
+    return blob;
   }
 
   @Nullable

@@ -26,13 +26,12 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.fb.FreeBusyQuery;
+import com.zimbra.cs.index.IndexStore;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
-import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
-import com.zimbra.cs.mailbox.DeliveryOptions;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -2377,5 +2376,20 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public boolean isReIndexInProgress()
+  {
+    return mMbox.index.isReIndexInProgress();
+  }
+
+  public short getIndexVolume() {
+    return mMbox.getIndexVolume();
+  }
+
+  public boolean isInMaintenanceMode()
+  {
+    com.zimbra.cs.mailbox.MailboxMaintenance maintenace = mMbox.getMaintenance();
+    return maintenace != null;
   }
 }

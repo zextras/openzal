@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -2031,4 +2032,15 @@ public class ProvisioningImp implements Provisioning
     com.zimbra.cs.account.accesscontrol.PermissionCache.invalidateAllCache();
   }
 
+  public void purgeMemcachedAccounts(List<String> accounts)
+  {
+    try
+    {
+      ProxyPurgeUtil.purgeAccounts((List)null,accounts,true,(String)null);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }

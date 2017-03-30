@@ -342,6 +342,7 @@ public interface Provisioning
 
   void invalidateAllCache();
 
+  void purgeMemcachedAccounts(List<String> accounts);
 
   class CountAccountByCos
   {

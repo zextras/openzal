@@ -748,7 +748,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
 
   public List<Server> getAllServers(String service) {
-    throw new UnsupportedOperationException();
+    return Collections.<Server>emptyList();
   }
   public List<Server> getAllServers(String service, String clusterId)
   {
