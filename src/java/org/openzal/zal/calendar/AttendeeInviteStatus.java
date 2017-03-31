@@ -95,9 +95,8 @@ public enum AttendeeInviteStatus
   {
     AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
     if( attendeeInviteStatus == null ) {
-      ZimbraLog.mobile.warn("Invalid invite status: "+partStat+", fall back to NE");
+      ZimbraLog.extensions.warn("Invalid invite status: "+partStat+", fall back to NE");
       attendeeInviteStatus = sZimbra2Zal.get("NE");
-      //throw new RuntimeException("Invalid invite status: "+partStat);
     }
     return attendeeInviteStatus;
   }
