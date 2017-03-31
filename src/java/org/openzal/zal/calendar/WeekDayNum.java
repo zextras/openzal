@@ -56,6 +56,12 @@ public class WeekDayNum
     mCalendarDay = day;
   }
 
+  public WeekDayNum(int day, int ordinal)
+  {
+    mOrdinal = ordinal;
+    mCalendarDay = day;
+  }
+
   public void setOrdinal(int ordinal)
   {
     mOrdinal = ordinal;
