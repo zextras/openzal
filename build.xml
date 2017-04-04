@@ -1,4 +1,4 @@
-<project name="ZAL" basedir="." default="zal-all">
+<project name="ZAL" basedir="." default="help">
 
 
   <taskdef name="preprocess" classname="com.objfac.prebop.ant.PreprocessorTask">
@@ -39,6 +39,8 @@
      <attribute name="MajorZimbraVersion"/>
      <attribute name="MiddleZimbraVersion"/>
      <attribute name="MinorZimbraVersion"/>
+     <attribute name="DevMode"/>
+     <attribute name="TargetName"/>
 
      <sequential>
        <local name="tmpsrc"/>
@@ -46,7 +48,7 @@
        <local name="dist"/>
        <property name="tmpsrc"  value="tmpsrc/@{ZimbraVersion}/jar/" />
        <property name="build" value="build/@{ZimbraVersion}/jar/" />
-       <property name="dist"  value="dist/@{ZimbraVersion}/"/>
+       <property name="dist"  value="dist/@{TargetName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
        <mkdir dir="${build}"/>
@@ -60,6 +62,7 @@
          <var name="MajorZimbraVersion"  value="@{MajorZimbraVersion}" />
          <var name="MiddleZimbraVersion" value="@{MiddleZimbraVersion}" />
          <var name="MinorZimbraVersion"  value="@{MinorZimbraVersion}" />
+         <var name="DevMode" value="@{DevMode}" />
          <filetype commentend="*/" commentbegin="/*" extensions="java"/>
        </preprocess>
 
@@ -164,7 +167,9 @@
   <build-zal ZimbraVersion="6.0.7"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "7" />
+             MinorZimbraVersion = "7"
+             TargetName = "6.0.7"
+             DevMode = "false" />
 </target>
 
 
@@ -183,7 +188,9 @@
   <build-zal ZimbraVersion="6.0.8"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "8" />
+             MinorZimbraVersion = "8"
+             TargetName = "6.0.8"
+             DevMode = "false" />
 </target>
 
 
@@ -202,7 +209,9 @@
   <build-zal ZimbraVersion="6.0.9"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "9" />
+             MinorZimbraVersion = "9"
+             TargetName = "6.0.9"
+             DevMode = "false" />
 </target>
 
 
@@ -221,7 +230,9 @@
   <build-zal ZimbraVersion="6.0.10"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "10" />
+             MinorZimbraVersion = "10"
+             TargetName = "6.0.10"
+             DevMode = "false" />
 </target>
 
 
@@ -240,7 +251,9 @@
   <build-zal ZimbraVersion="6.0.12"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "12" />
+             MinorZimbraVersion = "12"
+             TargetName = "6.0.12"
+             DevMode = "false" />
 </target>
 
 
@@ -259,7 +272,9 @@
   <build-zal ZimbraVersion="6.0.13"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "13" />
+             MinorZimbraVersion = "13"
+             TargetName = "6.0.13"
+             DevMode = "false" />
 </target>
 
 
@@ -278,7 +293,9 @@
   <build-zal ZimbraVersion="6.0.14"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "14" />
+             MinorZimbraVersion = "14"
+             TargetName = "6.0.14"
+             DevMode = "false" />
 </target>
 
 
@@ -297,7 +314,9 @@
   <build-zal ZimbraVersion="6.0.15"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "15" />
+             MinorZimbraVersion = "15"
+             TargetName = "6.0.15"
+             DevMode = "false" />
 </target>
 
 
@@ -316,7 +335,9 @@
   <build-zal ZimbraVersion="6.0.16"
              MajorZimbraVersion = "6"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "16" />
+             MinorZimbraVersion = "16"
+             TargetName = "6.0.16"
+             DevMode = "false" />
 </target>
 
 
@@ -335,7 +356,9 @@
   <build-zal ZimbraVersion="7.0.0"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "7.0.0"
+             DevMode = "false" />
 </target>
 
 
@@ -354,7 +377,9 @@
   <build-zal ZimbraVersion="7.0.1"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "7.0.1"
+             DevMode = "false" />
 </target>
 
 
@@ -373,7 +398,9 @@
   <build-zal ZimbraVersion="7.1.0"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "7.1.0"
+             DevMode = "false" />
 </target>
 
 
@@ -392,7 +419,9 @@
   <build-zal ZimbraVersion="7.1.1"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "7.1.1"
+             DevMode = "false" />
 </target>
 
 
@@ -411,7 +440,9 @@
   <build-zal ZimbraVersion="7.1.2"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "2" />
+             MinorZimbraVersion = "2"
+             TargetName = "7.1.2"
+             DevMode = "false" />
 </target>
 
 
@@ -430,7 +461,9 @@
   <build-zal ZimbraVersion="7.1.3"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "3" />
+             MinorZimbraVersion = "3"
+             TargetName = "7.1.3"
+             DevMode = "false" />
 </target>
 
 
@@ -449,7 +482,9 @@
   <build-zal ZimbraVersion="7.1.4"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "1"
-             MinorZimbraVersion = "4" />
+             MinorZimbraVersion = "4"
+             TargetName = "7.1.4"
+             DevMode = "false" />
 </target>
 
 
@@ -468,7 +503,9 @@
   <build-zal ZimbraVersion="7.2.0"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "7.2.0"
+             DevMode = "false" />
 </target>
 
 
@@ -487,7 +524,9 @@
   <build-zal ZimbraVersion="7.2.1"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "7.2.1"
+             DevMode = "false" />
 </target>
 
 
@@ -506,7 +545,9 @@
   <build-zal ZimbraVersion="7.2.2"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "2" />
+             MinorZimbraVersion = "2"
+             TargetName = "7.2.2"
+             DevMode = "false" />
 </target>
 
 
@@ -525,7 +566,9 @@
   <build-zal ZimbraVersion="7.2.3"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "3" />
+             MinorZimbraVersion = "3"
+             TargetName = "7.2.3"
+             DevMode = "false" />
 </target>
 
 
@@ -544,7 +587,9 @@
   <build-zal ZimbraVersion="7.2.4"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "4" />
+             MinorZimbraVersion = "4"
+             TargetName = "7.2.4"
+             DevMode = "false" />
 </target>
 
 
@@ -563,7 +608,9 @@
   <build-zal ZimbraVersion="7.2.5"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "5" />
+             MinorZimbraVersion = "5"
+             TargetName = "7.2.5"
+             DevMode = "false" />
 </target>
 
 
@@ -582,7 +629,9 @@
   <build-zal ZimbraVersion="7.2.6"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "6" />
+             MinorZimbraVersion = "6"
+             TargetName = "7.2.6"
+             DevMode = "false" />
 </target>
 
 
@@ -601,7 +650,9 @@
   <build-zal ZimbraVersion="7.2.7"
              MajorZimbraVersion = "7"
              MiddleZimbraVersion = "2"
-             MinorZimbraVersion = "7" />
+             MinorZimbraVersion = "7"
+             TargetName = "7.2.7"
+             DevMode = "false" />
 </target>
 
 
@@ -620,7 +671,9 @@
   <build-zal ZimbraVersion="8.0.0"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "8.0.0"
+             DevMode = "false" />
 </target>
 
 
@@ -639,7 +692,9 @@
   <build-zal ZimbraVersion="8.0.1"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "8.0.1"
+             DevMode = "false" />
 </target>
 
 
@@ -658,7 +713,9 @@
   <build-zal ZimbraVersion="8.0.2"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "2" />
+             MinorZimbraVersion = "2"
+             TargetName = "8.0.2"
+             DevMode = "false" />
 </target>
 
 
@@ -677,7 +734,9 @@
   <build-zal ZimbraVersion="8.0.3"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "3" />
+             MinorZimbraVersion = "3"
+             TargetName = "8.0.3"
+             DevMode = "false" />
 </target>
 
 
@@ -696,7 +755,9 @@
   <build-zal ZimbraVersion="8.0.4"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "4" />
+             MinorZimbraVersion = "4"
+             TargetName = "8.0.4"
+             DevMode = "false" />
 </target>
 
 
@@ -715,7 +776,9 @@
   <build-zal ZimbraVersion="8.0.5"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "5" />
+             MinorZimbraVersion = "5"
+             TargetName = "8.0.5"
+             DevMode = "false" />
 </target>
 
 
@@ -734,7 +797,9 @@
   <build-zal ZimbraVersion="8.0.6"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "6" />
+             MinorZimbraVersion = "6"
+             TargetName = "8.0.6"
+             DevMode = "false" />
 </target>
 
 
@@ -753,7 +818,9 @@
   <build-zal ZimbraVersion="8.0.7"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "7" />
+             MinorZimbraVersion = "7"
+             TargetName = "8.0.7"
+             DevMode = "false" />
 </target>
 
 
@@ -772,7 +839,9 @@
   <build-zal ZimbraVersion="8.0.8"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "8" />
+             MinorZimbraVersion = "8"
+             TargetName = "8.0.8"
+             DevMode = "false" />
 </target>
 
 
@@ -791,7 +860,9 @@
   <build-zal ZimbraVersion="8.0.9"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
-             MinorZimbraVersion = "9" />
+             MinorZimbraVersion = "9"
+             TargetName = "8.0.9"
+             DevMode = "false" />
 </target>
 
 
@@ -810,7 +881,9 @@
   <build-zal ZimbraVersion="8.5.0"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "5"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "8.5.0"
+             DevMode = "false" />
 </target>
 
 
@@ -829,7 +902,9 @@
   <build-zal ZimbraVersion="8.5.1"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "5"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "8.5.1"
+             DevMode = "false" />
 </target>
 
 
@@ -848,7 +923,9 @@
   <build-zal ZimbraVersion="8.6.0"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "6"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "8.6.0"
+             DevMode = "false" />
 </target>
 
 
@@ -867,7 +944,9 @@
   <build-zal ZimbraVersion="8.7.0"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "0" />
+             MinorZimbraVersion = "0"
+             TargetName = "8.7.0"
+             DevMode = "false" />
 </target>
 
 
@@ -886,7 +965,9 @@
   <build-zal ZimbraVersion="8.7.1"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "1" />
+             MinorZimbraVersion = "1"
+             TargetName = "8.7.1"
+             DevMode = "false" />
 </target>
 
 
@@ -905,7 +986,9 @@
   <build-zal ZimbraVersion="8.7.2"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "2" />
+             MinorZimbraVersion = "2"
+             TargetName = "8.7.2"
+             DevMode = "false" />
 </target>
 
 
@@ -924,7 +1007,9 @@
   <build-zal ZimbraVersion="8.7.3"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "3" />
+             MinorZimbraVersion = "3"
+             TargetName = "8.7.3"
+             DevMode = "false" />
 </target>
 
 
@@ -943,7 +1028,9 @@
   <build-zal ZimbraVersion="8.7.4"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "4" />
+             MinorZimbraVersion = "4"
+             TargetName = "8.7.4"
+             DevMode = "false" />
 </target>
 
 
@@ -962,7 +1049,9 @@
   <build-zal ZimbraVersion="8.7.5"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "5" />
+             MinorZimbraVersion = "5"
+             TargetName = "8.7.5"
+             DevMode = "false" />
 </target>
 
 
@@ -981,7 +1070,9 @@
   <build-zal ZimbraVersion="8.7.6"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "6" />
+             MinorZimbraVersion = "6"
+             TargetName = "8.7.6"
+             DevMode = "false" />
 </target>
 
 
@@ -994,9 +1085,30 @@
                     MinorZimbraVersion = "6" />
 </target>
 
+<target name="zal-dev-last"
+        description="Create jar for Zimbra 8.7.6"
+        depends="init">
+  <build-zal ZimbraVersion="8.7.6"
+             MajorZimbraVersion = "8"
+             MiddleZimbraVersion = "7"
+             MinorZimbraVersion = "6"
+             TargetName = "dev-last"
+             DevMode = "true" />
+</target>
+
+
+<target name="zal-dev-last-itbase"
+        description="Create test jar for Zimbra 8.7.6"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.6"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "6" />
+</target>
+
 
   <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.6" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6" />
+  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-dev-last" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -1193,6 +1305,7 @@
     <echo>commands availables are:
       zal-all
       zal-common
+      zal-dev-last
       zal-{zimbra-version}
       compatibility-check
       fast-compatibility-check

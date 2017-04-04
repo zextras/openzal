@@ -7,7 +7,7 @@ import os
 current_path=os.path.realpath(__file__)
 os.chdir( os.path.dirname(current_path) )
 
-def writeTemplate( template_file, parameters, zimbra_version ):
+def writeTemplate( template_file, parameters, zimbra_version, target_name, dev_mode = False ):
   parameters = parameters.copy()
 
   if zimbra_version:
@@ -16,6 +16,8 @@ def writeTemplate( template_file, parameters, zimbra_version ):
     parameters["MiddleZimbraVersion"] = versions.group(2)
     parameters["MinorZimbraVersion"] = versions.group(3)
     parameters["ZimbraVersion"] = zimbra_version
+    parameters["TargetName"] = target_name
+    parameters["DevMode"] = str(dev_mode).lower()
 
   text = open( template_file, "ro" ).read()
   for (key,value) in parameters.items():
@@ -91,9 +93,11 @@ Parameters = {
   "COMMON_PARALLEL_TESTS": common_parallel_tests
 }
 
-writeTemplate( "main_template_begin", Parameters, None )
+writeTemplate( "main_template_begin", Parameters, None, None )
 
 for zimbra_version in ZimbraVersions:
-  writeTemplate( "version_template",  Parameters, zimbra_version )
+  writeTemplate( "version_template",  Parameters, zimbra_version, zimbra_version )
 
-writeTemplate( "main_template_end",  Parameters, None )
+writeTemplate( "version_template",  Parameters, ZimbraVersions[-1], "dev-last", dev_mode=True )
+
+writeTemplate( "main_template_end",  Parameters, None, None )
