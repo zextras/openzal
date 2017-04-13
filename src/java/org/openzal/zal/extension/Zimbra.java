@@ -43,6 +43,7 @@ public class Zimbra
   @NotNull private final VolumeManager                    mVolumeManager;
   @NotNull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
   @NotNull private       StoreManager                     mStoreManager;
+           private       boolean                          mCanOverrideStoreManager;
 
   public Zimbra()
   {
@@ -53,10 +54,19 @@ public class Zimbra
       mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mVolumeManager = new VolumeManager();
-      mStoreManager = new StoreManagerImpl(
-        new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
-        mVolumeManager
-      );
+      if (mZimbraStoreManager instanceof FileBlobStore)
+      {
+        mStoreManager = new StoreManagerImpl(
+          new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
+          mVolumeManager
+        );
+        mCanOverrideStoreManager = true;
+      }
+      else
+      {
+        mStoreManager = (StoreManager) ((InternalOverrideStoreManager) mZimbraStoreManager).getWrapped();
+        mCanOverrideStoreManager = false;
+      }
     }
     catch (Exception ex)
     {
@@ -225,6 +235,10 @@ public class Zimbra
 
   public void overrideZimbraStoreManager(StoreManager storeManager)
   {
+    if (!mCanOverrideStoreManager)
+    {
+      throw new UnsupportedOperationException("Another ZAL extension already has already overridden Zimbra StoreManager");
+    }
     mInternalOverrideStoreManager = new InternalOverrideStoreManager(storeManager, mVolumeManager);
     ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
     try
