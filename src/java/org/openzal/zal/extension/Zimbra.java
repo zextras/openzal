@@ -74,6 +74,27 @@ public class Zimbra
     }
   }
 
+public Zimbra(Zimbra zimbra)
+  {
+    try
+    {
+      mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
+      mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
+      mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+      mZimbraDatabase = new ZimbraDatabase();
+      mVolumeManager = new VolumeManager();
+
+      mStoreManager = new StoreManagerImpl(
+              new FileBlobStoreWrapImpl((FileBlobStore) zimbra.mZimbraStoreManager),
+              mVolumeManager
+      );
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
+  }
+
   private static final Field sIsMailboxd;
 
   static
