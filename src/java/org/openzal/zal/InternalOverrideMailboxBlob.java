@@ -63,8 +63,12 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public MailboxBlob setDigest(String digest)
   {
-    mZalMailboxBlob.setDigest(digest);
-    return this;
+    return new ZalMailboxBlob(
+      mZalMailboxBlob.setDigest(digest),
+      mZalMailboxBlob.getMailbox(),
+      mZalMailboxBlob.getItemId(),
+      mZalMailboxBlob.getRevision()
+    ).toZimbra(MailboxBlob.class);
   }
 
   @Override
@@ -76,8 +80,12 @@ class InternalOverrideMailboxBlob extends com.zimbra.cs.store.MailboxBlob
   @Override
   public MailboxBlob setSize(long size)
   {
-    mZalMailboxBlob.setSize(size);
-    return this;
+    return new ZalMailboxBlob(
+      mZalMailboxBlob.setSize(size),
+      mZalMailboxBlob.getMailbox(),
+      mZalMailboxBlob.getItemId(),
+      mZalMailboxBlob.getRevision()
+    ).toZimbra(MailboxBlob.class);
   }
 
   @Override

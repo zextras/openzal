@@ -6,7 +6,6 @@ import com.zextras.lib.vfs.OutputStreamFileWriterWrapper;
 import com.zextras.lib.vfs.RelativePath;
 import com.zextras.lib.vfs.VfsError;
 import com.zextras.lib.vfs.ramvfs.RamFS;
-import com.zextras.utils.TextUtils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
@@ -329,7 +328,11 @@ public final class StoreManagerSimulator extends StoreManager
   {
     try
     {
-      ((MockBlob)blob).getVirtualFile().remove().syncAndGet();
+      if (blob instanceof MockBlob)
+      {
+        ((MockBlob) blob).getVirtualFile().remove().syncAndGet();
+      }
+      // TODO: blob can be instanceof InternalOverrideBlobWithMailboxInfo but it's not accessible from here (zimbra 8.0.3)
     }
     catch (VfsError e)
     {

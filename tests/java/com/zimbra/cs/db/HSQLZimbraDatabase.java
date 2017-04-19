@@ -4,6 +4,8 @@ package com.zimbra.cs.db;
  * Zimbra Collaboration Suite Server
  */
 
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.openzal.zal.lib.ZimbraVersion;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -20,6 +22,8 @@ import org.hsqldb.cmdline.SqlFile;
 
 public final class HSQLZimbraDatabase extends Db
 {
+  @Rule public TestName mTestName = new TestName();
+
   //
   // Populates ZIMBRA and MBOXGROUP1 schema.
   //
@@ -99,7 +103,7 @@ public final class HSQLZimbraDatabase extends Db
   }
 
   DbPool.PoolConfig getPoolConfig() {
-    return new Config();
+    return new Config("jdbc:hsqldb:mem:zimbra" + mTestName);
   }
 
   boolean supportsCapability(Capability capability) {
@@ -155,11 +159,11 @@ public final class HSQLZimbraDatabase extends Db
 
   public static class Config extends DbPool.PoolConfig
   {
-    Config() {
+    Config(String connection) {
       mDriverClassName = "org.hsqldb.jdbcDriver";
       mPoolSize = 10;
       mRootUrl = null;
-      mConnectionUrl = "jdbc:hsqldb:mem:zimbra";
+      mConnectionUrl = connection;
       mSupportsStatsCallback = false;
       mDatabaseProperties = new Properties();
     }
