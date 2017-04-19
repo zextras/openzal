@@ -24,19 +24,4 @@ public class ZimbraConnectionProviderSimulator implements ZimbraDatabase.Connect
       throw ExceptionWrapper.createUnableToObtainDBConnection(e);
     }
   }
-
-  @NotNull
-  @Override
-  public org.openzal.zal.Connection getMaintenanceConnection() throws UnableToObtainDBConnectionException
-  {
-    try {
-      DbPool.DbConnection connection = DbPool.getMaintenanceConnection();
-      DbConnectionSimulator connectionSimulator = new DbConnectionSimulator(connection.getConnection());
-      return new ZimbraConnectionWrapper(connectionSimulator);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.createUnableToObtainDBConnection(e);
-    }
-  }
 }
