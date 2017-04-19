@@ -1,6 +1,6 @@
 
   <target name="zal-common" depends="${JOINED_COMMON_ZIMBRA_JAR_VERSIONS}" />
-  <target name="zal-all" depends="${JOINED_ZIMBRA_JAR_VERSIONS}" />
+  <target name="zal-all" depends="${JOINED_ZIMBRA_JAR_VERSIONS},zal-dev-last" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -197,6 +197,7 @@
     <echo>commands availables are:
       zal-all
       zal-common
+      zal-dev-last
       zal-{zimbra-version}
       compatibility-check
       fast-compatibility-check

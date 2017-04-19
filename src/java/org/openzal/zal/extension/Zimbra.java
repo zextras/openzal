@@ -64,7 +64,7 @@ public class Zimbra
       }
       else
       {
-        mStoreManager = (StoreManager) ((InternalOverrideStoreManager) mZimbraStoreManager).getWrapped();
+        mStoreManager = null;
         mCanOverrideStoreManager = false;
       }
     }
@@ -137,6 +137,10 @@ public class Zimbra
   @NotNull
   public StoreManager getStoreManager()
   {
+    if (mStoreManager == null)
+    {
+      throw new RuntimeException("Unsupported overridden StoreManager");
+    }
     return mStoreManager;
   }
 
