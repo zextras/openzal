@@ -66,7 +66,7 @@
          <filetype commentend="*/" commentbegin="/*" extensions="java"/>
        </preprocess>
 
-       <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.6" source="1.6">
+       <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
            <path>
              <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
@@ -132,7 +132,7 @@
         <filetype commentend="*/" commentbegin="/*" extensions="java"/>
       </preprocess>
 
-      <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.6" source="1.6">
+      <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
         <classpath>
           <path>
             <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
