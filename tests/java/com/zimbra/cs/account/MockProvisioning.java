@@ -697,19 +697,19 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     {
       attrs.put(A_zimbraRedoLogProvider, MockRedoLogProvider.class.getName());
     }
-    if (!attrs.containsKey(A_zimbraRedoLogProvider))
+    if (!attrs.containsKey(A_zimbraId))
     {
       attrs.put(A_zimbraId, UUID.randomUUID().toString());
     }
-    if (!attrs.containsKey(A_zimbraRedoLogProvider))
+    if (!attrs.containsKey(A_zimbraMailMode))
     {
       attrs.put(A_zimbraMailMode, MailMode.http.toString());
     }
-    if (!attrs.containsKey(A_zimbraRedoLogProvider))
+    if (!attrs.containsKey(A_zimbraSmtpPort))
     {
       attrs.put(A_zimbraSmtpPort, "7025");
     }
-    if (!attrs.containsKey(A_zimbraRedoLogProvider))
+    if (!attrs.containsKey(A_zimbraMessageCacheSize))
     {
       attrs.put(A_zimbraMessageCacheSize, "0");
     }

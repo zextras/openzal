@@ -22,8 +22,6 @@ import org.hsqldb.cmdline.SqlFile;
 
 public final class HSQLZimbraDatabase extends Db
 {
-  @Rule public TestName mTestName = new TestName();
-
   //
   // Populates ZIMBRA and MBOXGROUP1 schema.
   //
@@ -103,7 +101,7 @@ public final class HSQLZimbraDatabase extends Db
   }
 
   DbPool.PoolConfig getPoolConfig() {
-    return new Config("jdbc:hsqldb:mem:zimbra" + mTestName);
+    return new Config();
   }
 
   boolean supportsCapability(Capability capability) {
@@ -159,11 +157,11 @@ public final class HSQLZimbraDatabase extends Db
 
   public static class Config extends DbPool.PoolConfig
   {
-    Config(String connection) {
+    Config() {
       mDriverClassName = "org.hsqldb.jdbcDriver";
       mPoolSize = 10;
       mRootUrl = null;
-      mConnectionUrl = connection;
+      mConnectionUrl = "jdbc:hsqldb:mem:zimbra";
       mSupportsStatsCallback = false;
       mDatabaseProperties = new Properties();
     }
