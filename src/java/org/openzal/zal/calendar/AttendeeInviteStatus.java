@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.log.ZimbraLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +95,8 @@ public enum AttendeeInviteStatus
   {
     AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
     if( attendeeInviteStatus == null ) {
-      throw new RuntimeException("Invalid invite status: "+partStat);
+      ZimbraLog.extensions.warn("Invalid invite status: "+partStat+", fall back to NE");
+      attendeeInviteStatus = sZimbra2Zal.get("NE");
     }
     return attendeeInviteStatus;
   }
