@@ -91,33 +91,7 @@ public class ZimbraSimulator extends ExternalResource
 
   private void init()
   {
-    try
-    {
-      initProperties();
-      initIndexing();
-      initProvisioning();
-      initHSQLDatabase();
-      mZimbra = new Zimbra();
-      initMailboxManager();
-      initStorageManager();
-
-      try
-      {
-        ScheduledTaskManager.getTask("", "", -1);
-      }
-      catch (Throwable ex)
-      {
-        ScheduledTaskManager.startup();
-      }
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException(e);
-    }
-    catch (Throwable throwable)
-    {
-      throw new RuntimeException(throwable);
-    }
+    init(null);
   }
 
   private void init(Zimbra zimbra)
@@ -126,7 +100,10 @@ public class ZimbraSimulator extends ExternalResource
     {
       initProperties();
       initIndexing();
-      //initProvisioning();
+      if (zimbra == null)
+      {
+        initProvisioning();
+      }
       initHSQLDatabase();
       mZimbra = new Zimbra(zimbra);
       initMailboxManager(zimbra);
@@ -209,38 +186,18 @@ public class ZimbraSimulator extends ExternalResource
     }
   }
 
-  private void initMailboxManager() throws Exception
-  {
-    mMailboxManager = (MailboxManager) Class.forName(LC.zimbra_class_mboxmanager.value()).newInstance();
-    com.zimbra.cs.mailbox.MailboxManager.setInstance(mMailboxManager);
-  }
-
   private void initMailboxManager(Zimbra zimbra) throws Exception
   {
     mMailboxManager = (MailboxManager) Class.forName(LC.zimbra_class_mboxmanager.value()).newInstance();
-    //com.zimbra.cs.mailbox.MailboxManager.setInstance(mMailboxManager);
+    if (zimbra == null)
+    {
+      com.zimbra.cs.mailbox.MailboxManager.setInstance(mMailboxManager);
+    }
   }
 
   private void initIndexing()
   {
     MailboxIndex.startup();
-  }
-
-  private void initStorageManager() throws Exception
-  {
-    //LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
-    //com.zimbra.cs.store.StoreManager.getInstance().startup();
-    mVolumeManager = new VolumeManager();
-    mStoreSimulator = new StoreManagerSimulator();
-    mStoreSimulator.startup();
-    mStoreRoot = mStoreSimulator.getStoreRoot();
-    FileBlobStoreWrap storeManagerSimulator = new FileBlobStoreSimulatorWrap(mStoreSimulator);
-    mStoreManager = new StoreManagerImpl(
-      storeManagerSimulator,
-      mVolumeManager
-    );
-
-    mZimbra.overrideZimbraStoreManager(mStoreManager);
   }
 
   private void initStorageManager(Zimbra zimbra) throws Exception
@@ -257,7 +214,10 @@ public class ZimbraSimulator extends ExternalResource
             mVolumeManager
     );
 
-    //mZimbra.overrideZimbraStoreManager(mStoreManager);
+    if (zimbra == null)
+    {
+      mZimbra.overrideZimbraStoreManager(mStoreManager);
+    }
   }
 
   private void initProvisioning() throws Exception

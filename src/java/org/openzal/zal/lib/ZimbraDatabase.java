@@ -107,12 +107,6 @@ public class ZimbraDatabase
     }
   }
 
-  @NotNull
-  public static Object getMailboxSynchronizer()
-  {
-    return new Object();
-  }
-
   public static int setMailboxId(PreparedStatement stmt, Mailbox mbox, int pos) throws SQLException
   {
     return DbMailItem.setMailboxId(stmt,

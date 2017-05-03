@@ -47,31 +47,7 @@ public class Zimbra
 
   public Zimbra()
   {
-    try
-    {
-      mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
-      mProvisioning = new ProvisioningImp(com.zimbra.cs.account.Provisioning.getInstance());
-      mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
-      mZimbraDatabase = new ZimbraDatabase();
-      mVolumeManager = new VolumeManager();
-      if (mZimbraStoreManager instanceof FileBlobStore)
-      {
-        mStoreManager = new StoreManagerImpl(
-          new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
-          mVolumeManager
-        );
-        mCanOverrideStoreManager = true;
-      }
-      else
-      {
-        mStoreManager = null;
-        mCanOverrideStoreManager = false;
-      }
-    }
-    catch (Exception ex)
-    {
-      throw new RuntimeException(ex);
-    }
+    this(null);
   }
 
 public Zimbra(Zimbra zimbra)
@@ -84,10 +60,30 @@ public Zimbra(Zimbra zimbra)
       mZimbraDatabase = new ZimbraDatabase();
       mVolumeManager = new VolumeManager();
 
-      mStoreManager = new StoreManagerImpl(
-              new FileBlobStoreWrapImpl((FileBlobStore) zimbra.mZimbraStoreManager),
-              mVolumeManager
-      );
+      if (zimbra != null)
+      {
+        mStoreManager = new StoreManagerImpl(
+                new FileBlobStoreWrapImpl((FileBlobStore) zimbra.mZimbraStoreManager),
+                mVolumeManager
+        );
+        mCanOverrideStoreManager = true;
+      }
+      else
+      {
+        if (mZimbraStoreManager instanceof FileBlobStore)
+        {
+          mStoreManager = new StoreManagerImpl(
+                  new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
+                  mVolumeManager
+          );
+          mCanOverrideStoreManager = true;
+        }
+        else
+        {
+          mStoreManager = null;
+          mCanOverrideStoreManager = false;
+        }
+      }
     }
     catch (Exception ex)
     {
