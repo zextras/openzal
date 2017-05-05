@@ -261,6 +261,7 @@ class ExtensionManagerImpl implements ExtensionManager
 
     for( ExtensionInfo info : extensionInfoList )
     {
+/* $if !DevMode $*/
       if( !info.isCompatible(ZalVersion.current) )
       {
         ZimbraLog.extensions.warn(
@@ -268,6 +269,7 @@ class ExtensionManagerImpl implements ExtensionManager
         );
         continue;
       }
+/* $endif$ */
 
       try
       {
