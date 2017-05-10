@@ -219,7 +219,7 @@ public class MailboxManagerImp implements MailboxManager
   {
     try
     {
-      mMailboxManager.endMaintenance(maintenance.getMailboxMaintenance(),
+      mMailboxManager.endMaintenance(maintenance.toZimbra(com.zimbra.cs.mailbox.MailboxMaintenance.class),
               success,
               removeFromCache);
     }

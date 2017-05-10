@@ -15,15 +15,9 @@ public class MailboxMaintenance {
     this.mMailboxMaintenance = (com.zimbra.cs.mailbox.MailboxMaintenance) mailboxMaintenance;
   }
 
-  @NotNull
-  public com.zimbra.cs.mailbox.MailboxMaintenance getMailboxMaintenance()
-  {
-    return mMailboxMaintenance;
-  }
-
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
-    return cls.cast(getMailboxMaintenance());
+    return cls.cast(mMailboxMaintenance);
   }
 
 }
