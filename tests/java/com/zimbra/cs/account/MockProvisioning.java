@@ -125,6 +125,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   private final Map<String, DistributionList>   name2Dlist   = new HashMap<String, DistributionList>();
   private final Map<String, Zimlet>             id2zimlets   = new HashMap<String, Zimlet>();
   private final Map<String, Signature>          id2signatue  = new HashMap<String, Signature>();
+  private final Map<String, Identity>           name2identity= new HashMap<String, Identity>();
 
   private final Config                    config        = new Config(new HashMap<String, Object>()
   {{
@@ -1133,7 +1134,9 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   /* $endif $ */
 
   public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
-    return new Identity(account, identityName, account.getId(), attrs, this);
+    Identity identity = new Identity(account, identityName, account.getId(), attrs, this);
+    name2identity.put(identityName, identity);
+    return identity;
   }
 
   public Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {
@@ -1149,7 +1152,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
 
   public List<Identity> getAllIdentities(Account account) {
-    return Collections.<Identity>emptyList();
+    return new ArrayList<Identity>(name2identity.values());
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
