@@ -393,11 +393,25 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
           {
             String partAccount = key.split("@")[0];
             String partDomain = key.split("@")[1];
-            String domainAliasTargetId = getDomainByName(partDomain).getDomainAliasTargetId();
-            if(domainAliasTargetId != null){
-              Domain domainById = getDomainById(domainAliasTargetId);
+            Domain domainByName = getDomainByName(partDomain);
+            if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+            {
+              Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
               key = partAccount+"@"+domainById.getName();
-            }else
+              if (name2account.get(key) == null)
+              {
+                for (String keyOfKeySet : name2account.keySet())
+                {
+                  Account account = name2account.get(keyOfKeySet);
+                  Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
+                  if (mySet.contains(key))
+                  {
+                    key = keyOfKeySet;
+                  }
+                }
+              }
+            }
+            else
             {
               for (String keyOfKeySet : name2account.keySet())
               {
