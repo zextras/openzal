@@ -387,6 +387,33 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     switch (keyType)
     {
       case name:
+        try
+        {
+          if (name2account.get(key) == null)
+          {
+            String partAccount = key.split("@")[0];
+            String partDomain = key.split("@")[1];
+            String domainAliasTargetId = getDomainByName(partDomain).getDomainAliasTargetId();
+            if(domainAliasTargetId != null){
+              Domain domainById = getDomainById(domainAliasTargetId);
+              key = partAccount+"@"+domainById.getName();
+            }else
+            {
+              for (String keyOfKeySet : name2account.keySet())
+              {
+                Account account = name2account.get(keyOfKeySet);
+                Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
+                if (mySet.contains(key))
+                {
+                  key = keyOfKeySet;
+                }
+              }
+            }
+          }
+        }
+        catch (ServiceException e)
+        {
+        }
         return name2account.get(key);
       case id:
       default:
@@ -1161,10 +1188,10 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       sGrants = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$Grants");
       sACE = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$ACE");
       sACEConstructor = sACE.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class, String.class, String.class, RightModifier.class);
-      sGrantsConstructor = sGrants.getDeclaredConstructors()[0];
+      sGrantsConstructor = sGrants.getDeclaredConstructor();
       sGrantsConstructor.setAccessible(true);
       sACEConstructor.setAccessible(true);
-      sAceField = sGrants.getDeclaredFields()[0];
+      sAceField = sGrants.getDeclaredField("mACEs");
       sAceField.setAccessible(true);
     }
     catch (Throwable ex)
