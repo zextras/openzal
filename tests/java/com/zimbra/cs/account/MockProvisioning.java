@@ -1,16 +1,22 @@
 package com.zimbra.cs.account;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
 import com.zextras.mobile.v2.engine.actions.GALSearchAction;
+import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
+import org.openzal.zal.Utils;
+import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 
 /**
@@ -1137,6 +1143,98 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     Identity identity = new Identity(account, identityName, account.getId(), attrs, this);
     name2identity.put(identityName, identity);
     return identity;
+  }
+
+  private static final Class<RightCommand> sRightCommand;
+  private static final Class<?> sGrants;
+  private static final Class<?> sACE;
+
+  private static final Constructor<?>             sACEConstructor;
+  private static final Constructor<?>            sGrantsConstructor;
+  private static final Field                     sAceField;
+
+  static
+  {
+    try
+    {
+      sRightCommand = com.zimbra.cs.account.accesscontrol.RightCommand.class;
+      sGrants = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$Grants");
+      sACE = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$ACE");
+      sACEConstructor = sACE.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class, String.class, String.class, RightModifier.class);
+      sGrantsConstructor = sGrants.getDeclaredConstructors()[0];
+      sGrantsConstructor.setAccessible(true);
+      sACEConstructor.setAccessible(true);
+      sAceField = sGrants.getDeclaredFields()[0];
+      sAceField.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public RightCommand.Grants getGrants(String targetType, TargetBy targetBy, String target, String granteeType, GranteeBy granteeBy, String grantee, boolean granteeIncludeGroupsGranteeBelongs) throws ServiceException
+  {
+    //TODO make it more generic
+    try
+    {
+      RightCommand.Grants grants = (RightCommand.Grants)sGrantsConstructor.newInstance();
+      Set<RightCommand.ACE> aceList = new HashSet<RightCommand.ACE>();
+      if (targetType!=null)
+      {
+        if (targetType.equals("account"))
+        {
+          if (targetBy.name().equals("id"))
+          {
+          Account account = id2account.get(target);
+          Set<String> zimbraAce = account.getMultiAttrSet("zimbraAce");
+          for (String aceString : zimbraAce)
+          {
+            RightCommand.ACE ace = extractAce(aceString, "account", account.getId(), account.getName());
+            aceList.add(ace);
+          }
+        }
+      }
+    }
+    sAceField.set(grants, aceList);
+    return grants;
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  //private ACE(String targetType, String targetId, String targetName, String granteeType, String granteeId, String granteeName, String right, RightModifier rightModifier) {
+  private RightCommand.ACE extractAce(String ace, String targetType, String targetId, String targetName) throws ServiceException, IllegalAccessException, InvocationTargetException, InstantiationException
+  {
+    String [] parts = ace.split("[ ]+");
+    String modifier = parts[2].substring(0, 1);
+    String right;
+
+    RightModifier rightModifier;
+
+    if(!(modifier.equals("+")
+      || modifier.equals("-")
+      || modifier.equals("")
+      || modifier.equals("*")))
+    {
+      rightModifier = null;
+      right = parts[2];
+    }
+    else
+    {
+      rightModifier = RightModifier.fromChar(modifier.charAt(0));
+      right = parts[2].substring(1);
+    }
+    String rightName = right;
+    String granteeId = parts[0];
+    String granteeType = parts[1];
+
+    Account accountById = getAccountById(granteeId);
+
+    return (RightCommand.ACE)sACEConstructor.newInstance(targetType, targetId, targetName, granteeType, accountById.getId(), accountById.getName(), rightName, rightModifier);
   }
 
   public Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {
