@@ -73,7 +73,8 @@ public abstract class JarUtils
     Enumeration<? extends ZipEntry> it = zipFile.entries();
     while( it.hasMoreElements() )
     {
-      ZipEntry zipEntry = it.nextElement();
+      ZipEntry zipEntry = (ZipEntry) it.nextElement().clone();
+      zipEntry.setCompressedSize(-1);
       InputStream inputStream = zipFile.getInputStream(zipEntry);
       try
       {
