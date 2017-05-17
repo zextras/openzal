@@ -1053,14 +1053,29 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     {
       if (name2Dlist.get(key) == null)
       {
-        String partDl = key.split("@")[0];
-        String partDomain = key.split("@")[1];
-        Domain domainByName = getDomainByName(partDomain);
-        if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+        if (key.contains(new StringBuilder().append('@')))
         {
-          Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
-          key = partDl+"@"+domainById.getName();
-          if (name2Dlist.get(key) == null)
+          String partDl = key.split("@")[0];
+          String partDomain = key.split("@")[1];
+          Domain domainByName = getDomainByName(partDomain);
+          if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+          {
+            Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
+            key = partDl+"@"+domainById.getName();
+            if (name2Dlist.get(key) == null)
+            {
+              for (String keyOfKeySet : name2Dlist.keySet())
+              {
+                DistributionList distributionList = name2Dlist.get(keyOfKeySet);
+                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
+                if (mySet.contains(key))
+                {
+                  key = keyOfKeySet;
+                }
+              }
+            }
+          }
+          else
           {
             for (String keyOfKeySet : name2Dlist.keySet())
             {
@@ -1070,18 +1085,6 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
               {
                 key = keyOfKeySet;
               }
-            }
-          }
-        }
-        else
-        {
-          for (String keyOfKeySet : name2Dlist.keySet())
-          {
-            DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-            Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
-            if (mySet.contains(key))
-            {
-              key = keyOfKeySet;
             }
           }
         }
