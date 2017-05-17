@@ -1003,6 +1003,23 @@ public class Account extends Entry
     return mAccount.isAllowAnyFromAddress();
   }
 
+  public void setAllowAnyFromAddress(boolean zimbraAllowAnyFromAddress)
+  {
+    try
+    {
+      mAccount.setAllowAnyFromAddress(zimbraAllowAnyFromAddress);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public String getGivenName()
+  {
+    return mAccount.getGivenName();
+  }
+
   public boolean isCalendarResource()
   {
     return mAccount.isCalendarResource();
