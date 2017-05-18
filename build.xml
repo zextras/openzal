@@ -43,11 +43,12 @@
      <attribute name="TargetName"/>
 
      <sequential>
+      <echo> DEV MODE = @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
        <property name="tmpsrc"  value="tmpsrc/@{ZimbraVersion}/jar/" />
-       <property name="build" value="build/@{ZimbraVersion}/jar/" />
+       <property name="build" value="build/@{ZimbraVersion}_dev_@{DevMode}/jar/" />
        <property name="dist"  value="dist/@{TargetName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
