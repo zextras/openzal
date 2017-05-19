@@ -2056,7 +2056,6 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  @Override
   public Collection<String> getWithDomainAliasesExpansion(String address)
   {
     Set<String> addresses = new HashSet<String>();
