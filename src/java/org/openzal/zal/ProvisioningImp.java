@@ -1456,12 +1456,14 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
+      TargetBy targetBy1 = targetBy==null?null:targetBy.toZimbra(TargetBy.class);
+      GranteeBy granteeBy1 = granteeBy==null?null:granteeBy.toZimbra(GranteeBy.class);
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType,
-        targetBy.toZimbra(TargetBy.class),
+        targetBy1,
         target,
         granteeType,
-        granteeBy.toZimbra(GranteeBy.class),
+        granteeBy1,
         grantee,
         granteeIncludeGroupsGranteeBelongs
         );

@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import com.zextras.lib.ZxPair;
 import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
 import com.zextras.mobile.v2.engine.actions.GALSearchAction;
 import com.zimbra.cs.account.accesscontrol.RightCommand;
@@ -416,17 +417,17 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
           key = leftPart + "@" + domainById.getName();
           if (selectedMap.get(key) == null)
           {
-            if (isBetweenAliases(selectedMap, key))
+            if (isBetweenAliases(selectedMap, key).first())
             {
-              return key;
+              return isBetweenAliases(selectedMap, key).second();
             }
           }
         }
         else
         {
-          if (isBetweenAliases(selectedMap, key))
+          if (isBetweenAliases(selectedMap, key).first())
           {
-            return key;
+            return isBetweenAliases(selectedMap, key).second();
           }
         }
       }
@@ -434,7 +435,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     return key;
   }
 
-  private boolean isBetweenAliases(Map<String, ? extends AliasedEntry> selectedMap, String key) throws ServiceException
+  private ZxPair<Boolean, String> isBetweenAliases(Map<String, ? extends AliasedEntry> selectedMap, String key) throws ServiceException
   {
     for (String keyOfKeySet : selectedMap.keySet())
     {
@@ -442,10 +443,10 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       Set<String> mySet   = new HashSet<String>(Arrays.asList(entry.getAliases()));
       if (mySet.contains(key))
       {
-        return true;
+        return new ZxPair<Boolean, String>(true, keyOfKeySet);
       }
     }
-    return false;
+    return new ZxPair<Boolean, String>(false, null);
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
@@ -1261,7 +1262,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
             for (String aceString : zimbraAce)
             {
               RightCommand.ACE ace = extractAce(aceString, "account", account.getId(), account.getName());
-              if (ace.granteeId().equals(grantee) || ace.granteeName().equals(grantee) ||
+              if (grantee == null || ace.granteeId().equals(grantee) || ace.granteeName().equals(grantee) ||
                 (granteeIncludeGroupsGranteeBelongs && ace.granteeType().equals("grp") && getGroups(getAccount(grantee)).contains(ace.granteeName())))//TODO test it
               {
                 aceList.add(ace);
