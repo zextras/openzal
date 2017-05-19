@@ -334,8 +334,6 @@ public interface Provisioning
   @NotNull
   void deleteCosById(String id);
 
-  Collection<String> getWithDomainAliasesExpansion(String address);
-
   Collection<Domain> getDomainAliases(Domain domain);
 
   void invalidateAllCache();

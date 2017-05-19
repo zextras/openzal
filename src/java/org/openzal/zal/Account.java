@@ -378,7 +378,8 @@ public class Account extends Entry
     for (String address : getAllAddresses())
     {
       addresses.add(address);
-      addresses.addAll(provisioning.getWithDomainAliasesExpansion(address));
+      //will be fixed in devel(compatibility check)
+      addresses.addAll(((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address));
     }
 
     return addresses;
