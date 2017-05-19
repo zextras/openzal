@@ -389,41 +389,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       case name:
         try
         {
-          if (name2account.get(key) == null)
-          {
-            String partAccount = key.split("@")[0];
-            String partDomain = key.split("@")[1];
-            Domain domainByName = getDomainByName(partDomain);
-            if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
-            {
-              Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
-              key = partAccount+"@"+domainById.getName();
-              if (name2account.get(key) == null)
-              {
-                for (String keyOfKeySet : name2account.keySet())
-                {
-                  Account account = name2account.get(keyOfKeySet);
-                  Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
-                  if (mySet.contains(key))
-                  {
-                    key = keyOfKeySet;
-                  }
-                }
-              }
-            }
-            else
-            {
-              for (String keyOfKeySet : name2account.keySet())
-              {
-                Account account = name2account.get(keyOfKeySet);
-                Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
-                if (mySet.contains(key))
-                {
-                  key = keyOfKeySet;
-                }
-              }
-            }
-          }
+          key = lookingForKey(key, name2account);
         }
         catch (ServiceException e)
         {
@@ -433,6 +399,53 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
       default:
         return id2account.get(key);
     }
+  }
+
+  private String lookingForKey (String key, Map<String, ? extends AliasedEntry> selectedMap) throws ServiceException
+  {
+    if (selectedMap.get(key) == null)
+    {
+      if (key.contains("@"))
+      {
+        String leftPart  = key.split("@")[0];
+        String rightPart   = key.split("@")[1];
+        Domain domainByName = getDomainByName(rightPart);
+        if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+        {
+          Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
+          key = leftPart + "@" + domainById.getName();
+          if (selectedMap.get(key) == null)
+          {
+            if (isBetweenAliases(selectedMap, key))
+            {
+              return key;
+            }
+          }
+        }
+        else
+        {
+          if (isBetweenAliases(selectedMap, key))
+          {
+            return key;
+          }
+        }
+      }
+    }
+    return key;
+  }
+
+  private boolean isBetweenAliases(Map<String, ? extends AliasedEntry> selectedMap, String key) throws ServiceException
+  {
+    for (String keyOfKeySet : selectedMap.keySet())
+    {
+      AliasedEntry entry = selectedMap.get(keyOfKeySet);
+      Set<String> mySet   = new HashSet<String>(Arrays.asList(entry.getAliases()));
+      if (mySet.contains(key))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
@@ -1048,56 +1061,19 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   {
     switch (keyType)
     {
-    case name:
-    try
-    {
-      if (name2Dlist.get(key) == null)
-      {
-        if (key.contains(new StringBuilder().append('@')))
+      case name:
+        try
         {
-          String partDl = key.split("@")[0];
-          String partDomain = key.split("@")[1];
-          Domain domainByName = getDomainByName(partDomain);
-          if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
-          {
-            Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
-            key = partDl+"@"+domainById.getName();
-            if (name2Dlist.get(key) == null)
-            {
-              for (String keyOfKeySet : name2Dlist.keySet())
-              {
-                DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
-                if (mySet.contains(key))
-                {
-                  key = keyOfKeySet;
-                }
-              }
-            }
-          }
-          else
-          {
-            for (String keyOfKeySet : name2Dlist.keySet())
-            {
-              DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
-              if (mySet.contains(key))
-              {
-                key = keyOfKeySet;
-              }
-            }
-          }
+          key = lookingForKey(key, name2Dlist);
         }
-      }
+        catch (ServiceException e)
+        {
+        }
+        return name2Dlist.get(key);
+      case id:
+      default:
+        return id2Dlist.get(key);
     }
-    catch (ServiceException e)
-    {
-    }
-    return name2Dlist.get(key);
-    case id:
-    default:
-    return id2Dlist.get(key);
-  }
   }
 
   /* $if MajorZimbraVersion >= 8 $ */

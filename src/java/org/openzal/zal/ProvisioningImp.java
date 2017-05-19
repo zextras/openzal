@@ -2054,6 +2054,33 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Override
+  public Collection<String> getWithDomainAliasesExpansion(String address)
+  {
+    Set<String> addresses = new HashSet<String>();
+    if (address.contains("@"))
+    {
+      String[] parts = address.split("@");
+      if (parts.length == 2)
+      {
+        String aliasName = parts[0];
+        String domainName = parts[1];
+
+        Domain domain = getDomainByName(domainName);
+        if (domain != null)
+        {
+          Collection<Domain> domainAliases = getDomainAliases(domain);
+          for (Domain domainAlias : domainAliases)
+          {
+            String alias = aliasName + "@" + domainAlias.getName();
+            addresses.add(alias);
+          }
+        }
+      }
+    }
+    return addresses;
+  }
+
   public static class GalSearchCallback extends GalSearchResultCallback
   {
     private final int             mSkip;

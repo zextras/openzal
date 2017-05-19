@@ -378,26 +378,7 @@ public class Account extends Entry
     for (String address : getAllAddresses())
     {
       addresses.add(address);
-      if (address.contains("@"))
-      {
-        String[] parts = address.split("@");
-        if (parts.length == 2)
-        {
-          String aliasName = parts[0];
-          String domainName = parts[1];
-
-          Domain domain = provisioning.getDomainByName(domainName);
-          if (domain != null)
-          {
-            Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
-            for (Domain domainAlias : domainAliases)
-            {
-              String alias = aliasName + "@" + domainAlias.getName();
-              addresses.add(alias);
-            }
-          }
-        }
-      }
+      addresses.addAll(provisioning.getWithDomainAliasesExpansion(address));
     }
 
     return addresses;
