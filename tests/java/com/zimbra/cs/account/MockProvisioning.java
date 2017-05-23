@@ -1380,6 +1380,14 @@ if (key.contains(new StringBuilder().append('@')))
 
   public Set<String> getGroups(Account acct) throws ServiceException {
     Set<String> mySet = new HashSet<String>();
+    Set<String> keySet = name2Dlist.keySet();
+    for (String key : keySet)
+    {
+      if (name2Dlist.get(key).getAllMembersSet().contains(acct.getName()))
+      {
+        mySet.add(key);
+      }
+    }
     return mySet;
   }
 
