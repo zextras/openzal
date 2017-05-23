@@ -1127,7 +1127,7 @@ if (key.contains(new StringBuilder().append('@')))
               for (String keyOfKeySet : name2Dlist.keySet())
               {
                 DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getMailAlias()));
+                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
                 if (mySet.contains(key))
                 {
                   key = keyOfKeySet;
@@ -1140,7 +1140,7 @@ if (key.contains(new StringBuilder().append('@')))
             for (String keyOfKeySet : name2Dlist.keySet())
             {
               DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getMailAlias()));
+              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
               if (mySet.contains(key))
               {
                 key = keyOfKeySet;
@@ -1379,7 +1379,8 @@ if (key.contains(new StringBuilder().append('@')))
   }
 
   public Set<String> getGroups(Account acct) throws ServiceException {
-    throw ServiceException.UNSUPPORTED();
+    Set<String> mySet = new HashSet<String>();
+    return mySet;
   }
 
   //private ACE(String targetType, String targetId, String targetName, String granteeType, String granteeId, String granteeName, String right, RightModifier rightModifier) {
