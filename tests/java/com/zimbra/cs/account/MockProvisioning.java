@@ -476,6 +476,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
   /* $endif $ */
 
+  /* $if MajorZimbraVersion >= 8 $ */
   private ZxPair<Boolean, String> isBetweenAliases(Map<String, ? extends AliasedEntry> selectedMap, String key) throws ServiceException
   {
     for (String keyOfKeySet : selectedMap.keySet())
@@ -489,6 +490,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     }
     return new ZxPair<Boolean, String>(false, null);
   }
+  /* $endif $ */
 
   /* $if MajorZimbraVersion >= 8 $ */
   public List<MimeTypeInfo> getMimeTypes(String mime)
