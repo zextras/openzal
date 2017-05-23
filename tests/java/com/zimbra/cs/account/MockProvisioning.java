@@ -407,7 +407,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
                 for (String keyOfKeySet : name2account.keySet())
                 {
                   Account account = name2account.get(keyOfKeySet);
-                  Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
+                  Set<String> mySet = new HashSet<String>(Arrays.asList(account.getMailAlias()));
                   if (mySet.contains(key))
                   {
                     key = keyOfKeySet;
@@ -420,7 +420,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
               for (String keyOfKeySet : name2account.keySet())
               {
                 Account account = name2account.get(keyOfKeySet);
-                Set<String> mySet = new HashSet<String>(Arrays.asList(account.getAliases()));
+                Set<String> mySet = new HashSet<String>(Arrays.asList(account.getMailAlias()));
                 if (mySet.contains(key))
                 {
                   key = keyOfKeySet;
@@ -1127,7 +1127,7 @@ if (key.contains(new StringBuilder().append('@')))
               for (String keyOfKeySet : name2Dlist.keySet())
               {
                 DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
+                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getMailAlias()));
                 if (mySet.contains(key))
                 {
                   key = keyOfKeySet;
@@ -1140,7 +1140,7 @@ if (key.contains(new StringBuilder().append('@')))
             for (String keyOfKeySet : name2Dlist.keySet())
             {
               DistributionList distributionList = name2Dlist.get(keyOfKeySet);
-              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
+              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getMailAlias()));
               if (mySet.contains(key))
               {
                 key = keyOfKeySet;
@@ -1376,6 +1376,10 @@ if (key.contains(new StringBuilder().append('@')))
     {
       throw new RuntimeException(e);
     }
+  }
+
+  public Set<String> getGroups(Account acct) throws ServiceException {
+    throw ServiceException.UNSUPPORTED();
   }
 
   //private ACE(String targetType, String targetId, String targetName, String granteeType, String granteeId, String granteeName, String right, RightModifier rightModifier) {
