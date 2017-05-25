@@ -1456,12 +1456,14 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
+      TargetBy targetBy1 = targetBy==null?null:targetBy.toZimbra(TargetBy.class);
+      GranteeBy granteeBy1 = granteeBy==null?null:granteeBy.toZimbra(GranteeBy.class);
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType,
-        targetBy.toZimbra(TargetBy.class),
+        targetBy1,
         target,
         granteeType,
-        granteeBy.toZimbra(GranteeBy.class),
+        granteeBy1,
         grantee,
         granteeIncludeGroupsGranteeBelongs
         );
@@ -2052,6 +2054,32 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public Collection<String> getWithDomainAliasesExpansion(String address)
+  {
+    Set<String> addresses = new HashSet<String>();
+    if (address.contains("@"))
+    {
+      String[] parts = address.split("@");
+      if (parts.length == 2)
+      {
+        String aliasName = parts[0];
+        String domainName = parts[1];
+
+        Domain domain = getDomainByName(domainName);
+        if (domain != null)
+        {
+          Collection<Domain> domainAliases = getDomainAliases(domain);
+          for (Domain domainAlias : domainAliases)
+          {
+            String alias = aliasName + "@" + domainAlias.getName();
+            addresses.add(alias);
+          }
+        }
+      }
+    }
+    return addresses;
   }
 
   public static class GalSearchCallback extends GalSearchResultCallback

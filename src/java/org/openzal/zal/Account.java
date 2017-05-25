@@ -366,6 +366,11 @@ public class Account extends Entry
     return Arrays.asList(mAccount.getMailAlias());
   }
 
+  /**
+   * @param  provisioning Provisioning
+   * @return Collection of all addresses of an Account obtained from account.getName() and account.getMailAlias()
+   * properly combined with their relative domainAliases
+   */
   @NotNull
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
@@ -373,26 +378,8 @@ public class Account extends Entry
     for (String address : getAllAddresses())
     {
       addresses.add(address);
-      if (address.contains("@"))
-      {
-        String[] parts = address.split("@");
-        if (parts.length == 2)
-        {
-          String aliasName = parts[0];
-          String domainName = parts[1];
-
-          Domain domain = provisioning.getDomainByName(domainName);
-          if (domain != null)
-          {
-            Collection<Domain> domainAliases = provisioning.getDomainAliases(domain);
-            for (Domain domainAlias : domainAliases)
-            {
-              String alias = aliasName + "@" + domainAlias.getName();
-              addresses.add(alias);
-            }
-          }
-        }
-      }
+      //will be fixed in devel(compatibility check)
+      addresses.addAll(((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address));
     }
 
     return addresses;
@@ -402,10 +389,14 @@ public class Account extends Entry
   public Collection<String> getAllAddressesAllowedInFrom(Provisioning provisioning)
   {
     Set<String> addresses = new HashSet<String>();
+
+    //add main address plus mail aliases combined with relative domain aliases
     addresses.addAll(getAllAddressesIncludeDomainAliases(provisioning));
 
+    //add addresses obtained from account multi attribute "zimbraAllowFromAddress"
     addresses.addAll(getAllowFromAddress());
 
+    //add sendAs and sendAsDistList and relative allowed aliases
     /* $if ZimbraVersion >= 8.0.0 $ */
     Map<Right, Set<com.zimbra.cs.account.Entry>>  rights;
     try
@@ -423,6 +414,7 @@ public class Account extends Entry
       {
         if (entry instanceof com.zimbra.cs.account.Account)
         {
+          addresses.add(((com.zimbra.cs.account.Account) entry).getName());
           addresses.addAll(Arrays.asList(((com.zimbra.cs.account.Account) entry).getPrefAllowAddressForDelegatedSender()));
         }
       }
@@ -434,6 +426,7 @@ public class Account extends Entry
       {
         if (entry instanceof com.zimbra.cs.account.DistributionList)
         {
+          addresses.add(((com.zimbra.cs.account.DistributionList) entry).getName());
           addresses.addAll(Arrays.asList((((com.zimbra.cs.account.DistributionList)entry).getPrefAllowAddressForDelegatedSender())));
         }
       }
@@ -443,6 +436,10 @@ public class Account extends Entry
     return addresses;
   }
 
+  /**
+   * @return the address of account's alias obtained from MultiAttribute "zimbraMailAlias" with the addition
+   * of account.getName().
+   */
   @NotNull
   public List<String> getAllAddresses()
   {
@@ -986,6 +983,23 @@ public class Account extends Entry
   public boolean isAllowAnyFromAddress()
   {
     return mAccount.isAllowAnyFromAddress();
+  }
+
+  public void setAllowAnyFromAddress(boolean zimbraAllowAnyFromAddress)
+  {
+    try
+    {
+      mAccount.setAllowAnyFromAddress(zimbraAllowAnyFromAddress);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public String getGivenName()
+  {
+    return mAccount.getGivenName();
   }
 
   public boolean isCalendarResource()

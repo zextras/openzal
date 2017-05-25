@@ -1,16 +1,23 @@
 package com.zimbra.cs.account;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import com.zextras.lib.ZxPair;
 import com.zextras.mobile.v2.as.events.utils.SearchGalProperty;
 import com.zextras.mobile.v2.engine.actions.GALSearchAction;
+import com.zimbra.cs.account.accesscontrol.RightCommand;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
+import org.openzal.zal.Utils;
+import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.redolog.MockRedoLogProvider;
 
 /**
@@ -125,6 +132,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   private final Map<String, DistributionList>   name2Dlist   = new HashMap<String, DistributionList>();
   private final Map<String, Zimlet>             id2zimlets   = new HashMap<String, Zimlet>();
   private final Map<String, Signature>          id2signatue  = new HashMap<String, Signature>();
+  private final Map<String, Identity>           name2identity= new HashMap<String, Identity>();
 
   private final Config                    config        = new Config(new HashMap<String, Object>()
   {{
@@ -380,12 +388,109 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     switch (keyType)
     {
       case name:
+        try
+        {
+          /* $if MajorZimbraVersion >= 8 $ */
+          key = lookingForKey(key, name2account);
+          /* $else $
+          if (name2account.get(key) == null)
+          {
+            String partAccount = key.split("@")[0];
+            String partDomain = key.split("@")[1];
+            Domain domainByName = getDomainByName(partDomain);
+            if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+            {
+              Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
+              key = partAccount+"@"+domainById.getName();
+              if (name2account.get(key) == null)
+              {
+                for (String keyOfKeySet : name2account.keySet())
+                {
+                  Account account = name2account.get(keyOfKeySet);
+                  Set<String> mySet = new HashSet<String>(Arrays.asList(account.getMailAlias()));
+                  if (mySet.contains(key))
+                  {
+                    key = keyOfKeySet;
+                  }
+                }
+              }
+            }
+            else
+            {
+              for (String keyOfKeySet : name2account.keySet())
+              {
+                Account account = name2account.get(keyOfKeySet);
+                Set<String> mySet = new HashSet<String>(Arrays.asList(account.getMailAlias()));
+                if (mySet.contains(key))
+                {
+                  key = keyOfKeySet;
+                }
+              }
+            }
+          }
+
+  /* $endif $ */
+        }
+        catch (ServiceException e)
+        {
+        }
         return name2account.get(key);
       case id:
       default:
         return id2account.get(key);
     }
   }
+
+  /* $if MajorZimbraVersion >= 8 $ */
+  private String lookingForKey (String key, Map<String, ? extends AliasedEntry> selectedMap) throws ServiceException
+  {
+    if (selectedMap.get(key) == null)
+    {
+      if (key.contains("@"))
+      {
+        String leftPart  = key.split("@")[0];
+        String rightPart   = key.split("@")[1];
+        Domain domainByName = getDomainByName(rightPart);
+        if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+        {
+          Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
+          key = leftPart + "@" + domainById.getName();
+          if (selectedMap.get(key) == null)
+          {
+            if (isBetweenAliases(selectedMap, key).first())
+            {
+              return isBetweenAliases(selectedMap, key).second();
+            }
+          }
+        }
+        else
+        {
+          if (isBetweenAliases(selectedMap, key).first())
+          {
+            return isBetweenAliases(selectedMap, key).second();
+          }
+        }
+      }
+    }
+    return key;
+  }
+  /* $endif $ */
+
+  /* $if MajorZimbraVersion >= 8 $ */
+  private ZxPair<Boolean, String> isBetweenAliases(Map<String, ? extends AliasedEntry> selectedMap, String key) throws ServiceException
+  {
+    for (String keyOfKeySet : selectedMap.keySet())
+    {
+      AliasedEntry entry = selectedMap.get(keyOfKeySet);
+      Set<String> mySet   = new HashSet<String>(Arrays.asList(entry.getAliases()));
+      if (mySet.contains(key))
+      {
+        return new ZxPair<Boolean, String>(true, keyOfKeySet);
+      }
+    }
+    return new ZxPair<Boolean, String>(false, null);
+  }
+  /* $endif $ */
 
   /* $if MajorZimbraVersion >= 8 $ */
   public List<MimeTypeInfo> getMimeTypes(String mime)
@@ -982,6 +1087,10 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   public DistributionList createDistributionList(String name, Map<String, Object> listAttrs) throws AccountServiceException
   {
+    if (!listAttrs.containsKey(A_zimbraId))
+    {
+      listAttrs.put(A_zimbraId, UUID.randomUUID().toString());
+    }
     DistributionList list = new MockDistributionList(name, name, listAttrs, this);
     name2Dlist.put(name, list);
     id2Dlist.put(list.getId(), list);
@@ -994,13 +1103,62 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   public DistributionList get(DistributionListBy keyType, String key)
   /* $endif $ */
   {
-    if( keyType.toString().equalsIgnoreCase("id") )
+    switch (keyType)
     {
-      return id2Dlist.get(key);
-    }
-    else
-    {
-      return name2Dlist.get(key);
+      case name:
+        try
+        {
+            /* $if MajorZimbraVersion >= 8 $ */
+
+          key = lookingForKey(key, name2Dlist);
+            /* $else $
+
+if (key.contains(new StringBuilder().append('@')))
+        {
+          String partDl = key.split("@")[0];
+          String partDomain = key.split("@")[1];
+          Domain domainByName = getDomainByName(partDomain);
+          if (domainByName != null && domainByName.getDomainAliasTargetId() != null)
+          {
+            Domain domainById = getDomainById(domainByName.getDomainAliasTargetId());
+            key = partDl+"@"+domainById.getName();
+            if (name2Dlist.get(key) == null)
+            {
+              for (String keyOfKeySet : name2Dlist.keySet())
+              {
+                DistributionList distributionList = name2Dlist.get(keyOfKeySet);
+                Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
+                if (mySet.contains(key))
+                {
+                  key = keyOfKeySet;
+                }
+              }
+            }
+          }
+          else
+          {
+            for (String keyOfKeySet : name2Dlist.keySet())
+            {
+              DistributionList distributionList = name2Dlist.get(keyOfKeySet);
+              Set<String> mySet = new HashSet<String>(Arrays.asList(distributionList.getAliases()));
+              if (mySet.contains(key))
+              {
+                key = keyOfKeySet;
+              }
+            }
+          }
+        }
+
+  /* $endif $ */
+
+        }
+        catch (ServiceException e)
+        {
+        }
+        return name2Dlist.get(key);
+      case id:
+      default:
+        return id2Dlist.get(key);
     }
   }
 
@@ -1024,7 +1182,11 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
 
   public void addAlias(DistributionList dl, String alias) {
-    throw new UnsupportedOperationException();
+    Map<String, Object> attrs   = dl.getAttrs();
+    Set<String>         zimbraMailAlias = dl.getMultiAttrSet("zimbraMailAlias");
+    zimbraMailAlias.add(alias);
+    attrs.put("zimbraMailAlias", zimbraMailAlias.toArray(new String[zimbraMailAlias.size()]));
+    dl.setAttrs(attrs);
   }
 
   public void removeAlias(DistributionList dl, String alias) {
@@ -1133,7 +1295,131 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   /* $endif $ */
 
   public Identity createIdentity(Account account, String identityName, Map<String, Object> attrs) {
-    return new Identity(account, identityName, account.getId(), attrs, this);
+    Identity identity = new Identity(account, identityName, account.getId(), attrs, this);
+    name2identity.put(identityName, identity);
+    return identity;
+  }
+
+  private static final Class<RightCommand> sRightCommand;
+  private static final Class<?> sGrants;
+  private static final Class<?> sACE;
+
+  private static final Constructor<?>             sACEConstructor;
+  private static final Constructor<?>            sGrantsConstructor;
+  private static final Field                     sAceField;
+
+  static
+  {
+    try
+    {
+      sRightCommand = com.zimbra.cs.account.accesscontrol.RightCommand.class;
+      sGrants = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$Grants");
+      sACE = sRightCommand.getClassLoader().loadClass("com.zimbra.cs.account.accesscontrol.RightCommand$ACE");
+      sACEConstructor = sACE.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class, String.class, String.class, RightModifier.class);
+      sGrantsConstructor = sGrants.getDeclaredConstructor();
+      sGrantsConstructor.setAccessible(true);
+      sACEConstructor.setAccessible(true);
+      sAceField = sGrants.getDeclaredField("mACEs");
+      sAceField.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+  public RightCommand.Grants getGrants(String targetType, TargetBy targetBy, String target, String granteeType, GranteeBy granteeBy, String grantee, boolean granteeIncludeGroupsGranteeBelongs) throws ServiceException
+  {
+    //TODO make it more generic(Handle inherited rights)
+    try
+    {
+      RightCommand.Grants grants = (RightCommand.Grants)sGrantsConstructor.newInstance();
+      Set<RightCommand.ACE> aceList = new HashSet<RightCommand.ACE>();
+      if (targetType!=null)
+      {
+        if (targetType.equals("account"))
+        {
+          if (targetBy.name().equals("id"))
+          {
+            Account account = id2account.get(target);
+            Set<String> zimbraAce = account.getMultiAttrSet("zimbraAce");
+            for (String aceString : zimbraAce)
+            {
+              RightCommand.ACE ace = extractAce(aceString, "account", account.getId(), account.getName());
+              if (grantee == null || ace.granteeId().equals(grantee) || ace.granteeName().equals(grantee) ||
+                (granteeIncludeGroupsGranteeBelongs && ace.granteeType().equals("grp") && getGroups(getAccount(grantee)).contains(ace.granteeName())))//TODO test it
+              {
+                aceList.add(ace);
+              }
+            }
+          }
+        }
+        else if (targetType.equals("dl"))
+        {
+          if (targetBy.name().equals("id"))
+          {
+            DistributionList    distributionList   = id2Dlist.get(target);
+            Set<String> zimbraAce = distributionList.getMultiAttrSet("zimbraAce");
+            for (String aceString : zimbraAce)
+            {
+              RightCommand.ACE ace = extractAce(aceString, "account", distributionList.getId(), distributionList.getName());
+              aceList.add(ace);
+            }
+          }
+        }
+      }
+    sAceField.set(grants, aceList);
+    return grants;
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public Set<String> getGroups(Account acct) throws ServiceException {
+    Set<String> mySet = new HashSet<String>();
+    Set<String> keySet = name2Dlist.keySet();
+    for (String key : keySet)
+    {
+      if (name2Dlist.get(key).getAllMembersSet().contains(acct.getName()))
+      {
+        mySet.add(key);
+      }
+    }
+    return mySet;
+  }
+
+  //private ACE(String targetType, String targetId, String targetName, String granteeType, String granteeId, String granteeName, String right, RightModifier rightModifier) {
+  private RightCommand.ACE extractAce(String ace, String targetType, String targetId, String targetName) throws ServiceException, IllegalAccessException, InvocationTargetException, InstantiationException
+  {
+    String [] parts = ace.split("[ ]+");
+    String modifier = parts[2].substring(0, 1);
+    String right;
+
+    RightModifier rightModifier;
+
+    if(!(modifier.equals("+")
+      || modifier.equals("-")
+      || modifier.equals("")
+      || modifier.equals("*")))
+    {
+      rightModifier = null;
+      right = parts[2];
+    }
+    else
+    {
+      rightModifier = RightModifier.fromChar(modifier.charAt(0));
+      right = parts[2].substring(1);
+    }
+    String rightName = right;
+    String granteeId = parts[0];
+    String granteeType = parts[1];
+
+    Account accountById = getAccountById(granteeId);
+
+    return (RightCommand.ACE)sACEConstructor.newInstance(targetType, targetId, targetName, granteeType, accountById.getId(), accountById.getName(), rightName, rightModifier);
   }
 
   public Identity restoreIdentity(Account account, String identityName, Map<String, Object> attrs) {
@@ -1149,7 +1435,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
   }
 
   public List<Identity> getAllIdentities(Account account) {
-    return Collections.<Identity>emptyList();
+    return new ArrayList<Identity>(name2identity.values());
   }
 
   /* $if MajorZimbraVersion >= 8 $ */
