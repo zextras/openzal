@@ -30,7 +30,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 1.11.11 </echo>
+    <echo> Building ZAL version 1.11.12 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -85,7 +85,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="1.11.11" />
+           <attribute name="Specification-Version" value="1.11.12" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -152,7 +152,7 @@
       <jar jarfile="${dist}/zal-itbase.jar" compress="false">
         <manifest>
           <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-          <attribute name="Specification-Version" value="1.11.11" />
+          <attribute name="Specification-Version" value="1.11.12" />
           <attribute name="Specification-Vendor" value="ZeXtras" />
           <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
           <attribute name="Created-By" value="ZeXtras" />
@@ -1128,30 +1128,51 @@
                     MinorZimbraVersion = "9" />
 </target>
 
-<target name="zal-dev-last"
-        description="Create jar for Zimbra 8.7.9"
+<target name="zal-8.7.10"
+        description="Create jar for Zimbra 8.7.10"
         depends="init">
-  <build-zal ZimbraVersion="8.7.9"
+  <build-zal ZimbraVersion="8.7.10"
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "9"
+             MinorZimbraVersion = "10"
+             TargetName = "8.7.10"
+             DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.10-itbase"
+        description="Create test jar for Zimbra 8.7.10"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.10"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "10" />
+</target>
+
+<target name="zal-dev-last"
+        description="Create jar for Zimbra 8.7.10"
+        depends="init">
+  <build-zal ZimbraVersion="8.7.10"
+             MajorZimbraVersion = "8"
+             MiddleZimbraVersion = "7"
+             MinorZimbraVersion = "10"
              TargetName = "dev-last"
              DevMode = "true" />
 </target>
 
 
 <target name="zal-dev-last-itbase"
-        description="Create test jar for Zimbra 8.7.9"
+        description="Create test jar for Zimbra 8.7.10"
         depends="init">
-  <build-zal-itbase ZimbraVersion="8.7.9"
+  <build-zal-itbase ZimbraVersion="8.7.10"
                     MajorZimbraVersion = "8"
                     MiddleZimbraVersion = "7"
-                    MinorZimbraVersion = "9" />
+                    MinorZimbraVersion = "10" />
 </target>
 
 
-  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.9" />
-  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-dev-last" />
+  <target name="zal-common" depends="zal-6.0.7,zal-6.0.16,zal-7.0.0,zal-7.2.7,zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.10" />
+  <target name="zal-all" depends="zal-6.0.7,zal-6.0.8,zal-6.0.9,zal-6.0.10,zal-6.0.12,zal-6.0.13,zal-6.0.14,zal-6.0.15,zal-6.0.16,zal-7.0.0,zal-7.0.1,zal-7.1.0,zal-7.1.1,zal-7.1.2,zal-7.1.3,zal-7.1.4,zal-7.2.0,zal-7.2.1,zal-7.2.2,zal-7.2.3,zal-7.2.4,zal-7.2.5,zal-7.2.6,zal-7.2.7,zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-8.7.10,zal-dev-last" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -1170,7 +1191,7 @@
   <target name="fast-compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="11" arg2="0" />
+      <equals arg1="12" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -1179,7 +1200,7 @@
       </else>
     </if>
 
-    <for list="6.0.16,7.2.7,8.0.9,8.5.1,8.6.0,8.7.9" param="currentZimbraVersion">
+    <for list="6.0.16,7.2.7,8.0.9,8.5.1,8.6.0,8.7.10" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -1201,7 +1222,7 @@
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.7.9/zal.jar"/>
+      <arg value="dist/8.7.10/zal.jar"/>
       <arg value="dist/6.0.7/zal.jar"/>
     </exec>
   </target>
@@ -1209,7 +1230,7 @@
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="11" arg2="0" />
+      <equals arg1="12" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -1218,7 +1239,7 @@
       </else>
     </if>
 
-    <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0,8.7.1,8.7.2,8.7.3,8.7.4,8.7.5,8.7.6,8.7.7,8.7.9" param="currentZimbraVersion">
+    <for list="6.0.7,6.0.8,6.0.9,6.0.10,6.0.12,6.0.13,6.0.14,6.0.15,6.0.16,7.0.0,7.0.1,7.1.0,7.1.1,7.1.2,7.1.3,7.1.4,7.2.0,7.2.1,7.2.2,7.2.3,7.2.4,7.2.5,7.2.6,7.2.7,8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0,8.7.1,8.7.2,8.7.3,8.7.4,8.7.5,8.7.6,8.7.7,8.7.9,8.7.10" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -1239,7 +1260,7 @@
     <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.7.9/zal.jar"/>
+      <arg value="dist/8.7.10/zal.jar"/>
       <arg value="dist/6.0.7/zal.jar"/>
     </exec>
   </target>
@@ -1254,7 +1275,7 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="1.11.11"/>
+          value="1.11.12"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="1"/>
@@ -1263,13 +1284,13 @@
           value="11"/>
         <replacefilter
           token="@VERSION_MICRO@"
-          value="11"/>
+          value="12"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
           value="6.0.7"/>
         <replacefilter
           token="@LAST_ZIMBRA_VERSION@"
-          value="8.7.9"/>
+          value="8.7.10"/>
       </replace>
     </sequential>
   </macrodef>
@@ -1335,7 +1356,7 @@
       <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-1.11/buildroot"/>
       <arg value="openzal-1.11/SPEC/openzal-1.11.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-1.11/RPMS/noarch/openzal-1.11-11-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-1.11/RPMS/noarch/openzal-1.11-12-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
