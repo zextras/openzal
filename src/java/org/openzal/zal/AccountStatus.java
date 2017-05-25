@@ -29,7 +29,7 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 public class AccountStatus
 {
   public static String ACCOUNT_STATUS_MAINTENANCE = Provisioning.ACCOUNT_STATUS_MAINTENANCE;
-  public static String ACCOUNT_STATUS_LOCKED      = Provisioning.ACCOUNT_STATUS_LOCKOUT;
+  public static String ACCOUNT_STATUS_LOCKED      = Provisioning.ACCOUNT_STATUS_LOCKED;
   public static String ACCOUNT_STATUS_LOCKOUT     = Provisioning.ACCOUNT_STATUS_LOCKOUT;
   public static String ACCOUNT_STATUS_ACTIVE      = Provisioning.ACCOUNT_STATUS_ACTIVE;
   public static String ACCOUNT_STATUS_CLOSED      = Provisioning.ACCOUNT_STATUS_CLOSED;
