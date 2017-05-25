@@ -43,7 +43,6 @@
      <attribute name="TargetName"/>
 
      <sequential>
-      <echo> DEV MODE = @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
