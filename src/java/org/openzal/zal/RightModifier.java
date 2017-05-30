@@ -42,4 +42,8 @@ public class RightModifier
   {
     return mRightModifier;
   }
+
+  public char getModifier() {
+    return mRightModifier.getModifier();
+  }
 }
