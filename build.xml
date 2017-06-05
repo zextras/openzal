@@ -40,7 +40,6 @@
      <attribute name="MiddleZimbraVersion"/>
      <attribute name="MinorZimbraVersion"/>
      <attribute name="DevMode"/>
-     <attribute name="TargetName"/>
 
      <sequential>
        <local name="tmpsrc"/>
@@ -48,7 +47,7 @@
        <local name="dist"/>
        <property name="tmpsrc"  value="tmpsrc/@{ZimbraVersion}/jar/" />
        <property name="build" value="build/@{ZimbraVersion}_dev_@{DevMode}/jar/" />
-       <property name="dist"  value="dist/@{TargetName}/"/>
+       <property name="dist"  value="dist/@{ZimbraVersion}/"/>
 
        <mkdir dir="${tmpsrc}"/>
        <mkdir dir="${build}"/>
@@ -168,7 +167,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "0"
-             TargetName = "8.0.0"
              DevMode = "false" />
 </target>
 
@@ -189,7 +187,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "1"
-             TargetName = "8.0.1"
              DevMode = "false" />
 </target>
 
@@ -210,7 +207,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "2"
-             TargetName = "8.0.2"
              DevMode = "false" />
 </target>
 
@@ -231,7 +227,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "3"
-             TargetName = "8.0.3"
              DevMode = "false" />
 </target>
 
@@ -252,7 +247,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "4"
-             TargetName = "8.0.4"
              DevMode = "false" />
 </target>
 
@@ -273,7 +267,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "5"
-             TargetName = "8.0.5"
              DevMode = "false" />
 </target>
 
@@ -294,7 +287,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "6"
-             TargetName = "8.0.6"
              DevMode = "false" />
 </target>
 
@@ -315,7 +307,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "7"
-             TargetName = "8.0.7"
              DevMode = "false" />
 </target>
 
@@ -336,7 +327,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "8"
-             TargetName = "8.0.8"
              DevMode = "false" />
 </target>
 
@@ -357,7 +347,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "9"
-             TargetName = "8.0.9"
              DevMode = "false" />
 </target>
 
@@ -378,7 +367,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "5"
              MinorZimbraVersion = "0"
-             TargetName = "8.5.0"
              DevMode = "false" />
 </target>
 
@@ -399,7 +387,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "5"
              MinorZimbraVersion = "1"
-             TargetName = "8.5.1"
              DevMode = "false" />
 </target>
 
@@ -420,7 +407,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "6"
              MinorZimbraVersion = "0"
-             TargetName = "8.6.0"
              DevMode = "false" />
 </target>
 
@@ -441,7 +427,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "0"
-             TargetName = "8.7.0"
              DevMode = "false" />
 </target>
 
@@ -462,7 +447,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "1"
-             TargetName = "8.7.1"
              DevMode = "false" />
 </target>
 
@@ -483,7 +467,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "2"
-             TargetName = "8.7.2"
              DevMode = "false" />
 </target>
 
@@ -504,7 +487,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "3"
-             TargetName = "8.7.3"
              DevMode = "false" />
 </target>
 
@@ -525,7 +507,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "4"
-             TargetName = "8.7.4"
              DevMode = "false" />
 </target>
 
@@ -546,7 +527,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "5"
-             TargetName = "8.7.5"
              DevMode = "false" />
 </target>
 
@@ -567,7 +547,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "6"
-             TargetName = "8.7.6"
              DevMode = "false" />
 </target>
 
@@ -588,7 +567,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "7"
-             TargetName = "8.7.7"
              DevMode = "false" />
 </target>
 
@@ -609,7 +587,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "9"
-             TargetName = "8.7.9"
              DevMode = "false" />
 </target>
 
@@ -630,7 +607,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "10"
-             TargetName = "8.7.10"
              DevMode = "false" />
 </target>
 
@@ -651,7 +627,6 @@
              MajorZimbraVersion = "8"
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "10"
-             TargetName = "dev-last"
              DevMode = "true" />
 </target>
 
