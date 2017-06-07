@@ -40,6 +40,7 @@
      <attribute name="MiddleZimbraVersion"/>
      <attribute name="MinorZimbraVersion"/>
      <attribute name="DevMode"/>
+     <attribute name="DistDirName"/>
 
      <sequential>
        <local name="tmpsrc"/>
@@ -47,7 +48,7 @@
        <local name="dist"/>
        <property name="tmpsrc"  value="tmpsrc/@{ZimbraVersion}/jar/" />
        <property name="build" value="build/@{ZimbraVersion}_dev_@{DevMode}/jar/" />
-       <property name="dist"  value="dist/@{ZimbraVersion}/"/>
+       <property name="dist"  value="dist/@{DistDirName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
        <mkdir dir="${build}"/>

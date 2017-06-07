@@ -5,6 +5,7 @@
              MajorZimbraVersion = "${MajorZimbraVersion}"
              MiddleZimbraVersion = "${MiddleZimbraVersion}"
              MinorZimbraVersion = "${MinorZimbraVersion}"
+             DistDirName = "${DistDirName}"
              DevMode = "${DevMode}" />
 </target>
 
