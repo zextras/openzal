@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
+import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
 import org.jetbrains.annotations.NotNull;
@@ -863,11 +864,45 @@ public class Mailbox
   }
 
   public void move(@NotNull OperationContext octxt, int itemId, byte type, int targetId)
-    throws ZimbraException
+          throws ZimbraException
   {
     try
     {
       mMbox.move(octxt.getOperationContext(), itemId, Item.convertType(type), targetId);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public int move(@NotNull Account dstAccount,@NotNull OperationContext octxt, int itemId, byte type, int targetId)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.service.util.ItemId zimbraItemId = new com.zimbra.cs.service.util.ItemId(
+              dstAccount.getId(),
+              targetId
+      );
+      List<String> createdIds = ItemActionHelper.MOVE(octxt.getOperationContext(),
+              mMbox,
+              SoapProtocol.Soap12,
+              Arrays.asList(itemId),
+              Item.convertType(type),
+              null,
+              zimbraItemId).getCreatedIds();
+
+      if (createdIds == null)
+      {
+        return itemId;
+      }
+      if (createdIds.size() != 1)
+      {
+        throw new NoSuchItemException(Integer.toString(itemId));
+      }
+      com.zimbra.cs.service.util.ItemId newZimbraItemId = new com.zimbra.cs.service.util.ItemId(createdIds.get(0),(String)null);
+      return newZimbraItemId.getId();
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
