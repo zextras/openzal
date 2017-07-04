@@ -3,6 +3,7 @@ package org.openzal.zal;
 import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
@@ -446,6 +447,12 @@ public class ProvisioningSimulator extends ProvisioningImp
 
   public Account createAccount(String dstAccount, String newPassword, Map<String, Object> attrs)
       throws ZimbraException
+  {
+    throw new RuntimeException("Provisioning method not implemented");
+  }
+
+  public Server createServer(String name, Map<String, Object> attrs)
+          throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
   }

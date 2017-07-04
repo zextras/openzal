@@ -20,6 +20,7 @@ import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 
 import java.io.File;
+import java.util.Properties;
 
 // for testing purpose only
 public class ZimbraSimulator extends ExternalResource
@@ -27,6 +28,7 @@ public class ZimbraSimulator extends ExternalResource
   private VolumeManager mVolumeManager;
   private StoreManager  mStoreManager;
   private StoreManagerSimulator mStoreSimulator;
+  private com.zimbra.cs.mailbox.MailboxManager mMailboxManager;
 
   public RamFS getStoreRoot()
   {
@@ -49,6 +51,21 @@ public class ZimbraSimulator extends ExternalResource
     }
 
     init();
+  }
+
+  public ZimbraSimulator(Zimbra zimbra)
+  {
+    try
+    {
+      Class.forName("org.hsqldb.jdbcDriver");
+    }
+    catch (Exception e)
+    {
+      ZELog.chat.err("Error loading DB Driver: " + Utils.exceptionToString(e));
+      throw new RuntimeException(e);
+    }
+
+    init(zimbra);
   }
 
   /*
@@ -74,15 +91,27 @@ public class ZimbraSimulator extends ExternalResource
 
   private void init()
   {
+    init(null);
+  }
+
+  private void init(Zimbra zimbra)
+  {
     try
     {
       initProperties();
       initIndexing();
-      initProvisioning();
+      if (zimbra == null)
+      {
+        initProvisioning();
+      }
       initHSQLDatabase();
-      initMailboxManager();
-      mZimbra = new Zimbra();
-      initStorageManager();
+      mZimbra = new Zimbra(zimbra);
+      initMailboxManager(zimbra);
+      initStorageManager(zimbra);
+
+      /* $if ZimbraVersion < 8.0.0 $
+      Volume.reloadVolumes();
+       $endif$ */
 
       try
       {
@@ -157,9 +186,13 @@ public class ZimbraSimulator extends ExternalResource
     }
   }
 
-  private void initMailboxManager() throws Exception
+  private void initMailboxManager(Zimbra zimbra) throws Exception
   {
-    com.zimbra.cs.mailbox.MailboxManager.setInstance((MailboxManager) Class.forName(LC.zimbra_class_mboxmanager.value()).newInstance());
+    mMailboxManager = (MailboxManager) Class.forName(LC.zimbra_class_mboxmanager.value()).newInstance();
+    if (zimbra == null)
+    {
+      com.zimbra.cs.mailbox.MailboxManager.setInstance(mMailboxManager);
+    }
   }
 
   private void initIndexing()
@@ -167,7 +200,7 @@ public class ZimbraSimulator extends ExternalResource
     MailboxIndex.startup();
   }
 
-  private void initStorageManager() throws Exception
+  private void initStorageManager(Zimbra zimbra) throws Exception
   {
     //LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
     //com.zimbra.cs.store.StoreManager.getInstance().startup();
@@ -177,11 +210,14 @@ public class ZimbraSimulator extends ExternalResource
     mStoreRoot = mStoreSimulator.getStoreRoot();
     FileBlobStoreWrap storeManagerSimulator = new FileBlobStoreSimulatorWrap(mStoreSimulator);
     mStoreManager = new StoreManagerImpl(
-      storeManagerSimulator,
-      mVolumeManager
+            storeManagerSimulator,
+            mVolumeManager
     );
 
-    mZimbra.overrideZimbraStoreManager(mStoreManager);
+    if (zimbra == null)
+    {
+      mZimbra.overrideZimbraStoreManager(mStoreManager);
+    }
   }
 
   private void initProvisioning() throws Exception
@@ -251,7 +287,7 @@ public class ZimbraSimulator extends ExternalResource
 
   public org.openzal.zal.MailboxManager getMailboxManager() throws Exception
   {
-    return new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
+    return new MailboxManagerImp(mMailboxManager);
   }
 
   public StoreManager getStoreManager()

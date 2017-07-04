@@ -45,6 +45,8 @@ import org.openzal.zal.lib.ZimbraVersion;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -223,6 +225,11 @@ public abstract class Utils
     return ByteUtil.isGzipped(inputStream);
   }
 
+  public static boolean isGzipped(byte[] data) throws IOException
+  {
+    return ByteUtil.isGzipped(data);
+  }
+
   public static byte[] getContent(InputStream stream, int sizeHint) throws IOException
   {
     return ByteUtil.getContent(stream, sizeHint);
@@ -327,6 +334,19 @@ public abstract class Utils
     catch (NoSuchAlgorithmException e)
     {
       throw new IOException(e);
+    }
+  }
+
+  public static boolean isValidInternetAddress(String name)
+  {
+    try
+    {
+      new InternetAddress(name).validate();
+      return true;
+    }
+    catch (AddressException e)
+    {
+      return false;
     }
   }
 }

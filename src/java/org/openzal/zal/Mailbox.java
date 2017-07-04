@@ -26,16 +26,16 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.fb.FreeBusyQuery;
+import com.zimbra.cs.index.IndexStore;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
-import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
-import com.zimbra.cs.mailbox.DeliveryOptions;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
+import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
 import org.jetbrains.annotations.NotNull;
@@ -864,11 +864,45 @@ public class Mailbox
   }
 
   public void move(@NotNull OperationContext octxt, int itemId, byte type, int targetId)
-    throws ZimbraException
+          throws ZimbraException
   {
     try
     {
       mMbox.move(octxt.getOperationContext(), itemId, Item.convertType(type), targetId);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public int move(@NotNull Account dstAccount,@NotNull OperationContext octxt, int itemId, byte type, int targetId)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.service.util.ItemId zimbraItemId = new com.zimbra.cs.service.util.ItemId(
+              dstAccount.getId(),
+              targetId
+      );
+      List<String> createdIds = ItemActionHelper.MOVE(octxt.getOperationContext(),
+              mMbox,
+              SoapProtocol.Soap12,
+              Arrays.asList(itemId),
+              Item.convertType(type),
+              null,
+              zimbraItemId).getCreatedIds();
+
+      if (createdIds == null)
+      {
+        return itemId;
+      }
+      if (createdIds.size() != 1)
+      {
+        throw new NoSuchItemException(Integer.toString(itemId));
+      }
+      com.zimbra.cs.service.util.ItemId newZimbraItemId = new com.zimbra.cs.service.util.ItemId(createdIds.get(0),(String)null);
+      return newZimbraItemId.getId();
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1135,6 +1169,11 @@ public class Mailbox
   public int getLastChangeID()
   {
     return mMbox.getLastChangeID();
+  }
+
+  public int getLastItemId()
+  {
+    return mMbox.getLastItemId();
   }
 
   public void clearItemCache()
@@ -2348,5 +2387,44 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public void recalculateFolderAndTagCounts()
+  {
+    try
+    {
+      mMbox.recalculateFolderAndTagCounts();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void startReIndex()
+  {
+    try
+    {
+      mMbox.index.startReIndex();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean isReIndexInProgress()
+  {
+    return mMbox.index.isReIndexInProgress();
+  }
+
+  public short getIndexVolume() {
+    return mMbox.getIndexVolume();
+  }
+
+  public boolean isInMaintenanceMode()
+  {
+    com.zimbra.cs.mailbox.MailboxMaintenance maintenace = mMbox.getMaintenance();
+    return maintenace != null;
   }
 }

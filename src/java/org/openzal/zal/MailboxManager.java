@@ -42,4 +42,10 @@ public interface MailboxManager
   void addListener(MailboxManagerListener listener);
 
   void removeListener(MailboxManagerListener listener);
+
+  Mailbox getMailboxByAccountId(String mailboxId,boolean autoCreate) throws ZimbraException;
+
+  MailboxMaintenance beginMaintenance(String accountId, int mailboxId) throws ZimbraException;
+
+  void endMaintenance(MailboxMaintenance maintenance, boolean success, boolean removeFromCache) throws ZimbraException;
 }

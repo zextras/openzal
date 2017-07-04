@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -38,7 +39,7 @@ import org.openzal.zal.*;
 public final class StoreManagerSimulator extends StoreManager
 {
 
-  private static final RamFS mStoreRoot = new RamFS();
+  private final RamFS mStoreRoot;
 
   public RamFS getStoreRoot()
   {
@@ -47,6 +48,7 @@ public final class StoreManagerSimulator extends StoreManager
 
   public StoreManagerSimulator()
   {
+    mStoreRoot = new RamFS();
 //        DebugConfig.disableMessageStoreFsync = true;
   }
 
@@ -90,38 +92,30 @@ public final class StoreManagerSimulator extends StoreManager
     mockblob.setFile(file);
 
     OutputStream writer;
-    FileStreamWriterDigestCalculator streamWriter;
+    MessageDigest messageDigest;
     try
     {
-      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-      MessageDigest legacyMessageDigest = MessageDigest.getInstance("SHA-1");
-      streamWriter = new FileStreamWriterDigestCalculator(
-        file.openWriterStream(),
-        messageDigest,
-        legacyMessageDigest
-      );
-      writer = new OutputStreamFileWriterWrapper(
-        streamWriter
-      );
-    }
-    catch (VfsError e)
-    {
-      throw new IOException(e);
+      writer = file.openOutputStreamWrapper();
+      messageDigest = MessageDigest.getInstance("SHA-256");
     }
     catch (NoSuchAlgorithmException e)
     {
       throw new RuntimeException(e);
     }
+    catch (VfsError vfsError)
+    {
+      throw new RuntimeException(vfsError);
+    }
     try
     {
-      int size = IOUtils.copy(data, writer);
-
-      mockblob.setDigest(streamWriter.digest());
+      DigestOutputStream digestOutputStream = new DigestOutputStream(writer, messageDigest);
+      int size = IOUtils.copy(data, digestOutputStream);
+      mockblob.setDigest(Utils.encodeFSSafeBase64(messageDigest.digest()));
       mockblob.setRawSize(size);
     }
     finally
     {
-      writer.close();
+      IOUtils.closeQuietly(writer);
     }
 
     return mockblob;
@@ -435,7 +429,15 @@ public final class StoreManagerSimulator extends StoreManager
 
   public boolean deleteStore(Mailbox mbox) throws IOException
   {
-    throw new UnsupportedOperationException();
+    try
+    {
+      mStoreRoot.getRoot().removeContent().syncAndGet();
+      return true;
+    }
+    catch (VfsError vfsError)
+    {
+      throw new IOException(vfsError);
+    }
   }
 
   public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> mblobs) throws IOException

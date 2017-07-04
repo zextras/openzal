@@ -199,6 +199,10 @@ public interface Provisioning
   Account createAccount(String dstAccount, @Nullable String newPassword, Map<String, Object> attrs)
     throws ZimbraException;
 
+  @Nullable
+  Server createServer(String name, Map<String, Object> attrs)
+          throws ZimbraException;
+
   void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
       throws ZimbraException;
 
@@ -338,6 +342,7 @@ public interface Provisioning
 
   void invalidateAllCache();
 
+  void purgeMemcachedAccounts(List<String> accounts);
 
   class CountAccountByCos
   {

@@ -4,6 +4,8 @@ package com.zimbra.cs.db;
  * Zimbra Collaboration Suite Server
  */
 
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.openzal.zal.lib.ZimbraVersion;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -153,7 +155,7 @@ public final class HSQLZimbraDatabase extends Db
 // mRootUrl = null;
 // mConnectionUrl = "jdbc:hsqldb:file:/tmp/zimbra-it/zimbra";
 
-  private static final class Config extends DbPool.PoolConfig
+  public static class Config extends DbPool.PoolConfig
   {
     Config() {
       mDriverClassName = "org.hsqldb.jdbcDriver";

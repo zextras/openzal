@@ -142,4 +142,31 @@ public class ZimbraConnectionWrapper implements Connection
   {
     return mConnection.getConnection();
   }
+
+  @Override
+  public void disableForeignKeyConstraints()
+  {
+    try
+    {
+      mConnection.disableForeignKeyConstraints();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      //
+    }
+  }
+
+  @Override
+  public void enableForeignKeyConstraints()
+  {
+    try
+    {
+      mConnection.enableForeignKeyConstraints();
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      //
+    }
+  }
+
 }

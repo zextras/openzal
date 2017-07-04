@@ -21,10 +21,13 @@
 package org.openzal.zal;
 
 
+import com.zimbra.cs.mailbox.*;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -178,4 +181,52 @@ public class MailboxManagerImp implements MailboxManager
   {
     mMailboxManager.removeListener(new MailboxManagerListenerWrapper(listener));
   }
+
+  @Override
+  public Mailbox getMailboxByAccountId(String accountId,boolean autoCreate) throws ZimbraException
+  {
+    try
+    {
+      return new Mailbox(mMailboxManager.getMailboxByAccountId(
+              accountId,
+              com.zimbra.cs.mailbox.MailboxManager.FetchMode.AUTOCREATE,
+              true));
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public MailboxMaintenance beginMaintenance(String accountId, int mailboxId) throws ZimbraException
+  {
+    try
+    {
+      MailboxMaintenance maintenance = new MailboxMaintenance(mMailboxManager.beginMaintenance(
+              accountId,
+              mailboxId));
+      return maintenance;
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void endMaintenance(MailboxMaintenance maintenance, boolean success, boolean removeFromCache) throws ZimbraException
+  {
+    try
+    {
+      mMailboxManager.endMaintenance(maintenance.toZimbra(com.zimbra.cs.mailbox.MailboxMaintenance.class),
+              success,
+              removeFromCache);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
 }

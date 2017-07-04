@@ -47,6 +47,11 @@ public class Zimbra
 
   public Zimbra()
   {
+    this(null);
+  }
+
+public Zimbra(Zimbra zimbra)
+  {
     try
     {
       mZimbraStoreManager = com.zimbra.cs.store.StoreManager.getInstance();
@@ -54,18 +59,30 @@ public class Zimbra
       mMailboxManager = new MailboxManagerImp(com.zimbra.cs.mailbox.MailboxManager.getInstance());
       mZimbraDatabase = new ZimbraDatabase();
       mVolumeManager = new VolumeManager();
-      if (mZimbraStoreManager instanceof FileBlobStore)
+
+      if (zimbra != null)
       {
         mStoreManager = new StoreManagerImpl(
-          new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
-          mVolumeManager
+                new FileBlobStoreWrapImpl((FileBlobStore) zimbra.mZimbraStoreManager),
+                mVolumeManager
         );
         mCanOverrideStoreManager = true;
       }
       else
       {
-        mStoreManager = null;
-        mCanOverrideStoreManager = false;
+        if (mZimbraStoreManager instanceof FileBlobStore)
+        {
+          mStoreManager = new StoreManagerImpl(
+                  new FileBlobStoreWrapImpl((FileBlobStore) mZimbraStoreManager),
+                  mVolumeManager
+          );
+          mCanOverrideStoreManager = true;
+        }
+        else
+        {
+          mStoreManager = null;
+          mCanOverrideStoreManager = false;
+        }
       }
     }
     catch (Exception ex)

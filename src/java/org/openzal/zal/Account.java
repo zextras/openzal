@@ -561,6 +561,18 @@ public class Account extends Entry
     return new AccountStatus(accountStatus);
   }
 
+  public void setAccountStatus(AccountStatus status)
+  {
+    try
+    {
+      mAccount.setAccountStatus(status.toZimbra(ZAttrProvisioning.AccountStatus.class));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public Object getAttrDefault(String name)
   {
     return mAccount.getAttrDefault(name);

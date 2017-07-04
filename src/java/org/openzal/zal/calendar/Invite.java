@@ -862,4 +862,17 @@ public class Invite
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+   public void updateMyPartStat(Account acct, String partStat) throws ServiceException
+   {
+     try
+     {
+       mInvite.updateMyPartStat(acct.toZimbra(com.zimbra.cs.account.Account.class), partStat);
+     }
+     catch (Exception e)
+     {
+       throw ExceptionWrapper.wrap(e);
+     }
+   }
+
 }

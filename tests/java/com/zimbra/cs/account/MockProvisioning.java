@@ -14,6 +14,8 @@ import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.Utils;
@@ -115,21 +117,18 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   private final Map<String, ShareLocator> shareLocators = new HashMap<String, ShareLocator>();
 
-  private final Server localhost;
-  private final Cos    mDefaultCos;
+  private final Server        mLocalhost;
+  private final List<Server>  mServers;
+  private final Cos           mDefaultCos;
 
   private int mCounter = 1;
 
   public MockProvisioning()
   {
+    mServers = new ArrayList<Server>();
     Map<String, Object> attrs = new HashMap<String, Object>();
     attrs.put(A_zimbraServiceHostname, "localhost");
-    attrs.put(A_zimbraRedoLogProvider, MockRedoLogProvider.class.getName());
-    attrs.put(A_zimbraId, UUID.randomUUID().toString());
-    attrs.put(A_zimbraMailMode, MailMode.http.toString());
-    attrs.put(A_zimbraSmtpPort, "7025");
-    attrs.put(A_zimbraMessageCacheSize, "0");
-    localhost = new Server("localhost", "localhost", attrs, Collections.<String, Object>emptyMap(), this);
+    mLocalhost = createServer("localhost",attrs);
     mDefaultCos = new Cos("test", "id", new HashMap<String, Object>(), this);
 
     initMimeTypes();
@@ -454,7 +453,7 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   public Server getLocalServer()
   {
-    return localhost;
+    return mLocalhost;
   }
 
   public Server getLocalServerIfDefined()
@@ -789,28 +788,68 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
     throw new UnsupportedOperationException();
   }
 
-  public Server createServer(String name, Map<String, Object> attrs) {
-    throw new UnsupportedOperationException();
+  public Server createServer(String name, Map<String, Object> attrs)
+  {
+    if (!attrs.containsKey(A_zimbraServiceHostname))
+    {
+      throw new RuntimeException(A_zimbraServiceHostname+" not specified");
+    }
+    if (!attrs.containsKey(A_zimbraRedoLogProvider))
+    {
+      attrs.put(A_zimbraRedoLogProvider, MockRedoLogProvider.class.getName());
+    }
+    if (!attrs.containsKey(A_zimbraId))
+    {
+      attrs.put(A_zimbraId, UUID.randomUUID().toString());
+    }
+    if (!attrs.containsKey(A_zimbraMailMode))
+    {
+      attrs.put(A_zimbraMailMode, MailMode.http.toString());
+    }
+    if (!attrs.containsKey(A_zimbraSmtpPort))
+    {
+      attrs.put(A_zimbraSmtpPort, "7025");
+    }
+    if (!attrs.containsKey(A_zimbraMessageCacheSize))
+    {
+      attrs.put(A_zimbraMessageCacheSize, "0");
+    }
+
+    Server server = new Server(name, name, attrs, Collections.<String, Object>emptyMap(), this);
+    mServers.add(server);
+    return server;
   }
 
-  public Server get(Key.ServerBy keyName, String key)
+  public Server get(final Key.ServerBy keyName,final String key)
   {
     switch (keyName) {
       case id:
-        return localhost.getId().equals(key) ? localhost : null;
+        return (Server)CollectionUtils.find(mServers, new Predicate() {
+          @Override
+          public boolean evaluate(Object o)
+          {
+            return ((Server)o).getId().equals(key);
+          }
+        });
       case name:
-        return localhost.getName().equals(key) ? localhost : null;
+        return (Server)CollectionUtils.find(mServers, new Predicate() {
+          @Override
+          public boolean evaluate(Object o)
+          {
+            return ((Server)o).getName().equals(key);
+          }
+        });
       default:
         throw new UnsupportedOperationException();
     }
   }
 
   public List<Server> getAllServers() {
-    return Arrays.asList(localhost);
+    return mServers;
   }
 
   public List<Server> getAllServers(String service) {
-    throw new UnsupportedOperationException();
+    return Collections.<Server>emptyList();
   }
   public List<Server> getAllServers(String service, String clusterId)
   {

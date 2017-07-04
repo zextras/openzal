@@ -147,7 +147,7 @@ public class FileBlobStoreSimulatorWrap implements FileBlobStoreWrap
   @Override
   public boolean deleteStore(Mailbox mbox, Iterable blobs) throws IOException
   {
-    throw new UnsupportedOperationException();
+    return mStore.deleteStore(mbox);
   }
 
   @Override
