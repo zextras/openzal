@@ -593,7 +593,7 @@ public class ProvisioningImp implements Provisioning
       com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
       if (domain == null)
       {
-        throw new NoSuchDomainException(domainId);
+        return null;
       }
       else
       {
