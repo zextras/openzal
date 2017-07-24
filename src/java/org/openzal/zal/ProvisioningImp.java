@@ -31,6 +31,7 @@ import com.unboundid.ldap.sdk.schema.Schema;
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.LdapUsage;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
@@ -2095,7 +2096,7 @@ public class ProvisioningImp implements Provisioning
 
     try
     {
-      ldapContext = (UBIDLdapContext) LdapClient.getContext(LdapUsage.GET_ENTRY);
+      ldapContext = (UBIDLdapContext) LdapClient.getContext(LdapServerType.MASTER,LdapUsage.GET_ENTRY);
       LDAPConnection conn = ldapContext.getNative();
 
       // Schema
