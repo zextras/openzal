@@ -29,6 +29,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
 import org.openzal.zal.provisioning.Group;
 
+import java.io.IOException;
 import java.util.*;
 
 public interface Provisioning
@@ -343,6 +344,8 @@ public interface Provisioning
   void invalidateAllCache();
 
   void purgeMemcachedAccounts(List<String> accounts);
+
+  void dumpLDAPToLDIF(String schemaFileName, String ldifFileName) throws IOException;
 
   class CountAccountByCos
   {

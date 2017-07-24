@@ -20,8 +20,19 @@
 
 package org.openzal.zal;
 
+import java.io.IOException;
 import java.util.*;
 
+import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.SearchResult;
+import com.unboundid.ldap.sdk.SearchResultEntry;
+import com.unboundid.ldap.sdk.SearchScope;
+import com.unboundid.ldap.sdk.schema.Schema;
+import com.unboundid.ldif.LDIFWriter;
+import com.zimbra.cs.ldap.LdapClient;
+import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.ldap.LdapUsage;
+import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
@@ -51,6 +62,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.provisioning.Group;
 
 public class ProvisioningImp implements Provisioning
@@ -2071,6 +2083,62 @@ public class ProvisioningImp implements Provisioning
     catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void dumpLDAPToLDIF(String schemaFileName, String ldifFileName) throws IOException
+  {
+    UBIDLdapContext ldapContext = null;
+    LDIFWriter schemaWriter = null;
+    LDIFWriter ldifWriter = null;
+
+    try
+    {
+      ldapContext = (UBIDLdapContext) LdapClient.getContext(LdapUsage.GET_ENTRY);
+      LDAPConnection conn = ldapContext.getNative();
+
+      // Schema
+      Schema schema = conn.getSchema();
+      schemaWriter = new LDIFWriter(schemaFileName);
+      schemaWriter.writeEntry(schema.getSchemaEntry());
+
+      // LDIF
+      ldifWriter = new LDIFWriter(ldifFileName);
+      SearchResult searchResult = conn.search(LdapConstants.DN_ROOT_DSE, SearchScope.SUB, "(objectClass=*)");
+      for (SearchResultEntry entry : searchResult.getSearchEntries())
+      {
+        ldifWriter.writeEntry(entry);
+      }
+    }
+    catch (Exception e)
+    {
+      ZimbraLog.extensions.fatal("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+      throw new IOException(e);
+    }
+    finally
+    {
+      LdapClient.closeContext(ldapContext);
+      try
+      {
+        if (schemaWriter != null)
+        {
+          schemaWriter.close();
+        }
+      }
+      catch (IOException e)
+      {
+      }
+      try
+      {
+        if (ldifWriter != null)
+        {
+          ldifWriter.close();
+        }
+      }
+      catch (IOException e)
+      {
+      }
     }
   }
 }
