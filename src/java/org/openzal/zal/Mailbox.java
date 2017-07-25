@@ -46,6 +46,7 @@ import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
+import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.internet.MimeMessage;
@@ -2411,6 +2412,25 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public void deleteIndex() throws IOException
+  {
+    mMbox.index.deleteIndex();
+  }
+
+  public void suspendIndexing()
+  {
+/* $if ZimbraVersion >= 8.7.0 $ */
+    mMbox.suspendIndexing();
+/* $endif $ */
+  }
+
+  public void resumeIndexing()
+  {
+/* $if ZimbraVersion >= 8.7.0 $ */
+    mMbox.resumeIndexing();
+/* $endif $ */
   }
 
   public boolean isReIndexInProgress()

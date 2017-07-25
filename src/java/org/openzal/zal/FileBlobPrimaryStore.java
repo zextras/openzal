@@ -80,7 +80,13 @@ public class FileBlobPrimaryStore implements PrimaryStore
   @Override
   public String getMailboxDirPath(int mboxId)
   {
-    return mVolume.getMailboxDir(mboxId, (short) 1);
+    return mVolume.getMailboxDir(mboxId, StoreVolume.TYPE_MESSAGE);
+  }
+
+  @Override
+  public String getMailboxDirPath(int mboxId,short type)
+  {
+    return mVolume.getMailboxDir(mboxId, type);
   }
 
   @Override
