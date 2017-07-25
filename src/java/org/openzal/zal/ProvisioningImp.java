@@ -24,16 +24,19 @@ import java.io.IOException;
 import java.util.*;
 
 import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPURL;
+import com.unboundid.ldap.sdk.SearchRequest;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.schema.Schema;
+
 import com.unboundid.ldif.LDIFWriter;
-import com.zimbra.cs.ldap.LdapClient;
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
-import com.zimbra.cs.ldap.LdapUsage;
-import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
+import com.zimbra.cs.ldap.unboundid.LdapServerPool;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
@@ -2088,58 +2091,111 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void dumpLDAPToLDIF(String schemaFileName, String ldifFileName) throws IOException
+  public void dumpLDAPToLDIF(String schemaFileName, String ldifFileName, String configFileName) throws IOException
   {
-    UBIDLdapContext ldapContext = null;
     LDIFWriter schemaWriter = null;
     LDIFWriter ldifWriter = null;
+    LDIFWriter configWriter = null;
+    LDAPConnection connection = null;
 
     try
     {
-      ldapContext = (UBIDLdapContext) LdapClient.getContext(LdapServerType.MASTER,LdapUsage.GET_ENTRY);
-      LDAPConnection conn = ldapContext.getNative();
+      LdapServerConfig.ZimbraLdapConfig ldapConfig = new LdapServerConfig.ZimbraLdapConfig(LdapServerType.MASTER);
+      LdapServerPool ldapServerPool = new LdapServerPool(ldapConfig);
 
-      // Schema
-      Schema schema = conn.getSchema();
-      schemaWriter = new LDIFWriter(schemaFileName);
-      schemaWriter.writeEntry(schema.getSchemaEntry());
-
-      // LDIF
-      ldifWriter = new LDIFWriter(ldifFileName);
-      SearchResult searchResult = conn.search(LdapConstants.DN_ROOT_DSE, SearchScope.SUB, "(objectClass=*)");
-      for (SearchResultEntry entry : searchResult.getSearchEntries())
+      if (ldapServerPool.getUrls().isEmpty())
       {
-        ldifWriter.writeEntry(entry);
+        throw new IOException("No ldap server found");
+      }
+
+      for (LDAPURL url : ldapServerPool.getUrls())
+      {
+        try
+        {
+          connection = new LDAPConnection(url.getHost(), url.getPort(),"cn=config", LC.ldap_root_password.value());
+          // Schema
+          Schema schema = connection.getSchema();
+          schemaWriter = new LDIFWriter(schemaFileName);
+          schemaWriter.writeEntry(schema.getSchemaEntry());
+
+          // LDIF
+          ldifWriter = new LDIFWriter(ldifFileName);
+          SearchResult searchResult = connection.search(
+                  LdapConstants.DN_ROOT_DSE,
+                  SearchScope.SUB, "(objectClass=*)",
+                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
+                  SearchRequest.ALL_USER_ATTRIBUTES);
+          for (SearchResultEntry entry : searchResult.getSearchEntries())
+          {
+            ldifWriter.writeEntry(entry);
+          }
+
+          configWriter = new LDIFWriter(configFileName);
+          SearchResult configResult = connection.search(
+                  "cn=config",
+                  SearchScope.SUB, "(objectClass=*)",
+                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
+                  SearchRequest.ALL_USER_ATTRIBUTES);
+          for (SearchResultEntry entry : configResult.getSearchEntries())
+          {
+            configWriter.writeEntry(entry);
+          }
+
+          break; // One is enough
+        }
+        catch (Exception e)
+        {
+          ZimbraLog.extensions.error("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+        }
+        finally
+        {
+          try
+          {
+            if (connection != null)
+            {
+              connection.close();
+            }
+          }
+          catch (Exception e)
+          {
+          }
+          try
+          {
+            if (schemaWriter != null)
+            {
+              schemaWriter.close();
+            }
+          }
+          catch (IOException e)
+          {
+          }
+          try
+          {
+            if (ldifWriter != null)
+            {
+              ldifWriter.close();
+            }
+          }
+          catch (IOException e)
+          {
+          }
+          try
+          {
+            if (configWriter != null)
+            {
+              configWriter.close();
+            }
+          }
+          catch (IOException e)
+          {
+          }
+        }
       }
     }
     catch (Exception e)
     {
       ZimbraLog.extensions.fatal("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
       throw new IOException(e);
-    }
-    finally
-    {
-      LdapClient.closeContext(ldapContext);
-      try
-      {
-        if (schemaWriter != null)
-        {
-          schemaWriter.close();
-        }
-      }
-      catch (IOException e)
-      {
-      }
-      try
-      {
-        if (ldifWriter != null)
-        {
-          ldifWriter.close();
-        }
-      }
-      catch (IOException e)
-      {
-      }
     }
   }
 }
