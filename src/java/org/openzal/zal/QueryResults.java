@@ -25,9 +25,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public class QueryResults
+public class QueryResults implements Closeable
 {
   @NotNull private final ZimbraQueryResults mZimbraQueryResults;
 
