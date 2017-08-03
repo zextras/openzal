@@ -24,7 +24,7 @@ import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.FileBlobPrimaryStore;
 import org.openzal.zal.Store;
-import org.openzal.zal.StoreBuilder;
+import org.openzal.zal.CacheableStoreBuilder;
 import org.openzal.zal.StoreManager;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.VolumeManager;
@@ -45,11 +45,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class StoreManagerImpl implements StoreManager
 {
-  private final Map<String, Store>        mStores;
-  private final Map<String, StoreBuilder> mStoreFactories;
+  private final Map<String, Store> mStoresCached;
+  private final Map<String, CacheableStoreBuilder> mCacheableStoreBuilderMap;
   private final ReentrantLock             mLock;
   private final VolumeManager             mVolumeManager;
-  private final StoreBuilder              mFileBlobStoreBuilder;
+  private final FileBlobStoreWrap mFileBlobStore;
 
   static
   {
@@ -99,37 +99,28 @@ public class StoreManagerImpl implements StoreManager
   }
 
   public StoreManagerImpl(
-    final Object fileBlobStore,
+    final FileBlobStoreWrap fileBlobStore,
     VolumeManager volumeManager
   )
   {
     mVolumeManager = volumeManager;
     mLock = new ReentrantLock();
-    mStoreFactories = new HashMap<String, StoreBuilder>();
-    mStores = new HashMap<String, Store>();
-    mFileBlobStoreBuilder = new StoreBuilder()
-    {
-      @Override
-      public Store make(String volumeId)
-      {
-        return new FileBlobPrimaryStore(
-          (FileBlobStoreWrap) fileBlobStore,
-          mVolumeManager.getById(volumeId)
-        );
-      }
-    };
+    mCacheableStoreBuilderMap = new HashMap<String, CacheableStoreBuilder>();
+    mStoresCached = new HashMap<String, Store>();
+    mFileBlobStore = fileBlobStore;
   }
 
   @Override
-  public void register(StoreBuilder storeBuilder, String volumeId)
+  public void register(CacheableStoreBuilder cacheableStoreBuilder, String volumeId)
   {
     mLock.lock();
     try
     {
-      mStores.remove(volumeId);
+      mStoresCached.remove(volumeId);
       if (mVolumeManager.isValidVolume(volumeId))
       {
-        mStoreFactories.put(volumeId, storeBuilder);
+        mCacheableStoreBuilderMap.put(volumeId,
+                                      cacheableStoreBuilder);
       }
       else
       {
@@ -148,8 +139,8 @@ public class StoreManagerImpl implements StoreManager
     mLock.lock();
     try
     {
-      mStoreFactories.remove(volumeId);
-      mStores.remove(volumeId);
+      mCacheableStoreBuilderMap.remove(volumeId);
+      mStoresCached.remove(volumeId);
     }
     finally
     {
@@ -166,7 +157,7 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public void startup() throws IOException
   {
-    for (Store store : mStores.values())
+    for (Store store : mStoresCached.values())
     {
       store.startup();
     }
@@ -175,7 +166,7 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public void shutdown()
   {
-    for (Store store : mStores.values())
+    for (Store store : mStoresCached.values())
     {
       store.shutdown();
     }
@@ -191,20 +182,19 @@ public class StoreManagerImpl implements StoreManager
   @Override
   public Store getStore(String volumeId)
   {
-    if (!mStores.containsKey(volumeId))
+    if (!mCacheableStoreBuilderMap.containsKey(volumeId))
     {
-      Store store;
-      if (mStoreFactories.containsKey(volumeId))
-      {
-        store = mStoreFactories.get(volumeId).make(volumeId);
-      }
-      else
-      {
-        store = mFileBlobStoreBuilder.make(volumeId);
-      }
-      mStores.put(volumeId, store);
+      return new FileBlobPrimaryStore(mFileBlobStore,
+                                      mVolumeManager.getById(volumeId));
     }
-    return mStores.get(volumeId);
+    
+    if (!mStoresCached.containsKey(volumeId))
+    {
+      Store cacheableStore = mCacheableStoreBuilderMap.get(volumeId).make(volumeId);
+      mStoresCached.put(volumeId, cacheableStore);
+      return cacheableStore;
+    }
+    return mStoresCached.get(volumeId);
   }
 
   @Override

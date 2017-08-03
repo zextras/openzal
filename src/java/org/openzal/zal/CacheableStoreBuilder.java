@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-public interface StoreBuilder
+public interface CacheableStoreBuilder
 {
   Store make(String volumeId);
 }
