@@ -87,7 +87,7 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
-  public long getFileSize() throws IOException
+  public long getStoredFileSize() throws IOException
   {
     return mStagedBlob.getSize();
   }

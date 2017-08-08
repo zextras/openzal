@@ -38,6 +38,6 @@ public interface Blob
   MailboxBlob toMailboxBlob();
   Blob setDigest(String digest);
   Blob setSize(long size);
-  long getFileSize() throws IOException;
+  long getStoredFileSize() throws IOException;
 }
 

@@ -133,9 +133,9 @@ public class BlobWrap implements Blob
   }
 
   @Override
-  public long getFileSize() throws IOException
+  public long getStoredFileSize() throws IOException
   {
-    return mBlob.getRawSize();
+    return mBlob.getFile().length();
   }
 
   public String getKey()
