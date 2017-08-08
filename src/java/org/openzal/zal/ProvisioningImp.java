@@ -201,6 +201,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
+  public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
   public static String A_zimbraNetworkModulesNGEnabled                        = "zimbraNetworkModulesNGEnabled";
   public static String A_zimbraNetworkMobileNGEnabled                         = "zimbraNetworkMobileNGEnabled";
 
