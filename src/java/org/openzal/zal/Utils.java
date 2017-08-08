@@ -349,4 +349,32 @@ public abstract class Utils
       return false;
     }
   }
+
+  public static String currentStackTrace()
+  {
+    StringBuilder sb = new StringBuilder(128);
+    StackTraceElement elements[] = Thread.currentThread().getStackTrace();
+
+    sb.append( "Thread Stack:\n");
+
+    for( int n=2; n < elements.length; ++n ){
+      sb.append( "        at ");
+      sb.append( elements[n].getClassName() );
+      sb.append( "." );
+      sb.append( elements[n].getMethodName() );
+      sb.append( " ( ");
+      sb.append( elements[n].getFileName()  );
+      sb.append( ":");
+      sb.append( elements[n].getLineNumber()  );
+      sb.append( " )");
+
+      if( elements[n].isNativeMethod() ) {
+        sb.append(" [native]");
+      }
+
+      sb.append("\n");
+    }
+
+    return sb.toString();
+  }
 }
