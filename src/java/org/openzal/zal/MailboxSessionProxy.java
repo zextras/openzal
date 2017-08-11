@@ -20,6 +20,9 @@
 
 package org.openzal.zal;
 
+/* $if ZimbraVersion >= 8.8.2 $ */
+import com.zimbra.common.mailbox.BaseItemInfo;
+/* $endif $ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.lib.Clock;
@@ -30,6 +33,8 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.Session;
 
+import java.util.Collection;
+import java.util.Map;
 
 public class MailboxSessionProxy
 {
@@ -129,22 +134,41 @@ public class MailboxSessionProxy
       }
 
       // Ignore changes that comes from another mailbox.
-      if( source != null && source.getMailbox().getId() != mMboxId )
+      if( source != null && (source.getMailbox() instanceof com.zimbra.cs.mailbox.Mailbox) && ((com.zimbra.cs.mailbox.Mailbox) source.getMailbox()).getId() != mMboxId )
       {
         ZimbraLog.mailbox.debug(
           getLoggerName() +
-          " The changes come from another mailbox, ignoring. S: " +
-            source.getMailbox().getId() + " - C: " + mMboxId
+            " The changes come from another mailbox, ignoring. S: " +
+            ((com.zimbra.cs.mailbox.Mailbox) source.getMailbox()).getId() + " - C: " + mMboxId
+        );
+        return;
+      }
+
+      if( source != null && !(source.getMailbox() instanceof com.zimbra.cs.mailbox.Mailbox) )
+      {
+        ZimbraLog.mailbox.debug(
+          getLoggerName() +
+            " The changes come from an external mailbox, ignoring."
         );
         return;
       }
 
       if( pns.created != null )
       {
+        /* $if ZimbraVersion >= 8.8.2 $ */
+        for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, BaseItemInfo>) pns.created).keySet() )
+        {
+        /* $else $
         for( PendingModifications.ModificationKey mod : pns.created.keySet() )
         {
-          MailItem what = pns.created.get(mod);
-          if( areChangesForMobile( what ))
+        /* $endif $ */
+          Object whatObj = pns.created.get(mod);
+          if (! (whatObj instanceof MailItem))
+          {
+            continue;
+          }
+          MailItem what = (MailItem) whatObj;
+          if (areChangesForMobile(what))
           {
             mListener.notifyChanges(
               mMboxId,
@@ -162,9 +186,9 @@ public class MailboxSessionProxy
 
       if( pns.modified != null )
       {
-        for( PendingModifications.ModificationKey mod : pns.modified.keySet() )
+        for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, PendingModifications.Change>) pns.modified).keySet() )
         {
-          PendingModifications.Change change = pns.modified.get(mod);
+          PendingModifications.Change change = (PendingModifications.Change) pns.modified.get(mod);
 
           if( areChangesForMobile( change.what ))
           {
@@ -199,9 +223,9 @@ public class MailboxSessionProxy
 
       if( pns.deleted != null )
       {
-        for( PendingModifications.ModificationKey mod : pns.deleted.keySet() )
+        for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, PendingModifications.Change>) pns.deleted).keySet() )
         {
-          PendingModifications.Change change = pns.deleted.get(mod);
+          PendingModifications.Change change = (PendingModifications.Change) pns.deleted.get(mod);
           if( areChangesForMobile( change.what ))
           {
             ItemChange itemChange = new ItemChange(
