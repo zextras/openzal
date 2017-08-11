@@ -170,6 +170,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraAllowFromAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraAllowFromAddress;
   public static String A_zimbraAccountStatus                                  = com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus;
   public static String A_zimbraSpamIsSpamAccount                              = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsSpamAccount;
+  public static String A_zimbraSpamIsNotSpamAccount                           = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsNotSpamAccount;
   public static String A_zimbraServiceHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraServiceHostname;
   public static String A_objectClass                                          = com.zimbra.cs.account.Provisioning.A_objectClass;
   public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
