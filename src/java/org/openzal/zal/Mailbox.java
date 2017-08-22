@@ -885,14 +885,19 @@ public class Mailbox
               dstAccount.getId(),
               targetId
       );
-      List<String> createdIds = ItemActionHelper.MOVE(octxt.getOperationContext(),
-              mMbox,
-              SoapProtocol.Soap12,
-              Arrays.asList(itemId),
-              Item.convertType(type),
-              null,
-              zimbraItemId).getCreatedIds();
-
+      ItemActionHelper op = ItemActionHelper.MOVE(octxt.getOperationContext(),
+                                                  mMbox,
+                                                  SoapProtocol.Soap12,
+                                                  Arrays.asList(itemId),
+                                                  Item.convertType(type),
+                                                  null,
+                                                  zimbraItemId);
+      List<String> createdIds;
+      /* $if ZimbraVersion >= 8.8.2 $ */
+      createdIds = op.getResult().getSuccessIds();
+      /* $else $
+      createdIds = op.getCreatedIds();
+      /* $endif $ */
       if (createdIds == null)
       {
         return itemId;
