@@ -97,6 +97,11 @@ public class Config extends Entry
     return mConfig.getAttr(name, defaultValue);
   }
 
+  public String getAttr(String name, boolean applyDefaults)
+  {
+    return mConfig.getAttr(name, applyDefaults);
+  }
+
   public void setMessageIdDedupeCacheSize(int messageIdDedupeCacheSize)
   {
     try

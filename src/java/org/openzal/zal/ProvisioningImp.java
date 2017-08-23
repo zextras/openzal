@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.LDAPURL;
 import com.unboundid.ldap.sdk.SearchRequest;
 import com.unboundid.ldap.sdk.SearchResult;
@@ -38,6 +39,7 @@ import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.unboundid.LdapServerPool;
 import com.zimbra.cs.util.ProxyPurgeUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -170,6 +172,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraAllowFromAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraAllowFromAddress;
   public static String A_zimbraAccountStatus                                  = com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus;
   public static String A_zimbraSpamIsSpamAccount                              = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsSpamAccount;
+  public static String A_zimbraSpamIsNotSpamAccount                           = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsNotSpamAccount;
   public static String A_zimbraServiceHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraServiceHostname;
   public static String A_objectClass                                          = com.zimbra.cs.account.Provisioning.A_objectClass;
   public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
@@ -202,6 +205,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
+  public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
+
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
   public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
@@ -2098,57 +2103,64 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void dumpLDAPToLDIF(String schemaFileName, String ldifFileName, String configFileName) throws IOException
+  public List<String> dumpLDAPToLDIF(String path) throws IOException
   {
     LDIFWriter schemaWriter = null;
     LDIFWriter ldifWriter = null;
     LDIFWriter configWriter = null;
     LDAPConnection connection = null;
+    ArrayList files = new ArrayList();
 
     try
     {
+      if (!path.endsWith("/"))
+      {
+        path = path + "/";
+      }
+
       LdapServerConfig.ZimbraLdapConfig ldapConfig = new LdapServerConfig.ZimbraLdapConfig(LdapServerType.MASTER);
       LdapServerPool ldapServerPool = new LdapServerPool(ldapConfig);
-
       if (ldapServerPool.getUrls().isEmpty())
       {
         throw new IOException("No ldap server found");
       }
+      else
+      {
+        boolean usersDone = false;
 
       for (LDAPURL url : ldapServerPool.getUrls())
       {
         try
         {
           connection = new LDAPConnection(url.getHost(), url.getPort(),"cn=config", LC.ldap_root_password.value());
-          // Schema
+            String accesslogFileName = FilenameUtils.normalize(path + "accesslog-" + url.getHost() + ".ldif");
+            LDIFWriter accesslogWriter = new LDIFWriter(accesslogFileName);
+
+            try
+            {
+              this.write(connection, accesslogWriter, "cn=accesslog");
+              files.add(accesslogFileName);
+            }
+            catch (LDAPSearchException var27)
+            {
+            }
+            finally
+            {
+              this.close(accesslogWriter);
+            }
+
+            if (!usersDone)
+            {
           Schema schema = connection.getSchema();
-          schemaWriter = new LDIFWriter(schemaFileName);
+              schemaWriter = new LDIFWriter(path + "ldap.schema");
           schemaWriter.writeEntry(schema.getSchemaEntry());
-
-          // LDIF
-          ldifWriter = new LDIFWriter(ldifFileName);
-          SearchResult searchResult = connection.search(
-                  LdapConstants.DN_ROOT_DSE,
-                  SearchScope.SUB, "(objectClass=*)",
-                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
-                  SearchRequest.ALL_USER_ATTRIBUTES);
-          for (SearchResultEntry entry : searchResult.getSearchEntries())
-          {
-            ldifWriter.writeEntry(entry);
+              files.add(path + "ldap.schema");
+              this.write(connection, new LDIFWriter(path + "ldap.ldif"), "");
+              files.add(path + "ldap.ldif");
+              this.write(connection, new LDIFWriter(path + "ldap-config.ldif"), "cn=config");
+              files.add(path + "ldap-config.ldif");
+              usersDone = true;
           }
-
-          configWriter = new LDIFWriter(configFileName);
-          SearchResult configResult = connection.search(
-                  "cn=config",
-                  SearchScope.SUB, "(objectClass=*)",
-                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
-                  SearchRequest.ALL_USER_ATTRIBUTES);
-          for (SearchResultEntry entry : configResult.getSearchEntries())
-          {
-            configWriter.writeEntry(entry);
-          }
-
-          break; // One is enough
         }
         catch (Exception e)
         {
@@ -2156,47 +2168,14 @@ public class ProvisioningImp implements Provisioning
         }
         finally
         {
-          try
-          {
-            if (connection != null)
-            {
-              connection.close();
-            }
-          }
-          catch (Exception e)
-          {
-          }
-          try
-          {
-            if (schemaWriter != null)
-            {
-              schemaWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
-          }
-          try
-          {
-            if (ldifWriter != null)
-            {
-              ldifWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
-          }
-          try
-          {
-            if (configWriter != null)
-            {
-              configWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
+            this.close(connection);
+            this.close(schemaWriter);
+            this.close(ldifWriter);
+            this.close(configWriter);
           }
         }
+
+        return files;
       }
     }
     catch (Exception e)
@@ -2204,5 +2183,43 @@ public class ProvisioningImp implements Provisioning
       ZimbraLog.extensions.fatal("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
       throw new IOException(e);
     }
+  }
+
+  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException {
+    SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
+    Iterator var5 = configResult.getSearchEntries().iterator();
+
+    while(var5.hasNext())
+    {
+      SearchResultEntry entry = (SearchResultEntry)var5.next();
+      writer.writeEntry(entry);
+    }
+  }
+
+  private void close(LDAPConnection connection)
+  {
+    try
+    {
+      if (connection != null)
+      {
+        connection.close();
+      }
+    } catch (Exception e)
+    {
+    }
+  }
+
+  private void close(LDIFWriter schemaWriter)
+  {
+          try
+          {
+            if (schemaWriter != null)
+            {
+              schemaWriter.close();
+            }
+    } catch (IOException e)
+          {
+          }
+
   }
 }

@@ -37,11 +37,11 @@ public class FileBlobPrimaryStore implements PrimaryStore
   private final StoreVolume       mVolume;
 
   public FileBlobPrimaryStore(
-    Object storeManager,
+    FileBlobStoreWrap storeManager,
     StoreVolume volume
   )
   {
-    this.sm = (FileBlobStoreWrap) storeManager;
+    sm = storeManager;
     mVolume = volume;
     // TODO handle compression
     // mVolume.getCompressBlobs()
