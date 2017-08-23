@@ -2128,11 +2128,11 @@ public class ProvisioningImp implements Provisioning
       {
         boolean usersDone = false;
 
-      for (LDAPURL url : ldapServerPool.getUrls())
-      {
-        try
+        for (LDAPURL url : ldapServerPool.getUrls())
         {
-          connection = new LDAPConnection(url.getHost(), url.getPort(),"cn=config", LC.ldap_root_password.value());
+          try
+          {
+            connection = new LDAPConnection(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
             String accesslogFileName = FilenameUtils.normalize(path + "accesslog-" + url.getHost() + ".ldif");
             LDIFWriter accesslogWriter = new LDIFWriter(accesslogFileName);
 
@@ -2141,7 +2141,7 @@ public class ProvisioningImp implements Provisioning
               this.write(connection, accesslogWriter, "cn=accesslog");
               files.add(accesslogFileName);
             }
-            catch (LDAPSearchException var27)
+            catch (LDAPSearchException e)
             {
             }
             finally
@@ -2151,23 +2151,23 @@ public class ProvisioningImp implements Provisioning
 
             if (!usersDone)
             {
-          Schema schema = connection.getSchema();
+              Schema schema = connection.getSchema();
               schemaWriter = new LDIFWriter(path + "ldap.schema");
-          schemaWriter.writeEntry(schema.getSchemaEntry());
+              schemaWriter.writeEntry(schema.getSchemaEntry());
               files.add(path + "ldap.schema");
               this.write(connection, new LDIFWriter(path + "ldap.ldif"), "");
               files.add(path + "ldap.ldif");
               this.write(connection, new LDIFWriter(path + "ldap-config.ldif"), "cn=config");
               files.add(path + "ldap-config.ldif");
               usersDone = true;
+            }
           }
-        }
-        catch (Exception e)
-        {
-          ZimbraLog.extensions.error("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
-        }
-        finally
-        {
+          catch (Exception e)
+          {
+            ZimbraLog.extensions.error("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+          }
+          finally
+          {
             this.close(connection);
             this.close(schemaWriter);
             this.close(ldifWriter);
@@ -2185,13 +2185,14 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException {
+  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
+  {
     SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
-    Iterator var5 = configResult.getSearchEntries().iterator();
+    Iterator iterator = configResult.getSearchEntries().iterator();
 
-    while(var5.hasNext())
+    while(iterator.hasNext())
     {
-      SearchResultEntry entry = (SearchResultEntry)var5.next();
+      SearchResultEntry entry = (SearchResultEntry)iterator.next();
       writer.writeEntry(entry);
     }
   }
@@ -2211,15 +2212,14 @@ public class ProvisioningImp implements Provisioning
 
   private void close(LDIFWriter schemaWriter)
   {
-          try
-          {
-            if (schemaWriter != null)
-            {
-              schemaWriter.close();
-            }
+    try
+    {
+      if (schemaWriter != null)
+      {
+        schemaWriter.close();
+      }
     } catch (IOException e)
-          {
-          }
-
+    {
+    }
   }
 }
