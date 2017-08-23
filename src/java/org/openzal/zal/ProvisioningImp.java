@@ -202,9 +202,15 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
-  public static String A_zimbraNetworkModulesNGEnabled                        = "zimbraNetworkModulesNGEnabled";
-  public static String A_zimbraNetworkMobileNGEnabled                         = "zimbraNetworkMobileNGEnabled";
-
+  /* $if ZimbraVersion >= 8.8.0 $ */
+  public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
+  public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
+  public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
+  /* $else$
+  public static String A_zimbraNetworkModulesNGEnabled                        = "";
+  public static String A_zimbraNetworkMobileNGEnabled                         = "";
+  public static String A_zimbraNetworkAdminEnabled                            = "";
+  /* $endif$ */
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
