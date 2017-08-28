@@ -16,5 +16,7 @@
   <build-zal-itbase ZimbraVersion="${ZimbraVersion}"
                     MajorZimbraVersion = "${MajorZimbraVersion}"
                     MiddleZimbraVersion = "${MiddleZimbraVersion}"
-                    MinorZimbraVersion = "${MinorZimbraVersion}" />
+                    MinorZimbraVersion = "${MinorZimbraVersion}"
+                    DistDirName = "${DistDirName}"
+                    DevMode = "${DevMode}" />
 </target>

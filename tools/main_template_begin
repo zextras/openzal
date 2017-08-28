@@ -43,7 +43,7 @@
      <attribute name="DistDirName"/>
 
      <sequential>
-      <echo> DEV MODE = @{DevMode}</echo>
+       <echo>devmode is @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
@@ -112,14 +112,16 @@
     <attribute name="MajorZimbraVersion"/>
     <attribute name="MiddleZimbraVersion"/>
     <attribute name="MinorZimbraVersion"/>
+    <attribute name="DevMode"/>
+    <attribute name="DistDirName"/>
 
     <sequential>
       <local name="itbase_tmpsrc"/>
       <local name="itbase_build"/>
       <local name="dist"/>
       <property name="itbase_tmpsrc"  value="tmpsrc/@{ZimbraVersion}/itbase/" />
-      <property name="itbase_build" value="build/@{ZimbraVersion}/itbase/" />
-      <property name="dist"  value="dist/@{ZimbraVersion}/"/>
+      <property name="itbase_build" value="build/@{ZimbraVersion}_dev_@{DevMode}/itbase/" />
+      <property name="dist"  value="dist/@{DistDirName}/"/>
 
       <mkdir dir="${itbase_tmpsrc}"/>
       <mkdir dir="${itbase_build}"/>
