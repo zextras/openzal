@@ -26,7 +26,6 @@ import java.util.*;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.LDAPURL;
-import com.unboundid.ldap.sdk.SearchRequest;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
@@ -34,12 +33,10 @@ import com.unboundid.ldap.sdk.schema.Schema;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.unboundid.LdapServerPool;
 import com.zimbra.cs.util.ProxyPurgeUtil;
-import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -2098,8 +2095,8 @@ public class ProvisioningImp implements Provisioning
   public List<String> dumpLDAPToLDIF(String path) throws IOException
   {
     LDIFWriter schemaWriter = null;
-    LDIFWriter ldifWriter = null;
     LDIFWriter configWriter = null;
+    LDIFWriter ldifWriter = null;
     LDAPConnection connection = null;
     ArrayList files = new ArrayList();
 
@@ -2116,101 +2113,117 @@ public class ProvisioningImp implements Provisioning
       {
         throw new IOException("No ldap server found");
       }
-      else
+
+      Exception lastException = null;
+      for (LDAPURL url : ldapServerPool.getUrls())
       {
-        boolean usersDone = false;
+        try
+        {
+          connection = new LDAPConnection(url.getHost(), url.getPort(), LC.zimbra_ldap_userdn.value(), LC.zimbra_ldap_password.value());
+
+          ldifWriter = new LDIFWriter(path + "ldap.ldif");
+          write(connection, ldifWriter, "");
+          files.add(path + "ldap.ldif");
+          Schema schema = connection.getSchema();
+          schemaWriter = new LDIFWriter(path + "ldap-schema.ldif");
+          schemaWriter.writeEntry(schema.getSchemaEntry());
+          files.add(path + "ldap-schema.ldif");
+          lastException = null;
+          break;
+        }
+        catch (Exception e)
+        {
+          lastException = e;
+          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+        }
+        finally
+        {
+          close(connection);
+          close(schemaWriter);
+          close(ldifWriter);
+        }
+      }
+
+      if (lastException != null)
+      {
+        throw lastException;
+      }
 
       for (LDAPURL url : ldapServerPool.getUrls())
       {
         try
         {
-          connection = new LDAPConnection(url.getHost(), url.getPort(),"cn=config", LC.ldap_root_password.value());
-            String accesslogFileName = FilenameUtils.normalize(path + "accesslog-" + url.getHost() + ".ldif");
-            LDIFWriter accesslogWriter = new LDIFWriter(accesslogFileName);
+          connection = new LDAPConnection(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
 
-            try
-            {
-              this.write(connection, accesslogWriter, "cn=accesslog");
-              files.add(accesslogFileName);
-            }
-            catch (LDAPSearchException var27)
-            {
-            }
-            finally
-            {
-              this.close(accesslogWriter);
-            }
-
-            if (!usersDone)
-            {
-          Schema schema = connection.getSchema();
-              schemaWriter = new LDIFWriter(path + "ldap.schema");
-          schemaWriter.writeEntry(schema.getSchemaEntry());
-              files.add(path + "ldap.schema");
-              this.write(connection, new LDIFWriter(path + "ldap.ldif"), "");
-              files.add(path + "ldap.ldif");
-              this.write(connection, new LDIFWriter(path + "ldap-config.ldif"), "cn=config");
-              files.add(path + "ldap-config.ldif");
-              usersDone = true;
-          }
+          write(connection, new LDIFWriter(path + "ldap-config.ldif"), "cn=config");
+          files.add(path + "ldap-config.ldif");
+          lastException = null;
+          break;
         }
         catch (Exception e)
         {
-          ZimbraLog.extensions.error("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+          lastException = e;
+          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
         }
         finally
         {
-            this.close(connection);
-            this.close(schemaWriter);
-            this.close(ldifWriter);
-            this.close(configWriter);
-          }
+          close(connection);
+          close(configWriter);
         }
-
-        return files;
       }
+
+      if (lastException != null)
+      {
+        throw lastException;
+      }
+
+      return files;
     }
     catch (Exception e)
     {
-      ZimbraLog.extensions.fatal("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
       throw new IOException(e);
     }
   }
 
-  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException {
+  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
+  {
     SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
-    Iterator var5 = configResult.getSearchEntries().iterator();
+    Iterator it = configResult.getSearchEntries().iterator();
 
-    while(var5.hasNext())
+    while (it.hasNext())
     {
-      SearchResultEntry entry = (SearchResultEntry)var5.next();
+      SearchResultEntry entry = (SearchResultEntry) it.next();
       writer.writeEntry(entry);
     }
   }
 
-  private void close(LDAPConnection connection) {
-          try
-          {
-            if (connection != null)
-            {
-              connection.close();
-            }
-    } catch (Exception var3)
-          {
-          }
+  private void close(LDAPConnection connection)
+  {
+    try
+    {
+      if (connection != null)
+      {
+        connection.close();
+      }
+    }
+    catch (Exception e)
+    {
+    }
 
   }
 
-  private void close(LDIFWriter schemaWriter) {
-          try
-          {
-            if (schemaWriter != null)
-            {
-              schemaWriter.close();
-            }
-    } catch (IOException var3)
-          {
-          }
+  private void close(LDIFWriter schemaWriter)
+  {
+    try
+    {
+      if (schemaWriter != null)
+      {
+        schemaWriter.close();
+      }
+    }
+    catch (IOException e)
+    {
+    }
 
   }
 }
