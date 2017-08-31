@@ -869,6 +869,10 @@ public class Mailbox
   {
     try
     {
+      if (!canWrite(octxt,itemId) || !canWrite(octxt,targetId))
+      {
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getName() + " on " + mMbox.getAccount().getMail() + " mailbox");
+      }
       mMbox.move(octxt.getOperationContext(), itemId, Item.convertType(type), targetId);
     }
     catch (com.zimbra.common.service.ServiceException e)
