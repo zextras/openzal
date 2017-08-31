@@ -198,7 +198,9 @@
       zal-all
       zal-common
       zal-dev-last
+      zal-dev-last-itbase
       zal-{zimbra-version}
+      zal-{zimbra-version}-itbase
       compatibility-check
       fast-compatibility-check
       clean
