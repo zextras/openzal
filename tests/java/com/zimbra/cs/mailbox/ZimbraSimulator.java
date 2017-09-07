@@ -180,7 +180,7 @@ public class ZimbraSimulator extends ExternalResource
         recursiveDelete(each);
       }
     }
-    if (!file.delete())
+    if (file.exists() && !file.delete())
     {
       throw new RuntimeException("Unable to delete file " + file.getAbsolutePath());
     }
