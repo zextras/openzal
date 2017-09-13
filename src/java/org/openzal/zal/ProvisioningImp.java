@@ -30,6 +30,7 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.schema.Schema;
+import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
@@ -2123,6 +2124,7 @@ public class ProvisioningImp implements Provisioning
       }
 
       Exception lastException = null;
+      String hostException = "";
       for (LDAPURL url : ldapServerPool.getUrls())
       {
         try
@@ -2141,6 +2143,7 @@ public class ProvisioningImp implements Provisioning
         }
         catch (Exception e)
         {
+          hostException = url.getHost();
           lastException = e;
           ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
         }
@@ -2154,7 +2157,12 @@ public class ProvisioningImp implements Provisioning
 
       if (lastException != null)
       {
-        throw lastException;
+        if (lastException.equals(ResultCode.INVALID_CREDENTIALS))
+        {
+          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
+            " with user " + LC.zimbra_ldap_userdn.value() + " details : " + lastException));
+        }
+        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
       }
 
       for (LDAPURL url : ldapServerPool.getUrls())
@@ -2170,6 +2178,7 @@ public class ProvisioningImp implements Provisioning
         }
         catch (Exception e)
         {
+          hostException = url.getHost();
           lastException = e;
           ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
         }
@@ -2182,7 +2191,12 @@ public class ProvisioningImp implements Provisioning
 
       if (lastException != null)
       {
-        throw lastException;
+        if (lastException.equals(ResultCode.INVALID_CREDENTIALS))
+        {
+          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
+            " with user cn=config details : " + lastException));
+        }
+        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
       }
 
       return files;

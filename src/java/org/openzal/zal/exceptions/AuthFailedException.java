@@ -22,7 +22,7 @@ package org.openzal.zal.exceptions;
 
 public class AuthFailedException extends ZimbraException
 {
-  protected AuthFailedException(Exception exception)
+  public AuthFailedException(Exception exception)
   {
     super(exception);
   }
