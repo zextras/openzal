@@ -14,8 +14,6 @@ import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.ldap.LdapDomainProxy;
 import com.zimbra.cs.gal.GalSearchParams;
 import com.zimbra.cs.gal.GalSearchResultCallback;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.Utils;
@@ -822,26 +820,25 @@ public final class MockProvisioning extends com.zimbra.cs.account.Provisioning
 
   public Server get(final Key.ServerBy keyName,final String key)
   {
-    switch (keyName) {
-      case id:
-        return (Server)CollectionUtils.find(mServers, new Predicate() {
-          @Override
-          public boolean evaluate(Object o)
+    for (Server server : mServers)
+    {
+      switch (keyName)
+      {
+        case id:
+          if (server.getId().equals(key))
           {
-            return ((Server)o).getId().equals(key);
+            return server;
           }
-        });
-      case name:
-        return (Server)CollectionUtils.find(mServers, new Predicate() {
-          @Override
-          public boolean evaluate(Object o)
+        case name:
+          if (server.getName().equals(key))
           {
-            return ((Server)o).getName().equals(key);
+            return server;
           }
-        });
-      default:
-        throw new UnsupportedOperationException();
+        default:
+          throw new UnsupportedOperationException();
+      }
     }
+    return null;
   }
 
   public List<Server> getAllServers() {
