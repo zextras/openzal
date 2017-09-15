@@ -23,6 +23,7 @@ package org.openzal.zal.tools;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
 import java.security.KeyFactory;
 import java.security.Signature;
@@ -35,20 +36,34 @@ public class ChecksumWriter
 {
   public static void main(@NotNull String args[]) throws Exception
   {
-    if( args.length <= 2 )
+    String privateKeyPath = null;
+    String zipFilePath = null;
+    String outDir = null;
+    File destination = null;
+    if (args.length == 4 && "-d".equals(args[0]))
     {
-      System.err.println("/path/to/PrivateKey, /path/to/Source, /path/to/Destination parameters required.");
+      outDir = args[1];
+      privateKeyPath = args[2];
+      zipFilePath = args[3];
+    }
+    else if (args.length == 3)
+    {
+      privateKeyPath = args[0];
+      zipFilePath = args[1];
+      destination = new File(args[2]);
+    }
+    else
+    {
+      System.err.println("-d /path/, /path/to/PrivateKey, /path/to/Source or /path/to/PrivateKey, /path/to/Source, /path/to/Destination parameters required.");
       System.exit(1);
     }
 
     RandomAccessFile privateKeyFile = null;
     ZipFile zipFile = null;
-    File destination;
     try
     {
-      privateKeyFile = new RandomAccessFile(args[0], "r");
-      zipFile = new ZipFile(args[1]);
-      destination = new File(args[2]);
+      privateKeyFile = new RandomAccessFile(privateKeyPath, "r");
+      zipFile = new ZipFile(zipFilePath);
 
       byte[] privateKeyContent = new byte[(int) privateKeyFile.length()];
       try
@@ -70,7 +85,34 @@ public class ChecksumWriter
       rsa256.initSign(privateKey);
       rsa256.update(currentDigest);
 
-      JarUtils.copyJar(zipFile, destination, currentDigest, rsa256.sign());
+      if (outDir != null)
+      {
+        File digest = new File(outDir + "/DIGEST");
+        File signature = new File(outDir + "/SIGNATURE");
+        FileOutputStream digestOutputStream = new FileOutputStream(digest);
+        try
+        {
+          digestOutputStream.write(JarUtils.printableByteArray(currentDigest).getBytes());
+        }
+        finally
+        {
+          digestOutputStream.close();
+        }
+
+        FileOutputStream signatureOutputStream = new FileOutputStream(signature);
+        try
+        {
+          signatureOutputStream.write(JarUtils.printableByteArray(rsa256.sign()).getBytes());
+        }
+        finally
+        {
+          signatureOutputStream.close();
+        }
+      }
+      else
+      {
+        JarUtils.copyJar(zipFile, destination, currentDigest, rsa256.sign());
+      }
 
       System.exit(0);
     }
