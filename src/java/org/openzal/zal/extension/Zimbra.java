@@ -21,8 +21,8 @@
 package org.openzal.zal.extension;
 
 import com.zimbra.cs.store.file.FileBlobStore;
-import org.apache.cxf.jaxrs.ext.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
 import org.openzal.zal.StoreManager;
