@@ -2,8 +2,10 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import com.unboundid.ldap.listener.InMemoryDirectoryServer;
+import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
+import com.unboundid.ldap.sdk.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
@@ -26,6 +28,7 @@ public class ProvisioningSimulator extends ProvisioningImp
   private Map<String, Domain> mDomainMap;
   private Map<String, Account> mAccountMap;
   private Map<String, DistributionList> mDistributionListMap;
+  private Map<String, InMemoryDirectoryServer> mLDAPServer;
 
   /*************** Simulator methods ********************/
   public ProvisioningSimulator()
@@ -34,6 +37,7 @@ public class ProvisioningSimulator extends ProvisioningImp
     mDomainMap = new HashMap<String, Domain>();
     mAccountMap = new HashMap<String, Account>();
     mDistributionListMap = new HashMap<String, DistributionList>();
+    mLDAPServer = new HashMap<String, InMemoryDirectoryServer>();
   }
 
   public void addDomain(String domain)
@@ -586,6 +590,40 @@ public class ProvisioningSimulator extends ProvisioningImp
   {
     return new Cos("test", "id", new HashMap<String, Object>(), this);
   }
-  
+
+  @Override
+  protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
+  {
+    InMemoryDirectoryServer server = mLDAPServer.get(host + String.valueOf(port) + bindDN);
+    Map<DN, byte[]> binds = server.getConfig().getAdditionalBindCredentials();
+    byte[] password = binds.get(new DN(bindDN));
+    if (password == null)
+    {
+      throw new LDAPException(ResultCode.PARAM_ERROR, "Simple bind operations are not allowed to contain a bind DN without a password.");
+    }
+    if (!bindPassword.equals(new String(password)))
+    {
+      throw new LDAPException(ResultCode.INVALID_CREDENTIALS, "Wrong password");
+    }
+    return server;
+  }
+
+  public InMemoryDirectoryServer createLdapServer(String ldifFile, String baseDN,String host, int port, String bindDN, String bindPassword) throws LDAPException
+  {
+    InMemoryDirectoryServer mLdapServer;
+    InMemoryDirectoryServerConfig mLdapConfig = new InMemoryDirectoryServerConfig(baseDN);
+    if (bindPassword != null && !bindPassword.isEmpty())
+    {
+      mLdapConfig.addAdditionalBindCredentials(bindDN, bindPassword);
+    }
+    mLdapConfig.setSchema(null);
+    mLdapServer = new InMemoryDirectoryServer(mLdapConfig);
+    if (ldifFile != null && !ldifFile.isEmpty())
+    {
+      mLdapServer.importFromLDIF(false, ldifFile);
+    }
+    mLDAPServer.put(host + String.valueOf(port) + bindDN, mLdapServer);
+    return mLdapServer;
+  }
 
 }

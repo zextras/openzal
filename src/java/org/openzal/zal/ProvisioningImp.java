@@ -23,17 +23,13 @@ package org.openzal.zal;
 import java.io.IOException;
 import java.util.*;
 
-import com.unboundid.ldap.sdk.LDAPConnection;
-import com.unboundid.ldap.sdk.LDAPSearchException;
-import com.unboundid.ldap.sdk.LDAPURL;
-import com.unboundid.ldap.sdk.SearchResult;
-import com.unboundid.ldap.sdk.SearchResultEntry;
-import com.unboundid.ldap.sdk.SearchScope;
+import com.unboundid.ldap.sdk.*;
 import com.unboundid.ldap.sdk.schema.Schema;
 import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.unboundid.LdapServerPool;
@@ -2101,13 +2097,12 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<String> dumpLDAPToLDIF(String path) throws IOException
+  public void dumpLDAPToLDIF(String path,List<String> files) throws IOException
   {
     LDIFWriter schemaWriter = null;
     LDIFWriter configWriter = null;
     LDIFWriter ldifWriter = null;
-    LDAPConnection connection = null;
-    ArrayList files = new ArrayList();
+    LDAPInterface connection = null;
 
     try
     {
@@ -2129,15 +2124,18 @@ public class ProvisioningImp implements Provisioning
       {
         try
         {
-          connection = new LDAPConnection(url.getHost(), url.getPort(), LC.zimbra_ldap_userdn.value(), LC.zimbra_ldap_password.value());
+          connection = connectToLdap(url.getHost(), url.getPort(), LC.zimbra_ldap_userdn.value(), LC.zimbra_ldap_password.value());
 
           ldifWriter = new LDIFWriter(path + "ldap.ldif");
           write(connection, ldifWriter, "");
           files.add(path + "ldap.ldif");
           Schema schema = connection.getSchema();
-          schemaWriter = new LDIFWriter(path + "ldap-schema.ldif");
-          schemaWriter.writeEntry(schema.getSchemaEntry());
-          files.add(path + "ldap-schema.ldif");
+          if (schema != null)
+          {
+            schemaWriter = new LDIFWriter(path + "ldap-schema.ldif");
+            schemaWriter.writeEntry(schema.getSchemaEntry());
+            files.add(path + "ldap-schema.ldif");
+          }
           lastException = null;
           break;
         }
@@ -2157,10 +2155,12 @@ public class ProvisioningImp implements Provisioning
 
       if (lastException != null)
       {
-        if (lastException.equals(ResultCode.INVALID_CREDENTIALS))
+        if (lastException instanceof LDAPException && (
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
         {
           throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
-            " with user " + LC.zimbra_ldap_userdn.value() + " details : " + lastException));
+            " with user " + LC.zimbra_ldap_userdn.value()));
         }
         throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
       }
@@ -2169,9 +2169,10 @@ public class ProvisioningImp implements Provisioning
       {
         try
         {
-          connection = new LDAPConnection(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
+          connection = connectToLdap(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
 
-          write(connection, new LDIFWriter(path + "ldap-config.ldif"), "cn=config");
+          configWriter = new LDIFWriter(path + "ldap-config.ldif");
+          write(connection, configWriter , "cn=config");
           files.add(path + "ldap-config.ldif");
           lastException = null;
           break;
@@ -2191,23 +2192,28 @@ public class ProvisioningImp implements Provisioning
 
       if (lastException != null)
       {
-        if (lastException.equals(ResultCode.INVALID_CREDENTIALS))
+        if (lastException instanceof LDAPException && (
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
         {
           throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
-            " with user cn=config details : " + lastException));
+            " with user cn=config"));
         }
         throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
       }
-
-      return files;
     }
-    catch (Exception e)
+    catch (LdapException e)
     {
       throw new IOException(e);
     }
   }
 
-  private void write(LDAPConnection connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
+  protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
+  {
+    return new LDAPConnection(host, port, bindDN, bindPassword);
+  }
+
+  private void write(LDAPInterface connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
   {
     SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
     Iterator it = configResult.getSearchEntries().iterator();
@@ -2219,13 +2225,13 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  private void close(LDAPConnection connection)
+  private void close(LDAPInterface connection)
   {
     try
     {
-      if (connection != null)
+      if (connection != null && connection instanceof LDAPConnection)
       {
-        connection.close();
+        ((LDAPConnection)connection).close();
       }
     }
     catch (Exception e)
