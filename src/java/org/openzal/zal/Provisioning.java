@@ -345,7 +345,7 @@ public interface Provisioning
 
   void purgeMemcachedAccounts(List<String> accounts);
 
-  List<String> dumpLDAPToLDIF(String path) throws IOException;
+  void dumpLDAPToLDIF(String path,List<String> files) throws IOException;
 
   class CountAccountByCos
   {
