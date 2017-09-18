@@ -21,6 +21,7 @@
 package org.openzal.zal.extension;
 
 import com.zimbra.cs.store.file.FileBlobStore;
+import org.apache.cxf.jaxrs.ext.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
@@ -151,13 +152,9 @@ public Zimbra(Zimbra zimbra)
     return mZimbraDatabase;
   }
 
-  @NotNull
+  @Nullable
   public StoreManager getStoreManager()
   {
-    if (mStoreManager == null)
-    {
-      throw new RuntimeException("Unsupported overridden StoreManager");
-    }
     return mStoreManager;
   }
 
