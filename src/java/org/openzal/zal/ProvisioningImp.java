@@ -23,17 +23,13 @@ package org.openzal.zal;
 import java.io.IOException;
 import java.util.*;
 
-import com.unboundid.ldap.sdk.LDAPConnection;
-import com.unboundid.ldap.sdk.LDAPURL;
-import com.unboundid.ldap.sdk.SearchRequest;
-import com.unboundid.ldap.sdk.SearchResult;
-import com.unboundid.ldap.sdk.SearchResultEntry;
-import com.unboundid.ldap.sdk.SearchScope;
+import com.unboundid.ldap.sdk.*;
 import com.unboundid.ldap.sdk.schema.Schema;
+import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.unboundid.LdapServerPool;
@@ -170,9 +166,11 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraAllowFromAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraAllowFromAddress;
   public static String A_zimbraAccountStatus                                  = com.zimbra.cs.account.Provisioning.A_zimbraAccountStatus;
   public static String A_zimbraSpamIsSpamAccount                              = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsSpamAccount;
+  public static String A_zimbraSpamIsNotSpamAccount                           = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsNotSpamAccount;
   public static String A_zimbraServiceHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraServiceHostname;
   public static String A_objectClass                                          = com.zimbra.cs.account.Provisioning.A_objectClass;
   public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
+  public static String A_zimbraZimletEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraZimletEnabled;
   public static String SERVICE_MAILBOX                                        = com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX;
   public static String A_zimbraAdminPort                                      = com.zimbra.cs.account.Provisioning.A_zimbraAdminPort;
   public static String A_zimbraNotebookAccount                                = com.zimbra.cs.account.Provisioning.A_zimbraNotebookAccount;
@@ -201,9 +199,17 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
-  public static String A_zimbraNetworkModulesNGEnabled                        = "zimbraNetworkModulesNGEnabled";
-  public static String A_zimbraNetworkMobileNGEnabled                         = "zimbraNetworkMobileNGEnabled";
+  public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
 
+  /* $if ZimbraVersion >= 8.8.0 $ */
+  public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
+  public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
+  public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
+  /* $else$
+  public static String A_zimbraNetworkModulesNGEnabled                        = "";
+  public static String A_zimbraNetworkMobileNGEnabled                         = "";
+  public static String A_zimbraNetworkAdminEnabled                            = "";
+  /* $endif$ */
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
   @NotNull
@@ -2091,111 +2097,161 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void dumpLDAPToLDIF(String schemaFileName, String ldifFileName, String configFileName) throws IOException
+  public void dumpLDAPToLDIF(String path,List<String> files) throws IOException
   {
     LDIFWriter schemaWriter = null;
-    LDIFWriter ldifWriter = null;
     LDIFWriter configWriter = null;
-    LDAPConnection connection = null;
+    LDIFWriter ldifWriter = null;
+    LDAPInterface connection = null;
 
     try
     {
+      if (!path.endsWith("/"))
+      {
+        path = path + "/";
+      }
+
       LdapServerConfig.ZimbraLdapConfig ldapConfig = new LdapServerConfig.ZimbraLdapConfig(LdapServerType.MASTER);
       LdapServerPool ldapServerPool = new LdapServerPool(ldapConfig);
-
       if (ldapServerPool.getUrls().isEmpty())
       {
         throw new IOException("No ldap server found");
+      }
+
+      Exception lastException = null;
+      String hostException = "";
+      for (LDAPURL url : ldapServerPool.getUrls())
+      {
+        try
+        {
+          connection = connectToLdap(url.getHost(), url.getPort(), LC.zimbra_ldap_userdn.value(), LC.zimbra_ldap_password.value());
+
+          ldifWriter = new LDIFWriter(path + "ldap.ldif");
+          write(connection, ldifWriter, "");
+          files.add(path + "ldap.ldif");
+          Schema schema = connection.getSchema();
+          if (schema != null)
+          {
+            schemaWriter = new LDIFWriter(path + "ldap-schema.ldif");
+            schemaWriter.writeEntry(schema.getSchemaEntry());
+            files.add(path + "ldap-schema.ldif");
+          }
+          lastException = null;
+          break;
+        }
+        catch (Exception e)
+        {
+          hostException = url.getHost();
+          lastException = e;
+          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+        }
+        finally
+        {
+          close(connection);
+          close(schemaWriter);
+          close(ldifWriter);
+        }
+      }
+
+      if (lastException != null)
+      {
+        if (lastException instanceof LDAPException && (
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
+        {
+          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
+            " with user " + LC.zimbra_ldap_userdn.value()));
+        }
+        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
       }
 
       for (LDAPURL url : ldapServerPool.getUrls())
       {
         try
         {
-          connection = new LDAPConnection(url.getHost(), url.getPort(),"cn=config", LC.ldap_root_password.value());
-          // Schema
-          Schema schema = connection.getSchema();
-          schemaWriter = new LDIFWriter(schemaFileName);
-          schemaWriter.writeEntry(schema.getSchemaEntry());
+          connection = connectToLdap(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
 
-          // LDIF
-          ldifWriter = new LDIFWriter(ldifFileName);
-          SearchResult searchResult = connection.search(
-                  LdapConstants.DN_ROOT_DSE,
-                  SearchScope.SUB, "(objectClass=*)",
-                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
-                  SearchRequest.ALL_USER_ATTRIBUTES);
-          for (SearchResultEntry entry : searchResult.getSearchEntries())
-          {
-            ldifWriter.writeEntry(entry);
-          }
-
-          configWriter = new LDIFWriter(configFileName);
-          SearchResult configResult = connection.search(
-                  "cn=config",
-                  SearchScope.SUB, "(objectClass=*)",
-                  SearchRequest.ALL_OPERATIONAL_ATTRIBUTES,
-                  SearchRequest.ALL_USER_ATTRIBUTES);
-          for (SearchResultEntry entry : configResult.getSearchEntries())
-          {
-            configWriter.writeEntry(entry);
-          }
-
-          break; // One is enough
+          configWriter = new LDIFWriter(path + "ldap-config.ldif");
+          write(connection, configWriter , "cn=config");
+          files.add(path + "ldap-config.ldif");
+          lastException = null;
+          break;
         }
         catch (Exception e)
         {
-          ZimbraLog.extensions.error("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
+          hostException = url.getHost();
+          lastException = e;
+          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
         }
         finally
         {
-          try
-          {
-            if (connection != null)
-            {
-              connection.close();
-            }
-          }
-          catch (Exception e)
-          {
-          }
-          try
-          {
-            if (schemaWriter != null)
-            {
-              schemaWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
-          }
-          try
-          {
-            if (ldifWriter != null)
-            {
-              ldifWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
-          }
-          try
-          {
-            if (configWriter != null)
-            {
-              configWriter.close();
-            }
-          }
-          catch (IOException e)
-          {
-          }
+          close(connection);
+          close(configWriter);
         }
+      }
+
+      if (lastException != null)
+      {
+        if (lastException instanceof LDAPException && (
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
+          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
+        {
+          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
+            " with user cn=config"));
+        }
+        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
+      }
+    }
+    catch (LdapException e)
+    {
+      throw new IOException(e);
+    }
+  }
+
+  protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
+  {
+    return new LDAPConnection(host, port, bindDN, bindPassword);
+  }
+
+  private void write(LDAPInterface connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
+  {
+    SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
+    Iterator it = configResult.getSearchEntries().iterator();
+
+    while (it.hasNext())
+    {
+      SearchResultEntry entry = (SearchResultEntry) it.next();
+      writer.writeEntry(entry);
+    }
+  }
+
+  private void close(LDAPInterface connection)
+  {
+    try
+    {
+      if (connection != null && connection instanceof LDAPConnection)
+      {
+        ((LDAPConnection)connection).close();
       }
     }
     catch (Exception e)
     {
-      ZimbraLog.extensions.fatal("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
-      throw new IOException(e);
     }
+
+  }
+
+  private void close(LDIFWriter schemaWriter)
+  {
+    try
+    {
+      if (schemaWriter != null)
+      {
+        schemaWriter.close();
+      }
+    }
+    catch (IOException e)
+    {
+    }
+
   }
 }

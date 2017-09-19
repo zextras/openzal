@@ -42,7 +42,7 @@
      <attribute name="DistDirName"/>
 
      <sequential>
-      <echo> DEV MODE = @{DevMode}</echo>
+       <echo>devmode is @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
@@ -106,3 +106,59 @@
     </sequential>
   </macrodef>
 
+  <macrodef name="build-zal-itbase">
+    <attribute name="ZimbraVersion"/>
+    <attribute name="MajorZimbraVersion"/>
+    <attribute name="MiddleZimbraVersion"/>
+    <attribute name="MinorZimbraVersion"/>
+    <attribute name="DevMode"/>
+    <attribute name="DistDirName"/>
+
+    <sequential>
+      <local name="itbase_tmpsrc"/>
+      <local name="itbase_build"/>
+      <local name="dist"/>
+      <property name="itbase_tmpsrc"  value="tmpsrc/@{ZimbraVersion}/itbase/" />
+      <property name="itbase_build" value="build/@{ZimbraVersion}_dev_@{DevMode}/itbase/" />
+      <property name="dist"  value="dist/@{DistDirName}/"/>
+
+      <mkdir dir="${itbase_tmpsrc}"/>
+      <mkdir dir="${itbase_build}"/>
+
+      <echo>Preprocessing ZAL test library...</echo>
+      <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+        <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
+        <var name="MajorZimbraVersion"  value="@{MajorZimbraVersion}" />
+        <var name="MiddleZimbraVersion" value="@{MiddleZimbraVersion}" />
+        <var name="MinorZimbraVersion"  value="@{MinorZimbraVersion}" />
+        <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+      </preprocess>
+
+      <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
+        <classpath>
+          <path>
+            <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+              <include name="*.jar"/>
+            </fileset>
+          </path>
+          <path refid="libraries" />
+          <pathelement location="${dist}/zal.jar" />
+          <pathelement location="../dist/zextras.jar" />
+          </classpath>
+        <compilerarg value="${COMPILER_ARGS}" />
+      </javac>
+
+      <delete dir="${itbase_tmpsrc}/"/>
+
+      <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+        <manifest>
+          <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+          <attribute name="Specification-Version" value="${VERSION}" />
+          <attribute name="Specification-Vendor" value="ZeXtras" />
+          <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
+          <attribute name="Created-By" value="ZeXtras" />
+        </manifest>
+        <fileset dir="${itbase_build}" />
+      </jar>
+    </sequential>
+  </macrodef>

@@ -87,6 +87,12 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
+  public long getStoredFileSize() throws IOException
+  {
+    return mStagedBlob.getSize();
+  }
+
+  @Override
   public void renameTo(String newPath) throws IOException
   {
     wrapZimbraObject(mStagedBlob).renameTo(newPath);

@@ -132,6 +132,12 @@ public class BlobWrap implements Blob
     return this;
   }
 
+  @Override
+  public long getStoredFileSize() throws IOException
+  {
+    return mBlob.getFile().length();
+  }
+
   public String getKey()
   {
     return mBlob.getPath();

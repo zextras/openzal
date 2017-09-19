@@ -46,6 +46,7 @@ import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
+import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.internet.MimeMessage;
@@ -868,6 +869,10 @@ public class Mailbox
   {
     try
     {
+      if (!canWrite(octxt,itemId) || !canWrite(octxt,targetId))
+      {
+        throw new PermissionDeniedException("Missing write permissions for " + octxt.getAccount().getName() + " on " + mMbox.getAccount().getMail() + " mailbox");
+      }
       mMbox.move(octxt.getOperationContext(), itemId, Item.convertType(type), targetId);
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -885,14 +890,19 @@ public class Mailbox
               dstAccount.getId(),
               targetId
       );
-      List<String> createdIds = ItemActionHelper.MOVE(octxt.getOperationContext(),
-              mMbox,
-              SoapProtocol.Soap12,
-              Arrays.asList(itemId),
-              Item.convertType(type),
-              null,
-              zimbraItemId).getCreatedIds();
-
+      ItemActionHelper op = ItemActionHelper.MOVE(octxt.getOperationContext(),
+                                                  mMbox,
+                                                  SoapProtocol.Soap12,
+                                                  Arrays.asList(itemId),
+                                                  Item.convertType(type),
+                                                  null,
+                                                  zimbraItemId);
+      List<String> createdIds;
+      /* $if ZimbraVersion >= 8.8.2 $ */
+      createdIds = op.getResult().getSuccessIds();
+      /* $else $
+      createdIds = op.getCreatedIds();
+      /* $endif $ */
       if (createdIds == null)
       {
         return itemId;
@@ -2411,6 +2421,25 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public void deleteIndex() throws IOException
+  {
+    mMbox.index.deleteIndex();
+  }
+
+  public void suspendIndexing()
+  {
+/* $if ZimbraVersion >= 8.7.0 $ */
+    mMbox.suspendIndexing();
+/* $endif $ */
+  }
+
+  public void resumeIndexing()
+  {
+/* $if ZimbraVersion >= 8.7.0 $ */
+    mMbox.resumeIndexing();
+/* $endif $ */
   }
 
   public boolean isReIndexInProgress()

@@ -98,6 +98,12 @@ public class MailboxBlobWrap implements MailboxBlob
   }
 
   @Override
+  public long getStoredFileSize() throws IOException
+  {
+    return mMailboxBlob.getLocalBlob().getRawSize();
+  }
+
+  @Override
   public Blob getLocalBlob()
   {
     try

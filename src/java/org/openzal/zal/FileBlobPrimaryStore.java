@@ -37,11 +37,11 @@ public class FileBlobPrimaryStore implements PrimaryStore
   private final StoreVolume       mVolume;
 
   public FileBlobPrimaryStore(
-    Object storeManager,
+    FileBlobStoreWrap storeManager,
     StoreVolume volume
   )
   {
-    this.sm = (FileBlobStoreWrap) storeManager;
+    sm = storeManager;
     mVolume = volume;
     // TODO handle compression
     // mVolume.getCompressBlobs()
@@ -80,7 +80,13 @@ public class FileBlobPrimaryStore implements PrimaryStore
   @Override
   public String getMailboxDirPath(int mboxId)
   {
-    return mVolume.getMailboxDir(mboxId, (short) 1);
+    return mVolume.getMailboxDir(mboxId, StoreVolume.TYPE_MESSAGE);
+  }
+
+  @Override
+  public String getMailboxDirPath(int mboxId,short type)
+  {
+    return mVolume.getMailboxDir(mboxId, type);
   }
 
   @Override

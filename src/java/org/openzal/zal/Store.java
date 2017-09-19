@@ -43,6 +43,7 @@ public interface Store
   String getVolumeName();
   String getBlobPath(int mboxId, int itemId, int modContent);
   String getMailboxDirPath(int mboxId);
+  String getMailboxDirPath(int mboxId,short type);
   String getRootPath();
   boolean isCompressed();
   long getCompressionThreshold();

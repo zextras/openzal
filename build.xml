@@ -42,7 +42,7 @@
      <attribute name="DistDirName"/>
 
      <sequential>
-      <echo> DEV MODE = @{DevMode}</echo>
+       <echo>devmode is @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
@@ -106,6 +106,62 @@
     </sequential>
   </macrodef>
 
+  <macrodef name="build-zal-itbase">
+    <attribute name="ZimbraVersion"/>
+    <attribute name="MajorZimbraVersion"/>
+    <attribute name="MiddleZimbraVersion"/>
+    <attribute name="MinorZimbraVersion"/>
+    <attribute name="DevMode"/>
+    <attribute name="DistDirName"/>
+
+    <sequential>
+      <local name="itbase_tmpsrc"/>
+      <local name="itbase_build"/>
+      <local name="dist"/>
+      <property name="itbase_tmpsrc"  value="tmpsrc/@{ZimbraVersion}/itbase/" />
+      <property name="itbase_build" value="build/@{ZimbraVersion}_dev_@{DevMode}/itbase/" />
+      <property name="dist"  value="dist/@{DistDirName}/"/>
+
+      <mkdir dir="${itbase_tmpsrc}"/>
+      <mkdir dir="${itbase_build}"/>
+
+      <echo>Preprocessing ZAL test library...</echo>
+      <preprocess indir="${itbase}" outdir="${itbase_tmpsrc}" out="replace" >
+        <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
+        <var name="MajorZimbraVersion"  value="@{MajorZimbraVersion}" />
+        <var name="MiddleZimbraVersion" value="@{MiddleZimbraVersion}" />
+        <var name="MinorZimbraVersion"  value="@{MinorZimbraVersion}" />
+        <filetype commentend="*/" commentbegin="/*" extensions="java"/>
+      </preprocess>
+
+      <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
+        <classpath>
+          <path>
+            <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+              <include name="*.jar"/>
+            </fileset>
+          </path>
+          <path refid="libraries" />
+          <pathelement location="${dist}/zal.jar" />
+          <pathelement location="../dist/zextras.jar" />
+          </classpath>
+        <compilerarg value="-Xlint:none" />
+      </javac>
+
+      <delete dir="${itbase_tmpsrc}/"/>
+
+      <jar jarfile="${dist}/zal-itbase.jar" compress="false">
+        <manifest>
+          <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
+          <attribute name="Specification-Version" value="2.0.0" />
+          <attribute name="Specification-Vendor" value="ZeXtras" />
+          <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
+          <attribute name="Created-By" value="ZeXtras" />
+        </manifest>
+        <fileset dir="${itbase_build}" />
+      </jar>
+    </sequential>
+  </macrodef>
 
 <target name="zal-8.0.0"
         description="Create jar for Zimbra 8.0.0"
@@ -116,6 +172,18 @@
              MinorZimbraVersion = "0"
              DistDirName = "8.0.0"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.0.0-itbase"
+        description="Create test jar for Zimbra 8.0.0"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.0"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "0"
+                    DistDirName = "8.0.0"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.0.1"
@@ -129,6 +197,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.0.1-itbase"
+        description="Create test jar for Zimbra 8.0.1"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.1"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "1"
+                    DistDirName = "8.0.1"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.0.2"
         description="Create jar for Zimbra 8.0.2"
         depends="init">
@@ -138,6 +218,18 @@
              MinorZimbraVersion = "2"
              DistDirName = "8.0.2"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.0.2-itbase"
+        description="Create test jar for Zimbra 8.0.2"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.2"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "2"
+                    DistDirName = "8.0.2"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.0.3"
@@ -151,6 +243,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.0.3-itbase"
+        description="Create test jar for Zimbra 8.0.3"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.3"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "3"
+                    DistDirName = "8.0.3"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.0.4"
         description="Create jar for Zimbra 8.0.4"
         depends="init">
@@ -160,6 +264,18 @@
              MinorZimbraVersion = "4"
              DistDirName = "8.0.4"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.0.4-itbase"
+        description="Create test jar for Zimbra 8.0.4"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.4"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "4"
+                    DistDirName = "8.0.4"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.0.5"
@@ -173,6 +289,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.0.5-itbase"
+        description="Create test jar for Zimbra 8.0.5"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.5"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "5"
+                    DistDirName = "8.0.5"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.0.6"
         description="Create jar for Zimbra 8.0.6"
         depends="init">
@@ -182,6 +310,18 @@
              MinorZimbraVersion = "6"
              DistDirName = "8.0.6"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.0.6-itbase"
+        description="Create test jar for Zimbra 8.0.6"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.6"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "6"
+                    DistDirName = "8.0.6"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.0.7"
@@ -195,6 +335,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.0.7-itbase"
+        description="Create test jar for Zimbra 8.0.7"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.7"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "7"
+                    DistDirName = "8.0.7"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.0.8"
         description="Create jar for Zimbra 8.0.8"
         depends="init">
@@ -204,6 +356,18 @@
              MinorZimbraVersion = "8"
              DistDirName = "8.0.8"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.0.8-itbase"
+        description="Create test jar for Zimbra 8.0.8"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.8"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "8"
+                    DistDirName = "8.0.8"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.0.9"
@@ -217,6 +381,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.0.9-itbase"
+        description="Create test jar for Zimbra 8.0.9"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.0.9"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "0"
+                    MinorZimbraVersion = "9"
+                    DistDirName = "8.0.9"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.5.0"
         description="Create jar for Zimbra 8.5.0"
         depends="init">
@@ -226,6 +402,18 @@
              MinorZimbraVersion = "0"
              DistDirName = "8.5.0"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.5.0-itbase"
+        description="Create test jar for Zimbra 8.5.0"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.5.0"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "5"
+                    MinorZimbraVersion = "0"
+                    DistDirName = "8.5.0"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.5.1"
@@ -239,6 +427,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.5.1-itbase"
+        description="Create test jar for Zimbra 8.5.1"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.5.1"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "5"
+                    MinorZimbraVersion = "1"
+                    DistDirName = "8.5.1"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.6.0"
         description="Create jar for Zimbra 8.6.0"
         depends="init">
@@ -248,6 +448,18 @@
              MinorZimbraVersion = "0"
              DistDirName = "8.6.0"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.6.0-itbase"
+        description="Create test jar for Zimbra 8.6.0"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.6.0"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "6"
+                    MinorZimbraVersion = "0"
+                    DistDirName = "8.6.0"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.0"
@@ -261,6 +473,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.7.0-itbase"
+        description="Create test jar for Zimbra 8.7.0"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.0"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "0"
+                    DistDirName = "8.7.0"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.7.1"
         description="Create jar for Zimbra 8.7.1"
         depends="init">
@@ -270,6 +494,18 @@
              MinorZimbraVersion = "1"
              DistDirName = "8.7.1"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.1-itbase"
+        description="Create test jar for Zimbra 8.7.1"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.1"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "1"
+                    DistDirName = "8.7.1"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.2"
@@ -283,6 +519,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.7.2-itbase"
+        description="Create test jar for Zimbra 8.7.2"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.2"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "2"
+                    DistDirName = "8.7.2"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.7.3"
         description="Create jar for Zimbra 8.7.3"
         depends="init">
@@ -292,6 +540,18 @@
              MinorZimbraVersion = "3"
              DistDirName = "8.7.3"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.3-itbase"
+        description="Create test jar for Zimbra 8.7.3"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.3"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "3"
+                    DistDirName = "8.7.3"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.4"
@@ -305,6 +565,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.7.4-itbase"
+        description="Create test jar for Zimbra 8.7.4"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.4"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "4"
+                    DistDirName = "8.7.4"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.7.5"
         description="Create jar for Zimbra 8.7.5"
         depends="init">
@@ -314,6 +586,18 @@
              MinorZimbraVersion = "5"
              DistDirName = "8.7.5"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.5-itbase"
+        description="Create test jar for Zimbra 8.7.5"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.5"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "5"
+                    DistDirName = "8.7.5"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.6"
@@ -327,6 +611,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.7.6-itbase"
+        description="Create test jar for Zimbra 8.7.6"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.6"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "6"
+                    DistDirName = "8.7.6"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.7.7"
         description="Create jar for Zimbra 8.7.7"
         depends="init">
@@ -336,6 +632,18 @@
              MinorZimbraVersion = "7"
              DistDirName = "8.7.7"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.7-itbase"
+        description="Create test jar for Zimbra 8.7.7"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.7"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "7"
+                    DistDirName = "8.7.7"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.9"
@@ -349,6 +657,18 @@
              DevMode = "false" />
 </target>
 
+
+<target name="zal-8.7.9-itbase"
+        description="Create test jar for Zimbra 8.7.9"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.9"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "9"
+                    DistDirName = "8.7.9"
+                    DevMode = "false" />
+</target>
+
 <target name="zal-8.7.10"
         description="Create jar for Zimbra 8.7.10"
         depends="init">
@@ -358,6 +678,18 @@
              MinorZimbraVersion = "10"
              DistDirName = "8.7.10"
              DevMode = "false" />
+</target>
+
+
+<target name="zal-8.7.10-itbase"
+        description="Create test jar for Zimbra 8.7.10"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.7.10"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "10"
+                    DistDirName = "8.7.10"
+                    DevMode = "false" />
 </target>
 
 <target name="zal-8.7.11"
@@ -371,20 +703,113 @@
              DevMode = "false" />
 </target>
 
-<target name="zal-dev-last"
-        description="Create jar for Zimbra 8.7.11"
+
+<target name="zal-8.7.11-itbase"
+        description="Create test jar for Zimbra 8.7.11"
         depends="init">
-  <build-zal ZimbraVersion="8.7.11"
+  <build-zal-itbase ZimbraVersion="8.7.11"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "7"
+                    MinorZimbraVersion = "11"
+                    DistDirName = "8.7.11"
+                    DevMode = "false" />
+</target>
+
+<target name="zal-8.8.2"
+        description="Create jar for Zimbra 8.8.2"
+        depends="init">
+  <build-zal ZimbraVersion="8.8.2"
              MajorZimbraVersion = "8"
-             MiddleZimbraVersion = "7"
-             MinorZimbraVersion = "11"
+             MiddleZimbraVersion = "8"
+             MinorZimbraVersion = "2"
+             DistDirName = "8.8.2"
+             DevMode = "false" />
+</target>
+
+
+<target name="zal-8.8.2-itbase"
+        description="Create test jar for Zimbra 8.8.2"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.8.2"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "8"
+                    MinorZimbraVersion = "2"
+                    DistDirName = "8.8.2"
+                    DevMode = "false" />
+</target>
+
+<target name="zal-8.8.3"
+        description="Create jar for Zimbra 8.8.3"
+        depends="init">
+  <build-zal ZimbraVersion="8.8.3"
+             MajorZimbraVersion = "8"
+             MiddleZimbraVersion = "8"
+             MinorZimbraVersion = "3"
+             DistDirName = "8.8.3"
+             DevMode = "false" />
+</target>
+
+
+<target name="zal-8.8.3-itbase"
+        description="Create test jar for Zimbra 8.8.3"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.8.3"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "8"
+                    MinorZimbraVersion = "3"
+                    DistDirName = "8.8.3"
+                    DevMode = "false" />
+</target>
+
+<target name="zal-8.8.4"
+        description="Create jar for Zimbra 8.8.4"
+        depends="init">
+  <build-zal ZimbraVersion="8.8.4"
+             MajorZimbraVersion = "8"
+             MiddleZimbraVersion = "8"
+             MinorZimbraVersion = "4"
+             DistDirName = "8.8.4"
+             DevMode = "false" />
+</target>
+
+
+<target name="zal-8.8.4-itbase"
+        description="Create test jar for Zimbra 8.8.4"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.8.4"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "8"
+                    MinorZimbraVersion = "4"
+                    DistDirName = "8.8.4"
+                    DevMode = "false" />
+</target>
+
+<target name="zal-dev-last"
+        description="Create jar for Zimbra 8.8.4"
+        depends="init">
+  <build-zal ZimbraVersion="8.8.4"
+             MajorZimbraVersion = "8"
+             MiddleZimbraVersion = "8"
+             MinorZimbraVersion = "4"
              DistDirName = "dev-last"
              DevMode = "true" />
 </target>
 
 
-  <target name="zal-common" depends="zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.11" />
-  <target name="zal-all" depends="zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-8.7.10,zal-8.7.11,zal-dev-last" />
+<target name="zal-dev-last-itbase"
+        description="Create test jar for Zimbra 8.8.4"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="8.8.4"
+                    MajorZimbraVersion = "8"
+                    MiddleZimbraVersion = "8"
+                    MinorZimbraVersion = "4"
+                    DistDirName = "dev-last"
+                    DevMode = "true" />
+</target>
+
+
+  <target name="zal-common" depends="zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.11,zal-8.8.4" />
+  <target name="zal-all" depends="zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-8.7.10,zal-8.7.11,zal-8.8.2,zal-8.8.3,zal-8.8.4,zal-dev-last" />
 
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
@@ -412,7 +837,7 @@
       </else>
     </if>
 
-    <for list="8.0.9,8.5.1,8.6.0,8.7.11" param="currentZimbraVersion">
+    <for list="8.0.9,8.5.1,8.6.0,8.7.11,8.8.4" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -434,7 +859,7 @@
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.7.11/zal.jar"/>
+      <arg value="dist/8.8.4/zal.jar"/>
       <arg value="dist/8.0.0/zal.jar"/>
     </exec>
   </target>
@@ -451,7 +876,7 @@
       </else>
     </if>
 
-    <for list="8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0,8.7.1,8.7.2,8.7.3,8.7.4,8.7.5,8.7.6,8.7.7,8.7.9,8.7.10,8.7.11" param="currentZimbraVersion">
+    <for list="8.0.0,8.0.1,8.0.2,8.0.3,8.0.4,8.0.5,8.0.6,8.0.7,8.0.8,8.0.9,8.5.0,8.5.1,8.6.0,8.7.0,8.7.1,8.7.2,8.7.3,8.7.4,8.7.5,8.7.6,8.7.7,8.7.9,8.7.10,8.7.11,8.8.2,8.8.3,8.8.4" param="currentZimbraVersion">
       <sequential>
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
@@ -472,7 +897,7 @@
     <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
-      <arg value="dist/8.7.11/zal.jar"/>
+      <arg value="dist/8.8.4/zal.jar"/>
       <arg value="dist/8.0.0/zal.jar"/>
     </exec>
   </target>
@@ -502,7 +927,7 @@
           value="8.0.0"/>
         <replacefilter
           token="@LAST_ZIMBRA_VERSION@"
-          value="8.7.11"/>
+          value="8.8.4"/>
       </replace>
     </sequential>
   </macrodef>
@@ -582,7 +1007,9 @@
       zal-all
       zal-common
       zal-dev-last
+      zal-dev-last-itbase
       zal-{zimbra-version}
+      zal-{zimbra-version}-itbase
       compatibility-check
       fast-compatibility-check
       clean

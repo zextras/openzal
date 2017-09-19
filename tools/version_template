@@ -8,3 +8,15 @@
              DistDirName = "${DistDirName}"
              DevMode = "${DevMode}" />
 </target>
+
+
+<target name="zal-${TargetName}-itbase"
+        description="Create test jar for Zimbra ${ZimbraVersion}"
+        depends="init">
+  <build-zal-itbase ZimbraVersion="${ZimbraVersion}"
+                    MajorZimbraVersion = "${MajorZimbraVersion}"
+                    MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                    MinorZimbraVersion = "${MinorZimbraVersion}"
+                    DistDirName = "${DistDirName}"
+                    DevMode = "${DevMode}" />
+</target>
