@@ -210,6 +210,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraNetworkModulesNGEnabled                        = "";
   public static String A_zimbraNetworkMobileNGEnabled                         = "";
   public static String A_zimbraNetworkAdminEnabled                            = "";
+  public static String A_zimbraNetworkAdminNGEnabled                          = "";
   /* $endif$ */
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
 
