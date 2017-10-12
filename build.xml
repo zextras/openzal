@@ -812,7 +812,7 @@
   <target name="zal-all" depends="zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-8.7.10,zal-8.7.11,zal-8.8.2,zal-8.8.3,zal-8.8.4,zal-dev-last" />
 
   <target name="clean" description="clean up" >
-    <delete includeemptydirs="true">
+    <delete includeemptydirs="true" failonerror="false" >
       <fileset dir="dist/" includes="**/*" />
       <fileset dir="build/" includes="**/*" />
       <fileset dir="tmpsrc/" includes="**/*" />
