@@ -123,6 +123,11 @@ public class Invite
     return mInvite.getSeqNo();
   }
 
+  public boolean getRsvp()
+  {
+    return mInvite.getRsvp();
+  }
+
   public boolean isRecurrence()
   {
     return mInvite.isRecurrence();
