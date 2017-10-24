@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 public class MimeConstants
 {
+  public static final String CT_TYPE                     = "Content-Type";
   public static final String CT_TEXT_PLAIN               = com.zimbra.common.mime.MimeConstants.CT_TEXT_PLAIN;
   public static final String CT_TEXT_HTML                = com.zimbra.common.mime.MimeConstants.CT_TEXT_HTML;
   public static final String CT_TEXT_CALENDAR            = com.zimbra.common.mime.MimeConstants.CT_TEXT_CALENDAR;
