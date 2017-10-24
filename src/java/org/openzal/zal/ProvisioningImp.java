@@ -2210,6 +2210,12 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Override
+  public void registerChangePasswordListener(ChangePasswordListener listener)
+  {
+    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ZEChangePasswordListener(listener));
+  }
+
   protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
   {
     return new LDAPConnection(host, port, bindDN, bindPassword);
