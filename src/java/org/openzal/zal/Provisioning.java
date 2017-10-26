@@ -347,6 +347,8 @@ public interface Provisioning
 
   void dumpLDAPToLDIF(String path,List<String> files) throws IOException;
 
+  long getLastLogonTimestampFrequency();
+
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;
