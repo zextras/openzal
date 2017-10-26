@@ -2100,6 +2100,19 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public long getLastLogonTimestampFrequency()
+  {
+    try
+    {
+      return mProvisioning.getConfig().getLastLogonTimestampFrequency();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public void dumpLDAPToLDIF(String path,List<String> files) throws IOException
   {
     LDIFWriter schemaWriter = null;
