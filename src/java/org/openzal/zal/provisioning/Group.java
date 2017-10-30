@@ -24,6 +24,8 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 
 public class Group
@@ -52,4 +54,20 @@ public class Group
     }
   }
 
+  public String getName()
+  {
+    return mGroup.getName();
+  }
+
+  public Collection<String> getAliases()
+  {
+    try
+    {
+      return Arrays.asList(mGroup.getAliases());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
