@@ -25,9 +25,11 @@ import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.calendar.ZRecur;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -251,5 +253,18 @@ public class RecurrenceRule
   public void setByMonthList(List<Integer> byMonthList)
   {
     mZRecur.setByMonthList(byMonthList);
+  }
+
+  public List<Date> expandRecurrenceOverRange(long dateStart, long rangeStart, long rangeEnd)
+  {
+    ParsedDateTime dtStart = ParsedDateTime.fromUTCTime(dateStart);
+    try
+    {
+      return mZRecur.expandRecurrenceOverRange(dtStart, rangeStart, rangeEnd);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
