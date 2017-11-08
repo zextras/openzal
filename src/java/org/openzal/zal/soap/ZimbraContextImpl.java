@@ -20,6 +20,7 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.common.soap.AdminConstants;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Continuation;
 import org.openzal.zal.Jetty;
@@ -89,13 +90,27 @@ class ZimbraContextImpl implements ZimbraContext
 
     for (Element element : request.listElements())
     {
-      String key = element.getName();
-      String value = element.getText();
-      if (value.isEmpty())
-      {
-        value = null;
+      String elementName = element.getName();
+      if(elementName.equals(AdminConstants.E_A)){
+        Set<Element.Attribute> attributeSet = element.listAttributes();
+        for (Element.Attribute attribute : attributeSet)
+        {
+          String aKey = attribute.getValue();
+          String value = element.getText();
+          if (value.isEmpty())
+          {
+            value = null;
+          }
+          mMap.put(aKey, value);
+        }
+      }else {
+        String value = element.getText();
+        if (value.isEmpty())
+        {
+          value = null;
+        }
+        mMap.put(elementName, value);
       }
-      mMap.put(key, value);
     }
   }
 
