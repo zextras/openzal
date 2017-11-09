@@ -187,10 +187,20 @@ public class MailboxManagerImp implements MailboxManager
   {
     try
     {
-      return new Mailbox(mMailboxManager.getMailboxByAccountId(
-              accountId,
-              com.zimbra.cs.mailbox.MailboxManager.FetchMode.AUTOCREATE,
-              true));
+      if (autoCreate)
+      {
+        return new Mailbox(mMailboxManager.getMailboxByAccountId(
+          accountId,
+          com.zimbra.cs.mailbox.MailboxManager.FetchMode.AUTOCREATE,
+          true));
+      }
+      else
+      {
+        return new Mailbox(mMailboxManager.getMailboxByAccountId(
+          accountId,
+          com.zimbra.cs.mailbox.MailboxManager.FetchMode.DO_NOT_AUTOCREATE,
+          true));
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
