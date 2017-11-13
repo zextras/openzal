@@ -217,7 +217,14 @@ public abstract class Utils
 
   public static boolean isGzipped(File file) throws IOException
   {
-    return FileUtil.isGzipped(file);
+    try
+    {
+      return FileUtil.isGzipped(file);
+    }
+    catch (EOFException eof)
+    {
+      return false;
+    }
   }
 
   public static boolean isGzipped(InputStream inputStream) throws IOException
