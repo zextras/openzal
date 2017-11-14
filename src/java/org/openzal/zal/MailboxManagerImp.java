@@ -21,13 +21,10 @@
 package org.openzal.zal;
 
 
-import com.zimbra.cs.mailbox.*;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -106,6 +103,19 @@ public class MailboxManagerImp implements MailboxManager
     try
     {
       return new Mailbox(mMailboxManager.getMailboxById((int)mailboxId));
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public Mailbox getMailboxById(long mailboxId,boolean skipMailHostCheck) throws ZimbraException
+  {
+    try
+    {
+      return new Mailbox(mMailboxManager.getMailboxById((int)mailboxId,skipMailHostCheck));
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -239,4 +249,18 @@ public class MailboxManagerImp implements MailboxManager
     }
   }
 
+  @Override
+  public void cleanCache(Mailbox mailbox)
+  {
+    MailboxMaintenance maintenance = beginMaintenance(mailbox.getAccountId(), mailbox.getId());
+    endMaintenance(maintenance, false, true);
+  }
+
+  @Override
+  public Mailbox cleanCacheAndGetUpdatedMailbox(Mailbox mailbox)
+  {
+    MailboxMaintenance maintenance = beginMaintenance(mailbox.getAccountId(), mailbox.getId());
+    endMaintenance(maintenance, false, true);
+    return getMailboxByAccountId(mailbox.getAccountId());
+  }
 }
