@@ -205,14 +205,6 @@ public class ExceptionWrapper
         return new NoSuchMessageException(exception);
       }
     });
-    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_CONV, new ExceptionWrapperCreator()
-    {
-      @Override
-      public ZimbraException create(Exception exception)
-      {
-        return new NoSuchConversationException(exception);
-      }
-    });
     mExceptionMap.put( MailServiceException.NO_SUCH_APPT, new ExceptionWrapperCreator()
     {
       @Override
@@ -267,6 +259,22 @@ public class ExceptionWrapper
       public ZimbraException create(Exception exception)
       {
         return new NoSuchGrantException(exception);
+      }
+    });
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_ITEM, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchItemException(exception);
+      }
+    });
+    mExceptionMap.put(MailServiceException.WRONG_HOST, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new WrongHostException(exception);
       }
     });
     mExceptionMap.put(LDAP_EXCEPTION, new ExceptionWrapperCreator()
