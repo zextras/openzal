@@ -259,8 +259,7 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public Mailbox cleanCacheAndGetUpdatedMailbox(Mailbox mailbox)
   {
-    MailboxMaintenance maintenance = beginMaintenance(mailbox.getAccountId(), mailbox.getId());
-    endMaintenance(maintenance, false, true);
+    cleanCache(mailbox);
     return getMailboxByAccountId(mailbox.getAccountId());
   }
 }
