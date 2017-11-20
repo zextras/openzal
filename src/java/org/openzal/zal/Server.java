@@ -68,6 +68,15 @@ public class Server extends Entry
     return Arrays.asList(mServer.getHsmPolicy());
   }
 
+  public boolean isLdapGentimeFractionalSecondsEnabled()
+  {
+    /*$if ZimbraVersion >= 8.7.0 $ */
+    return mServer.isLdapGentimeFractionalSecondsEnabled();
+    /*$else $
+    return false;
+    /*$endif $ */
+  }
+
   public void setHsmPolicy(@NotNull Collection<String> zimbraHsmPolicy)
   {
     try

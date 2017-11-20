@@ -349,6 +349,8 @@ public interface Provisioning
 
   void registerChangePasswordListener(ChangePasswordListener listener);
 
+  long getLastLogonTimestampFrequency();
+
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;
