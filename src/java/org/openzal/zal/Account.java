@@ -73,6 +73,35 @@ public class Account extends Entry
     );
   }
 
+
+  public String getLastLogonTime()
+  {
+    /* $if ZimbraVersion >= 8.7.6 $ */
+    try
+    {
+    /* $endif $ */
+      return mAccount.getLastLogonTimestampAsString();
+    /* $if ZimbraVersion >= 8.7.6 $ */
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
+  }
+
+  public void setLastLogonTime(String time)
+  {
+    try
+    {
+      mAccount.setLastLogonTimestampAsString(time);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public boolean isFeatureMobilePolicyEnabled()
   {
     return mAccount.isFeatureMobilePolicyEnabled();

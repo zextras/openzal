@@ -49,7 +49,7 @@ public class ICalendarTimezone
     return cls.cast(mICalTimeZone);
   }
 
-  @Deprecated
+  @Deprecated //Use Account.getAccountTimeZone instead
   public static ICalendarTimezone getAccountTimeZone(@NotNull Account account)
   {
     ICalTimeZone accountTimeZone = Util.getAccountTimeZone(

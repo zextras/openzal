@@ -33,6 +33,8 @@ public interface MailboxManager
 
   Mailbox getMailboxById(long mailboxId) throws ZimbraException;
 
+  Mailbox getMailboxById(long mailboxId,boolean skipMailHostCheck) throws ZimbraException;
+
   Mailbox getMailboxByAccount(Account account) throws ZimbraException;
 
   Mailbox getMailboxByAccountId(String accountId) throws ZimbraException;
@@ -48,4 +50,8 @@ public interface MailboxManager
   MailboxMaintenance beginMaintenance(String accountId, int mailboxId) throws ZimbraException;
 
   void endMaintenance(MailboxMaintenance maintenance, boolean success, boolean removeFromCache) throws ZimbraException;
+
+  void cleanCache(Mailbox mailbox);
+
+  Mailbox cleanCacheAndGetUpdatedMailbox(Mailbox mailbox);
 }
