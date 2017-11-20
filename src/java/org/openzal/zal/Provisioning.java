@@ -347,6 +347,8 @@ public interface Provisioning
 
   void dumpLDAPToLDIF(String path,List<String> files) throws IOException;
 
+  void registerChangePasswordListener(ChangePasswordListener listener);
+
   long getLastLogonTimestampFrequency();
 
   class CountAccountByCos
