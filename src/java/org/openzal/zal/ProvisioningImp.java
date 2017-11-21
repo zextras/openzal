@@ -29,6 +29,7 @@ import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.cs.account.auth.twofactor.TwoFactorAuth;
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
@@ -2227,7 +2228,13 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
-    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ZEChangePasswordListener(listener));
+    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
+  }
+
+  @Override
+  public void registerTwoFactorChangeListener(String name, TwoFactorChangeListener listener)
+  {
+    TwoFactorAuth.TwoFactorChangeListener.register(name, new TwoFactorChangeListenerWrapper(listener));
   }
 
   protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException

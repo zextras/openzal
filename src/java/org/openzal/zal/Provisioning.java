@@ -349,6 +349,8 @@ public interface Provisioning
 
   void registerChangePasswordListener(ChangePasswordListener listener);
 
+  void registerTwoFactorChangeListener(String name, TwoFactorChangeListener listener);
+
   long getLastLogonTimestampFrequency();
 
   class CountAccountByCos

@@ -5,11 +5,11 @@ import com.zimbra.cs.account.ldap.ChangePasswordListener;
 
 import java.util.Map;
 
-public class ZEChangePasswordListener extends ChangePasswordListener
+public class ChangePasswordListenerWrapper extends ChangePasswordListener
 {
   private final org.openzal.zal.ChangePasswordListener mListener;
 
-  public ZEChangePasswordListener(org.openzal.zal.ChangePasswordListener listener)
+  public ChangePasswordListenerWrapper(org.openzal.zal.ChangePasswordListener listener)
   {
     mListener = listener;
   }
