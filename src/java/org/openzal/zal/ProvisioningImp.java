@@ -29,7 +29,9 @@ import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
+/* $if ZimbraVersion >= 8.7.0 $ */
 import com.zimbra.cs.account.auth.twofactor.TwoFactorAuth;
+/* $endif $ */
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
@@ -2234,7 +2236,9 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void registerTwoFactorChangeListener(String name, TwoFactorChangeListener listener)
   {
+    /* $if ZimbraVersion >= 8.7.0 $ */
     TwoFactorAuth.TwoFactorChangeListener.register(name, new TwoFactorChangeListenerWrapper(listener));
+    /* $endif $ */
   }
 
   protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
