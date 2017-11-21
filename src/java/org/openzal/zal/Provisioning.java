@@ -349,7 +349,7 @@ public interface Provisioning
 
   void registerChangePasswordListener(ChangePasswordListener listener);
 
-  void registerTwoFactorChangeListener(String name, TwoFactorChangeListener listener);
+  void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener);
 
   long getLastLogonTimestampFrequency();
 
