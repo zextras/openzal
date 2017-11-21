@@ -17,7 +17,7 @@
 
 package org.openzal.zal;
 
-public interface TwoFactorChangeListener
+public interface TwoFactorAuthChangeListener
 {
   void twoFactorAuthEnabled(Account acct);
   void twoFactorAuthDisabled(Account acct);
