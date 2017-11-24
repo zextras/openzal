@@ -29,8 +29,6 @@ import com.unboundid.ldap.sdk.ResultCode;
 
 import com.unboundid.ldif.LDIFWriter;
 import com.zimbra.common.localconfig.LC;
-/* $if ZimbraVersion >= 8.7.0 $ */
-/* $endif $ */
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerConfig;
 import com.zimbra.cs.ldap.LdapServerType;
