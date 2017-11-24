@@ -2227,7 +2227,13 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
-    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ZEChangePasswordListener(listener));
+    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
+  }
+
+  @Override
+  public void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener)
+  {
+    TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
   }
 
   protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
