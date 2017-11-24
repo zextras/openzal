@@ -214,6 +214,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraNetworkAdminNGEnabled                          = "";
   /* $endif$ */
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
+  public static String A_zimbraSmimeOCSPEnabled                               = com.zimbra.cs.account.Provisioning.A_zimbraSmimeOCSPEnabled;
 
   @NotNull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
