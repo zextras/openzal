@@ -22,6 +22,7 @@ package org.openzal.zal.exceptions;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
 
@@ -340,6 +341,10 @@ public class ExceptionWrapper
     try
     {
       throw exception;
+    }
+    catch (AccountServiceException.AuthFailedServiceException authFailedServiceException)
+    {
+      return mExceptionMap.get(com.zimbra.cs.account.AccountServiceException.AUTH_FAILED).create(authFailedServiceException);
     }
     catch(LdapException ldapException)
     {
