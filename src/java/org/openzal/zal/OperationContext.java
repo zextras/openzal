@@ -60,7 +60,7 @@ public class OperationContext
     return new Account(mOperationContext.getAuthenticatedUser());
   }
 
-  public OperationContext setRequestIP (String addr)
+  public OperationContext setRequestIP (@NotNull String addr)
   {
     mOperationContext.setRequestIP(addr);
     return this;
