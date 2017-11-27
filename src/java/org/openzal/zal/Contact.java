@@ -83,6 +83,23 @@ public class Contact extends Item
     {
       return mAttachment.getContent();
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ContactAttachment that = (ContactAttachment) o;
+
+      return mAttachment.equals(that.mAttachment);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return mAttachment.hashCode();
+    }
   }
 
   @NotNull
