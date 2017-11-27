@@ -529,6 +529,18 @@ public class Account extends Entry
     }
   }
 
+  public void setPassword(String newPassword, boolean enforcePolicy)
+  {
+    try
+    {
+      mAccount.getProvisioning().setPassword(mAccount, newPassword, enforcePolicy);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public boolean isIsAdminAccount()
   {
     return mAccount.isIsAdminAccount();
