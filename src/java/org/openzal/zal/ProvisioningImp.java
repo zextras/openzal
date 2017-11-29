@@ -206,7 +206,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
   public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
   public static String A_zimbraNetworkAdminEnabled                            = com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
-  public static String A_zimbraNetworkAdminNGEnabled                          = com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
+  public static String A_zimbraNetworkAdminNGEnabled                          = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
   /* $else$
   public static String A_zimbraNetworkModulesNGEnabled                        = "";
   public static String A_zimbraNetworkMobileNGEnabled                         = "";
