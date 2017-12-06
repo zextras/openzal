@@ -317,14 +317,29 @@ public class Item implements Comparable<Item>
       return mCustomMetadata.put(key, value);
     }
 
+    public boolean containsKey(String key)
+    {
+      return mCustomMetadata.containsKey(key);
+    }
+
+    public String remove(String key)
+    {
+      return mCustomMetadata.remove(key);
+    }
   }
 
-  @NotNull
+  @Nullable
   public CustomMetadata getCustomData(String section) throws ZimbraException
   {
     try
     {
-      return new CustomMetadata(mMailItem.getCustomData(section));
+      MailItem.CustomMetadata customData = mMailItem.getCustomData(section);
+      if (customData == null)
+      {
+        return null;
+      }
+
+      return new CustomMetadata(customData);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
