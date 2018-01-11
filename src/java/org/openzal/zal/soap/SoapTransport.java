@@ -21,6 +21,8 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.soap.JaxbUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
@@ -60,5 +62,50 @@ public class SoapTransport
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public <T> T invoke(Object jaxbObject)
+    throws IOException
+  {
+    return (T) invoke(jaxbObject, SoapProtocol.Soap12);
+  }
+
+  public <T> T invoke(Object jaxbObject, SoapProtocol proto) throws IOException
+  {
+    try
+    {
+      Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
+      Element res = mSoapHttpTransport.invoke(req);
+      return (T) JaxbUtil.elementToJaxb(res);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public <T> T invokeWithoutSession(Object jaxbObject)
+    throws IOException
+  {
+    return (T) invokeWithoutSession(jaxbObject, SoapProtocol.Soap12);
+  }
+
+  public <T> T invokeWithoutSession(Object jaxbObject, SoapProtocol proto) throws IOException
+  {
+    try
+    {
+      Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
+      Element res = mSoapHttpTransport.invokeWithoutSession(req);
+      return (T) JaxbUtil.elementToJaxb(res);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void setTargetAcctId(String targetAcctId)
+  {
+    mSoapHttpTransport.setTargetAcctId(targetAcctId);
   }
 }
