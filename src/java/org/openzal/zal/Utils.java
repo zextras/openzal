@@ -159,6 +159,11 @@ public abstract class Utils
     return ByteUtil.encodeFSSafeBase64(data);
   }
 
+  public static byte[] decodeFSSafeBase64(String  data)
+  {
+    return ByteUtil.decodeFSSafeBase64(data);
+  }
+
   public static void addToMultiMap(Map<String, Object> result, String name, String value)
   {
     StringUtil.addToMultiMap(result, name, value);
