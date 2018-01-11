@@ -23,6 +23,13 @@ package org.openzal.zal;
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.mailbox.calendar.Util;
 
+import com.zimbra.soap.account.message.GetSMIMEPublicCertsRequest;
+import com.zimbra.soap.account.message.GetSMIMEPublicCertsResponse;
+import com.zimbra.soap.account.type.SMIMEPublicCertInfo;
+import com.zimbra.soap.account.type.SMIMEPublicCertsInfo;
+import com.zimbra.soap.account.type.SMIMEPublicCertsStoreSpec;
+import com.zimbra.soap.type.SourceLookupOpt;
+import com.zimbra.soap.type.StoreLookupOpt;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.exceptions.*;
 import com.zimbra.common.account.ZAttrProvisioning;
@@ -33,7 +40,9 @@ import com.zimbra.cs.account.accesscontrol.Right;
 import com.zimbra.cs.account.accesscontrol.generated.UserRights;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.soap.SoapTransport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,6 +55,9 @@ import java.util.Set;
 
 public class Account extends Entry
 {
+  public static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
+  public static final String END_CERT = "-----END CERTIFICATE-----";
+
   @NotNull private final com.zimbra.cs.account.Account mAccount;
 
   public Account(@NotNull Object account)
@@ -1114,5 +1126,36 @@ public class Account extends Entry
   {
     return mAccount.isFeatureSMIMEEnabled();
   }
+
+  public List<String> getCertificates(SoapTransport soapTransport) throws IOException
+  {
+    SMIMEPublicCertsStoreSpec store = new SMIMEPublicCertsStoreSpec();
+    store.addStoreType("CONTACT");
+    store.addStoreType("GAL");
+    store.addStoreType("LDAP");
+    store.setSourceLookupOpt(SourceLookupOpt.ALL);
+    store.setStoreLookupOpt(StoreLookupOpt.ANY);
+
+    GetSMIMEPublicCertsRequest request = new GetSMIMEPublicCertsRequest(store);
+    request.addEmail(getName());
+    GetSMIMEPublicCertsResponse response = soapTransport.invokeWithoutSession( request );
+
+    List<String> certificates = new ArrayList<String>();
+
+    SMIMEPublicCertsInfo certs = response.getCerts();
+    if (certs != null)
+    {
+      for (SMIMEPublicCertInfo info : certs.getCerts())
+      {
+        String cert = new String(Utils.decodeFSSafeBase64(info.getValue()));
+        cert = cert.replaceAll(BEGIN_CERT,"");
+        cert = cert.replaceAll(END_CERT,"");
+        cert = cert.replaceAll( "((\\r\\n)|(\\n))","");
+        certificates.add(cert);
+      }
+    }
+    return certificates;
+  }
+
 }
 
