@@ -334,6 +334,15 @@ public class ExceptionWrapper
         }
       }
     );
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_MBOX, new ExceptionWrapperCreator()
+      {
+        @Override
+        public ZimbraException create(Exception exception)
+        {
+          return new NoSuchMailboxException(exception);
+        }
+      }
+    );
   }
 
   public static ZimbraException wrap(Exception exception)
