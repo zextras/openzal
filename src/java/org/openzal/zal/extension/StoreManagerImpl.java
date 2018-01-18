@@ -23,6 +23,7 @@ package org.openzal.zal.extension;
 import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.FileBlobPrimaryStore;
+import org.openzal.zal.PrimaryStoreBuilder;
 import org.openzal.zal.Store;
 import org.openzal.zal.CacheableStoreBuilder;
 import org.openzal.zal.StoreManager;
@@ -50,6 +51,8 @@ public class StoreManagerImpl implements StoreManager
   private final ReentrantLock             mLock;
   private final VolumeManager             mVolumeManager;
   private final FileBlobStoreWrap mFileBlobStore;
+
+  private PrimaryStoreBuilder mPrimaryStoreBuilder;
 
   static
   {
@@ -108,6 +111,14 @@ public class StoreManagerImpl implements StoreManager
     mCacheableStoreBuilderMap = new HashMap<String, CacheableStoreBuilder>();
     mStoresCached = new HashMap<String, Store>();
     mFileBlobStore = fileBlobStore;
+    mPrimaryStoreBuilder = new PrimaryStoreBuilder()
+    {
+      @Override
+      public PrimaryStore build(FileBlobStoreWrap fileBlobStoreWrap, StoreVolume storeVolume)
+      {
+        return new FileBlobPrimaryStore(fileBlobStoreWrap, storeVolume);
+      }
+    };
   }
 
   @Override
@@ -184,8 +195,10 @@ public class StoreManagerImpl implements StoreManager
   {
     if (!mCacheableStoreBuilderMap.containsKey(volumeId))
     {
-      return new FileBlobPrimaryStore(mFileBlobStore,
-                                      mVolumeManager.getById(volumeId));
+      return mPrimaryStoreBuilder.build(
+        mFileBlobStore,
+        mVolumeManager.getById(volumeId)
+      );
     }
     
     if (!mStoresCached.containsKey(volumeId))
@@ -206,5 +219,11 @@ public class StoreManagerImpl implements StoreManager
       stores.add(getStore(volume.getId()));
     }
     return stores;
+  }
+
+  @Override
+  public void setPrimaryStoreBuilder(PrimaryStoreBuilder primaryStoreBuilder)
+  {
+    mPrimaryStoreBuilder = primaryStoreBuilder;
   }
 }
