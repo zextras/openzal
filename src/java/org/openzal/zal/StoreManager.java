@@ -33,4 +33,5 @@ public interface StoreManager
   PrimaryStore getPrimaryStore();
   Store getStore(String locator);
   Collection<Store> getAllStores();
+  void setPrimaryStoreBuilder(PrimaryStoreBuilder primaryStoreBuilder);
 }
