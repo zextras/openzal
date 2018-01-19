@@ -287,7 +287,7 @@ public class Mailbox
     return new Item(item);
   }
 
-  @NotNull
+  @Nullable
   public Item getItemRevisionById(@NotNull OperationContext zContext, int id, byte type, int revision)
     throws NoSuchItemException
   {
@@ -300,7 +300,32 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(serviceException);
     }
+    if (item == null)
+    {
+      return null;
+    }
     return new Item(item);
+  }
+
+  @NotNull
+  public List<Item> getAllRevisions(@NotNull OperationContext zContext, int id, byte type)
+  {
+    try
+    {
+      List<MailItem> mailItems = mMbox.getAllRevisions(zContext.getOperationContext(), id, Item.convertType(type));
+
+      List<Item> items = new ArrayList<Item>(mailItems.size());
+      for (MailItem mailItem : mailItems)
+      {
+        items.add(new Item(mailItem));
+      }
+
+      return items;
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
   }
 
   @NotNull
