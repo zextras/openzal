@@ -62,6 +62,11 @@ public class Server extends Entry
     );
   }
 
+  public String getServerHostname()
+  {
+    return mServer.getServiceHostname();
+  }
+
   @NotNull
   public Collection<String> getHsmPolicy()
   {
