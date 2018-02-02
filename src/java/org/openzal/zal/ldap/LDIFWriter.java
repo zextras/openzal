@@ -10,9 +10,16 @@ public class LDIFWriter implements Closeable
   @NotNull
   private final com.unboundid.ldif.LDIFWriter mLDIFWriter;
 
-  public LDIFWriter(@NotNull Object ldifWriter)
+  public LDIFWriter(String path) throws LDAPException
   {
-    mLDIFWriter = (com.unboundid.ldif.LDIFWriter)ldifWriter;
+    try
+    {
+      mLDIFWriter = new com.unboundid.ldif.LDIFWriter(path);
+    }
+    catch (IOException e)
+    {
+      throw new LDAPException(e);
+    }
   }
 
   protected <T> T toZimbra(Class<T> cls)

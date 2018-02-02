@@ -24,7 +24,11 @@ public class ResultCode
   @Override
   public boolean equals(Object o)
   {
-    return mResultCode.equals(o);
+    if (o instanceof ResultCode)
+    {
+      return mResultCode.equals(((ResultCode) o).toZimbra(com.unboundid.ldap.sdk.ResultCode.class));
+    }
+    return false;
   }
 
 }

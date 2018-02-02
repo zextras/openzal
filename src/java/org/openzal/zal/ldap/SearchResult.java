@@ -1,7 +1,5 @@
 package org.openzal.zal.ldap;
 
-import com.unboundid.ldap.sdk.SearchResultEntry;
-import org.apache.commons.compress.utils.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

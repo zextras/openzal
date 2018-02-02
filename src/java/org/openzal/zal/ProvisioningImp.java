@@ -20,17 +20,16 @@
 
 package org.openzal.zal;
 
-import java.io.IOException;
 import java.util.*;
 
-import com.zimbra.cs.ldap.LdapConnType;
+import com.zimbra.cs.ldap.unboundid.UnixDomainSocketFactory;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.ldap.LDAPConnection;
 import org.openzal.zal.ldap.LDAPException;
-import org.openzal.zal.ldap.LDAPInterface;
+import org.openzal.zal.ldap.LdapConnType;
 import org.openzal.zal.lib.Filter;
 
 import com.zimbra.cs.account.*;
@@ -2109,10 +2108,26 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword,
-                                        LdapConnType connType, boolean sslAllowUntrustedCerts) throws LDAPException
+  public LDAPConnection connectToLdap(String host, int port, String bindDN, String bindPassword,
+                                      LdapConnType connType, boolean sslAllowUntrustedCerts) throws LDAPException
   {
-    return new LDAPConnection(host, port, bindDN, bindPassword,connType,sslAllowUntrustedCerts);
+    SocketFactory socketFactory = null;
+    if (connType == LdapConnType.LDAPI)
+    {
+      socketFactory = new UnixDomainSocketFactory();
+    }
+    else if (connType == LdapConnType.LDAPS)
+    {
+      if (sslAllowUntrustedCerts)
+      {
+        socketFactory = com.zimbra.common.net.SocketFactories.dummySSLSocketFactory();
+      }
+      else
+      {
+        socketFactory = SocketFactories.defaultSSLSocketFactory();
+      }
+    }
+    return new LDAPConnection(socketFactory, host, port, bindDN, bindPassword);
   }
 
   @Override
