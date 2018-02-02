@@ -345,8 +345,6 @@ public interface Provisioning
 
   void purgeMemcachedAccounts(List<String> accounts);
 
-  void dumpLDAPToLDIF(String path,List<String> files) throws IOException;
-
   void registerChangePasswordListener(ChangePasswordListener listener);
 
   void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener);
