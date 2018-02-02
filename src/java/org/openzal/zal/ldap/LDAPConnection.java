@@ -9,7 +9,7 @@ import java.io.Closeable;
 public class LDAPConnection implements Closeable, LDAPInterface
 {
   @NotNull
-  private final com.unboundid.ldap.sdk.LDAPConnection mLDAPConnection;
+  private final com.unboundid.ldap.sdk.LDAPInterface mLDAPConnection;
 
   public LDAPConnection(SocketFactory socketFactory, String host, int port, String bindDN, String bindPassword)
     throws LDAPException
@@ -24,6 +24,11 @@ public class LDAPConnection implements Closeable, LDAPInterface
     }
   }
 
+  public LDAPConnection(Object connection)
+  {
+    mLDAPConnection = (com.unboundid.ldap.sdk.LDAPInterface)connection;
+  }
+
   protected <T> T toZimbra(Class<T> cls)
   {
     return cls.cast(mLDAPConnection);
@@ -32,7 +37,10 @@ public class LDAPConnection implements Closeable, LDAPInterface
   @Override
   public void close()
   {
-    mLDAPConnection.close();
+    if (mLDAPConnection instanceof com.unboundid.ldap.sdk.LDAPConnection)
+    {
+      ((com.unboundid.ldap.sdk.LDAPConnection) mLDAPConnection).close();
+    }
   }
 
   public Schema getSchema()
@@ -40,7 +48,12 @@ public class LDAPConnection implements Closeable, LDAPInterface
   {
     try
     {
-      return new Schema(mLDAPConnection.getSchema());
+      com.unboundid.ldap.sdk.schema.Schema schema = mLDAPConnection.getSchema();
+      if (schema != null)
+      {
+        return new Schema(schema);
+      }
+      return null;
     }
     catch (com.unboundid.ldap.sdk.LDAPException e)
     {
