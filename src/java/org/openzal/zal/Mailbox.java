@@ -38,6 +38,7 @@ import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
+import org.apache.commons.dbutils.DbUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.CalendarItemData;
@@ -2333,14 +2334,16 @@ public class Mailbox
       "mailbox_metadata"
     ) + " WHERE mailbox_id=? AND section=? LIMIT 1";
     Connection connection = null;
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
-      PreparedStatement statement = connection.prepareStatement(query);
+      statement = connection.prepareStatement(query);
       statement.setInt(1, getId());
       statement.setString(2, key);
 
-      ResultSet resultSet = statement.executeQuery();
+      resultSet = statement.executeQuery();
       if (resultSet.next())
       {
         return resultSet.getString(1);
@@ -2352,6 +2355,8 @@ public class Mailbox
     }
     finally
     {
+      DbUtils.closeQuietly(resultSet);
+      DbUtils.closeQuietly(statement);
       if (connection != null)
       {
         connection.close();
@@ -2377,11 +2382,13 @@ public class Mailbox
       "mailbox_metadata"
     ) + " SET metadata=? WHERE mailbox_id=? AND section=?";
     Connection connection = null;
+    PreparedStatement updateStatement = null;
+    PreparedStatement insertStatement = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
 
-      PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+      updateStatement = connection.prepareStatement(updateQuery);
       updateStatement.setString(1, metadata);
       updateStatement.setInt(2, getId());
       updateStatement.setString(3, section);
@@ -2393,7 +2400,7 @@ public class Mailbox
         //String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
         String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
 
-        PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
+        insertStatement = connection.prepareStatement(insertQuery);
         insertStatement.setInt(1, getId());
         insertStatement.setString(2, section);
         insertStatement.setString(3, metadata);
@@ -2405,6 +2412,8 @@ public class Mailbox
     }
     finally
     {
+      DbUtils.closeQuietly(insertStatement);
+      DbUtils.closeQuietly(updateStatement);
       if (connection != null)
       {
         connection.close();
