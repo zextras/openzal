@@ -55,7 +55,6 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.provisioning.Group;
 
 import javax.net.SocketFactory;
@@ -2105,29 +2104,6 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
-  }
-
-  @Override
-  public LDAPConnection connectToLdap(String host, int port, String bindDN, String bindPassword,
-                                      LdapConnType connType, boolean sslAllowUntrustedCerts) throws LDAPException
-  {
-    SocketFactory socketFactory = null;
-    if (connType == LdapConnType.LDAPI)
-    {
-      socketFactory = new UnixDomainSocketFactory();
-    }
-    else if (connType == LdapConnType.LDAPS)
-    {
-      if (sslAllowUntrustedCerts)
-      {
-        socketFactory = com.zimbra.common.net.SocketFactories.dummySSLSocketFactory();
-      }
-      else
-      {
-        socketFactory = SocketFactories.defaultSSLSocketFactory();
-      }
-    }
-    return new LDAPConnection(socketFactory, host, port, bindDN, bindPassword);
   }
 
   @Override

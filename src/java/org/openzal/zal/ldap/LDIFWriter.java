@@ -37,6 +37,11 @@ public class LDIFWriter implements Closeable
     mLDIFWriter.writeEntry(entry.toZimbra(com.unboundid.ldap.sdk.Entry.class));
   }
 
+  public void writeEntry(SearchResultEntry entry) throws IOException
+  {
+    mLDIFWriter.writeEntry(entry.toZimbra(com.unboundid.ldap.sdk.SearchResultEntry.class));
+  }
+
   @Override
   public void close() throws IOException
   {

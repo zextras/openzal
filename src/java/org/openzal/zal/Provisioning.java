@@ -353,9 +353,6 @@ public interface Provisioning
 
   long getLastLogonTimestampFrequency();
 
-  LDAPConnection connectToLdap(String host, int port, String bindDN, String bindPassword,
-                               LdapConnType connType, boolean sslAllowUntrustedCerts) throws LDAPException;
-
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;

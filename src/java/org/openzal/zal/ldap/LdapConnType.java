@@ -21,4 +21,15 @@ public class LdapConnType
   {
     return cls.cast(mLdapConnType);
   }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (o instanceof LdapConnType)
+    {
+      LdapConnType that = (LdapConnType)o;
+      return mLdapConnType == that.mLdapConnType;
+    }
+    return false;
+  }
 }
