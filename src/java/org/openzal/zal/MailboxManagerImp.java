@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -192,6 +193,7 @@ public class MailboxManagerImp implements MailboxManager
     mMailboxManager.removeListener(new MailboxManagerListenerWrapper(listener));
   }
 
+  @Nullable
   @Override
   public Mailbox getMailboxByAccountId(String accountId,boolean autoCreate) throws ZimbraException
   {
@@ -206,10 +208,16 @@ public class MailboxManagerImp implements MailboxManager
       }
       else
       {
-        return new Mailbox(mMailboxManager.getMailboxByAccountId(
+        com.zimbra.cs.mailbox.Mailbox mailbox = mMailboxManager.getMailboxByAccountId(
           accountId,
           com.zimbra.cs.mailbox.MailboxManager.FetchMode.DO_NOT_AUTOCREATE,
-          true));
+          true
+        );
+        if (mailbox == null)
+        {
+          return null;
+        }
+        return new Mailbox(mailbox);
       }
     }
     catch (com.zimbra.common.service.ServiceException e)
