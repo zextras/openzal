@@ -2478,7 +2478,7 @@ public class Mailbox
 
   public boolean isReIndexInProgress()
   {
-    return mMbox.index.isReIndexInProgress();
+    return mMbox.index.isReIndexInProgress() || mMbox.index.isCompactIndexInProgress();
   }
 
   public short getIndexVolume() {

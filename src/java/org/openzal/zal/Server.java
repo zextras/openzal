@@ -21,15 +21,24 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.httpclient.URLUtil;
+import com.zimbra.soap.admin.message.BackupQueryRequest;
+import com.zimbra.soap.admin.message.BackupQueryResponse;
+import com.zimbra.soap.admin.type.BackupQueryAccounts;
+import com.zimbra.soap.admin.type.BackupQueryInfo;
+import com.zimbra.soap.admin.type.BackupQuerySpec;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.log.ZimbraLog;
+import org.openzal.zal.soap.SoapTransport;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -199,6 +208,28 @@ public class Server extends Entry
     {
       throw ExceptionWrapper.wrap(ex);
     }
+  }
+
+  public boolean isNetworkLegacyBackupActive(SoapTransport soapTransport)
+  {
+    BackupQueryRequest request = new BackupQueryRequest(new BackupQuerySpec());
+    try
+    {
+      BackupQueryResponse response = soapTransport.invoke(request);
+      List<BackupQueryInfo> backups = response.getBackups();
+      for (BackupQueryInfo backup : backups)
+      {
+        BackupQueryAccounts accounts = backup.getAccounts();
+        if (!accounts.getAccounts().isEmpty())
+        {
+          return true;
+        }
+      }
+    }
+    catch (IOException ignore)
+    {}
+
+    return false;
   }
 }
 
