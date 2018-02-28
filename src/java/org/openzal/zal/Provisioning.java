@@ -61,6 +61,12 @@ public interface Provisioning
   void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
           throws ZimbraException;
 
+  void visitAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull SearchDirectoryOptions searchDirectoryOptions)
+    throws ZimbraException;
+
+  void visitCoses(@NotNull SimpleVisitor<Cos> visitor, @NotNull SearchDirectoryOptions searchDirectoryOptions)
+    throws ZimbraException;
+
   void visitAllLocalAccountsSlow(
     @NotNull SimpleVisitor<Account> visitor,
     @NotNull Filter<Account> filterAccounts
