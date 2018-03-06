@@ -20,23 +20,16 @@
 
 package org.openzal.zal;
 
-import java.io.IOException;
 import java.util.*;
 
-import com.unboundid.ldap.sdk.*;
-import com.unboundid.ldap.sdk.schema.Schema;
-import com.unboundid.ldap.sdk.ResultCode;
-
-import com.unboundid.ldif.LDIFWriter;
-import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.ldap.LdapException;
-import com.zimbra.cs.ldap.LdapServerConfig;
-import com.zimbra.cs.ldap.LdapServerType;
-import com.zimbra.cs.ldap.unboundid.LdapServerPool;
+import com.zimbra.cs.ldap.unboundid.UnixDomainSocketFactory;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.ldap.LDAPConnection;
+import org.openzal.zal.ldap.LDAPException;
+import org.openzal.zal.ldap.LdapConnType;
 import org.openzal.zal.lib.Filter;
 
 import com.zimbra.cs.account.*;
@@ -62,8 +55,9 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.provisioning.Group;
+
+import javax.net.SocketFactory;
 
 public class ProvisioningImp implements Provisioning
 {
@@ -2113,118 +2107,6 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void dumpLDAPToLDIF(String path,List<String> files) throws IOException
-  {
-    LDIFWriter schemaWriter = null;
-    LDIFWriter configWriter = null;
-    LDIFWriter ldifWriter = null;
-    LDAPInterface connection = null;
-
-    try
-    {
-      if (!path.endsWith("/"))
-      {
-        path = path + "/";
-      }
-
-      LdapServerConfig.ZimbraLdapConfig ldapConfig = new LdapServerConfig.ZimbraLdapConfig(LdapServerType.MASTER);
-      LdapServerPool ldapServerPool = new LdapServerPool(ldapConfig);
-      if (ldapServerPool.getUrls().isEmpty())
-      {
-        throw new IOException("No ldap server found");
-      }
-
-      Exception lastException = null;
-      String hostException = "";
-      for (LDAPURL url : ldapServerPool.getUrls())
-      {
-        try
-        {
-          connection = connectToLdap(url.getHost(), url.getPort(), LC.zimbra_ldap_userdn.value(), LC.zimbra_ldap_password.value());
-
-          ldifWriter = new LDIFWriter(path + "ldap.ldif");
-          write(connection, ldifWriter, "");
-          files.add(path + "ldap.ldif");
-          Schema schema = connection.getSchema();
-          if (schema != null)
-          {
-            schemaWriter = new LDIFWriter(path + "ldap-schema.ldif");
-            schemaWriter.writeEntry(schema.getSchemaEntry());
-            files.add(path + "ldap-schema.ldif");
-          }
-          lastException = null;
-          break;
-        }
-        catch (Exception e)
-        {
-          hostException = url.getHost();
-          lastException = e;
-          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
-        }
-        finally
-        {
-          close(connection);
-          close(schemaWriter);
-          close(ldifWriter);
-        }
-      }
-
-      if (lastException != null)
-      {
-        if (lastException instanceof LDAPException && (
-          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
-          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
-        {
-          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
-            " with user " + LC.zimbra_ldap_userdn.value()));
-        }
-        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
-      }
-
-      for (LDAPURL url : ldapServerPool.getUrls())
-      {
-        try
-        {
-          connection = connectToLdap(url.getHost(), url.getPort(), "cn=config", LC.ldap_root_password.value());
-
-          configWriter = new LDIFWriter(path + "ldap-config.ldif");
-          write(connection, configWriter , "cn=config");
-          files.add(path + "ldap-config.ldif");
-          lastException = null;
-          break;
-        }
-        catch (Exception e)
-        {
-          hostException = url.getHost();
-          lastException = e;
-          ZimbraLog.extensions.warn("ZAL ldap dump Exception: " + Utils.exceptionToString(e));
-        }
-        finally
-        {
-          close(connection);
-          close(configWriter);
-        }
-      }
-
-      if (lastException != null)
-      {
-        if (lastException instanceof LDAPException && (
-          ((LDAPException) lastException).getResultCode().equals(ResultCode.INVALID_CREDENTIALS)) ||
-          ((LDAPException) lastException).getResultCode().equals(ResultCode.AUTHORIZATION_DENIED))
-        {
-          throw new AuthFailedException(new RuntimeException("Authentication error on server " + hostException +
-            " with user cn=config"));
-        }
-        throw new RuntimeException("Error on server " + hostException + " details : " + lastException);
-      }
-    }
-    catch (LdapException e)
-    {
-      throw new IOException(e);
-    }
-  }
-
-  @Override
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
     com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
@@ -2234,52 +2116,5 @@ public class ProvisioningImp implements Provisioning
   public void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener)
   {
     TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
-  }
-
-  protected LDAPInterface connectToLdap(String host, int port, String bindDN, String bindPassword) throws LDAPException
-  {
-    return new LDAPConnection(host, port, bindDN, bindPassword);
-  }
-
-  private void write(LDAPInterface connection, LDIFWriter writer, String baseDN) throws LDAPSearchException, IOException
-  {
-    SearchResult configResult = connection.search(baseDN, SearchScope.SUB, "(objectClass=*)", new String[]{"+", "*"});
-    Iterator it = configResult.getSearchEntries().iterator();
-
-    while (it.hasNext())
-    {
-      SearchResultEntry entry = (SearchResultEntry) it.next();
-      writer.writeEntry(entry);
-    }
-  }
-
-  private void close(LDAPInterface connection)
-  {
-    try
-    {
-      if (connection != null && connection instanceof LDAPConnection)
-      {
-        ((LDAPConnection)connection).close();
-      }
-    }
-    catch (Exception e)
-    {
-    }
-
-  }
-
-  private void close(LDIFWriter schemaWriter)
-  {
-    try
-    {
-      if (schemaWriter != null)
-      {
-        schemaWriter.close();
-      }
-    }
-    catch (IOException e)
-    {
-    }
-
   }
 }

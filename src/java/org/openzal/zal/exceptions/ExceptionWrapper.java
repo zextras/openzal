@@ -355,7 +355,7 @@ public class ExceptionWrapper
     {
       return mExceptionMap.get(com.zimbra.cs.account.AccountServiceException.AUTH_FAILED).create(authFailedServiceException);
     }
-    catch(LdapException ldapException)
+    catch(com.zimbra.cs.ldap.LdapException ldapException)
     {
       return mExceptionMap.get(LDAP_EXCEPTION).create(ldapException);
     }
