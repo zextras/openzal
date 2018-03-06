@@ -26,4 +26,8 @@ public class ZimbraLdapConfig
     return mZimbraLdapConfig.sslAllowUntrustedCerts();
   }
 
+  public String getLdapURL()
+  {
+    return mZimbraLdapConfig.getLdapURL();
+  }
 }
