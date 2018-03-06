@@ -1653,6 +1653,31 @@ public class Mailbox
   }
 
   @NotNull
+  public Document addDocumentRevision(
+    @NotNull OperationContext octxt,
+    int docId,
+    ParsedDocument parsedDocument
+  )
+    throws ZimbraException, IOException
+  {
+    MailItem document;
+    try
+    {
+      document = mMbox.addDocumentRevision(
+        octxt.getOperationContext(),
+        docId,
+        parsedDocument.toZimbra(com.zimbra.cs.mime.ParsedDocument.class)
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Document(document);
+  }
+
+  @NotNull
   public Document createDocument(
     @NotNull OperationContext octxt, int folderId,
                                  String filename, String mimeType,
