@@ -33,7 +33,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -46,7 +46,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -72,7 +72,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -85,7 +85,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/${LAST_ZIMBRA_VERSION}/zal.jar"/>

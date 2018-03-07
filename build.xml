@@ -3,12 +3,12 @@
 
   <taskdef name="preprocess" classname="com.objfac.prebop.ant.PreprocessorTask">
     <classpath>
-      <pathelement location="lib/preprocessor.jar"/>
+      <pathelement location="../build-commons/prebop/preprocessor.jar"/>
     </classpath>
   </taskdef>
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
-      <pathelement location="lib/ant-contrib-1.0b3.jar"/>
+      <pathelement location="../build-commons/ant-contrib/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
 
@@ -19,7 +19,10 @@
   <property name="COMPILER_ARGS" value="-Xlint"/>
 
   <path id="libraries">
-      <fileset dir="lib" >
+      <fileset dir="../build-commons/lib" >
+          <include name="*.jar"/>
+      </fileset>
+      <fileset dir="../build-commons/guice" >
           <include name="*.jar"/>
       </fileset>
   </path>
@@ -66,7 +69,7 @@
        <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
            <path>
-             <fileset dir="lib/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+             <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
                <include name="*.jar"/>
              </fileset>
            </path>
@@ -94,7 +97,7 @@
          <classpath>
            <pathelement location="${dist}/zal.jar.unsigned" />
          </classpath>
-         <arg value="private/key.pkcs8" />
+         <arg value="${dist}/../../../private/key.pkcs8" />
          <arg value="${dist}/zal.jar.unsigned" />
          <arg value="${dist}/zal.jar" />
        </java>
@@ -134,7 +137,7 @@
       <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
         <classpath>
           <path>
-            <fileset dir="lib/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+            <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
               <include name="*.jar"/>
             </fileset>
           </path>
@@ -908,7 +911,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -921,7 +924,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -947,7 +950,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -960,7 +963,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.8.7/zal.jar"/>
