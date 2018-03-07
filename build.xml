@@ -3,12 +3,12 @@
 
   <taskdef name="preprocess" classname="com.objfac.prebop.ant.PreprocessorTask">
     <classpath>
-      <pathelement location="../build-commons/prebop/preprocessor.jar"/>
+      <pathelement location="lib/preprocessor.jar"/>
     </classpath>
   </taskdef>
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
-      <pathelement location="../build-commons/ant-contrib/ant-contrib-1.0b3.jar"/>
+      <pathelement location="lib/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
 
@@ -19,17 +19,14 @@
   <property name="COMPILER_ARGS" value="-Xlint"/>
 
   <path id="libraries">
-      <fileset dir="../build-commons/lib" >
-          <include name="*.jar"/>
-      </fileset>
-      <fileset dir="../build-commons/guice" >
+      <fileset dir="lib" >
           <include name="*.jar"/>
       </fileset>
   </path>
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 2.1.2 </echo>
+    <echo> Building ZAL version 2.2.0 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -69,7 +66,7 @@
        <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
            <path>
-             <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+             <fileset dir="lib/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
                <include name="*.jar"/>
              </fileset>
            </path>
@@ -84,7 +81,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="2.1.2" />
+           <attribute name="Specification-Version" value="2.2.0" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -97,7 +94,7 @@
          <classpath>
            <pathelement location="${dist}/zal.jar.unsigned" />
          </classpath>
-         <arg value="${dist}/../../../private/key.pkcs8" />
+         <arg value="private/key.pkcs8" />
          <arg value="${dist}/zal.jar.unsigned" />
          <arg value="${dist}/zal.jar" />
        </java>
@@ -137,7 +134,7 @@
       <javac includeantruntime="false" debug="true" debuglevel="lines,vars,source" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
         <classpath>
           <path>
-            <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+            <fileset dir="lib/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
               <include name="*.jar"/>
             </fileset>
           </path>
@@ -153,7 +150,7 @@
       <jar jarfile="${dist}/zal-itbase.jar" compress="false">
         <manifest>
           <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-          <attribute name="Specification-Version" value="2.1.2" />
+          <attribute name="Specification-Version" value="2.2.0" />
           <attribute name="Specification-Vendor" value="ZeXtras" />
           <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
           <attribute name="Created-By" value="ZeXtras" />
@@ -897,7 +894,7 @@
   <target name="fast-compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="2" arg2="0" />
+      <equals arg1="0" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -911,7 +908,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -924,7 +921,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -936,7 +933,7 @@
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="2" arg2="0" />
+      <equals arg1="0" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -950,7 +947,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -963,7 +960,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="lib/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.8.7/zal.jar"/>
@@ -981,16 +978,16 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="2.1.2"/>
+          value="2.2.0"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="2"/>
         <replacefilter
           token="@VERSION_MINOR@"
-          value="1"/>
+          value="2"/>
         <replacefilter
           token="@VERSION_MICRO@"
-          value="2"/>
+          value="0"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
           value="8.0.0"/>
@@ -1009,14 +1006,14 @@
     <delete dir="${deb-dir-tmp}"/>
 
     <mkdir dir="${deb-dir-tmp}"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.1"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.1/usr/share/openzal/2.1"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.1/DEBIAN"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.2"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.2/usr/share/openzal/2.2"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.2/DEBIAN"/>
 
     <prepare-build-template srcFile="tools/deb_control_template"
-                            destFile="${deb-dir-tmp}/openzal-2.1/DEBIAN/control" />
+                            destFile="${deb-dir-tmp}/openzal-2.2/DEBIAN/control" />
 
-    <copy todir="${deb-dir-tmp}/openzal-2.1/usr/share/openzal/2.1">
+    <copy todir="${deb-dir-tmp}/openzal-2.2/usr/share/openzal/2.2">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1026,9 +1023,9 @@
           dir="${deb-dir-tmp}"
           failonerror="true">
       <arg value="--build"/>
-      <arg value="openzal-2.1"/>
+      <arg value="openzal-2.2"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-2.1.deb" todir="." />
+    <move file="${deb-dir-tmp}/openzal-2.2.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
@@ -1041,15 +1038,15 @@
     <delete dir="${rpm-dir-tmp}"/>
 
     <mkdir dir="${rpm-dir-tmp}"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.1"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.1/buildroot/usr/share/openzal/2.1"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.1/SPEC"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.1/RPMS"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.2"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.2/buildroot/usr/share/openzal/2.2"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.2/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.2/RPMS"/>
 
     <prepare-build-template srcFile="tools/rpm_spec_template"
-                            destFile="${rpm-dir-tmp}/openzal-2.1/SPEC/openzal-2.1.spec" />
+                            destFile="${rpm-dir-tmp}/openzal-2.2/SPEC/openzal-2.2.spec" />
 
-    <copy todir="${rpm-dir-tmp}/openzal-2.1/buildroot/usr/share/openzal/2.1">
+    <copy todir="${rpm-dir-tmp}/openzal-2.2/buildroot/usr/share/openzal/2.2">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1059,10 +1056,10 @@
           dir="${rpm-dir-tmp}"
           failonerror="true">
       <arg value="-bb"/>
-      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.1/buildroot"/>
-      <arg value="openzal-2.1/SPEC/openzal-2.1.spec"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.2/buildroot"/>
+      <arg value="openzal-2.2/SPEC/openzal-2.2.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-2.1/RPMS/noarch/openzal-2.1-2-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-2.2/RPMS/noarch/openzal-2.2-0-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>

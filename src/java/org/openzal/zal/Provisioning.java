@@ -26,10 +26,12 @@ import org.openzal.zal.exceptions.NoSuchAccountException;
 import org.openzal.zal.exceptions.NoSuchGrantException;
 import org.openzal.zal.exceptions.UnableToFindDistributionListException;
 import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.ldap.LDAPConnection;
+import org.openzal.zal.ldap.LDAPException;
+import org.openzal.zal.ldap.LdapConnType;
 import org.openzal.zal.lib.Filter;
 import org.openzal.zal.provisioning.Group;
 
-import java.io.IOException;
 import java.util.*;
 
 public interface Provisioning
@@ -350,8 +352,6 @@ public interface Provisioning
   void invalidateAllCache();
 
   void purgeMemcachedAccounts(List<String> accounts);
-
-  void dumpLDAPToLDIF(String path,List<String> files) throws IOException;
 
   void registerChangePasswordListener(ChangePasswordListener listener);
 
