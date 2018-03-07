@@ -216,6 +216,8 @@ public class ProvisioningImp implements Provisioning
   private final NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
   @NotNull
   private final NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
+  @NotNull
+  private final NamedEntryWrapper<Cos>  mNamedEntryCosWrapper;
   private final static String[] mAccountAttrs = {
     com.zimbra.cs.account.Provisioning.A_c,
     com.zimbra.cs.account.Provisioning.A_cn,
@@ -249,6 +251,16 @@ public class ProvisioningImp implements Provisioning
       public Domain wrap(NamedEntry entry)
       {
         return new Domain((com.zimbra.cs.account.Domain) entry);
+      }
+    };
+
+    mNamedEntryCosWrapper = new NamedEntryWrapper<Cos>()
+    {
+      @NotNull
+      @Override
+      public Cos wrap(NamedEntry entry)
+      {
+        return new Cos((com.zimbra.cs.account.Cos) entry);
       }
     };
   }
@@ -384,6 +396,42 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public void visitAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull SearchDirectoryOptions searchDirectoryOptions)
+  {
+    ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
+
+    try
+    {
+      mProvisioning.searchDirectory(
+        searchDirectoryOptions.withType(SearchDirectoryOptions.ObjectType.accounts).toZimbra(com.zimbra.cs.account.SearchDirectoryOptions.class),
+        zimbraVisitor
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void visitCoses(@NotNull SimpleVisitor<Cos> visitor, @NotNull SearchDirectoryOptions searchDirectoryOptions)
+  {
+    ZimbraVisitorWrapper<Cos> zimbraVisitor = new ZimbraVisitorWrapper<Cos>(visitor, mNamedEntryCosWrapper);
+
+    try
+    {
+      mProvisioning.searchDirectory(
+        searchDirectoryOptions.withType(SearchDirectoryOptions.ObjectType.coses).toZimbra(com.zimbra.cs.account.SearchDirectoryOptions.class),
+        zimbraVisitor
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public void visitAllLocalAccountsSlow(
     @NotNull SimpleVisitor<Account> visitor,
     @NotNull Filter<Account> filterAccounts
@@ -418,11 +466,11 @@ public class ProvisioningImp implements Provisioning
     {
       ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
 
-      SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
-      searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
+      com.zimbra.cs.account.SearchDirectoryOptions searchOptions = new com.zimbra.cs.account.SearchDirectoryOptions();
+      searchOptions.setMakeObjectOpt(com.zimbra.cs.account.SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
       searchOptions.setTypes(
-        SearchDirectoryOptions.ObjectType.accounts,
-        SearchDirectoryOptions.ObjectType.resources
+        com.zimbra.cs.account.SearchDirectoryOptions.ObjectType.accounts,
+        com.zimbra.cs.account.SearchDirectoryOptions.ObjectType.resources
       );
       searchOptions.setFilter(ZLdapFilterFactory.getInstance().accountById(accountId.getId()));
 
@@ -1653,7 +1701,7 @@ public class ProvisioningImp implements Provisioning
   public List<Account> getAllDelegatedAdminAccounts() throws ZimbraException
   {
     List<NamedEntry> entryList;
-    SearchDirectoryOptions opts = new SearchDirectoryOptions();
+    com.zimbra.cs.account.SearchDirectoryOptions opts = new com.zimbra.cs.account.SearchDirectoryOptions();
     ZLdapFilterFactory zLdapFilterFactory = ZLdapFilterFactory.getInstance();
     try
     {
@@ -1662,7 +1710,7 @@ public class ProvisioningImp implements Provisioning
         zLdapFilterFactory.equalityFilter(A_zimbraIsDelegatedAdminAccount, "TRUE", true)
       );
       opts.setFilter(filter);
-      opts.setTypes(SearchDirectoryOptions.ObjectType.accounts);
+      opts.setTypes(com.zimbra.cs.account.SearchDirectoryOptions.ObjectType.accounts);
       entryList = mProvisioning.searchDirectory(opts);
     }
     catch (ServiceException e)
