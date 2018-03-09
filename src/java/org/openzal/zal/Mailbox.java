@@ -462,6 +462,24 @@ public class Mailbox
     return new Folder(folder);
   }
 
+
+  @NotNull
+  public Item getItemByPath(@NotNull OperationContext zContext, String path)
+    throws NoSuchItemException
+  {
+    MailItem mailItem;
+    try
+    {
+      mailItem = mMbox.getItemByPath(zContext.getOperationContext(), path);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Folder(mailItem);
+  }
+
   @NotNull
   public List<Folder> getModifiedFolders(int sequence)
     throws NoSuchFolderException
