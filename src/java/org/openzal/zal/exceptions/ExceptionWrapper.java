@@ -182,6 +182,14 @@ public class ExceptionWrapper
         return new NoSuchItemException(exception);
       }
     });
+    mExceptionMap.put(MailServiceException.NO_SUCH_DOC, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new NoSuchItemException(exception);
+      }
+    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_TAG, new ExceptionWrapperCreator()
     {
       @Override
