@@ -288,7 +288,7 @@ public class Mailbox
     return new Item(item);
   }
 
-  @Nullable
+  @NotNull
   public Item getItemRevisionById(@NotNull OperationContext zContext, int id, byte type, int revision)
     throws NoSuchItemException
   {
@@ -303,7 +303,7 @@ public class Mailbox
     }
     if (item == null)
     {
-      return null;
+      throw new NoSuchItemException(id+"-"+revision);
     }
     return new Item(item);
   }
