@@ -288,7 +288,7 @@ public class Mailbox
     return new Item(item);
   }
 
-  @Nullable
+  @NotNull
   public Item getItemRevisionById(@NotNull OperationContext zContext, int id, byte type, int revision)
     throws NoSuchItemException
   {
@@ -303,7 +303,7 @@ public class Mailbox
     }
     if (item == null)
     {
-      return null;
+      throw new NoSuchItemException(id+"-"+revision);
     }
     return new Item(item);
   }
@@ -460,6 +460,24 @@ public class Mailbox
     }
 
     return new Folder(folder);
+  }
+
+
+  @NotNull
+  public Item getItemByPath(@NotNull OperationContext zContext, String path)
+    throws NoSuchItemException
+  {
+    MailItem mailItem;
+    try
+    {
+      mailItem = mMbox.getItemByPath(zContext.getOperationContext(), path);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Folder(mailItem);
   }
 
   @NotNull
@@ -1642,6 +1660,31 @@ public class Mailbox
         name,
         description,
         data
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new Document(document);
+  }
+
+  @NotNull
+  public Document addDocumentRevision(
+    @NotNull OperationContext octxt,
+    int docId,
+    ParsedDocument parsedDocument
+  )
+    throws ZimbraException, IOException
+  {
+    MailItem document;
+    try
+    {
+      document = mMbox.addDocumentRevision(
+        octxt.getOperationContext(),
+        docId,
+        parsedDocument.toZimbra(com.zimbra.cs.mime.ParsedDocument.class)
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
