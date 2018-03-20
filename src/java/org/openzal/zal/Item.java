@@ -104,6 +104,11 @@ public class Item implements Comparable<Item>
     return MailItem.Type.of(type);
   }
 
+  public int getVersion()
+  {
+    return mMailItem.getVersion();
+  }
+
   @NotNull
   public static Item constructItem(@NotNull Mailbox mbox, @NotNull UnderlyingData data) throws ZimbraException
   {
