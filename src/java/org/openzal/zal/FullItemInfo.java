@@ -41,8 +41,57 @@ public class FullItemInfo extends PlacedItemInfo
   public final long   dateChanged;
   public final String uuid;
   public final int    mailboxId;
+  public final Integer revision_version;
+  public final Integer revision_date;
+  public final Long revision_size;
+  public final String revision_locator;
+  public final String revision_blob_digest;
+  public final String revision_name;
+  public final String revision_metadata;
+  public final Integer revision_mod_metadata;
+  public final Integer revision_change_date;
+  public final Integer revision_mod_content;
 
   public FullItemInfo(int itemId, byte type, int parent_id, int folder_id, int index_id, int imap_id, long date, long size, String locator, String blob_digest, int unread_count, int flags, String tags, String subject, String name, String metadata, int mod_metadata, int mod_content, long dateChanged, String uuid, int mailbox_id)
+  {
+    this(
+      itemId,
+      type,
+      parent_id,
+      folder_id,
+      index_id,
+      imap_id,
+      date,
+      size,
+      locator,
+      blob_digest,
+      unread_count,
+      flags,
+      tags,
+      subject,
+      name,
+      metadata,
+      mod_metadata,
+      mod_content,
+      dateChanged,
+      uuid,
+      mailbox_id,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    );
+  }
+
+  public FullItemInfo(int itemId, byte type, int parent_id, int folder_id, int index_id, int imap_id, long date, long size, String locator, String blob_digest, int unread_count, int flags, String tags, String subject, String name, String metadata, int mod_metadata, int mod_content, long dateChanged, String uuid, int mailbox_id,
+                      Integer revision_version,  Integer revision_date,  Long revision_size,  String revision_locator,  String revision_blob_digest,  String revision_name,  String revision_metadata,  Integer revision_mod_metadata, Integer revision_change_date,  Integer revision_mod_content
+  )
   {
     super(folder_id, itemId, mod_metadata, date);
     this.type = type;
@@ -62,6 +111,16 @@ public class FullItemInfo extends PlacedItemInfo
     this.dateChanged = dateChanged;
     this.uuid = uuid;
     this.mailboxId = mailbox_id;
+    this.revision_version = revision_version;
+    this.revision_date = revision_date;
+    this.revision_size = revision_size;
+    this.revision_locator = revision_locator;
+    this.revision_blob_digest = revision_blob_digest;
+    this.revision_name = revision_name;
+    this.revision_metadata = revision_metadata;
+    this.revision_mod_metadata = revision_mod_metadata;
+    this.revision_change_date = revision_change_date;
+    this.revision_mod_content = revision_mod_content;
   }
 
   @Override
@@ -146,6 +205,46 @@ public class FullItemInfo extends PlacedItemInfo
     {
       return false;
     }
+    if (revision_version != null ? !revision_version.equals(that.revision_version) : that.revision_version != null)
+    {
+      return false;
+    }
+    if (revision_date != null ? !revision_date.equals(that.revision_date) : that.revision_date != null)
+    {
+      return false;
+    }
+    if (revision_size != null ? !revision_size.equals(that.revision_size) : that.revision_size != null)
+    {
+      return false;
+    }
+    if (revision_locator != null ? !revision_locator.equals(that.revision_locator) : that.revision_locator != null)
+    {
+      return false;
+    }
+    if (revision_blob_digest != null ? !revision_blob_digest.equals(that.revision_blob_digest) : that.revision_blob_digest != null)
+    {
+      return false;
+    }
+    if (revision_name != null ? !revision_name.equals(that.revision_name) : that.revision_name != null)
+    {
+      return false;
+    }
+    if (revision_metadata != null ? !revision_metadata.equals(that.revision_metadata) : that.revision_metadata != null)
+    {
+      return false;
+    }
+    if (revision_mod_metadata != null ? !revision_mod_metadata.equals(that.revision_mod_metadata) : that.revision_mod_metadata != null)
+    {
+      return false;
+    }
+    if (revision_change_date != null ? !revision_change_date.equals(that.revision_change_date) : that.revision_change_date != null)
+    {
+      return false;
+    }
+    if (revision_mod_content != null ? !revision_mod_content.equals(that.revision_mod_content) : that.revision_mod_content != null)
+    {
+      return false;
+    }
 
     return true;
   }
@@ -170,6 +269,16 @@ public class FullItemInfo extends PlacedItemInfo
     result = 31 * result + modContent;
     result = 31 * result + (int) (dateChanged ^ (dateChanged >>> 32));
     result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+    result = 31 * result + (revision_version != null ? revision_version.hashCode() : 0);
+    result = 31 * result + (revision_date != null ? revision_date.hashCode() : 0);
+    result = 31 * result + (revision_size != null ? revision_size.hashCode() : 0);
+    result = 31 * result + (revision_locator != null ? revision_locator.hashCode() : 0);
+    result = 31 * result + (revision_blob_digest != null ? revision_blob_digest.hashCode() : 0);
+    result = 31 * result + (revision_name != null ? revision_name.hashCode() : 0);
+    result = 31 * result + (revision_metadata != null ? revision_metadata.hashCode() : 0);
+    result = 31 * result + (revision_mod_metadata != null ? revision_mod_metadata.hashCode() : 0);
+    result = 31 * result + (revision_change_date != null ? revision_change_date.hashCode() : 0);
+    result = 31 * result + (revision_mod_content != null ? revision_mod_content.hashCode() : 0);
     return result;
   }
 }
