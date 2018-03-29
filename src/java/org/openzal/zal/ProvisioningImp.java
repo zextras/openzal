@@ -1946,6 +1946,37 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Override
+  public void deleteDistributionListById(String id)
+  {
+    try
+    {
+      mProvisioning.deleteDistributionList(id);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void deleteDistributionListByName(String name)
+  {
+    try
+    {
+      DistributionList distributionList = get(ProvisioningKey.ByDistributionList.name, name);
+      if (distributionList == null)
+      {
+        throw new NoSuchDistributionListException(name);
+      }
+      mProvisioning.deleteDistributionList(distributionList.getId());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public Collection<String> getWithDomainAliasesExpansion(String address)
   {
     Set<String> addresses = new HashSet<String>();

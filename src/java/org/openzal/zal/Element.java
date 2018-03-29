@@ -18,65 +18,78 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.soap;
+package org.openzal.zal;
 
+import com.zimbra.common.soap.XmlParseException;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.Element;
-import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
-import com.zimbra.common.service.ServiceException;
 
-import java.util.List;
+import java.io.InputStream;
 
-public class SoapElement
+public class Element
 {
   @NotNull private final com.zimbra.common.soap.Element mElement;
 
-  public SoapElement(Object element)
+  public Element(String name)
   {
+    mElement = new com.zimbra.common.soap.Element.XMLElement(name);
+  }
+
+  public Element(@NotNull Object element)
+  {
+    if (element == null)
+    {
+      throw new NullPointerException();
+    }
     mElement = (com.zimbra.common.soap.Element) element;
   }
 
-  public List<SoapElement> getPathElementList(String[] xpath)
+  public Element clone()
   {
-    return ZimbraListWrapper.wrapElements(mElement.getPathElementList(xpath));
-
+    return new Element(mElement.clone());
   }
 
-  public String getAttribute(String key)
+  public void addAttribute(String key, Boolean value)
+  {
+    mElement.addAttribute(key, value);
+  }
+
+  public void addAttribute(String key, Integer value)
+  {
+    mElement.addAttribute(key, value);
+  }
+
+  public void addAttribute(String key, String value)
+  {
+    mElement.addAttribute(key, value);
+  }
+
+  public <T> T toZimbra(Class<T> cls)
+  {
+    return cls.cast(mElement);
+  }
+
+  public static Element parseXML(String xml)
   {
     try
     {
-      return mElement.getAttribute(key);
+      return new Element(com.zimbra.common.soap.Element.parseXML(xml));
     }
-    catch (ServiceException e)
+    catch (XmlParseException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  public long getAttributeLong(String key)
+  public static Element parseXML(InputStream is)
   {
     try
     {
-      return mElement.getAttributeLong(key);
+      return new Element(com.zimbra.common.soap.Element.parseXML(is));
     }
-    catch (ServiceException e)
+    catch (XmlParseException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
-
-  public Element getElement(String key)
-  {
-    try
-    {
-      return new Element(mElement.getElement(key));
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
 }
