@@ -20,10 +20,11 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.Element;
+import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -47,29 +48,13 @@ public class SoapTransport
     );
   }
 
-  public SoapElement invoke(Element request) throws IOException
+  public SoapElement invoke(XMLElement request) throws IOException
   {
     try
     {
       return new SoapElement(
         mSoapHttpTransport.invoke(
-          request.toZimbra(com.zimbra.common.soap.Element.class)
-        )
-      );
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public SoapElement invokeRaw(Element request) throws IOException
-  {
-    try
-    {
-      return new SoapElement(
-        mSoapHttpTransport.invokeRaw(
-          request.toZimbra(com.zimbra.common.soap.Element.class)
+          request.toZimbra(Element.XMLElement.class)
         )
       );
     }
@@ -89,8 +74,8 @@ public class SoapTransport
   {
     try
     {
-      com.zimbra.common.soap.Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
-      com.zimbra.common.soap.Element res = mSoapHttpTransport.invoke(req);
+      Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
+      Element res = mSoapHttpTransport.invoke(req);
       return (T) JaxbUtil.elementToJaxb(res);
     }
     catch (ServiceException e)
@@ -109,8 +94,8 @@ public class SoapTransport
   {
     try
     {
-      com.zimbra.common.soap.Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
-      com.zimbra.common.soap.Element res = mSoapHttpTransport.invokeWithoutSession(req);
+      Element req = JaxbUtil.jaxbToElement(jaxbObject, proto.getFactory());
+      Element res = mSoapHttpTransport.invokeWithoutSession(req);
       return (T) JaxbUtil.elementToJaxb(res);
     }
     catch (ServiceException e)
