@@ -21,20 +21,20 @@
 package org.openzal.zal.soap;
 
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.Element;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
 
 import java.util.List;
 
 public class SoapElement
 {
-  @NotNull private final com.zimbra.common.soap.Element mElement;
+  @NotNull private final Element mElement;
 
   public SoapElement(Object element)
   {
-    mElement = (com.zimbra.common.soap.Element) element;
+    mElement = (Element) element;
   }
 
   public List<SoapElement> getPathElementList(String[] xpath)
@@ -66,17 +66,4 @@ public class SoapElement
       throw ExceptionWrapper.wrap(e);
     }
   }
-
-  public Element getElement(String key)
-  {
-    try
-    {
-      return new Element(mElement.getElement(key));
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
 }

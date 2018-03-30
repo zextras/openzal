@@ -20,7 +20,6 @@
 
 package org.openzal.zal;
 
-import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.NoSuchAccountException;
@@ -341,12 +340,6 @@ public interface Provisioning
 
   @NotNull
   void deleteCosById(String id);
-
-  @NotNull
-  void deleteDistributionListById(String zimbraId);
-
-  @NotNull
-  void deleteDistributionListByName(String name);
 
   Collection<Domain> getDomainAliases(Domain domain);
 
