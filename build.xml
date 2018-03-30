@@ -29,7 +29,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 2.2.0 </echo>
+    <echo> Building ZAL version 2.2.1 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -84,7 +84,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="2.2.0" />
+           <attribute name="Specification-Version" value="2.2.1" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -153,7 +153,7 @@
       <jar jarfile="${dist}/zal-itbase.jar" compress="false">
         <manifest>
           <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-          <attribute name="Specification-Version" value="2.2.0" />
+          <attribute name="Specification-Version" value="2.2.1" />
           <attribute name="Specification-Vendor" value="ZeXtras" />
           <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
           <attribute name="Created-By" value="ZeXtras" />
@@ -920,7 +920,7 @@
   <target name="fast-compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="0" arg2="0" />
+      <equals arg1="1" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -959,7 +959,7 @@
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="0" arg2="0" />
+      <equals arg1="1" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -1004,7 +1004,7 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="2.2.0"/>
+          value="2.2.1"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="2"/>
@@ -1013,7 +1013,7 @@
           value="2"/>
         <replacefilter
           token="@VERSION_MICRO@"
-          value="0"/>
+          value="1"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
           value="8.0.0"/>
@@ -1085,7 +1085,7 @@
       <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.2/buildroot"/>
       <arg value="openzal-2.2/SPEC/openzal-2.2.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-2.2/RPMS/noarch/openzal-2.2-0-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-2.2/RPMS/noarch/openzal-2.2-1-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
