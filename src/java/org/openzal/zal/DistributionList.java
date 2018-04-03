@@ -21,7 +21,6 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.exceptions.AlreadyExistsException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 
-public class DistributionList extends Entry
+public class DistributionList extends Group
 {
   @NotNull private final com.zimbra.cs.account.DistributionList mDistributionList;
 
@@ -37,35 +36,6 @@ public class DistributionList extends Entry
   {
     super(distributionList);
     mDistributionList = (com.zimbra.cs.account.DistributionList) distributionList;
-  }
-
-  @NotNull
-  public Collection<String> getAliases()
-  {
-    try
-    {
-      return Arrays.asList(mDistributionList.getAliases());
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @NotNull
-  public Set<String> getAllMembersSet()
-  {
-    Set<String> set;
-    try
-    {
-      set = new HashSet<String>(mDistributionList.getAllMembersSet());
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return set;
   }
 
   public void addMembers(@Nullable Collection<String> members)
@@ -113,43 +83,9 @@ public class DistributionList extends Entry
   }
 
   @NotNull
-  public Set<String> getMultiAttrSet(String name)
-  {
-    return new HashSet<String>(mDistributionList.getMultiAttrSet(name));
-  }
-
-  @NotNull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
     return Arrays.asList(mDistributionList.getPrefAllowAddressForDelegatedSender());
-  }
-
-  public String getId()
-  {
-    return mDistributionList.getId();
-  }
-
-  public String getName()
-  {
-    return mDistributionList.getName();
-  }
-
-  public void addAlias(String alias) throws AlreadyExistsException
-  {
-    try
-    {
-      mDistributionList.addAlias(alias);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @NotNull
-  public Map<String, Object> getAttrs(boolean applyDefaults)
-  {
-    return new HashMap<String, Object>(mDistributionList.getAttrs(applyDefaults));
   }
 
   @NotNull
