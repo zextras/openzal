@@ -26,16 +26,13 @@ import org.openzal.zal.exceptions.NoSuchAccountException;
 import org.openzal.zal.exceptions.NoSuchGrantException;
 import org.openzal.zal.exceptions.UnableToFindDistributionListException;
 import org.openzal.zal.exceptions.ZimbraException;
-import org.openzal.zal.ldap.LDAPConnection;
-import org.openzal.zal.ldap.LDAPException;
-import org.openzal.zal.ldap.LdapConnType;
 import org.openzal.zal.lib.Filter;
-import org.openzal.zal.provisioning.Group;
 
 import java.util.*;
 
 public interface Provisioning
 {
+  String A_member = com.zimbra.cs.account.Provisioning.A_member;
   String ZIMBRA_USER_ID = "e0fafd89-1360-11d9-8661-000a95d98ef2";
 
   boolean isValidUid(@NotNull String uid);
@@ -111,6 +108,9 @@ public interface Provisioning
   List<DistributionList> getAllDistributionLists(@NotNull Domain domain)
       throws ZimbraException;
 
+  List<Group> getAllGroups(Domain domain)
+    throws ZimbraException;
+
   @Nullable
   Cos getCosById(String cosId)
     throws ZimbraException;
@@ -183,15 +183,27 @@ public interface Provisioning
     throws ZimbraException;
 
   @Nullable
-  Domain createDomain(String currentDomainName, HashMap<String, Object> stringObjectHashMap)
+  Domain createDomain(String currentDomainName, Map<String, Object> stringObjectMap)
     throws ZimbraException;
 
   @Nullable
-  Cos createCos(String cosname, HashMap<String, Object> stringObjectHashMap)
+  Cos createCos(String cosname, Map<String, Object> stringObjectMap)
     throws ZimbraException;
 
   @Nullable
-  DistributionList createDistributionList(String dlistName, HashMap<String, Object> stringObjectHashMap)
+  DistributionList createDistributionList(String dlistName)
+    throws ZimbraException;
+
+  @Nullable
+  DistributionList createDistributionList(String dlistName, Map<String, Object> stringObjectMap)
+    throws ZimbraException;
+
+  @Nullable
+  Group createDynamicGroup(String groupName)
+    throws ZimbraException;
+
+  @Nullable
+  Group createDynamicGroup(String groupName, Map<String, Object> stringObjectMap)
     throws ZimbraException;
 
   @Nullable

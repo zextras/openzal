@@ -20,7 +20,6 @@
 
 package org.openzal.zal;
 
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
@@ -41,7 +40,6 @@ import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
 import com.zimbra.cs.zimlet.ZimletUtil;
-import org.openzal.zal.lib.ZimbraVersion;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -143,7 +141,7 @@ public abstract class Utils
     {
       return URLUtil.getPublicURLForDomain(
         server.toZimbra(com.zimbra.cs.account.Server.class),
-        domain != null ? domain.toZimbra(com.zimbra.cs.account.Domain.class) : null,
+        domain != null ? domain.toZimbra() : null,
         path,
         true
       );
