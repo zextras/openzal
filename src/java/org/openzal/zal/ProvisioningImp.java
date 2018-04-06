@@ -208,6 +208,17 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraNetworkAdminNGEnabled                          = "";
   /* $endif$ */
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
+  /* $if ZimbraVersion >= 8.6.0 $ */
+  public static String A_zimbraMailboxdSSLProtocols                           = com.zimbra.cs.account.Provisioning.A_zimbraMailboxdSSLProtocols;
+  /* $else$
+  public static String A_zimbraMailboxdSSLProtocols                           = "";
+  /* $endif$ */
+  public static String A_zimbraSSLExcludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLExcludeCipherSuites;
+  /* $if ZimbraVersion >= 8.5.0 $ */
+  public static String A_zimbraSSLIncludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLIncludeCipherSuites;
+  /* $else$
+  public static String A_zimbraSSLIncludeCipherSuites                         = "";
+  /* $endif$ */
 
   @NotNull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -2117,4 +2128,5 @@ public class ProvisioningImp implements Provisioning
   {
     TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
   }
+
 }
