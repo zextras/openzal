@@ -20,8 +20,6 @@
 
 package org.openzal.zal.soap;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.zimbra.soap.*;
 import org.dom4j.QName;
 import org.jetbrains.annotations.NotNull;
@@ -33,12 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Singleton
 public class SoapServiceManager
 {
   @NotNull private final Map<QName, DocumentHandler> mOriginalHandlersMap;
 
-  @Inject
   public SoapServiceManager()
   {
     mOriginalHandlersMap = new HashMap<QName, DocumentHandler>(64);

@@ -3,12 +3,12 @@
 
   <taskdef name="preprocess" classname="com.objfac.prebop.ant.PreprocessorTask">
     <classpath>
-      <pathelement location="../build-commons/prebop/preprocessor.jar"/>
+      <pathelement location="lib/preprocessor.jar"/>
     </classpath>
   </taskdef>
   <taskdef resource="net/sf/antcontrib/antlib.xml">
     <classpath>
-      <pathelement location="../build-commons/ant-contrib/ant-contrib-1.0b3.jar"/>
+      <pathelement location="lib/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
 
@@ -19,10 +19,7 @@
   <property name="COMPILER_ARGS" value="-Xlint"/>
 
   <path id="libraries">
-      <fileset dir="../build-commons/lib" >
-          <include name="*.jar"/>
-      </fileset>
-      <fileset dir="../build-commons/guice" >
+      <fileset dir="lib" >
           <include name="*.jar"/>
       </fileset>
   </path>
@@ -69,7 +66,7 @@
        <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
            <path>
-             <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+             <fileset dir="zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
                <include name="*.jar"/>
              </fileset>
            </path>
@@ -97,7 +94,7 @@
          <classpath>
            <pathelement location="${dist}/zal.jar.unsigned" />
          </classpath>
-         <arg value="${dist}/../../../private/key.pkcs8" />
+         <arg value="private/key.pkcs8" />
          <arg value="${dist}/zal.jar.unsigned" />
          <arg value="${dist}/zal.jar" />
        </java>
@@ -137,7 +134,7 @@
       <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${itbase_tmpsrc}" destdir="${itbase_build}/" target="1.7" source="1.7">
         <classpath>
           <path>
-            <fileset dir="../build-commons/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+            <fileset dir="lib/zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
               <include name="*.jar"/>
             </fileset>
           </path>
