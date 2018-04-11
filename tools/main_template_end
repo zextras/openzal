@@ -240,19 +240,23 @@
  </target>
 
   <target name="help">
-    <echo>commands availables are:
-      zal-all
-      zal-common
-      zal-dev-current
-      zal-dev-last
-      zal-dev-last-itbase
-      zal-{zimbra-version}
-      zal-{zimbra-version}-itbase
-      compatibility-check
-      fast-compatibility-check
-      clean
-      doxygen
+    <echo>
+    <![CDATA[
+      commands available are:
+
+      zal-all                       build zal for all zimbra versions (see tools/generate-build)
+      zal-common                    build zal for most commons zimbra versions (see tools/generate-build)
+      zal-dev-current               build zal against current zimbra version in dev mode
+      zal-dev-last                  build zal against last zimbra version in dev mode (see tools/generate-build)
+      zal-{zimbra-version}          build zal against specified zimbra version in dev mode
+      compatibility-check           check zal Java API Compliance against all zal versions
+      fast-compatibility-check      check zal Java API Compliance against previous zal version
+      clean                         clean up build
+      doxygen                       create doxygen documentation
       help
+
+      dev mode: no checks against zimbra version will be performed at runtime
+    ]]>
     </echo>
   </target>
 
