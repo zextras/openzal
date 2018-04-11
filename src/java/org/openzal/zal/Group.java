@@ -103,8 +103,6 @@ public class Group extends Entry
   }
 
   public boolean isDynamic()
-    throws
-    AlreadyExistsException
   {
     try
     {
