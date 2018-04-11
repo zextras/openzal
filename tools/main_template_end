@@ -33,7 +33,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -46,7 +46,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -72,7 +72,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="/tools/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -85,7 +85,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/${LAST_ZIMBRA_VERSION}/zal.jar"/>
@@ -193,10 +193,57 @@
     depends="package-deb, package-rpm">
   </target>
 
+ <target name="dependencies" description="download dependencies">
+    <property name="lib" value="lib"/>
+    <if>
+      <available file="${lib}/annotations-13.0.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar"
+             dest="${lib}/annotations-13.0.jar" usetimestamp="true"/>
+     </else>
+    </if>
+    <if>
+      <available file="${lib}/commons-dbutils-1.6.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/commons-dbutils/commons-dbutils/1.6/commons-dbutils-1.6.jar"
+             dest="${lib}/commons-dbutils-1.6.jar" usetimestamp="true"/>
+     </else>
+    </if>
+    <if>
+      <available file="${lib}/jackson-core-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.6.7/jackson-core-2.6.7.jar"
+             dest="${lib}/jackson-core-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+    <if>
+      <available file="${lib}/jackson-databind-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.6.7/jackson-databind-2.6.7.jar"
+             dest="${lib}/jackson-databind-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+    <if>
+      <available file="${lib}/jackson-annotations-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.6.7/jackson-annotations-2.6.7.jar"
+             dest="${lib}/jackson-annotations-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+    <if>
+      <available file="${lib}/ant-contrib-1.0b3.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar"
+             dest="${lib}/ant-contrib-1.0b3.jar" usetimestamp="true"/>
+     </else>
+   </if>
+ </target>
+
   <target name="help">
     <echo>commands availables are:
       zal-all
       zal-common
+      zal-dev-current
       zal-dev-last
       zal-dev-last-itbase
       zal-{zimbra-version}

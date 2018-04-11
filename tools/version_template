@@ -1,6 +1,6 @@
 <target name="zal-${TargetName}"
         description="Create jar for Zimbra ${ZimbraVersion}"
-        depends="init">
+        depends="init,dependencies">
   <build-zal ZimbraVersion="${ZimbraVersion}"
              MajorZimbraVersion = "${MajorZimbraVersion}"
              MiddleZimbraVersion = "${MiddleZimbraVersion}"

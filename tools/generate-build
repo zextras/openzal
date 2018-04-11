@@ -2,6 +2,8 @@
 
 import re
 import os
+import sys
+from distutils.version import StrictVersion
 
 #change directory in the script dir
 current_path=os.path.realpath(__file__)
@@ -38,20 +40,19 @@ ZimbraVersions=[
   "8.7.2", "8.7.3", "8.7.4", "8.7.5", "8.7.6",
   "8.7.7", "8.7.9", "8.7.10", "8.7.11",
   "8.8.2", "8.8.3", "8.8.4", "8.8.5", "8.8.6",
-  "8.8.7", "8.8.8"
+  "8.8.7"
 ]
 
 CommonZimbraVersions=[
   "8.0.0", "8.0.9",
-  "8.6.0", "8.7.11", "8.8.8"
+  "8.6.0", "8.7.11"
 ]
 
 MajorZimbraVersions=[
   "8.0.9",
   "8.5.1",
   "8.6.0",
-  "8.7.11",
-  "8.8.8"
+  "8.7.11"
 ]
 
 joined_zimbra_jar_versions  = join(ZimbraVersions, "zal-" )
@@ -95,5 +96,12 @@ for zimbra_version in ZimbraVersions:
   writeTemplate( "version_template",  Parameters, zimbra_version, zimbra_version, zimbra_version )
 
 writeTemplate( "version_template",  Parameters, ZimbraVersions[-1], "dev-last", "dev-last", dev_mode=True )
+
+zimbra_jars = "../zimbra-jars"
+dirs = [d.replace("zimbra-jars-","") for d in os.listdir(zimbra_jars) if d[-1].isdigit() and os.path.isdir(os.path.join(zimbra_jars, d))]
+dirs.sort(key=StrictVersion)
+latest_jars = dirs[-1]
+
+writeTemplate( "version_template",  Parameters, latest_jars, "dev-current", "dev-current", dev_mode=True )
 
 writeTemplate( "main_template_end",  Parameters, None, None, None )
