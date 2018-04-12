@@ -94,4 +94,19 @@ public class Mime
       return original;
     }
   }
+
+  public static boolean isMultipartSigned(String contentType)
+  {
+    return com.zimbra.cs.mime.Mime.isMultipartSigned(contentType);
+  }
+
+  public static boolean isEncrypted(String contentType)
+  {
+    return com.zimbra.cs.mime.Mime.isEncrypted(contentType);
+  }
+
+  public static boolean isPKCS7Signed(String contentType)
+  {
+    return com.zimbra.cs.mime.Mime.isPKCS7Signed(contentType);
+  }
 }
