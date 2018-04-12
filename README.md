@@ -20,15 +20,30 @@ You can clone ZAL repository using:
 ### Build Dependencies ###
 
 Zimbra Sources - <http://www.zimbra.com>  
-For each version of zimbra copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+For each version of zimbra:
+ 
+* copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+* from "/opt/zimbra/common/jetty_home/lib/" copy 
+jetty-continuation-x.x.x.y.jar
+jetty-http-x.x.x.y.jar
+jetty-io-x.x.x.y.jar
+jetty-rewrite-x.x.x.y.jar
+jetty-security-x.x.x.y.jar
+jetty-server-x.x.x.y.jar
+jetty-servlet-x.x.x.y.jar
+jetty-servlets-x.x.x.y.jar
+jetty-util-x.x.x.y.jar
+in "zimbra-jars/${VERSION}/"
+* from "jetty_base/common/lib" copy jtnef-x.x.x.jar in "zimbra-jars/${VERSION}/" 
+
 
 All others dependencies are downloaded automatically by ant and placed into lib directory 
 
 ### How to build ###
 
-If you want to sign your jar place your key.pkcs8 into private directory to sign jar (go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> to more details)
+If you want to sign your jar place your key.pkcs8 into private directory (to sign jar go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> for more details)
 
-Resolve all ZAL dependencies then run:
+Then run:
 
 > tools/generate-build > build.xml  
 > ant zal-all
