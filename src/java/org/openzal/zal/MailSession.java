@@ -64,7 +64,7 @@ public class MailSession
     {
       if (domain != null)
       {
-        return JMSession.getSmtpHosts(domain.toZimbra(com.zimbra.cs.account.Domain.class));
+        return JMSession.getSmtpHosts(domain.toZimbra());
       }
       else
       {
