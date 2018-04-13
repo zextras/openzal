@@ -103,6 +103,21 @@ public class ZimbraListWrapper
     return list;
   }
 
+  public static List<Group> wrapGroups(List<com.zimbra.cs.account.Group> groups)
+  {
+    if (groups == null || groups.size() == 0)
+    {
+      return Collections.emptyList();
+    }
+    List<Group> zxGroups = new ArrayList<>(groups.size());
+    for (com.zimbra.cs.account.Group group : groups)
+    {
+      zxGroups.add(new Group(group));
+    }
+
+    return zxGroups;
+  }
+
   @NotNull
   public static List<Signature> wrapSignatures(@Nullable List<com.zimbra.cs.account.Signature> signatures)
   {

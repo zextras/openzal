@@ -18,22 +18,26 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.provisioning;
+package org.openzal.zal;
 
+import org.openzal.zal.exceptions.AlreadyExistsException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-public class Group
+public class Group extends Entry
 {
   @NotNull private final com.zimbra.cs.account.Group mGroup;
 
   public Group(@NotNull Object group)
   {
+    super(group);
     if (group == null)
     {
       throw new NullPointerException();
@@ -66,6 +70,45 @@ public class Group
       return Arrays.asList(mGroup.getAliases());
     }
     catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @NotNull
+  public Map<String, Object> getAttrs(boolean applyDefaults)
+  {
+    return new HashMap<>(mGroup.getAttrs(applyDefaults));
+  }
+
+  public String getId()
+  {
+    return mGroup.getId();
+  }
+
+  public void addAlias(String alias)
+    throws
+    AlreadyExistsException
+  {
+    try
+    {
+      mGroup.getProvisioning().addGroupAlias(
+        mGroup,
+        alias);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean isDynamic()
+  {
+    try
+    {
+      return mGroup.isDynamic();
+    }
+    catch (Exception e)
     {
       throw ExceptionWrapper.wrap(e);
     }

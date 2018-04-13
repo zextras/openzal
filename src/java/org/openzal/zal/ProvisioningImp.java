@@ -22,14 +22,10 @@ package org.openzal.zal;
 
 import java.util.*;
 
-import com.zimbra.cs.ldap.unboundid.UnixDomainSocketFactory;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
-import org.openzal.zal.ldap.LDAPConnection;
-import org.openzal.zal.ldap.LDAPException;
-import org.openzal.zal.ldap.LdapConnType;
 import org.openzal.zal.lib.Filter;
 
 import com.zimbra.cs.account.*;
@@ -55,9 +51,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.provisioning.Group;
-
-import javax.net.SocketFactory;
+import org.openzal.zal.Group;
 
 public class ProvisioningImp implements Provisioning
 {
@@ -69,6 +63,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
   /* $endif $ */
 
+  public static String A_zimbraIsACLGroup                                           = com.zimbra.cs.account.Provisioning.A_zimbraIsACLGroup;
+  public static String A_memberURL                                                  = com.zimbra.cs.account.Provisioning.A_memberURL;
   public static String A_zimbraMailDomainQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailDomainQuota;
   public static String A_zimbraPrefAllowAddressForDelegatedSender                   = com.zimbra.cs.account.Provisioning.A_zimbraPrefAllowAddressForDelegatedSender;
   public static String DEFAULT_COS_NAME                                             = com.zimbra.cs.account.Provisioning.DEFAULT_COS_NAME;
@@ -466,7 +462,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.getAllAccounts(
-        domain.toZimbra(com.zimbra.cs.account.Domain.class),
+        domain.toZimbra(),
         namedEntryVisitor
       );
     }
@@ -722,7 +718,23 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapDistributionLists(
-        mProvisioning.getAllDistributionLists(domain.toZimbra(com.zimbra.cs.account.Domain.class))
+        mProvisioning.getAllDistributionLists(domain.toZimbra())
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public List<Group> getAllGroups(Domain domain)
+    throws ZimbraException
+  {
+    try
+    {
+      return ZimbraListWrapper.wrapGroups(
+        mProvisioning.getAllGroups(domain.toZimbra())
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -914,7 +926,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapAccounts(
-        mProvisioning.getAllAccounts(domain.toZimbra(com.zimbra.cs.account.Domain.class))
+        mProvisioning.getAllAccounts(domain.toZimbra())
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -958,7 +970,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapCalendarResources(
-        mProvisioning.getAllCalendarResources(domain.toZimbra(com.zimbra.cs.account.Domain.class))
+        mProvisioning.getAllCalendarResources(domain.toZimbra())
       );
     }
     catch (ServiceException e)
@@ -1103,12 +1115,13 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Domain createDomain(String currentDomainName, HashMap<String, Object> stringObjectHashMap)
+  public Domain createDomain(String currentDomainName, Map<String, Object> stringObjectMap)
     throws ZimbraException
   {
     try
     {
-      com.zimbra.cs.account.Domain domain = mProvisioning.createDomain(currentDomainName, stringObjectHashMap);
+      com.zimbra.cs.account.Domain domain = mProvisioning.createDomain(currentDomainName,
+        stringObjectMap);
       if (domain == null)
       {
         return null;
@@ -1126,12 +1139,13 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Cos createCos(String cosname, HashMap<String, Object> stringObjectHashMap)
+  public Cos createCos(String cosname, Map<String, Object> stringObjectMap)
     throws ZimbraException
   {
     try
     {
-      com.zimbra.cs.account.Cos cos = mProvisioning.createCos(cosname, stringObjectHashMap);
+      com.zimbra.cs.account.Cos cos = mProvisioning.createCos(cosname,
+        stringObjectMap);
       if (cos == null)
       {
         return null;
@@ -1149,12 +1163,21 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public DistributionList createDistributionList(String dlistName, HashMap<String, Object> stringObjectHashMap)
+  public DistributionList createDistributionList(String dlistName)
+    throws ZimbraException
+  {
+    return createDistributionList(dlistName, Collections.<String, Object>emptyMap());
+  }
+
+  @Override
+  @Nullable
+  public DistributionList createDistributionList(String dlistName, Map<String, Object> stringObjectMap)
     throws ZimbraException
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.createDistributionList(dlistName, stringObjectHashMap);
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.createDistributionList(dlistName,
+        stringObjectMap);
       if (distributionList == null)
       {
         return null;
@@ -1162,6 +1185,38 @@ public class ProvisioningImp implements Provisioning
       else
       {
         return new DistributionList(distributionList);
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  @Nullable
+  public Group createDynamicGroup(String groupName)
+    throws ZimbraException
+  {
+    return createDynamicGroup(groupName, Collections.<String, Object>emptyMap());
+  }
+
+  @Override
+  @Nullable
+  public Group createDynamicGroup(String groupName, Map<String, Object> stringObjectMap)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.account.Group group = mProvisioning.createDynamicGroup(groupName,
+        stringObjectMap);
+      if (group == null)
+      {
+        return null;
+      }
+      else
+      {
+        return new Group(group);
       }
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1473,7 +1528,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return new CountAccountResult(
-        mProvisioning.countAccount(domain.toZimbra(com.zimbra.cs.account.Domain.class))
+        mProvisioning.countAccount(domain.toZimbra())
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
