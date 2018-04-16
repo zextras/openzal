@@ -20,20 +20,16 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Domain extends Entry
 {
@@ -166,9 +162,10 @@ public class Domain extends Entry
     }
   }
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  @Override
+  com.zimbra.cs.account.Domain toZimbra()
   {
-    return cls.cast(mDomain);
+    return mDomain;
   }
 
   public long getLongAttr(String name, int defaultValue)

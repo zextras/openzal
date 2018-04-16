@@ -1148,10 +1148,16 @@ public class Account extends Entry
       for (SMIMEPublicCertInfo info : certs.getCerts())
       {
         String cert = new String(Utils.decodeFSSafeBase64(info.getValue()));
-        cert = cert.replaceAll(BEGIN_CERT,"");
-        cert = cert.replaceAll(END_CERT,"");
-        cert = cert.replaceAll( "((\\r\\n)|(\\n))","");
-        certificates.add(cert);
+
+        int beginIndex = cert.indexOf(BEGIN_CERT);
+        int endIndex = cert.indexOf(END_CERT);
+
+        if(beginIndex != -1 && endIndex != -1)
+        {
+          cert = cert.substring(beginIndex + BEGIN_CERT.length(), endIndex);
+          cert = cert.replaceAll( "((\\r\\n)|(\\n))","");
+          certificates.add(cert);
+        }
       }
     }
     return certificates;
