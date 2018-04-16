@@ -31,31 +31,33 @@
   </target>
 
   <macrodef name="build-zal">
-     <attribute name="ZimbraVersion"/>
      <attribute name="MajorZimbraVersion"/>
      <attribute name="MiddleZimbraVersion"/>
      <attribute name="MinorZimbraVersion"/>
      <attribute name="DevMode"/>
      <attribute name="DistDirName"/>
+     <attribute name="ZimbraJars"/>
 
      <sequential>
+       <echo>@{ZimbraJars}</echo>
        <echo>devmode is @{DevMode}</echo>
        <local name="tmpsrc"/>
        <local name="build"/>
        <local name="dist"/>
-       <property name="tmpsrc"  value="tmpsrc/@{ZimbraVersion}/jar/" />
-       <property name="build" value="build/@{ZimbraVersion}_dev_@{DevMode}/jar/" />
+       <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
+       <property name="tmpsrc"  value="tmpsrc/${ZimbraVersion}/jar/" />
+       <property name="build" value="build/${ZimbraVersion}_dev_@{DevMode}/jar/" />
        <property name="dist"  value="dist/@{DistDirName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
        <mkdir dir="${build}"/>
        <mkdir dir="${dist}"/>
 
-       <echo>Creating zal JAR for zimbra @{ZimbraVersion} ...</echo>
+       <echo>Creating zal JAR for zimbra ${ZimbraVersion} ...</echo>
 
        <echo>Preprocessing...</echo>
        <preprocess indir="${src}" outdir="${tmpsrc}" out="replace" >
-         <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
+         <var name="ZimbraVersion" value="${ZimbraVersion}" />
          <var name="MajorZimbraVersion"  value="@{MajorZimbraVersion}" />
          <var name="MiddleZimbraVersion" value="@{MiddleZimbraVersion}" />
          <var name="MinorZimbraVersion"  value="@{MinorZimbraVersion}" />
@@ -66,9 +68,9 @@
        <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
            <path>
-             <fileset dir="zimbra-jars/zimbra-jars-@{ZimbraVersion}/" >
+             <multirootfileset basedirs="@{ZimbraJars}" >
                <include name="*.jar"/>
-             </fileset>
+             </multirootfileset>
            </path>
            <path refid="libraries" />
            <pathelement path="${build}" />
@@ -83,7 +85,7 @@
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
            <attribute name="Specification-Version" value="${VERSION}" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
-           <attribute name="Implementation-Version" value="@{ZimbraVersion}" />
+           <attribute name="Implementation-Version" value="${ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
            <attribute name="Zimbra-Extension-Class" value="org.openzal.zal.extension.ZalEntrypointImpl" />
          </manifest>
