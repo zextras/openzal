@@ -858,7 +858,7 @@
         description="Create jar for current Zimbra"
         depends="init,dependencies">
 
-        <property name="zm-build" value="../zimbra/zm-build" />
+        <property name="zm-build" value="../zm-build" />
         <exec executable="cat" outputproperty="MajorZimbraVersion">
                 <arg value="${zm-build}/RE/MAJOR"/>
         </exec>
@@ -1104,13 +1104,6 @@
       <else>
         <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.6.7/jackson-annotations-2.6.7.jar"
              dest="${lib}/jackson-annotations-2.6.7.jar" usetimestamp="true"/>
-     </else>
-   </if>
-    <if>
-      <available file="${lib}/ant-contrib-1.0b3.jar" />
-      <else>
-        <get src="http://central.maven.org/maven2/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar"
-             dest="${lib}/ant-contrib-1.0b3.jar" usetimestamp="true"/>
      </else>
    </if>
  </target>
