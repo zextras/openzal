@@ -2,6 +2,30 @@
   <target name="zal-common" depends="${JOINED_COMMON_ZIMBRA_JAR_VERSIONS}" />
   <target name="zal-all" depends="${JOINED_ZIMBRA_JAR_VERSIONS},zal-dev-last" />
 
+  <target name="zal-dev-current"
+        description="Create jar for current Zimbra"
+        depends="init,dependencies">
+
+        <property name="zm-build" value="../zimbra/zm-build" />
+        <exec executable="cat" outputproperty="MajorZimbraVersion">
+                <arg value="${zm-build}/RE/MAJOR"/>
+        </exec>
+        <exec executable="cat" outputproperty="MiddleZimbraVersion">
+                <arg value="${zm-build}/RE/MINOR"/>
+        </exec>
+        <exec executable="sed" outputproperty="MinorZimbraVersion">
+                <arg value="s/.*\([0-9]\).*/\1/"/>
+                <arg value="${zm-build}/RE/MICRO"/>
+        </exec>
+
+        <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
+                 MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                 MinorZimbraVersion = "${MinorZimbraVersion}"
+                 DistDirName = "${DistDirName}"
+                 ZimbraJars = "../zm-zcs-lib/build/dist/,../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
+                 DevMode = "true" />
+  </target>
+
   <target name="clean" description="clean up" >
     <delete includeemptydirs="true">
       <fileset dir="dist/" includes="**/*" />
@@ -244,10 +268,10 @@
     <![CDATA[
       commands available are:
 
-      zal-all                       build zal for all zimbra versions (see tools/generate-build)
-      zal-common                    build zal for most commons zimbra versions (see tools/generate-build)
-      zal-dev-current               build zal against current zimbra version in dev mode
-      zal-dev-last                  build zal against last zimbra version in dev mode (see tools/generate-build)
+      zal-all                       build zal for all zimbra versions
+      zal-common                    build zal for most commons zimbra versions
+      zal-dev-current               build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)
+      zal-dev-last                  build zal against last zimbra version in dev mode
       zal-{zimbra-version}          build zal against specified zimbra version in dev mode
       compatibility-check           check zal Java API Compliance against all zal versions
       fast-compatibility-check      check zal Java API Compliance against previous zal version

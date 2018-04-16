@@ -19,11 +19,12 @@ You can clone ZAL repository using:
 
 ### Build Dependencies ###
 
-Zimbra Sources - <http://www.zimbra.com>  
-For each version of zimbra:
+To build target **zal-all**:
+
+For each zimbra version you want to build ZAL for:
  
-* copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
-* from "/opt/zimbra/common/jetty_home/lib/" copy 
+* copy all file from "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+* copy from "/opt/zimbra/common/jetty_home/lib/"  
 jetty-continuation-x.x.x.y.jar
 jetty-http-x.x.x.y.jar
 jetty-io-x.x.x.y.jar
@@ -34,8 +35,12 @@ jetty-servlet-x.x.x.y.jar
 jetty-servlets-x.x.x.y.jar
 jetty-util-x.x.x.y.jar
 in "zimbra-jars/${VERSION}/"
-* from "jetty_base/common/lib" copy jtnef-x.x.x.jar in "zimbra-jars/${VERSION}/" 
+* copy jtnef-x.x.x.jar from "jetty_base/common/lib" in "zimbra-jars/${VERSION}/" 
 
+To build target **zal-dev-current**:
+
+Simply place OpenZAL into same directory of zm-build and follow guide <https://github.com/Zimbra/zm-build/wiki/installer-build> to 
+build Zimbra. In this case there is no need to copy jars manually.
 
 All others dependencies are downloaded automatically by ant and placed into lib directory 
 

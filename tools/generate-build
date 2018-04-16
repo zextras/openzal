@@ -98,11 +98,4 @@ for zimbra_version in ZimbraVersions:
 
 writeTemplate( "version_template",  Parameters, ZimbraVersions[-1], "dev-last", "dev-last", dev_mode=True )
 
-zimbra_jars = "../zimbra-jars"
-dirs = [d.replace("zimbra-jars-","") for d in os.listdir(zimbra_jars) if d[-1].isdigit() and os.path.isdir(os.path.join(zimbra_jars, d))]
-dirs.sort(key=StrictVersion)
-latest_jars = dirs[-1]
-
-writeTemplate( "version_template",  Parameters, latest_jars, "dev-current", "dev-current", dev_mode=True )
-
 writeTemplate( "main_template_end",  Parameters, None, None, None )

@@ -1,10 +1,23 @@
 <target name="zal-${TargetName}"
         description="Create jar for Zimbra ${ZimbraVersion}"
         depends="init,dependencies">
-  <build-zal ZimbraVersion="${ZimbraVersion}"
-             MajorZimbraVersion = "${MajorZimbraVersion}"
+  <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
              MiddleZimbraVersion = "${MiddleZimbraVersion}"
              MinorZimbraVersion = "${MinorZimbraVersion}"
              DistDirName = "${DistDirName}"
-             DevMode = "${DevMode}" />
+             DevMode = "${DevMode}"
+             ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}"
+  />
+</target>
+
+<target name="zal-${TargetName}-itbase"
+        description="Create test jar for Zimbra ${ZimbraVersion}"
+        depends="init">
+  <build-zal-itbase MajorZimbraVersion = "${MajorZimbraVersion}"
+                    MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                    MinorZimbraVersion = "${MinorZimbraVersion}"
+                    DistDirName = "${DistDirName}"
+                    DevMode = "${DevMode}"
+                    ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}"
+  />
 </target>
