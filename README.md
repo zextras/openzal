@@ -17,9 +17,30 @@ You can clone ZAL repository using:
 
    Zimbra is all you need ;)
 
-### Build Dependencies ###
+### Jar Signing ###
 
-To build target **zal-all**:
+If you want to sign your jar place your key.pkcs8 into private directory otherwise skip this section (to sign jar go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> for more details) 
+
+### Build Targets ###
+
+**zal-dev-current-binary**:
+
+OpenZAL can be place anywhere, and zimbra must be installed into /opt/zimbra
+
+Then run:
+
+    ant zal-dev-current-binary  
+
+**zal-dev-current-source**:
+
+Simply place OpenZAL into same directory of zm-build and follow guide <https://github.com/Zimbra/zm-build/wiki/installer-build> to 
+build Zimbra.
+
+Then run:
+
+    ant zal-dev-current-source  
+
+**zal-all**:
 
 For each zimbra version you want to build ZAL for:
  
@@ -37,23 +58,8 @@ jetty-util-x.x.x.y.jar
 in "zimbra-jars/${VERSION}/"
 * copy jtnef-x.x.x.jar from "jetty_base/common/lib" in "zimbra-jars/${VERSION}/" 
 
-To build target **zal-dev-current**:
-
-Simply place OpenZAL into same directory of zm-build and follow guide <https://github.com/Zimbra/zm-build/wiki/installer-build> to 
-build Zimbra. In this case there is no need to copy jars manually.
-
-All others dependencies are downloaded automatically by ant and placed into lib directory 
-
-### How to build ###
-
-If you want to sign your jar place your key.pkcs8 into private directory (to sign jar go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> for more details)
-
 Then run:
 
-> tools/generate-build > build.xml  
-> ant zal-all
+    ant zal-all  
 
-or to build only the current zimbra version: 
-
-> ant zal-dev-current  
 

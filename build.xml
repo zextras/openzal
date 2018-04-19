@@ -854,8 +854,8 @@
   <target name="zal-common" depends="zal-8.0.0,zal-8.0.9,zal-8.6.0,zal-8.7.11,zal-8.8.8" />
   <target name="zal-all" depends="zal-8.0.0,zal-8.0.1,zal-8.0.2,zal-8.0.3,zal-8.0.4,zal-8.0.5,zal-8.0.6,zal-8.0.7,zal-8.0.8,zal-8.0.9,zal-8.5.0,zal-8.5.1,zal-8.6.0,zal-8.7.0,zal-8.7.1,zal-8.7.2,zal-8.7.3,zal-8.7.4,zal-8.7.5,zal-8.7.6,zal-8.7.7,zal-8.7.9,zal-8.7.10,zal-8.7.11,zal-8.8.2,zal-8.8.3,zal-8.8.4,zal-8.8.5,zal-8.8.6,zal-8.8.7,zal-8.8.8,zal-dev-last" />
 
-  <target name="zal-dev-current"
-        description="Create jar for current Zimbra"
+  <target name="zal-dev-current-source"
+        description="Create jar for current Zimbra source"
         depends="init,dependencies">
 
         <property name="zm-build" value="../zm-build" />
@@ -878,8 +878,46 @@
                  DevMode = "true" />
   </target>
 
+  <target name="zal-dev-current-binary"
+        description="Create jar for current Zimbra binary installed"
+        depends="init,dependencies">
+
+        <exec executable="bash" outputproperty="ZimbraVersion">
+                <arg value="-c"/>
+                <arg value="unzip -p /opt/zimbra/lib/jars/zimbrastore.jar META-INF/MANIFEST.MF | grep Specification\-Version\: | awk '{print $2}'"/>
+        </exec>
+
+        <propertyregex
+          property="MajorZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\1"
+          casesensitive="false" />
+
+        <propertyregex
+          property="MiddleZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\2"
+          casesensitive="false" />
+
+        <propertyregex
+          property="MinorZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\3"
+          casesensitive="false" />
+
+        <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
+                 MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                 MinorZimbraVersion = "${MinorZimbraVersion}"
+                 DistDirName = "${DistDirName}"
+                 ZimbraJars = "/opt/zimbra/common/jetty_home/lib/,/opt/zimbra/lib/jars/"
+                 DevMode = "true" />
+  </target>
+
   <target name="clean" description="clean up" >
-    <delete includeemptydirs="true">
+    <delete includeemptydirs="true" failonerror="false">
       <fileset dir="dist/" includes="**/*" />
       <fileset dir="build/" includes="**/*" />
       <fileset dir="tmpsrc/" includes="**/*" />
@@ -1115,7 +1153,8 @@
 
       zal-all                       build zal for all zimbra versions
       zal-common                    build zal for most commons zimbra versions
-      zal-dev-current               build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)
+      zal-dev-current-source        build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)
+      zal-dev-current-binary        build zal against current zimbra binary in dev mode (zimbra be installed in /opt/zimbra)
       zal-dev-last                  build zal against last zimbra version in dev mode
       zal-{zimbra-version}          build zal against specified zimbra version in dev mode
       compatibility-check           check zal Java API Compliance against all zal versions
