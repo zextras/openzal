@@ -85,7 +85,10 @@ public class SoapServiceManager
 
     try
     {
-      ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+      synchronized(this)
+      {
+        ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+      }
     }
     catch (IllegalAccessException e)
     {
