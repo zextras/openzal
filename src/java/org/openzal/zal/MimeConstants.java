@@ -22,13 +22,18 @@ package org.openzal.zal;
 
 public class MimeConstants
 {
-  public static final String CT_TYPE                     = "Content-Type";
-  public static final String CT_TEXT_PLAIN               = com.zimbra.common.mime.MimeConstants.CT_TEXT_PLAIN;
-  public static final String CT_TEXT_HTML                = com.zimbra.common.mime.MimeConstants.CT_TEXT_HTML;
-  public static final String CT_TEXT_CALENDAR            = com.zimbra.common.mime.MimeConstants.CT_TEXT_CALENDAR;
-  public static final String CT_MESSAGE_RFC822           = com.zimbra.common.mime.MimeConstants.CT_MESSAGE_RFC822;
-  public static final String CT_APPLICATION_OCTET_STREAM = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_OCTET_STREAM;
-  public static final String CT_MULTIPART_PREFIX         = com.zimbra.common.mime.MimeConstants.CT_MULTIPART_PREFIX;
-  public static final String P_CHARSET                   = com.zimbra.common.mime.MimeConstants.P_CHARSET;
-  public static final String P_CHARSET_UTF8              = com.zimbra.common.mime.MimeConstants.P_CHARSET_UTF8;
+  public static final String CT_TYPE                      = "Content-Type";
+  public static final String CT_TEXT_PLAIN                = com.zimbra.common.mime.MimeConstants.CT_TEXT_PLAIN;
+  public static final String CT_TEXT_HTML                 = com.zimbra.common.mime.MimeConstants.CT_TEXT_HTML;
+  public static final String CT_TEXT_CALENDAR             = com.zimbra.common.mime.MimeConstants.CT_TEXT_CALENDAR;
+  public static final String CT_MESSAGE_RFC822            = com.zimbra.common.mime.MimeConstants.CT_MESSAGE_RFC822;
+  public static final String CT_APPLICATION_OCTET_STREAM  = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_OCTET_STREAM;
+  public static final String CT_MULTIPART_PREFIX          = com.zimbra.common.mime.MimeConstants.CT_MULTIPART_PREFIX;
+  public static final String P_CHARSET                    = com.zimbra.common.mime.MimeConstants.P_CHARSET;
+  public static final String P_CHARSET_UTF8               = com.zimbra.common.mime.MimeConstants.P_CHARSET_UTF8;
+  public static final String CT_APPLICATION_SMIME         = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_SMIME;
+  public static final String CT_APPLICATION_SMIME_OLD     = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_SMIME_OLD;
+  public static final String CT_MULTIPART_SIGNED          = com.zimbra.common.mime.MimeConstants.CT_MULTIPART_SIGNED;
+  public static final String CT_SMIME_TYPE_ENVELOPED_DATA = com.zimbra.common.mime.MimeConstants.CT_SMIME_TYPE_ENVELOPED_DATA;
+  public static final String CT_SMIME_TYPE_SIGNED_DATA    = com.zimbra.common.mime.MimeConstants.CT_SMIME_TYPE_SIGNED_DATA;
 }
