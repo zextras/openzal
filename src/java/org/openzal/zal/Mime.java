@@ -61,6 +61,13 @@ public class Mime
   }
 
   @Nullable
+  public static MimeMultipart getMultipartContent(MimeMessage mimeMessage, String contentType)
+    throws IOException, MessagingException
+  {
+    return com.zimbra.cs.mime.Mime.getMultipartContent(new MimeMessage(mimeMessage), contentType);
+  }
+
+  @Nullable
   public static String getSubject(MimeMessage mimeMessage) throws MessagingException
   {
     return com.zimbra.cs.mime.Mime.getSubject(mimeMessage);
