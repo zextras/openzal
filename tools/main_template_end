@@ -22,7 +22,8 @@
                  MiddleZimbraVersion = "${MiddleZimbraVersion}"
                  MinorZimbraVersion = "${MinorZimbraVersion}"
                  DistDirName = "${DistDirName}"
-                 ZimbraJars = "../zm-zcs-lib/build/dist/,../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
+                 ZimbraJars = "../zm-zcs-lib/build/dist/"
+                 ZimbraJarsExt = "../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
                  DevMode = "true" />
   </target>
 
@@ -60,7 +61,8 @@
                  MiddleZimbraVersion = "${MiddleZimbraVersion}"
                  MinorZimbraVersion = "${MinorZimbraVersion}"
                  DistDirName = "${DistDirName}"
-                 ZimbraJars = "/opt/zimbra/common/jetty_home/lib/,/opt/zimbra/lib/jars/"
+                 ZimbraJars = "/opt/zimbra/common/jetty_home/lib/"
+                 ZimbraJarsExt = "/opt/zimbra/lib/jars/"
                  DevMode = "true" />
   </target>
 
