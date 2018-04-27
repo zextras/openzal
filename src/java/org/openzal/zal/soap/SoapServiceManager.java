@@ -22,22 +22,32 @@ package org.openzal.zal.soap;
 
 import com.zimbra.soap.*;
 import org.dom4j.QName;
-import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Utils;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SoapServiceManager
 {
-  @NotNull private final Map<QName, DocumentHandler> mOriginalHandlersMap;
+  private final static Map<QName, DocumentHandler> sOriginalHandlersMap;
+  private static Field sExtraServices;
 
-  public SoapServiceManager()
+  static
   {
-    mOriginalHandlersMap = new HashMap<QName, DocumentHandler>(64);
+    try
+    {
+      sExtraServices = com.zimbra.soap.SoapServlet.class.getDeclaredField("sExtraServices");
+      sExtraServices.setAccessible(true);
+      sOriginalHandlersMap = new ConcurrentHashMap<QName, DocumentHandler>(64);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
   }
 
   class InternalHandlerMapPublisher implements HandlerMapPublisher
@@ -47,9 +57,9 @@ public class SoapServiceManager
     {
       for (Map.Entry<QName, DocumentHandler> entry : handlerMap.entrySet())
       {
-        if (!mOriginalHandlersMap.containsKey(entry.getKey()))
+        if (!sOriginalHandlersMap.containsKey(entry.getKey()))
         {
-          mOriginalHandlersMap.put(entry.getKey(), entry.getValue());
+          sOriginalHandlersMap.put(entry.getKey(), entry.getValue());
         }
       }
     }
@@ -75,7 +85,10 @@ public class SoapServiceManager
 
     try
     {
-      ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+      synchronized(this)
+      {
+        ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+      }
     }
     catch (IllegalAccessException e)
     {
@@ -90,7 +103,7 @@ public class SoapServiceManager
       new InternalOverrideDocumentServiceImpl(
         soapService,
         new InternalHandlerMapPublisher(),
-        mOriginalHandlersMap
+        sOriginalHandlersMap
       )
     );
   }
@@ -100,23 +113,8 @@ public class SoapServiceManager
   {
     SoapServlet.addService(
       soapService.getServiceName(),
-      new InternalRestoreDocumentService(soapService,mOriginalHandlersMap)
+      new InternalRestoreDocumentService(soapService, sOriginalHandlersMap)
     );
   }
 
-  private static Field sExtraServices = null;
-
-  static
-  {
-    try
-    {
-      sExtraServices = com.zimbra.soap.SoapServlet.class.getDeclaredField("sExtraServices");
-      sExtraServices.setAccessible(true);
-    }
-    catch (Throwable ex)
-    {
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
-      throw new RuntimeException(ex);
-    }
-  }
 }
