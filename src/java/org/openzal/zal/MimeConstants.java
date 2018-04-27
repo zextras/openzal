@@ -31,10 +31,9 @@ public class MimeConstants
   public static final String CT_MULTIPART_PREFIX          = com.zimbra.common.mime.MimeConstants.CT_MULTIPART_PREFIX;
   public static final String P_CHARSET                    = com.zimbra.common.mime.MimeConstants.P_CHARSET;
   public static final String P_CHARSET_UTF8               = com.zimbra.common.mime.MimeConstants.P_CHARSET_UTF8;
-  public static final String CT_APPLICATION_SMIME         = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_SMIME;
-  public static final String CT_APPLICATION_SMIME_OLD     = "application/x-pkcs7-mime";
   public static final String CT_MULTIPART_SIGNED          = com.zimbra.common.mime.MimeConstants.CT_MULTIPART_SIGNED;
   public static final String CT_SMIME_TYPE_ENVELOPED_DATA = "enveloped-data";
+  public static final String CT_APPLICATION_SMIME         = com.zimbra.common.mime.MimeConstants.CT_APPLICATION_SMIME;
+  public static final String CT_APPLICATION_SMIME_OLD     = "application/x-pkcs7-mime";
   public static final String CT_SMIME_TYPE_SIGNED_DATA    = "signed-data";
 }
-  
