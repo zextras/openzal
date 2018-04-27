@@ -6,7 +6,8 @@
              MinorZimbraVersion = "${MinorZimbraVersion}"
              DistDirName = "${DistDirName}"
              DevMode = "${DevMode}"
-             ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}"
+             ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}/"
+             ZimbraJarsExt = ""
   />
 </target>
 
@@ -18,6 +19,7 @@
                     MinorZimbraVersion = "${MinorZimbraVersion}"
                     DistDirName = "${DistDirName}"
                     DevMode = "${DevMode}"
-                    ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}"
+                    ZimbraJars = "zimbra-jars/zimbra-jars-${MajorZimbraVersion}.${MiddleZimbraVersion}.${MinorZimbraVersion}/"
+                    ZimbraJarsExt = ""
   />
 </target>

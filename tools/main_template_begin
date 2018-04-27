@@ -37,6 +37,7 @@
      <attribute name="DevMode"/>
      <attribute name="DistDirName"/>
      <attribute name="ZimbraJars"/>
+     <attribute name="ZimbraJarsExt"/>
 
      <sequential>
        <echo>@{ZimbraJars}</echo>
@@ -64,16 +65,17 @@
          <var name="DevMode" value="@{DevMode}" />
          <filetype commentend="*/" commentbegin="/*" extensions="java"/>
        </preprocess>
-
        <javac includeantruntime="false" debug="${DEBUG_ENABLED}" debuglevel="${DEBUG_LEVEL}" srcdir="${tmpsrc}/" destdir="${build}/" target="1.7" source="1.7">
          <classpath>
-           <path>
-             <multirootfileset basedirs="@{ZimbraJars}" >
-               <include name="*.jar"/>
-             </multirootfileset>
-           </path>
-           <path refid="libraries" />
-           <pathelement path="${build}" />
+           <fileset dir="@{ZimbraJars}" >
+             <include name="*.jar"/>
+           </fileset>
+           <fileset dir="@{ZimbraJarsExt}" >
+             <include name="*.jar"/>
+           </fileset>
+           <fileset dir="lib/" >
+             <include name="*.jar"/>
+           </fileset>
          </classpath>
          <compilerarg value="${COMPILER_ARGS}" />
        </javac>
