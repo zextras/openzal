@@ -17,33 +17,49 @@ You can clone ZAL repository using:
 
    Zimbra is all you need ;)
 
-### Build Dependencies ###
+### Jar Signing ###
 
-PreBob Java preprocessor - <http://prebop.sourceforge.net/>  
-Download and copy "preprocessor.jar" in "ant/"
+If you want to sign your jar place your key.pkcs8 into private directory otherwise skip this section (to sign jar go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> for more details) 
 
-Ant Contrib - <http://ant-contrib.sourceforge.net/>  
-Download and copy "ant-contrib-1.0b3.jar" in "ant/"
+### Build Targets ###
 
-Intellij Annotations - <http://mvnrepository.com/artifact/com.intellij/annotations/12.0>
-Download and copy "annotations-12.jar" in "lib/"
+**zal-dev-current-binary**:
 
-Google Guice 3.0 - <https://code.google.com/p/google-guice/downloads/detail?name=guice-3.0.zip>  
-Download and extract all files in "lib/"
+OpenZAL can be place anywhere, and zimbra must be installed into /opt/zimbra
 
-Jackson Annotations 2.7 - <http://search.maven.org/#artifactdetails%7Ccom.fasterxml.jackson.core%7Cjackson-annotations%7C2.7.4%7Cbundle>
-Download and copy "jackson-annotations-2.7.4.jar" in "lib/"
+Then run:
 
-Jackson Databind 2.7 - <http://search.maven.org/#artifactdetails%7Ccom.fasterxml.jackson.core%7Cjackson-databind%7C2.7.4%7Cbundle>
-Download and copy "jackson-databind-2.7.4.jar" in "lib/"
+    ant zal-dev-current-binary  
 
-Zimbra Sources - <http://www.zimbra.com>  
-For each version of zimbra copy "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+**zal-dev-current-source**:
 
-### How to build ###
+Simply place OpenZAL into same directory of zm-build and follow guide <https://github.com/Zimbra/zm-build/wiki/installer-build> to 
+build Zimbra.
 
-Resolve all ZAL dependencies then run:
+Then run:
 
-> tools/generate-build > build.xml  
-> ant zal-all
+    ant zal-dev-current-source  
+
+**zal-all**:
+
+For each zimbra version you want to build ZAL for:
+ 
+* copy all file from "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+* copy from "/opt/zimbra/common/jetty_home/lib/"  
+jetty-continuation-x.x.x.y.jar
+jetty-http-x.x.x.y.jar
+jetty-io-x.x.x.y.jar
+jetty-rewrite-x.x.x.y.jar
+jetty-security-x.x.x.y.jar
+jetty-server-x.x.x.y.jar
+jetty-servlet-x.x.x.y.jar
+jetty-servlets-x.x.x.y.jar
+jetty-util-x.x.x.y.jar
+in "zimbra-jars/${VERSION}/"
+* copy jtnef-x.x.x.jar from "jetty_base/common/lib" in "zimbra-jars/${VERSION}/" 
+
+Then run:
+
+    ant zal-all  
+
 
