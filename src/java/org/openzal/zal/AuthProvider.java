@@ -21,7 +21,6 @@
 package org.openzal.zal;
 
 
-import com.google.inject.Singleton;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.service.AuthProviderException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -29,7 +28,6 @@ import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 
 
-@Singleton
 public class AuthProvider
 {
   @NotNull
