@@ -2,8 +2,70 @@
   <target name="zal-common" depends="${JOINED_COMMON_ZIMBRA_JAR_VERSIONS}" />
   <target name="zal-all" depends="${JOINED_ZIMBRA_JAR_VERSIONS},zal-dev-last" />
 
+  <target name="zal-dev-current-source"
+        description="Create jar for current Zimbra source"
+        depends="init,dependencies">
+
+        <property name="zm-build" value="../zm-build" />
+        <exec executable="cat" outputproperty="MajorZimbraVersion">
+                <arg value="${zm-build}/RE/MAJOR"/>
+        </exec>
+        <exec executable="cat" outputproperty="MiddleZimbraVersion">
+                <arg value="${zm-build}/RE/MINOR"/>
+        </exec>
+        <exec executable="sed" outputproperty="MinorZimbraVersion">
+                <arg value="s/.*\([0-9]\).*/\1/"/>
+                <arg value="${zm-build}/RE/MICRO"/>
+        </exec>
+
+        <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
+                 MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                 MinorZimbraVersion = "${MinorZimbraVersion}"
+                 DistDirName = "${DistDirName}"
+                 ZimbraJars = "../zm-zcs-lib/build/dist/,../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
+                 DevMode = "true" />
+  </target>
+
+  <target name="zal-dev-current-binary"
+        description="Create jar for current Zimbra binary installed"
+        depends="init,dependencies">
+
+        <exec executable="bash" outputproperty="ZimbraVersion">
+                <arg value="-c"/>
+                <arg value="unzip -p /opt/zimbra/lib/jars/zimbrastore.jar META-INF/MANIFEST.MF | grep Specification\-Version\: | awk '{print $2}'"/>
+        </exec>
+
+        <propertyregex
+          property="MajorZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\1"
+          casesensitive="false" />
+
+        <propertyregex
+          property="MiddleZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\2"
+          casesensitive="false" />
+
+        <propertyregex
+          property="MinorZimbraVersion"
+          input="${ZimbraVersion}"
+          regexp="([0-9]+)\.([0-9]+)\.([0-9]+).*"
+          select="\3"
+          casesensitive="false" />
+
+        <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
+                 MiddleZimbraVersion = "${MiddleZimbraVersion}"
+                 MinorZimbraVersion = "${MinorZimbraVersion}"
+                 DistDirName = "${DistDirName}"
+                 ZimbraJars = "/opt/zimbra/common/jetty_home/lib/,/opt/zimbra/lib/jars/"
+                 DevMode = "true" />
+  </target>
+
   <target name="clean" description="clean up" >
-    <delete includeemptydirs="true">
+    <delete includeemptydirs="true" failonerror="false">
       <fileset dir="dist/" includes="**/*" />
       <fileset dir="build/" includes="**/*" />
       <fileset dir="tmpsrc/" includes="**/*" />
@@ -33,7 +95,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -46,7 +108,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -72,7 +134,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="/tools/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -85,7 +147,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="../build-commons/japi-compliance-checker/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/${LAST_ZIMBRA_VERSION}/zal.jar"/>
@@ -193,19 +255,64 @@
     depends="package-deb, package-rpm">
   </target>
 
+ <target name="dependencies" description="download dependencies">
+    <property name="lib" value="lib"/>
+    <if>
+      <available file="${lib}/annotations-13.0.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar"
+             dest="${lib}/annotations-13.0.jar" usetimestamp="true"/>
+     </else>
+    </if>
+    <if>
+      <available file="${lib}/commons-dbutils-1.6.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/commons-dbutils/commons-dbutils/1.6/commons-dbutils-1.6.jar"
+             dest="${lib}/commons-dbutils-1.6.jar" usetimestamp="true"/>
+     </else>
+    </if>
+    <if>
+      <available file="${lib}/jackson-core-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.6.7/jackson-core-2.6.7.jar"
+             dest="${lib}/jackson-core-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+    <if>
+      <available file="${lib}/jackson-databind-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.6.7/jackson-databind-2.6.7.jar"
+             dest="${lib}/jackson-databind-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+    <if>
+      <available file="${lib}/jackson-annotations-2.6.7.jar" />
+      <else>
+        <get src="http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.6.7/jackson-annotations-2.6.7.jar"
+             dest="${lib}/jackson-annotations-2.6.7.jar" usetimestamp="true"/>
+     </else>
+   </if>
+ </target>
+
   <target name="help">
-    <echo>commands availables are:
-      zal-all
-      zal-common
-      zal-dev-last
-      zal-dev-last-itbase
-      zal-{zimbra-version}
-      zal-{zimbra-version}-itbase
-      compatibility-check
-      fast-compatibility-check
-      clean
-      doxygen
+    <echo>
+    <![CDATA[
+      commands available are:
+
+      zal-all                       build zal for all zimbra versions
+      zal-common                    build zal for most commons zimbra versions
+      zal-dev-current-source        build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)
+      zal-dev-current-binary        build zal against current zimbra binary in dev mode (zimbra be installed in /opt/zimbra)
+      zal-dev-last                  build zal against last zimbra version in dev mode
+      zal-{zimbra-version}          build zal against specified zimbra version in dev mode
+      compatibility-check           check zal Java API Compliance against all zal versions
+      fast-compatibility-check      check zal Java API Compliance against previous zal version
+      clean                         clean up build
+      doxygen                       create doxygen documentation
       help
+
+      dev mode: no checks against zimbra version will be performed at runtime
+    ]]>
     </echo>
   </target>
 

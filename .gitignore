@@ -8,3 +8,4 @@ src/zal.iml
 compat_reports/
 openzal-*.deb
 openzal-*.rpm
+private/
