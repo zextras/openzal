@@ -20,7 +20,6 @@
 
 package org.openzal.zal.index;
 
-import com.google.inject.Singleton;
 import com.zimbra.cs.convert.AttachmentInfo;
 import com.zimbra.cs.convert.ConversionException;
 import com.zimbra.cs.mime.*;
@@ -40,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Singleton
 public class IndexerManager
 {
   private static final Field                     sMimeHandlerManagerHandlersField;

@@ -28,9 +28,7 @@ import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 
 import com.zimbra.cs.volume.*;
-import com.google.inject.Singleton;
 
-@Singleton
 public class VolumeManager
 {
   private static final short sMboxGroupBits = 8;
