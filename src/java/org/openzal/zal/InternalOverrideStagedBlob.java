@@ -24,7 +24,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 
 import java.io.IOException;
 
-class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
+public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
 {
   private final StagedBlob mBlob;
 

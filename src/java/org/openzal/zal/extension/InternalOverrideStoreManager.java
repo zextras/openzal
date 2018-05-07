@@ -239,10 +239,12 @@ class InternalOverrideStoreManager
 
       return delete(vsb);
     }
-    else
+    else if (InternalOverrideStagedBlob.class.isAssignableFrom(staged.getClass()))
     {
-      return false;
+      return ((InternalOverrideStagedBlob) staged).getWrappedObject().getFile().delete();
     }
+
+    return false;
   }
 
   public boolean delete(MailboxBlob blob) throws IOException
