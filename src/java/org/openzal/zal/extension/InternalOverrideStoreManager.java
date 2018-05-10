@@ -54,7 +54,6 @@ class InternalOverrideStoreManager
 {
   private final org.openzal.zal.StoreManager mStoreManager;
   private final VolumeManager mVolumeManager;
-  // TODO maybe PrimaryStoreAccessr?
 
   public InternalOverrideStoreManager(
     org.openzal.zal.StoreManager storeManager,
