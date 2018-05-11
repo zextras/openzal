@@ -42,14 +42,14 @@ public class FullItemInfo extends PlacedItemInfo
   public final String uuid;
   public final int    mailboxId;
   public final Integer revision_version;
-  public final Integer revision_date;
+  public final Long revision_date;
   public final Long revision_size;
   public final String revision_locator;
   public final String revision_blob_digest;
   public final String revision_name;
   public final String revision_metadata;
   public final Integer revision_mod_metadata;
-  public final Integer revision_change_date;
+  public final Long revision_change_date;
   public final Integer revision_mod_content;
 
   public FullItemInfo(int itemId, byte type, int parent_id, int folder_id, int index_id, int imap_id, long date, long size, String locator, String blob_digest, int unread_count, int flags, String tags, String subject, String name, String metadata, int mod_metadata, int mod_content, long dateChanged, String uuid, int mailbox_id)
@@ -90,7 +90,7 @@ public class FullItemInfo extends PlacedItemInfo
   }
 
   public FullItemInfo(int itemId, byte type, int parent_id, int folder_id, int index_id, int imap_id, long date, long size, String locator, String blob_digest, int unread_count, int flags, String tags, String subject, String name, String metadata, int mod_metadata, int mod_content, long dateChanged, String uuid, int mailbox_id,
-                      Integer revision_version,  Integer revision_date,  Long revision_size,  String revision_locator,  String revision_blob_digest,  String revision_name,  String revision_metadata,  Integer revision_mod_metadata, Integer revision_change_date,  Integer revision_mod_content
+                      Integer revision_version,  Long revision_date,  Long revision_size,  String revision_locator,  String revision_blob_digest,  String revision_name,  String revision_metadata,  Integer revision_mod_metadata, Long revision_change_date,  Integer revision_mod_content
   )
   {
     super(folder_id, itemId, mod_metadata, date);
