@@ -26,7 +26,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 2.3.0 </echo>
+    <echo> Building ZAL version 2.4.0 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -85,7 +85,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="2.3.0" />
+           <attribute name="Specification-Version" value="2.4.0" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="${ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -1085,13 +1085,13 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="2.3.0"/>
+          value="2.4.0"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="2"/>
         <replacefilter
           token="@VERSION_MINOR@"
-          value="3"/>
+          value="4"/>
         <replacefilter
           token="@VERSION_MICRO@"
           value="0"/>
@@ -1113,14 +1113,14 @@
     <delete dir="${deb-dir-tmp}"/>
 
     <mkdir dir="${deb-dir-tmp}"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.3"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.3/usr/share/openzal/2.3"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.3/DEBIAN"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.4"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.4/usr/share/openzal/2.4"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.4/DEBIAN"/>
 
     <prepare-build-template srcFile="tools/deb_control_template"
-                            destFile="${deb-dir-tmp}/openzal-2.3/DEBIAN/control" />
+                            destFile="${deb-dir-tmp}/openzal-2.4/DEBIAN/control" />
 
-    <copy todir="${deb-dir-tmp}/openzal-2.3/usr/share/openzal/2.3">
+    <copy todir="${deb-dir-tmp}/openzal-2.4/usr/share/openzal/2.4">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1130,9 +1130,9 @@
           dir="${deb-dir-tmp}"
           failonerror="true">
       <arg value="--build"/>
-      <arg value="openzal-2.3"/>
+      <arg value="openzal-2.4"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-2.3.deb" todir="." />
+    <move file="${deb-dir-tmp}/openzal-2.4.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
@@ -1145,15 +1145,15 @@
     <delete dir="${rpm-dir-tmp}"/>
 
     <mkdir dir="${rpm-dir-tmp}"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.3"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.3/buildroot/usr/share/openzal/2.3"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.3/SPEC"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.3/RPMS"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.4"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/buildroot/usr/share/openzal/2.4"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/RPMS"/>
 
     <prepare-build-template srcFile="tools/rpm_spec_template"
-                            destFile="${rpm-dir-tmp}/openzal-2.3/SPEC/openzal-2.3.spec" />
+                            destFile="${rpm-dir-tmp}/openzal-2.4/SPEC/openzal-2.4.spec" />
 
-    <copy todir="${rpm-dir-tmp}/openzal-2.3/buildroot/usr/share/openzal/2.3">
+    <copy todir="${rpm-dir-tmp}/openzal-2.4/buildroot/usr/share/openzal/2.4">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1163,10 +1163,10 @@
           dir="${rpm-dir-tmp}"
           failonerror="true">
       <arg value="-bb"/>
-      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.3/buildroot"/>
-      <arg value="openzal-2.3/SPEC/openzal-2.3.spec"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.4/buildroot"/>
+      <arg value="openzal-2.4/SPEC/openzal-2.4.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-2.3/RPMS/noarch/openzal-2.3-0-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-2.4/RPMS/noarch/openzal-2.4-0-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
