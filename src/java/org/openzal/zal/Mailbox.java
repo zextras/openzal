@@ -55,6 +55,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -289,6 +290,22 @@ public class Mailbox
   }
 
   @NotNull
+  public Item getItemByIdFromDumpster(@NotNull OperationContext zContext, int id, byte type)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getItemById(zContext.getOperationContext(), id, Item.convertType(type), true);
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    return new Item(item);
+  }
+
+  @NotNull
   public Item getItemRevisionById(@NotNull OperationContext zContext, int id, byte type, int revision)
     throws NoSuchItemException
   {
@@ -308,24 +325,105 @@ public class Mailbox
     return new Item(item);
   }
 
-  @NotNull
-  public List<Item> getAllRevisions(@NotNull OperationContext zContext, int id, byte type)
+  @Nullable private static Method sLoadRevisionsMethod = null;
+
+  static
   {
     try
     {
-      List<MailItem> mailItems = mMbox.getAllRevisions(zContext.getOperationContext(), id, Item.convertType(type));
+      sLoadRevisionsMethod = com.zimbra.cs.mailbox.MailItem.class.getDeclaredMethod("loadRevisions");
+      sLoadRevisionsMethod.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
 
-      List<Item> items = new ArrayList<Item>(mailItems.size());
-      for (MailItem mailItem : mailItems)
-      {
-        items.add(new Item(mailItem));
-      }
-
-      return items;
+  @NotNull
+  public Item getItemRevisionByIdFromDumpster(@NotNull OperationContext zContext, int id, byte type, int revision)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getItemRevision(zContext.getOperationContext(), id, Item.convertType(type), revision, true);
     }
     catch (com.zimbra.common.service.ServiceException serviceException)
     {
       throw ExceptionWrapper.wrap(serviceException);
+    }
+    if (item == null)
+    {
+      throw new NoSuchItemException(id+"-"+revision);
+    }
+    return new Item(item);
+  }
+
+  @NotNull
+  public List<Item> getAllRevisions(@NotNull OperationContext zContext, int id, byte type)
+  {
+    return getAllRevisions(zContext, id, type, false);
+  }
+
+  @NotNull
+  public List<Item> getAllRevisions(@NotNull OperationContext zContext, int id, byte type, boolean inDumpster)
+  {
+    try
+    {
+      if (inDumpster)
+      {
+        beginTransaction("getAllRevisions", zContext);
+        try
+        {
+          Item item = getItemByIdFromDumpster(zContext, id, type);
+
+          MailItem mailItem = item.toZimbra(MailItem.class);
+          List<Item> revisions;
+          Object revisionsObject = sLoadRevisionsMethod.invoke(mailItem);
+          if (revisionsObject == null)
+          {
+            revisions = Collections.singletonList(item);
+          }
+          else
+          {
+            List<MailItem> zimbraRevisions = (List<MailItem>) revisionsObject;
+            revisions = new ArrayList<Item>(zimbraRevisions.size());
+            for (MailItem zimbraItem : zimbraRevisions)
+            {
+              revisions.add(new Item(zimbraItem));
+            }
+            revisions.add(item);
+          }
+
+          return revisions;
+        }
+        finally
+        {
+          endTransaction(true);
+        }
+      }
+      else
+      {
+        List<MailItem> mailItems = mMbox.getAllRevisions(zContext.getOperationContext(), id, Item.convertType(type));
+
+        List<Item> items = new ArrayList<Item>(mailItems.size());
+        for (MailItem mailItem : mailItems)
+        {
+          items.add(new Item(mailItem));
+        }
+
+        return items;
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    catch (IllegalAccessException | InvocationTargetException e)
+    {
+      throw new RuntimeException(e);
     }
   }
 
