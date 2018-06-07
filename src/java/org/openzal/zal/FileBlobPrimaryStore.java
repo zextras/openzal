@@ -200,6 +200,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
+  public boolean delete(StagedBlob blob) throws IOException
+  {
+    return sm.delete(com.zimbra.cs.store.StagedBlob.class.cast(InternalOverrideStagedBlob.wrap(blob)));
+  }
+
+  @Override
   public boolean delete(Blob blob) throws IOException
   {
     return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob)));
