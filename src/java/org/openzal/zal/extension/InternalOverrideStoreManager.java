@@ -216,34 +216,7 @@ class InternalOverrideStoreManager
 
   public boolean delete(StagedBlob staged) throws IOException
   {
-    if (staged == null)
-    {
-      return false;
-    }
-
-    if (VolumeStagedBlob.class.isAssignableFrom(staged.getClass()))
-    {
-      VolumeStagedBlob vsb = (VolumeStagedBlob) staged;
-      try
-      {
-        if (!(Boolean) mVolumeStagedBlobWasStagedDirectlyMethod.invoke(vsb))
-        {
-          return false;
-        }
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-
-      return delete(vsb);
-    }
-    else if (InternalOverrideStagedBlob.class.isAssignableFrom(staged.getClass()))
-    {
-      return ((InternalOverrideStagedBlob) staged).getWrappedObject().getFile().delete();
-    }
-
-    return false;
+    return mStoreManager.getStore(staged.getLocator()).delete(StagedBlobWrap.wrapZimbraObject(staged));
   }
 
   public boolean delete(MailboxBlob blob) throws IOException
