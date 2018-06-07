@@ -216,6 +216,11 @@ class InternalOverrideStoreManager
 
   public boolean delete(StagedBlob staged) throws IOException
   {
+    if (staged == null)
+    {
+      return false;
+    }
+
     return mStoreManager.getStore(staged.getLocator()).delete(StagedBlobWrap.wrapZimbraObject(staged));
   }
 
