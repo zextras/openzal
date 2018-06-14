@@ -55,6 +55,15 @@ public class VolumeManager
                             boolean compressBlobs, long compressionThreshold)
     throws ZimbraException
   {
+    return update(id, type, name, path, compressBlobs, compressionThreshold, true);
+  }
+
+  public StoreVolume update(String id, short type,
+                            String name, String path,
+                            boolean compressBlobs, long compressionThreshold,
+                            boolean checkPath)
+    throws ZimbraException
+  {
 
     StoreVolume volumeToUpdate = getById(id);
 
@@ -65,14 +74,7 @@ public class VolumeManager
       builder.setId(Short.parseShort(id));
       builder.setName(name);
       builder.setType(type);
-      if (!path.startsWith(File.separator))
-      {
-        builder.setPath(path, false);
-      }
-      else
-      {
-        builder.setPath(path, true);
-      }
+      builder.setPath(path, checkPath);
       builder.setMboxGroupBits(volumeToUpdate.getMboxGroupBits());
       builder.setMboxBit(volumeToUpdate.getMboxBits());
       builder.setFileGroupBits(volumeToUpdate.getFileGroupBits());
@@ -98,6 +100,14 @@ public class VolumeManager
                             boolean compressBlobs, long compressionThreshold)
     throws ZimbraException
   {
+    return create(id, type, name, path, compressBlobs, compressionThreshold, true);
+  }
+
+  public StoreVolume create(short id, short type,
+                            String name, String path,
+                            boolean compressBlobs, long compressionThreshold, boolean checkPath)
+    throws ZimbraException
+  {
     Volume vol;
     try
     {
@@ -105,14 +115,7 @@ public class VolumeManager
       builder.setId(id);
       builder.setType(type);
       builder.setName(name);
-      if (!path.startsWith(File.separator))
-      {
-        builder.setPath(path, false);
-      }
-      else
-      {
-        builder.setPath(path, true);
-      }
+      builder.setPath(path, checkPath);
       builder.setMboxGroupBits(sMboxGroupBits);
       builder.setMboxBit(sMboxBits);
       builder.setFileGroupBits(sFileGroupBits);
