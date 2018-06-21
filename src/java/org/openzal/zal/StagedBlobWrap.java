@@ -137,4 +137,9 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
 
     return new StagedBlobWrap(stagedBlob);
   }
+
+  public Object getWrappedObject()
+  {
+    return mStagedBlob;
+  }
 }
