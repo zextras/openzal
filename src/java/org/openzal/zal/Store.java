@@ -31,6 +31,7 @@ public interface Store
   MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
   MailboxBlob link(Blob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
   boolean delete(MailboxBlob blob) throws IOException;
+  boolean delete(StagedBlob blob) throws IOException;
   void startup() throws IOException, ZimbraException;
   void shutdown();
   boolean supports(StoreFeature feature);
