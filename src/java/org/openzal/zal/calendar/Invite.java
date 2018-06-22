@@ -323,7 +323,7 @@ public class Invite
   }
 
   @Nullable
-  public Date getStartTimeDate()
+  public Calendar getStartTimeDate()
   {
     ParsedDateTime startTime = mInvite.getStartTime();
     if (startTime == null)
@@ -331,11 +331,11 @@ public class Invite
       return null;
     }
 
-    return startTime.getDate();
+    return startTime.getCalendarCopy();
   }
 
   @Nullable
-  public Date getEndTimeDate()
+  public Calendar getEndTimeDate()
   {
     ParsedDateTime endTime = mInvite.getEffectiveEndTime();
     if (endTime == null)
@@ -343,7 +343,7 @@ public class Invite
       return null;
     }
 
-    return endTime.getDate();
+    return endTime.getCalendarCopy();
   }
 
   public long getEffectiveDuration()

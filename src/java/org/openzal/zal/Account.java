@@ -45,6 +45,7 @@ import org.openzal.zal.soap.SoapTransport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class Account extends Entry
 {
@@ -324,9 +326,18 @@ public class Account extends Entry
     return mAccount.getDomainId();
   }
 
-  public Date getPrefOutOfOfficeUntilDate()
+  public Calendar getPrefOutOfOfficeUntilDate()
   {
-    return mAccount.getPrefOutOfOfficeUntilDate();
+    Date date = mAccount.getPrefOutOfOfficeUntilDate();
+
+    if( date == null )
+    {
+      return null;
+    }
+
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    calendar.setTime(date);
+    return calendar;
   }
 
   public String getDisplayName()
@@ -467,11 +478,11 @@ public class Account extends Entry
     return list;
   }
 
-  public void setPrefOutOfOfficeUntilDate(Date zimbraPrefOutOfOfficeUntilDate)
+  public void setPrefOutOfOfficeUntilDate(Calendar zimbraPrefOutOfOfficeUntilDate)
   {
     try
     {
-      mAccount.setPrefOutOfOfficeUntilDate(zimbraPrefOutOfOfficeUntilDate);
+      mAccount.setPrefOutOfOfficeUntilDate(zimbraPrefOutOfOfficeUntilDate.getTime());
     }
     catch (ServiceException e)
     {
@@ -586,9 +597,18 @@ public class Account extends Entry
     return mAccount.getPrefOutOfOfficeExternalReply();
   }
 
-  public Date getPrefOutOfOfficeFromDate()
+  public Calendar getPrefOutOfOfficeFromDate()
   {
-    return mAccount.getPrefOutOfOfficeFromDate();
+    Date date = mAccount.getPrefOutOfOfficeFromDate();
+
+    if( date == null )
+    {
+      return null;
+    }
+
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    calendar.setTime(date);
+    return calendar;
   }
 
   public boolean isIsSystemAccount()
@@ -827,11 +847,11 @@ public class Account extends Entry
     return Arrays.asList(mAccount.getMobilePolicyUnapprovedInROMApplication());
   }
 
-  public void setPrefOutOfOfficeFromDate(Date zimbraPrefOutOfOfficeFromDate)
+  public void setPrefOutOfOfficeFromDate(Calendar zimbraPrefOutOfOfficeFromDate)
   {
     try
     {
-      mAccount.setPrefOutOfOfficeFromDate(zimbraPrefOutOfOfficeFromDate);
+      mAccount.setPrefOutOfOfficeFromDate(zimbraPrefOutOfOfficeFromDate.getTime());
     }
     catch (ServiceException e)
     {

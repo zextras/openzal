@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.Account;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.zimbra.common.calendar.ICalTimeZone;
@@ -217,8 +217,8 @@ public class ICalendarTimezone
     return mICalTimeZone;
   }
 
-  public boolean inDaylightTime(Date date)
+  public boolean inDaylightTime(Calendar calendar)
   {
-    return mICalTimeZone.inDaylightTime(date);
+    return mICalTimeZone.inDaylightTime(calendar.getTime());
   }
 }

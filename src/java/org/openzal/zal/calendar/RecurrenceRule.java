@@ -20,6 +20,7 @@
 
 package org.openzal.zal.calendar;
 
+
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.service.ServiceException;
@@ -255,12 +256,24 @@ public class RecurrenceRule
     mZRecur.setByMonthList(byMonthList);
   }
 
-  public List<Date> expandRecurrenceOverRange(long dateStart, long rangeStart, long rangeEnd)
+  public List<Calendar> expandRecurrenceOverRange(long dateStart, long rangeStart, long rangeEnd)
   {
     ParsedDateTime dtStart = ParsedDateTime.fromUTCTime(dateStart);
     try
     {
-      return mZRecur.expandRecurrenceOverRange(dtStart, rangeStart, rangeEnd);
+      List<Calendar> calendarList = new ArrayList();
+      for(Date date : mZRecur.expandRecurrenceOverRange(dtStart, rangeStart, rangeEnd))
+      {
+        if(date == null)
+        {
+          calendarList.add(null);
+        }
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(date);
+        calendarList.add(calendar);
+      }
+      return calendarList;
     }
     catch (ServiceException e)
     {
