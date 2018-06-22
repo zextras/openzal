@@ -264,11 +264,6 @@ public class RecurrenceRule
       List<Calendar> calendarList = new ArrayList();
       for(Date date : mZRecur.expandRecurrenceOverRange(dtStart, rangeStart, rangeEnd))
       {
-        if(date == null)
-        {
-          calendarList.add(null);
-        }
-
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.setTime(date);
         calendarList.add(calendar);
