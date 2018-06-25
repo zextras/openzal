@@ -119,6 +119,23 @@ public class Mailbox
     }
   }
 
+  public void deleteRevision(@NotNull OperationContext zContext, int itemId, int revision)
+  {
+    try
+    {
+      mMbox.purgeRevision(
+        zContext.getOperationContext(),
+        itemId,
+        revision,
+        false
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   static class FakeMailbox extends com.zimbra.cs.mailbox.Mailbox
   {
     public FakeMailbox(@NotNull com.zimbra.cs.account.Account account)
