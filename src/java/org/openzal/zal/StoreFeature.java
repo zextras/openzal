@@ -28,7 +28,13 @@ public enum StoreFeature
   BULK_DELETE(StoreManager.StoreFeature.BULK_DELETE),
   CENTRALIZED(StoreManager.StoreFeature.CENTRALIZED),
   RESUMABLE_UPLOAD(StoreManager.StoreFeature.RESUMABLE_UPLOAD),
-  SINGLE_INSTANCE_SERVER_CREATE(StoreManager.StoreFeature.SINGLE_INSTANCE_SERVER_CREATE);
+  SINGLE_INSTANCE_SERVER_CREATE(StoreManager.StoreFeature.SINGLE_INSTANCE_SERVER_CREATE),
+  /* $ if ZimbraVersion >= 8.8.10
+  CUSTOM_STORE_API(StoreManager.StoreFeature.CUSTOM_STORE_API),
+  /* $ else $ */
+  CUSTOM_STORE_API(null),
+  /* $ endif $ */
+  ;
 
   private final StoreManager.StoreFeature mStoreFeature;
 
@@ -59,8 +65,12 @@ public enum StoreFeature
         return RESUMABLE_UPLOAD;
       case SINGLE_INSTANCE_SERVER_CREATE:
         return SINGLE_INSTANCE_SERVER_CREATE;
+      /* $ if ZimbraVersion >= 8.8.10
+      case CUSTOM_STORE_API:
+        return CUSTOM_STORE_API;
+      /* $ else $ */
       default:
-        throw new RuntimeException();
+        throw new UnsupportedOperationException("Unsupported feature " + storeFeature.toString());
     }
   }
 }

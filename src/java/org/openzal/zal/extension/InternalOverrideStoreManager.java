@@ -76,7 +76,56 @@ class InternalOverrideStoreManager
 
   public boolean supports(StoreManager.StoreFeature feature)
   {
-    return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
+    switch (feature)
+    {
+      case BULK_DELETE:
+        return supportedByAll(feature);
+      case CENTRALIZED:
+        return supportedByAll(feature);
+      case RESUMABLE_UPLOAD:
+        return supportedByAll(feature);
+      case SINGLE_INSTANCE_SERVER_CREATE:
+        return supportedByAll(feature);
+      /* $if ZimbraVersion >= 8.8.10 $
+      case CUSTOM_STORE_API:
+        return supportedAtLeasOnce(feature);
+      /* $endif $ */
+      default:
+        return false;
+    }
+  }
+
+  public boolean supports(StoreManager.StoreFeature feature, String locator)
+  {
+    return mStoreManager.getStore(locator).supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
+  }
+
+  private boolean supportedAtLeasOnce(StoreFeature feature)
+  {
+    for (Store store : mStoreManager.getAllStores())
+    {
+      if (store.supports(org.openzal.zal.StoreFeature.fromZimbra(feature)))
+      {
+        return true;
+      }
+
+    }
+
+    return false;
+  }
+
+  private boolean supportedByAll(StoreFeature feature)
+  {
+    for (Store store : mStoreManager.getAllStores())
+    {
+      if (!store.supports(org.openzal.zal.StoreFeature.fromZimbra(feature)))
+      {
+        return false;
+      }
+
+    }
+
+    return true;
   }
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
