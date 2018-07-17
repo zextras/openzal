@@ -307,6 +307,55 @@ public class Mailbox
   }
 
   @NotNull
+  public Item getItemByUuId(@NotNull OperationContext zContext, String uuid, byte type, boolean fromDumpster)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getItemByUuid(zContext.getOperationContext(), uuid, Item.convertType(type),fromDumpster);
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    return new Item(item);
+  }
+
+  @NotNull
+  public Document getDocumentById(@NotNull OperationContext zContext, int id)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getDocumentById(zContext.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    return new Document(item);
+  }
+
+  @NotNull
+  public Document getDocumentByUuid(@NotNull OperationContext zContext, String uuid)
+    throws NoSuchItemException
+  {
+    MailItem item;
+    try
+    {
+      item = mMbox.getDocumentByUuid(zContext.getOperationContext(), uuid);
+    }
+    catch (com.zimbra.common.service.ServiceException serviceException)
+    {
+      throw ExceptionWrapper.wrap(serviceException);
+    }
+    return new Document(item);
+  }
+
+
+  @NotNull
   public Item getItemByIdFromDumpster(@NotNull OperationContext zContext, int id, byte type)
     throws NoSuchItemException
   {
