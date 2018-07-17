@@ -739,4 +739,14 @@ public class Item implements Comparable<Item>
   {
     return mMailItem.compareTo(item.toZimbra(MailItem.class));
   }
+
+  public String getUuid()
+  {
+    String item = mMailItem.getUuid();
+    if (item == null)
+    {
+      throw new NoSuchItemException(mMailItem.getName());
+    }
+    return item;
+  }
 }
