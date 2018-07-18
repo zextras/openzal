@@ -2173,6 +2173,30 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public Group assertGroupById(String groupId)
+  {
+    Group group = getGroupById(groupId);
+    if (group == null)
+    {
+      throw new NoSuchGroupException(groupId);
+    }
+
+    return group;
+  }
+
+  @Override
+  public Group assertGroupByName(String groupName)
+  {
+    Group group = getGroupByName(groupName);
+    if (group == null)
+    {
+      throw new NoSuchGroupException(groupName);
+    }
+
+    return group;
+  }
+
+  @Override
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
     com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
