@@ -45,6 +45,11 @@ public class Group extends Entry
     mGroup = (com.zimbra.cs.account.Group) group;
   }
 
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mGroup);
+  }
+
   @NotNull
   public Set<String> getAllMembersSet()
   {
