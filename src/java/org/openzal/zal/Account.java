@@ -56,14 +56,11 @@ import java.util.Set;
 public class Account extends Entry
 {
   public static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
-  public static final String END_CERT   = "-----END CERTIFICATE-----";
+  public static final String END_CERT = "-----END CERTIFICATE-----";
 
   @NotNull private final com.zimbra.cs.account.Account mAccount;
 
-  public Account(
-    @NotNull
-      Object account
-  )
+  public Account(@NotNull Object account)
   {
     super(account);
     mAccount = (com.zimbra.cs.account.Account) account;
@@ -74,8 +71,7 @@ public class Account extends Entry
     String accountId,
     Map<String, Object> accountAttrs,
     Map emptyMap,
-    @NotNull
-      Provisioning provisioning
+    @NotNull Provisioning provisioning
   )
   {
     this(
@@ -95,11 +91,11 @@ public class Account extends Entry
     /* $if ZimbraVersion >= 8.7.6 $ */
     try
     {
-      /* $endif $ */
+    /* $endif $ */
       return mAccount.getLastLogonTimestampAsString();
-      /* $if ZimbraVersion >= 8.7.6 $ */
+    /* $if ZimbraVersion >= 8.7.6 $ */
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -112,7 +108,7 @@ public class Account extends Entry
     {
       mAccount.setLastLogonTimestampAsString(time);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -140,7 +136,7 @@ public class Account extends Entry
     {
       mAccount.addAlias(alias);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -173,7 +169,7 @@ public class Account extends Entry
     {
       return ZimbraListWrapper.wrapDataSources(mAccount.getAllDataSources());
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -189,30 +185,26 @@ public class Account extends Entry
     return mAccount.isMobileSmartForwardRFC822Enabled();
   }
 
-  public void setPrefAllowAddressForDelegatedSender(
-    @NotNull
-      Collection<String> addresses
-  )
+  public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> addresses)
     throws ZimbraException
   {
     try
     {
       mAccount.setPrefAllowAddressForDelegatedSender(addresses.toArray(new String[addresses.size()]));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  public List<Identity> getAllIdentities()
-    throws NoSuchAccountException
+  public List<Identity> getAllIdentities() throws NoSuchAccountException
   {
     try
     {
-      return ZimbraListWrapper.wrapIdentities(mAccount.getAllIdentities());
+       return ZimbraListWrapper.wrapIdentities(mAccount.getAllIdentities());
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -253,7 +245,7 @@ public class Account extends Entry
     {
       mAccount.modifyDataSource(dataSourceId, attrs);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -265,27 +257,26 @@ public class Account extends Entry
     {
       return mAccount.isAccountExternal();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Nullable
-  public Identity getIdentityByName(String name)
-    throws NoSuchAccountException
+  public Identity getIdentityByName(String name) throws NoSuchAccountException
   {
     com.zimbra.cs.account.Identity identity;
     try
     {
       identity = mAccount.getIdentityByName(name);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
 
-    if( identity == null )
+    if ( identity == null )
     {
       return null;
     }
@@ -310,7 +301,7 @@ public class Account extends Entry
     {
       mAccount.setPrefOutOfOfficeReply(zimbraPrefOutOfOfficeReply);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -322,7 +313,7 @@ public class Account extends Entry
     {
       mAccount.setIsSystemAccount(zimbraIsSystemAccount);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -357,17 +348,17 @@ public class Account extends Entry
     {
       mAccount.unsetSignatureId();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  /**
-   * @param via If not null, in it will set a Map<distributionList1,
-   *            distributionList2> of distribution list which the user is a member
-   *            (indirectly), where distributionList2 is in distributionList1,
-   */
+/**
+ * @param via If not null, in it will set a Map<distributionList1,
+ *            distributionList2> of distribution list which the user is a member
+ *            (indirectly), where distributionList2 is in distributionList1,
+ */
   @NotNull
   public List<DistributionList> getDistributionLists(boolean directOnly, Map<String, String> via)
   {
@@ -375,7 +366,7 @@ public class Account extends Entry
     {
       return ZimbraListWrapper.wrapDistributionLists(mAccount.getDistributionLists(directOnly, via));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -393,7 +384,7 @@ public class Account extends Entry
   }
 
   /**
-   * @param provisioning Provisioning
+   * @param  provisioning Provisioning
    * @return Collection of all addresses of an Account obtained from account.getName() and account.getMailAlias()
    * properly combined with their relative domainAliases
    */
@@ -401,11 +392,11 @@ public class Account extends Entry
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
     Set<String> addresses = new HashSet<String>();
-    for( String address : getAllAddresses() )
+    for (String address : getAllAddresses())
     {
       addresses.add(address);
       //will be fixed in devel(compatibility check)
-      addresses.addAll(((ProvisioningImp) provisioning).getWithDomainAliasesExpansion(address));
+      addresses.addAll(((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address));
     }
 
     return addresses;
@@ -422,39 +413,36 @@ public class Account extends Entry
     //add addresses obtained from account multi attribute "zimbraAllowFromAddress"
     addresses.addAll(getAllowFromAddress());
 
-    Map<Right, Set<com.zimbra.cs.account.Entry>> rights;
+    Map<Right, Set<com.zimbra.cs.account.Entry>>  rights;
     try
     {
-      rights = new ACLAccessManager().discoverUserRights(mAccount, new HashSet<Right>()
-      {{
-        add(UserRights.R_sendAs); add(UserRights.R_sendAsDistList);
-      }}, false);
+      rights = new ACLAccessManager().discoverUserRights(mAccount, new HashSet<Right>(){{add(UserRights.R_sendAs);add(UserRights.R_sendAsDistList);}}, false);
     }
-    catch( Exception e )
+    catch (Exception e)
     {
       return addresses;
     }
-    if( rights.containsKey(UserRights.R_sendAs) )
+    if (rights.containsKey(UserRights.R_sendAs))
     {
       Set<com.zimbra.cs.account.Entry> allowed = rights.get(UserRights.R_sendAs);
-      for( com.zimbra.cs.account.Entry entry : allowed )
+      for (com.zimbra.cs.account.Entry entry : allowed)
       {
-        if( entry instanceof com.zimbra.cs.account.Account )
+        if (entry instanceof com.zimbra.cs.account.Account)
         {
           addresses.add(((com.zimbra.cs.account.Account) entry).getName());
           addresses.addAll(Arrays.asList(((com.zimbra.cs.account.Account) entry).getPrefAllowAddressForDelegatedSender()));
         }
       }
     }
-    if( rights.containsKey(UserRights.R_sendAsDistList) )
+    if (rights.containsKey(UserRights.R_sendAsDistList))
     {
       Set<com.zimbra.cs.account.Entry> allowed = rights.get(UserRights.R_sendAsDistList);
-      for( com.zimbra.cs.account.Entry entry : allowed )
+      for (com.zimbra.cs.account.Entry entry : allowed)
       {
-        if( entry instanceof com.zimbra.cs.account.DistributionList )
+        if (entry instanceof com.zimbra.cs.account.DistributionList)
         {
           addresses.add(((com.zimbra.cs.account.DistributionList) entry).getName());
-          addresses.addAll(Arrays.asList((((com.zimbra.cs.account.DistributionList) entry).getPrefAllowAddressForDelegatedSender())));
+          addresses.addAll(Arrays.asList((((com.zimbra.cs.account.DistributionList)entry).getPrefAllowAddressForDelegatedSender())));
         }
       }
     }
@@ -485,7 +473,7 @@ public class Account extends Entry
     {
       mAccount.setPrefOutOfOfficeUntilDate(zimbraPrefOutOfOfficeUntilDate);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -498,20 +486,19 @@ public class Account extends Entry
   }
 
   @Nullable
-  public Cos getCOS()
-    throws NoSuchDomainException
+  public Cos getCOS() throws NoSuchDomainException
   {
     com.zimbra.cs.account.Cos cos;
     try
     {
       cos = mAccount.getCOS();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
 
-    if( cos == null )
+    if ( cos == null )
     {
       return null;
     }
@@ -525,14 +512,13 @@ public class Account extends Entry
   }
 
   @NotNull
-  public List<Signature> getAllSignatures()
-    throws NoSuchAccountException
+  public List<Signature> getAllSignatures() throws NoSuchAccountException
   {
     try
     {
       return ZimbraListWrapper.wrapSignatures(mAccount.getAllSignatures());
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -543,16 +529,13 @@ public class Account extends Entry
     return mAccount.isMobilePolicyAllowPartialProvisioning();
   }
 
-  public void authAccount(String password,
-    @NotNull
-      Protocol proto
-  )
+  public void authAccount(String password, @NotNull Protocol proto)
   {
     try
     {
       mAccount.authAccount(password, proto.toZimbra());
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -564,7 +547,7 @@ public class Account extends Entry
     {
       mAccount.getProvisioning().setPassword(mAccount, newPassword, enforcePolicy);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -576,23 +559,20 @@ public class Account extends Entry
   }
 
   @Override
-  public boolean equals(
-    @Nullable
-      Object o
-  )
+  public boolean equals(@Nullable Object o)
   {
-    if( this == o )
+    if (this == o)
     {
       return true;
     }
-    if( o == null || getClass() != o.getClass() )
+    if (o == null || getClass() != o.getClass())
     {
       return false;
     }
 
-    return getId().equals(
-      ((Account) o).getId()
-    );
+   return getId().equals(
+     ((Account) o).getId()
+   );
   }
 
   @Override
@@ -626,7 +606,7 @@ public class Account extends Entry
   {
     ZAttrProvisioning.AccountStatus accountStatus = mAccount.getAccountStatus();
 
-    if( accountStatus == null )
+    if ( accountStatus == null )
     {
       return null;
     }
@@ -640,7 +620,7 @@ public class Account extends Entry
     {
       mAccount.setAccountStatus(status.toZimbra(ZAttrProvisioning.AccountStatus.class));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -671,7 +651,7 @@ public class Account extends Entry
     {
       return new Signature(mAccount.createSignature(signatureName, attrs));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -716,7 +696,7 @@ public class Account extends Entry
     {
       distributionLists = mAccount.getDistributionLists();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -743,10 +723,7 @@ public class Account extends Entry
     return mAccount.isFeatureMobileSyncEnabled();
   }
 
-  public void setPrefExternalSendersType(
-    @NotNull
-      PrefExternalSendersType zimbraPrefExternalSendersType
-  )
+  public void setPrefExternalSendersType(@NotNull PrefExternalSendersType zimbraPrefExternalSendersType)
   {
     try
     {
@@ -754,20 +731,19 @@ public class Account extends Entry
         zimbraPrefExternalSendersType.toZimbra(ZAttrProvisioning.PrefExternalSendersType.class)
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  public void deleteAccount()
-    throws NoSuchAccountException
+  public void deleteAccount() throws NoSuchAccountException
   {
     try
     {
       mAccount.deleteAccount();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -778,10 +754,7 @@ public class Account extends Entry
     return mAccount.isPrefOutOfOfficeReplyEnabled();
   }
 
-  public String getAccountStatus(
-    @NotNull
-      Provisioning prov
-  )
+  public String getAccountStatus(@NotNull Provisioning prov)
   {
     return mAccount.getAccountStatus(
       prov.toZimbra(com.zimbra.cs.account.Provisioning.class)
@@ -796,12 +769,12 @@ public class Account extends Entry
     {
       signature = mAccount.getSignatureByName(key);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
 
-    if( signature == null )
+    if ( signature == null )
     {
       return null;
     }
@@ -820,7 +793,7 @@ public class Account extends Entry
     {
       mAccount.setPrefOutOfOfficeReplyEnabled(zimbraPrefOutOfOfficeReplyEnabled);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -833,7 +806,7 @@ public class Account extends Entry
     {
       mAccount.modifySignature(signatureId, attrs);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -862,7 +835,7 @@ public class Account extends Entry
     {
       mAccount.setPrefOutOfOfficeFromDate(zimbraPrefOutOfOfficeFromDate);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -875,20 +848,19 @@ public class Account extends Entry
   }
 
   @Nullable
-  public DataSource getDataSourceByName(String name)
-    throws NoSuchAccountException
+  public DataSource getDataSourceByName(String name) throws NoSuchAccountException
   {
     com.zimbra.cs.account.DataSource dataSource;
     try
     {
       dataSource = mAccount.getDataSourceByName(name);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
 
-    if( dataSource == null )
+    if ( dataSource == null )
     {
       return null;
     }
@@ -914,8 +886,7 @@ public class Account extends Entry
 
   @NotNull
   public DataSource createDataSource(
-    @NotNull
-      DataSourceType sourceType,
+    @NotNull DataSourceType sourceType,
     String sourceName,
     Map<String, Object> attrs,
     boolean passwdAlreadyEncrypted
@@ -925,15 +896,14 @@ public class Account extends Entry
     try
     {
       return new DataSource(
-        mAccount.createDataSource(
-          sourceType.toZimbra(com.zimbra.soap.admin.type.DataSourceType.class),
-          sourceName,
-          attrs,
-          passwdAlreadyEncrypted
-        )
+      mAccount.createDataSource(
+        sourceType.toZimbra(com.zimbra.soap.admin.type.DataSourceType.class),
+        sourceName,
+        attrs,
+        passwdAlreadyEncrypted)
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -950,27 +920,23 @@ public class Account extends Entry
     {
       mAccount.setSignatureId(signatureId);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  public void setAllowFromAddress(
-    @NotNull
-      Collection<String> zimbraAllowFromAddress
-  )
+  public void setAllowFromAddress(@NotNull Collection<String> zimbraAllowFromAddress)
   {
     try
     {
       mAccount.setAllowFromAddress(zimbraAllowFromAddress.toArray(new String[zimbraAllowFromAddress.size()]));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
-
 
   public void unsetPrefOutOfOfficeDate()
     throws ServiceException
@@ -985,13 +951,13 @@ public class Account extends Entry
     {
       mAccount.setPrefOutOfOfficeExternalReplyEnabled(prefOutOfOfficeExternalReplyEnabled);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
-  public boolean isPrefOutOfOfficeExternalKnownReplyEnabled()
+  public boolean isPrefOutOfOfficeExternalReplyEnabled()
   {
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
   }
@@ -1008,7 +974,7 @@ public class Account extends Entry
     {
       mAccount.removeAlias(alias);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1022,7 +988,7 @@ public class Account extends Entry
     {
       return new Identity(mAccount.createIdentity(identityName, attrs));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1039,7 +1005,7 @@ public class Account extends Entry
     {
       mAccount.setAllowAnyFromAddress(zimbraAllowAnyFromAddress);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1071,10 +1037,7 @@ public class Account extends Entry
     return mAccount.getLongAttr(name, defaultValue);
   }
 
-  public <T> T toZimbra(
-    @NotNull
-      Class<T> cls
-  )
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mAccount);
   }
@@ -1085,7 +1048,7 @@ public class Account extends Entry
     {
       return AccountUtil.addressMatchesAccount(mAccount, address);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1097,7 +1060,7 @@ public class Account extends Entry
     {
       return AccountUtil.getEffectiveQuota(mAccount);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1109,7 +1072,7 @@ public class Account extends Entry
     {
       return AccountUtil.addressMatchesAccount(mAccount, address);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1125,9 +1088,7 @@ public class Account extends Entry
     try
     {
       mAccount.setIsDelegatedAdminAccount(zimbraIsDelegatedAdminAccount);
-    }
-    catch( ServiceException se )
-    {
+    } catch(ServiceException se) {
       throw ExceptionWrapper.wrap(se);
     }
   }
@@ -1143,7 +1104,7 @@ public class Account extends Entry
     {
       return com.zimbra.cs.account.Provisioning.onLocalServer(mAccount);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1151,7 +1112,7 @@ public class Account extends Entry
 
   public String getServerHostname()
   {
-    return mAccount.getAttr(ProvisioningImp.A_zimbraMailHost, "localhost");
+    return mAccount.getAttr(ProvisioningImp.A_zimbraMailHost,"localhost");
   }
 
   public boolean checkAuthTokenValidityValue(AuthToken authToken)
@@ -1160,7 +1121,7 @@ public class Account extends Entry
     {
       return mAccount.checkAuthTokenValidityValue(authToken.toZimbra(com.zimbra.cs.account.AuthToken.class));
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1180,8 +1141,7 @@ public class Account extends Entry
     return mAccount.isFeatureSMIMEEnabled();
   }
 
-  public List<String> getCertificates(SoapTransport soapTransport)
-    throws IOException
+  public List<String> getCertificates(SoapTransport soapTransport) throws IOException
   {
     SMIMEPublicCertsStoreSpec store = new SMIMEPublicCertsStoreSpec();
     store.addStoreType("CONTACT");
@@ -1192,24 +1152,24 @@ public class Account extends Entry
 
     GetSMIMEPublicCertsRequest request = new GetSMIMEPublicCertsRequest(store);
     request.addEmail(getName());
-    GetSMIMEPublicCertsResponse response = soapTransport.invokeWithoutSession(request);
+    GetSMIMEPublicCertsResponse response = soapTransport.invokeWithoutSession( request );
 
     List<String> certificates = new ArrayList<String>();
 
     SMIMEPublicCertsInfo certs = response.getCerts();
-    if( certs != null )
+    if (certs != null)
     {
-      for( SMIMEPublicCertInfo info : certs.getCerts() )
+      for (SMIMEPublicCertInfo info : certs.getCerts())
       {
         String cert = new String(Utils.decodeFSSafeBase64(info.getValue()));
 
         int beginIndex = cert.indexOf(BEGIN_CERT);
         int endIndex = cert.indexOf(END_CERT);
 
-        if( beginIndex != -1 && endIndex != -1 )
+        if(beginIndex != -1 && endIndex != -1)
         {
           cert = cert.substring(beginIndex + BEGIN_CERT.length(), endIndex);
-          cert = cert.replaceAll("((\\r\\n)|(\\n))", "");
+          cert = cert.replaceAll( "((\\r\\n)|(\\n))","");
           certificates.add(cert);
         }
       }
