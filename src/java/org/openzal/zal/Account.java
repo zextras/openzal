@@ -957,7 +957,7 @@ public class Account extends Entry
     }
   }
 
-  public boolean isPrefOutOfOfficeExternalReplyEnabled()
+  public boolean isPrefOutOfOfficeExternalKnownReplyEnabled()
   {
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
   }
