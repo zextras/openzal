@@ -21,7 +21,7 @@
         <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
                  MiddleZimbraVersion = "${MiddleZimbraVersion}"
                  MinorZimbraVersion = "${MinorZimbraVersion}"
-                 DistDirName = "${DistDirName}"
+                 DistDirName = "${ZimbraVersion}"
                  ZimbraJars = "../zm-zcs-lib/build/dist/"
                  ZimbraJarsExt = "../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
                  DevMode = "true" />

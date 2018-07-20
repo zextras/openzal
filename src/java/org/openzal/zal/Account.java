@@ -392,11 +392,14 @@ public class Account extends Entry
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
     Set<String> addresses = new HashSet<String>();
+    Map<String,Collection<Domain>> domainCache = new HashMap<>();
     for (String address : getAllAddresses())
     {
       addresses.add(address);
       //will be fixed in devel(compatibility check)
-      addresses.addAll(((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address));
+      addresses.addAll(
+        ((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address, domainCache)
+      );
     }
 
     return addresses;
@@ -664,15 +667,17 @@ public class Account extends Entry
   }
 
   public void setPrefOutOfOfficeExternalReply(String zimbraPrefOutOfOfficeExternalReply)
+    throws ServiceException
   {
-    try
-    {
-      mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
+    mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
+    mAccount.setPrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
+  }
+
+  public void setPrefOutOfOfficeExternalUnknownReply(String zimbraPrefOutOfOfficeExternalReply)
+    throws ServiceException
+  {
+    mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
+    mAccount.setPrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
   }
 
   @NotNull
@@ -936,6 +941,13 @@ public class Account extends Entry
     }
   }
 
+  public void unsetPrefOutOfOfficeDate()
+    throws ServiceException
+  {
+    mAccount.unsetPrefOutOfOfficeUntilDate();
+    mAccount.unsetPrefOutOfOfficeFromDate();
+  }
+
   public void setPrefOutOfOfficeExternalReplyEnabled(boolean prefOutOfOfficeExternalReplyEnabled)
   {
     try
@@ -948,9 +960,14 @@ public class Account extends Entry
     }
   }
 
-  public boolean isPrefOutOfOfficeExternalReplyEnabled()
+  public boolean isPrefOutOfOfficeExternalKnownReplyEnabled()
   {
     return mAccount.isPrefOutOfOfficeExternalReplyEnabled();
+  }
+
+  public boolean isPrefOutOfOfficeExternalUnknownReplyEnabled()
+  {
+    return mAccount.isPrefOutOfOfficeExternalReplyEnabled() && mAccount.getPrefExternalSendersType() == ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB;
   }
 
   public void removeAlias(String alias)

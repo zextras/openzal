@@ -2014,6 +2014,11 @@ public class ProvisioningImp implements Provisioning
 
   public Collection<String> getWithDomainAliasesExpansion(String address)
   {
+    return getWithDomainAliasesExpansion(address, new HashMap<String, Collection<Domain>>());
+  }
+
+  public Collection<String> getWithDomainAliasesExpansion(String address, Map<String,Collection<Domain>> domainCache)
+  {
     Set<String> addresses = new HashSet<String>();
     if (address.contains("@"))
     {
@@ -2023,15 +2028,25 @@ public class ProvisioningImp implements Provisioning
         String aliasName = parts[0];
         String domainName = parts[1];
 
-        Domain domain = getDomainByName(domainName);
-        if (domain != null)
+        Collection<Domain> domainAliases = domainCache.get(domainName);
+        if( domainAliases == null )
         {
-          Collection<Domain> domainAliases = getDomainAliases(domain);
-          for (Domain domainAlias : domainAliases)
+          Domain domain = getDomainByName(domainName);
+          if (domain != null)
           {
-            String alias = aliasName + "@" + domainAlias.getName();
-            addresses.add(alias);
+            domainAliases = getDomainAliases(domain);
+            domainCache.put(domainName, domainAliases);
           }
+          else
+          {
+            domainAliases = Collections.emptyList();
+          }
+        }
+
+        for (Domain domainAlias : domainAliases)
+        {
+          String alias = aliasName + '@' + domainAlias.getName();
+          addresses.add(alias);
         }
       }
     }
