@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.cs.store.file.VolumeStagedBlob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -197,6 +198,12 @@ public class FileBlobPrimaryStore implements PrimaryStore
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public boolean delete(StagedBlob blob) throws IOException
+  {
+    return sm.delete(com.zimbra.cs.store.StagedBlob.class.cast(InternalOverrideStagedBlob.wrap(blob)));
   }
 
   @Override
