@@ -667,14 +667,14 @@ public class Account extends Entry
     throws ServiceException
   {
     mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
-    mAccount.setPrefExternalSendersTypeAsString("ALL");
+    mAccount.setPrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
   }
 
   public void setPrefOutOfOfficeExternalUnknownReply(String zimbraPrefOutOfOfficeExternalReply)
     throws ServiceException
   {
     mAccount.setPrefOutOfOfficeExternalReply(zimbraPrefOutOfOfficeExternalReply);
-    mAccount.setPrefExternalSendersTypeAsString("ALLNOTINAB");
+    mAccount.setPrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
   }
 
   @NotNull
@@ -964,7 +964,7 @@ public class Account extends Entry
 
   public boolean isPrefOutOfOfficeExternalUnknownReplyEnabled()
   {
-    return mAccount.isPrefOutOfOfficeExternalReplyEnabled() && mAccount.getPrefExternalSendersTypeAsString().equals("ALLNOTINAB");
+    return mAccount.isPrefOutOfOfficeExternalReplyEnabled() && mAccount.getPrefExternalSendersType() == ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB;
   }
 
   public void removeAlias(String alias)
