@@ -21,10 +21,11 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.store.file.VolumeStagedBlob;
 
 import java.io.IOException;
 
-class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
+public class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
 {
   private final StagedBlob mBlob;
 
@@ -74,6 +75,10 @@ class InternalOverrideStagedBlob extends com.zimbra.cs.store.StagedBlob
 
   public static Object wrap(StagedBlob stagedBlob)
   {
+    if (stagedBlob instanceof StagedBlobWrap)
+    {
+      return ((StagedBlobWrap) stagedBlob).getWrappedObject();
+    }
     return new InternalOverrideStagedBlob(stagedBlob);
   }
 
