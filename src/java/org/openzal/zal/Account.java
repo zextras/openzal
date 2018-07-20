@@ -392,11 +392,14 @@ public class Account extends Entry
   public Collection<String> getAllAddressesIncludeDomainAliases(Provisioning provisioning)
   {
     Set<String> addresses = new HashSet<String>();
+    Map<String,Collection<Domain>> domainCache = new HashMap<>();
     for (String address : getAllAddresses())
     {
       addresses.add(address);
       //will be fixed in devel(compatibility check)
-      addresses.addAll(((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address));
+      addresses.addAll(
+        ((ProvisioningImp)provisioning).getWithDomainAliasesExpansion(address, domainCache)
+      );
     }
 
     return addresses;
