@@ -54,7 +54,6 @@ class InternalOverrideStoreManager
 {
   private final org.openzal.zal.StoreManager mStoreManager;
   private final VolumeManager mVolumeManager;
-  // TODO maybe PrimaryStoreAccessr?
 
   public InternalOverrideStoreManager(
     org.openzal.zal.StoreManager storeManager,
@@ -222,27 +221,7 @@ class InternalOverrideStoreManager
       return false;
     }
 
-    if (VolumeStagedBlob.class.isAssignableFrom(staged.getClass()))
-    {
-      VolumeStagedBlob vsb = (VolumeStagedBlob) staged;
-      try
-      {
-        if (!(Boolean) mVolumeStagedBlobWasStagedDirectlyMethod.invoke(vsb))
-        {
-          return false;
-        }
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-
-      return delete(vsb);
-    }
-    else
-    {
-      return false;
-    }
+    return mStoreManager.getStore(staged.getLocator()).delete(StagedBlobWrap.wrapZimbraObject(staged));
   }
 
   public boolean delete(MailboxBlob blob) throws IOException
