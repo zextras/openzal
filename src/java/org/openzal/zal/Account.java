@@ -1113,6 +1113,7 @@ public class Account extends Entry
     }
   }
 
+  @Deprecated
   public String getServerHostname()
   {
     return mAccount.getAttr(ProvisioningImp.A_zimbraMailHost,"localhost");
