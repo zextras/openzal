@@ -125,4 +125,9 @@ public class Folder extends Item
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public boolean isHidden()
+  {
+     return ((com.zimbra.cs.mailbox.Folder) mMailItem).isHidden();
+  }
 }
