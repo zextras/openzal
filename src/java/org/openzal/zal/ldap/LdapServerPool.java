@@ -1,6 +1,8 @@
 package org.openzal.zal.ldap;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.LdapException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +13,14 @@ public class LdapServerPool
   private final com.zimbra.cs.ldap.unboundid.LdapServerPool mLdapServerPool;
 
   public LdapServerPool(@NotNull ZimbraLdapConfig ldapServerConfig)
-    throws LDAPException
+    throws LdapException
   {
     try
     {
       mLdapServerPool = new com.zimbra.cs.ldap.unboundid.LdapServerPool(ldapServerConfig.toZimbra(com.zimbra.cs.ldap.LdapServerConfig.class));
     } catch (com.zimbra.cs.ldap.LdapException e)
     {
-      throw new LDAPException(e);
+      throw ExceptionWrapper.wrap(e);
     }
   }
 
