@@ -365,6 +365,10 @@ public interface Provisioning
 
   long getLastLogonTimestampFrequency();
 
+  Group assertGroupById(String groupId);
+
+  Group assertGroupByName(String groupName);
+
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;

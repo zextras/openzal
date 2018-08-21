@@ -211,6 +211,26 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
+  public Store getStoreByName(String name)
+  {
+    if (!mCacheableStoreBuilderMap.containsKey(name))
+    {
+      return mPrimaryStoreBuilder.build(
+        mFileBlobStore,
+        mVolumeManager.getVolumeByName(name)
+      );
+    }
+
+    if (!mStoresCached.containsKey(name))
+    {
+      Store cacheableStore = mCacheableStoreBuilderMap.get(name).make(name);
+      mStoresCached.put(name, cacheableStore);
+      return cacheableStore;
+    }
+    return mStoresCached.get(name);
+  }
+
+  @Override
   public Collection<Store> getAllStores()
   {
     List<Store> stores = new ArrayList<Store>();
