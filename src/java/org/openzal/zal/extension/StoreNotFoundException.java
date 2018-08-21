@@ -1,6 +1,6 @@
 /*
  * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2016 ZeXtras S.r.l.
+ * Copyright (C) 2017 ZeXtras S.r.l.
  *
  * This file is part of ZAL.
  *
@@ -18,22 +18,11 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.extension;
 
-
-import java.io.IOException;
-import java.util.Collection;
-
-public interface StoreManager
+public class StoreNotFoundException extends RuntimeException
 {
-  void register(CacheableStoreBuilder cacheableStoreBuilder, String volumeId);
-  void unregister(String volumeId);
-  void makeActive(String volumeId);
-  void startup() throws IOException;
-  void shutdown();
-  PrimaryStore getPrimaryStore();
-  Store getStore(String locator);
-  Store getStoreByName(String name);
-  Collection<Store> getAllStores();
-  void setPrimaryStoreBuilder(PrimaryStoreBuilder primaryStoreBuilder);
+  public StoreNotFoundException(String name) {
+    super("Cannot find store "+name);
+  }
 }
