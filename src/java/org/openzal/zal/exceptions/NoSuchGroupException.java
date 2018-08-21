@@ -18,21 +18,14 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal;
+package org.openzal.zal.exceptions;
 
-import java.io.IOException;
-import java.util.Collection;
+import com.zimbra.cs.account.AccountServiceException;
 
-public interface StoreManager
+public class NoSuchGroupException extends ZimbraException
 {
-  void register(CacheableStoreBuilder cacheableStoreBuilder, String volumeId);
-  void unregister(String volumeId);
-  void makeActive(String volumeId);
-  void startup() throws IOException;
-  void shutdown();
-  PrimaryStore getPrimaryStore();
-  Store getStore(String locator);
-  Store getStoreByName(String name);
-  Collection<Store> getAllStores();
-  void setPrimaryStoreBuilder(PrimaryStoreBuilder primaryStoreBuilder);
+  public NoSuchGroupException(String group)
+  {
+    super(AccountServiceException.NO_SUCH_GROUP(group));
+  }
 }
