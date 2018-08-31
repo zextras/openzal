@@ -215,9 +215,13 @@ public class StoreManagerImpl implements StoreManager
   {
     if (!mCacheableStoreBuilderMap.containsKey(name))
     {
+      StoreVolume volume = mVolumeManager.getVolumeByName(name);
+      if( volume == null ) {
+        throw new StoreNotFoundException(name);
+      }
       return mPrimaryStoreBuilder.build(
         mFileBlobStore,
-        mVolumeManager.getVolumeByName(name)
+        volume
       );
     }
 

@@ -25,30 +25,27 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.lib.ZalWrapper;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class Metadata
+  implements ZalWrapper<com.zimbra.cs.mailbox.Metadata>
 {
-  @NotNull private final com.zimbra.cs.mailbox.Metadata mMetadata;
+  @NotNull private final com.zimbra.cs.mailbox.Metadata mZObject;
 
-  protected Metadata(@NotNull Object metadata)
+  public Metadata()
   {
-    if (metadata == null)
-    {
-      throw new NullPointerException();
-    }
-    mMetadata = (com.zimbra.cs.mailbox.Metadata) metadata;
+    this(new com.zimbra.cs.mailbox.Metadata());
   }
 
   public Metadata(@Nullable String encoded)
   {
     try
     {
-      mMetadata = new com.zimbra.cs.mailbox.Metadata(encoded);
+      mZObject = new com.zimbra.cs.mailbox.Metadata(encoded);
     }
     catch (MailServiceException e)
     {
@@ -56,26 +53,39 @@ public class Metadata
     }
   }
 
-  public Metadata()
+  public Metadata(@Nullable Map<String, Object> map)
   {
-    mMetadata = new com.zimbra.cs.mailbox.Metadata();
+    this();
+    for(String key : map.keySet())
+    {
+      put(key, map.get(key));
+    }
+  }
+
+  protected Metadata(@NotNull Object metadata)
+  {
+    if (metadata == null)
+    {
+      throw new NullPointerException();
+    }
+    mZObject = (com.zimbra.cs.mailbox.Metadata) metadata;
   }
 
   public Metadata(TreeMap<String, String> map)
   {
-    mMetadata = new com.zimbra.cs.mailbox.Metadata(map);
+    mZObject = new com.zimbra.cs.mailbox.Metadata(map);
   }
 
   public boolean containsKey(String key)
   {
-    return mMetadata.containsKey(key);
+    return mZObject.containsKey(key);
   }
 
   public long getLong(String key, long defaultValue)
   {
     try
     {
-      return mMetadata.getLong(key, defaultValue);
+      return mZObject.getLong(key, defaultValue);
     }
     catch (ServiceException e)
     {
@@ -85,25 +95,25 @@ public class Metadata
 
   public Metadata put(String key, long value)
   {
-    mMetadata.put(key, value);
+    mZObject.put(key, value);
     return this;
   }
 
   public String toString()
   {
-    return mMetadata.toString();
+    return mZObject.toString();
   }
 
   public Map<String, Object> asMap()
   {
-    return (Map<String, Object>) mMetadata.asMap();
+    return (Map<String, Object>) mZObject.asMap();
   }
 
   public String get(String key)
   {
     try
     {
-      return mMetadata.get(key);
+      return mZObject.get(key);
     }
     catch (ServiceException e)
     {
@@ -113,12 +123,12 @@ public class Metadata
 
   public String get(String key, String defaultValue)
   {
-    return mMetadata.get(key, defaultValue);
+    return mZObject.get(key, defaultValue);
   }
 
   public Metadata remove(String key)
   {
-    mMetadata.remove(key);
+    mZObject.remove(key);
     return this;
   }
 
@@ -126,29 +136,24 @@ public class Metadata
   {
     if( value instanceof Metadata )
     {
-      mMetadata.put(key, ((Metadata)value).toZimbra(com.zimbra.cs.mailbox.Metadata.class));
+      mZObject.put(key, ((Metadata)value).toZimbra(com.zimbra.cs.mailbox.Metadata.class));
       return this;
     }
     if( value instanceof MetadataList )
     {
-      mMetadata.put(key, ((MetadataList)value).toZimbra(com.zimbra.cs.mailbox.MetadataList.class));
+      mZObject.put(key, ((MetadataList)value).toZimbra(com.zimbra.cs.mailbox.MetadataList.class));
       return this;
     }
 
-    mMetadata.put(key, value);
+    mZObject.put(key, value);
     return this;
-  }
-
-  protected <T> T toZimbra(Class<T> cls)
-  {
-    return cls.cast(mMetadata);
   }
 
   public int getInt(String key, int i)
   {
     try
     {
-      String value = mMetadata.get(key);
+      String value = mZObject.get(key);
       if( value == null )
       {
         return i;
@@ -168,7 +173,7 @@ public class Metadata
   {
     try
     {
-      String value = mMetadata.get(key);
+      String value = mZObject.get(key);
       if( value == null )
       {
         return i;
@@ -186,14 +191,14 @@ public class Metadata
 
   public void put(String key, List<Object> list )
   {
-    mMetadata.put(key, list);
+    mZObject.put(key, list);
   }
 
   public MetadataList getList(String key)
   {
     try
     {
-      Object obj = mMetadata.getList(key, true);
+      Object obj = mZObject.getList(key, true);
       if( obj == null ) return new MetadataList();
       return new MetadataList(obj);
     }
@@ -201,6 +206,18 @@ public class Metadata
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public com.zimbra.cs.mailbox.Metadata toZimbra()
+  {
+    return mZObject;
+  }
+
+  @Override
+  public <T> T toZimbra(@NotNull Class<T> cls)
+  {
+    return cls.cast(mZObject);
   }
 }
 
