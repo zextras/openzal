@@ -31,8 +31,10 @@ import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
 
+import org.openzal.zal.lib.ZalWrapper;
 import org.openzal.zal.log.ZimbraLog;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.lucene.document.LuceneDocument;
 
 
 public class Item implements Comparable<Item>
@@ -58,6 +60,7 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_COMMENT              = 17;
   public static final byte TYPE_LINK                 = 18;
 
+  // FIXME clone of Item.UnderlyingData.FIELD_INDEX_ID
   public static final String FN_INDEX_ID = "idx";
 
   public Item(@NotNull Object item)
@@ -122,6 +125,26 @@ public class Item implements Comparable<Item>
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @NotNull
+  public static Item constructItem(@NotNull Mailbox mbox, @NotNull UnderlyingData data, boolean skipCache)
+    throws ZimbraException
+  {
+    try
+    {
+      return new Item(
+        MailItem.constructItem(
+          mbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
+          data.toZimbra(MailItem.UnderlyingData.class),
+          skipCache
+        )
+      );
+    }
+    catch( com.zimbra.common.service.ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -353,7 +376,29 @@ public class Item implements Comparable<Item>
   }
 
   public static class UnderlyingData
+    implements ZalWrapper<MailItem.UnderlyingData>
   {
+    public static final String FN_ID           = "id";
+    public static final String FN_TYPE         = "tp";
+    public static final String FN_PARENT_ID    = "pid";
+    public static final String FN_FOLDER_ID    = "fid";
+    public static final String FN_PREV_FOLDER  = "pfid";
+    public static final String FN_INDEX_ID     = "idx";
+    public static final String FN_IMAP_ID      = "imap";
+    public static final String FN_LOCATOR      = "loc";
+    public static final String FN_BLOB_DIGEST  = "dgst";
+    public static final String FN_DATE         = "dt";
+    public static final String FN_SIZE         = "sz";
+    public static final String FN_UNREAD_COUNT = "uc";
+    public static final String FN_FLAGS        = "fg";
+    public static final String FN_TAGS         = "tg";
+    public static final String FN_SUBJECT      = "sbj";
+    public static final String FN_NAME         = "nm";
+    public static final String FN_METADATA     = "meta";
+    public static final String FN_MOD_METADATA = "modm";
+    public static final String FN_MOD_CONTENT  = "modc";
+    public static final String FN_DATE_CHANGED = "dc";
+
     private MailItem.UnderlyingData mUnderlyingData;
 
     public UnderlyingData()
@@ -366,6 +411,32 @@ public class Item implements Comparable<Item>
       mUnderlyingData = (MailItem.UnderlyingData)data;
     }
 
+    public UnderlyingData(Metadata metadata)
+    {
+      this();
+      try
+      {
+        deserialize(metadata);
+      }
+      catch( ServiceException e )
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+    }
+
+    public void deserialize(Metadata metadata)
+      throws ServiceException
+    {
+      mUnderlyingData.deserialize(metadata.toZimbra());
+    }
+
+    @Override
+    public com.zimbra.cs.mailbox.MailItem.UnderlyingData toZimbra()
+    {
+      return mUnderlyingData;
+    }
+
+    @Override
     public <T> T toZimbra(@NotNull Class<T> cls)
     {
       return cls.cast(mUnderlyingData);
@@ -748,5 +819,10 @@ public class Item implements Comparable<Item>
       throw new NoSuchItemException(mMailItem.getName());
     }
     return item;
+  }
+
+  public List<LuceneDocument> generateIndexData()
+  {
+    return new ArrayList<>();
   }
 }

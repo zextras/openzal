@@ -1113,6 +1113,7 @@ public class Account extends Entry
     }
   }
 
+  @Deprecated
   public String getServerHostname()
   {
     return mAccount.getAttr(ProvisioningImp.A_zimbraMailHost,"localhost");
@@ -1178,6 +1179,19 @@ public class Account extends Entry
       }
     }
     return certificates;
+  }
+
+  public Collection<String> getGroups()
+  {
+    try
+    {
+      com.zimbra.cs.account.Provisioning.GroupMembership memberships = mAccount.getAclGroups(false);
+      return memberships.groupIds();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
 }

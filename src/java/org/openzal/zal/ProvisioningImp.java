@@ -1166,7 +1166,7 @@ public class ProvisioningImp implements Provisioning
   public DistributionList createDistributionList(String dlistName)
     throws ZimbraException
   {
-    return createDistributionList(dlistName, Collections.<String, Object>emptyMap());
+    return createDistributionList(dlistName, new HashMap<String, Object>());
   }
 
   @Override
