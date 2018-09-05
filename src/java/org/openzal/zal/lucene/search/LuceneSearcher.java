@@ -21,7 +21,7 @@ public class LuceneSearcher
   public LuceneTopDocs search(LuceneQuery query, int limit)
     throws IOException
   {
-    return new LuceneTopDocs(mZObject.search(query.toZimbra(), limit));
+    return new LuceneTopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
   }
 
   public int countDocuments()
