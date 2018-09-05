@@ -9,12 +9,6 @@ public class LuceneTermQuery
 {
   public LuceneTermQuery(LuceneTerm term)
   {
-    super(new TermQuery(term.toZimbra()));
-  }
-
-  @Override
-  public org.apache.lucene.search.TermQuery toZimbra()
-  {
-    return (TermQuery) super.toZimbra();
+    super(new TermQuery(term.toZimbra(org.apache.lucene.index.Term.class)));
   }
 }

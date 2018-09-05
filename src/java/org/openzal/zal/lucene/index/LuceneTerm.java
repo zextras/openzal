@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.ZalWrapper;
 
 public class LuceneTerm
-  implements ZalWrapper<org.apache.lucene.index.Term>
 {
   private final org.apache.lucene.index.Term mZObject;
 
@@ -35,13 +34,6 @@ public class LuceneTerm
     return mZObject.toString();
   }
 
-  @Override
-  public org.apache.lucene.index.Term toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);

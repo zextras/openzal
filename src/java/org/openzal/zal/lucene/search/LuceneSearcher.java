@@ -1,12 +1,11 @@
 package org.openzal.zal.lucene.search;
 
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
 import java.io.IOException;
 
+/* $if ZimbraVersion >= 8.5.0 $ */
 public class LuceneSearcher
-  implements ZalWrapper<com.zimbra.cs.index.ZimbraIndexSearcher>
 {
   private final com.zimbra.cs.index.ZimbraIndexSearcher mZObject;
 
@@ -41,15 +40,42 @@ public class LuceneSearcher
     return mZObject.toString();
   }
 
-  @Override
-  public com.zimbra.cs.index.ZimbraIndexSearcher toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);
   }
 }
+/* $else $
+public class LuceneSearcher
+{
+  public LuceneSearcher(@NotNull Object zObject) {
+    throw new UnsupportedOperationException();
+  }
+
+  public LuceneIndexReader getIndexReader()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public LuceneTopDocs search(LuceneQuery query, int limit)
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public int countDocuments()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public int countDeletedDocuments()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> target)
+  {
+    throw new UnsupportedOperationException();
+  }
+}
+/* $endif $ */

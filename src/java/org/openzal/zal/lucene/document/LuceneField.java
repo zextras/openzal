@@ -1,17 +1,19 @@
 package org.openzal.zal.lucene.document;
 
-import org.apache.lucene.document.Field;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
 public class LuceneField
-  implements ZalWrapper<org.apache.lucene.document.Field>
 {
   private final org.apache.lucene.document.Field mZObject;
 
   public LuceneField(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
   {
-    this(new Field(name, value, stored.toZimbra(), indexed.toZimbra()));
+    this(new org.apache.lucene.document.Field(
+      name,
+      value,
+      org.apache.lucene.document.Field.Store.valueOf(stored.name()),
+      org.apache.lucene.document.Field.Index.valueOf(indexed.name())
+    ));
   }
 
   public LuceneField(@NotNull Object zObject)
@@ -45,56 +47,23 @@ public class LuceneField
     return mZObject.toString();
   }
 
-  @Override
-  public org.apache.lucene.document.Field toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);
   }
 
   public enum Store
-    implements ZalWrapper<org.apache.lucene.document.Field.Store>
   {
     YES,
-    NO;
-
-    @Override
-    public org.apache.lucene.document.Field.Store toZimbra()
-    {
-      return org.apache.lucene.document.Field.Store.valueOf(name());
-    }
-
-    @Override
-    public <T> T toZimbra(@NotNull Class<T> target)
-    {
-      return target.cast(this);
-    }
+    NO
   }
 
   public enum Index
-    implements ZalWrapper<org.apache.lucene.document.Field.Index>
   {
     NO,
     ANALYZED,
     NOT_ANALYZED,
     ANALYZED_NO_NORMS,
-    NOT_ANALYZED_NO_NORMS;
-
-    @Override
-    public org.apache.lucene.document.Field.Index toZimbra()
-    {
-      return org.apache.lucene.document.Field.Index.valueOf(name());
-    }
-
-    @Override
-    public <T> T toZimbra(@NotNull Class<T> target)
-    {
-      return target.cast(this);
-    }
+    NOT_ANALYZED_NO_NORMS
   }
 }
