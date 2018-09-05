@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LuceneIndexer
-  implements ZalWrapper<com.zimbra.cs.index.Indexer>,
-             Closeable
+  implements Closeable
 {
   private final com.zimbra.cs.index.Indexer mZObject;
 
@@ -67,7 +66,7 @@ public class LuceneIndexer
 
     for( LuceneDocument document : documentList )
     {
-      zimbraDocumentList.add(document.toZimbra());
+      zimbraDocumentList.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class));
     }
 
     mZObject.addDocument(
@@ -80,7 +79,7 @@ public class LuceneIndexer
   public void addDocument(LuceneDocument document)
     throws IOException
   {
-    getWriter().addDocument(document.toZimbra().toDocument());
+    getWriter().addDocument(document.toZimbra(com.zimbra.cs.index.IndexDocument.class).toDocument());
   }
 
   public void addDocument(List<LuceneDocument> documents)
@@ -95,7 +94,7 @@ public class LuceneIndexer
   public void deleteDocuments(LuceneTerm term)
     throws IOException
   {
-    getWriter().deleteDocuments(term.toZimbra());
+    getWriter().deleteDocuments(term.toZimbra(org.apache.lucene.index.Term.class));
   }
 
   public void deleteDocuments(LuceneTerm... terms)
@@ -105,7 +104,7 @@ public class LuceneIndexer
 
     for( int i = 0; i < zimbraArray.length; i++ )
     {
-      zimbraArray[i] = terms[i].toZimbra();
+      zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
     }
 
     getWriter().deleteDocuments(zimbraArray);
@@ -114,7 +113,7 @@ public class LuceneIndexer
   public void deleteDocuments(LuceneQuery query)
     throws IOException
   {
-    getWriter().deleteDocuments(query.toZimbra());
+    getWriter().deleteDocuments(query.toZimbra(org.apache.lucene.search.Query.class));
   }
 
   public void deleteDocuments(LuceneQuery... queries)
@@ -124,7 +123,7 @@ public class LuceneIndexer
 
     for( int i = 0; i < zimbraArray.length; i++ )
     {
-      zimbraArray[i] = queries[i].toZimbra();
+      zimbraArray[i] = queries[i].toZimbra(org.apache.lucene.search.Query.class);
     }
 
     getWriter().deleteDocuments(zimbraArray);
@@ -171,13 +170,6 @@ public class LuceneIndexer
     return mZObject.toString();
   }
 
-  @Override
-  public com.zimbra.cs.index.Indexer toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);

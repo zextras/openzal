@@ -1,17 +1,16 @@
 package org.openzal.zal.lucene.search;
 
-import com.zimbra.cs.index.ZimbraTopDocs;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.ZalWrapper;
 
+/* $if ZimbraVersion >= 8.5.0 $ */
 public class LuceneTopDocs
-  implements ZalWrapper<ZimbraTopDocs>
 {
-  private ZimbraTopDocs mZObject;
+  private com.zimbra.cs.index.ZimbraTopDocs mZObject;
 
   public LuceneTopDocs(@NotNull Object zObject)
   {
-    mZObject = (ZimbraTopDocs) zObject;
+    mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
   }
 
   @Override
@@ -20,15 +19,22 @@ public class LuceneTopDocs
     return mZObject.toString();
   }
 
-  @Override
-  public ZimbraTopDocs toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);
   }
 }
+/* $else $
+public class LuceneTopDocs
+{
+  public LuceneTopDocs(@NotNull Object zObject)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> target)
+  {
+    throw new UnsupportedOperationException();
+  }
+}
+/* $endif $ */

@@ -15,7 +15,7 @@ public class LuceneMultiPhraseQuery
   {
     super(new MultiPhraseQuery());
 
-    if(terms.length > 0)
+    if( terms.length > 0 )
     {
       add(terms);
     }
@@ -23,7 +23,7 @@ public class LuceneMultiPhraseQuery
 
   public void add(@NotNull LuceneTerm term)
   {
-    toZimbra().add(term.toZimbra());
+    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
   }
 
   public void add(@NotNull List<LuceneTerm> terms)
@@ -35,17 +35,11 @@ public class LuceneMultiPhraseQuery
   {
     Term[] zimbraArray = new Term[terms.length];
 
-    for(int i = 0; i < zimbraArray.length; i++)
+    for( int i = 0; i < zimbraArray.length; i++ )
     {
-      zimbraArray[i] = terms[i].toZimbra();
+      zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
     }
 
-    toZimbra().add(zimbraArray);
-  }
-
-  @Override
-  public org.apache.lucene.search.MultiPhraseQuery toZimbra()
-  {
-    return (MultiPhraseQuery) super.toZimbra();
+    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(zimbraArray);
   }
 }

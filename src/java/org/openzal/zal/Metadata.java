@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Metadata
-  implements ZalWrapper<com.zimbra.cs.mailbox.Metadata>
 {
   @NotNull private final com.zimbra.cs.mailbox.Metadata mZObject;
 
@@ -208,13 +207,6 @@ public class Metadata
     }
   }
 
-  @Override
-  public com.zimbra.cs.mailbox.Metadata toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mZObject);

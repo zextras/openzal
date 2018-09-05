@@ -1,11 +1,9 @@
 package org.openzal.zal.lucene.document;
 
-import org.apache.lucene.document.Field;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
+/* $if ZimbraVersion >= 8.5.0 $ */
 public class LuceneDocument
-  implements ZalWrapper<com.zimbra.cs.index.IndexDocument>
 {
   private final com.zimbra.cs.index.IndexDocument mZObject;
 
@@ -19,14 +17,19 @@ public class LuceneDocument
     this(new com.zimbra.cs.index.IndexDocument());
   }
 
-  public void add(@NotNull String field, @NotNull String value, @NotNull LuceneField.Store stored, @NotNull LuceneField.Index indexed)
+  public void add(
+    @NotNull String field,
+    @NotNull String value,
+    @NotNull LuceneField.Store stored,
+    @NotNull LuceneField.Index indexed
+  )
   {
     add(new LuceneField(field, value, stored, indexed));
   }
 
   public void add(LuceneField field)
   {
-    mZObject.toDocument().add(field.toZimbra());
+    mZObject.toDocument().add(field.toZimbra(org.apache.lucene.document.Field.class));
   }
 
   public void remove(String field)
@@ -45,15 +48,47 @@ public class LuceneDocument
     return mZObject.toDocument().toString();
   }
 
-  @Override
-  public com.zimbra.cs.index.IndexDocument toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);
   }
 }
+/* $else $
+public class LuceneDocument
+{
+  public LuceneDocument(@NotNull Object zObject)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public LuceneDocument()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public void add(@NotNull String field, @NotNull String value, @NotNull LuceneField.Store stored, @NotNull LuceneField.Index indexed)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public void add(LuceneField field)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public void remove(String field)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public void removeAll(String field)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> target)
+  {
+    throw new UnsupportedOperationException();
+  }
+}
+/* $endif $ */

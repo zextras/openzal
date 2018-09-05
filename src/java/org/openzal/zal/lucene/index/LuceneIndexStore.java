@@ -8,8 +8,8 @@ import org.openzal.zal.lucene.search.LuceneSearcher;
 
 import java.io.IOException;
 
+/* $if ZimbraVersion >= 8.5.0 $ */
 public class LuceneIndexStore
-  implements ZalWrapper<com.zimbra.cs.index.LuceneIndex>
 {
   private final com.zimbra.cs.index.LuceneIndex mZObject;
 
@@ -36,13 +36,6 @@ public class LuceneIndexStore
     return mZObject.toString();
   }
 
-  @Override
-  public com.zimbra.cs.index.LuceneIndex toZimbra()
-  {
-    return mZObject;
-  }
-
-  @Override
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     return target.cast(mZObject);
@@ -50,7 +43,6 @@ public class LuceneIndexStore
 
 
   public static class Factory
-    implements ZalWrapper<com.zimbra.cs.index.LuceneIndex.Factory>
   {
     private final com.zimbra.cs.index.LuceneIndex.Factory mZObject;
 
@@ -76,17 +68,62 @@ public class LuceneIndexStore
       return mZObject.toString();
     }
 
-    @Override
-    public com.zimbra.cs.index.LuceneIndex.Factory toZimbra()
-    {
-      return mZObject;
-    }
-
-    @Override
     public <T> T toZimbra(@NotNull Class<T> target)
     {
       return target.cast(mZObject);
     }
   }
-
 }
+
+/* $else $
+public class LuceneIndexStore
+{
+
+  public LuceneIndexStore(@NotNull Object zObject)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public LuceneIndexer openIndexer()
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public LuceneSearcher openSearcher()
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public <T> T toZimbra(@NotNull Class<T> target)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+
+  public static class Factory
+  {
+    public Factory()
+    {
+      throw new UnsupportedOperationException();
+    }
+
+    public Factory(@NotNull Object zObject)
+    {
+      throw new UnsupportedOperationException();
+    }
+
+    public LuceneIndexStore getIndexStore(Mailbox mailbox)
+      throws ServiceException
+    {
+      throw new UnsupportedOperationException();
+    }
+
+    public <T> T toZimbra(@NotNull Class<T> target)
+    {
+      throw new UnsupportedOperationException();
+    }
+  }
+}
+/* $endif $ */

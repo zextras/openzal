@@ -134,6 +134,7 @@ public class Item implements Comparable<Item>
   public static Item constructItem(@NotNull Mailbox mbox, @NotNull UnderlyingData data, boolean skipCache)
     throws ZimbraException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     try
     {
       return new Item(
@@ -148,6 +149,9 @@ public class Item implements Comparable<Item>
     {
       throw ExceptionWrapper.wrap(e);
     }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   @NotNull
@@ -376,7 +380,6 @@ public class Item implements Comparable<Item>
   }
 
   public static class UnderlyingData
-    implements ZalWrapper<MailItem.UnderlyingData>
   {
     public static final String FN_ID           = "id";
     public static final String FN_TYPE         = "tp";
@@ -427,16 +430,13 @@ public class Item implements Comparable<Item>
     public void deserialize(Metadata metadata)
       throws ServiceException
     {
-      mUnderlyingData.deserialize(metadata.toZimbra());
+      /* $if ZimbraVersion >= 8.5.0 $ */
+      mUnderlyingData.deserialize(metadata.toZimbra(com.zimbra.cs.mailbox.Metadata.class));
+      /* $else $
+      throw new UnsupportedOperationException();
+      /* $endif $ */
     }
 
-    @Override
-    public com.zimbra.cs.mailbox.MailItem.UnderlyingData toZimbra()
-    {
-      return mUnderlyingData;
-    }
-
-    @Override
     public <T> T toZimbra(@NotNull Class<T> cls)
     {
       return cls.cast(mUnderlyingData);
