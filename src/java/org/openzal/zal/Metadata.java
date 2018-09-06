@@ -25,7 +25,6 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
 import java.util.List;
 import java.util.Map;

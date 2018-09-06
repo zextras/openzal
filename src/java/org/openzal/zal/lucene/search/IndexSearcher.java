@@ -1,18 +1,20 @@
 package org.openzal.zal.lucene.search;
 
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.lucene.document.Document;
+import org.openzal.zal.lucene.document.DocumentId;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-public class Searcher
+public class IndexSearcher
   implements Closeable
 {
   private final com.zimbra.cs.index.ZimbraIndexSearcher mZObject;
   private final IndexReader mReader;
 
-  public Searcher(@NotNull Object zObject) {
+  public IndexSearcher(@NotNull Object zObject) {
     mZObject = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
     mReader = new IndexReader(mZObject.getIndexReader());
   }
@@ -38,6 +40,12 @@ public class Searcher
     return getIndexReader().countDeletedDocument();
   }
 
+  public Document getDocument(DocumentId id)
+    throws IOException
+  {
+    return new Document(mZObject.doc(id.toZimbra(com.zimbra.cs.index.ZimbraIndexDocumentID.class)));
+  }
+
   @Override
   public void close()
     throws IOException
@@ -57,10 +65,10 @@ public class Searcher
   }
 }
 /* $else $
-public class Searcher
+public class IndexSearcher
   implements Closeable
 {
-  public Searcher(@NotNull Object zObject) {
+  public IndexSearcher(@NotNull Object zObject) {
     throw new UnsupportedOperationException();
   }
 
