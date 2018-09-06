@@ -23,22 +23,48 @@ package org.openzal.zal;
 import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
+import java.util.Collections;
+
 public class ACLAccessManager
 {
   private final com.zimbra.cs.account.accesscontrol.ACLAccessManager mAclAccessManager;
 
-  public ACLAccessManager() throws ServiceException
+  public ACLAccessManager()
   {
-    mAclAccessManager = new com.zimbra.cs.account.accesscontrol.ACLAccessManager();
+    try
+    {
+      mAclAccessManager = new com.zimbra.cs.account.accesscontrol.ACLAccessManager();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
-  public boolean canAccessAccount(Account authAccount, Account target)
+  public boolean canLoginAsAccount(Account authAccount, Account target)
   {
     try
     {
       return mAclAccessManager.canAccessAccount(
         authAccount.toZimbra(com.zimbra.cs.account.Account.class),
         target.toZimbra(com.zimbra.cs.account.Account.class),
+        true
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean canModifyAccountStatus(Account authAccount, Account target)
+  {
+    try
+    {
+      return mAclAccessManager.canSetAttrs(
+        authAccount.toZimbra(com.zimbra.cs.account.Account.class),
+        target.toZimbra(com.zimbra.cs.account.Account.class),
+        Collections.singleton( "zimbraAccountStatus" ),
         true
       );
     }
