@@ -1,19 +1,17 @@
 package org.openzal.zal.lucene.search;
 
 import com.sun.istack.NotNull;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.MultiPhraseQuery;
-import org.openzal.zal.lucene.index.LuceneTerm;
+import org.openzal.zal.lucene.index.Term;
 
 import java.util.List;
 
-public class LuceneMultiPhraseQuery
-  extends LuceneQuery
+public class MultiPhraseQuery
+  extends Query
 {
 
-  public LuceneMultiPhraseQuery(LuceneTerm... terms)
+  public MultiPhraseQuery(Term... terms)
   {
-    super(new MultiPhraseQuery());
+    super(new org.apache.lucene.search.MultiPhraseQuery());
 
     if( terms.length > 0 )
     {
@@ -21,19 +19,19 @@ public class LuceneMultiPhraseQuery
     }
   }
 
-  public void add(@NotNull LuceneTerm term)
+  public void add(@NotNull Term term)
   {
     toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
   }
 
-  public void add(@NotNull List<LuceneTerm> terms)
+  public void add(@NotNull List<Term> terms)
   {
-    add(terms.toArray(new LuceneTerm[0]));
+    add(terms.toArray(new Term[0]));
   }
 
-  public void add(@NotNull LuceneTerm[] terms)
+  public void add(@NotNull Term[] terms)
   {
-    Term[] zimbraArray = new Term[terms.length];
+    org.apache.lucene.index.Term[] zimbraArray = new org.apache.lucene.index.Term[terms.length];
 
     for( int i = 0; i < zimbraArray.length; i++ )
     {

@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.ZalWrapper;
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-public class LuceneTopDocs
+public class TopDocs
 {
   private com.zimbra.cs.index.ZimbraTopDocs mZObject;
 
-  public LuceneTopDocs(@NotNull Object zObject)
+  public TopDocs(@NotNull Object zObject)
   {
     mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
   }
@@ -25,9 +25,9 @@ public class LuceneTopDocs
   }
 }
 /* $else $
-public class LuceneTopDocs
+public class TopDocs
 {
-  public LuceneTopDocs(@NotNull Object zObject)
+  public TopDocs(@NotNull Object zObject)
   {
     throw new UnsupportedOperationException();
   }

@@ -1,8 +1,7 @@
 package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
-import org.openzal.zal.lucene.index.LuceneIndexStore;
+import org.openzal.zal.lucene.index.IndexStore;
 
 public class MailboxIndex
 {
@@ -12,9 +11,9 @@ public class MailboxIndex
     mZObject = (com.zimbra.cs.mailbox.MailboxIndex) zObject;
   }
 
-  public LuceneIndexStore getIndexStore()
+  public IndexStore getIndexStore()
   {
-    return new LuceneIndexStore(mZObject.getIndexStore());
+    return new IndexStore(mZObject.getIndexStore());
   }
 
   public <T> T toZimbra(@NotNull Class<T> clazz)

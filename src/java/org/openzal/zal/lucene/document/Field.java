@@ -2,11 +2,11 @@ package org.openzal.zal.lucene.document;
 
 import org.jetbrains.annotations.NotNull;
 
-public class LuceneField
+public class Field
 {
   private final org.apache.lucene.document.Field mZObject;
 
-  public LuceneField(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
+  public Field(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
   {
     this(new org.apache.lucene.document.Field(
       name,
@@ -16,7 +16,7 @@ public class LuceneField
     ));
   }
 
-  public LuceneField(@NotNull Object zObject)
+  public Field(@NotNull Object zObject)
   {
     mZObject = (org.apache.lucene.document.Field) zObject;
   }

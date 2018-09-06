@@ -31,10 +31,9 @@ import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
 
-import org.openzal.zal.lib.ZalWrapper;
 import org.openzal.zal.log.ZimbraLog;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lucene.document.LuceneDocument;
+import org.openzal.zal.lucene.document.Document;
 
 
 public class Item implements Comparable<Item>
@@ -224,9 +223,9 @@ public class Item implements Comparable<Item>
   }
 
   @NotNull
-  public Document toDocument()
+  public org.openzal.zal.Document toDocument()
   {
-    return new Document(mMailItem);
+    return new org.openzal.zal.Document(mMailItem);
   }
 
   @NotNull
@@ -821,7 +820,7 @@ public class Item implements Comparable<Item>
     return item;
   }
 
-  public List<LuceneDocument> generateIndexData()
+  public List<Document> generateIndexData()
   {
     return new ArrayList<>();
   }

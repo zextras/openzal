@@ -3,16 +3,16 @@ package org.openzal.zal.lucene.document;
 import org.jetbrains.annotations.NotNull;
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-public class LuceneDocument
+public class Document
 {
   private final com.zimbra.cs.index.IndexDocument mZObject;
 
-  public LuceneDocument(@NotNull Object zObject)
+  public Document(@NotNull Object zObject)
   {
     mZObject = (com.zimbra.cs.index.IndexDocument) zObject;
   }
 
-  public LuceneDocument()
+  public Document()
   {
     this(new com.zimbra.cs.index.IndexDocument());
   }
@@ -20,14 +20,14 @@ public class LuceneDocument
   public void add(
     @NotNull String field,
     @NotNull String value,
-    @NotNull LuceneField.Store stored,
-    @NotNull LuceneField.Index indexed
+    @NotNull Field.Store stored,
+    @NotNull Field.Index indexed
   )
   {
-    add(new LuceneField(field, value, stored, indexed));
+    add(new Field(field, value, stored, indexed));
   }
 
-  public void add(LuceneField field)
+  public void add(Field field)
   {
     mZObject.toDocument().add(field.toZimbra(org.apache.lucene.document.Field.class));
   }
@@ -50,28 +50,33 @@ public class LuceneDocument
 
   public <T> T toZimbra(@NotNull Class<T> target)
   {
+    if(target.equals(org.apache.lucene.document.Document.class))
+    {
+      return target.cast(mZObject.toDocument());
+    }
+
     return target.cast(mZObject);
   }
 }
 /* $else $
-public class LuceneDocument
+public class Document
 {
-  public LuceneDocument(@NotNull Object zObject)
+  public Document(@NotNull Object zObject)
   {
     throw new UnsupportedOperationException();
   }
 
-  public LuceneDocument()
+  public Document()
   {
     throw new UnsupportedOperationException();
   }
 
-  public void add(@NotNull String field, @NotNull String value, @NotNull LuceneField.Store stored, @NotNull LuceneField.Index indexed)
+  public void add(@NotNull String field, @NotNull String value, @NotNull Field.Store stored, @NotNull Field.Index indexed)
   {
     throw new UnsupportedOperationException();
   }
 
-  public void add(LuceneField field)
+  public void add(Field field)
   {
     throw new UnsupportedOperationException();
   }
