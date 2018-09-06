@@ -3,11 +3,11 @@ package org.openzal.zal.lucene.search;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.ZalWrapper;
 
-public abstract class LuceneQuery
+public abstract class Query
 {
   private final org.apache.lucene.search.Query mZObject;
 
-  public LuceneQuery(Object zObject)
+  public Query(Object zObject)
   {
     mZObject = (org.apache.lucene.search.Query) zObject;
   }

@@ -3,31 +3,30 @@ package org.openzal.zal.lucene.index;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Mailbox;
-import org.openzal.zal.lib.ZalWrapper;
-import org.openzal.zal.lucene.search.LuceneSearcher;
+import org.openzal.zal.lucene.search.Searcher;
 
 import java.io.IOException;
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-public class LuceneIndexStore
+public class IndexStore
 {
   private final com.zimbra.cs.index.LuceneIndex mZObject;
 
-  public LuceneIndexStore(@NotNull Object zObject)
+  public IndexStore(@NotNull Object zObject)
   {
     mZObject = (com.zimbra.cs.index.LuceneIndex) zObject;
   }
 
-  public LuceneIndexer openIndexer()
+  public Indexer openIndexer()
     throws IOException
   {
-    return new LuceneIndexer(mZObject.openIndexer());
+    return new Indexer(mZObject.openIndexer());
   }
 
-  public LuceneSearcher openSearcher()
+  public Searcher openSearcher()
     throws IOException
   {
-    return new LuceneSearcher(mZObject.openSearcher());
+    return new Searcher(mZObject.openSearcher());
   }
 
   @Override
@@ -56,10 +55,10 @@ public class LuceneIndexStore
       mZObject = (com.zimbra.cs.index.LuceneIndex.Factory) zObject;
     }
 
-    public LuceneIndexStore getIndexStore(Mailbox mailbox)
+    public IndexStore getIndexStore(Mailbox mailbox)
       throws ServiceException
     {
-      return new LuceneIndexStore(mZObject.getIndexStore(mailbox.getMailbox()));
+      return new IndexStore(mZObject.getIndexStore(mailbox.getMailbox()));
     }
 
     @Override
@@ -76,21 +75,21 @@ public class LuceneIndexStore
 }
 
 /* $else $
-public class LuceneIndexStore
+public class IndexStore
 {
 
-  public LuceneIndexStore(@NotNull Object zObject)
+  public IndexStore(@NotNull Object zObject)
   {
     throw new UnsupportedOperationException();
   }
 
-  public LuceneIndexer openIndexer()
+  public Indexer openIndexer()
     throws IOException
   {
     throw new UnsupportedOperationException();
   }
 
-  public LuceneSearcher openSearcher()
+  public Searcher openSearcher()
     throws IOException
   {
     throw new UnsupportedOperationException();
@@ -114,7 +113,7 @@ public class LuceneIndexStore
       throw new UnsupportedOperationException();
     }
 
-    public LuceneIndexStore getIndexStore(Mailbox mailbox)
+    public IndexStore getIndexStore(Mailbox mailbox)
       throws ServiceException
     {
       throw new UnsupportedOperationException();

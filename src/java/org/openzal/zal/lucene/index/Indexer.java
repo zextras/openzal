@@ -1,16 +1,12 @@
 package org.openzal.zal.lucene.index;
 
 import com.zimbra.cs.index.LuceneIndex;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Query;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Folder;
 import org.openzal.zal.Item;
 import org.openzal.zal.exceptions.ExceptionWrapper;
-import org.openzal.zal.lib.ZalWrapper;
-import org.openzal.zal.lucene.document.LuceneDocument;
-import org.openzal.zal.lucene.search.LuceneQuery;
+import org.openzal.zal.lucene.document.Document;
+import org.openzal.zal.lucene.search.Query;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -19,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LuceneIndexer
+public class Indexer
   implements Closeable
 {
   private final com.zimbra.cs.index.Indexer mZObject;
@@ -27,7 +23,7 @@ public class LuceneIndexer
   private Object rIndexWriterRef;
   private Method rmIndexWriterRefGet;
 
-  public LuceneIndexer(@NotNull Object zObject)
+  public Indexer(@NotNull Object zObject)
   {
     if( zObject.getClass().getCanonicalName().equals("com.zimbra.cs.index.LuceneIndex.LuceneIndexerImpl") )
     {
@@ -59,12 +55,12 @@ public class LuceneIndexer
     }
   }
 
-  public void addDocument(Folder folder, Item item, List<LuceneDocument> documentList)
+  public void addDocument(Folder folder, Item item, List<Document> documentList)
     throws IOException
   {
     List<com.zimbra.cs.index.IndexDocument> zimbraDocumentList = new ArrayList<>();
 
-    for( LuceneDocument document : documentList )
+    for( Document document : documentList )
     {
       zimbraDocumentList.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class));
     }
@@ -74,65 +70,6 @@ public class LuceneIndexer
       item.toZimbra(com.zimbra.cs.mailbox.MailItem.class),
       zimbraDocumentList
     );
-  }
-
-  public void addDocument(LuceneDocument document)
-    throws IOException
-  {
-    getWriter().addDocument(document.toZimbra(com.zimbra.cs.index.IndexDocument.class).toDocument());
-  }
-
-  public void addDocument(List<LuceneDocument> documents)
-    throws IOException
-  {
-    for( LuceneDocument document : documents )
-    {
-      addDocument(document);
-    }
-  }
-
-  public void deleteDocuments(LuceneTerm term)
-    throws IOException
-  {
-    getWriter().deleteDocuments(term.toZimbra(org.apache.lucene.index.Term.class));
-  }
-
-  public void deleteDocuments(LuceneTerm... terms)
-    throws IOException
-  {
-    Term[] zimbraArray = new Term[terms.length];
-
-    for( int i = 0; i < zimbraArray.length; i++ )
-    {
-      zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
-    }
-
-    getWriter().deleteDocuments(zimbraArray);
-  }
-
-  public void deleteDocuments(LuceneQuery query)
-    throws IOException
-  {
-    getWriter().deleteDocuments(query.toZimbra(org.apache.lucene.search.Query.class));
-  }
-
-  public void deleteDocuments(LuceneQuery... queries)
-    throws IOException
-  {
-    Query[] zimbraArray = new Query[queries.length];
-
-    for( int i = 0; i < zimbraArray.length; i++ )
-    {
-      zimbraArray[i] = queries[i].toZimbra(org.apache.lucene.search.Query.class);
-    }
-
-    getWriter().deleteDocuments(zimbraArray);
-  }
-
-  public void deleteAll()
-    throws IOException
-  {
-    getWriter().deleteAll();
   }
 
   public void compact()
@@ -145,11 +82,11 @@ public class LuceneIndexer
     return mZObject.maxDocs();
   }
 
-  private IndexWriter getWriter()
+  public IndexWriter getIndexWriter()
   {
     try
     {
-      return (IndexWriter) rmIndexWriterRefGet.invoke(rIndexWriterRef);
+      return new IndexWriter(rmIndexWriterRefGet.invoke(rIndexWriterRef));
     }
     catch( Exception e )
     {

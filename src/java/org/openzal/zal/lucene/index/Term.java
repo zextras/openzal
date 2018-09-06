@@ -1,19 +1,17 @@
 package org.openzal.zal.lucene.index;
 
-import org.apache.lucene.index.Term;
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
-public class LuceneTerm
+public class Term
 {
   private final org.apache.lucene.index.Term mZObject;
 
-  public LuceneTerm(@NotNull String field, @NotNull String value)
+  public Term(@NotNull String field, @NotNull String value)
   {
-    this(new Term(field, value));
+    this(new org.apache.lucene.index.Term(field, value));
   }
 
-  public LuceneTerm(@NotNull Object zObject)
+  public Term(@NotNull Object zObject)
   {
     mZObject = (org.apache.lucene.index.Term) zObject;
   }

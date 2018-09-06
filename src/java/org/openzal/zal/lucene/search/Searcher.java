@@ -2,26 +2,30 @@ package org.openzal.zal.lucene.search;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.io.IOException;
 
 /* $if ZimbraVersion >= 8.5.0 $ */
-public class LuceneSearcher
+public class Searcher
+  implements Closeable
 {
   private final com.zimbra.cs.index.ZimbraIndexSearcher mZObject;
+  private final IndexReader mReader;
 
-  public LuceneSearcher(@NotNull Object zObject) {
+  public Searcher(@NotNull Object zObject) {
     mZObject = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
+    mReader = new IndexReader(mZObject.getIndexReader());
   }
 
-  public LuceneIndexReader getIndexReader()
+  public IndexReader getIndexReader()
   {
-    return new LuceneIndexReader(mZObject.getIndexReader());
+    return mReader;
   }
 
-  public LuceneTopDocs search(LuceneQuery query, int limit)
+  public TopDocs search(Query query, int limit)
     throws IOException
   {
-    return new LuceneTopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
+    return new TopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
   }
 
   public int countDocuments()
@@ -32,6 +36,13 @@ public class LuceneSearcher
   public int countDeletedDocuments()
   {
     return getIndexReader().countDeletedDocument();
+  }
+
+  @Override
+  public void close()
+    throws IOException
+  {
+    mZObject.close();
   }
 
   @Override
@@ -46,18 +57,19 @@ public class LuceneSearcher
   }
 }
 /* $else $
-public class LuceneSearcher
+public class Searcher
+  implements Closeable
 {
-  public LuceneSearcher(@NotNull Object zObject) {
+  public Searcher(@NotNull Object zObject) {
     throw new UnsupportedOperationException();
   }
 
-  public LuceneIndexReader getIndexReader()
+  public IndexReader getIndexReader()
   {
     throw new UnsupportedOperationException();
   }
 
-  public LuceneTopDocs search(LuceneQuery query, int limit)
+  public TopDocs search(Query query, int limit)
     throws IOException
   {
     throw new UnsupportedOperationException();
@@ -69,6 +81,12 @@ public class LuceneSearcher
   }
 
   public int countDeletedDocuments()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void close()
   {
     throw new UnsupportedOperationException();
   }
