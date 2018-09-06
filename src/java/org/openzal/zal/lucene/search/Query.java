@@ -1,7 +1,6 @@
 package org.openzal.zal.lucene.search;
 
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
 public abstract class Query
 {

@@ -3,7 +3,7 @@ package org.openzal.zal.lucene.index;
 import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Mailbox;
-import org.openzal.zal.lucene.search.Searcher;
+import org.openzal.zal.lucene.search.IndexSearcher;
 
 import java.io.IOException;
 
@@ -23,10 +23,10 @@ public class IndexStore
     return new Indexer(mZObject.openIndexer());
   }
 
-  public Searcher openSearcher()
+  public IndexSearcher openSearcher()
     throws IOException
   {
-    return new Searcher(mZObject.openSearcher());
+    return new IndexSearcher(mZObject.openSearcher());
   }
 
   @Override
@@ -89,7 +89,7 @@ public class IndexStore
     throw new UnsupportedOperationException();
   }
 
-  public Searcher openSearcher()
+  public IndexSearcher openSearcher()
     throws IOException
   {
     throw new UnsupportedOperationException();

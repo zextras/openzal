@@ -2,7 +2,6 @@ package org.openzal.zal.lucene.search;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.openzal.zal.lib.ZalWrapper;
 
 import java.io.Closeable;
 import java.io.IOException;
