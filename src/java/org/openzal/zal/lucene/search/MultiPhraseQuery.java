@@ -19,9 +19,15 @@ public class MultiPhraseQuery
     }
   }
 
+  @Override
+  protected org.apache.lucene.search.MultiPhraseQuery getZimbra()
+  {
+    return (org.apache.lucene.search.MultiPhraseQuery) super.getZimbra();
+  }
+
   public void add(@NotNull Term term)
   {
-    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
+    getZimbra().add(term.toZimbra(org.apache.lucene.index.Term.class));
   }
 
   public void add(@NotNull List<Term> terms)
@@ -38,6 +44,7 @@ public class MultiPhraseQuery
       zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
     }
 
-    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(zimbraArray);
+    getZimbra().add(zimbraArray);
   }
+
 }
