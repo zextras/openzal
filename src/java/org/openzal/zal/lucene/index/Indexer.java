@@ -72,6 +72,42 @@ public class Indexer
     );
   }
 
+  public void addDocument(Document document)
+    throws IOException
+  {
+    getIndexWriter().addDocument(document);
+  }
+
+  public void addDocument(List<Document> documentList)
+    throws IOException
+  {
+    getIndexWriter().addDocument(documentList);
+  }
+
+  public void deleteDocuments(Term... terms)
+    throws IOException
+  {
+    getIndexWriter().deleteDocuments(terms);
+  }
+
+  public void deleteDocuments(Query...queries)
+    throws IOException
+  {
+    getIndexWriter().deleteDocuments(queries);
+  }
+
+  public void deleteAll()
+    throws IOException
+  {
+    getIndexWriter().deleteAll();
+  }
+
+  public void deleteUnusuedFiles()
+    throws IOException
+  {
+    getIndexWriter().deleteUnusuedFiles();
+  }
+
   public void compact()
   {
     mZObject.compact();
@@ -82,7 +118,7 @@ public class Indexer
     return mZObject.maxDocs();
   }
 
-  public IndexWriter getIndexWriter()
+  private IndexWriter getIndexWriter()
   {
     try
     {

@@ -19,7 +19,7 @@ public class IndexSearcher
     mReader = new IndexReader(mZObject.getIndexReader());
   }
 
-  public IndexReader getIndexReader()
+  private IndexReader getIndexReader()
   {
     return mReader;
   }
