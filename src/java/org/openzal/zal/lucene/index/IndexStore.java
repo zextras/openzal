@@ -100,6 +100,10 @@ public class IndexStore
     throw new UnsupportedOperationException();
   }
 
+  public String toString()
+  {
+    throw new UnsupportedOperationException();
+  }
 
   public static class Factory
   {
@@ -115,6 +119,11 @@ public class IndexStore
 
     public IndexStore getIndexStore(Mailbox mailbox)
       throws ServiceException
+    {
+      throw new UnsupportedOperationException();
+    }
+
+    public String toString()
     {
       throw new UnsupportedOperationException();
     }

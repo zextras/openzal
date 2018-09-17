@@ -72,11 +72,6 @@ public class IndexSearcher
     throw new UnsupportedOperationException();
   }
 
-  public IndexReader getIndexReader()
-  {
-    throw new UnsupportedOperationException();
-  }
-
   public TopDocs search(Query query, int limit)
     throws IOException
   {
@@ -95,6 +90,18 @@ public class IndexSearcher
 
   @Override
   public void close()
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public Document getDocument(DocumentId id)
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public String toString()
   {
     throw new UnsupportedOperationException();
   }
