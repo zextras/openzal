@@ -154,6 +154,11 @@ public class Document
     throw new UnsupportedOperationException();
   }
 
+  public String toString()
+  {
+    throw new UnsupportedOperationException();
+  }
+
   public <T> T toZimbra(@NotNull Class<T> target)
   {
     throw new UnsupportedOperationException();

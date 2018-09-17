@@ -65,6 +65,7 @@ public class IndexReader
 
   @Override
   public void close()
+    throws IOException
   {
     throw new UnsupportedOperationException();
   }
