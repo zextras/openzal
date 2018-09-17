@@ -26,7 +26,6 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.fb.FreeBusyQuery;
-import com.zimbra.cs.index.IndexStore;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
@@ -47,7 +46,6 @@ import org.openzal.zal.calendar.RecurrenceId;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
-import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 
 import javax.mail.internet.MimeMessage;
@@ -72,6 +70,7 @@ import com.zimbra.cs.db.DbMailItem.SearchOpts;
 public class Mailbox
 {
   @NotNull final private com.zimbra.cs.mailbox.Mailbox mMbox;
+  @NotNull private final MailboxIndex mIndex;
 
   public static final int ID_AUTO_INCREMENT       = com.zimbra.cs.mailbox.Mailbox.ID_AUTO_INCREMENT;
   public static final int ID_FOLDER_USER_ROOT     = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_USER_ROOT;
@@ -188,6 +187,7 @@ public class Mailbox
       throw new IllegalArgumentException("mMbox is null");
     }
     this.mMbox = (com.zimbra.cs.mailbox.Mailbox) mbox;
+    mIndex = new MailboxIndex(this.mMbox.index);
   }
 
   @NotNull
@@ -2650,6 +2650,11 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public MailboxIndex getIndex()
+  {
+    return mIndex;
   }
 
   public void startReIndex()
