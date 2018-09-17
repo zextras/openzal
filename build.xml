@@ -26,7 +26,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 2.4.0 </echo>
+    <echo> Building ZAL version 2.5.0 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -85,7 +85,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="2.4.0" />
+           <attribute name="Specification-Version" value="2.5.0" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="${ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -964,7 +964,7 @@
         <build-zal MajorZimbraVersion = "${MajorZimbraVersion}"
                  MiddleZimbraVersion = "${MiddleZimbraVersion}"
                  MinorZimbraVersion = "${MinorZimbraVersion}"
-                 DistDirName = "${DistDirName}"
+                 DistDirName = "${ZimbraVersion}"
                  ZimbraJars = "../zm-zcs-lib/build/dist/"
                  ZimbraJarsExt = "../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
                  DevMode = "true" />
@@ -1110,13 +1110,13 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="2.4.0"/>
+          value="2.5.0"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="2"/>
         <replacefilter
           token="@VERSION_MINOR@"
-          value="4"/>
+          value="5"/>
         <replacefilter
           token="@VERSION_MICRO@"
           value="0"/>
@@ -1138,14 +1138,14 @@
     <delete dir="${deb-dir-tmp}"/>
 
     <mkdir dir="${deb-dir-tmp}"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.4"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.4/usr/share/openzal/2.4"/>
-    <mkdir dir="${deb-dir-tmp}/openzal-2.4/DEBIAN"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.5"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.5/usr/share/openzal/2.5"/>
+    <mkdir dir="${deb-dir-tmp}/openzal-2.5/DEBIAN"/>
 
     <prepare-build-template srcFile="tools/deb_control_template"
-                            destFile="${deb-dir-tmp}/openzal-2.4/DEBIAN/control" />
+                            destFile="${deb-dir-tmp}/openzal-2.5/DEBIAN/control" />
 
-    <copy todir="${deb-dir-tmp}/openzal-2.4/usr/share/openzal/2.4">
+    <copy todir="${deb-dir-tmp}/openzal-2.5/usr/share/openzal/2.5">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1155,9 +1155,9 @@
           dir="${deb-dir-tmp}"
           failonerror="true">
       <arg value="--build"/>
-      <arg value="openzal-2.4"/>
+      <arg value="openzal-2.5"/>
     </exec>
-    <move file="${deb-dir-tmp}/openzal-2.4.deb" todir="." />
+    <move file="${deb-dir-tmp}/openzal-2.5.deb" todir="." />
 
     <delete dir="${deb-dir-tmp}"/>
   </target>
@@ -1170,15 +1170,15 @@
     <delete dir="${rpm-dir-tmp}"/>
 
     <mkdir dir="${rpm-dir-tmp}"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.4"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/buildroot/usr/share/openzal/2.4"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/SPEC"/>
-    <mkdir dir="${rpm-dir-tmp}/openzal-2.4/RPMS"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.5"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.5/buildroot/usr/share/openzal/2.5"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.5/SPEC"/>
+    <mkdir dir="${rpm-dir-tmp}/openzal-2.5/RPMS"/>
 
     <prepare-build-template srcFile="tools/rpm_spec_template"
-                            destFile="${rpm-dir-tmp}/openzal-2.4/SPEC/openzal-2.4.spec" />
+                            destFile="${rpm-dir-tmp}/openzal-2.5/SPEC/openzal-2.5.spec" />
 
-    <copy todir="${rpm-dir-tmp}/openzal-2.4/buildroot/usr/share/openzal/2.4">
+    <copy todir="${rpm-dir-tmp}/openzal-2.5/buildroot/usr/share/openzal/2.5">
       <fileset dir="dist">
         <include name="**/zal.jar"/>
       </fileset>
@@ -1188,10 +1188,10 @@
           dir="${rpm-dir-tmp}"
           failonerror="true">
       <arg value="-bb"/>
-      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.4/buildroot"/>
-      <arg value="openzal-2.4/SPEC/openzal-2.4.spec"/>
+      <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.5/buildroot"/>
+      <arg value="openzal-2.5/SPEC/openzal-2.5.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-2.4/RPMS/noarch/openzal-2.4-0-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-2.5/RPMS/noarch/openzal-2.5-0-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
