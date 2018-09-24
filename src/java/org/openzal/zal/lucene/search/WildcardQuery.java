@@ -10,6 +10,7 @@ public class WildcardQuery
     /* $if ZimbraVersion >= 8.5.0 $ */
     super(new org.apache.lucene.search.WildcardQuery(term.toZimbra(org.apache.lucene.index.Term.class)));
     /* $else $
+    super(null);
     throw new UnsupportedOperationException();
     /* $endif $ */
   }

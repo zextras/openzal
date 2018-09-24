@@ -19,6 +19,7 @@ public class MultiPhraseQuery
       add(terms);
     }
     /* $else $
+    super(null);
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
