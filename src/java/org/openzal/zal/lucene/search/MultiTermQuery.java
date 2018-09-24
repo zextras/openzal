@@ -10,6 +10,7 @@ public class MultiTermQuery
     /* $if ZimbraVersion >= 8.5.0 $ */
     super(zObject);
     /* $else $
+    super(null);
     throw new UnsupportedOperationException();
     /* $endif $ */
   }

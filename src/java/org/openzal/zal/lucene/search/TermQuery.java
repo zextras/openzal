@@ -11,6 +11,7 @@ public class TermQuery
     /* $if ZimbraVersion >= 8.5.0 $ */
     super(new org.apache.lucene.search.TermQuery(term.toZimbra(org.apache.lucene.index.Term.class)));
     /* $else $
+    super(null);
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
