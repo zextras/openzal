@@ -6,79 +6,67 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Closeable;
 import java.io.IOException;
 
-/* $if ZimbraVersion >= 8.5.0 $ */
 public class IndexReader
   implements Closeable
 {
+  /* $if ZimbraVersion >= 8.5.0 $ */
   private final com.zimbra.cs.index.ZimbraIndexReader mZObject;
+  /* $endif $ */
 
-  public IndexReader(@NotNull Object zObject) {
-    mZObject = (com.zimbra.cs.index.ZimbraIndexReader) zObject;
-  }
-
-  public int countDocuments()
-  {
-    return mZObject.numDocs();
-  }
-
-  public int countDeletedDocument()
-  {
-    return mZObject.numDeletedDocs();
-  }
-
-  @Override
-  public void close()
-    throws IOException
-  {
-    mZObject.close();
-  }
-
-  @Override
-  public String toString()
-  {
-    return mZObject.toString();
-  }
-
-  public <T> T toZimbra(@NotNull Class<T> target)
-  {
-    return target.cast(mZObject);
-  }
-}
-/* $else $
-public class IndexReader
-  implements Closeable
-{
   public IndexReader(@NotNull Object zObject)
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    mZObject = (com.zimbra.cs.index.ZimbraIndexReader) zObject;
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public int countDocuments()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mZObject.numDocs();
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public int countDeletedDocument()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mZObject.numDeletedDocs();
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   @Override
   public void close()
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    mZObject.close();
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   @Override
   public String toString()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mZObject.toString();
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> target)
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return target.cast(mZObject);
+    /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 }
-/* $endif $ */
