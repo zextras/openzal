@@ -18,13 +18,19 @@ import java.util.List;
 public class Indexer
   implements Closeable
 {
+  /* $if ZimbraVersion >= 8.5.0 $ */
   private final com.zimbra.cs.index.Indexer mZObject;
-
+  /* $endif $ */
+  /* $if ZimbraVersion >= 8.5.0 $ */
   private Object rIndexWriterRef;
+  /* $endif $ */
+  /* $if ZimbraVersion >= 8.5.0 $ */
   private Method rmIndexWriterRefGet;
+  /* $endif $ */
 
   public Indexer(@NotNull Object zObject)
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     if( zObject.getClass().getCanonicalName().equals("com.zimbra.cs.index.LuceneIndex.LuceneIndexerImpl") )
     {
       mZObject = (com.zimbra.cs.index.Indexer) zObject;
@@ -53,11 +59,15 @@ public class Indexer
         zObject.getClass().getCanonicalName()
       ));
     }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void addDocument(Folder folder, Item item, List<Document> documentList)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     List<com.zimbra.cs.index.IndexDocument> zimbraDocumentList = new ArrayList<>();
 
     for( Document document : documentList )
@@ -70,56 +80,92 @@ public class Indexer
       item.toZimbra(com.zimbra.cs.mailbox.MailItem.class),
       zimbraDocumentList
     );
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void addDocument(Document document)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().addDocument(document);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void addDocument(List<Document> documentList)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().addDocument(documentList);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void deleteDocuments(Term... terms)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().deleteDocuments(terms);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void deleteDocuments(Query...queries)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().deleteDocuments(queries);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void deleteAll()
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().deleteAll();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void deleteUnusuedFiles()
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     getIndexWriter().deleteUnusuedFiles();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void compact()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject.compact();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public int maxDocs()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     return mZObject.maxDocs();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   private IndexWriter getIndexWriter()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     try
     {
       return new IndexWriter(rmIndexWriterRefGet.invoke(rIndexWriterRef));
@@ -128,23 +174,38 @@ public class Indexer
     {
       throw ExceptionWrapper.wrap(e);
     }
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   @Override
   public void close()
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject.close();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   @Override
   public String toString()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     return mZObject.toString();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> target)
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 }

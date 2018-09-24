@@ -7,6 +7,10 @@ public class MultiTermQuery
 {
   public MultiTermQuery(@NotNull Object zObject)
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     super(zObject);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 }
