@@ -584,7 +584,7 @@ public class Mailbox
       return mMbox.getTombstones(sequence).getAllIds();
   /* $else$
       return mMbox.listTombstones( sequence );
-     $endif$ */
+  /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException serviceException)
     {
@@ -1166,12 +1166,12 @@ public class Mailbox
 /* $if ZimbraVersion == 8.0.0 |! ZimbraVersion == 8.0.1 $
     itemIds = mMbox.getItemListByDates(octxt.getOperationContext(), Item.convertType(type),
                                       start, end, folderId, descending);
-  $elseif ZimbraVersion < 8.5.0 $
+/*  $elseif ZimbraVersion < 8.5.0 $
 
       DbMailItem.SearchOpts options = new DbMailItem.SearchOpts(start, end, descending);
       itemIds = mMbox.getItemIdList(octxt.getOperationContext(), Item.convertType(type),
                                    folderId, options);
-   $else $ */
+/* $else $ */
       DbMailItem.QueryParams options = new DbMailItem.QueryParams();
       options.setFolderIds(Collections.singletonList(folderId));
       options.setIncludedTypes(Collections.singletonList(Item.convertType(type)));
