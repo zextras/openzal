@@ -13,13 +13,20 @@ public class FileDownloader {
     mDestinationPath = destinationPath;
   }
 
-  void download() throws IOException
+  public void download() throws IOException
   {
+    File destinationFile = new File(mDestinationPath);
+
     System.out.print("Downloading "+mDestinationPath+"...");
-    if( new File(mDestinationPath).exists() ) {
+    if( destinationFile.exists() ) {
       System.out.println("already exists, skipping.");
       return;
     }
+
+    if( !destinationFile.getParentFile().exists() ) {
+      destinationFile.getParentFile().mkdirs();
+    }
+
     byte[] buffer = new byte[ 64*1024 ];
     InputStream inputStream = mUrl.openStream();
     FileOutputStream output = new FileOutputStream(mDestinationPath);

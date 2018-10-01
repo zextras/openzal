@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +9,10 @@ public class ZalBuilder
   public static void main(String args[])
     throws Exception
   {
+    SystemReader systemReader = new SystemReader();
+
+    System.out.println("ZAL - Version "+systemReader.readVersion());
+
     if( new File("zimbra/").list() == null )
     {
       FileDownloader downloader = new FileDownloader(
@@ -28,6 +32,20 @@ public class ZalBuilder
       "commons-dbutils/commons-dbutils", "1.6"
     );
     downloader.download();
+
+    TemplateWriter writer = new TemplateWriter(
+      "src/java/org/openzal/zal/ZalBuildInfo.java",
+      "package org.openzal.zal;\n" +
+        "\n" +
+        "public class ZalBuildInfo\n" +
+        "{\n" +
+        "    public static String COMMIT=\"${COMMIT}\";\n" +
+        "    public static String VERSION=\"${VERSION}\";\n" +
+        "}"
+    );
+    writer.add("COMMIT", systemReader.readCommit());
+    writer.add("VERSION", systemReader.readVersion());
+    writer.write();
 
     String[] rawVersions;
     if( args.length == 0 )

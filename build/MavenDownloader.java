@@ -32,7 +32,7 @@ public class MavenDownloader {
 
       mFileDownloaders.add(
         new FileDownloader(
-          "http://central.maven.org/maven2/"+artifactName+"/"+artifactVersion+"/"+filename,
+          "https://repo.maven.apache.org/maven2/"+artifactName+"/"+artifactVersion+"/"+filename,
           destinationPath+filename
         )
       );
