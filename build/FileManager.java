@@ -143,14 +143,27 @@ class FileManager extends ForwardingJavaFileManager<JavaFileManager>
   }
 
   @Override
-  public FileObject getFileForInput(Location location, String s, String s1) throws IOException {
+  public FileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException {
     System.out.println("getFileForInput");
-    return super.getFileForInput(location, s, s1);
+    return super.getFileForInput(location, packageName, relativeName);
   }
 
   @Override
-  public FileObject getFileForOutput(Location location, String s, String s1, FileObject fileObject) throws IOException {
+  public FileObject getFileForOutput(Location location, String packageName, String relativeName, FileObject fileObject) throws IOException {
     System.out.println("getFileForOutput");
-    return super.getFileForOutput(location, s, s1, fileObject);
+    return super.getFileForOutput(location, packageName, relativeName, fileObject);
+  }
+
+  public void writeFile(String path, InputStream inputStream) throws IOException {
+    ZipEntry zipEntry = new ZipEntry(path);
+    mZip.putNextEntry(zipEntry);
+
+    byte[] buffer = new byte[ 64*1024 ];
+    while( true )
+    {
+      int read = inputStream.read(buffer);
+      if( read < 0 ) break;
+      mZip.write(buffer,0,read);
+    }
   }
 }
