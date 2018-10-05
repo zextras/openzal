@@ -169,6 +169,8 @@ public class ZalBuilder
       }
 
       case "zal-common": {
+        checkOrDownloadZimbraJars();
+        checkOrDownloadMavenDependencies(systemReader);
         for (final String rawVersion : sCommonZimbraVersions) {
           queueTask(new Runnable(){
             @Override
@@ -186,6 +188,8 @@ public class ZalBuilder
       }
 
       case "zal-all": {
+        checkOrDownloadZimbraJars();
+        checkOrDownloadMavenDependencies(systemReader);
         for (final Version version : extractZimbraVersions()) {
           queueTask(new Runnable(){
             @Override
@@ -270,7 +274,7 @@ public class ZalBuilder
   }
 
   private static void buildFromSource(Version version, SystemReader systemReader) throws Exception {
-    checkDependencies(systemReader);
+    checkOrDownloadMavenDependencies(systemReader);
 
     Build build = new Build(
       Arrays.asList("lib/", "../zm-zcs-lib/", "../zm-mailbox/" ),
@@ -282,7 +286,7 @@ public class ZalBuilder
   }
 
   private static void buildFromLiveZimbra(Version version, SystemReader systemReader) throws Exception {
-    checkDependencies(systemReader);
+    checkOrDownloadMavenDependencies(systemReader);
 
     Build build = new Build(
       Arrays.asList("lib/", "/opt/zimbra/lib/jars/", "/opt/zimbra/common/jetty_home/lib/" ),
@@ -294,9 +298,8 @@ public class ZalBuilder
   }
 
   private static void buildFromZimbraVersion(Version version, SystemReader systemReader, boolean devMode) throws Exception {
-    checkDependencies(systemReader);
-    checkZimbraDirectory();
-
+    checkOrDownloadMavenDependencies(systemReader);
+    checkOrDownloadZimbraJars();
 
     File zimbraDir = new File("zimbra/"+version);
     if( !zimbraDir.exists() ) {
@@ -312,15 +315,13 @@ public class ZalBuilder
     build.compileAll("Compiling "+(devMode ? "dev ":"")+version+ "...");
   }
 
-  private static void checkZimbraDirectory() throws Exception {
+  private static void checkOrDownloadZimbraJars() throws Exception {
     if( new File("zimbra/").list() == null )
     {
       FileDownloader downloader = new FileDownloader(
-        "https://s3-eu-west-1.amazonaws.com/zimbra-jars/zimbra-all.tar.xz",
-        "tmp/zimbra-all.tar.xz"
+        "https://s3-eu-west-1.amazonaws.com/zimbra-jars/zimbra-all.tar.xz"
       );
-      downloader.download();
-      downloader.unpack("zimbra/");
+      downloader.downloadAndUnpack("zimbra/");
     }
   }
 
@@ -341,7 +342,7 @@ public class ZalBuilder
     System.out.print("\n");
   }
 
-  private static void checkDependencies(SystemReader systemReader) throws Exception {
+  private static void checkOrDownloadMavenDependencies(SystemReader systemReader) throws Exception {
     if( !sCheckedDependencies.compareAndSet(false,true) ) {
       return;
     }
