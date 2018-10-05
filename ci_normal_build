@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./build zal-all zal-dev-last compatibility-check
+./build_package.sh
