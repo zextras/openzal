@@ -124,7 +124,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
         " commit " +
         ZalBuildInfo.COMMIT
     );
-/* $if !DevMode $*/
+/* $if DevMode != 1 $*/
     if (!ZimbraVersion.current.equals(ZalVersion.target))
     {
       throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());

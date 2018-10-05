@@ -7,14 +7,15 @@ import javax.tools.*;
 @SuppressWarnings("ALL")
 public class Build
 {
-
   private final JavaCompiler mJavaCompiler;
   private final FileManager mFileManager;
   private final SourcePreprocessor mSourcePreprocessor;
   private final List<String> mLibDirectories;
+  private final Map<String, String> mManifest;
 
-  public Build( List<String> libDirectories, String destinationJar, SourcePreprocessor sourcePreprocessor ) {
+  public Build(List<String> libDirectories, String destinationJar, SourcePreprocessor sourcePreprocessor, Map<String, String> manifest) {
     mLibDirectories = libDirectories;
+    mManifest = manifest;
     mJavaCompiler = ToolProvider.getSystemJavaCompiler();
     mFileManager = new FileManager(
       mJavaCompiler.getStandardFileManager(null, Locale.US, StandardCharsets.UTF_8),
@@ -23,7 +24,7 @@ public class Build
     mSourcePreprocessor = sourcePreprocessor;
   }
 
-  void compileAll() throws Exception
+  void compileAll(String text) throws Exception
   {
     List<String> options = new LinkedList<>();
     options.add("-g");
@@ -36,34 +37,55 @@ public class Build
     options.add("-classpath");
     options.add(listJars());
 
-   /* for( String option : options )
-    {
-      System.out.println("option: "+option);
-    }
-*/
     List<? extends JavaFileObject> compilationUnitsList = listSources();
+    DiagnosticCollector<JavaFileObject> diagnosticCollector = new DiagnosticCollector<>();
 
     JavaCompiler.CompilationTask task = mJavaCompiler.getTask(
       null, /* out - a Writer for additional output from the compiler; use System.err if null */
       mFileManager, /* fileManager - a file manager; if null use the compiler's standard filemanager */
-      null, /* diagnosticListener - a diagnostic listener; if null use the compiler's default method for reporting diagnostics */
+      diagnosticCollector, /* diagnosticListener - a diagnostic listener; if null use the compiler's default method for reporting diagnostics */
       options,
       null, /* classes - names of classes to be processed by annotation processing, null means no class names */
       compilationUnitsList /* compilationUnits - the compilation units to compile, null means no compilation units */
     );
 
+    System.out.println(text);
     boolean result = task.call();
     if( result )
     {
-      System.err.println("Compilation successful");
+      System.err.println(text+"OK");
     }
     else
     {
-      System.err.println("Compilation failed");
+      System.err.println(text+"FAILED");
+      task = mJavaCompiler.getTask(
+        null, /* out - a Writer for additional output from the compiler; use System.err if null */
+        mFileManager, /* fileManager - a file manager; if null use the compiler's standard filemanager */
+        null, /* diagnosticListener - a diagnostic listener; if null use the compiler's default method for reporting diagnostics */
+        options,
+        null, /* classes - names of classes to be processed by annotation processing, null means no class names */
+        compilationUnitsList /* compilationUnits - the compilation units to compile, null means no compilation units */
+      );
+      task.call();
       System.exit(1);
     }
 
+    mFileManager.writeFile("META-INF/MANIFEST.MF",createManifestStream());
     mFileManager.close();
+  }
+
+  private InputStream createManifestStream() {
+    StringBuffer stringBuffer = new StringBuffer();
+
+    stringBuffer.append("Manifest-Version: 1.0\r\n");
+    for( Map.Entry<String,String> entry : mManifest.entrySet() ) {
+      stringBuffer.append(entry.getKey()).append(": ").append(entry.getValue()).append("\r\n");
+    }
+    stringBuffer.append("\r\n");
+
+    return new ByteArrayInputStream(
+      stringBuffer.toString().getBytes(StandardCharsets.UTF_8)
+    );
   }
 
   private String listJars() throws IOException {

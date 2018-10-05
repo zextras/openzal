@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
@@ -49,5 +50,22 @@ public class Version implements Comparable<Version> {
     sb.append(mVersionParts[mVersionParts.length-1]);
 
     return sb.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Version version = (Version) o;
+    return Arrays.equals(mVersionParts, version.mVersionParts);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(mVersionParts);
+  }
+
+  public int getMicro() {
+    return mVersionParts[2];
   }
 }

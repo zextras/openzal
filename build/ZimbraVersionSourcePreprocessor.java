@@ -189,11 +189,13 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     boolean result = true;
     boolean lastWasAnd = true;
     boolean shouldBeLast = false;
-
+    int lastMatchIndex = 0;
 
     Matcher matcher = sExpressionPattern.matcher(expression);
     while( matcher.find() )
     {
+      lastMatchIndex = matcher.end();
+
       if( shouldBeLast ) {
         throw new RuntimeException("Bad Expression syntax: missing && or ||");
       }
@@ -219,6 +221,10 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
 
       lastWasAnd = "&&".equals(andOr);
       shouldBeLast = null == andOr;
+    }
+
+    if( expression.length() > lastMatchIndex ) {
+      throw new RuntimeException("Bad Expression syntax: "+expression.substring(lastMatchIndex));
     }
 
     return result;
@@ -478,6 +484,29 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
           "/* $endif */",
         sample
       );
+    }
+
+    {
+      String sample = "/* $if !DevMode $*/\n" +
+        "echo ciao\n" +
+        "/* $endif */";
+
+      boolean failed = false;
+      try {
+        assertSample(
+          "0",
+          sample,
+          sample
+        );
+
+        failed = true;
+      }
+      catch (PreprocessorError ignore) {
+      }
+
+      if( failed ) {
+        throw new RuntimeException("Expected exception");
+      }
     }
 
     System.out.println("Test pass ;)");
