@@ -47,7 +47,7 @@
        <local name="dist"/>
        <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
        <property name="tmpsrc"  value="tmpsrc/${ZimbraVersion}/jar/" />
-       <property name="build" value="build/${ZimbraVersion}_dev_@{DevMode}/jar/" />
+       <property name="build" value="tmp-build/${ZimbraVersion}_dev_@{DevMode}/jar/" />
        <property name="dist"  value="dist/@{DistDirName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
@@ -116,6 +116,7 @@
        </if>
     </sequential>
   </macrodef>
+
 <target name="zal-8.0.0"
         description="Create jar for Zimbra 8.0.0"
         depends="init,dependencies">
@@ -123,7 +124,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "0"
              DistDirName = "8.0.0"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.0/"
              ZimbraJarsExt = ""
   />
@@ -136,7 +137,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "0"
                     DistDirName = "8.0.0"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.0/"
                     ZimbraJarsExt = ""
   />
@@ -148,7 +149,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "1"
              DistDirName = "8.0.1"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.1/"
              ZimbraJarsExt = ""
   />
@@ -161,7 +162,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "1"
                     DistDirName = "8.0.1"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.1/"
                     ZimbraJarsExt = ""
   />
@@ -173,7 +174,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "2"
              DistDirName = "8.0.2"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.2/"
              ZimbraJarsExt = ""
   />
@@ -186,7 +187,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "2"
                     DistDirName = "8.0.2"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.2/"
                     ZimbraJarsExt = ""
   />
@@ -198,7 +199,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "3"
              DistDirName = "8.0.3"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.3/"
              ZimbraJarsExt = ""
   />
@@ -211,7 +212,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "3"
                     DistDirName = "8.0.3"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.3/"
                     ZimbraJarsExt = ""
   />
@@ -223,7 +224,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "4"
              DistDirName = "8.0.4"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.4/"
              ZimbraJarsExt = ""
   />
@@ -236,7 +237,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "4"
                     DistDirName = "8.0.4"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.4/"
                     ZimbraJarsExt = ""
   />
@@ -248,7 +249,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "5"
              DistDirName = "8.0.5"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.5/"
              ZimbraJarsExt = ""
   />
@@ -261,7 +262,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "5"
                     DistDirName = "8.0.5"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.5/"
                     ZimbraJarsExt = ""
   />
@@ -273,7 +274,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "6"
              DistDirName = "8.0.6"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.6/"
              ZimbraJarsExt = ""
   />
@@ -286,7 +287,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "6"
                     DistDirName = "8.0.6"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.6/"
                     ZimbraJarsExt = ""
   />
@@ -298,7 +299,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "7"
              DistDirName = "8.0.7"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.7/"
              ZimbraJarsExt = ""
   />
@@ -311,7 +312,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "7"
                     DistDirName = "8.0.7"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.7/"
                     ZimbraJarsExt = ""
   />
@@ -323,7 +324,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "8"
              DistDirName = "8.0.8"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.8/"
              ZimbraJarsExt = ""
   />
@@ -336,7 +337,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "8"
                     DistDirName = "8.0.8"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.8/"
                     ZimbraJarsExt = ""
   />
@@ -348,7 +349,7 @@
              MiddleZimbraVersion = "0"
              MinorZimbraVersion = "9"
              DistDirName = "8.0.9"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.0.9/"
              ZimbraJarsExt = ""
   />
@@ -361,7 +362,7 @@
                     MiddleZimbraVersion = "0"
                     MinorZimbraVersion = "9"
                     DistDirName = "8.0.9"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.0.9/"
                     ZimbraJarsExt = ""
   />
@@ -373,7 +374,7 @@
              MiddleZimbraVersion = "5"
              MinorZimbraVersion = "0"
              DistDirName = "8.5.0"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.5.0/"
              ZimbraJarsExt = ""
   />
@@ -386,7 +387,7 @@
                     MiddleZimbraVersion = "5"
                     MinorZimbraVersion = "0"
                     DistDirName = "8.5.0"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.5.0/"
                     ZimbraJarsExt = ""
   />
@@ -398,7 +399,7 @@
              MiddleZimbraVersion = "5"
              MinorZimbraVersion = "1"
              DistDirName = "8.5.1"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.5.1/"
              ZimbraJarsExt = ""
   />
@@ -411,7 +412,7 @@
                     MiddleZimbraVersion = "5"
                     MinorZimbraVersion = "1"
                     DistDirName = "8.5.1"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.5.1/"
                     ZimbraJarsExt = ""
   />
@@ -423,7 +424,7 @@
              MiddleZimbraVersion = "6"
              MinorZimbraVersion = "0"
              DistDirName = "8.6.0"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.6.0/"
              ZimbraJarsExt = ""
   />
@@ -436,7 +437,7 @@
                     MiddleZimbraVersion = "6"
                     MinorZimbraVersion = "0"
                     DistDirName = "8.6.0"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.6.0/"
                     ZimbraJarsExt = ""
   />
@@ -448,7 +449,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "0"
              DistDirName = "8.7.0"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.0/"
              ZimbraJarsExt = ""
   />
@@ -461,7 +462,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "0"
                     DistDirName = "8.7.0"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.0/"
                     ZimbraJarsExt = ""
   />
@@ -473,7 +474,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "1"
              DistDirName = "8.7.1"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.1/"
              ZimbraJarsExt = ""
   />
@@ -486,7 +487,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "1"
                     DistDirName = "8.7.1"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.1/"
                     ZimbraJarsExt = ""
   />
@@ -498,7 +499,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "2"
              DistDirName = "8.7.2"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.2/"
              ZimbraJarsExt = ""
   />
@@ -511,7 +512,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "2"
                     DistDirName = "8.7.2"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.2/"
                     ZimbraJarsExt = ""
   />
@@ -523,7 +524,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "3"
              DistDirName = "8.7.3"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.3/"
              ZimbraJarsExt = ""
   />
@@ -536,7 +537,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "3"
                     DistDirName = "8.7.3"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.3/"
                     ZimbraJarsExt = ""
   />
@@ -548,7 +549,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "4"
              DistDirName = "8.7.4"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.4/"
              ZimbraJarsExt = ""
   />
@@ -561,7 +562,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "4"
                     DistDirName = "8.7.4"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.4/"
                     ZimbraJarsExt = ""
   />
@@ -573,7 +574,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "5"
              DistDirName = "8.7.5"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.5/"
              ZimbraJarsExt = ""
   />
@@ -586,7 +587,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "5"
                     DistDirName = "8.7.5"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.5/"
                     ZimbraJarsExt = ""
   />
@@ -598,7 +599,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "6"
              DistDirName = "8.7.6"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.6/"
              ZimbraJarsExt = ""
   />
@@ -611,7 +612,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "6"
                     DistDirName = "8.7.6"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.6/"
                     ZimbraJarsExt = ""
   />
@@ -623,7 +624,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "7"
              DistDirName = "8.7.7"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.7/"
              ZimbraJarsExt = ""
   />
@@ -636,7 +637,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "7"
                     DistDirName = "8.7.7"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.7/"
                     ZimbraJarsExt = ""
   />
@@ -648,7 +649,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "9"
              DistDirName = "8.7.9"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.9/"
              ZimbraJarsExt = ""
   />
@@ -661,7 +662,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "9"
                     DistDirName = "8.7.9"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.9/"
                     ZimbraJarsExt = ""
   />
@@ -673,7 +674,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "10"
              DistDirName = "8.7.10"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.10/"
              ZimbraJarsExt = ""
   />
@@ -686,7 +687,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "10"
                     DistDirName = "8.7.10"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.10/"
                     ZimbraJarsExt = ""
   />
@@ -698,7 +699,7 @@
              MiddleZimbraVersion = "7"
              MinorZimbraVersion = "11"
              DistDirName = "8.7.11"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.7.11/"
              ZimbraJarsExt = ""
   />
@@ -711,7 +712,7 @@
                     MiddleZimbraVersion = "7"
                     MinorZimbraVersion = "11"
                     DistDirName = "8.7.11"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.7.11/"
                     ZimbraJarsExt = ""
   />
@@ -723,7 +724,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "2"
              DistDirName = "8.8.2"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.2/"
              ZimbraJarsExt = ""
   />
@@ -736,7 +737,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "2"
                     DistDirName = "8.8.2"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.2/"
                     ZimbraJarsExt = ""
   />
@@ -748,7 +749,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "3"
              DistDirName = "8.8.3"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.3/"
              ZimbraJarsExt = ""
   />
@@ -761,7 +762,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "3"
                     DistDirName = "8.8.3"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.3/"
                     ZimbraJarsExt = ""
   />
@@ -773,7 +774,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "4"
              DistDirName = "8.8.4"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.4/"
              ZimbraJarsExt = ""
   />
@@ -786,7 +787,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "4"
                     DistDirName = "8.8.4"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.4/"
                     ZimbraJarsExt = ""
   />
@@ -798,7 +799,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "5"
              DistDirName = "8.8.5"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.5/"
              ZimbraJarsExt = ""
   />
@@ -811,7 +812,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "5"
                     DistDirName = "8.8.5"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.5/"
                     ZimbraJarsExt = ""
   />
@@ -823,7 +824,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "6"
              DistDirName = "8.8.6"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.6/"
              ZimbraJarsExt = ""
   />
@@ -836,7 +837,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "6"
                     DistDirName = "8.8.6"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.6/"
                     ZimbraJarsExt = ""
   />
@@ -848,7 +849,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "7"
              DistDirName = "8.8.7"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.7/"
              ZimbraJarsExt = ""
   />
@@ -861,7 +862,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "7"
                     DistDirName = "8.8.7"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.7/"
                     ZimbraJarsExt = ""
   />
@@ -873,7 +874,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "8"
              DistDirName = "8.8.8"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.8/"
              ZimbraJarsExt = ""
   />
@@ -886,7 +887,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "8"
                     DistDirName = "8.8.8"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.8/"
                     ZimbraJarsExt = ""
   />
@@ -898,7 +899,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "9"
              DistDirName = "8.8.9"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.9/"
              ZimbraJarsExt = ""
   />
@@ -911,7 +912,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "9"
                     DistDirName = "8.8.9"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.9/"
                     ZimbraJarsExt = ""
   />
@@ -923,7 +924,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "10"
              DistDirName = "8.8.10"
-             DevMode = "false"
+             DevMode = "0"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.10/"
              ZimbraJarsExt = ""
   />
@@ -936,7 +937,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "10"
                     DistDirName = "8.8.10"
-                    DevMode = "false"
+                    DevMode = "0"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.10/"
                     ZimbraJarsExt = ""
   />
@@ -948,7 +949,7 @@
              MiddleZimbraVersion = "8"
              MinorZimbraVersion = "10"
              DistDirName = "dev-last"
-             DevMode = "true"
+             DevMode = "1"
              ZimbraJars = "zimbra-jars/zimbra-jars-8.8.10/"
              ZimbraJarsExt = ""
   />
@@ -961,7 +962,7 @@
                     MiddleZimbraVersion = "8"
                     MinorZimbraVersion = "10"
                     DistDirName = "dev-last"
-                    DevMode = "true"
+                    DevMode = "1"
                     ZimbraJars = "zimbra-jars/zimbra-jars-8.8.10/"
                     ZimbraJarsExt = ""
   />
@@ -992,7 +993,7 @@
                  DistDirName = "${ZimbraVersion}"
                  ZimbraJars = "../zm-zcs-lib/build/dist/"
                  ZimbraJarsExt = "../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
-                 DevMode = "true" />
+                 DevMode = "1" />
   </target>
 
   <target name="zal-dev-current-binary"
@@ -1031,7 +1032,7 @@
                  DistDirName = "${DistDirName}"
                  ZimbraJars = "/opt/zimbra/common/jetty_home/lib/"
                  ZimbraJarsExt = "/opt/zimbra/lib/jars/"
-                 DevMode = "true" />
+                 DevMode = "1" />
   </target>
 
   <target name="clean" description="clean up" >
@@ -1065,7 +1066,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -1078,7 +1079,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -1104,7 +1105,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="/tools/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -1117,7 +1118,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/8.8.10/zal.jar"/>

@@ -20,7 +20,9 @@ def writeTemplate( template_file, parameters, zimbra_version, target_name, dist_
     parameters["ZimbraVersion"] = zimbra_version
     parameters["TargetName"] = target_name
     parameters["DistDirName"] = dist_dir_name
-    parameters["DevMode"] = str(dev_mode).lower()
+    DevModeNum = "0"
+    if dev_mode: DevModeNum = "1"
+    parameters["DevMode"] = DevModeNum
 
   text = open( template_file, "ro" ).read()
   for (key,value) in parameters.items():

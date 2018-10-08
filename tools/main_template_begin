@@ -47,7 +47,7 @@
        <local name="dist"/>
        <var name="ZimbraVersion" value="@{MajorZimbraVersion}.@{MiddleZimbraVersion}.@{MinorZimbraVersion}" />
        <property name="tmpsrc"  value="tmpsrc/${ZimbraVersion}/jar/" />
-       <property name="build" value="build/${ZimbraVersion}_dev_@{DevMode}/jar/" />
+       <property name="build" value="tmp-build/${ZimbraVersion}_dev_@{DevMode}/jar/" />
        <property name="dist"  value="dist/@{DistDirName}/"/>
 
        <mkdir dir="${tmpsrc}"/>
