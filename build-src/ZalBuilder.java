@@ -319,7 +319,7 @@ public class ZalBuilder
     if( new File("zimbra/").list() == null )
     {
       FileDownloader downloader = new FileDownloader(
-        "https://s3-eu-west-1.amazonaws.com/zimbra-jars/zimbra-all.tar.xz"
+        "https://s3-eu-west-1.amazonaws.com/zimbra-jars/zimbra-all.tar.br"
       );
       downloader.downloadAndUnpack("zimbra/");
     }
