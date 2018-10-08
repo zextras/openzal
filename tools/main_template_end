@@ -24,7 +24,7 @@
                  DistDirName = "${ZimbraVersion}"
                  ZimbraJars = "../zm-zcs-lib/build/dist/"
                  ZimbraJarsExt = "../zm-mailbox/build/stage/zimbra-common-core-jar/opt/zimbra/lib/jars/"
-                 DevMode = "true" />
+                 DevMode = "1" />
   </target>
 
   <target name="zal-dev-current-binary"
@@ -63,7 +63,7 @@
                  DistDirName = "${DistDirName}"
                  ZimbraJars = "/opt/zimbra/common/jetty_home/lib/"
                  ZimbraJarsExt = "/opt/zimbra/lib/jars/"
-                 DevMode = "true" />
+                 DevMode = "1" />
   </target>
 
   <target name="clean" description="clean up" >
@@ -97,7 +97,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -110,7 +110,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-binary"/>
       <arg value="-l"/>
       <arg value="OpenZal"/>
@@ -136,7 +136,7 @@
         <if>
           <equals arg1="${lastZalPath}" arg2="" />
           <else>
-            <exec failonerror="true" executable="/tools/japi-compliance-checker.pl">
+            <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
               <arg value="-binary"/>
               <arg value="-l"/>
               <arg value="OpenZal"/>
@@ -149,7 +149,7 @@
       </sequential>
     </for>
 
-    <exec failonerror="true" executable="tools/japi-compliance-checker.pl">
+    <exec failonerror="true" executable="tools/japi-compliance-checker/japi-compliance-checker.pl">
       <arg value="-l"/>
       <arg value="OpenZal"/>
       <arg value="dist/${LAST_ZIMBRA_VERSION}/zal.jar"/>
