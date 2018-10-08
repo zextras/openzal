@@ -58,11 +58,9 @@ public class FileDownloader {
 
     Process process = Runtime.getRuntime().exec(
       new String[]{
-        "tar",
-        "xJf",
-        "-",
-        "-C",
-        destinationDir
+        "/bin/bash",
+        "-c",
+        "brotli --decompress --stdout | tar xf - -C "+destinationDir
       }
     );
 
@@ -79,10 +77,12 @@ public class FileDownloader {
     URL url;
     String buildProxyEnv = System.getenv().get("BUILD_PROXY");
     if( buildProxyEnv != null && !buildProxyEnv.isEmpty()) {
+      System.out.print("(Using Proxy)...");
       URL proxyUrl = new URL(buildProxyEnv);
       url = new URL(proxyUrl.getProtocol(), proxyUrl.getHost(), proxyUrl.getPort(), mUrl.toExternalForm());
     }
     else {
+      System.out.print("(Direct)...");
       url = mUrl;
     }
 
