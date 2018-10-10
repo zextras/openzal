@@ -20,9 +20,18 @@
 
 package org.openzal.zal.soap;
 
+import java.util.Objects;
+
 public class QName
 {
   private final String mName;
+  private final String mNamespace;
+
+  public QName(String name, String namespace)
+  {
+    mName = name;
+    mNamespace = namespace;
+  }
 
   public String getNamespace()
   {
@@ -34,11 +43,21 @@ public class QName
     return mName;
   }
 
-  private final String mNamespace;
-
-  public QName(String name, String namespace)
+  @Override
+  public boolean equals(Object o)
   {
-    mName = name;
-    mNamespace = namespace;
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    QName qName = (QName) o;
+    return Objects.equals(mName, qName.mName) &&
+      Objects.equals(mNamespace, qName.mNamespace);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return Objects.hash(mName, mNamespace);
   }
 }
