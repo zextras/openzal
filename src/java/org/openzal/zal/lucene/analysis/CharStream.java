@@ -11,6 +11,8 @@ public class CharStream
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.analysis.CharStream) zObject);
+    /* $else $
+    super(null);
     /* $endif $ */
   }
 
@@ -26,11 +28,7 @@ public class CharStream
   /* $if ZimbraVersion >= 8.5.0 $ */
   protected org.apache.lucene.analysis.CharStream getZimbra()
   {
-    /* $if ZimbraVersion >= 8.5.0 $ */
     return (org.apache.lucene.analysis.CharStream) in;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
   /* $endif $ */
 
