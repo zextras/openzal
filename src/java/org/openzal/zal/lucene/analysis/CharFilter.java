@@ -15,10 +15,11 @@ public class CharFilter
     /* $endif $ */
   }
 
-
+  /* $if ZimbraVersion >= 8.5.0 $ */
   @Override
   protected org.apache.lucene.analysis.CharFilter getZimbra()
   {
     return (org.apache.lucene.analysis.CharFilter) super.getZimbra();
   }
+  /* $endif $ */
 }

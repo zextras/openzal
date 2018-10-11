@@ -66,14 +66,12 @@ public class Analyzer
     /* $endif $ */
   }
 
+  /* $if ZimbraVersion >= 8.5.0 $ */
   protected org.apache.lucene.analysis.Analyzer getZimbra()
   {
-    /* $if ZimbraVersion >= 8.5.0 $ */
     return mZObject;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
+  /* $endif $ */
 
   @Override
   public String toString()
