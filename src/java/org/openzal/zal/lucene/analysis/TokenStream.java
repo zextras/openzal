@@ -1,63 +1,60 @@
-package org.openzal.zal.lucene.document;
+package org.openzal.zal.lucene.analysis;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Field
+import java.io.Closeable;
+import java.io.IOException;
+
+public class TokenStream
+  implements Closeable
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private final org.apache.lucene.document.Field mZObject;
+  private final org.apache.lucene.analysis.TokenStream mZObject;
   /* $endif $ */
 
-  public Field(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
+  public TokenStream(@NotNull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    this(new org.apache.lucene.document.Field(
-      name,
-      value,
-      org.apache.lucene.document.Field.Store.valueOf(stored.name()),
-      org.apache.lucene.document.Field.Index.valueOf(indexed.name())
-    ));
+    mZObject = (org.apache.lucene.analysis.TokenStream) zObject;
     /* $endif $ */
   }
 
-  public Field(@NotNull Object zObject)
+  public boolean incrementToken()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (org.apache.lucene.document.Field) zObject;
-    /* $endif $ */
-  }
-
-  public String getName()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.name();
+    return mZObject.incrementToken();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public String getValue()
+  public void end()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.stringValue();
+    mZObject.end();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public boolean isStored()
+  public void reset()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.isStored();
+    mZObject.end();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public boolean isIndexed()
+  @Override
+  public void close()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.isIndexed();
+    mZObject.close();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -80,20 +77,5 @@ public class Field
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
-  }
-
-  public enum Store
-  {
-    YES,
-    NO
-  }
-
-  public enum Index
-  {
-    NO,
-    ANALYZED,
-    NOT_ANALYZED,
-    ANALYZED_NO_NORMS,
-    NOT_ANALYZED_NO_NORMS
   }
 }

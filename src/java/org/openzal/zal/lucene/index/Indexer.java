@@ -59,8 +59,6 @@ public class Indexer
         zObject.getClass().getCanonicalName()
       ));
     }
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

@@ -2,6 +2,7 @@ package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lucene.index.IndexStore;
+import org.openzal.zal.lucene.analysis.Analyzer;
 
 public class MailboxIndex
 {
@@ -14,6 +15,11 @@ public class MailboxIndex
   public IndexStore getIndexStore()
   {
     return new IndexStore(mZObject.getIndexStore());
+  }
+
+  public Analyzer getAnalyzer()
+  {
+    return new Analyzer(mZObject.getAnalyzer());
   }
 
   public <T> T toZimbra(@NotNull Class<T> clazz)

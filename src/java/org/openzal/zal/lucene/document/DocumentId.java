@@ -11,9 +11,7 @@ public class DocumentId
   public DocumentId(@NotNull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
+    mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;;
     /* $endif $ */
   }
 

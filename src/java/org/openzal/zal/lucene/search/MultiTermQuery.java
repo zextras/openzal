@@ -8,10 +8,9 @@ public class MultiTermQuery
   public MultiTermQuery(@NotNull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    super(zObject);
+    super((org.apache.lucene.search.MultiTermQuery) zObject);
     /* $else $
     super(null);
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 }

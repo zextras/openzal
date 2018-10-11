@@ -17,8 +17,6 @@ public class IndexStore
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.LuceneIndex) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
