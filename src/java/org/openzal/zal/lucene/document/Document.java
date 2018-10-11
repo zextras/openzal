@@ -21,8 +21,6 @@ public class Document
       zObject = new com.zimbra.cs.index.IndexDocument((org.apache.lucene.document.Document) zObject);
     }
     mZObject = (com.zimbra.cs.index.IndexDocument) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -30,8 +28,6 @@ public class Document
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     this(new com.zimbra.cs.index.IndexDocument());
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

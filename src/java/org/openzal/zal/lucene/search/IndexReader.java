@@ -17,8 +17,6 @@ public class IndexReader
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraIndexReader) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

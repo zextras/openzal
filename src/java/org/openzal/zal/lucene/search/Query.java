@@ -12,8 +12,6 @@ public class Query
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.search.Query) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

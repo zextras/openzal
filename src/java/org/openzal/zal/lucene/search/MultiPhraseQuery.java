@@ -12,15 +12,23 @@ public class MultiPhraseQuery
   public MultiPhraseQuery(Term... terms)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    super(new org.apache.lucene.search.MultiPhraseQuery());
+    this(new org.apache.lucene.search.MultiPhraseQuery());
 
     if( terms.length > 0 )
     {
       add(terms);
     }
     /* $else $
+    this((Object) null);
+    /* $endif $ */
+  }
+
+  public MultiPhraseQuery(@NotNull Object zObject)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    super((org.apache.lucene.search.MultiPhraseQuery) zObject);
+    /* $else $
     super(null);
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

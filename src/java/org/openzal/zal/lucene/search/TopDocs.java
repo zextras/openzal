@@ -15,8 +15,6 @@ public class TopDocs
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

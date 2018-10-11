@@ -1,63 +1,56 @@
-package org.openzal.zal.lucene.document;
+package org.openzal.zal.lucene.analysis;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Field
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+
+public class Analyzer
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private final org.apache.lucene.document.Field mZObject;
+  private org.apache.lucene.analysis.Analyzer mZObject;
   /* $endif $ */
 
-  public Field(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
+  public Analyzer(Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    this(new org.apache.lucene.document.Field(
-      name,
-      value,
-      org.apache.lucene.document.Field.Store.valueOf(stored.name()),
-      org.apache.lucene.document.Field.Index.valueOf(indexed.name())
-    ));
+    mZObject = (org.apache.lucene.analysis.Analyzer) zObject;
     /* $endif $ */
   }
 
-  public Field(@NotNull Object zObject)
+  public TokenStream tokenStream(String field, Reader reader)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (org.apache.lucene.document.Field) zObject;
-    /* $endif $ */
-  }
-
-  public String getName()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.name();
+    return new TokenStream(mZObject.tokenStream(field, reader));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public String getValue()
+  public TokenStream tokenStream(String field, String text)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.stringValue();
+    return new TokenStream(mZObject.tokenStream(field, new StringReader(text)));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public boolean isStored()
+  public Tokenizer reusableTokenStream(String field, Reader reader)
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.isStored();
+    return new Tokenizer(mZObject.reusableTokenStream(field, reader));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public boolean isIndexed()
+  protected org.apache.lucene.analysis.Analyzer getZimbra()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.isIndexed();
+    return mZObject;
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -80,20 +73,5 @@ public class Field
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
-  }
-
-  public enum Store
-  {
-    YES,
-    NO
-  }
-
-  public enum Index
-  {
-    NO,
-    ANALYZED,
-    NOT_ANALYZED,
-    ANALYZED_NO_NORMS,
-    NOT_ANALYZED_NO_NORMS
   }
 }
