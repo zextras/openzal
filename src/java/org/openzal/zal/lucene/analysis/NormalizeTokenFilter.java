@@ -4,20 +4,44 @@ import java.io.IOException;
 
 public final class NormalizeTokenFilter extends CharFilter
 {
+
   public NormalizeTokenFilter(CharStream in)
   {
     super(in);
   }
 
+  /* $if ZimbraVersion >= 8.7.0 $
+  public NormalizeTokenFilter(Object zObject)
+  {
+    super((com.zimbra.cs.index.analysis.NormalizeTokenFilter)zObject);
+  }
+  /* $endif $ */
+
+  /* $if ZimbraVersion >= 8.7.0 $
+  @Override
+  protected com.zimbra.cs.index.analysis.NormalizeTokenFilter getZimbra()
+  {
+    return (com.zimbra.cs.index.analysis.NormalizeTokenFilter) super.getZimbra();
+  }
+  /* $endif $ */
+
+
   public int read()
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.7.0 $
+    return getZimbra().read();
+    /* $else $ */
     return normalize(super.read());
+    /* $endif $ */
   }
 
   public int read(char[] buf, int offset, int len)
     throws IOException
   {
+    /* $if ZimbraVersion >= 8.7.0 $
+    return getZimbra().read(buf, offset, len);
+    /* $else $ */
     int result = super.read(buf, offset, len);
 
     for( int i = 0; i < result; ++i )
@@ -26,15 +50,23 @@ public final class NormalizeTokenFilter extends CharFilter
     }
 
     return result;
+    /* $endif $ */
   }
 
   public static int normalize(int c)
   {
+    /* $if ZimbraVersion >= 8.7.0 $
+    return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(c);
+    /* $else $ */
     return normalize(c, 0);
+    /* $endif $ */
   }
 
   public static int normalize(int c, int p)
   {
+    /* $if ZimbraVersion >= 8.7.0 $
+    return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(c, p);
+    /* $else $ */
     switch( c )
     {
       case 178:
@@ -1392,10 +1424,14 @@ public final class NormalizeTokenFilter extends CharFilter
       default:
         return Character.toLowerCase(c);
     }
+    /* $endif $ */
   }
 
   public static String normalize(String value)
   {
+    /* $if ZimbraVersion >= 8.7.0 $
+    return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(value);
+    /* $else $ */
     StringBuilder result = new StringBuilder();
 
     for( int i = 0; i < value.length(); ++i )
@@ -1404,5 +1440,6 @@ public final class NormalizeTokenFilter extends CharFilter
     }
 
     return result.toString();
+    /* $endif $ */
   }
 }
