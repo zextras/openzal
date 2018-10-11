@@ -19,6 +19,25 @@ public class Analyzer
     /* $endif $ */
   }
 
+
+  public TokenStream tokenStream(String text)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return tokenStream(null, text);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  public TokenStream tokenStream(Reader reader)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return tokenStream(null, reader);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
   public TokenStream tokenStream(String field, Reader reader)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
