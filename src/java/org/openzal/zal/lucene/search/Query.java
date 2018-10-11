@@ -15,6 +15,7 @@ public class Query
     /* $endif $ */
   }
 
+  /* $if ZimbraVersion >= 8.5.0 $ */
   protected org.apache.lucene.search.Query getZimbra()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
@@ -23,6 +24,7 @@ public class Query
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
+  /* $endif $ */
 
   public Query combine(Query... queries)
   {
