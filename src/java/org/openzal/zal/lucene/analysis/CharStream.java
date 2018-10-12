@@ -16,19 +16,10 @@ public class CharStream
     /* $endif $ */
   }
 
-  protected org.apache.lucene.analysis.CharStream getZimbra()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return (org.apache.lucene.analysis.CharStream) in;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
   public int correctOffset(int currentOff)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return getZimbra().correctOffset(currentOff);
+    return toZimbra(org.apache.lucene.analysis.CharStream.class).correctOffset(currentOff);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -38,7 +29,7 @@ public class CharStream
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return getZimbra().toString();
+    return in.toString();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -47,7 +38,7 @@ public class CharStream
   public <T> T toZimbra(@org.jetbrains.annotations.NotNull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(getZimbra());
+    return target.cast(in);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

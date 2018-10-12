@@ -32,20 +32,10 @@ public class MultiPhraseQuery
     /* $endif $ */
   }
 
-  @Override
-  protected org.apache.lucene.search.MultiPhraseQuery getZimbra()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return (org.apache.lucene.search.MultiPhraseQuery) super.getZimbra();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
   public void add(@NotNull Term term)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getZimbra().add(term.toZimbra(org.apache.lucene.index.Term.class));
+    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -70,7 +60,7 @@ public class MultiPhraseQuery
       zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
     }
 
-    getZimbra().add(zimbraArray);
+    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(zimbraArray);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
