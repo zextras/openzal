@@ -15,12 +15,14 @@ public class Query
     /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
   protected org.apache.lucene.search.Query getZimbra()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     return mZObject;
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $endif $ */
 
   public Query combine(Query... queries)
   {
