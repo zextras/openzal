@@ -32,13 +32,15 @@ public class MultiPhraseQuery
     /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
   @Override
   protected org.apache.lucene.search.MultiPhraseQuery getZimbra()
   {
+    /* $if ZimbraVersion >= 8.5.0 $ */
     return (org.apache.lucene.search.MultiPhraseQuery) super.getZimbra();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
-  /* $endif $ */
 
   public void add(@NotNull Term term)
   {

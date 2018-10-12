@@ -20,6 +20,15 @@ public class Analyzer
   }
 
 
+  protected org.apache.lucene.analysis.Analyzer getZimbra()
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mZObject;
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
   public TokenStream tokenStream(String text)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
@@ -66,12 +75,6 @@ public class Analyzer
     /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
-  protected org.apache.lucene.analysis.Analyzer getZimbra()
-  {
-    return mZObject;
-  }
-  /* $endif $ */
 
   @Override
   public String toString()

@@ -16,6 +16,15 @@ public class CharStream
     /* $endif $ */
   }
 
+  protected org.apache.lucene.analysis.CharStream getZimbra()
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return (org.apache.lucene.analysis.CharStream) in;
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
   public int correctOffset(int currentOff)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
@@ -24,13 +33,6 @@ public class CharStream
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
-
-  /* $if ZimbraVersion >= 8.5.0 $ */
-  protected org.apache.lucene.analysis.CharStream getZimbra()
-  {
-    return (org.apache.lucene.analysis.CharStream) in;
-  }
-  /* $endif $ */
 
   @Override
   public String toString()
