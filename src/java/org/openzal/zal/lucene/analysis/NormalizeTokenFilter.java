@@ -20,22 +20,12 @@ public final class NormalizeTokenFilter extends CharFilter
     /* $endif $ */
   }
 
-  @Override
-  protected com.zimbra.cs.index.analysis.NormalizeTokenFilter getZimbra()
-  {
-    /* $if ZimbraVersion >= 8.7.0 $ */
-    return (com.zimbra.cs.index.analysis.NormalizeTokenFilter) super.getZimbra();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
 
   public int read()
     throws IOException
   {
     /* $if ZimbraVersion >= 8.7.0 $
-    return getZimbra().read();
+    return toZimbra(com.zimbra.cs.index.analysis.NormalizeTokenFilter.class).read();
     /* $else $ */
     return normalize(super.read());
     /* $endif $ */
@@ -45,7 +35,7 @@ public final class NormalizeTokenFilter extends CharFilter
     throws IOException
   {
     /* $if ZimbraVersion >= 8.7.0 $
-    return getZimbra().read(buf, offset, len);
+    return toZimbra(com.zimbra.cs.index.analysis.NormalizeTokenFilter.class).read(buf, offset, len);
     /* $else $ */
     int result = super.read(buf, offset, len);
 
