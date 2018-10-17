@@ -79,6 +79,12 @@ class InternalOverrideStoreManager
     return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
   }
 
+  @Override
+  public boolean supports(StoreFeature storeFeature, String s)
+  {
+    throw new UnsupportedOperationException();
+  }
+
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
     return mStoreManager.getPrimaryStore().toZimbra(FileBlobStore.class).getBlobBuilder();

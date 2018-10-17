@@ -270,4 +270,16 @@ public class MailboxManagerImp implements MailboxManager
     cleanCache(mailbox);
     return getMailboxByAccountId(mailbox.getAccountId());
   }
+
+  @Override
+  public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
+  {
+    mMailboxManager.registerAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+  }
+
+  @Override
+  public void removeAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
+  {
+    mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+  }
 }
