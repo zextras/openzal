@@ -278,6 +278,7 @@ public class ZalBuilder
 
     Build build = new Build(
       Arrays.asList("lib/", "../zm-zcs-lib/", "../zm-mailbox/" ),
+      Arrays.asList("src/java/"),
       "dist/"+version+"/zal.jar",
       new ZimbraVersionSourcePreprocessor( version, true),
       generateManifest(version, systemReader)
@@ -290,6 +291,7 @@ public class ZalBuilder
 
     Build build = new Build(
       Arrays.asList("lib/", "/opt/zimbra/lib/jars/", "/opt/zimbra/common/jetty_home/lib/" ),
+      Arrays.asList("src/java/"),
       "dist/"+version+"/zal.jar",
       new ZimbraVersionSourcePreprocessor( version, true),
       generateManifest(version, systemReader)
@@ -308,6 +310,7 @@ public class ZalBuilder
 
     Build build = new Build(
       Arrays.asList("lib/", "zimbra/"+version+"/jars/"),
+      Arrays.asList("src/java/"),
       (devMode ? "dist/dev-last/zal.jar" : "dist/"+version+"/zal.jar"),
       new ZimbraVersionSourcePreprocessor( version, devMode),
       generateManifest(version, systemReader)

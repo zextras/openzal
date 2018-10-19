@@ -4,6 +4,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.tools.*;
 
+/**
+ * This class builds java source code given:
+ *   library paths, source directories, jar path, SourcePreprocessor (EmptySourcePreprocessor available) and manifest
+ *
+ * This class can be called concurrently with other builds, by default the stdout/sdterr of compiler is hidden only in
+ * case of failure the compile is re-run and output is shown.
+ *
+ * System.exit(1) is used when a build fails.
+ */
 @SuppressWarnings("ALL")
 public class Build
 {
@@ -11,10 +20,19 @@ public class Build
   private final FileManager mFileManager;
   private final SourcePreprocessor mSourcePreprocessor;
   private final List<String> mLibDirectories;
+  private final List<String> mSourceDirectories;
   private final Map<String, String> mManifest;
 
-  public Build(List<String> libDirectories, String destinationJar, SourcePreprocessor sourcePreprocessor, Map<String, String> manifest) {
+  public Build(
+    List<String> libDirectories,
+    List<String> sourceDirectories,
+    String destinationJar,
+    SourcePreprocessor sourcePreprocessor,
+    Map<String, String> manifest
+  )
+  {
     mLibDirectories = libDirectories;
+    mSourceDirectories = sourceDirectories;
     mManifest = manifest;
     mJavaCompiler = ToolProvider.getSystemJavaCompiler();
     mFileManager = new FileManager(
@@ -111,7 +129,13 @@ public class Build
   }
 
   private List<? extends JavaFileObject> listSources() throws IOException {
-    return listSources("src/java/", "");
+    ArrayList<JavaFileObject> sourceFiles = new ArrayList<>(4096);
+    for( String sourcePath : mSourceDirectories) {
+      sourceFiles.addAll(
+        listSources(sourcePath, "")
+      );
+    }
+    return sourceFiles;
   }
 
   private List<? extends JavaFileObject> listSources(String sourcePath, String subPath) throws IOException {

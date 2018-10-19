@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * Handles the populating of templates resolving with the provided map,
+ * useful to generate code.
+ */
 public class TemplateWriter {
 
   private final String mFileDestination;

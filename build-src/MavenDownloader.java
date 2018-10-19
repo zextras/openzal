@@ -2,6 +2,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Download maven artifacts in the specified path.
+ * The args must be populated with library name and version such as:
+ *   "org/example/artifact", "1.2.3"
+ */
 public class MavenDownloader {
   private final List<FileDownloader> mFileDownloaders;
 
