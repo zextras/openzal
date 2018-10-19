@@ -1,7 +1,13 @@
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
+/**
+ * Handle the download of one URL in a specific path OR the unpacking of a file towards a specific path.
+ * To unpack the file the brotli dependency is needed (brotli is ~6x faster than gzip with bzip2 compression level)
+ *
+ * This class uses BUILD_PROXY to proxy downloads from either http or https resources.
+ * BUILD_PROXY must be a special proxy because normal shitty proxies refuse syntax: GET https://....
+ */
 public class FileDownloader {
   private final URL mUrl;
   private final String mDestinationPath;

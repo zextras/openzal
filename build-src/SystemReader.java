@@ -3,6 +3,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Jolly class:
+ *   handles executing of commands and read of version,commit
+ */
 class SystemReader
 {
   private String mCommitCache = null;

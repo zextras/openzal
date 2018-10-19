@@ -2,7 +2,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-  * This class implements a preprocessor for java source files.
+  * This class implements a preprocessor for java source files back-compatible with ant-prebop preprocessor.
+  * Tests are directly inside in this class main().
   */
 public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
   private final Version mZimbraVersion;

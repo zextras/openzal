@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Manage versions, string only
+ * Simplified version from the generic implementation
+ */
 @SuppressWarnings("Duplicates")
 public class Version implements Comparable<Version> {
   private final int[] mVersionParts;

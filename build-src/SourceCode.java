@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Read source code and apply source preprocessor just in time
+ */
 class SourceCode extends SimpleJavaFileObject
 {
   private final File mFile;

@@ -9,6 +9,9 @@ import java.net.URI;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * This class handles write of jar file, called by java compiler
+ */
 class FileManager extends ForwardingJavaFileManager<JavaFileManager>
 {
   private final String mDestinationJar;
