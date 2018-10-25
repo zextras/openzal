@@ -231,5 +231,26 @@ public class Server extends Entry
 
     return false;
   }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if(this == o)
+    {
+      return true;
+    }
+    if(o == null || getClass() != o.getClass())
+    {
+      return false;
+    }
+    Server server = (Server) o;
+    return server.getServerHostname().equals(getServerHostname());
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return getServerHostname().hashCode();
+  }
 }
 
