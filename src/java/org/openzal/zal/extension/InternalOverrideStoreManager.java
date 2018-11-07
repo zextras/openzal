@@ -79,10 +79,13 @@ class InternalOverrideStoreManager
     return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(feature));
   }
 
-  @Override
-  public boolean supports(StoreFeature storeFeature, String s)
+  public boolean supports(StoreManager.StoreFeature storeFeature, String s)
   {
+    /* $if ZimbraVersion >= 8.8.10 $ */
     return mStoreManager.getStore(s).supports(org.openzal.zal.StoreFeature.fromZimbra(storeFeature));
+    /* $else $
+    return mStoreManager.getPrimaryStore().supports(org.openzal.zal.StoreFeature.fromZimbra(storeFeature));
+    /* $endif $ */
   }
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
