@@ -274,12 +274,16 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
+    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $endif $ */
   }
 
   @Override
   public void removeAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
+    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $endif $ */
   }
 }
