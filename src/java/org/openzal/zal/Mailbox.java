@@ -2703,9 +2703,15 @@ public class Mailbox
     return maintenace != null;
   }
 
-  public void checkSizeChange(long newSize)
+  public void checkSizeChange(long newSize) throws ZimbraException
   {
-    // TODO
-    throw new UnsupportedOperationException();
+    try
+    {
+      mMbox.checkSizeChange(newSize);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }

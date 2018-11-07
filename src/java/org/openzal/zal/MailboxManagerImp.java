@@ -274,7 +274,7 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
-    mMailboxManager.registerAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
   }
 
   @Override
