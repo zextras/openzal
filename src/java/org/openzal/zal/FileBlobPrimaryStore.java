@@ -240,7 +240,20 @@ public class FileBlobPrimaryStore implements PrimaryStore
   @Override
   public boolean supports(StoreFeature feature)
   {
-    return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
+    switch (feature)
+    {
+      case BULK_DELETE:
+        return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
+      case CENTRALIZED:
+        return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
+      case RESUMABLE_UPLOAD:
+        return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
+      case SINGLE_INSTANCE_SERVER_CREATE:
+        return sm.supports(feature.toZimbra(StoreManager.StoreFeature.class));
+      case CUSTOM_STORE_API:
+        return true;
+    }
+    return false;
   }
 
   @Override
