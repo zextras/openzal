@@ -82,7 +82,7 @@ class InternalOverrideStoreManager
   @Override
   public boolean supports(StoreFeature storeFeature, String s)
   {
-    throw new UnsupportedOperationException();
+    return mStoreManager.getStore(s).supports(org.openzal.zal.StoreFeature.fromZimbra(storeFeature));
   }
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
