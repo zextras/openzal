@@ -29,6 +29,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
@@ -286,4 +287,43 @@ public class MailboxManagerImp implements MailboxManager
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
     /* $endif $ */
   }
+
+  /* $if ZimbraVersion >= 8.8.10 $ */
+  class ZALAdditionalQuotaProvider implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
+  {
+    private final AdditionalQuotaProvider mAdditionalQuotaProvider;
+
+    ZALAdditionalQuotaProvider(AdditionalQuotaProvider mAdditionalQuotaProvider)
+    {
+      this.mAdditionalQuotaProvider = mAdditionalQuotaProvider;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+      if (this == o)
+      {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass())
+      {
+        return false;
+      }
+      ZALAdditionalQuotaProvider that = (ZALAdditionalQuotaProvider) o;
+      return Objects.equals(mAdditionalQuotaProvider, that.mAdditionalQuotaProvider);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return Objects.hash(mAdditionalQuotaProvider);
+    }
+
+    @Override
+    public long getAdditionalQuota(com.zimbra.cs.mailbox.Mailbox mailbox)
+    {
+      return mAdditionalQuotaProvider.getAdditionalQuota(new org.openzal.zal.Mailbox(mailbox));
+    }
+  }
+  /* $endif $ */
 }
