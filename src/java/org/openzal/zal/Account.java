@@ -1069,7 +1069,7 @@ public class Account extends Entry
     }
   }
 
-  public void setMailQuota(Long zimbraMailQuota)
+  public void setMailQuota(long zimbraMailQuota)
   {
     try
     {
