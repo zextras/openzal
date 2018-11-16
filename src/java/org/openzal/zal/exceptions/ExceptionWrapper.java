@@ -387,6 +387,10 @@ public class ExceptionWrapper
     {
       return mExceptionMap.get(AUTH_TOKEN_EXCEPTION).create(authTokenException);
     }
+    catch( com.zimbra.cs.volume.VolumeServiceException volumeException )
+    {
+      return mExceptionMap.get(VOLUME_SERVICE_EXCEPTION).create(volumeException);
+    }
     catch(ServiceException serviceException)
     {
       String code = serviceException.getCode();
