@@ -810,14 +810,10 @@ public class Item implements Comparable<Item>
     return mMailItem.compareTo(item.toZimbra(MailItem.class));
   }
 
+  @Nullable
   public String getUuid()
   {
-    String item = mMailItem.getUuid();
-    if (item == null)
-    {
-      throw new NoSuchItemException(mMailItem.getName());
-    }
-    return item;
+    return mMailItem.getUuid();
   }
 
   public List<Document> generateIndexData()

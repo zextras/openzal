@@ -238,6 +238,14 @@ public class ExceptionWrapper
         return new QuotaExceededException(exception);
       }
     });
+    mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.DOMAIN_QUOTA_EXCEEDED, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new QuotaExceededException(exception);
+      }
+    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.ALREADY_EXISTS, new ExceptionWrapperCreator()
     {
       @Override
@@ -378,6 +386,10 @@ public class ExceptionWrapper
     catch(com.zimbra.cs.account.AuthTokenException authTokenException)
     {
       return mExceptionMap.get(AUTH_TOKEN_EXCEPTION).create(authTokenException);
+    }
+    catch( com.zimbra.cs.volume.VolumeServiceException volumeException )
+    {
+      return mExceptionMap.get(VOLUME_SERVICE_EXCEPTION).create(volumeException);
     }
     catch(ServiceException serviceException)
     {
