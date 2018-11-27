@@ -100,7 +100,7 @@ public class ZimletFile
   }
 
   @Nullable
-  public InputStream getContent(String name) throws IOException
+  public InputStream getContentStream(String name) throws IOException
   {
     com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
     if (entry == null)
@@ -108,5 +108,16 @@ public class ZimletFile
       return null;
     }
     return entry.getContentStream();
+  }
+
+  @Nullable
+  public byte[] getContent(String name) throws IOException
+  {
+    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
+    if (entry == null)
+    {
+      return null;
+    }
+    return entry.getContents();
   }
 }
