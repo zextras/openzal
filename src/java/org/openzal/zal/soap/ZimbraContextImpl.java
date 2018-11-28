@@ -196,7 +196,7 @@ class ZimbraContextImpl implements ZimbraContext
   }
 
   @Override
-  public String getAuthenticatedAccontId()
+  public String getAuthenticatedAccountId()
   {
     String accountId =  mZimbraSoapContext.getAuthtokenAccountId();
     return accountId == null ? "" : accountId;
