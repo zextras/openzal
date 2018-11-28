@@ -46,6 +46,7 @@ import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -393,5 +394,55 @@ public abstract class Utils
     }
 
     return sb.toString();
+  }
+
+  public static String dnToName(String dn)
+  {
+    char[] chars = new char[ dn.length() ];
+
+    dn.getChars(0, chars.length, chars,0 );
+    StringBuilder address = new StringBuilder(dn.length());
+
+    int currentIdx = 0;
+    do
+    {
+      if( chars[currentIdx+0] == 'u' && chars[currentIdx+1] == 'i' && chars[currentIdx+2] == 'd' && chars[currentIdx+3] == '=' )
+      {
+        currentIdx += 4;
+        while( currentIdx < chars.length && chars[currentIdx] != ',' )
+          address.append(chars[currentIdx++]);
+        currentIdx++;
+        address.append('@');
+      }
+      else
+      {
+        if (chars[currentIdx+0] == 'd' && chars[currentIdx+1] == 'c' && chars[currentIdx+2] == '=')
+        {
+          currentIdx += 3;
+          while( currentIdx < chars.length && chars[currentIdx] != ',' )
+            address.append((char)chars[currentIdx++]);
+          currentIdx++;
+          address.append('.');
+        }
+        else
+        {
+          if (address.length() == 0 && chars[currentIdx+0] == 'c' && chars[currentIdx+1] == 'n' && chars[currentIdx+2] == '=')
+          {
+            currentIdx += 3;
+            while( currentIdx < chars.length && chars[currentIdx] != ',' )
+              address.append(chars[currentIdx++]);
+            return address.toString();
+          }
+          else
+          {
+            while( currentIdx < chars.length && chars[currentIdx] != ',' ) currentIdx++;
+            currentIdx++;
+          }
+        }
+      }
+
+    } while ( currentIdx < chars.length );
+
+    return address.substring(0,address.length()-1);
   }
 }

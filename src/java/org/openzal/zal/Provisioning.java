@@ -34,6 +34,7 @@ public interface Provisioning
 {
   String A_member = com.zimbra.cs.account.Provisioning.A_member;
   String ZIMBRA_USER_ID = "e0fafd89-1360-11d9-8661-000a95d98ef2";
+  String DEFAULT_COS_ID = "e00428a1-0c00-11d9-836a-000d93afea2a";
 
   boolean isValidUid(@NotNull String uid);
 
@@ -358,6 +359,12 @@ public interface Provisioning
   void invalidateAllCache();
 
   void purgeMemcachedAccounts(List<String> accounts);
+
+  void rawQuery(String base, String query, LdapVisitor visitor);
+
+  void rawQuery(String base, String query, LdapVisitor visitor, String[] fields);
+
+  int rawCountQuery(String base, String query);
 
   void registerChangePasswordListener(ChangePasswordListener listener);
 
