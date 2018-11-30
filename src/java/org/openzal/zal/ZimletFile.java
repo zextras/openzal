@@ -20,12 +20,14 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.zimlet.ZimletException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.NoSuchFileException;
 
 public class ZimletFile
 {
@@ -95,5 +97,27 @@ public class ZimletFile
   public byte[] getZimletContent()
   {
     return mZimletFile.toByteArray();
+  }
+
+  @Nullable
+  public InputStream getContentStream(String name) throws IOException
+  {
+    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
+    if (entry == null)
+    {
+      return null;
+    }
+    return entry.getContentStream();
+  }
+
+  @Nullable
+  public byte[] getContent(String name) throws IOException
+  {
+    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
+    if (entry == null)
+    {
+      return null;
+    }
+    return entry.getContents();
   }
 }
