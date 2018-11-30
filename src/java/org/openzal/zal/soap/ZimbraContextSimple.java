@@ -61,7 +61,7 @@ public class ZimbraContextSimple implements ZimbraContext
   }
 
   @Override
-  public String getAuthenticatedAccontId()
+  public String getAuthenticatedAccountId()
   {
     return mAuthenticatedAccountId;
   }

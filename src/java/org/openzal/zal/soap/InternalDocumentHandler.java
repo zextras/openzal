@@ -51,6 +51,6 @@ class InternalDocumentHandler extends DocumentHandler
   @Override
   public boolean needsAuth(Map<String, Object> context)
   {
-    return mInternalDocumentHelper.needsAdminAuth(context);
+    return mInternalDocumentHelper.needsAuth(context);
   }
 }

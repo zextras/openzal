@@ -28,7 +28,7 @@ public interface ZimbraContext extends SoapNode
 {
   String getTargetAccountId();
 
-  String getAuthenticatedAccontId();
+  String getAuthenticatedAccountId();
 
   String getRequesterIp();
 
