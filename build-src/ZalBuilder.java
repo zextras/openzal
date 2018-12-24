@@ -48,13 +48,13 @@ public class ZalBuilder
     }
     Collections.sort(zimbraVersions);
 
-    if( !zimbraVersions.get(0).equals(sFirstSupportedZimbraVersion) ) {
+    if( zimbraVersions.get(0).compareTo(sFirstSupportedZimbraVersion) > 0 ) {
       throw new RuntimeException(
         "First zimbra version is not "+sFirstSupportedZimbraVersion+", found instead "+zimbraVersions.get(0)
       );
     }
 
-    if( !zimbraVersions.get(zimbraVersions.size()-1).equals(sLastSupportedZimbraVersion) ) {
+    if( zimbraVersions.get(zimbraVersions.size()-1).compareTo(sLastSupportedZimbraVersion) < 0 ) {
       throw new RuntimeException(
         "Last zimbra version is not "+sLastSupportedZimbraVersion+", found instead "+zimbraVersions.get(zimbraVersions.size()-1)
       );
