@@ -1069,6 +1069,18 @@ public class Account extends Entry
     }
   }
 
+  public void setMailQuota(long zimbraMailQuota)
+  {
+    try
+    {
+      mAccount.setMailQuota(zimbraMailQuota);
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public boolean hasAddress(String address)
   {
     try

@@ -12,17 +12,6 @@ public class Query
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.search.Query) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  protected org.apache.lucene.search.Query getZimbra()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -36,7 +25,7 @@ public class Query
       zimbraQueries[i] = queries[i].toZimbra(org.apache.lucene.search.Query.class);
     }
 
-    return new Query(getZimbra().combine(zimbraQueries));
+    return new Query(mZObject.combine(zimbraQueries));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

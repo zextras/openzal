@@ -1,38 +1,29 @@
-package org.openzal.zal.lucene.search;
-
+package org.openzal.zal.lucene.analysis;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
 import java.io.IOException;
 
-public class IndexReader
-  implements Closeable
+public class TokenStream extends AttributeSource implements Closeable
 {
-  /* $if ZimbraVersion >= 8.5.0 $ */
-  private final com.zimbra.cs.index.ZimbraIndexReader mZObject;
-  /* $endif $ */
-
-  public IndexReader(@NotNull Object zObject)
+  public TokenStream(
+    @NotNull
+      Object zObject
+  )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraIndexReader) zObject;
-    /* $endif $ */
-  }
-
-  public int countDocuments()
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.numDocs();
+    super((org.apache.lucene.analysis.TokenStream) zObject);
     /* $else $
-    throw new UnsupportedOperationException();
+    super(null);
     /* $endif $ */
   }
 
-  public int countDeletedDocument()
+  public boolean incrementToken()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.numDeletedDocs();
+    return toZimbra(org.apache.lucene.analysis.TokenStream.class).incrementToken();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -43,26 +34,27 @@ public class IndexReader
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject.close();
+    toZimbra(org.apache.lucene.analysis.TokenStream.class).close();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Override
-  public String toString()
+  public void end()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.toString();
+    toZimbra(org.apache.lucene.analysis.TokenStream.class).end();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public void reset()
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(mZObject);
+    toZimbra(org.apache.lucene.analysis.TokenStream.class).end();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

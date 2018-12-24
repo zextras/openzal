@@ -1,69 +1,62 @@
-package org.openzal.zal.lucene.search;
+package org.openzal.zal.lucene.analysis;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.Reader;
 
-public class TopDocs
+public class Analyzer implements Closeable
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private com.zimbra.cs.index.ZimbraTopDocs mZObject;
+  private final org.apache.lucene.analysis.Analyzer mZObject;
   /* $endif $ */
 
-  public TopDocs(@NotNull Object zObject)
+  public Analyzer(@NotNull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
+    mZObject = (org.apache.lucene.analysis.Analyzer) zObject;
     /* $endif $ */
   }
 
-  public int getTotalHits()
+  public TokenStream tokenStream(String fieldName, Reader reader)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.getTotalHits();
+    return new TokenStream(mZObject.tokenStream(fieldName, reader));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public float getMaxScore()
+  public TokenStream reusableTokenStream(String fieldName, Reader reader)
+    throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.getMaxScore();
+    return new TokenStream(mZObject.reusableTokenStream(fieldName, reader));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public List<ScoreDoc> getScoreDocs()
-  {
+  public int getPositionIncrementGap(String fieldName) {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    List<ScoreDoc> scoreDocList = new ArrayList<>();
-
-    for( com.zimbra.cs.index.ZimbraScoreDoc doc : mZObject.getScoreDocs() )
-    {
-      scoreDocList.add(new ScoreDoc(doc));
-    }
-
-    return scoreDocList;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public ScoreDoc getScoreDoc(int index)
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return new ScoreDoc(mZObject.getScoreDoc(index));
+    return mZObject.getPositionIncrementGap(fieldName);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   @Override
-  public String toString()
-  {
+  public void close() {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    mZObject.close();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  @Override
+  public String toString() {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return mZObject.toString();
     /* $else $
@@ -71,7 +64,9 @@ public class TopDocs
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(
+    @NotNull Class<T> target
+  )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

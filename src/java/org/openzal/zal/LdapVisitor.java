@@ -18,17 +18,11 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.lib;
+package org.openzal.zal;
 
-import java.util.Calendar;
+import java.util.Map;
 
-public interface Clock
+public interface LdapVisitor
 {
-  long ONE_HOUR = 60L * 60L * 1000L;
-  long ONE_DAY = 24L * ONE_HOUR;
-  long HALF_DAY = 12L * ONE_DAY;
-
-  public long now();
-  public Calendar getCurrentTime();
-  public Calendar getDaysFromNow(int numDays);
+  void visit(String dn, String name, Map<String,String> entry);
 }

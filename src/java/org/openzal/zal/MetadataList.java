@@ -57,6 +57,16 @@ public class MetadataList
     return this;
   }
 
+  public MetadataList remove(Object value) {
+    mMetadataList.remove(value);
+    return this;
+  }
+
+  public MetadataList remove(int idx) {
+    mMetadataList.remove(idx);
+    return this;
+  }
+
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mMetadataList);

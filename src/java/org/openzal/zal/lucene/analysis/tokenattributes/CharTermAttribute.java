@@ -1,17 +1,20 @@
-package org.openzal.zal.lucene.document;
+package org.openzal.zal.lucene.analysis.tokenattributes;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DocumentId
+public class CharTermAttribute
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private com.zimbra.cs.index.ZimbraIndexDocumentID mZObject;
+  private final org.apache.lucene.analysis.tokenattributes.CharTermAttribute mZObject;
   /* $endif $ */
 
-  public DocumentId(@NotNull Object zObject)
+  public CharTermAttribute(
+    @NotNull
+      Object zObject
+  )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;;
+    mZObject = (org.apache.lucene.analysis.tokenattributes.CharTermAttribute) zObject;
     /* $endif $ */
   }
 
@@ -25,7 +28,10 @@ public class DocumentId
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(
+    @NotNull
+      Class<T> target
+  )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);
