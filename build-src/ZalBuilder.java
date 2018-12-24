@@ -9,11 +9,11 @@ public class ZalBuilder
 {
   private static final int     sMaxConcurrentTask = 4;
   private static final Version sFirstSupportedZimbraVersion = new Version("8.0.0");
-  private static final Version sLastSupportedZimbraVersion = new Version("8.8.10");
+  private static final Version sLastSupportedZimbraVersion = new Version("8.8.11");
 
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
   private static String[] sCommonZimbraVersions = {
-    "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10"
+    "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11"
   };
 
   public static void main(String args[])
@@ -90,7 +90,16 @@ public class ZalBuilder
       }
 
       case "clean": {
-        removeDirectoryContent("dist/", ".*[.]jar");
+        removeDirectoryContent("dist/", ".*[.]jar", false);
+/*
+        Uncomment when ant-based build system is removed
+        removeDirectoryContent("lib/", ".*[.]jar");
+*/
+        removeDirectoryContent(
+          "zimbra/",
+          ".*[.](jar|xml|sql|xml-template)",
+          true
+        );
         return;
       }
 
@@ -243,7 +252,7 @@ public class ZalBuilder
     sThreadList.clear();
   }
 
-  private static void removeDirectoryContent(String path, String regex) {
+  private static void removeDirectoryContent(String path, String regex, boolean removeDirectoryIfEmpty) {
     File dir = new File(path);
 
     Pattern pattern = Pattern.compile(regex);
@@ -257,7 +266,7 @@ public class ZalBuilder
             System.out.println("Skipping "+entry.getPath());
             return;
           }
-          removeDirectoryContent(entry.getPath(), regex);
+          removeDirectoryContent(entry.getPath(), regex, removeDirectoryIfEmpty);
           entry.delete();
         }
         else
@@ -270,6 +279,11 @@ public class ZalBuilder
           }
         }
       }
+    }
+
+    if( dir.list() == null || dir.list().length == 0 ) {
+      System.out.println("Removing "+dir.getPath());
+      dir.delete();
     }
   }
 
