@@ -1,18 +1,18 @@
 package org.openzal.zal.lucene.search;
 
-import com.sun.istack.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lucene.index.Term;
 
 import java.util.List;
 
-public class MultiPhraseQuery
+public class PhraseQuery
   extends Query
 {
 
-  public MultiPhraseQuery(Term... terms)
+  public PhraseQuery(Term... terms)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    this(new org.apache.lucene.search.MultiPhraseQuery());
+    this(new org.apache.lucene.search.PhraseQuery());
 
     if( terms.length > 0 )
     {
@@ -23,10 +23,10 @@ public class MultiPhraseQuery
     /* $endif $ */
   }
 
-  public MultiPhraseQuery(@NotNull Object zObject)
+  public PhraseQuery(@NotNull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    super((org.apache.lucene.search.MultiPhraseQuery) zObject);
+    super((org.apache.lucene.search.PhraseQuery) zObject);
     /* $else $
     super(null);
     /* $endif $ */
@@ -35,7 +35,16 @@ public class MultiPhraseQuery
   public void add(@NotNull Term term)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
+    toZimbra(org.apache.lucene.search.PhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  public void add(@NotNull Term term, int position)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    toZimbra(org.apache.lucene.search.PhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class), position);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -53,14 +62,10 @@ public class MultiPhraseQuery
   public void add(@NotNull Term[] terms)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    org.apache.lucene.index.Term[] zimbraArray = new org.apache.lucene.index.Term[terms.length];
-
-    for( int i = 0; i < zimbraArray.length; i++ )
+    for(int i = 0; i < terms.length; i++)
     {
-      zimbraArray[i] = terms[i].toZimbra(org.apache.lucene.index.Term.class);
+      add(terms[i], i);
     }
-
-    toZimbra(org.apache.lucene.search.MultiPhraseQuery.class).add(zimbraArray);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

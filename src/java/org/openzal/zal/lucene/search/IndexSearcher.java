@@ -22,8 +22,6 @@ public class IndexSearcher
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
     mReader = new IndexReader(mZObject.getIndexReader());
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

@@ -12,8 +12,6 @@ public class Term
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     this(new org.apache.lucene.index.Term(field, value));
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -21,8 +19,6 @@ public class Term
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.index.Term) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

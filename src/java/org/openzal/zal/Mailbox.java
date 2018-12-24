@@ -2702,4 +2702,18 @@ public class Mailbox
     com.zimbra.cs.mailbox.MailboxMaintenance maintenace = mMbox.getMaintenance();
     return maintenace != null;
   }
+
+  public void checkSizeChange(long newSize) throws ZimbraException
+  {
+    /* $if ZimbraVersion >= 8.8.10 $ */
+    try
+    {
+      mMbox.checkSizeChange(newSize);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
+  }
 }

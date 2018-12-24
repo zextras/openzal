@@ -20,13 +20,11 @@ public class Indexer
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
   private final com.zimbra.cs.index.Indexer mZObject;
-  /* $endif $ */
-  /* $if ZimbraVersion >= 8.5.0 $ */
   private Object rIndexWriterRef;
-  /* $endif $ */
-  /* $if ZimbraVersion >= 8.5.0 $ */
   private Method rmIndexWriterRefGet;
+  private IndexWriter mIndexWriter;
   /* $endif $ */
+
 
   public Indexer(@NotNull Object zObject)
   {
@@ -45,7 +43,7 @@ public class Indexer
         rmIndexWriterRefGet = target.getDeclaredMethod("get");
         rmIndexWriterRefGet.setAccessible(true);
 
-
+        mIndexWriter = getIndexWriter();
       }
       catch( Exception e )
       {
@@ -59,8 +57,6 @@ public class Indexer
         zObject.getClass().getCanonicalName()
       ));
     }
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -89,7 +85,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().addDocument(document);
+    mIndexWriter.addDocument(document);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -99,7 +95,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().addDocument(documentList);
+    mIndexWriter.addDocument(documentList);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -109,7 +105,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().deleteDocuments(terms);
+    mIndexWriter.deleteDocuments(terms);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -119,7 +115,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().deleteDocuments(queries);
+    mIndexWriter.deleteDocuments(queries);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -129,7 +125,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().deleteAll();
+    mIndexWriter.deleteAll();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -139,7 +135,7 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    getIndexWriter().deleteUnusuedFiles();
+    mIndexWriter.deleteUnusuedFiles();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

@@ -17,8 +17,6 @@ public class Field
       org.apache.lucene.document.Field.Store.valueOf(stored.name()),
       org.apache.lucene.document.Field.Index.valueOf(indexed.name())
     ));
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -26,8 +24,6 @@ public class Field
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.document.Field) zObject;
-    /* $else $
-    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 

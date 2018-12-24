@@ -22,6 +22,24 @@ package org.openzal.zal;
 
 import java.util.*;
 
+import com.unboundid.asn1.ASN1OctetString;
+import com.unboundid.ldap.sdk.Attribute;
+import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.SearchRequest;
+import com.unboundid.ldap.sdk.SearchResult;
+import com.unboundid.ldap.sdk.SearchResultEntry;
+import com.unboundid.ldap.sdk.SearchScope;
+import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
+import com.zimbra.cs.ldap.LdapClient;
+import com.zimbra.cs.ldap.LdapServerType;
+import com.zimbra.cs.ldap.LdapUsage;
+import com.zimbra.cs.ldap.ZLdapContext;
+import com.zimbra.cs.ldap.ZSearchControls;
+import com.zimbra.cs.ldap.ZSearchResultEntry;
+import com.zimbra.cs.ldap.ZSearchResultEnumeration;
+import com.zimbra.cs.ldap.ZSearchScope;
+import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.*;
@@ -51,7 +69,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
-import org.openzal.zal.Group;
+import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
 {
@@ -2209,6 +2227,117 @@ public class ProvisioningImp implements Provisioning
     }
 
     return group;
+  }
+
+  @Override
+  public void rawQuery(String base, final String query, LdapVisitor visitor)
+  {
+    rawQuery(base, query, visitor, null);
+  }
+
+  @Override
+  public void rawQuery(String base, final String query, LdapVisitor visitor, String[] fields)
+  {
+    UBIDLdapContext zlc = null;
+    try {
+      zlc = ((UBIDLdapContext) LdapClient.getContext(LdapServerType.REPLICA, LdapUsage.GENERIC));
+      LDAPConnection connection = zlc.getNative();
+
+
+      {
+        SearchRequest searchRequest = new SearchRequest(
+          base,
+          SearchScope.SUBORDINATE_SUBTREE,
+          query
+        );
+        searchRequest.setAttributes(fields);
+
+        HashMap<String,String> map = new HashMap<>(
+          fields == null ? 100 : fields.length, 1.0f
+        );
+
+        ASN1OctetString resumeCookie = null;
+        while (true)
+        {
+          searchRequest.setControls(
+            new SimplePagedResultsControl(
+              1000 * 25,
+              resumeCookie
+            )
+          );
+          SearchResult searchResult = connection.search(searchRequest);
+
+          for (SearchResultEntry current : searchResult.getSearchEntries())
+          {
+            String dn = current.getDN();
+            String address = Utils.dnToName(dn);
+
+            map.clear();
+            for( Attribute attribute : current.getAttributes() ) {
+              map.put(attribute.getName(), attribute.getValue());
+            }
+            visitor.visit(
+              dn,
+              address,
+              map
+            );
+          }
+
+          SimplePagedResultsControl responseControl = SimplePagedResultsControl.get(
+            searchResult
+          );
+          if (responseControl.moreResultsToReturn())
+          {
+            resumeCookie = responseControl.getCookie();
+          }
+          else
+          {
+            break;
+          }
+        }
+      }
+    } catch (ServiceException ex) {
+      throw ExceptionWrapper.wrap(ex);
+    }
+    catch (LDAPException ex) {
+      throw ExceptionWrapper.wrap(ex);
+    }
+    finally {
+      LdapClient.closeContext(zlc);
+    }
+  }
+
+  @Override
+  public int rawCountQuery(String base, final String query)
+  {
+    ZLdapContext zlc = null;
+    try
+    {
+      ZSearchControls searchControls = ZSearchControls.createSearchControls(
+        ZSearchScope.SEARCH_SCOPE_SUBTREE,
+        0,
+        (String[]) null
+      );
+
+      zlc = LdapClient.getContext(LdapServerType.REPLICA, LdapUsage.GENERIC);
+      return (int)zlc.countEntries(
+        base,
+        DirectQueryFilterBuilder.create(query),
+        searchControls
+      );
+    }
+    catch (ServiceException ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+    catch (LDAPException ex)
+    {
+      throw ExceptionWrapper.wrap(ex);
+    }
+    finally
+    {
+      LdapClient.closeContext(zlc);
+    }
   }
 
   @Override

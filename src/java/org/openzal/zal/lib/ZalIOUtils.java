@@ -22,12 +22,12 @@ package org.openzal.zal.lib;
 
 import com.zimbra.znative.IO;
 
+import java.io.File;
 import java.io.IOException;
 
 
 public class ZalIOUtils
 {
-
   public static int linkCount(String path)
     throws IOException
   {
@@ -38,5 +38,15 @@ public class ZalIOUtils
     throws IOException
   {
     IO.link(oldPath, newPath);
+  }
+
+  public static long getInodeId(String path)
+    throws IOException
+  {
+    /* $if ZimbraVersion >= 8.0.2$ */
+      return IO.fileInfo(path).getInodeNum();
+    /* $else$
+      return 0;
+     $endif$ */
   }
 }
