@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ActualClock;
 import org.openzal.zal.lib.Clock;
 import com.zimbra.common.service.ServiceException;
@@ -307,30 +308,48 @@ public class InviteFactory
       zAttendeeList.add(zAttendee);
     }
 
-    ParsedDateTime dateStart = null;
-    if( mUtcDateStart != 0L ) {
-      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    }
 
-    ParsedDateTime dateEnd = null;
-    if( mUtcDateEnd != 0L ) {
-      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    if( mUtcDateStart == 0L && mUtcDateEnd == 0L) {
+      mUtcDateStart = cal.getTimeInMillis();
+      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
     }
+    else if(mUtcDateStart == 0L && mUtcDateEnd < cal.getTimeInMillis())
+    {
+      throw new ZimbraException("EndDate can not be in the past!");
+    }
+    else if(mUtcDateStart == 0L && mUtcDateEnd > cal.getTimeInMillis())
+    {
+      mUtcDateStart = cal.getTimeInMillis();
+    }
+    else if(mUtcDateStart < cal.getTimeInMillis() && mUtcDateEnd == 0L)
+    {
+      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
+    }
+    // else if(mUtcDateStart > cal.getTimeInMillis() && mUtcDateEnd == 0L)
+    // {
+      // throw new ZimbraException("StartDate can not be in the future!???");
+    // }
+
+    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
+    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
 
     if (mAllDayEvent || task)
     {
-      if( dateStart != null ) {
         dateStart.setHasTime(false);
-      }
-      if( dateEnd != null ) {
         dateEnd.setHasTime(false);
-      }
     }
 
     Recurrence.RecurrenceRule mainRecurrenceRule = null;
+    ParsedDuration eventDuration = null;
     if (mRecurrenceRule != null)
     {
-      ParsedDuration eventDuration = dateEnd.difference(dateStart);
+      eventDuration = dateEnd.difference(dateStart);
       Recurrence.IRecurrence simpleRecurrenceRule = new Recurrence.SimpleRepeatingRule(dateStart,
                                                                                        eventDuration,
                                                                                        mRecurrenceRule.toZimbra(ZRecur.class),
