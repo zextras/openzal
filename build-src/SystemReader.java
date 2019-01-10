@@ -1,7 +1,9 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Jolly class:
@@ -11,6 +13,7 @@ class SystemReader
 {
   private String mCommitCache = null;
   private Version mVersionCache = null;
+  private Version mZalVersionCache = null;
 
   public String readCommit() throws Exception {
     if( mCommitCache == null ) {
@@ -53,13 +56,42 @@ class SystemReader
     }
   }
 
+  public void execWithOutput(String name, String command)
+    throws Exception
+  {
+    System.out.println("Running "+name+"...");
+
+    ProcessBuilder builder = new ProcessBuilder(
+      "/bin/bash",
+      "-c",
+      command
+    );
+
+    builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+    builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+    builder.redirectInput(ProcessBuilder.Redirect.INHERIT);
+
+    int result = builder.start().waitFor();
+    if( result != 0 ) {
+      System.err.println("Running "+name+"...FAILED");
+      throw new RuntimeException("Running "+name+" Failed");
+    }
+
+    System.out.println("Running "+name+"...OK");
+  }
+
   public Version readVersion() throws Exception {
     if( mVersionCache == null ) {
       mVersionCache = new Version(
-        readStream(new FileInputStream(new File("version")))
+        readFile("version")
       );
     }
     return mVersionCache;
+  }
+
+  public String readFile(String path) throws Exception
+  {
+    return readStream(new FileInputStream(new File(path)));
   }
 
   private String readStream(InputStream stream) throws IOException {
@@ -68,7 +100,7 @@ class SystemReader
       byte[] buffer = new byte[64*1024];
       int read = stream.read(buffer);
       if( read > 0 ) stringBuffer.append(
-        new String(buffer,0,read-1,"UTF-8")
+        new String(buffer, 0, read-1, StandardCharsets.UTF_8)
       );
 
       if( read < 0 ) break;

@@ -24,25 +24,43 @@ public class FileDownloader {
 
   public void download() throws IOException
   {
+    download(true);
+  }
+
+  public void downloadWithoutProxy() throws IOException
+  {
+    download(false);
+  }
+
+  private void download(boolean useProxy) throws IOException
+  {
     if( mDestinationPath == null ) {
       throw new RuntimeException("You didn't specify a destinationPath");
     }
     File destinationFile = new File(mDestinationPath);
 
-    System.out.print("Downloading "+mDestinationPath+"...");
     if( destinationFile.exists() ) {
-      System.out.println("already exists, skipping.");
       return;
     }
+
+    System.out.print("Downloading "+mDestinationPath+"...");
 
     if( !destinationFile.getParentFile().exists() ) {
       destinationFile.getParentFile().mkdirs();
     }
 
-    InputStream inputStream = openStream();
-    FileOutputStream output = new FileOutputStream(mDestinationPath);
-    copyStream(inputStream, output);
-    System.out.println("OK");
+    try
+    {
+      InputStream inputStream = openStream(useProxy);
+      FileOutputStream output = new FileOutputStream(mDestinationPath);
+      copyStream(inputStream, output);
+      System.out.println("OK");
+    }
+    catch (IOException ex)
+    {
+      System.err.println("FAILED ("+mUrl.toExternalForm()+")");
+      throw ex;
+    }
   }
 
   private void copyStream(InputStream inputStream, OutputStream output) throws IOException {
@@ -59,7 +77,7 @@ public class FileDownloader {
 
   public void downloadAndUnpack(String destinationDir) throws IOException, InterruptedException {
     System.out.print("Download and unpacking to "+destinationDir+"...");
-    InputStream inputStream = openStream();
+    InputStream inputStream = openStream(true);
     new File(destinationDir).mkdirs();
 
     Process process = Runtime.getRuntime().exec(
@@ -79,10 +97,10 @@ public class FileDownloader {
     System.out.println("OK");
   }
 
-  private InputStream openStream() throws IOException {
+  private InputStream openStream(boolean useProxy) throws IOException {
     URL url;
     String buildProxyEnv = System.getenv().get("BUILD_PROXY");
-    if( buildProxyEnv != null && !buildProxyEnv.isEmpty()) {
+    if( useProxy && buildProxyEnv != null && !buildProxyEnv.isEmpty()) {
       System.out.print("(Using Proxy)...");
       URL proxyUrl = new URL(buildProxyEnv);
       url = new URL(proxyUrl.getProtocol(), proxyUrl.getHost(), proxyUrl.getPort(), mUrl.toExternalForm());
