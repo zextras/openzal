@@ -52,7 +52,7 @@ class FileManager extends ForwardingJavaFileManager<JavaFileManager>
       mZip = new ZipOutputStream(
         new FileOutputStream(dstZip)
       );
-      mZip.setLevel(9);
+      mZip.setLevel(1);
     }
     return new JavaFileObject(){
 

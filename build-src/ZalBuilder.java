@@ -8,10 +8,13 @@ import java.util.regex.Pattern;
 public class ZalBuilder
 {
   private static final int     sMaxConcurrentTask = 4;
+
   private static final Version sFirstSupportedZimbraVersion = new Version("8.0.0");
   private static final Version sLastSupportedZimbraVersion = new Version("8.8.11");
 
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
+  private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
+
   private static String[] sCommonZimbraVersions = {
     "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11"
   };
@@ -19,6 +22,8 @@ public class ZalBuilder
   public static void main(String args[])
     throws Exception
   {
+    setupStdoutout();
+
     SystemReader systemReader = new SystemReader();
 
     System.out.println("  ZAL - Version "+systemReader.readVersion());
@@ -26,27 +31,73 @@ public class ZalBuilder
       help();
       System.exit(1);
     }
-    for( String command : args ) {
-      executeCommand(command, systemReader);
+
+    for( String command : args )
+    {
+      if( command.startsWith("-") )
+      {
+        parseParameter(command, systemReader);
+      }
+    }
+
+    for( String command : args )
+    {
+      if( !command.startsWith("-") )
+      {
+        executeCommand(command, systemReader);
+      }
     }
 
     System.exit(0);
+  }
+
+  private static void parseParameter(String parameter, final SystemReader systemReader) throws Exception
+  {
+    switch (parameter)
+    {
+      case "-h":
+      case "--help": {
+        help();
+        System.exit(0);
+        break;
+      }
+
+      default: {
+        System.out.println("Unknown parameter '"+parameter+"'");
+        help();
+        System.exit(1);
+      }
+    }
+  }
+
+  private static void setupStdoutout()
+  {
+    final long startTime = System.currentTimeMillis();
+    AtomicBoolean sharedMustWriteDate = new AtomicBoolean(true);
+    System.setOut(new PrintStream(new DatedOutputStream(System.out, startTime, sharedMustWriteDate), true));
+    System.setErr(new PrintStream(new DatedOutputStream(System.err, startTime, sharedMustWriteDate), true));
   }
 
   private static List<Version> extractZimbraVersions()
   {
     String[] rawZimbraVersions = new File("zimbra/").list();
     if( rawZimbraVersions == null || rawZimbraVersions.length == 0) {
-      System.out.println("zimbra/ is empty!");
-      System.exit(1);
-      return null;
+      throw new RuntimeException("Zimbra directory is empty!");
     }
 
     List<Version> zimbraVersions = new ArrayList<>(rawZimbraVersions.length);
-    for( String rawZimbraVersion : rawZimbraVersions ) {
+    for( String rawZimbraVersion : rawZimbraVersions )
+    {
+      if( !Pattern.matches("[0-9.]*", rawZimbraVersion) ) {
+        continue;
+      }
       zimbraVersions.add( new Version(rawZimbraVersion) );
     }
     Collections.sort(zimbraVersions);
+
+    if( zimbraVersions.isEmpty() ) {
+      throw new RuntimeException("No valid zimbra version were found");
+    }
 
     if( zimbraVersions.get(0).compareTo(sFirstSupportedZimbraVersion) > 0 ) {
       throw new RuntimeException(
@@ -66,8 +117,6 @@ public class ZalBuilder
   private static void executeCommand(String command, final SystemReader systemReader) throws Exception {
 
     switch (command) {
-      case "--help":
-      case "-h":
       case "help": {
         help();
         System.exit(0);
@@ -75,32 +124,31 @@ public class ZalBuilder
       }
 
       case "setup": {
-        checkOrDownloadMavenDependencies(systemReader);
-        checkOrDownloadZimbraJars();
+        setup(systemReader);
         return;
       }
 
       case "zal-dev-current-source": {
+        setup(systemReader);
         buildFromSource(sLastSupportedZimbraVersion,systemReader);
         return;
       }
 
       case "zal-dev-current-binary": {
+        setup(systemReader);
         buildFromLiveZimbra(sLastSupportedZimbraVersion,systemReader);
         return;
       }
 
       case "zal-dev-last": {
+        setup(systemReader);
         buildFromZimbraVersion(sLastSupportedZimbraVersion,systemReader,true);
         return;
       }
 
       case "clean": {
         removeDirectoryContent("dist/", ".*[.]jar", false);
-/*
-        Uncomment when ant-based build system is removed
-        removeDirectoryContent("lib/", ".*[.]jar");
-*/
+        removeDirectoryContent("lib/", ".*[.]jar", false);
         removeDirectoryContent(
           "zimbra/",
           ".*[.](jar|xml|sql|xml-template)",
@@ -119,16 +167,18 @@ public class ZalBuilder
         //check the compatibility between latest and first release
         zimbraVersions.add( zimbraVersions.get(0) );
 
+        AtomicBoolean failed = new AtomicBoolean(false);
         String lastVersion = "previous version binary";
         String lastVersionPath = "bin/previous-zal-version.jar";
         for( Version zimbraVersion :zimbraVersions) {
-          System.out.println("Checking compatibility "+lastVersion+" vs "+zimbraVersion);
           final String currentVersion = "dist/"+zimbraVersion+"/zal.jar";
           final String finalLastVersionPath = lastVersionPath;
+          final String finalLastVersion = lastVersion;
           queueTask(new Runnable() {
             @Override
             public void run() {
               try {
+                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...");
                 systemReader.exec(
                   "tools/japi-compliance-checker/japi-compliance-checker.pl",
                   "-binary",
@@ -137,8 +187,9 @@ public class ZalBuilder
                   finalLastVersionPath,
                   currentVersion
                 );
+                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...OK");
               } catch (Exception e) {
-                e.printStackTrace();
+                failed.set(false);
               }
             }
           });
@@ -147,6 +198,10 @@ public class ZalBuilder
           lastVersion = zimbraVersion.toString();
         }
         waitTask();
+
+        if( failed.get() ) {
+          System.exit(1);
+        }
         return;
       }
 
@@ -155,35 +210,52 @@ public class ZalBuilder
           System.out.println("No need to check compatibility for the first micro of "+systemReader.readVersion());
           return;
         }
-        String lastVersion = "bin/previous-zal-version.jar";
-        for( String zimbraVersion : sCommonZimbraVersions) {
+
+        List<Version> zimbraVersions = extractZimbraVersions();
+        //check the compatibility between latest and first release
+        zimbraVersions.add( zimbraVersions.get(0) );
+
+        AtomicBoolean failed = new AtomicBoolean(false);
+        String lastVersion = "previous version binary";
+        String lastVersionPath = "bin/previous-zal-version.jar";
+        for( String rawZimbraVersion : sCommonZimbraVersions) {
+          Version zimbraVersion = new Version(rawZimbraVersion);
           final String currentVersion = "dist/"+zimbraVersion+"/zal.jar";
+          final String finalLastVersionPath = lastVersionPath;
           final String finalLastVersion = lastVersion;
           queueTask(new Runnable() {
             @Override
             public void run() {
               try {
+                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...");
                 systemReader.exec(
-                  "tools/japi-compliance-checker.pl",
+                  "tools/japi-compliance-checker/japi-compliance-checker.pl",
                   "-binary",
                   "-l",
                   "OpenZAL",
-                  finalLastVersion,
+                  finalLastVersionPath,
                   currentVersion
                 );
+                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...OK");
               } catch (Exception e) {
-                e.printStackTrace();
+                failed.set(false);
               }
             }
           });
 
-          lastVersion = currentVersion;
+          lastVersionPath = currentVersion;
+          lastVersion = zimbraVersion.toString();
         }
         waitTask();
+
+        if( failed.get() ) {
+          System.exit(1);
+        }
         return;
       }
 
       case "zal-common": {
+        setup(systemReader);
         checkOrDownloadZimbraJars();
         checkOrDownloadMavenDependencies(systemReader);
         for (final String rawVersion : sCommonZimbraVersions) {
@@ -203,6 +275,7 @@ public class ZalBuilder
       }
 
       case "zal-all": {
+        setup(systemReader);
         checkOrDownloadZimbraJars();
         checkOrDownloadMavenDependencies(systemReader);
         for (final Version version : extractZimbraVersions()) {
@@ -234,6 +307,15 @@ public class ZalBuilder
     System.out.println("Unknown command '"+command+"'");
     help();
     System.exit(1);
+  }
+
+  private static void setup(SystemReader systemReader) throws Exception
+  {
+    if( !sSetupPerformed.compareAndSet(false, true) ) {
+      return;
+    }
+    checkOrDownloadMavenDependencies(systemReader);
+    checkOrDownloadZimbraJars();
   }
 
   private static List<Thread> sThreadList = new LinkedList<>();
@@ -297,8 +379,13 @@ public class ZalBuilder
     checkOrDownloadMavenDependencies(systemReader);
 
     Build build = new Build(
+      Build.JavaVersion.Java7,
       Arrays.asList("lib/", "../zm-zcs-lib/", "../zm-mailbox/" ),
       Arrays.asList("src/java/"),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
       "dist/"+version+"/zal.jar",
       new ZimbraVersionSourcePreprocessor( version, true),
       generateManifest(version, systemReader)
@@ -310,8 +397,13 @@ public class ZalBuilder
     checkOrDownloadMavenDependencies(systemReader);
 
     Build build = new Build(
+      Build.JavaVersion.Java7,
       Arrays.asList("lib/", "/opt/zimbra/lib/jars/", "/opt/zimbra/common/jetty_home/lib/" ),
       Arrays.asList("src/java/"),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
       "dist/"+version+"/zal.jar",
       new ZimbraVersionSourcePreprocessor( version, true),
       generateManifest(version, systemReader)
@@ -319,18 +411,21 @@ public class ZalBuilder
     build.compileAll("Compiling from /opt/zimbra dev "+version+ "...");
   }
 
-  private static void buildFromZimbraVersion(Version version, SystemReader systemReader, boolean devMode) throws Exception {
-    checkOrDownloadMavenDependencies(systemReader);
-    checkOrDownloadZimbraJars();
-
+  private static void buildFromZimbraVersion(Version version, SystemReader systemReader, boolean devMode) throws Exception
+  {
     File zimbraDir = new File("zimbra/"+version);
     if( !zimbraDir.exists() ) {
       throw new RuntimeException("Zimbra version "+version+" not found, maybe you need to cleanup zimbra/");
     }
 
     Build build = new Build(
+      Build.JavaVersion.Java7,
       Arrays.asList("lib/", "zimbra/"+version+"/jars/"),
       Arrays.asList("src/java/"),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
+      Collections.emptyList(),
       (devMode ? "dist/dev-last/zal.jar" : "dist/"+version+"/zal.jar"),
       new ZimbraVersionSourcePreprocessor( version, devMode),
       generateManifest(version, systemReader)
@@ -339,12 +434,40 @@ public class ZalBuilder
   }
 
   private static void checkOrDownloadZimbraJars() throws Exception {
-    if( new File("zimbra/").list() == null )
+
+    boolean emptyZimbraDir = new File("zimbra/").list() == null;
+    boolean brokenZimbraDir = false;
+
+    if( !emptyZimbraDir )
+    {
+      try
+      {
+        extractZimbraVersions();
+      }
+      catch (RuntimeException ex) {
+        System.err.println("Invalid zimbra directory: "+ex.getMessage());
+        brokenZimbraDir = true;
+      }
+    }
+
+    if( emptyZimbraDir || brokenZimbraDir )
     {
       FileDownloader downloader = new FileDownloader(
         "https://s3-eu-west-1.amazonaws.com/zimbra-jars/zimbra-all.tar.br"
       );
       downloader.downloadAndUnpack("zimbra/");
+    }
+
+    if( brokenZimbraDir )
+    {
+      try
+      {
+        extractZimbraVersions();
+      }
+      catch (RuntimeException ex) {
+        System.err.println("After downloading the last zal it's still broken!");
+        throw ex;
+      }
     }
   }
 
