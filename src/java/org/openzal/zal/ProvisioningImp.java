@@ -349,7 +349,14 @@ public class ProvisioningImp implements Provisioning
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      try
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+      catch(InvalidRequestException e1)
+      {
+        return null;
+      }
     }
   }
 
@@ -1774,7 +1781,7 @@ public class ProvisioningImp implements Provisioning
         return new Group(group);
       }
     }
-    catch (ServiceException e)
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1783,7 +1790,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   @Nullable
   public Group getGroupByName(String dlStr)
-    throws ZimbraException
+    throws NoSuchGroupException
   {
     try
     {
@@ -1797,9 +1804,16 @@ public class ProvisioningImp implements Provisioning
         return new Group(group);
       }
     }
-    catch (ServiceException e)
+    catch (com.zimbra.common.service.ServiceException e)
     {
-      throw ExceptionWrapper.wrap(e);
+      try
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+      catch(InvalidRequestException e1)
+      {
+        return null;
+      }
     }
   }
 
@@ -2206,7 +2220,9 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  @NotNull
   public Group assertGroupById(String groupId)
+    throws NoSuchGroupException
   {
     Group group = getGroupById(groupId);
     if (group == null)
@@ -2218,7 +2234,9 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  @NotNull
   public Group assertGroupByName(String groupName)
+    throws NoSuchGroupException
   {
     Group group = getGroupByName(groupName);
     if (group == null)
