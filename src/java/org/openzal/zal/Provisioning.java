@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.NoSuchAccountException;
 import org.openzal.zal.exceptions.NoSuchGrantException;
+import org.openzal.zal.exceptions.NoSuchGroupException;
 import org.openzal.zal.exceptions.UnableToFindDistributionListException;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -372,9 +373,13 @@ public interface Provisioning
 
   long getLastLogonTimestampFrequency();
 
-  Group assertGroupById(String groupId);
+  @NotNull
+  Group assertGroupById(String groupId)
+    throws NoSuchGroupException;
 
-  Group assertGroupByName(String groupName);
+  @NotNull
+  Group assertGroupByName(String groupName)
+    throws NoSuchGroupException;
 
   class CountAccountByCos
   {
