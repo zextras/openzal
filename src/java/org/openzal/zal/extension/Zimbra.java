@@ -253,17 +253,19 @@ public Zimbra(Zimbra zimbra)
 
   public void overrideZimbraStoreManager(StoreManager storeManager)
   {
-    if (!mCanOverrideStoreManager)
+    if( !mCanOverrideStoreManager )
     {
-      throw new UnsupportedOperationException("Another ZAL extension already has already overridden Zimbra StoreManager");
+      throw new UnsupportedOperationException(
+        "Another ZAL extension already has already overridden Zimbra StoreManager");
     }
     mInternalOverrideStoreManager = new InternalOverrideStoreManager(storeManager, mVolumeManager);
     ZimbraLog.extensions.info("ZAL override Zimbra StoreManager");
     try
     {
       sStoreManagerInstance.set(null, mInternalOverrideStoreManager);
+      mStoreManager = storeManager;
     }
-    catch (IllegalAccessException e)
+    catch( IllegalAccessException e )
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(e));
       throw new RuntimeException(e);
