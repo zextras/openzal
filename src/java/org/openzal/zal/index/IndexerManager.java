@@ -261,13 +261,13 @@ public class IndexerManager
     private String getExtension()
     {
       String extension = "";
-      if(getFilename() != null)
+      String filename = getFilename();
+      if( filename != null)
       {
-        int extensionIndex = getFilename().lastIndexOf('.');
-
+        int extensionIndex = filename.lastIndexOf('.');
         if (extensionIndex != -1)
         {
-          extension = getFilename().substring(extensionIndex, getFilename().length());
+          extension = filename.substring(extensionIndex + 1);
         }
       }
       return extension;
@@ -308,5 +308,4 @@ public class IndexerManager
       }
     }
   }
-
 }
