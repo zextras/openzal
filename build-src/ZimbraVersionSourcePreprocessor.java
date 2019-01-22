@@ -6,18 +6,18 @@ import java.util.regex.Pattern;
   * Tests are directly inside in this class main().
   */
 public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
-  private final Version mZimbraVersion;
   private final boolean mDevMode;
   private final Pattern sIfPattern = Pattern.compile("[$]if([^$]*)[$]");
   private final Pattern sElseIfPattern = Pattern.compile("[$]elseif([^$]*)[$]");
   private final Pattern sExpressionPattern = Pattern.compile(" *([a-zA-Z]+) *([<>=!]+) *([0-9.]+) *([|]{2}|[&]{2}|[|][!])? *");
+  private final Zimbra mZimbra;
 
   ZimbraVersionSourcePreprocessor(
-    Version zimbraVersion,
+    Zimbra zimbra,
     boolean devMode
   )
   {
-    mZimbraVersion = zimbraVersion;
+    mZimbra = zimbra;
     mDevMode = devMode;
   }
 
@@ -238,11 +238,15 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     switch (variableName)
     {
       case "ZimbraVersion":
-        variableValue = mZimbraVersion;
+        variableValue = mZimbra.getVersion();
         break;
 
       case "DevMode":
         variableValue = mDevMode ? new Version("1") : new Version("0");
+        break;
+
+      case "ZimbraX":
+        variableValue = mZimbra.getType() == Zimbra.Type.x ? new Version("1") : new Version("0");
         break;
 
       default:
@@ -516,7 +520,7 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
   private static void assertSample(String version, String expected, String code)
   {
     StringBuffer stringBuffer = new StringBuffer(code);
-    new ZimbraVersionSourcePreprocessor(new Version(version), version.equals("1")).apply(stringBuffer);
+    new ZimbraVersionSourcePreprocessor( new Zimbra(Zimbra.Type.classic,new Version(version)), version.equals("1")).apply(stringBuffer);
     if( !stringBuffer.toString().equals(expected) )
     {
       throw new RuntimeException("\n=== Expected: ===\n"+expected+"\n=== But found: ===\n"+stringBuffer);
