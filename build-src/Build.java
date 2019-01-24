@@ -19,7 +19,13 @@ import javax.tools.*;
  *   SourcePreprocessor (EmptySourcePreprocessor available)
  *   manifest map
  *
- * It also assemble the final jar
+ * This class has the responsibility to:
+ *   - validating provided paths
+ *   - compile java
+ *   - embed resources
+ *   - embed libraries with the provided rules
+ *   - execute source preprocessor
+ *   - write the manifest file
  *
  * This class can be called concurrently with other builds, by default the stdout/sdterr of compiler is hidden only in
  * case of failure the compile is re-run and output is shown.
@@ -34,7 +40,6 @@ public class Build
   );
 
   private final JavaCompiler        mJavaCompiler;
-  private final FileManager         mFileManager;
   private final SourcePreprocessor  mSourcePreprocessor;
   private final JavaVersion         mJavaVersion;
   private final List<String>        mLibDirectories;
@@ -45,6 +50,7 @@ public class Build
   private final List<String>        mIgnoreLibFilesList;
   private final String              mDestinationJar;
   private final Map<String, String> mManifest;
+  private       FileManager         mFileManager;
 
   enum JavaVersion
   {
@@ -89,13 +95,18 @@ public class Build
     mDestinationJar = destinationJar;
     mManifest = manifest;
     mJavaCompiler = ToolProvider.getSystemJavaCompiler();
-    mFileManager = new FileManager(
-      mJavaCompiler.getStandardFileManager(null, Locale.US, StandardCharsets.UTF_8),
-      destinationJar
-    );
+    mFileManager = createFileManager();
     mSourcePreprocessor = sourcePreprocessor;
 
     validatePaths();
+  }
+
+  private final FileManager createFileManager()
+  {
+    return new FileManager(
+      mJavaCompiler.getStandardFileManager(null, Locale.US, StandardCharsets.UTF_8),
+      mDestinationJar
+    );
   }
 
   private void validatePaths()
@@ -153,6 +164,8 @@ public class Build
     else
     {
       System.err.println(text+" Compilation...FAILED");
+      mFileManager.close();
+      mFileManager = createFileManager();
       task = mJavaCompiler.getTask(
         null, /* out - a Writer for additional output from the compiler; use System.err if null */
         mFileManager, /* fileManager - a file manager; if null use the compiler's standard filemanager */
