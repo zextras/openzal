@@ -1,6 +1,8 @@
 package org.openzal.zal.lucene.search;
 
+import com.zimbra.common.service.ServiceException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.document.DocumentId;
 
@@ -37,10 +39,21 @@ public class IndexSearcher
   public TopDocs search(Query query, int limit)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return new TopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
-    /* $else $
-    throw new UnsupportedOperationException();
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+      /* $endif $ */
+      /* $if ZimbraVersion >= 8.5.0 $ */
+      return new TopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
+      /* $else $
+      throw new UnsupportedOperationException();
+      /* $endif $ */
+      /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
     /* $endif $ */
   }
 
@@ -65,10 +78,21 @@ public class IndexSearcher
   public Document getDocument(DocumentId id)
     throws IOException
   {
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+    /* $endif $ */
     /* $if ZimbraVersion >= 8.5.0 $ */
     return new Document(mZObject.doc(id.toZimbra(com.zimbra.cs.index.ZimbraIndexDocumentID.class)));
     /* $else $
     throw new UnsupportedOperationException();
+    /* $endif $ */
+    /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
     /* $endif $ */
   }
 

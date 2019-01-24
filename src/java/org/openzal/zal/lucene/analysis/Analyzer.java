@@ -28,24 +28,6 @@ public class Analyzer implements Closeable
     /* $endif $ */
   }
 
-  public TokenStream reusableTokenStream(String fieldName, Reader reader)
-    throws IOException
-  {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return new TokenStream(mZObject.reusableTokenStream(fieldName, reader));
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public int getPositionIncrementGap(String fieldName) {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.getPositionIncrementGap(fieldName);
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
   @Override
   public void close() {
     /* $if ZimbraVersion >= 8.5.0 $ */

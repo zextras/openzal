@@ -13,9 +13,9 @@ public final class NormalizeTokenFilter extends CharFilter
 
   public NormalizeTokenFilter(Object zObject)
   {
-    /* $if ZimbraVersion >= 8.7.0 $ */
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     super((com.zimbra.cs.index.analysis.NormalizeTokenFilter)zObject);
-    /* $else $
+    /* $else $ */
     super(null);
     /* $endif $ */
   }
@@ -24,7 +24,7 @@ public final class NormalizeTokenFilter extends CharFilter
   public int read()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.7.0 $
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     return toZimbra(com.zimbra.cs.index.analysis.NormalizeTokenFilter.class).read();
     /* $else $ */
     return normalize(super.read());
@@ -34,7 +34,7 @@ public final class NormalizeTokenFilter extends CharFilter
   public int read(char[] buf, int offset, int len)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.7.0 $
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     return toZimbra(com.zimbra.cs.index.analysis.NormalizeTokenFilter.class).read(buf, offset, len);
     /* $else $ */
     int result = super.read(buf, offset, len);
@@ -50,7 +50,7 @@ public final class NormalizeTokenFilter extends CharFilter
 
   public static int normalize(int c)
   {
-    /* $if ZimbraVersion >= 8.7.0 $
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(c);
     /* $else $ */
     return normalize(c, 0);
@@ -59,7 +59,7 @@ public final class NormalizeTokenFilter extends CharFilter
 
   public static int normalize(int c, int p)
   {
-    /* $if ZimbraVersion >= 8.7.0 $
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(c, p);
     /* $else $ */
     switch( c )
@@ -1424,7 +1424,7 @@ public final class NormalizeTokenFilter extends CharFilter
 
   public static String normalize(String value)
   {
-    /* $if ZimbraVersion >= 8.7.0 $
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $
     return com.zimbra.cs.index.analysis.NormalizeTokenFilter.normalize(value);
     /* $else $ */
     StringBuilder result = new StringBuilder();
