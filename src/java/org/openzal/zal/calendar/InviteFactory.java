@@ -62,17 +62,18 @@ public class InviteFactory
   private       String             mDescriptionHtml;
   private       long               mLastModifyTimeUtc;
   private       int                mSequence;
-  private       ICalendarTimezone  mTimezone;
-  private       boolean            mAlarmSet;
-  private       int                mAlarmTime;
-  private       long               mReminderTime;
-  private       MimeMessage        mMimeMessage;
-  private       boolean            mHasAttachment;
+  private       ICalendarTimezone mTimezone;
+  private       boolean           mAlarmSet;
+  private       int               mAlarmTime;
+  private       long              mReminderTime;
+  private       MimeMessage       mMimeMessage;
+  private       boolean           mHasAttachment;
   @NotNull
-  private final Clock              mClock;
-  private       RecurrenceRule     mRecurrenceRule;
-  private       int                mMailItemId = 0;
-  private       String             mPartStat;
+  private final Clock             mClock;
+  private       RecurrenceRule    mRecurrenceRule;
+  private       int               mMailItemId = 0;
+  private       String            mPartStat;
+  private       boolean           mResponseRequest;
 
   public InviteFactory()
   {
@@ -226,6 +227,11 @@ public class InviteFactory
     mMimeMessage = mimeMessage;
   }
 
+  public void setResponseRequest(Boolean rsvp)
+  {
+    mResponseRequest = rsvp;
+  }
+
   public void populateFactoryFromExistingInvite( Invite invite )
   {
     mUid = invite.getUid();
@@ -300,14 +306,8 @@ public class InviteFactory
     List<ZAttendee> zAttendeeList = new LinkedList<ZAttendee>();
     for (Attendee attendee : mAttendeeList)
     {
-      ZAttendee zAttendee = new ZAttendee(
-        attendee.getAddress(), attendee.getName(),
-        null, null, null, null, "REQ", attendee.getStatus().getRawStatus(),
-        true, null, null, null, null
-      );
-      zAttendeeList.add(zAttendee);
+      zAttendeeList.add(attendee.toZAttendee());
     }
-
 
     Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
     cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -379,7 +379,7 @@ public class InviteFactory
       mAllDayEvent,
       dateStart,
       dateEnd,
-      null,
+      eventDuration,
       recurId,
       mainRecurrenceRule,
       isOrganizer,
@@ -401,7 +401,7 @@ public class InviteFactory
       mSequence,
       /* $endif$ */
       AttendeeInviteStatus.TENTATIVE.getRawStatus(),
-      true,
+      mResponseRequest,
       true
     );
 

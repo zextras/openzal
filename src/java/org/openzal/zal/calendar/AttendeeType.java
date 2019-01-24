@@ -22,25 +22,32 @@ package org.openzal.zal.calendar;
 
 public enum AttendeeType
 {
-  Required, Optional, Resource;
+  Organizer("CHA"),
+  Required("REQ"),
+  Optional("OPT"),
+  Resource("NON")
+  ;
+
+  private String mZValue;
+
+  AttendeeType(String zValue)
+  {
+    mZValue = zValue;
+  }
+
+  public String toZimbra()
+  {
+    return mZValue;
+  }
 
   public static AttendeeType fromString(String role)
   {
-    if ("NON".equals(role))
+    for(AttendeeType type : values())
     {
-      return Resource;
-    }
-    else if ("OPT".equals(role))
-    {
-      return Optional;
-    }
-    else if ("REQ".equals(role))
-    {
-      return Required;
-    }
-    else if ("CHA".equals(role))
-    {
-      return Resource;
+      if( type.toZimbra().equals(role) )
+      {
+        return type;
+      }
     }
 
     return Required;

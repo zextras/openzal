@@ -21,13 +21,71 @@
 package org.openzal.zal.calendar;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+@JsonIgnoreProperties( ignoreUnknown = true )
 public class Attendee
 {
+  private final AttendeeType mType;
+  private final String mAddress;
+  private final String mName;
+  private final AttendeeInviteStatus mStatus;
+  private final Boolean mRsvp;
+
+  public Attendee(
+    String address
+  )
+  {
+    this(address, address);
+  }
+
+  public Attendee(
+    String address,
+    String name
+  )
+  {
+    this(address, name, AttendeeInviteStatus.NEEDS_ACTION);
+  }
+
+  public Attendee(
+    String address,
+    String name,
+    AttendeeInviteStatus status
+  )
+  {
+    this(address, name, status, AttendeeType.Required);
+  }
+
+  public Attendee(
+    String address,
+    String name,
+    AttendeeInviteStatus status,
+    AttendeeType type
+  )
+  {
+    this(address, name, status, type, null);
+  }
+
+  @JsonCreator
+  public Attendee(
+    @JsonProperty( "address" ) String address,
+    @JsonProperty( "name" ) String name,
+    @JsonProperty( "status" ) AttendeeInviteStatus status,
+    @JsonProperty( "type" ) AttendeeType type,
+    @JsonProperty( "rsvp" ) Boolean rsvp
+  )
+  {
+    mAddress = (address == null) ? "" : address;
+    mName = (name == null) ? "" : name;
+    mStatus = status;
+    mType = type;
+    mRsvp = rsvp;
+  }
+
   public String getAddress()
   {
     return mAddress;
@@ -48,37 +106,38 @@ public class Attendee
     return mType;
   }
 
-  private final AttendeeType         mType;
-  private final String               mAddress;
-  private final String               mName;
-  private final AttendeeInviteStatus mStatus;
-
-  public Attendee(
-    String address,
-    String name,
-    AttendeeInviteStatus status
-  )
+  public boolean hasRsvp()
   {
-    this(address, name, status, AttendeeType.Required);
+    return getRsvp() != null;
   }
 
-  @JsonCreator
-  public Attendee(
-    @JsonProperty("address") String address,
-    @JsonProperty("name") String name,
-    @JsonProperty("status") AttendeeInviteStatus status,
-    @JsonProperty("type") AttendeeType type
-  )
+  public Boolean getRsvp()
   {
-    mType = type;
-    mAddress = (address == null) ? "" : address;
-    mName = (name == null) ? "" : name;
-    mStatus = status;
+    return mRsvp;
   }
 
   @NotNull
-  ZOrganizer toZOrganizer()
+  public ZOrganizer toZOrganizer()
   {
     return new ZOrganizer(mAddress, mName);
+  }
+
+  public ZAttendee toZAttendee()
+  {
+    return new ZAttendee(
+      getAddress(),
+      getName(),
+      null,
+      null,
+      null,
+      null,
+      getType().toZimbra(),
+      getStatus().getRawStatus(),
+      getRsvp(),
+      null,
+      null,
+      null,
+      null
+    );
   }
 }
