@@ -252,11 +252,18 @@ public class Mailbox
 
   public Object getListener(String listenerName)
   {
+    /* $if ZimbraX == 1 $ */
+    return null;
+    /* $else $
     return mMbox.getListener(listenerName);
+    /* $endif $ */
   }
 
   public void registerListener(@NotNull Listener listener)
   {
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $else $
     try
     {
       mMbox.addListener(listener.getStoreContext().toZimbra(Session.class));
@@ -267,16 +274,25 @@ public class Mailbox
                                mMbox.getId() + ": " +
                                e.getMessage());
     }
+    /* $endif $ */
   }
 
   public void unregisterListener(@NotNull Listener listener)
   {
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $else $
     mMbox.removeListener(listener.getStoreContext().toZimbra(Session.class));
+    /* $endif $ */
   }
 
   public void unregisterListener(@NotNull MailboxSessionProxy session)
   {
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $else $
     mMbox.removeListener(session.toZimbra(Session.class));
+    /* $endif $ */
   }
 
   private static int getMailboxSyncCutoff(@NotNull com.zimbra.cs.mailbox.Mailbox mMbox)
@@ -1394,9 +1410,20 @@ public class Mailbox
     return mMbox.getLastItemId();
   }
 
-  public void clearItemCache()
+  public void clearItemCache() throws ZimbraException
   {
-    mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+    /* $endif $ */
+      mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
+    /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
   }
 
 
@@ -2653,7 +2680,11 @@ public class Mailbox
   {
     try
     {
+      /* $if ZimbraX == 1 $ */
+      mMbox.index.startReIndex(mMbox.getOperationContext());
+      /* $else $
       mMbox.index.startReIndex();
+      /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -2661,23 +2692,38 @@ public class Mailbox
     }
   }
 
-  public void deleteIndex() throws IOException
+  public void deleteIndex() throws IOException, ZimbraException
   {
-    mMbox.index.deleteIndex();
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+    /* $endif $ */
+      mMbox.index.deleteIndex();
+    /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
   }
 
   public void suspendIndexing()
   {
-/* $if ZimbraVersion >= 8.7.0 $ */
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $elseif ZimbraVersion >= 8.7.0 $
     mMbox.suspendIndexing();
-/* $endif $ */
+    /* $endif $ */
   }
 
   public void resumeIndexing()
   {
-/* $if ZimbraVersion >= 8.7.0 $ */
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $elseif ZimbraVersion >= 8.7.0 $
     mMbox.resumeIndexing();
-/* $endif $ */
+    /* $endif $ */
   }
 
   public boolean isReIndexInProgress()
@@ -2697,7 +2743,9 @@ public class Mailbox
 
   public void checkSizeChange(long newSize) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $elseif ZimbraVersion >= 8.8.10 $
     try
     {
       mMbox.checkSizeChange(newSize);

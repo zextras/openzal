@@ -156,7 +156,18 @@ public class Item implements Comparable<Item>
   @NotNull
   public Mailbox getMailbox()
   {
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+    /* $endif $ */
     return new Mailbox(mMailItem.getMailbox());
+    /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
   }
 
   public int getMailboxId()
@@ -485,7 +496,18 @@ public class Item implements Comparable<Item>
   @NotNull
   public UnderlyingData getUnderlyingData()
   {
-    return new UnderlyingData(mMailItem.getUnderlyingData());
+    /* $if ZimbraX == 1 $ */
+    try
+    {
+      /* $endif $ */
+      return new UnderlyingData(mMailItem.getUnderlyingData());
+      /* $if ZimbraX == 1 $ */
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
   }
 
   public static class Color

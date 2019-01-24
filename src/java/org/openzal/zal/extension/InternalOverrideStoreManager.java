@@ -86,7 +86,7 @@ class InternalOverrideStoreManager
         return supportedByAll(feature);
       case SINGLE_INSTANCE_SERVER_CREATE:
         return supportedByAll(feature);
-      /* $if ZimbraVersion >= 8.8.10 $ */
+      /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 1 $
       case CUSTOM_STORE_API:
         return supportedAtLeasOnce(feature);
       /* $endif $ */
