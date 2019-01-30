@@ -26,7 +26,7 @@
 
   <target name="init">
     <tstamp />
-    <echo> Building ZAL version 2.5.2 </echo>
+    <echo> Building ZAL version 2.5.3 </echo>
     <exec executable="./gen_buildinfo.sh" failonerror="true" />
   </target>
 
@@ -85,7 +85,7 @@
        <jar jarfile="${dist}/zal.jar.unsigned" compress="false">
          <manifest>
            <attribute name="Specification-Title" value="Zimbra Abstraction Layer" />
-           <attribute name="Specification-Version" value="2.5.2" />
+           <attribute name="Specification-Version" value="2.5.3" />
            <attribute name="Specification-Vendor" value="ZeXtras" />
            <attribute name="Implementation-Version" value="${ZimbraVersion}" />
            <attribute name="Created-By" value="ZeXtras" />
@@ -1076,7 +1076,7 @@
   <target name="fast-compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="2" arg2="0" />
+      <equals arg1="3" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -1115,7 +1115,7 @@
   <target name="compatibility-check" description="check compatibility of zal jars">
 
     <if>
-      <equals arg1="2" arg2="0" />
+      <equals arg1="3" arg2="0" />
       <then>
         <var name="lastZalPath" value="" />
       </then>
@@ -1160,7 +1160,7 @@
       <replace file="@{destFile}">
         <replacefilter
           token="@VERSION@"
-          value="2.5.2"/>
+          value="2.5.3"/>
         <replacefilter
           token="@VERSION_MAJOR@"
           value="2"/>
@@ -1169,7 +1169,7 @@
           value="5"/>
         <replacefilter
           token="@VERSION_MICRO@"
-          value="2"/>
+          value="3"/>
         <replacefilter
           token="@FIRST_ZIMBRA_VERSION@"
           value="8.0.0"/>
@@ -1241,7 +1241,7 @@
       <arg value="--buildroot"/><arg value="${rpm-dir-tmp}/openzal-2.5/buildroot"/>
       <arg value="openzal-2.5/SPEC/openzal-2.5.spec"/>
     </exec>
-    <move file="${rpm-dir-tmp}/openzal-2.5/RPMS/noarch/openzal-2.5-2-0.noarch.rpm" todir="." />
+    <move file="${rpm-dir-tmp}/openzal-2.5/RPMS/noarch/openzal-2.5-3-0.noarch.rpm" todir="." />
 
     <delete dir="${rpm-dir-tmp}"/>
   </target>
