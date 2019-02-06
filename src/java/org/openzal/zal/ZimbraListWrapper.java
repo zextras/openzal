@@ -343,6 +343,24 @@ public class ZimbraListWrapper
   }
 
   @NotNull
+  public static Set<SoapElement.Attribute> wrapElementAttributes(@Nullable Set<Element.Attribute> attributes)
+  {
+    if (attributes == null || attributes.size() == 0)
+    {
+      return Collections.emptySet();
+    }
+    Set<SoapElement.Attribute> list =
+      new HashSet<>(attributes.size());
+
+    for (Element.Attribute attribute : attributes)
+    {
+      list.add(new SoapElement.Attribute(attribute));
+    }
+
+    return list;
+  }
+
+  @NotNull
   public static Collection<QuotaUsage> wrapQuotaUsages(@Nullable List<SoapProvisioning.QuotaUsage> quotaUsages)
   {
     if (quotaUsages == null || quotaUsages.size() == 0)
