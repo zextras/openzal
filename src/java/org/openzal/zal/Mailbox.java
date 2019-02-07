@@ -31,6 +31,11 @@ import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.*;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
+/* $if ZimbraX == 1 $ */
+import com.zimbra.cs.mailbox.cache.FolderCache;
+import com.zimbra.cs.mailbox.cache.LocalTagCache;
+import com.zimbra.cs.mailbox.cache.RedisTagCache;
+/* $endif $ */
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -2112,6 +2117,7 @@ public class Mailbox
 
   static
   {
+    /* $if ZimbraX == 0 $
     try
     {
       Class partypes[] = new Class[1];
@@ -2125,12 +2131,14 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
+    /* $endif $ */
   }
 
   @Nullable private static Method sBeginTransactionMethod = null;
 
   static
   {
+    /* $if ZimbraX == 0 $
     try
     {
       Class partypes[] = new Class[2];
@@ -2145,6 +2153,7 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
+    /* $endif $ */
   }
 
   public void beginTransaction(String name, @NotNull OperationContext context)
@@ -2155,6 +2164,9 @@ public class Mailbox
   private final void beginTransaction(String name, com.zimbra.cs.mailbox.OperationContext zContext)
     throws ZimbraException
   {
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $else $
     try
     {
       Object parameters[] = new Object[2];
@@ -2167,11 +2179,15 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(ex);
     }
+    /* $endif $ */
   }
 
   public final void endTransaction(boolean success)
     throws ZimbraException
   {
+    /* $if ZimbraX == 1 $ */
+    return;
+    /* $else $
     Object parameters[] = new Object[1];
     parameters[0] = success;
 
@@ -2183,6 +2199,7 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(ex);
     }
+    /* $endif $ */
   }
 
   private static Method sRawGetItem;
@@ -2296,7 +2313,19 @@ public class Mailbox
   {
     try
     {
-      return (Map<Object, com.zimbra.cs.mailbox.Tag>) sTagCache.get(mMbox);
+      Map<Object, com.zimbra.cs.mailbox.Tag> tagsMap;
+      /* $if ZimbraX == 1 $ */
+      RedisTagCache tagCache = (RedisTagCache) sTagCache.get(mMbox);
+      Collection<com.zimbra.cs.mailbox.Tag> tags = tagCache.values();
+      tagsMap = new HashMap<Object, com.zimbra.cs.mailbox.Tag>(tags.size());
+      for (com.zimbra.cs.mailbox.Tag tag : tags)
+      {
+        tagsMap.put(tag.getTagId(), tag);
+      }
+      /* $else $
+      tagsMap = (Map<Object, com.zimbra.cs.mailbox.Tag>) sTagCache.get(mMbox);
+      /* $endif $ */
+      return tagsMap;
     }
     catch (Throwable ex)
     {
@@ -2324,6 +2353,7 @@ public class Mailbox
 
   static
   {
+    /* $if ZimbraX == 0 $
     try
     {
       Class cls = null;
@@ -2357,6 +2387,7 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
+    /* $endif $ */
   }
 
   /*
@@ -2367,13 +2398,21 @@ public class Mailbox
   {
     try
     {
-
-      Collection<com.zimbra.cs.mailbox.Folder> list = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
+      Collection<com.zimbra.cs.mailbox.Folder> folders = Collections.emptyList();
+      /* $if ZimbraX == 1 $ */
+      FolderCache folderCache = (FolderCache) sFolderCache.get(mMbox);
+      if(folderCache != null)
+      {
+        folders = folderCache.values();
+      }
+      /* $else $
+      folders = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
         .get(sFolderCache.get(mMbox))).values());
 
-      ArrayList<Folder> newList = new ArrayList<Folder>(list.size());
+      /* $endif $  */
+      ArrayList<Folder> newList = new ArrayList<Folder>(folders.size());
 
-      for (Object folder : list)
+      for (Object folder : folders)
       {
         newList.add(new Folder(folder));
       }

@@ -20,7 +20,7 @@
 
 package org.openzal.zal.soap;
 
-/* $if ZimbraVersion >= 8.8.9 $ */
+/* $if ZimbraVersion >= 8.8.9 || ZimbraX == 1 $ */
 import com.google.common.cache.LoadingCache;
 /* $endif $ */
 import com.zimbra.soap.*;
@@ -91,7 +91,7 @@ public class SoapServiceManager
     {
       synchronized(this)
       {
-        /* $if ZimbraVersion >= 8.8.9 $ */
+        /* $if ZimbraVersion >= 8.8.9 || ZimbraX == 1 $ */
         ((LoadingCache<String, List<DocumentService>>) sExtraServices.get(null)).invalidate(soapService.getServiceName());
         /* $else $
         ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());

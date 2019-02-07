@@ -22,19 +22,34 @@ package org.openzal.zal;
 
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.lib.Version;
+import org.openzal.zal.lib.ZimbraVersion;
 
 public class ZalVersion
 {
   public static final    Version current = new Version(ZalBuildInfo.VERSION);
-  @NotNull public static Version target  = new Version(8, 0, 7);
+  @NotNull private static Version target;
 
   static
   {
+    /* $if ZimbraX == 0 $
     String implementationVersion = ZalVersion.class.getPackage().getImplementationVersion();
     if (implementationVersion != null && !implementationVersion.isEmpty())
     {
       target = new Version(implementationVersion);
     }
+    /* $else $ */
+    target = new Version(8,9,0);
+    /* $endif $ */
+  }
+
+  public static void checkCompatibility()
+  {
+    /* $if ZimbraX == 0 $
+    if (!ZimbraVersion.current.equals(ZalVersion.target))
+    {
+      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
+    }
+    /* $endif $ */
   }
 
   public static void main(String args[])
