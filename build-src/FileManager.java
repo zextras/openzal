@@ -26,9 +26,12 @@ class FileManager extends ForwardingJavaFileManager<JavaFileManager>
   @Override
   public void close() throws IOException {
     super.close();
-    mZip.closeEntry();
-    mZip.close();
-    mZip = null;
+    if (mZip != null)
+    {
+      mZip.closeEntry();
+      mZip.close();
+      mZip = null;
+    }
   }
 
   @Override
