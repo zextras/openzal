@@ -29,8 +29,10 @@ import com.zimbra.cs.fb.FreeBusyQuery;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
-import com.zimbra.cs.mailbox.*;
+import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
+import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -43,7 +45,17 @@ import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.calendar.CalendarItemData;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.RecurrenceId;
-import org.openzal.zal.exceptions.*;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.InternalServerException;
+import org.openzal.zal.exceptions.NoSuchAccountException;
+import org.openzal.zal.exceptions.NoSuchCalendarException;
+import org.openzal.zal.exceptions.NoSuchConversationException;
+import org.openzal.zal.exceptions.NoSuchFolderException;
+import org.openzal.zal.exceptions.NoSuchFreeBusyException;
+import org.openzal.zal.exceptions.NoSuchItemException;
+import org.openzal.zal.exceptions.NoSuchMessageException;
+import org.openzal.zal.exceptions.PermissionDeniedException;
+import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraConnectionWrapper;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
@@ -58,7 +70,17 @@ import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
@@ -142,13 +164,44 @@ public class Mailbox
       super(createMailboxMetadata(account));
     }
 
+    public FakeMailbox(long id, String accountId, int schemaGroupId)
+    {
+      super(createMailboxMetadata((int)id, accountId, schemaGroupId));
+    }
+
     @NotNull
-    private static MailboxData createMailboxMetadata(@NotNull com.zimbra.cs.account.Account account)
+    private static MailboxData createMailboxMetadata(
+      @NotNull
+        com.zimbra.cs.account.Account account
+    )
     {
       MailboxData data = new MailboxData();
       data.id = -1;
       data.schemaGroupId = -1;
       data.accountId = account.getId();
+      data.size = 0L;
+      data.contacts = 0;
+      data.indexVolumeId = 0;
+      data.lastBackupDate = 0;
+      data.lastItemId = 0;
+      data.lastChangeId = 0;
+      data.lastChangeDate = 0;
+      data.lastWriteDate = 0;
+      data.recentMessages = -1;
+      data.trackSync = -1;
+      data.trackImap = false;
+      data.configKeys = new HashSet<String>();
+
+      return data;
+    }
+
+    @NotNull
+    private static MailboxData createMailboxMetadata(int id, String accountId, int schemaGroupId)
+    {
+      com.zimbra.cs.mailbox.Mailbox.MailboxData data = new com.zimbra.cs.mailbox.Mailbox.MailboxData();
+      data.id = id;
+      data.schemaGroupId = schemaGroupId;
+      data.accountId = accountId;
       data.size = 0L;
       data.contacts = 0;
       data.indexVolumeId = 0;
@@ -198,6 +251,14 @@ public class Mailbox
     );
   }
 
+  @NotNull
+  public static Mailbox createFakeMailbox(long id, String accountId, int schemaGroupId)
+  {
+    return new Mailbox(
+      new FakeMailbox(id, accountId, schemaGroupId)
+    );
+  }
+
   public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(getMailbox());
@@ -211,7 +272,7 @@ public class Mailbox
         new ProvisioningImp(
           com.zimbra.cs.account.Provisioning.getInstance()
         ).getZimbraUser().toZimbra(com.zimbra.cs.account.Account.class)
-      )
+      ,true)
     );
   }
 
@@ -2463,7 +2524,7 @@ public class Mailbox
   public static Map<String, Integer> getMapAccountsAndMailboxes(@NotNull Connection conn)
     throws ZimbraException
   {
-    Map<String, Integer> accountsAndMailboxes = new HashMap<String, Integer>();
+    Map<String, Integer> accountsAndMailboxes;
     try
     {
       accountsAndMailboxes = DbMailbox.listMailboxes(conn.toZimbra(DbPool.DbConnection.class));
@@ -2536,10 +2597,7 @@ public class Mailbox
   )
     throws SQLException, ZimbraException
   {
-    String query = "SELECT metadata FROM " + DbMailbox.qualifyZimbraTableName(
-      mMbox,
-      "mailbox_metadata"
-    ) + " WHERE mailbox_id=? AND section=? LIMIT 1";
+    String query = "SELECT metadata FROM zimbra.mailbox_metadata WHERE mailbox_id=? AND section=? LIMIT 1";
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -2584,10 +2642,7 @@ public class Mailbox
       throw new SQLException("metadata is too big to be saved");
     }
 
-    String updateQuery = "UPDATE " + DbMailbox.qualifyZimbraTableName(
-      mMbox,
-      "mailbox_metadata"
-    ) + " SET metadata=? WHERE mailbox_id=? AND section=?";
+    String updateQuery = "UPDATE zimbra.mailbox_metadata SET metadata=? WHERE mailbox_id=? AND section=?";
     Connection connection = null;
     PreparedStatement updateStatement = null;
     PreparedStatement insertStatement = null;
@@ -2603,8 +2658,6 @@ public class Mailbox
       int res = updateStatement.executeUpdate();
       if (res == 0)
       {
-        //REPLACE works only on mysql
-        //String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
         String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
 
         insertStatement = connection.prepareStatement(insertQuery);
@@ -2612,7 +2665,7 @@ public class Mailbox
         insertStatement.setString(2, section);
         insertStatement.setString(3, metadata);
 
-        insertStatement.executeUpdate();
+        res = insertStatement.executeUpdate();
       }
 
       connection.commit();
@@ -2652,6 +2705,7 @@ public class Mailbox
     }
   }
 
+  @NotNull
   public MailboxIndex getIndex()
   {
     return mIndex;
@@ -2673,7 +2727,6 @@ public class Mailbox
   {
     mMbox.index.deleteIndex();
   }
-
   public void suspendIndexing()
   {
 /* $if ZimbraVersion >= 8.7.0 $ */

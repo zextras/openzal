@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.exceptions.ZimbraException;
 import java.util.Set;
 
@@ -58,4 +59,8 @@ public interface MailboxManager
   void registerAdditionalQuotaProvider(AdditionalQuotaProvider additionalQuotaProvider);
 
   void removeAdditionalQuotaProvider(AdditionalQuotaProvider additionalQuotaProvider);
+
+  MailboxData getMailboxData(long mailboxId);
+
+  void forceDeleteMailbox(@NotNull MailboxData data);
 }
