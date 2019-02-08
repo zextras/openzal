@@ -22,6 +22,7 @@ package org.openzal.zal.soap;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapParseException;
 import com.zimbra.common.soap.XmlParseException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZimbraListWrapper;
@@ -74,9 +75,28 @@ public class SoapElement
     return ZimbraListWrapper.wrapElementAttributes(mElement.listAttributes());
   }
 
-  public static SoapElement parseXML(String xml) throws XmlParseException
+  public static SoapElement parseXML(String xml)
   {
-    return new SoapElement(Element.parseXML(xml));
+    try
+    {
+      return new SoapElement(Element.parseXML(xml));
+    }
+    catch(ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static SoapElement parseJSON(String json)
+  {
+    try
+    {
+      return new SoapElement(Element.parseJSON(json));
+    }
+    catch(SoapParseException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   public List<SoapElement> listElements()
