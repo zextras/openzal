@@ -23,6 +23,10 @@ public class ZalBuilder
     "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11"
   };
 
+  private static List<String> sSkipDotClass = Arrays.asList(
+    "com/zimbra/cs/store/file/VolumeBlobProxy.class"
+  );
+
   public static void main(String args[])
     throws Exception
   {
@@ -450,7 +454,19 @@ public class ZalBuilder
       Collections.emptyList(),
       (devMode ? "dist/dev-last/zal.jar" : "dist/"+zimbra+"/zal.jar"),
       new ZimbraVersionSourcePreprocessor( zimbra, devMode),
-      generateManifest(zimbra, systemReader)
+      generateManifest(zimbra, systemReader),
+      new FileManager.Renamer()
+      {
+        @Override
+        public String rename(String path)
+        {
+          if (sSkipDotClass.contains(path))
+          {
+            return path.substring(0, path.length() - ".class".length());
+          }
+          return path;
+        }
+      }
     );
     build.compileAll("Compiling ZAL "+(devMode ? "dev ":"")+zimbra+ "...");
   }
