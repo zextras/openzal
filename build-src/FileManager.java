@@ -15,11 +15,13 @@ import java.util.zip.ZipOutputStream;
 class FileManager extends ForwardingJavaFileManager<JavaFileManager>
 {
   private final String mDestinationJar;
+  private final Renamer mRenamer;
   private ZipOutputStream mZip;
 
-  FileManager(JavaFileManager javaFileManager, String destinationJar){
+  FileManager(JavaFileManager javaFileManager, String destinationJar, Renamer renamer){
     super(javaFileManager);
     mDestinationJar = destinationJar;
+    mRenamer = renamer;
     mZip = null;
   }
 
@@ -76,7 +78,7 @@ class FileManager extends ForwardingJavaFileManager<JavaFileManager>
 
       @Override
       public OutputStream openOutputStream() throws IOException {
-        ZipEntry zipEntry = new ZipEntry(className.replaceAll("[.]","/")+".class");
+        ZipEntry zipEntry = new ZipEntry(mRenamer.rename(className.replaceAll("[.]","/")+".class"));
         mZip.putNextEntry(zipEntry);
         return new OutputStream() {
           @Override
@@ -171,5 +173,10 @@ class FileManager extends ForwardingJavaFileManager<JavaFileManager>
       if( read < 0 ) break;
       mZip.write(buffer,0,read);
     }
+  }
+
+  public interface Renamer
+  {
+    String rename(String path);
   }
 }
