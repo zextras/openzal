@@ -52,6 +52,15 @@ public class ZalVersion
     /* $endif $ */
   }
 
+  public static boolean isZimbraX()
+  {
+    /* $if ZimbraX == 1 $ */
+    return true;
+    /* $else $
+    return false;
+    /* $endif $ */
+  }
+
   public static void main(String args[])
   {
     System.out.println("zal_version: " + current.toString());
