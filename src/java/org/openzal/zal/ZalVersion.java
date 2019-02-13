@@ -65,7 +65,11 @@ public class ZalVersion
   {
     System.out.println("zal_version: " + current.toString());
     System.out.println("zal_commit: " + ZalBuildInfo.COMMIT);
+    /* $if ZimbraX == 1 $ */
+    System.out.println("target_zimbra_version: Zimbra X");
+    /* $else $
     System.out.println("target_zimbra_version: " + target.toString());
+    /* $endif $ */
 
     System.exit(0);
   }
