@@ -21,13 +21,17 @@
 package org.openzal.zal;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.*;
+import org.openzal.zal.exceptions.VolumeServiceException;
 import org.openzal.zal.exceptions.ZimbraException;
 
 import com.zimbra.cs.volume.*;
+import org.openzal.zal.log.ZimbraLog;
 
 public class VolumeManager
 {
@@ -36,11 +40,37 @@ public class VolumeManager
   private static final short sFileGroupBits = 8;
   private static final short sFileBits = 12;
 
+  private static Method sVolumeManagerLoad = null;
+  static
+  {
+    try
+    {
+      sVolumeManagerLoad = com.zimbra.cs.volume.VolumeManager.class.getDeclaredMethod("load");
+      sVolumeManagerLoad.setAccessible(true);
+    }
+    catch( Throwable t )
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(t));
+    }
+  }
+
   private final com.zimbra.cs.volume.VolumeManager  mVolumeManager;
 
   public VolumeManager()
   {
     mVolumeManager = com.zimbra.cs.volume.VolumeManager.getInstance();
+  }
+
+  public void reload()
+  {
+    try
+    {
+      sVolumeManagerLoad.invoke(mVolumeManager);
+    }
+    catch( IllegalAccessException | InvocationTargetException e )
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   public List<StoreVolume> getAll()
