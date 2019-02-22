@@ -14,11 +14,11 @@ public class Zimbra implements Comparable<Zimbra>
   @Override
   public int compareTo(Zimbra zimbra)
   {
-    if( mType == Type.x && zimbra.mType == Type.classic )
+    if( mType == Type.x && zimbra.mType == Type.standard )
     {
       return 1;
     }
-    if( mType == Type.classic && zimbra.mType == Type.x )
+    if( mType == Type.standard && zimbra.mType == Type.x )
     {
       return -1;
     }
@@ -31,7 +31,7 @@ public class Zimbra implements Comparable<Zimbra>
 
   enum Type
   {
-    classic,
+    standard,
     x
   }
 

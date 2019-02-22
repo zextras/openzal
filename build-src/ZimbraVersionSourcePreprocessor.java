@@ -583,7 +583,7 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
   private static void assertSample(String version, String expected, String code)
   {
     StringBuffer stringBuffer = new StringBuffer(code);
-    new ZimbraVersionSourcePreprocessor( new Zimbra(Zimbra.Type.classic,new Version(version)), version.equals("1")).apply(stringBuffer);
+    new ZimbraVersionSourcePreprocessor(new Zimbra(Zimbra.Type.standard, new Version(version)), version.equals("1")).apply(stringBuffer);
     if( !stringBuffer.toString().equals(expected) )
     {
       throw new RuntimeException("\n=== Expected: ===\n"+expected+"\n=== But found: ===\n"+stringBuffer);

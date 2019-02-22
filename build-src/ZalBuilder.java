@@ -104,7 +104,7 @@ public class ZalBuilder
       if( !Pattern.matches("[0-9.]*", rawZimbraVersion) ) {
         continue;
       }
-      zimbraVersions.add( new Zimbra(Zimbra.Type.classic, new Version(rawZimbraVersion)) );
+      zimbraVersions.add( new Zimbra(Zimbra.Type.standard, new Version(rawZimbraVersion)) );
     }
     Collections.sort(zimbraVersions);
 
@@ -147,19 +147,19 @@ public class ZalBuilder
 
       case "zal-dev-current-source": {
         setup(systemReader);
-        buildFromSource(new Zimbra(Zimbra.Type.classic,sLastSupportedZimbraVersion), systemReader);
+        buildFromSource(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion), systemReader);
         return;
       }
 
       case "zal-dev-current-binary": {
         setup(systemReader);
-        buildFromLiveZimbra(new Zimbra(Zimbra.Type.classic,sLastSupportedZimbraVersion),systemReader);
+        buildFromLiveZimbra(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion),systemReader);
         return;
       }
 
       case "zal-dev-last": {
         setup(systemReader);
-        buildFromZimbraVersion(new Zimbra(Zimbra.Type.classic,sLastSupportedZimbraVersion),systemReader,true);
+        buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion),systemReader,true);
         return;
       }
 
@@ -281,7 +281,7 @@ public class ZalBuilder
             public void run() {
               try {
                 buildFromZimbraVersion(
-                  new Zimbra(Zimbra.Type.classic,new Version(rawVersion)),
+                  new Zimbra(Zimbra.Type.standard,new Version(rawVersion)),
                   systemReader,
                   false
                 );
@@ -326,7 +326,7 @@ public class ZalBuilder
 
     if( command.startsWith("zal-") ) {
       Version zimbraVersion = new Version(command.substring(4));
-      buildFromZimbraVersion(new Zimbra(Zimbra.Type.classic, zimbraVersion), systemReader, false);
+      buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard, zimbraVersion), systemReader, false);
       return;
     }
 
