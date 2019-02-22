@@ -2,9 +2,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-  * This class implements a preprocessor for java source files back-compatible with ant-prebop preprocessor.
-  * Tests are directly inside in this class main().
-  */
+ * This class implements a preprocessor for java source files back-compatible with ant-prebop preprocessor.
+ * Tests are directly inside in this class main().
+ */
 public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
   private final boolean mDevMode;
   private final Pattern sIfPattern = Pattern.compile("[$]if([^$]*)[$]");
@@ -64,8 +64,8 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
 
       return
         countNewlines()+": "+mErrorMessage+"\n"+
-        line+"\n"+
-        "^";
+          line+"\n"+
+          "^";
     }
   }
 
@@ -119,23 +119,7 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
       matcher.group(1)
     );
 
-    if(!result)
-    {
-      int endCommentIndex = code.indexOf("*/", matcher.end() );
-      int nextCommandIndex = code.indexOf("$",matcher.end());
-      if( endCommentIndex != -1 && (nextCommandIndex == -1 || endCommentIndex < nextCommandIndex) ) {
-        code.replace(endCommentIndex, endCommentIndex + 2, "");
-      }
-    }
-    else
-    {
-      int endCommentIndex = code.indexOf("*/", matcher.end() );
-      int nextCommandIndex = code.indexOf("$",matcher.end());
-      if( endCommentIndex == -1 || (nextCommandIndex != -1 && endCommentIndex > nextCommandIndex)) {
-        code.insert(matcher.end()," */");
-      }
-    }
-
+    commentOrUncommentWhenNecessary(code, false, matcher, result);
     resolveSubexpression(code, result);
   }
 
@@ -147,9 +131,7 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
         elseIfMatcher.group(1)
       );
 
-      if(!commentEverything && result) {
-        code.insert(elseIfMatcher.end()," */");
-      }
+      commentOrUncommentWhenNecessary(code, commentEverything, elseIfMatcher, result);
 
       StringBuffer subCode = new StringBuffer(
         code.substring(elseIfMatcher.end())
@@ -181,6 +163,29 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
         if (commentIndex == -1) {
           code.insert(elseEndIndex + 1, " */");
         }
+      }
+    }
+  }
+
+  private void commentOrUncommentWhenNecessary(
+    StringBuffer code,
+    boolean commentEverything,
+    Matcher matcher,
+    boolean result
+  )
+  {
+    int endCommentIndex = code.indexOf("*/", matcher.end() );
+    int nextCommandIndex = code.indexOf("$", matcher.end());
+    if(!commentEverything && result)
+    {
+      if( endCommentIndex == -1 || (nextCommandIndex != -1 && endCommentIndex > nextCommandIndex)) {
+        code.insert(matcher.end(), " */");
+      }
+    }
+    else
+    {
+      if( endCommentIndex != -1 && (nextCommandIndex == -1 || endCommentIndex < nextCommandIndex) ) {
+        code.replace(endCommentIndex, endCommentIndex + 2, "");
       }
     }
   }
@@ -277,8 +282,8 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     {
       String sample =
         "/* $if ZimbraVersion >= 1.0 $ */\n" +
-        "echo ciao\n" +
-        "/* $endif */";
+          "echo ciao\n" +
+          "/* $endif */";
 
       assertSample(
         "1.0",
@@ -298,10 +303,10 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     {
       String sample =
         "/* $if ZimbraVersion >= 1.0 $ */\n" +
-        "ciao_1\n" +
-        "/* $else$ \n"+
-        "ciao_2\n" +
-        "/* $endif */";
+          "ciao_1\n" +
+          "/* $else$ \n"+
+          "ciao_2\n" +
+          "/* $endif */";
 
       assertSample(
         "1.0",
@@ -439,10 +444,68 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     }
 
     {
+      String sample = "/* $if ZimbraVersion >= 1.0 $\n" +
+        "ciao_1\n" +
+        "/* $elseif ZimbraVersion == 0.0 $ */\n"+
+        "ciao_2\n"+
+        "/* $endif */";
+
+      assertSample(
+        "0.0",
+        sample,
+        sample
+      );
+
+      assertSample(
+        "1.0",
+        "/* $if ZimbraVersion >= 1.0 $ */\n" +
+          "ciao_1\n" +
+          "/* $elseif ZimbraVersion == 0.0 $ \n"+
+          "ciao_2\n"+
+          "/* $endif */",
+        sample
+      );
+    }
+
+    {
+      String sample = "/* $if ZimbraVersion == 0.0 |! ZimbraVersion == 0.1 $ \n" +
+        "primo\n" +
+        "/* $elseif ZimbraVersion <= 1.0 $\n" +
+        "secondo\n" +
+        "/* $else $ */\n" +
+        "terzo\n" +
+        "/* $endif $ */";
+
+      assertSample(
+        "1.0",
+        "/* $if ZimbraVersion == 0.0 |! ZimbraVersion == 0.1 $ \n" +
+          "primo\n" +
+          "/* $elseif ZimbraVersion <= 1.0 $ */\n" +
+          "secondo\n" +
+          "/* $else $ \n" +
+          "terzo\n" +
+          "/* $endif $ */",
+        sample
+      );
+
+      assertSample(
+        "0.1",
+        "/* $if ZimbraVersion == 0.0 |! ZimbraVersion == 0.1 $ */ \n" +
+          "primo\n" +
+          "/* $elseif ZimbraVersion <= 1.0 $\n" +
+          "secondo\n" +
+          "/* $else $ \n" +
+          "terzo\n" +
+          "/* $endif $ */",
+        sample
+      );
+    }
+
+    {
       String sample =
         "/* $if ZimbraVersion != 8.0.1 && ZimbraVersion != 8.0.0 && ZimbraVersion < 8.5.0 $\n" +
-        "ciao\n" +
-        "/* $endif$ */";
+          "ciao\n" +
+          "/* $endif$ */";
 
       assertSample(
         "8.5",
