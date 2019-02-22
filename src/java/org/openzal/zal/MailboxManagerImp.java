@@ -21,11 +21,19 @@
 package org.openzal.zal;
 
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.db.DbMailbox;
+import com.zimbra.cs.db.DbPool;
+import org.apache.commons.dbutils.DbUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.NoSuchMailboxException;
 import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lib.ZimbraDatabase;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +43,10 @@ import java.util.Set;
 @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
 public class MailboxManagerImp implements MailboxManager
 {
+  static final String TABLE_MAILBOX       = "mailbox";
+  static final String TABLE_METADATA      = "mailbox_metadata";
+  static final String TABLE_OUT_OF_OFFICE = "out_of_office";
+
   private final          com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
   @NotNull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
 
@@ -61,14 +73,7 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public int[] getMailboxIds()
   {
-    try
-    {
-      return com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-    }
-    catch (com.zimbra.common.service.ServiceException ex)
-    {
-      throw new RuntimeException();
-    }
+    return mMailboxManager.getMailboxIds();
   }
 
   @Override
@@ -275,24 +280,24 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
-    /* $if ZimbraX == 0 $ */
-    return;
-    /* $elseif ZimbraVersion >= 8.8.10 $
+    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $elseif ZimbraX == 1 $
+    return;
     /* $endif $ */
   }
 
   @Override
   public void removeAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
-    /* $if ZimbraX == 0 $ */
-    return;
-    /* $elseif ZimbraVersion >= 8.8.10 $
+    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $elseif ZimbraX == 1 $
+    return;
     /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 1 $
+  /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
   class ZALAdditionalQuotaProvider implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
   {
     private final AdditionalQuotaProvider mAdditionalQuotaProvider;
@@ -330,4 +335,81 @@ public class MailboxManagerImp implements MailboxManager
     }
   }
   /* $endif $ */
+
+  @Override
+  public MailboxData getMailboxData(long mailboxId)
+  {
+    DbPool.DbConnection conn = null;
+    try
+    {
+      conn = DbPool.getConnection();
+      com.zimbra.cs.mailbox.Mailbox.MailboxData data;
+      try
+      {
+        data = DbMailbox.getMailboxStats(conn, (int) mailboxId);
+        if( data == null )
+        {
+          throw new NoSuchMailboxException(new RuntimeException());
+        }
+        return new MailboxData(data.id,data.schemaGroupId,data.accountId,data.indexVolumeId);
+      }
+      finally
+      {
+        conn.closeQuietly();
+      }
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void forceDeleteMailbox(@NotNull MailboxData data)
+  {
+    Connection connection = null;
+    PreparedStatement statement;
+    try
+    {
+      connection = ZimbraDatabase.legacyGetConnection();
+
+      Mailbox mailbox = Mailbox.createFakeMailbox(data.getId(), data.getAccountId(), data.getSchemaGroupId());
+      DbMailbox.clearMailboxContent(
+        connection.toZimbra(DbPool.DbConnection.class),
+        mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class)
+      );
+      String tables[] = {TABLE_OUT_OF_OFFICE, TABLE_METADATA, TABLE_MAILBOX};
+      String query = "DELETE FROM zimbra.%s WHERE id=?";
+      for( String table : tables )
+      {
+        statement = null;
+        try
+        {
+          statement = connection.prepareStatement(String.format(query, table));
+          statement.setInt(1, data.getId());
+          statement.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+        }
+        finally
+        {
+          DbUtils.closeQuietly(statement);
+        }
+      }
+      connection.commit();
+    }
+    catch (ServiceException e )
+    {
+      connection.rollback();
+      throw ExceptionWrapper.wrap(e);
+    }
+    finally
+    {
+      if (connection != null)
+      {
+        connection.close();
+      }
+    }
+  }
 }

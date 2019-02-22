@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.index;
 
-/* $if ZimbraX == 0 $
+/* $if ZimbraX == 0 $ */
 import com.zimbra.cs.index.LuceneIndex;
 /* $endif */
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Indexer
   implements Closeable
 {
-  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
   private final com.zimbra.cs.index.Indexer mZObject;
   private Object rIndexWriterRef;
   private Method rmIndexWriterRefGet;
@@ -30,7 +30,7 @@ public class Indexer
 
   public Indexer(@NotNull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     if( zObject.getClass().getCanonicalName().equals("com.zimbra.cs.index.LuceneIndex.LuceneIndexerImpl") )
     {
       mZObject = (com.zimbra.cs.index.Indexer) zObject;
@@ -65,7 +65,7 @@ public class Indexer
   public void addDocument(Folder folder, Item item, List<Document> documentList)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     List<com.zimbra.cs.index.IndexDocument> zimbraDocumentList = new ArrayList<>();
 
     for( Document document : documentList )
@@ -78,7 +78,7 @@ public class Indexer
       item.toZimbra(com.zimbra.cs.mailbox.MailItem.class),
       zimbraDocumentList
     );
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -86,9 +86,9 @@ public class Indexer
   public void addDocument(Document document)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.addDocument(document);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -96,9 +96,9 @@ public class Indexer
   public void addDocument(List<Document> documentList)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.addDocument(documentList);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -106,9 +106,9 @@ public class Indexer
   public void deleteDocuments(Term... terms)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.deleteDocuments(terms);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -116,9 +116,9 @@ public class Indexer
   public void deleteDocuments(Query...queries)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.deleteDocuments(queries);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -126,9 +126,9 @@ public class Indexer
   public void deleteAll()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.deleteAll();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -136,34 +136,34 @@ public class Indexer
   public void deleteUnusuedFiles()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mIndexWriter.deleteUnusuedFiles();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public void compact()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject.compact();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public int maxDocs()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.maxDocs();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   private IndexWriter getIndexWriter()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     try
     {
       return new IndexWriter(rmIndexWriterRefGet.invoke(rIndexWriterRef));
@@ -172,7 +172,7 @@ public class Indexer
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -181,9 +181,9 @@ public class Indexer
   public void close()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject.close();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -191,18 +191,18 @@ public class Indexer
   @Override
   public String toString()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.toString();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> target)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }

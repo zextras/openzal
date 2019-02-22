@@ -24,7 +24,7 @@ import com.zimbra.cs.convert.AttachmentInfo;
 import com.zimbra.cs.convert.ConversionException;
 import com.zimbra.cs.mime.*;
 import org.apache.lucene.document.Document;
-/* $if ZimbraX == 1 $ */
+/* $if ZimbraX == 1 $
 import org.apache.solr.common.SolrInputDocument;
 /* $endif $ */
 import org.jetbrains.annotations.NotNull;
@@ -234,9 +234,9 @@ public class IndexerManager
     }
 
     @Override
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     protected void addFields(SolrInputDocument doc) throws MimeHandlerException
-    /* $else $
+    /* $else $ */
     protected void addFields(Document doc) throws MimeHandlerException
     /* $endif $ */
     {

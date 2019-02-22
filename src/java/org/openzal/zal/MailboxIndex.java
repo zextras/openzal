@@ -19,9 +19,9 @@ public class MailboxIndex
 
   public Analyzer getAnalyzer()
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     throw new UnsupportedOperationException();
-    /* $else $
+    /* $else $ */
     return new Analyzer(mZObject.getAnalyzer());
     /* $endif $ */
   }

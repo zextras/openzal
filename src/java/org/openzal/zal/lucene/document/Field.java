@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class Field
 {
-  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
   private final org.apache.lucene.document.Field mZObject;
   /* $endif $ */
 
   public Field(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     this(new org.apache.lucene.document.Field(
       name,
       value,
@@ -22,43 +22,43 @@ public class Field
 
   public Field(@NotNull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject = (org.apache.lucene.document.Field) zObject;
     /* $endif $ */
   }
 
   public String getName()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.name();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public String getValue()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.stringValue();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public boolean isStored()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.isStored();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public boolean isIndexed()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.isIndexed();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -66,18 +66,18 @@ public class Field
   @Override
   public String toString()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return mZObject.toString();
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> target)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
