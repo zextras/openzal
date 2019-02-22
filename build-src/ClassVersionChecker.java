@@ -75,7 +75,8 @@ public class ClassVersionChecker
     {
       JarEntry jarEntry = it.nextElement();
 
-      if (jarEntry.getName().endsWith(".class"))
+      String name = jarEntry.getName();
+      if ( !name.startsWith("META-INF") && name.endsWith(".class"))
       {
         checkInputStream( jarEntry.getName(), maxVersion, jarFile.getInputStream(jarEntry) );
       }
