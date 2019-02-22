@@ -6,27 +6,27 @@ public class ZimbraAnalyzer extends Analyzer
 {
   public ZimbraAnalyzer(@NotNull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     super((com.zimbra.cs.index.ZimbraAnalyzer) zObject);
-    /* $else $ */
+    /* $else $
     super(null);
     /* $endif $ */
   }
 
   public static Analyzer getAnalyzer(String name)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return new Analyzer(com.zimbra.cs.index.ZimbraAnalyzer.getAnalyzer(name));
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public static Analyzer getInstance()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return new Analyzer(com.zimbra.cs.index.ZimbraAnalyzer.getInstance());
-    /* $else $ */
+    /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }

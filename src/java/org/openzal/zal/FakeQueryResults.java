@@ -102,7 +102,7 @@ public class FakeQueryResults extends QueryResults
         }
         /* $endif $ */
 
-        /* $if ZimbraX == 1 $ */
+        /* $if ZimbraX == 1 $
         @Override
         public boolean isRelevanceSortSupported()
         {

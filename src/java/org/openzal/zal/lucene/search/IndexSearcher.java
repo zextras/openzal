@@ -39,7 +39,7 @@ public class IndexSearcher
   public TopDocs search(Query query, int limit)
     throws IOException
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     try
     {
       /* $endif $ */
@@ -48,7 +48,7 @@ public class IndexSearcher
       /* $else $
       throw new UnsupportedOperationException();
       /* $endif $ */
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraX == 1 $
     }
     catch( ServiceException e )
     {
@@ -78,7 +78,7 @@ public class IndexSearcher
   public Document getDocument(DocumentId id)
     throws IOException
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     try
     {
     /* $endif $ */
@@ -87,7 +87,7 @@ public class IndexSearcher
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     }
     catch( ServiceException e )
     {

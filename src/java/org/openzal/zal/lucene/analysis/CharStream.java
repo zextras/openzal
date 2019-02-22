@@ -9,9 +9,9 @@ public class CharStream
 {
   public CharStream(@NotNull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     super((org.apache.lucene.analysis.CharStream) zObject);
-    /* $else $ */
+    /* $else $
     super(null);
     /* $endif $ */
   }

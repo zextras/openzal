@@ -31,20 +31,20 @@ public class ZalVersion
 
   static
   {
-    /* $if ZimbraX == 0 $
+    /* $if ZimbraX == 0 $ */
     String implementationVersion = ZalVersion.class.getPackage().getImplementationVersion();
     if (implementationVersion != null && !implementationVersion.isEmpty())
     {
       target = new Version(implementationVersion);
     }
-    /* $else $ */
+    /* $else $
     target = new Version(8,9,0);
     /* $endif $ */
   }
 
   public static void checkCompatibility()
   {
-    /* $if ZimbraX == 0 $
+    /* $if ZimbraX == 0 $ */
     if (!ZimbraVersion.current.equals(ZalVersion.target))
     {
       throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
@@ -54,9 +54,9 @@ public class ZalVersion
 
   public static boolean isZimbraX()
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     return true;
-    /* $else $
+    /* $else $ */
     return false;
     /* $endif $ */
   }
@@ -65,9 +65,9 @@ public class ZalVersion
   {
     System.out.println("zal_version: " + current.toString());
     System.out.println("zal_commit: " + ZalBuildInfo.COMMIT);
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     System.out.println("target_zimbra_version: Zimbra X");
-    /* $else $
+    /* $else $ */
     System.out.println("target_zimbra_version: " + target.toString());
     /* $endif $ */
 
