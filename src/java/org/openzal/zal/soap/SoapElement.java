@@ -120,6 +120,19 @@ public class SoapElement
     return new SoapElement(mElement.getElement(name));
   }
 
+  public boolean hasAttribute(String name)
+  {
+    for(Attribute attribute: listAttributes())
+    {
+      if(attribute.getKey().equals(name))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
   public static class Attribute
   {
     @NotNull private final Element.Attribute mAttribute;
