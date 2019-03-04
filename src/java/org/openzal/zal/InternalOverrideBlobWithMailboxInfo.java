@@ -28,7 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InternalOverrideBlobWithMailboxInfo extends com.zimbra.cs.store.file.VolumeBlobProxy
+class InternalOverrideBlobWithMailboxInfo extends com.zimbra.cs.store.file.VolumeBlobProxy
 {
   private final Blob   mBlob;
   private final String mVolumeId;
