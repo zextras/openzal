@@ -23,7 +23,6 @@ package org.openzal.zal.soap;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapParseException;
-import com.zimbra.common.soap.XmlParseException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -68,6 +67,11 @@ public class SoapElement
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public boolean hasAttribute(String key)
+  {
+    return listAttributes().contains(key);
   }
 
   public Set<SoapElement.Attribute> listAttributes()
