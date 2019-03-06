@@ -112,6 +112,18 @@ public class ZimbraContextSimple implements ZimbraContext
   }
 
   @Override
+  public InternalDocumentHelper.ElementFactory getElementFactory()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public SoapElement getRequest()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public SoapNode getSubNode(String name)
   {
     throw new UnsupportedOperationException();

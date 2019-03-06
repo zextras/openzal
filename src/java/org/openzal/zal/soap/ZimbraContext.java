@@ -23,6 +23,7 @@ package org.openzal.zal.soap;
 import org.openzal.zal.Continuation;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.Element;
 
 public interface ZimbraContext extends SoapNode
 {
@@ -39,4 +40,8 @@ public interface ZimbraContext extends SoapNode
   Continuation getContinuation();
 
   boolean isDelegatedAuth();
+
+  InternalDocumentHelper.ElementFactory getElementFactory();
+
+  SoapElement getRequest();
 }

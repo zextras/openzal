@@ -42,6 +42,14 @@ public class SoapResponseImpl implements SoapResponse
     mElementFactory = elementFactory;
   }
 
+  public SoapResponseImpl(
+    SoapElement element,
+    InternalDocumentHelper.ElementFactory elementFactory
+  )
+  {
+    this(element.toZimbra(Element.class), elementFactory);
+  }
+
   @Override
   public void setValue(String key, String value)
   {
