@@ -163,14 +163,14 @@ public class MailboxSessionProxy
       if( pns.created != null )
       {
         /* $endif $ */
-        /* $if ZimbraVersion >= 8.8.2 && ZimbraX == 0 $
+        /* $if ZimbraVersion >= 8.8.2 && ZimbraX == 0 $ */
         for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, BaseItemInfo>) pns.created).keySet() )
         {
         /* $elseif ZimbraX == 0 $
         for( PendingModifications.ModificationKey mod : pns.created.keySet() )
         {
         /* $endif $ */
-    /* $if ZimbraX == 0 $
+    /* $if ZimbraX == 0 $ */
           Object whatObj = pns.created.get(mod);
           if (! (whatObj instanceof MailItem))
           {
