@@ -52,7 +52,7 @@ public class SoapElement
     {
       return mElement.getAttribute(key);
     }
-    catch (ServiceException e)
+    catch(ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -64,7 +64,7 @@ public class SoapElement
     {
       return mElement.getAttributeLong(key);
     }
-    catch (ServiceException e)
+    catch(ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -122,7 +122,7 @@ public class SoapElement
 
   public boolean hasAttribute(String name)
   {
-    for(Attribute attribute: listAttributes())
+    for(Attribute attribute : listAttributes())
     {
       if(attribute.getKey().equals(name))
       {
@@ -132,6 +132,21 @@ public class SoapElement
     return false;
   }
 
+  public <T> T toZimbra(Class<T> clazz)
+  {
+    return clazz.cast(mElement);
+  }
+
+  @Override
+  public String toString()
+  {
+    return mElement.toString();
+  }
+
+  public byte[] toUTF8()
+  {
+    return mElement.toUTF8();
+  }
 
   public static class Attribute
   {

@@ -42,7 +42,7 @@ public class InternalDocumentHelper
     mSoapHandler = soapHandler;
   }
 
-  static class ElementFactory
+  public static class ElementFactory
   {
     private final ZimbraSoapContext mZimbraSoapContext;
 
