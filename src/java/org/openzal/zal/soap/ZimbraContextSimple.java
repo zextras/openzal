@@ -33,10 +33,28 @@ public class ZimbraContextSimple implements ZimbraContext
   private final String  mRequesterIp;
   private final boolean mDelegatedAuth;
   private final Map<String, String> mParameters;
+  private final HttpServletRequest mRequest;
 
   public ZimbraContextSimple()
   {
-    this("","","",false,new HashMap<String, String>());
+    this("","","",false,new HashMap<String, String>(), null);
+  }
+
+  public ZimbraContextSimple(
+    String targetAccountId,
+    String authenticatedAccountId,
+    String requesterIp,
+    boolean delegatedAuth,
+    Map<String, String> parameters,
+    HttpServletRequest request
+  )
+  {
+    mTargetAccountId = targetAccountId;
+    mAuthenticatedAccountId = authenticatedAccountId;
+    mRequesterIp = requesterIp;
+    mDelegatedAuth = delegatedAuth;
+    mParameters = parameters;
+    mRequest = request;
   }
 
   public ZimbraContextSimple(
@@ -47,11 +65,7 @@ public class ZimbraContextSimple implements ZimbraContext
     Map<String, String> parameters
   )
   {
-    mTargetAccountId = targetAccountId;
-    mAuthenticatedAccountId = authenticatedAccountId;
-    mRequesterIp = requesterIp;
-    mDelegatedAuth = delegatedAuth;
-    mParameters = parameters;
+    this(targetAccountId, authenticatedAccountId, requesterIp, delegatedAuth, parameters, null);
   }
 
   @Override
@@ -82,7 +96,7 @@ public class ZimbraContextSimple implements ZimbraContext
   @Override
   public HttpServletRequest getHttpServletRequest()
   {
-    throw new UnsupportedOperationException();
+    return mRequest;
   }
 
   @Override
