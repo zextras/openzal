@@ -31,14 +31,19 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.NoSuchMailboxException;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraDatabase;
+import org.openzal.zal.log.ZimbraLog;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"StaticVariableOfConcreteClass", "StaticNonFinalField", "Singleton"})
 public class MailboxManagerImp implements MailboxManager
@@ -62,6 +67,28 @@ public class MailboxManagerImp implements MailboxManager
     }
 
     mListenerMap = new HashMap<MailboxManagerListener, MailboxManagerListenerWrapper>();
+  }
+
+  private static final Field sMaintenanceLocks;
+  private static final Field sMailboxIds;
+  private static final Field sCache;
+
+  static
+  {
+    try
+    {
+      sMaintenanceLocks = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredField("maintenanceLocks");
+      sMailboxIds = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredField("mailboxIds");
+      sCache = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredField("cache");
+      sMaintenanceLocks.setAccessible(true);
+      sMailboxIds.setAccessible(true);
+      sCache.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
   }
 
   public MailboxManagerImp(Object mailboxManager)
@@ -410,6 +437,56 @@ public class MailboxManagerImp implements MailboxManager
       {
         connection.close();
       }
+    }
+
+/*
+    Remove mailbox entry from mailbox manager caches, it never existed....muhahaha
+*/
+    try
+    {
+      synchronized (mMailboxManager)
+      {
+        ((ConcurrentHashMap) (sMaintenanceLocks.get(mMailboxManager))).remove(data.getAccountId());
+        ((Map) (sMailboxIds.get(mMailboxManager))).remove(data.getAccountId());
+        ((Map) (sCache.get(mMailboxManager))).remove(data.getId());
+      }
+    }
+    catch (Throwable ex)
+    {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @Override
+  public void createMailboxWithSpecificId(Connection connection, Account account, long mailboxId)
+  {
+    try
+    {
+      DbMailbox.createMailbox(
+        connection.toZimbra(DbPool.DbConnection.class),
+        (int)mailboxId,
+        account.getId(),
+        account.getName(),
+        -1
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    try
+    {
+      synchronized (mMailboxManager)
+      {
+        ((ConcurrentHashMap) (sMaintenanceLocks.get(mMailboxManager))).remove(account.getId());
+        ((Map) (sMailboxIds.get(mMailboxManager))).put(account.getId().toLowerCase(), (int)mailboxId);
+        ((Map) (sCache.get(mMailboxManager))).remove((int)mailboxId);
+      }
+    }
+    catch (Throwable ex)
+    {
+      throw new RuntimeException(ex);
     }
   }
 }

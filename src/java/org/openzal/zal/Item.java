@@ -491,6 +491,82 @@ public class Item implements Comparable<Item>
     {
       return mUnderlyingData.metadata;
     }
+
+    public int getParentId()
+    {
+      return mUnderlyingData.parentId;
+    }
+
+    public int getFolderId()
+    {
+      return mUnderlyingData.folderId;
+    }
+
+    public int getIndexId()
+    {
+      return mUnderlyingData.indexId;
+    }
+
+    public int getImapId()
+    {
+      return mUnderlyingData.imapId;
+    }
+
+    public long getSize()
+    {
+      return mUnderlyingData.size;
+    }
+
+    public String getLocator()
+    {
+      return mUnderlyingData.locator;
+    }
+
+
+    public String getBlobDigest()
+    {
+      return mUnderlyingData.getBlobDigest();
+    }
+
+    public int getUnreadCount()
+    {
+      return mUnderlyingData.unreadCount;
+    }
+
+    public int getFlags()
+    {
+      return mUnderlyingData.getFlags();
+    }
+
+    public String[] getTags()
+    {
+      return mUnderlyingData.getTags();
+    }
+
+    public String getSubject()
+    {
+      return mUnderlyingData.getSubject();
+    }
+
+    public int getModMetadata()
+    {
+      return mUnderlyingData.modMetadata;
+    }
+
+    public int getChangeDate()
+    {
+      return mUnderlyingData.dateChanged;
+    }
+
+    public int getModContent()
+    {
+      return mUnderlyingData.modContent;
+    }
+
+    public String getUuid()
+    {
+      return mUnderlyingData.uuid;
+    }
   }
 
   @NotNull

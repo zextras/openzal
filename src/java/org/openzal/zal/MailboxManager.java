@@ -46,7 +46,7 @@ public interface MailboxManager
 
   void removeListener(MailboxManagerListener listener);
 
-  Mailbox getMailboxByAccountId(String mailboxId,boolean autoCreate) throws ZimbraException;
+  Mailbox getMailboxByAccountId(String accountId, boolean autoCreate) throws ZimbraException;
 
   MailboxMaintenance beginMaintenance(String accountId, int mailboxId) throws ZimbraException;
 
@@ -63,4 +63,6 @@ public interface MailboxManager
   MailboxData getMailboxData(long mailboxId);
 
   void forceDeleteMailbox(@NotNull MailboxData data);
+
+  void createMailboxWithSpecificId(Connection connection, Account account, long mailboxId);
 }
