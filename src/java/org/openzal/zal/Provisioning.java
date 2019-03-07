@@ -216,6 +216,21 @@ public interface Provisioning
   Account createAccount(String dstAccount, @Nullable String newPassword, Map<String, Object> attrs)
     throws ZimbraException;
 
+  Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs, Map<String, Object> origAttrs);
+
+  DataSource restoreDataSource(Account account, DataSourceType dsType, String dsName, Map<String, Object> dataSourceAttrs);
+
+  Identity restoreIdentity(Account account, String identityName, Map<String, Object> identityAttrs);
+
+  Signature restoreSignature(Account account, String signatureName, Map<String, Object> signatureAttrs);
+
+  void restoreCos(Map<String,Object> attributes);
+
+  void restoreDomain(Map<String, Object> attributes);
+
+  void restoreDistributionList(String name, Map<String, Object> attributes);
+
+
   @Nullable
   Server createServer(String name, Map<String, Object> attrs)
           throws ZimbraException;

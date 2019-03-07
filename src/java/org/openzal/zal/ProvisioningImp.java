@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import com.unboundid.asn1.ASN1OctetString;
 import com.unboundid.ldap.sdk.Attribute;
@@ -34,10 +35,10 @@ import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.LdapUsage;
+import com.zimbra.cs.ldap.LdapUtil;
 import com.zimbra.cs.ldap.ZLdapContext;
+import com.zimbra.cs.ldap.ZMutableEntry;
 import com.zimbra.cs.ldap.ZSearchControls;
-import com.zimbra.cs.ldap.ZSearchResultEntry;
-import com.zimbra.cs.ldap.ZSearchResultEnumeration;
 import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
@@ -1289,6 +1290,145 @@ public class ProvisioningImp implements Provisioning
       {
         return new Account(account);
       }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs, Map<String, Object> origAttrs)
+  {
+    try
+    {
+      com.zimbra.cs.account.Account account = mProvisioning.restoreAccount(emailAddress, password, attrs, origAttrs);
+      return new Account(account);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public DataSource restoreDataSource(Account account, DataSourceType dsType, String dsName, Map<String, Object> dataSourceAttrs)
+  {
+    try
+    {
+      return new DataSource(
+        mProvisioning.restoreDataSource(
+          account.toZimbra(com.zimbra.cs.account.Account.class),
+          com.zimbra.soap.admin.type.DataSourceType.fromString(dsType.name()),
+          dsName,
+          dataSourceAttrs
+        )
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public Identity restoreIdentity(Account account, String identityName, Map<String, Object> identityAttrs)
+  {
+    try
+    {
+      return new Identity(
+        mProvisioning.restoreIdentity(
+          account.toZimbra(com.zimbra.cs.account.Account.class),
+          identityName,
+          identityAttrs
+        )
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public Signature restoreSignature(Account account, String signatureName, Map<String, Object> signatureAttrs)
+  {
+    try
+    {
+      return new Signature(
+        mProvisioning.restoreSignature(
+          account.toZimbra(com.zimbra.cs.account.Account.class),
+          signatureName,
+          signatureAttrs
+        )
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void restoreCos(Map<String, Object> attributes)
+  {
+    ZLdapContext zlc = null;
+    try
+    {
+      zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_COS);
+      ZMutableEntry entry = LdapClient.createMutableEntry();
+      entry.mapToAttrs(attributes);
+      String dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
+      entry.setDN(dn);
+      zlc.createEntry(entry);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void restoreDomain(Map<String, Object> attributes)
+  {
+    ZLdapContext zlc = null;
+    try
+    {
+      String name = (String) attributes.get("zimbraDomainName");
+      String dn = name.split(Pattern.quote("."))[0];
+      zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DOMAIN);
+      ZMutableEntry entry = LdapClient.createMutableEntry();
+      entry.mapToAttrs(attributes);
+      entry.setDN(dn);
+      zlc.createEntry(entry);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void restoreDistributionList(String address, Map<String, Object> attributes)
+  {
+    ZLdapContext zlc = null;
+    try
+    {
+      String[] parts = address.split(Pattern.quote("@"));
+      String local = parts[0];
+      String domain = parts[1];
+
+      StringBuffer dc = new StringBuffer();
+      for( String token : domain.split(Pattern.quote(".")) ) {
+        dc.append(",dc=").append(LdapUtil.escapeRDNValue(token));
+      }
+
+      String dn = "uid="+LdapUtil.escapeRDNValue(local)+"ou=people"+dc;
+      zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DISTRIBUTIONLIST);
+      ZMutableEntry entry = LdapClient.createMutableEntry();
+      entry.mapToAttrs(attributes);
+      entry.setDN(dn);
+      zlc.createEntry(entry);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
