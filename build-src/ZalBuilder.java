@@ -34,7 +34,7 @@ public class ZalBuilder
 
     SystemReader systemReader = new SystemReader();
 
-    System.out.println("  ZAL - Version "+systemReader.readVersion());
+    System.out.println("ZAL - Version "+systemReader.readVersion());
     if( args.length == 0 ) {
       help();
       System.exit(1);
@@ -160,6 +160,12 @@ public class ZalBuilder
       case "zal-dev-last": {
         setup(systemReader);
         buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion),systemReader,true);
+        return;
+      }
+
+      case "zal-last": {
+        setup(systemReader);
+        buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion),systemReader,false);
         return;
       }
 
@@ -517,6 +523,7 @@ public class ZalBuilder
     System.out.printf(format,"setup", "download zal dependencies and zimbra jars");
     System.out.printf(format,"zal-all", "build zal for all zimbra versions");
     System.out.printf(format,"zal-common", "build zal for most commons zimbra versions");
+    System.out.printf(format,"zal-last", "build zal against last zimbra version");
     System.out.printf(format,"zal-dev-current-source", "build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)");
     System.out.printf(format,"zal-dev-current-binary", "build zal against current zimbra binary in dev mode (zimbra be installed in /opt/zimbra)");
     System.out.printf(format,"zal-dev-last", "build zal against last zimbra version in dev mode");
