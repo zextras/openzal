@@ -124,6 +124,12 @@ public class ZimbraContextSimple implements ZimbraContext
   }
 
   @Override
+  public boolean hasParameter(String key)
+  {
+    return mParameters.containsKey(key);
+  }
+
+  @Override
   public SoapNode getSubNode(String name)
   {
     throw new UnsupportedOperationException();
