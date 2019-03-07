@@ -44,4 +44,6 @@ public interface ZimbraContext extends SoapNode
   InternalDocumentHelper.ElementFactory getElementFactory();
 
   SoapElement getRequest();
+
+  boolean hasParameter(String key);
 }
