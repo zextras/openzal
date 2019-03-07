@@ -139,22 +139,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
   public MailboxBlob copy(Blob src, Mailbox destMbox, int destMsgId, int destRevision)
     throws IOException, ZimbraException
   {
-    try
-    {
-      return MailboxBlobWrap.wrapZimbraObject(
-        sm.copy(
-          com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(src)),
-          destMbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class),
-          destMsgId,
-          destRevision,
-          mVolume.getId()
-        )
-      );
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
+    return link(src, destMbox, destMsgId, destRevision);
   }
 
   @NotNull

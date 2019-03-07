@@ -38,6 +38,8 @@ import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
