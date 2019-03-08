@@ -101,6 +101,14 @@ public class FakeQueryResults extends QueryResults
           return false;
         }
         /* $endif $ */
+
+        /* $if ZimbraX == 1 $
+        @Override
+        public boolean isRelevanceSortSupported()
+        {
+          return false;
+        }
+        /* $endif $ */
       }
     );
     mZimbraQueryResults = zimbraQueryResults;

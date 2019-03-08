@@ -29,9 +29,9 @@ public enum StoreFeature
   CENTRALIZED(StoreManager.StoreFeature.CENTRALIZED),
   RESUMABLE_UPLOAD(StoreManager.StoreFeature.RESUMABLE_UPLOAD),
   SINGLE_INSTANCE_SERVER_CREATE(StoreManager.StoreFeature.SINGLE_INSTANCE_SERVER_CREATE),
-  /* $if ZimbraVersion >= 8.8.10 $ */
+  /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 1 $
   CUSTOM_STORE_API(StoreManager.StoreFeature.CUSTOM_STORE_API);
-  /* $else $
+  /* $else $ */
   CUSTOM_STORE_API(null);
   /* $endif $ */
 
@@ -64,7 +64,7 @@ public enum StoreFeature
         return RESUMABLE_UPLOAD;
       case SINGLE_INSTANCE_SERVER_CREATE:
         return SINGLE_INSTANCE_SERVER_CREATE;
-      /*$if ZimbraVersion >= 8.8.10 $ */
+      /*$if ZimbraVersion >= 8.8.10 && ZimbraX == 1 $
       case CUSTOM_STORE_API:
         return CUSTOM_STORE_API;
       /*$endif $*/
