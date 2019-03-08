@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -32,7 +34,9 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
+import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.ldap.LdapClient;
+import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.LdapUsage;
 import com.zimbra.cs.ldap.LdapUtil;
@@ -70,6 +74,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.cs.mailbox.Contact;
 
 import org.jetbrains.annotations.Nullable;
+import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
@@ -1202,8 +1207,10 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.createDistributionList(dlistName,
-        stringObjectMap);
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.createDistributionList(
+        dlistName,
+        stringObjectMap
+      );
       if (distributionList == null)
       {
         return null;
@@ -1298,16 +1305,52 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public Account restoreAccount(String emailAddress, String password, Map<String, Object> attrs, Map<String, Object> origAttrs)
+  public void restoreAccount(String emailAddress, Map<String, Object> attrs)
   {
+    ZLdapContext zlc = null;
+    ZMutableEntry entry = null;
+    String dn = null;
     try
     {
-      com.zimbra.cs.account.Account account = mProvisioning.restoreAccount(emailAddress, password, attrs, origAttrs);
-      return new Account(account);
+      zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_ACCOUNT);
+      entry = LdapClient.createMutableEntry();
+      entry.mapToAttrs(attrs);
+      //dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
+      LdapProvisioning provisioning = (LdapProvisioning)mProvisioning;
+
+      String[] parts = emailAddress.split("@");
+      String localPart = parts[0];
+      String domain = parts[1];
+
+      dn = provisioning.getDIT().accountDNCreate(
+        null,
+        entry.getAttributes(),
+        localPart,
+        domain
+      );
+
+      entry.setDN(dn);
+      ZimbraLog.mailbox.info("Restoring account "+dn);
+      zlc.createEntry(entry);
+    }
+    catch (LdapException.LdapEntryAlreadyExistException ex)
+    {
+      try
+      {
+        zlc.replaceAttributes(dn, entry.getAttributes());
+      }
+      catch (LdapException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+    finally
+    {
+      LdapClient.closeContext(zlc);
     }
   }
 
@@ -1373,18 +1416,88 @@ public class ProvisioningImp implements Provisioning
   public void restoreCos(Map<String, Object> attributes)
   {
     ZLdapContext zlc = null;
+    ZMutableEntry entry = null;
+    String dn = null;
     try
     {
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_COS);
-      ZMutableEntry entry = LdapClient.createMutableEntry();
+      entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
-      String dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
+      dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
       entry.setDN(dn);
+      ZimbraLog.mailbox.info("Restoring cos "+dn);
       zlc.createEntry(entry);
+    }
+    catch (LdapException.LdapEntryAlreadyExistException ex)
+    {
+      try
+      {
+        zlc.replaceAttributes(dn, entry.getAttributes());
+      }
+      catch (LdapException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+    finally
+    {
+      LdapClient.closeContext(zlc);
+    }
+  }
+
+  private final static Method sCreateParentDomains;
+  static
+  {
+    try
+    {
+      sCreateParentDomains = com.zimbra.cs.account.ldap.LdapProvisioning.class.getDeclaredMethod(
+        "createParentDomains",
+        ZLdapContext.class,
+        String[].class,
+        String[].class
+      );
+      sCreateParentDomains.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
+
+  private void createParentDomains(ZLdapContext zlc, String[] parts, String[] dns) throws ServiceException
+  {
+    try
+    {
+      sCreateParentDomains.invoke(mProvisioning,zlc,parts,dns);
+    }
+    catch (IllegalAccessException e)
+    {
+      throw new RuntimeException(e);
+    }
+    catch (InvocationTargetException e)
+    {
+      try
+      {
+        throw e.getCause();
+      }
+      catch (RuntimeException ex)
+      {
+        throw ex;
+      }
+      catch (ServiceException ex)
+      {
+        throw ex;
+      }
+      catch (Throwable throwable)
+      {
+        throw new RuntimeException(throwable);
+      }
     }
   }
 
@@ -1392,19 +1505,64 @@ public class ProvisioningImp implements Provisioning
   public void restoreDomain(Map<String, Object> attributes)
   {
     ZLdapContext zlc = null;
+    String dn = null;
+    ZMutableEntry entry = null;
     try
     {
       String name = (String) attributes.get("zimbraDomainName");
-      String dn = name.split(Pattern.quote("."))[0];
+      String[] parts = name.split(Pattern.quote("."));
+
+      StringBuffer stringBuffer = new StringBuffer();
+      for( String part : parts )
+      {
+        stringBuffer
+          .append("dc=")
+          .append(LdapUtil.escapeRDNValue(part))
+          .append(",");
+      }
+      dn = stringBuffer.substring(0, stringBuffer.length()-1);
+
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DOMAIN);
-      ZMutableEntry entry = LdapClient.createMutableEntry();
+
+      LdapProvisioning provisioning = (LdapProvisioning)mProvisioning;
+
+      if( parts.length > 1 )
+      {
+        String[] dns = provisioning.getDIT().domainToDNs(parts);
+        createParentDomains(zlc, parts, dns);
+      }
+
+      entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
       entry.setDN(dn);
+      ZimbraLog.mailbox.info("Restoring domain "+dn);
+
       zlc.createEntry(entry);
+
+      String acctBaseDn = provisioning.getDIT().domainDNToAccountBaseDN(dn);
+      if (!acctBaseDn.equals(dn)) {
+        zlc.createEntry(provisioning.getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+        zlc.createEntry(provisioning.getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
+      }
+    }
+    catch (LdapException.LdapEntryAlreadyExistException ex)
+    {
+      try
+      {
+        zlc.replaceAttributes(dn, entry.getAttributes());
+      }
+      catch (LdapException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+    finally
+    {
+      LdapClient.closeContext(zlc);
     }
   }
 
@@ -1412,6 +1570,8 @@ public class ProvisioningImp implements Provisioning
   public void restoreDistributionList(String address, Map<String, Object> attributes)
   {
     ZLdapContext zlc = null;
+    ZMutableEntry entry = null;
+    String dn = null;
     try
     {
       String[] parts = address.split(Pattern.quote("@"));
@@ -1423,16 +1583,32 @@ public class ProvisioningImp implements Provisioning
         dc.append(",dc=").append(LdapUtil.escapeRDNValue(token));
       }
 
-      String dn = "uid="+LdapUtil.escapeRDNValue(local)+"ou=people"+dc;
+      dn = "uid="+LdapUtil.escapeRDNValue(local)+",ou=people"+dc;
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DISTRIBUTIONLIST);
-      ZMutableEntry entry = LdapClient.createMutableEntry();
+      entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
       entry.setDN(dn);
+      ZimbraLog.mailbox.info("Restoring distribution list "+dn);
       zlc.createEntry(entry);
+    }
+    catch (LdapException.LdapEntryAlreadyExistException ex)
+    {
+      try
+      {
+        zlc.replaceAttributes(dn, entry.getAttributes());
+      }
+      catch (LdapException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+    finally
+    {
+      LdapClient.closeContext(zlc);
     }
   }
 
