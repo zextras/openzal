@@ -20,13 +20,16 @@
 
 package org.openzal.zal.soap;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.SoapParseException;
+import com.zimbra.common.soap.XmlParseException;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.Element;
 
 import java.util.List;
+import java.util.Set;
 
 public class SoapElement
 {
@@ -49,7 +52,7 @@ public class SoapElement
     {
       return mElement.getAttribute(key);
     }
-    catch (ServiceException e)
+    catch(ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -61,9 +64,112 @@ public class SoapElement
     {
       return mElement.getAttributeLong(key);
     }
-    catch (ServiceException e)
+    catch(ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public Set<SoapElement.Attribute> listAttributes()
+  {
+    return ZimbraListWrapper.wrapElementAttributes(mElement.listAttributes());
+  }
+
+  public static SoapElement parseXML(String xml)
+  {
+    try
+    {
+      return new SoapElement(Element.parseXML(xml));
+    }
+    catch(ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static SoapElement parseJSON(String json)
+  {
+    try
+    {
+      return new SoapElement(Element.parseJSON(json));
+    }
+    catch(SoapParseException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<SoapElement> listElements()
+  {
+    return ZimbraListWrapper.wrapElements(mElement.listElements());
+  }
+
+  public String getName()
+  {
+    return mElement.getName();
+  }
+
+  public String getText()
+  {
+    return mElement.getText();
+  }
+
+  public SoapElement getElement(String name)
+    throws ServiceException
+  {
+    return new SoapElement(mElement.getElement(name));
+  }
+
+  public boolean hasAttribute(String name)
+  {
+    for(Attribute attribute : listAttributes())
+    {
+      if(attribute.getKey().equals(name))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public <T> T toZimbra(Class<T> clazz)
+  {
+    return clazz.cast(mElement);
+  }
+
+  @Override
+  public String toString()
+  {
+    return mElement.toString();
+  }
+
+  public byte[] toUTF8()
+  {
+    return mElement.toUTF8();
+  }
+
+  public static class Attribute
+  {
+    @NotNull private final Element.Attribute mAttribute;
+
+    public Attribute(Object attribute)
+    {
+      mAttribute = (Element.Attribute) attribute;
+    }
+
+    public String getKey()
+    {
+      return mAttribute.getKey();
+    }
+
+    public String getValue()
+    {
+      return mAttribute.getValue();
+    }
+
+    public void setValue(String value)
+    {
+      mAttribute.setValue(value);
     }
   }
 }

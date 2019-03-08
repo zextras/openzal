@@ -73,4 +73,9 @@ public class SoapResponseSimple implements SoapResponse
   {
     return mMap.get(responses);
   }
+
+  public HashMap<String, Object> getMap()
+  {
+    return mMap;
+  }
 }
