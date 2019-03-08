@@ -23,7 +23,7 @@ package org.openzal.zal.soap;
 import com.zimbra.common.soap.Element;
 import org.jetbrains.annotations.NotNull;
 
-class SoapResponseImpl implements SoapResponse
+public class SoapResponseImpl implements SoapResponse
 {
   public Element getElement()
   {
@@ -40,6 +40,14 @@ class SoapResponseImpl implements SoapResponse
   {
     mElement = element;
     mElementFactory = elementFactory;
+  }
+
+  public SoapResponseImpl(
+    SoapElement element,
+    InternalDocumentHelper.ElementFactory elementFactory
+  )
+  {
+    this(element.toZimbra(Element.class), elementFactory);
   }
 
   @Override

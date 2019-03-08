@@ -41,11 +41,6 @@ import java.util.Set;
 
 class ZimbraContextImpl implements ZimbraContext
 {
-  public Element getRequest()
-  {
-    return mRequest;
-  }
-
   public Map<String, Object> getContext()
   {
     return mContext;
@@ -268,5 +263,23 @@ class ZimbraContextImpl implements ZimbraContext
   public boolean isDelegatedAuth()
   {
     return mZimbraSoapContext.getAuthToken().isDelegatedAuth();
+  }
+
+  @Override
+  public InternalDocumentHelper.ElementFactory getElementFactory()
+  {
+    return new InternalDocumentHelper.ElementFactory(mZimbraSoapContext);
+  }
+
+  @Override
+  public SoapElement getRequest()
+  {
+    return new SoapElement(mRequest);
+  }
+
+  @Override
+  public boolean hasParameter(String key)
+  {
+    return mMap.containsKey(key);
   }
 }

@@ -174,6 +174,14 @@ public class ExceptionWrapper
         return new AlreadyInProgressException(exception);
       }
     });
+    mExceptionMap.put(ServiceException.PARSE_ERROR, new ExceptionWrapperCreator()
+    {
+      @Override
+      public ZimbraException create(Exception exception)
+      {
+        return new XmlParseException(exception);
+      }
+    });
     mExceptionMap.put(com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_ITEM, new ExceptionWrapperCreator()
     {
       @Override

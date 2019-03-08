@@ -18,32 +18,12 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.soap;
+package org.openzal.zal.exceptions;
 
-import org.openzal.zal.Continuation;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.Element;
-
-public interface ZimbraContext extends SoapNode
+public class XmlParseException extends ZimbraException
 {
-  String getTargetAccountId();
-
-  String getAuthenticatedAccontId();
-
-  String getRequesterIp();
-
-  SoapResponse execLocalRequest();
-
-  HttpServletRequest getHttpServletRequest();
-
-  Continuation getContinuation();
-
-  boolean isDelegatedAuth();
-
-  InternalDocumentHelper.ElementFactory getElementFactory();
-
-  SoapElement getRequest();
-
-  boolean hasParameter(String key);
+  protected XmlParseException(Exception exception)
+  {
+    super(exception);
+  }
 }
