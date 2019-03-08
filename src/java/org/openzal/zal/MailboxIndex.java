@@ -19,7 +19,11 @@ public class MailboxIndex
 
   public Analyzer getAnalyzer()
   {
+    /* $if ZimbraX == 1 $
+    throw new UnsupportedOperationException();
+    /* $else $ */
     return new Analyzer(mZObject.getAnalyzer());
+    /* $endif $ */
   }
 
   public <T> T toZimbra(@NotNull Class<T> clazz)

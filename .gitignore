@@ -1,4 +1,3 @@
-build/
 deb/
 dist/
 doc/html/
@@ -8,4 +7,8 @@ src/zal.iml
 compat_reports/
 openzal-*.deb
 openzal-*.rpm
-private/
+/zimbra
+/lib
+/release
+/tmp
+/private

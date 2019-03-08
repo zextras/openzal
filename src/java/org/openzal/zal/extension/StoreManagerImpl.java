@@ -106,19 +106,32 @@ public class StoreManagerImpl implements StoreManager
     VolumeManager volumeManager
   )
   {
+    this(
+      fileBlobStore,
+      volumeManager,
+      new PrimaryStoreBuilder()
+      {
+        @Override
+        public PrimaryStore build(FileBlobStoreWrap fileBlobStore, StoreVolume storeVolume)
+        {
+          return new FileBlobPrimaryStore(fileBlobStore, storeVolume);
+        }
+      }
+    );
+  }
+
+  public StoreManagerImpl(
+    final FileBlobStoreWrap fileBlobStore,
+    VolumeManager volumeManager,
+    PrimaryStoreBuilder primaryStoreBuilder
+  )
+  {
     mVolumeManager = volumeManager;
     mLock = new ReentrantLock();
     mCacheableStoreBuilderMap = new HashMap<String, CacheableStoreBuilder>();
     mStoresCached = new HashMap<String, Store>();
     mFileBlobStore = fileBlobStore;
-    mPrimaryStoreBuilder = new PrimaryStoreBuilder()
-    {
-      @Override
-      public PrimaryStore build(FileBlobStoreWrap fileBlobStoreWrap, StoreVolume storeVolume)
-      {
-        return new FileBlobPrimaryStore(fileBlobStoreWrap, storeVolume);
-      }
-    };
+    mPrimaryStoreBuilder = primaryStoreBuilder;
   }
 
   @Override

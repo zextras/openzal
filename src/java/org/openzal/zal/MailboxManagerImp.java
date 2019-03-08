@@ -73,14 +73,7 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public int[] getMailboxIds()
   {
-    try
-    {
-      return com.zimbra.cs.mailbox.MailboxManager.getInstance().getMailboxIds();
-    }
-    catch (com.zimbra.common.service.ServiceException ex)
-    {
-      throw new RuntimeException();
-    }
+    return mMailboxManager.getMailboxIds();
   }
 
   @Override
@@ -289,6 +282,8 @@ public class MailboxManagerImp implements MailboxManager
   {
     /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $elseif ZimbraX == 1 $
+    return;
     /* $endif $ */
   }
 
@@ -297,6 +292,8 @@ public class MailboxManagerImp implements MailboxManager
   {
     /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
+    /* $elseif ZimbraX == 1 $
+    return;
     /* $endif $ */
   }
 
@@ -378,6 +375,7 @@ public class MailboxManagerImp implements MailboxManager
   }
 
   /* $if ZimbraVersion >= 8.8.10 $ */
+  /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
   class ZALAdditionalQuotaProvider implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
   {
     private final AdditionalQuotaProvider mAdditionalQuotaProvider;

@@ -261,7 +261,7 @@ class ExtensionManagerImpl implements ExtensionManager
 
     for( ExtensionInfo info : extensionInfoList )
     {
-/* $if !DevMode $*/
+/* $if DevMode != 1 $*/
       if( !info.isCompatible(ZalVersion.current) )
       {
         ZimbraLog.extensions.warn(

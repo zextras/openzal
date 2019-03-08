@@ -43,10 +43,10 @@ public class ZalIOUtils
   public static long getInodeId(String path)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.0.2$ */
+    /* $if ZimbraVersion >= 8.0.2 $ */
       return IO.fileInfo(path).getInodeNum();
     /* $else$
       return 0;
-     $endif$ */
+    /* $endif# */
   }
 }

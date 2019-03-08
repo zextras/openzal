@@ -11,40 +11,49 @@ API documentation is available on <https://zextras.github.io/OpenZAL/>
 Latest ZAL is downloadable from <git@github.com:ZeXtras/OpenZAL.git>
 You can clone ZAL repository using:
         
-        git clone https://zextras.github.io/OpenZAL/
+>`git clone https://zextras.github.io/OpenZAL/`
 
 ### Runtime Dependencies ###
 
    Zimbra is all you need ;)
 
-### Jar Signing ###
+### Simple build ###
 
-If you want to sign your jar place your key.pkcs8 into private directory otherwise skip this section (to sign jar go to <https://wiki.openssl.org/index.php/Command_Line_Utilities#pkcs8_.2F_pkcs5> for more details) 
+>`$ ./build zal-all`
+All dependencies will be downloaded automatically and jars will be created in dist/{VERSION}/zal.jar
 
 ### Build Targets ###
+```
+$ ./build
+  ZAL - Version 2.5.0
 
+  help                                    Show this help message                  
+  zal-all                                 build zal for all zimbra versions       
+  zal-common                              build zal for most commons zimbra versions
+  zal-dev-current-source                  build zal against current zimbra source in dev mode (zimbra jar must be located in ../zm-zcs-lib and ../zm-mailbox)
+  zal-dev-current-binary                  build zal against current zimbra binary in dev mode (zimbra be installed in /opt/zimbra)
+  zal-dev-last                            build zal against last zimbra version in dev mode
+  zal-{zimbra-version}                    build zal against specified zimbra version in dev mode
+  compatibility-check                     check zal Java API Compliance against all zal versions
+  fast-compatibility-check                check zal Java API Compliance only against previous zal version
+  clean                                   clean up temporary                      
+```
 **zal-dev-current-binary**:
 
-OpenZAL can be place anywhere, and zimbra must be installed into /opt/zimbra
-
+OpenZAL can be place anywhere, and zimbra must be installed into /opt/zimbra.
 Then run:
-
-    ant zal-dev-current-binary  
+> `./build zal-dev-current-binary`
 
 **zal-dev-current-source**:
 
 Simply place OpenZAL into same directory of zm-build and follow guide <https://github.com/Zimbra/zm-build/wiki/installer-build> to 
-build Zimbra.
+build Zimbra. Then run:
+>`./build zal-dev-current-source`
 
-Then run:
-
-    ant zal-dev-current-source  
-
-**zal-all**:
-
+**Adding a zimbra version**:
 For each zimbra version you want to build ZAL for:
- 
-* copy all file from "/opt/zimbra/lib/jars/" in "zimbra-jars/${VERSION}/"
+
+* copy all file from "/opt/zimbra/lib/jars/" in "zimbra/${VERSION}/jars/"
 * copy from "/opt/zimbra/common/jetty_home/lib/"  
 jetty-continuation-x.x.x.y.jar
 jetty-http-x.x.x.y.jar
@@ -55,11 +64,7 @@ jetty-server-x.x.x.y.jar
 jetty-servlet-x.x.x.y.jar
 jetty-servlets-x.x.x.y.jar
 jetty-util-x.x.x.y.jar
-in "zimbra-jars/${VERSION}/"
-* copy jtnef-x.x.x.jar from "jetty_base/common/lib" in "zimbra-jars/${VERSION}/" 
-
-Then run:
-
-    ant zal-all  
+in "zimbra/${VERSION}/jars/"
+* copy jtnef-x.x.x.jar from "jetty_base/common/lib" in "zimbra/${VERSION}/jars/" 
 
 
