@@ -23,13 +23,11 @@ package org.openzal.zal.soap;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapParseException;
-import com.zimbra.common.soap.XmlParseException;
+import java.util.List;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
-
-import java.util.List;
-import java.util.Set;
 
 public class SoapElement
 {
@@ -171,5 +169,10 @@ public class SoapElement
     {
       mAttribute.setValue(value);
     }
+  }
+
+  public String toXML()
+  {
+    return mElement.toXML().asXML();
   }
 }

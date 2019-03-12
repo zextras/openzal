@@ -23,6 +23,8 @@ package org.openzal.zal.soap;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
+import java.util.Map;
+import org.apache.http.HttpHeaders;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
@@ -54,6 +56,22 @@ public class SoapTransport
     {
       return new SoapElement(
         mSoapHttpTransport.invoke(
+          request.toZimbra(Element.XMLElement.class)
+        )
+      );
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public SoapElement invokeWithoutSession(XMLElement request) throws IOException
+  {
+    try
+    {
+      return new SoapElement(
+        mSoapHttpTransport.invokeWithoutSession(
           request.toZimbra(Element.XMLElement.class)
         )
       );
@@ -107,5 +125,11 @@ public class SoapTransport
   public void setTargetAcctId(String targetAcctId)
   {
     mSoapHttpTransport.setTargetAcctId(targetAcctId);
+  }
+
+  public void setCustomHeader(String header,String value)
+  {
+    Map<String, String> customHeaders = mSoapHttpTransport.getCustomHeaders();
+    customHeaders.put(header, value);
   }
 }
