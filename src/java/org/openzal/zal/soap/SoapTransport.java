@@ -24,7 +24,6 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
 import java.util.Map;
-import org.apache.http.HttpHeaders;
 import org.jetbrains.annotations.NotNull;
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
