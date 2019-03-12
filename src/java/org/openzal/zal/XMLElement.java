@@ -21,18 +21,28 @@
 package org.openzal.zal;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.XmlParseException;
 import org.jetbrains.annotations.NotNull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public class XMLElement
 {
   @NotNull private final Element.XMLElement mXMLElement;
 
-  public XMLElement(String name)
+  public XMLElement(String xml)
   {
-    mXMLElement = new Element.XMLElement(name);
+    try
+    {
+      mXMLElement = (Element.XMLElement)Element.parseXML(xml);
+    }
+    catch( XmlParseException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
-  protected XMLElement(@NotNull Object element)
+  protected XMLElement(@NotNull Object
+    element)
   {
     if (element == null)
     {
