@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1172,21 +1173,31 @@ public class Account extends Entry
 
     List<String> certificates = new ArrayList<String>();
 
-    SMIMEPublicCertsInfo certs = response.getCerts();
-    if (certs != null)
+    List<SMIMEPublicCertsInfo> certsList;
+
+    /* $if ZimbraVersion >= 8.8.12 $ */
+    certsList = response.getCerts();
+    /* $else$
+    certsList = Collections.singletonList( response.getCerts() );
+    /* $endif$ */
+
+    for( SMIMEPublicCertsInfo current : certsList )
     {
-      for (SMIMEPublicCertInfo info : certs.getCerts())
+      if (current != null)
       {
-        String cert = new String(Utils.decodeFSSafeBase64(info.getValue()));
-
-        int beginIndex = cert.indexOf(BEGIN_CERT);
-        int endIndex = cert.indexOf(END_CERT);
-
-        if(beginIndex != -1 && endIndex != -1)
+        for (SMIMEPublicCertInfo info : current.getCerts())
         {
-          cert = cert.substring(beginIndex + BEGIN_CERT.length(), endIndex);
-          cert = cert.replaceAll( "((\\r\\n)|(\\n))","");
-          certificates.add(cert);
+          String cert = new String(Utils.decodeFSSafeBase64(info.getValue()));
+
+          int beginIndex = cert.indexOf(BEGIN_CERT);
+          int endIndex = cert.indexOf(END_CERT);
+
+          if (beginIndex != -1 && endIndex != -1)
+          {
+            cert = cert.substring(beginIndex + BEGIN_CERT.length(), endIndex);
+            cert = cert.replaceAll("((\\r\\n)|(\\n))", "");
+            certificates.add(cert);
+          }
         }
       }
     }
