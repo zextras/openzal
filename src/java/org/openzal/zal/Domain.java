@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.jetbrains.annotations.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
@@ -162,10 +163,10 @@ public class Domain extends Entry
     }
   }
 
-  @Override
-  com.zimbra.cs.account.Domain toZimbra()
+  @VisibleForTesting
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
-    return mDomain;
+    return cls.cast(mDomain);
   }
 
   public long getLongAttr(String name, int defaultValue)

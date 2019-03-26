@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.soap.admin.message.BackupQueryRequest;
 import com.zimbra.soap.admin.message.BackupQueryResponse;
@@ -170,7 +171,8 @@ public class Server extends Entry
     return Arrays.asList(mServer.getServiceEnabled());
   }
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  @VisibleForTesting
+  public <T> T toZimbra(@NotNull Class<T> cls)
   {
     return cls.cast(mServer);
   }
