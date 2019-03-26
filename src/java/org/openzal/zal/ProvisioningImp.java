@@ -487,7 +487,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.getAllAccounts(
-        domain.toZimbra(),
+        domain.toZimbra(com.zimbra.cs.account.Domain.class),
         namedEntryVisitor
       );
     }
@@ -743,7 +743,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapDistributionLists(
-        mProvisioning.getAllDistributionLists(domain.toZimbra())
+        mProvisioning.getAllDistributionLists(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -759,7 +759,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapGroups(
-        mProvisioning.getAllGroups(domain.toZimbra())
+        mProvisioning.getAllGroups(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -951,7 +951,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapAccounts(
-        mProvisioning.getAllAccounts(domain.toZimbra())
+        mProvisioning.getAllAccounts(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -995,7 +995,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return ZimbraListWrapper.wrapCalendarResources(
-        mProvisioning.getAllCalendarResources(domain.toZimbra())
+        mProvisioning.getAllCalendarResources(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
     catch (ServiceException e)
@@ -1553,7 +1553,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return new CountAccountResult(
-        mProvisioning.countAccount(domain.toZimbra())
+        mProvisioning.countAccount(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
