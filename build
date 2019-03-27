@@ -3,7 +3,13 @@
 set -e
 ROOT=$(dirname $0)
 
+if [[ -z ${JAVA_HOME} ]]; then
+    export JAVA_HOME=/usr/lib/jvm/java-11-oracle
+fi
+export JAVAC=${JAVA_HOME}/bin/javac
+export JAVA=${JAVA_HOME}/bin/java
+
 mkdir -p ${ROOT}/tmp/build/
-javac ${ROOT}/build-src/*.java -d ${ROOT}/tmp/build/
+${JAVAC} ${ROOT}/build-src/*.java -d ${ROOT}/tmp/build/
 cd ${ROOT}
-java -cp tmp/build/ ZalBuilder $@
+${JAVA} -cp tmp/build/ ZalBuilder $@

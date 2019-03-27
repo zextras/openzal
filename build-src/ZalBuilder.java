@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class ZalBuilder
 {
-  private static final int     sMaxConcurrentTask = 4;
+  private static final int sMaxConcurrentTask = 4;
 
   private static final Version sFirstSupportedZimbraVersion = new Version("8.0.0");
   private static final Version sLastSupportedZimbraVersion  = new Version("8.8.12");
@@ -546,7 +546,8 @@ public class ZalBuilder
       "com/fasterxml/jackson/core/jackson-core", "2.6.7",
       "com/fasterxml/jackson/core/jackson-databind", "2.6.7",
       "com/fasterxml/jackson/core/jackson-annotations", "2.6.7",
-      "commons-dbutils/commons-dbutils", "1.6"
+      "commons-dbutils/commons-dbutils", "1.6",
+      "javax/activation/javax.activation-api", "1.2.0"
     );
     downloader.download();
 
