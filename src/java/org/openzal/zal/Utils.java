@@ -142,7 +142,7 @@ public abstract class Utils
     {
       return URLUtil.getPublicURLForDomain(
         server.toZimbra(com.zimbra.cs.account.Server.class),
-        domain != null ? domain.toZimbra() : null,
+        domain != null ? domain.toZimbra(com.zimbra.cs.account.Domain.class) : null,
         path,
         true
       );
