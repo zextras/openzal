@@ -69,6 +69,7 @@ public class MailboxManagerImp implements MailboxManager
     mListenerMap = new HashMap<MailboxManagerListener, MailboxManagerListenerWrapper>();
   }
 
+  /* $if ZimbraX == 0 $ */
   private static final Field sMaintenanceLocks;
   private static final Field sMailboxIds;
   private static final Field sCache;
@@ -90,6 +91,7 @@ public class MailboxManagerImp implements MailboxManager
       throw new RuntimeException(ex);
     }
   }
+  /* $endif $ */
 
   public MailboxManagerImp(Object mailboxManager)
   {
@@ -403,6 +405,7 @@ public class MailboxManagerImp implements MailboxManager
 /*
     Remove mailbox entry from mailbox manager caches, it never existed....muhahaha
 */
+    /* $if ZimbraX == 0 $ */
     try
     {
       synchronized (mMailboxManager)
@@ -416,6 +419,7 @@ public class MailboxManagerImp implements MailboxManager
     {
       throw new RuntimeException(ex);
     }
+    /* $endif $ */
   }
 
   @Override
@@ -436,6 +440,7 @@ public class MailboxManagerImp implements MailboxManager
       throw ExceptionWrapper.wrap(e);
     }
 
+    /* $if ZimbraX == 0 $ */
     try
     {
       synchronized (mMailboxManager)
@@ -449,6 +454,7 @@ public class MailboxManagerImp implements MailboxManager
     {
       throw new RuntimeException(ex);
     }
+    /* $endif $ */
   }
 
   /* $if ZimbraVersion >= 8.8.10 $ */
