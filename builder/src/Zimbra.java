@@ -1,5 +1,3 @@
-package src;
-
 public class Zimbra implements Comparable<Zimbra>
 {
   public Type getType()
