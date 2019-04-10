@@ -1,3 +1,5 @@
+package src;
+
 import javax.tools.SimpleJavaFileObject;
 import java.io.File;
 import java.io.FileInputStream;

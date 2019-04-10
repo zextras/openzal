@@ -1,3 +1,4 @@
+package src;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -412,6 +413,8 @@ public class Build
 
     String filenameList[] = directory.list();
     if (filenameList == null) filenameList = new String[0];
+
+    Arrays.sort(filenameList);
 
     for (String filename : filenameList) {
       final File subFile = new File(directory, filename);

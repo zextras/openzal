@@ -1,3 +1,5 @@
+package src;
+
 /**
  * To be used when no preprocessor is needed
  */
