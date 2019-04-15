@@ -20,14 +20,14 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class RightModifier
 {
-  @NotNull private final com.zimbra.cs.account.accesscontrol.RightModifier mRightModifier;
+  @Nonnull private final com.zimbra.cs.account.accesscontrol.RightModifier mRightModifier;
 
   RightModifier(
-    @NotNull com.zimbra.cs.account.accesscontrol.RightModifier rightModifier
+    @Nonnull com.zimbra.cs.account.accesscontrol.RightModifier rightModifier
   )
   {
     if (rightModifier == null)

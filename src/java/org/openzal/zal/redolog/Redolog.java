@@ -20,14 +20,14 @@
 
 package org.openzal.zal.redolog;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.redolog.op.RedoableOp;
 
 import com.zimbra.cs.mailbox.MailboxOperation;
 
 public class Redolog
 {
-  public static int getOpCode( @NotNull RedoableOp op )
+  public static int getOpCode( @Nonnull RedoableOp op )
   {
     return op.getOpCode();
   }

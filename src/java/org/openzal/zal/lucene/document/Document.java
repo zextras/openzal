@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.document;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class Document
   private final com.zimbra.cs.index.IndexDocument mZObject;
   /* $endif $ */
 
-  public Document(@NotNull Object zObject)
+  public Document(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     if( zObject instanceof org.apache.lucene.document.Document )
@@ -32,10 +32,10 @@ public class Document
   }
 
   public void add(
-    @NotNull String field,
-    @NotNull String value,
-    @NotNull Field.Store stored,
-    @NotNull Field.Index indexed
+    @Nonnull String field,
+    @Nonnull String value,
+    @Nonnull Field.Store stored,
+    @Nonnull Field.Index indexed
   )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
@@ -132,7 +132,7 @@ public class Document
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     if( target.equals(org.apache.lucene.document.Document.class) )

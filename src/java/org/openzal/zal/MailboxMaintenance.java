@@ -1,7 +1,7 @@
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MailboxMaintenance {
   private com.zimbra.cs.mailbox.MailboxMaintenance mMailboxMaintenance;
@@ -15,7 +15,7 @@ public class MailboxMaintenance {
     this.mMailboxMaintenance = (com.zimbra.cs.mailbox.MailboxMaintenance) mailboxMaintenance;
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mMailboxMaintenance);
   }

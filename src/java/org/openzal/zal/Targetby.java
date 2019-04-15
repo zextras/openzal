@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -28,12 +28,12 @@ import com.zimbra.soap.type.TargetBy;
 
 public class Targetby
 {
-  @NotNull private final TargetBy mTargetBy;
+  @Nonnull private final TargetBy mTargetBy;
 
   public static Targetby id   = new Targetby(TargetBy.id);
   public static Targetby name = new Targetby(TargetBy.name);
 
-  Targetby(@NotNull Object targetBy)
+  Targetby(@Nonnull Object targetBy)
   {
     mTargetBy = (TargetBy) targetBy;
   }

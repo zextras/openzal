@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.index.Term;
 
 public class PrefixQuery
@@ -15,7 +15,7 @@ public class PrefixQuery
     /* $endif $ */
   }
 
-  public PrefixQuery(@NotNull Object zObject)
+  public PrefixQuery(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.search.PrefixQuery) zObject);

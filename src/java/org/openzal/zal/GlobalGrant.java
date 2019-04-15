@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.HashSet;
@@ -30,15 +30,15 @@ import java.util.Set;
 
 public class GlobalGrant extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
+  @Nonnull private final com.zimbra.cs.account.GlobalGrant mGlobalGrant;
 
-  public GlobalGrant(@NotNull Object globalGrant)
+  public GlobalGrant(@Nonnull Object globalGrant)
   {
     super(globalGrant);
     mGlobalGrant = (com.zimbra.cs.account.GlobalGrant) globalGrant;
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mGlobalGrant.getMultiAttrSet(name));

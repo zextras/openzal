@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.analysis.tokenattributes.CharTermAttribute;
 
 
@@ -10,7 +10,7 @@ public class AttributeSource
   private final org.apache.lucene.util.AttributeSource mZObject;
   /* $endif $ */
 
-  public AttributeSource(@NotNull Object zObject)
+  public AttributeSource(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.util.AttributeSource) zObject;
@@ -35,7 +35,7 @@ public class AttributeSource
   }
 
   public <T> T toZimbra(
-    @NotNull Class<T> target
+    @Nonnull Class<T> target
   )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */

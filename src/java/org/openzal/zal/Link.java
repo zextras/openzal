@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Link extends Document
 {
-  @NotNull private final com.zimbra.cs.mailbox.Link mLink;
+  @Nonnull private final com.zimbra.cs.mailbox.Link mLink;
 
-  public Link(@NotNull Object item)
+  public Link(@Nonnull Object item)
   {
     super(item);
     mLink = (com.zimbra.cs.mailbox.Link) item;

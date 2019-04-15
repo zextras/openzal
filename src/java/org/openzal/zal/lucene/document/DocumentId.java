@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.document;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class DocumentId
 {
@@ -8,7 +8,7 @@ public class DocumentId
   private com.zimbra.cs.index.ZimbraIndexDocumentID mZObject;
   /* $endif $ */
 
-  public DocumentId(@NotNull Object zObject)
+  public DocumentId(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;;
@@ -25,7 +25,7 @@ public class DocumentId
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

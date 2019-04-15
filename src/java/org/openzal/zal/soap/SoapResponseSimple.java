@@ -20,13 +20,13 @@
 
 package org.openzal.zal.soap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 
 public class SoapResponseSimple implements SoapResponse
 {
-  @NotNull private final HashMap<String, Object> mMap;
+  @Nonnull private final HashMap<String, Object> mMap;
 
   public SoapResponseSimple()
   {

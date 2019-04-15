@@ -1,16 +1,16 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResult
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.SearchResult mSearchResult;
 
-  public SearchResult(@NotNull Object searchResult)
+  public SearchResult(@Nonnull Object searchResult)
   {
     mSearchResult = (com.unboundid.ldap.sdk.SearchResult)searchResult;
   }

@@ -22,8 +22,8 @@ package org.openzal.zal;
 
 import com.zimbra.common.mime.ContentDisposition;
 import com.zimbra.common.mime.ContentType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimePart;
@@ -34,7 +34,7 @@ public class MPartInfo
 {
   private final com.zimbra.cs.mime.MPartInfo mMPartInfo;
 
-  protected MPartInfo(@NotNull Object mPartInfo)
+  protected MPartInfo(@Nonnull Object mPartInfo)
   {
     if (mPartInfo == null)
     {
@@ -43,14 +43,14 @@ public class MPartInfo
     mMPartInfo = (com.zimbra.cs.mime.MPartInfo) mPartInfo;
   }
 
-  @NotNull
+  @Nonnull
   public String getFilename()
   {
     String res = mMPartInfo.getFilename();
     return res == null ? "" : res;
   }
 
-  @NotNull
+  @Nonnull
   public String getDisposition()
   {
     String res = mMPartInfo.getDisposition();

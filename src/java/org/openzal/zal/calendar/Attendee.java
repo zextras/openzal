@@ -23,8 +23,8 @@ package org.openzal.zal.calendar;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Attendee
 {
@@ -76,7 +76,7 @@ public class Attendee
     mStatus = status;
   }
 
-  @NotNull
+  @Nonnull
   ZOrganizer toZOrganizer()
   {
     return new ZOrganizer(mAddress, mName);

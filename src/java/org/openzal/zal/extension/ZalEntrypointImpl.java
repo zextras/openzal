@@ -20,7 +20,7 @@
 
 package org.openzal.zal.extension;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.ZalBuildInfo;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.JarAccessor;

@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.document;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Field
 {
@@ -8,7 +8,7 @@ public class Field
   private final org.apache.lucene.document.Field mZObject;
   /* $endif $ */
 
-  public Field(@NotNull String name, @NotNull String value, @NotNull Store stored, @NotNull Index indexed)
+  public Field(@Nonnull String name, @Nonnull String value, @Nonnull Store stored, @Nonnull Index indexed)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     this(new org.apache.lucene.document.Field(
@@ -20,7 +20,7 @@ public class Field
     /* $endif $ */
   }
 
-  public Field(@NotNull Object zObject)
+  public Field(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject = (org.apache.lucene.document.Field) zObject;
@@ -73,7 +73,7 @@ public class Field
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);

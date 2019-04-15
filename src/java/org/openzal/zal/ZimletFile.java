@@ -20,10 +20,10 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.zimlet.ZimletException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +31,9 @@ import java.nio.file.NoSuchFileException;
 
 public class ZimletFile
 {
-  @NotNull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
+  @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
 
-  protected ZimletFile(@NotNull Object zimletFile)
+  protected ZimletFile(@Nonnull Object zimletFile)
   {
     if (zimletFile == null)
     {

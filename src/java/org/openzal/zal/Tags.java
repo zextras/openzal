@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class Tags
 {
   private final String[] mTags;
 
-  public static Tags extractFromItem( @NotNull Item item )
+  public static Tags extractFromItem( @Nonnull Item item )
   {
     return new Tags(item.getTags());
   }

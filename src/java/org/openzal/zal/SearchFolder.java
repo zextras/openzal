@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SearchFolder extends Folder
 {
-  @NotNull private final com.zimbra.cs.mailbox.SearchFolder mSearchFolder;
+  @Nonnull private final com.zimbra.cs.mailbox.SearchFolder mSearchFolder;
 
-  public SearchFolder(@NotNull Object item)
+  public SearchFolder(@Nonnull Object item)
   {
     super(item);
     mSearchFolder = (com.zimbra.cs.mailbox.SearchFolder) item;

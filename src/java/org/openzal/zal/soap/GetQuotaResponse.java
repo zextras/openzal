@@ -20,7 +20,7 @@
 
 package org.openzal.zal.soap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.AccountQuotaInfo;
 import org.openzal.zal.ZimbraListWrapper;
 import com.zimbra.cs.service.admin.GetQuotaUsage;
@@ -30,7 +30,7 @@ import java.util.List;
 
 public class GetQuotaResponse
 {
-  @NotNull private final GetQuotaUsageResponse mGetQuotaUsageResponse;
+  @Nonnull private final GetQuotaUsageResponse mGetQuotaUsageResponse;
 
   public static final String SORT_TOTAL_USED   = GetQuotaUsage.SORT_TOTAL_USED;
   public static final String SORT_QUOTA_LIMIT  = GetQuotaUsage.SORT_QUOTA_LIMIT;

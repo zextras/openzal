@@ -22,15 +22,15 @@ package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
 public class IAttributes
 {
-  @NotNull private final com.zimbra.cs.ldap.IAttributes mIAttributes;
+  @Nonnull private final com.zimbra.cs.ldap.IAttributes mIAttributes;
 
-  protected IAttributes(@NotNull Object iattributes)
+  protected IAttributes(@Nonnull Object iattributes)
   {
     if (iattributes == null)
     {

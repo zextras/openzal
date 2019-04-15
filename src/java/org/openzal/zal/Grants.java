@@ -21,15 +21,15 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.accesscontrol.RightCommand;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Set;
 
 public class Grants
 {
-  @NotNull private final RightCommand.Grants mGrants;
+  @Nonnull private final RightCommand.Grants mGrants;
 
-  protected Grants(@NotNull Object grants)
+  protected Grants(@Nonnull Object grants)
   {
     if (grants == null)
     {
@@ -38,7 +38,7 @@ public class Grants
     mGrants = (RightCommand.Grants) grants;
   }
 
-  @NotNull
+  @Nonnull
   public Set<ACE> getACEs()
   {
     return ZimbraListWrapper.wrapACEs(mGrants.getACEs());

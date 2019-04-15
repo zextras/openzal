@@ -21,7 +21,7 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.soap.AdminConstants;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.Continuation;
 import org.openzal.zal.Jetty;
 import org.openzal.zal.Utils;

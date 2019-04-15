@@ -20,16 +20,16 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Signature
 {
-  @NotNull private final com.zimbra.cs.account.Signature mSignature;
+  @Nonnull private final com.zimbra.cs.account.Signature mSignature;
 
-  protected Signature(@NotNull Object signature)
+  protected Signature(@Nonnull Object signature)
   {
     if (signature == null)
     {

@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ZAuthToken
 {
-  @NotNull private final com.zimbra.common.auth.ZAuthToken mZAuthToken;
+  @Nonnull private final com.zimbra.common.auth.ZAuthToken mZAuthToken;
 
-  protected ZAuthToken(@NotNull Object zAuthToken)
+  protected ZAuthToken(@Nonnull Object zAuthToken)
   {
     if (zAuthToken == null)
     {

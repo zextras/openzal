@@ -21,7 +21,7 @@
 package org.openzal.zal.redolog;
 
 import com.zimbra.cs.redolog.logger.LogWriter;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 
 public class RedologLogWriter

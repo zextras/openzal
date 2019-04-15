@@ -23,7 +23,7 @@ package org.openzal.zal;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
@@ -32,9 +32,9 @@ import java.util.List;
 
 public class Message extends Item
 {
-  @NotNull private final com.zimbra.cs.mailbox.Message mMessage;
+  @Nonnull private final com.zimbra.cs.mailbox.Message mMessage;
 
-  public Message(@NotNull Object mailItem)
+  public Message(@Nonnull Object mailItem)
   {
     super(mailItem);
     mMessage = (com.zimbra.cs.mailbox.Message) mailItem;

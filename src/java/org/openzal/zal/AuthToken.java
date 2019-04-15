@@ -22,13 +22,13 @@ package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.account.AuthTokenException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class AuthToken
 {
-  @NotNull private final com.zimbra.cs.account.AuthToken mAuthToken;
+  @Nonnull private final com.zimbra.cs.account.AuthToken mAuthToken;
 
-  protected AuthToken(@NotNull Object authToken)
+  protected AuthToken(@Nonnull Object authToken)
   {
     if (authToken == null)
     {
@@ -69,7 +69,7 @@ public class AuthToken
     return mAuthToken.toString();
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mAuthToken);
   }

@@ -23,7 +23,7 @@ package org.openzal.zal;
 import org.openzal.zal.exceptions.AlreadyExistsException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,9 +33,9 @@ import java.util.Set;
 
 public class Group extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.Group mGroup;
+  @Nonnull private final com.zimbra.cs.account.Group mGroup;
 
-  public Group(@NotNull Object group)
+  public Group(@Nonnull Object group)
   {
     super(group);
     if (group == null)
@@ -45,12 +45,12 @@ public class Group extends Entry
     mGroup = (com.zimbra.cs.account.Group) group;
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mGroup);
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getAllMembersSet()
   {
     try
@@ -80,7 +80,7 @@ public class Group extends Entry
     }
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<>(mGroup.getAttrs(applyDefaults));

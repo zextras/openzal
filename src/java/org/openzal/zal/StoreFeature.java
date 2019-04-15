@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.store.StoreManager;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public enum StoreFeature
 {
@@ -42,7 +42,7 @@ public enum StoreFeature
     mStoreFeature = (StoreManager.StoreFeature) storeFeature;
   }
 
-  protected <T> T toZimbra(@NotNull  Class<T> className)
+  protected <T> T toZimbra(@Nonnull  Class<T> className)
   {
     if (mStoreFeature == null)
     {

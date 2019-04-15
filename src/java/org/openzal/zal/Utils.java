@@ -20,8 +20,8 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -133,9 +133,9 @@ public abstract class Utils
   }
 
   public static String getPublicURLForDomain(
-    @NotNull Server server,
+    @Nonnull Server server,
     @Nullable Domain domain,
-    @NotNull String path
+    @Nonnull String path
   )
   {
     try

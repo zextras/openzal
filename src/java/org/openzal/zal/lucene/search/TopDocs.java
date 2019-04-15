@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class TopDocs
   private com.zimbra.cs.index.ZimbraTopDocs mZObject;
   /* $endif $ */
 
-  public TopDocs(@NotNull Object zObject)
+  public TopDocs(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
@@ -71,7 +71,7 @@ public class TopDocs
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

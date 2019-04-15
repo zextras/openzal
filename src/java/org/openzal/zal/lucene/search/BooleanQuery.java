@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.ZimbraListWrapper;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class BooleanQuery
     /* $endif $ */
   }
 
-  public BooleanQuery(@NotNull
+  public BooleanQuery(@Nonnull
     Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
@@ -27,7 +27,7 @@ public class BooleanQuery
     /* $endif $ */
   }
 
-  public void add(@NotNull Query query, BooleanClause.Occur occur)
+  public void add(@Nonnull Query query, BooleanClause.Occur occur)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     toZimbra(org.apache.lucene.search.BooleanQuery.class).add(query.toZimbra(org.apache.lucene.search.Query.class), org.apache.lucene.search.BooleanClause.Occur.valueOf(occur.name()));

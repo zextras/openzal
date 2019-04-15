@@ -21,7 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.Mime;
 import org.openzal.zal.MimeConstants;
 import org.openzal.zal.Utils;

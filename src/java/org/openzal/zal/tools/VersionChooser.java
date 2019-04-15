@@ -20,7 +20,7 @@
 
 package org.openzal.zal.tools;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.extension.BootstrapClassLoader;
 import org.openzal.zal.lib.Version;
 

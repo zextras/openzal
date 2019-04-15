@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.index.Term;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class PhraseQuery
     /* $endif $ */
   }
 
-  public PhraseQuery(@NotNull Object zObject)
+  public PhraseQuery(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     super((org.apache.lucene.search.PhraseQuery) zObject);
@@ -32,7 +32,7 @@ public class PhraseQuery
     /* $endif $ */
   }
 
-  public void add(@NotNull Term term)
+  public void add(@Nonnull Term term)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     toZimbra(org.apache.lucene.search.PhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class));
@@ -41,7 +41,7 @@ public class PhraseQuery
     /* $endif $ */
   }
 
-  public void add(@NotNull Term term, int position)
+  public void add(@Nonnull Term term, int position)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     toZimbra(org.apache.lucene.search.PhraseQuery.class).add(term.toZimbra(org.apache.lucene.index.Term.class), position);
@@ -50,7 +50,7 @@ public class PhraseQuery
     /* $endif $ */
   }
 
-  public void add(@NotNull List<Term> terms)
+  public void add(@Nonnull List<Term> terms)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     add(terms.toArray(new Term[0]));
@@ -59,7 +59,7 @@ public class PhraseQuery
     /* $endif $ */
   }
 
-  public void add(@NotNull Term[] terms)
+  public void add(@Nonnull Term[] terms)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     for(int i = 0; i < terms.length; i++)
