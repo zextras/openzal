@@ -1206,5 +1206,15 @@ public class Account extends Entry
     }
   }
 
+  public long getMailTrashLifetime()
+  {
+    return mAccount.getMailTrashLifetime();
+  }
+
+  public long getPrefTrashLifetime()
+  {
+    return mAccount.getPrefTrashLifetime();
+  }
+
 }
 
