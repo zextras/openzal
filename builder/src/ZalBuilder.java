@@ -542,7 +542,7 @@ public class ZalBuilder
 
     MavenDownloader downloader = new MavenDownloader(
       "lib/",
-      "org/jetbrains/annotations", "16.0.3",
+      "com/google/code/findbugs/jsr305", "3.0.2",
       "com/fasterxml/jackson/core/jackson-core", "2.6.7",
       "com/fasterxml/jackson/core/jackson-databind", "2.6.7",
       "com/fasterxml/jackson/core/jackson-annotations", "2.6.7",

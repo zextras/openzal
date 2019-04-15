@@ -22,16 +22,16 @@ package org.openzal.zal;
 
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataSource
 {
-  @NotNull private final com.zimbra.cs.account.DataSource mDataSource;
+  @Nonnull private final com.zimbra.cs.account.DataSource mDataSource;
 
-  DataSource(@NotNull Object dataSource)
+  DataSource(@Nonnull Object dataSource)
   {
     if (dataSource == null)
     {

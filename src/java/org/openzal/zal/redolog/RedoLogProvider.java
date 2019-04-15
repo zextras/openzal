@@ -21,7 +21,7 @@
 package org.openzal.zal.redolog;
 
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class RedoLogProvider
 {
@@ -32,7 +32,7 @@ public class RedoLogProvider
     mRedologProvider = com.zimbra.cs.redolog.RedoLogProvider.getInstance();
   }
 
-  @NotNull
+  @Nonnull
   public RedoLogManager getRedoLogManager()
   {
     return new RedoLogManager(

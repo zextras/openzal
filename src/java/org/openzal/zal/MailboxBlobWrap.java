@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,9 +30,9 @@ import java.io.InputStream;
 
 public class MailboxBlobWrap implements MailboxBlob
 {
-  @NotNull private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
+  @Nonnull private final com.zimbra.cs.store.MailboxBlob mMailboxBlob;
 
-  public MailboxBlobWrap(@NotNull Object mailboxBlob)
+  public MailboxBlobWrap(@Nonnull Object mailboxBlob)
   {
     if (mailboxBlob == null)
     {
@@ -41,7 +41,7 @@ public class MailboxBlobWrap implements MailboxBlob
     mMailboxBlob = (com.zimbra.cs.store.MailboxBlob) mailboxBlob;
   }
 
-  @NotNull
+  @Nonnull
   public Object getWrappedObject()
   {
     return mMailboxBlob;

@@ -1,13 +1,13 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Entry
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.Entry mEntry;
 
-  public Entry(@NotNull Object entry)
+  public Entry(@Nonnull Object entry)
   {
     mEntry = (com.unboundid.ldap.sdk.Entry)entry;
   }

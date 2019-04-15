@@ -20,17 +20,17 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Note extends Item
 {
-  @NotNull private final com.zimbra.cs.mailbox.Note mNote;
+  @Nonnull private final com.zimbra.cs.mailbox.Note mNote;
 
   class Rectangle
   {
     final com.zimbra.cs.mailbox.Note.Rectangle mRectangle;
 
-    public Rectangle(@NotNull com.zimbra.cs.mailbox.Note.Rectangle rectangle)
+    public Rectangle(@Nonnull com.zimbra.cs.mailbox.Note.Rectangle rectangle)
     {
       mRectangle = rectangle;
     }
@@ -41,7 +41,7 @@ public class Note extends Item
     }
   }
 
-  public Note(@NotNull Object item)
+  public Note(@Nonnull Object item)
   {
     super(item);
     mNote = (com.zimbra.cs.mailbox.Note) item;

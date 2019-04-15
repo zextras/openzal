@@ -23,16 +23,16 @@ package org.openzal.zal;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.index.ZimbraQueryResults;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 public class QueryResults implements Closeable
 {
-  @NotNull private final ZimbraQueryResults mZimbraQueryResults;
+  @Nonnull private final ZimbraQueryResults mZimbraQueryResults;
 
-  protected QueryResults(@NotNull Object zimbraQueryResults)
+  protected QueryResults(@Nonnull Object zimbraQueryResults)
   {
     if (zimbraQueryResults == null)
     {

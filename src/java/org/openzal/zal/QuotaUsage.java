@@ -21,13 +21,13 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.soap.SoapProvisioning;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class QuotaUsage
 {
-  @NotNull private final SoapProvisioning.QuotaUsage mQuotaUsage;
+  @Nonnull private final SoapProvisioning.QuotaUsage mQuotaUsage;
 
-  protected QuotaUsage(@NotNull Object quotaUsage)
+  protected QuotaUsage(@Nonnull Object quotaUsage)
   {
     if (quotaUsage == null)
     {

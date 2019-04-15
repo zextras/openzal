@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.index.Term;
 
 public class WildcardQuery
@@ -24,7 +24,7 @@ public class WildcardQuery
     /* $endif $ */
   }
 
-  public WildcardQuery(@NotNull Object zObject)
+  public WildcardQuery(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.search.WildcardQuery) zObject);

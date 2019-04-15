@@ -21,7 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.ZRecur;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import com.zimbra.common.calendar.ZWeekDay;
 import java.util.Calendar;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class WeekDayNum
 {
-  @NotNull
+  @Nonnull
   private static final Map<Integer, ZWeekDay> mZal2Zimbra;
   private              int                    mOrdinal;
   private final        int                    mCalendarDay;

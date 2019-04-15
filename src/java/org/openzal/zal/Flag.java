@@ -22,9 +22,9 @@ package org.openzal.zal;
 
 import java.lang.reflect.*;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.log.ZimbraLog;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 
 public final class Flag extends Item
@@ -135,7 +135,7 @@ public final class Flag extends Item
 
   private final com.zimbra.cs.mailbox.Flag mFlag;
 
-  public Flag(@NotNull Object item)
+  public Flag(@Nonnull Object item)
   {
     super(item);
     mFlag = (com.zimbra.cs.mailbox.Flag) item;

@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.MailItem;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class WikiTemplate implements Comparable<WikiTemplate>
 {
-  @NotNull private final com.zimbra.cs.wiki.WikiTemplate mWikiTemplate;
+  @Nonnull private final com.zimbra.cs.wiki.WikiTemplate mWikiTemplate;
 
   public WikiTemplate(String item, String id, String key, String name)
   {
@@ -39,16 +39,16 @@ public class WikiTemplate implements Comparable<WikiTemplate>
   }
 
   @Override
-  public int compareTo(@NotNull WikiTemplate o)
+  public int compareTo(@Nonnull WikiTemplate o)
   {
     return mWikiTemplate.compareTo(o.toZimbra(com.zimbra.cs.wiki.WikiTemplate.class));
   }
 
   public static class Context
   {
-    @NotNull private final com.zimbra.cs.wiki.WikiTemplate.Context mContext;
+    @Nonnull private final com.zimbra.cs.wiki.WikiTemplate.Context mContext;
 
-    public Context(@NotNull WikiPage.WikiContext wikiPageContext, @NotNull Item item, @NotNull WikiTemplate wikiTemplate)
+    public Context(@Nonnull WikiPage.WikiContext wikiPageContext, @Nonnull Item item, @Nonnull WikiTemplate wikiTemplate)
     {
       mContext = new com.zimbra.cs.wiki.WikiTemplate.Context(
         wikiPageContext.toZimbra(),
@@ -57,18 +57,18 @@ public class WikiTemplate implements Comparable<WikiTemplate>
       );
     }
 
-    protected <T> T toZimbra(@NotNull Class<T> cls)
+    protected <T> T toZimbra(@Nonnull Class<T> cls)
     {
       return cls.cast(mContext);
     }
   }
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  protected <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mWikiTemplate);
   }
 
-  public String toString(@NotNull Context context)
+  public String toString(@Nonnull Context context)
     throws IOException
   {
     try

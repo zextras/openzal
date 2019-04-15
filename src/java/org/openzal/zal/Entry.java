@@ -22,8 +22,8 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.NamedEntry;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.Collections;
@@ -35,7 +35,7 @@ public abstract class Entry
 {
   private final com.zimbra.cs.account.Entry mEntry;
 
-  Entry(@NotNull Object entry)
+  Entry(@Nonnull Object entry)
   {
     if (entry == null)
     {
@@ -86,7 +86,7 @@ public abstract class Entry
     return true;
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mEntry.getMultiAttrSet(name));

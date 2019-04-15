@@ -1,11 +1,11 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class MultiTermQuery
   extends Query
 {
-  public MultiTermQuery(@NotNull Object zObject)
+  public MultiTermQuery(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.search.MultiTermQuery) zObject);

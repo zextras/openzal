@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Query
 {
@@ -8,7 +8,7 @@ public class Query
   private final org.apache.lucene.search.Query mZObject;
   /* $endif $ */
 
-  public Query(@NotNull Object zObject)
+  public Query(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject = (org.apache.lucene.search.Query) zObject;
@@ -41,7 +41,7 @@ public class Query
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);

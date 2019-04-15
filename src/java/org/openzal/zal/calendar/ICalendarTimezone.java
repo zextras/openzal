@@ -20,9 +20,9 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.Account;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -34,7 +34,7 @@ public class ICalendarTimezone
 {
   private ICalTimeZone mICalTimeZone;
 
-  public ICalendarTimezone(@NotNull Object timeZone)
+  public ICalendarTimezone(@Nonnull Object timeZone)
   {
     if (timeZone == null)
     {
@@ -50,7 +50,7 @@ public class ICalendarTimezone
   }
 
   @Deprecated //Use Account.getAccountTimeZone instead
-  public static ICalendarTimezone getAccountTimeZone(@NotNull Account account)
+  public static ICalendarTimezone getAccountTimeZone(@Nonnull Account account)
   {
     ICalTimeZone accountTimeZone = Util.getAccountTimeZone(
       account.toZimbra(com.zimbra.cs.account.Account.class)
@@ -58,7 +58,7 @@ public class ICalendarTimezone
     return new ICalendarTimezone(accountTimeZone);
   }
 
-  @NotNull
+  @Nonnull
   public static ICalendarTimezone lookup(String tzid,
                                       int stdOffset, String stdDtStart, String stdRRule, String stdTzname,
                                       int dayOffset, String dayDtStart, String dayRRule, String dayTzname)

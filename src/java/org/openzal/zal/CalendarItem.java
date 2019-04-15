@@ -34,8 +34,8 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.Recurrence;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -47,9 +47,9 @@ import java.util.ListIterator;
 
 public class CalendarItem extends Item
 {
-  @NotNull private final com.zimbra.cs.mailbox.CalendarItem mCalendarItem;
+  @Nonnull private final com.zimbra.cs.mailbox.CalendarItem mCalendarItem;
 
-  public CalendarItem(@NotNull Object item)
+  public CalendarItem(@Nonnull Object item)
   {
     super((MailItem) item);
     mCalendarItem = (com.zimbra.cs.mailbox.CalendarItem) item;

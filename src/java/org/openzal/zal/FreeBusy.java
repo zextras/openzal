@@ -22,13 +22,13 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class FreeBusy {
-  @NotNull
+  @Nonnull
   private final com.zimbra.cs.fb.FreeBusy mFreeBusy;
 
-  public FreeBusy(@NotNull Object item) {
+  public FreeBusy(@Nonnull Object item) {
     mFreeBusy = (com.zimbra.cs.fb.FreeBusy) item;
   }
 

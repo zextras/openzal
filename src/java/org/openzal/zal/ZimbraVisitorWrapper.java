@@ -21,16 +21,16 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.NamedEntry;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 class ZimbraVisitorWrapper<T> implements NamedEntry.Visitor
 {
-  @NotNull private final SimpleVisitor<T>     mVisitor;
-  @NotNull private final NamedEntryWrapper<T> mNamedEntryWrapper;
+  @Nonnull private final SimpleVisitor<T>     mVisitor;
+  @Nonnull private final NamedEntryWrapper<T> mNamedEntryWrapper;
 
   protected ZimbraVisitorWrapper(
-    @NotNull SimpleVisitor<T> visitor,
-    @NotNull NamedEntryWrapper<T> namedEntryWrapper
+    @Nonnull SimpleVisitor<T> visitor,
+    @Nonnull NamedEntryWrapper<T> namedEntryWrapper
   )
   {
     mVisitor = visitor;

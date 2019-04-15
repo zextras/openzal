@@ -20,14 +20,14 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
 
 public class ZalVersion
 {
   public static final    Version current = new Version(ZalBuildInfo.VERSION);
-  @NotNull private static Version target;
+  @Nonnull private static Version target;
 
   static
   {

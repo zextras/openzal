@@ -21,22 +21,22 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.Entry;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CalendarResource extends Account
 {
-  @NotNull private final com.zimbra.cs.account.CalendarResource mCalendarResource;
+  @Nonnull private final com.zimbra.cs.account.CalendarResource mCalendarResource;
 
-  public CalendarResource(@NotNull Object calendarResource)
+  public CalendarResource(@Nonnull Object calendarResource)
   {
     super(calendarResource);
     mCalendarResource = (com.zimbra.cs.account.CalendarResource) calendarResource;
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mCalendarResource.getMultiAttrSet(name));
@@ -47,7 +47,7 @@ public class CalendarResource extends Account
     return mCalendarResource.getName();
   }
 
-  @NotNull
+  @Nonnull
   Entry toZimbra()
   {
     return mCalendarResource;

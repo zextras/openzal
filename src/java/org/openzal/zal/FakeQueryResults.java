@@ -25,7 +25,7 @@ import com.zimbra.cs.index.QueryInfo;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraHit;
 import com.zimbra.cs.index.ZimbraQueryResults;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +35,7 @@ public class FakeQueryResults extends QueryResults
   private final List<SearchHit> mZimbraQueryResults;
   private int element;
 
-  public FakeQueryResults(@NotNull List<SearchHit> zimbraQueryResults)
+  public FakeQueryResults(@Nonnull List<SearchHit> zimbraQueryResults)
   {
     super(
       new ZimbraQueryResults(){

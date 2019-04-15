@@ -20,14 +20,14 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Mountpoint extends Folder
 {
-  @NotNull private final com.zimbra.cs.mailbox.Mountpoint mMountpoint;
+  @Nonnull private final com.zimbra.cs.mailbox.Mountpoint mMountpoint;
 
-  public Mountpoint(@NotNull Object item)
+  public Mountpoint(@Nonnull Object item)
   {
     super(item);
     mMountpoint = (com.zimbra.cs.mailbox.Mountpoint) item;

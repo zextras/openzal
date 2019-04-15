@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class ZimbraId
 {

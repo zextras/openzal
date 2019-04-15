@@ -20,19 +20,19 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.*;
 
 
 public class DistributionList extends Group
 {
-  @NotNull private final com.zimbra.cs.account.DistributionList mDistributionList;
+  @Nonnull private final com.zimbra.cs.account.DistributionList mDistributionList;
 
-  DistributionList(@NotNull Object distributionList)
+  DistributionList(@Nonnull Object distributionList)
   {
     super(distributionList);
     mDistributionList = (com.zimbra.cs.account.DistributionList) distributionList;
@@ -68,7 +68,7 @@ public class DistributionList extends Group
     }
   }
 
-  public void setPrefAllowAddressForDelegatedSender(@NotNull Collection<String> zimbraPrefAllowAddressForDelegatedSender)
+  public void setPrefAllowAddressForDelegatedSender(@Nonnull Collection<String> zimbraPrefAllowAddressForDelegatedSender)
   {
     try
     {
@@ -82,13 +82,13 @@ public class DistributionList extends Group
     }
   }
 
-  @NotNull
+  @Nonnull
   public Collection<String> getPrefAllowAddressForDelegatedSender()
   {
     return Arrays.asList(mDistributionList.getPrefAllowAddressForDelegatedSender());
   }
 
-  @NotNull
+  @Nonnull
   com.zimbra.cs.account.DistributionList toZimbra()
   {
     return mDistributionList;

@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.analysis.tokenattributes;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class CharTermAttribute
 {
@@ -9,7 +9,7 @@ public class CharTermAttribute
   /* $endif $ */
 
   public CharTermAttribute(
-    @NotNull
+    @Nonnull
       Object zObject
   )
   {
@@ -29,7 +29,7 @@ public class CharTermAttribute
   }
 
   public <T> T toZimbra(
-    @NotNull
+    @Nonnull
       Class<T> target
   )
   {

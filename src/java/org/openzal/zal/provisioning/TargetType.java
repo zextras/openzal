@@ -20,7 +20,7 @@
 
 package org.openzal.zal.provisioning;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public enum TargetType
   group("group"),
   global("global");
 
-  @NotNull
+  @Nonnull
   private static Map<String, TargetType> TARGET_TYPES = new HashMap<String, TargetType>()
   {{
       put("account", account);
@@ -55,15 +55,15 @@ public enum TargetType
       put("global", global);
     }};
 
-  @NotNull
+  @Nonnull
   private final String mType;
 
-  TargetType(@NotNull String type)
+  TargetType(@Nonnull String type)
   {
     mType = type;
   }
 
-  @NotNull
+  @Nonnull
   public String getCode()
   {
     return mType;

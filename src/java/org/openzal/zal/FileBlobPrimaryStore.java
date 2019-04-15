@@ -23,8 +23,8 @@ package org.openzal.zal;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -110,7 +110,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
 
   @Nullable
   @Override
-  public MailboxBlob getMailboxBlob(@NotNull Mailbox mbox, int msgId, int revision)
+  public MailboxBlob getMailboxBlob(@Nonnull Mailbox mbox, int msgId, int revision)
     throws ZimbraException
   {
     com.zimbra.cs.store.MailboxBlob mailboxBlob;
@@ -142,8 +142,8 @@ public class FileBlobPrimaryStore implements PrimaryStore
     return link(src, destMbox, destMsgId, destRevision);
   }
 
-  @NotNull
-  public MailboxBlob link(@NotNull Blob src, @NotNull Mailbox destMbox, int destMsgId, int destRevision)
+  @Nonnull
+  public MailboxBlob link(@Nonnull Blob src, @Nonnull Mailbox destMbox, int destMsgId, int destRevision)
     throws IOException, ZimbraException
   {
     try
@@ -197,7 +197,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
     return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob)));
   }
 
-  public boolean delete(@NotNull MailboxBlob blob)
+  public boolean delete(@Nonnull MailboxBlob blob)
     throws IOException
   {
     return sm.delete(com.zimbra.cs.store.Blob.class.cast(InternalOverrideFactory.wrapBlob(blob.getLocalBlob())));
