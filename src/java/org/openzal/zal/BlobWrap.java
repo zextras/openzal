@@ -23,8 +23,8 @@ package org.openzal.zal;
 import com.zimbra.cs.store.file.VolumeBlobProxy;
 import com.zimbra.cs.store.file.VolumeMailboxBlob;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.io.File;
@@ -33,17 +33,17 @@ import java.io.InputStream;
 
 public class BlobWrap implements Blob
 {
-  @NotNull private final com.zimbra.cs.store.Blob mBlob;
+  @Nonnull private final com.zimbra.cs.store.Blob mBlob;
   private final String mVolumeId;
 
-  @NotNull
+  @Nonnull
   public Object getWrappedObject()
   {
     return mBlob;
   }
 
   public BlobWrap(
-    @NotNull Object blob,
+    @Nonnull Object blob,
     String volumeId
   )
   {

@@ -20,11 +20,11 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.TreeMap;
 
 public class Metadata
 {
-  @NotNull private final com.zimbra.cs.mailbox.Metadata mZObject;
+  @Nonnull private final com.zimbra.cs.mailbox.Metadata mZObject;
 
   public Metadata()
   {
@@ -60,7 +60,7 @@ public class Metadata
     }
   }
 
-  protected Metadata(@NotNull Object metadata)
+  protected Metadata(@Nonnull Object metadata)
   {
     if (metadata == null)
     {
@@ -206,7 +206,7 @@ public class Metadata
     }
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mZObject);
   }

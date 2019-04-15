@@ -1,19 +1,19 @@
 package org.openzal.zal.ldap;
 
 import com.zimbra.cs.ldap.LdapException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LDAPException extends Exception
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.LDAPException mLDAPException;
 
-  public LDAPException(@NotNull Object ldapException)
+  public LDAPException(@Nonnull Object ldapException)
   {
     mLDAPException = (com.unboundid.ldap.sdk.LDAPException)ldapException;
   }
 
-  public LDAPException(@NotNull ResultCode paramError, String s)
+  public LDAPException(@Nonnull ResultCode paramError, String s)
   {
     mLDAPException = new com.unboundid.ldap.sdk.LDAPException(paramError.toZimbra(com.unboundid.ldap.sdk.ResultCode.class),s);
   }

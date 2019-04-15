@@ -21,17 +21,17 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.auth.AuthContext;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Protocol
 {
-  @NotNull public static Protocol zsync = new Protocol(AuthContext.Protocol.zsync);
+  @Nonnull public static Protocol zsync = new Protocol(AuthContext.Protocol.zsync);
   public static          Protocol im    = new Protocol(AuthContext.Protocol.im);
 
   private final com.zimbra.cs.account.auth.AuthContext.Protocol mProtocol;
 
   Protocol(
-    @NotNull com.zimbra.cs.account.auth.AuthContext.Protocol protocol
+    @Nonnull com.zimbra.cs.account.auth.AuthContext.Protocol protocol
   )
   {
     if (protocol == null)

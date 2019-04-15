@@ -1,13 +1,13 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 public class LDIFWriter implements Closeable
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldif.LDIFWriter mLDIFWriter;
 
   public LDIFWriter(String path) throws LDAPException

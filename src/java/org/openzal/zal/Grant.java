@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.*;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.ACL;
@@ -29,7 +29,7 @@ import com.zimbra.cs.mailbox.Metadata;
 
 public class Grant
 {
-  @NotNull private final ACL.Grant mGrant;
+  @Nonnull private final ACL.Grant mGrant;
 
   public Grant(Object grant)
   {
@@ -89,7 +89,7 @@ public class Grant
     return mGrant.getPassword();
   }
 
-  @NotNull
+  @Nonnull
   public Metadata encode()
   {
     return mGrant.encode();

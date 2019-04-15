@@ -22,12 +22,12 @@ package org.openzal.zal;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.XmlParseException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public class XMLElement
 {
-  @NotNull private final Element.XMLElement mXMLElement;
+  @Nonnull private final Element.XMLElement mXMLElement;
 
   public XMLElement(String xml)
   {
@@ -41,7 +41,7 @@ public class XMLElement
     }
   }
 
-  protected XMLElement(@NotNull Object
+  protected XMLElement(@Nonnull Object
     element)
   {
     if (element == null)

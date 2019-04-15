@@ -20,7 +20,7 @@
 
 package org.openzal.zal.soap;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.Utils;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;

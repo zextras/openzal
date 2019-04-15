@@ -21,10 +21,10 @@
 package org.openzal.zal;
 
 import com.google.common.annotations.VisibleForTesting;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,9 +34,9 @@ import java.util.Map;
 
 public class Domain extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.Domain mDomain;
+  @Nonnull private final com.zimbra.cs.account.Domain mDomain;
 
-  public Domain(@NotNull Object domain)
+  public Domain(@Nonnull Object domain)
   {
     super(domain);
     mDomain = (com.zimbra.cs.account.Domain) domain;
@@ -47,7 +47,7 @@ public class Domain extends Entry
     String id,
     Map<String, Object> attrs,
     Map<String, Object> defaults,
-    @NotNull Provisioning prov
+    @Nonnull Provisioning prov
   )
   {
     this(
@@ -88,7 +88,7 @@ public class Domain extends Entry
     return mDomain.getName();
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mDomain.getAttrs(applyDefaults));
@@ -99,7 +99,7 @@ public class Domain extends Entry
     return mDomain.getMailDomainQuota();
   }
 
-  public void setDomainCOSMaxAccounts(@NotNull Collection<String> zimbraDomainCOSMaxAccounts)
+  public void setDomainCOSMaxAccounts(@Nonnull Collection<String> zimbraDomainCOSMaxAccounts)
   {
     try
     {
@@ -139,7 +139,7 @@ public class Domain extends Entry
     }
   }
 
-  @NotNull
+  @Nonnull
   public Collection<String> getDomainCOSMaxAccounts()
   {
     return Arrays.asList(mDomain.getDomainCOSMaxAccounts());
@@ -150,7 +150,7 @@ public class Domain extends Entry
     return mDomain.getPasswordChangeListener();
   }
 
-  @NotNull
+  @Nonnull
   public List<Account> getAllAccounts()
   {
     try
@@ -164,7 +164,7 @@ public class Domain extends Entry
   }
 
   @VisibleForTesting
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mDomain);
   }

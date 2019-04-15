@@ -24,7 +24,7 @@ import org.openzal.zal.Connection;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.db.DbPool;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +35,7 @@ public class ZimbraConnectionWrapper implements Connection
 {
   private DbPool.DbConnection mConnection;
 
-  public ZimbraConnectionWrapper(@NotNull Object connection)
+  public ZimbraConnectionWrapper(@Nonnull Object connection)
   {
     if ( connection == null )
     {
@@ -66,7 +66,7 @@ public class ZimbraConnectionWrapper implements Connection
   }
 
   @Override
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mConnection);
   }

@@ -1,7 +1,7 @@
 package org.openzal.zal.lucene.search;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.document.DocumentId;
@@ -19,7 +19,7 @@ public class IndexSearcher
   private final IndexReader                             mReader;
   /* $endif $ */
 
-  public IndexSearcher(@NotNull Object zObject)
+  public IndexSearcher(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
@@ -117,7 +117,7 @@ public class IndexSearcher
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

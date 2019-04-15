@@ -21,8 +21,8 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.MailboxManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,13 +33,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MailboxManagerListenerWrapper implements MailboxManager.Listener
 {
-  @NotNull
+  @Nonnull
   private final MailboxManagerListener mListener;
   private final Set<String>            mAlreadyNotifiedMailboxes;
   private final ReentrantLock          mLock;
   private       boolean                mTrack;
 
-  public MailboxManagerListenerWrapper(@NotNull MailboxManagerListener listener)
+  public MailboxManagerListenerWrapper(@Nonnull MailboxManagerListener listener)
   {
     if (listener == null)
     {

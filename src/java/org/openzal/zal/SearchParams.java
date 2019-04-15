@@ -23,7 +23,7 @@ package org.openzal.zal;
 
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.mailbox.MailItem;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class SearchParams
     mParams.setInDumpster(false);
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mParams);
   }

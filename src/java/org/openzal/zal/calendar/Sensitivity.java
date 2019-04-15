@@ -20,7 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public enum Sensitivity
     mSensitivity = sensitivity;
   }
 
-  @NotNull
+  @Nonnull
   private static final Map<String, Sensitivity> sZimbra2Zal;
 
   static
@@ -59,8 +59,8 @@ public enum Sensitivity
     sZimbra2Zal.put("CONFIDENTIAL", CONFIDENTIAL);
   }
 
-  @NotNull
-  public static Sensitivity fromZimbra(@NotNull String classProp)
+  @Nonnull
+  public static Sensitivity fromZimbra(@Nonnull String classProp)
   {
     Sensitivity sensitivity = sZimbra2Zal.get(classProp);
     if (sensitivity == null)

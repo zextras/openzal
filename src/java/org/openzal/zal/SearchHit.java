@@ -20,16 +20,16 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.index.ZimbraHit;
 
 public class SearchHit
 {
-  @NotNull private final ZimbraHit mZimbraHit;
+  @Nonnull private final ZimbraHit mZimbraHit;
 
-  protected SearchHit(@NotNull Object zimbraHit)
+  protected SearchHit(@Nonnull Object zimbraHit)
   {
     mZimbraHit = (ZimbraHit) zimbraHit;
   }

@@ -20,7 +20,7 @@
 
 package org.openzal.zal.tools;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,7 @@ import java.util.zip.ZipFile;
 
 public class ChecksumWriter
 {
-  public static void main(@NotNull String args[]) throws Exception
+  public static void main(@Nonnull String args[]) throws Exception
   {
     String privateKeyPath = null;
     String zipFilePath = null;

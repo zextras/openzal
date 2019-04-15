@@ -1,6 +1,6 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.LdapException;
 
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class LdapServerPool
 {
-  @NotNull
+  @Nonnull
   private final com.zimbra.cs.ldap.unboundid.LdapServerPool mLdapServerPool;
 
-  public LdapServerPool(@NotNull ZimbraLdapConfig ldapServerConfig)
+  public LdapServerPool(@Nonnull ZimbraLdapConfig ldapServerConfig)
     throws LdapException
   {
     try

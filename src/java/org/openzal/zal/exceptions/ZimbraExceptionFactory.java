@@ -20,12 +20,12 @@
 
 package org.openzal.zal.exceptions;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ZimbraExceptionFactory
 {
   protected static ZimbraException wrapAccountServiceException(
-    @NotNull com.zimbra.cs.account.AccountServiceException accountServiceException
+    @Nonnull com.zimbra.cs.account.AccountServiceException accountServiceException
   )
   {
     String code = accountServiceException.getCode();

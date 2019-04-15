@@ -22,8 +22,8 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.store.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
@@ -53,7 +53,7 @@ public class StoreVolume
   private static final short sFileBits = 12;
 
 
-  public StoreVolume(@NotNull Object vol)
+  public StoreVolume(@Nonnull Object vol)
   {
     if ( vol == null )
       throw new NullPointerException("Volume is null");

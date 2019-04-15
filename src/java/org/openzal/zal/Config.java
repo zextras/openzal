@@ -27,21 +27,21 @@ import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.extension.ZimbraExtension;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.NoSuchDomainException;
 
 public class Config extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.Config mConfig;
+  @Nonnull private final com.zimbra.cs.account.Config mConfig;
 
-  public Config(@NotNull Object config)
+  public Config(@Nonnull Object config)
   {
     super(config);
     mConfig = (com.zimbra.cs.account.Config) config;
   }
 
-  public Config(HashMap<String, Object> hashMap, @NotNull Provisioning provisioning)
+  public Config(HashMap<String, Object> hashMap, @Nonnull Provisioning provisioning)
   {
     this(
       new com.zimbra.cs.account.Config(
@@ -56,7 +56,7 @@ public class Config extends Entry
     return mConfig.getVersionCheckNotificationEmail();
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mConfig.getMultiAttrSet(name));
@@ -67,13 +67,13 @@ public class Config extends Entry
     return mConfig.getAttr(name);
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mConfig.getAttrs(applyDefaults));
   }
 
-  public @NotNull Domain getDefaultDomain()
+  public @Nonnull Domain getDefaultDomain()
   {
     String defaultDomainName = mConfig.getAttr("zimbraDefaultDomainName","");
     try

@@ -22,7 +22,7 @@ package org.openzal.zal.http;
 
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ZimbraExtension;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class HttpServiceManager
 {
@@ -30,7 +30,7 @@ public class HttpServiceManager
   {
     private final String mPath;
 
-    public FakeZimbraExtension(@NotNull String path)
+    public FakeZimbraExtension(@Nonnull String path)
     {
       mPath = path.replaceFirst("/","");
     }
@@ -50,7 +50,7 @@ public class HttpServiceManager
     { }
   }
 
-  public void registerHandler(@NotNull HttpHandler httpHandler )
+  public void registerHandler(@Nonnull HttpHandler httpHandler )
   {
     try
     {
@@ -63,13 +63,13 @@ public class HttpServiceManager
     }
   }
 
-  public void replaceHandler(@NotNull HttpHandler httpHandler)
+  public void replaceHandler(@Nonnull HttpHandler httpHandler)
   {
     unregisterHandler(httpHandler);
     registerHandler(httpHandler);
   }
 
-  public void unregisterHandler(@NotNull HttpHandler httpHandler )
+  public void unregisterHandler(@Nonnull HttpHandler httpHandler )
   {
     FakeZimbraExtension fakeZimbraExtension = new FakeZimbraExtension(httpHandler.getPath());
     ExtensionDispatcherServlet.unregister(fakeZimbraExtension);

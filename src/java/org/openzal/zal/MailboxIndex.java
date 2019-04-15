@@ -1,6 +1,6 @@
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.analysis.Analyzer;
 import org.openzal.zal.lucene.index.IndexStore;
 
@@ -8,7 +8,7 @@ public class MailboxIndex
 {
   private final com.zimbra.cs.mailbox.MailboxIndex mZObject;
 
-  public MailboxIndex(@NotNull Object zObject) {
+  public MailboxIndex(@Nonnull Object zObject) {
     mZObject = (com.zimbra.cs.mailbox.MailboxIndex) zObject;
   }
 
@@ -26,7 +26,7 @@ public class MailboxIndex
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> clazz)
+  public <T> T toZimbra(@Nonnull Class<T> clazz)
   {
     return clazz.cast(mZObject);
   }

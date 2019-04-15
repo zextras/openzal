@@ -21,8 +21,8 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mime.ExpandMimeMessage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -34,13 +34,13 @@ import java.util.List;
 
 public class Mime
 {
-  @NotNull
+  @Nonnull
   public static List<MPartInfo> getParts(MimeMessage mimeMessage) throws IOException, MessagingException
   {
     return ZimbraListWrapper.wrapMPartInfos(com.zimbra.cs.mime.Mime.getParts(mimeMessage));
   }
 
-  @NotNull
+  @Nonnull
   public static MPartInfo getTextBody(MimeMessage mimeMessage, boolean preferHtml)
     throws IOException, MessagingException
   {
@@ -72,7 +72,7 @@ public class Mime
     return com.zimbra.cs.mime.Mime.getMimePart(mimePart, part);
   }
 
-  @NotNull
+  @Nonnull
   public static MimeMessage buildFixedMimeMessage(Session session)
   {
     return new com.zimbra.cs.mime.Mime.FixedMimeMessage(session);

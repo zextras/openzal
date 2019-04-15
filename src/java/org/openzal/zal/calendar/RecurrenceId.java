@@ -22,7 +22,7 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.cs.mailbox.calendar.RecurId;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 
 public class RecurrenceId
@@ -40,7 +40,7 @@ public class RecurrenceId
     return mExceptionStartTimeUtc;
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(new RecurId(ParsedDateTime.fromUTCTime(mExceptionStartTimeUtc), RecurId.RANGE_NONE));
   }

@@ -21,7 +21,7 @@
 package org.openzal.zal.redolog;
 
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -29,9 +29,9 @@ import java.io.RandomAccessFile;
 
 public class RedoLogInput
 {
-  @NotNull private final com.zimbra.cs.redolog.RedoLogInput mRedoLogInput;
+  @Nonnull private final com.zimbra.cs.redolog.RedoLogInput mRedoLogInput;
 
-  public RedoLogInput(RandomAccessFile fileHandler, @NotNull String currentRedoPath)
+  public RedoLogInput(RandomAccessFile fileHandler, @Nonnull String currentRedoPath)
   {
     mRedoLogInput = new com.zimbra.cs.redolog.RedoLogInput(fileHandler, currentRedoPath);
   }
