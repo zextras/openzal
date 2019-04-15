@@ -21,13 +21,13 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.index.SortBy;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SortedBy
 {
   private final SortBy mSortBy;
 
-  @NotNull public static SortedBy NONE      = new SortedBy(SortBy.NONE);
+  @Nonnull public static SortedBy NONE      = new SortedBy(SortBy.NONE);
   public static          SortedBy DATE_DESC = new SortedBy(SortBy.DATE_DESC);
 
   protected SortedBy(SortBy sortBy)

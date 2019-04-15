@@ -22,8 +22,8 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.mailbox.calendar.WindowsTimeZoneInformation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class WinTimeZoneInformation
 {
@@ -48,7 +48,7 @@ public class WinTimeZoneInformation
   }
 
   protected WinTimeZoneInformation(
-    @NotNull Object windowsTimeZoneInformation
+    @Nonnull Object windowsTimeZoneInformation
   )
   {
     if ( windowsTimeZoneInformation == null )

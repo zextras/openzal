@@ -21,14 +21,14 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.accesscontrol.RightCommand;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ACE
 {
   private final RightCommand.ACE mACE;
 
-  protected ACE(@NotNull Object ace)
+  protected ACE(@Nonnull Object ace)
   {
     if ( ace == null )
     {

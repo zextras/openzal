@@ -1,10 +1,10 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LdapConnType
 {
-  @NotNull
+  @Nonnull
   private final com.zimbra.cs.ldap.LdapConnType mLdapConnType;
 
   public final static LdapConnType PLAIN = new LdapConnType(com.zimbra.cs.ldap.LdapConnType.PLAIN);
@@ -12,7 +12,7 @@ public class LdapConnType
   public final static LdapConnType STARTTLS = new LdapConnType(com.zimbra.cs.ldap.LdapConnType.STARTTLS);
   public final static LdapConnType LDAPI = new LdapConnType(com.zimbra.cs.ldap.LdapConnType.LDAPI);
 
-  public LdapConnType(@NotNull Object ldapConnType)
+  public LdapConnType(@Nonnull Object ldapConnType)
   {
     mLdapConnType = (com.zimbra.cs.ldap.LdapConnType)ldapConnType;
   }

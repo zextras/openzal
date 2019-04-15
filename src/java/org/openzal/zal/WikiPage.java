@@ -20,14 +20,14 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class WikiPage
 {
   public static class WikiContext
   {
-    @NotNull public final com.zimbra.cs.wiki.WikiPage.WikiContext mWikiContext;
+    @Nonnull public final com.zimbra.cs.wiki.WikiPage.WikiContext mWikiContext;
 
     public WikiContext(OperationContext ctxt)
     {

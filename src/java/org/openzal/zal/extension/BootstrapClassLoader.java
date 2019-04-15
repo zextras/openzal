@@ -20,7 +20,7 @@
 
 package org.openzal.zal.extension;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.Utils;
 
 import java.io.File;
@@ -84,7 +84,7 @@ public class BootstrapClassLoader extends ClassLoader
   }
 
   @Override
-  protected Class loadClass(@NotNull String name, boolean resolve)
+  protected Class loadClass(@Nonnull String name, boolean resolve)
     throws ClassNotFoundException
   {
     //System.out.printf("#### Loading class %s ",name);

@@ -23,7 +23,7 @@ package org.openzal.zal;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AttributeClass;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 
 public class DataSourceType
@@ -38,10 +38,10 @@ public class DataSourceType
   public static String imap_OCName = AttributeClass.imapDataSource.getOCName();
   public static String pop3_OCName = AttributeClass.pop3DataSource.getOCName();
 
-  @NotNull
+  @Nonnull
   private final String mDataSourceType;
 
-  protected DataSourceType(@NotNull Object type)
+  protected DataSourceType(@Nonnull Object type)
   {
     if (type == null)
     {
@@ -63,7 +63,7 @@ public class DataSourceType
     }
   }
 
-  @NotNull
+  @Nonnull
   public String name()
   {
     return mDataSourceType;

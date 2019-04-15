@@ -22,20 +22,20 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
 
 public class Folder extends Item
 {
-  public Folder(@NotNull Object item)
+  public Folder(@Nonnull Object item)
   {
     super((MailItem) item);
   }
 
-  public Folder(@NotNull Item item)
+  public Folder(@Nonnull Item item)
   {
     super(item);
   }
@@ -51,7 +51,7 @@ public class Folder extends Item
     return new Acl(acl);
   }
 
-  @NotNull
+  @Nonnull
   public String getUrl()
   {
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getUrl();
@@ -88,7 +88,7 @@ public class Folder extends Item
     return (id == Mailbox.ID_FOLDER_ROOT || id == Mailbox.ID_FOLDER_USER_ROOT);
   }
 
-  @NotNull
+  @Nonnull
   public Folder getParent()
     throws ZimbraException
   {

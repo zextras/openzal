@@ -20,7 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public enum FreeBusyStatus
   BusyUnavailable("O"),
   NoData("N");
 
-  @NotNull
+  @Nonnull
   private static final Map<String, FreeBusyStatus> sZimbra2Zal;
 
   static
@@ -59,7 +59,7 @@ public enum FreeBusyStatus
     mRawFreeBusyStatus = rawFreeBusyStatus;
   }
 
-  @NotNull
+  @Nonnull
   public static FreeBusyStatus fromZimbra(String freeBusy)
   {
     FreeBusyStatus status = sZimbra2Zal.get(freeBusy);

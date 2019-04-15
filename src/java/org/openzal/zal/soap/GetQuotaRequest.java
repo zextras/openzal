@@ -21,11 +21,11 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.soap.admin.message.GetQuotaUsageRequest;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class GetQuotaRequest
 {
-  @NotNull private final GetQuotaUsageRequest mGetQuotaUsageRequest;
+  @Nonnull private final GetQuotaUsageRequest mGetQuotaUsageRequest;
 
   public GetQuotaRequest(
     String domain, Boolean allServers, Integer limit, Integer offset,

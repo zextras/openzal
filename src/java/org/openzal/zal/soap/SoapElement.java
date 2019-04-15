@@ -25,13 +25,13 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapParseException;
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public class SoapElement
 {
-  @NotNull private final Element mElement;
+  @Nonnull private final Element mElement;
 
   public SoapElement(Object element)
   {
@@ -148,7 +148,7 @@ public class SoapElement
 
   public static class Attribute
   {
-    @NotNull private final Element.Attribute mAttribute;
+    @Nonnull private final Element.Attribute mAttribute;
 
     public Attribute(Object attribute)
     {

@@ -1,7 +1,7 @@
 package org.openzal.zal.lucene.index;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.lucene.search.IndexSearcher;
 
@@ -13,7 +13,7 @@ public class IndexStore
   private final com.zimbra.cs.index.LuceneIndex mZObject;
   /* $endif $ */
 
-  public IndexStore(@NotNull Object zObject)
+  public IndexStore(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     mZObject = (com.zimbra.cs.index.LuceneIndex) zObject;
@@ -50,7 +50,7 @@ public class IndexStore
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);
@@ -75,7 +75,7 @@ public class IndexStore
     /* $endif $ */
     }
 
-    public Factory(@NotNull Object zObject)
+    public Factory(@Nonnull Object zObject)
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
       mZObject = (com.zimbra.cs.index.LuceneIndex.Factory) zObject;
@@ -104,7 +104,7 @@ public class IndexStore
       /* $endif $ */
     }
 
-    public <T> T toZimbra(@NotNull Class<T> target)
+    public <T> T toZimbra(@Nonnull Class<T> target)
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
       return target.cast(mZObject);

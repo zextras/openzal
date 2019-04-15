@@ -24,7 +24,7 @@ import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.DocumentService;
 import org.dom4j.Namespace;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -42,7 +42,7 @@ class InternalDocumentService implements DocumentService
     mHandlerMapPublisher = handlerMapPublisher;
   }
 
-  @NotNull
+  @Nonnull
   private DocumentHandler wrapHandler(SoapHandler soapHandler)
   {
     if ( mSoapService.isAdminService() )

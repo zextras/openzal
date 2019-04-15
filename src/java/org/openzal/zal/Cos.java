@@ -20,10 +20,10 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,9 +34,9 @@ import java.util.Set;
 
 public class Cos extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.Cos mCos;
+  @Nonnull private final com.zimbra.cs.account.Cos mCos;
 
-  protected Cos(@NotNull Object cos)
+  protected Cos(@Nonnull Object cos)
   {
     super(cos);
     mCos = (com.zimbra.cs.account.Cos) cos;
@@ -46,7 +46,7 @@ public class Cos extends Entry
     String name,
     String id,
     Map<String, Object> attrs,
-    @NotNull Provisioning prov
+    @Nonnull Provisioning prov
   )
   {
     this(
@@ -59,7 +59,7 @@ public class Cos extends Entry
     );
   }
 
-  @NotNull
+  @Nonnull
   public Collection<String> getACE()
   {
     return Arrays.asList(mCos.getACE());
@@ -70,7 +70,7 @@ public class Cos extends Entry
     return mCos.getMailQuota();
   }
 
-  @NotNull
+  @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {
     return new HashSet<String>(mCos.getMultiAttrSet(name));
@@ -81,7 +81,7 @@ public class Cos extends Entry
     return mCos.getId();
   }
 
-  public void setACE(@NotNull Collection<String> strings)
+  public void setACE(@Nonnull Collection<String> strings)
   {
     try
     {
@@ -110,7 +110,7 @@ public class Cos extends Entry
     }
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, Object> getAttrs(boolean applyDefaults)
   {
     return new HashMap<String, Object>(mCos.getAttrs(applyDefaults));
@@ -155,7 +155,7 @@ public class Cos extends Entry
     return result;
   }
 
-  @NotNull
+  @Nonnull
   com.zimbra.cs.account.Cos toZimbra()
   {
     return mCos;

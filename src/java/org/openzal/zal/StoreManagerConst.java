@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public abstract class StoreManagerConst
 {
   private final static String VOLUME_FIELD = "locator";
 
-  @NotNull
+  @Nonnull
   public static String getVolumeField()
   {
     return VOLUME_FIELD;

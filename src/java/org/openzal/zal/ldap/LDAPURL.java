@@ -1,18 +1,18 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LDAPURL
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.LDAPURL mLDAPURL;
 
-  public LDAPURL(@NotNull Object mLdapUrl)
+  public LDAPURL(@Nonnull Object mLdapUrl)
   {
     mLDAPURL = (com.unboundid.ldap.sdk.LDAPURL)mLdapUrl;
   }
 
-  public LDAPURL(@NotNull String url) throws LDAPException
+  public LDAPURL(@Nonnull String url) throws LDAPException
   {
     try
     {

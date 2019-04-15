@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.HashMap;
@@ -31,9 +31,9 @@ import java.util.Set;
 
 public class Zimlet extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.Zimlet mZimlet;
+  @Nonnull private final com.zimbra.cs.account.Zimlet mZimlet;
 
-  Zimlet(@NotNull Object zimlet)
+  Zimlet(@Nonnull Object zimlet)
   {
     super(zimlet);
     mZimlet = (com.zimbra.cs.account.Zimlet) zimlet;
@@ -65,7 +65,7 @@ public class Zimlet extends Entry
     return new HashMap<String, Object>();
   }
 
-  @NotNull
+  @Nonnull
   com.zimbra.cs.account.Zimlet toZimbra()
   {
     return mZimlet;

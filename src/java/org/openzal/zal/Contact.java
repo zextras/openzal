@@ -21,10 +21,10 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.service.formatter.VCard;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class Contact extends Item
 {
   private final com.zimbra.cs.mailbox.Contact mContact;
 
-  public Contact(@NotNull Object item)
+  public Contact(@Nonnull Object item)
   {
     super(item);
     mContact = (com.zimbra.cs.mailbox.Contact) item;
@@ -49,7 +49,7 @@ public class Contact extends Item
   {
     private final com.zimbra.cs.mailbox.Contact.Attachment mAttachment;
 
-    public ContactAttachment(@NotNull com.zimbra.cs.mailbox.Contact.Attachment attachment)
+    public ContactAttachment(@Nonnull com.zimbra.cs.mailbox.Contact.Attachment attachment)
     {
       if (attachment == null)
       {
@@ -102,7 +102,7 @@ public class Contact extends Item
     }
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, String> getFields()
   {
     return new HashMap<String, String>(
@@ -110,7 +110,7 @@ public class Contact extends Item
     );
   }
 
-  @NotNull
+  @Nonnull
   public Map<String, String> getAllFields()
   {
     return mContact.getAllFields();

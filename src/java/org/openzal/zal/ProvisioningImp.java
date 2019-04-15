@@ -46,7 +46,7 @@ import com.zimbra.cs.ldap.ZSearchControls;
 import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -73,7 +73,7 @@ import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 
 import com.zimbra.cs.mailbox.Contact;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
@@ -240,12 +240,12 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraSSLIncludeCipherSuites                         = "";
   /* $endif$ */
 
-  @NotNull
+  @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
-  @NotNull
+  @Nonnull
   private final NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
-  @NotNull
+  @Nonnull
   private final NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
   private final static String[] mAccountAttrs = {
     com.zimbra.cs.account.Provisioning.A_c,
@@ -265,7 +265,7 @@ public class ProvisioningImp implements Provisioning
 
     mNamedEntryAccountWrapper = new NamedEntryWrapper<Account>()
     {
-      @NotNull
+      @Nonnull
       @Override
       public Account wrap(NamedEntry entry)
       {
@@ -275,7 +275,7 @@ public class ProvisioningImp implements Provisioning
 
     mNamedEntryDomainWrapper = new NamedEntryWrapper<Domain>()
     {
-      @NotNull
+      @Nonnull
       @Override
       public Domain wrap(NamedEntry entry)
       {
@@ -285,7 +285,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public boolean isValidUid(@NotNull String uid)
+  public boolean isValidUid(@Nonnull String uid)
   {
     return uid.length() == 36 &&
       (uid.charAt(8) == '-' &&
@@ -295,7 +295,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Account getZimbraUser()
     throws ZimbraException
   {
@@ -367,7 +367,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor)
+  public void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -389,7 +389,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitAllLocalAccountsNoDefaults(@NotNull SimpleVisitor<Account> visitor)
+  public void visitAllLocalAccountsNoDefaults(@Nonnull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -410,7 +410,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
+  public void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Filter<Account> filterAccounts)
     throws ZimbraException
   {
     ProvisioningVisitor<Account> accountProvisioningVisitor = new ProvisioningVisitor<Account>(
@@ -423,8 +423,8 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void visitAllLocalAccountsSlow(
-    @NotNull SimpleVisitor<Account> visitor,
-    @NotNull Filter<Account> filterAccounts
+    @Nonnull SimpleVisitor<Account> visitor,
+    @Nonnull Filter<Account> filterAccounts
   )
     throws ZimbraException
   {
@@ -473,7 +473,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitAllDomains(@NotNull SimpleVisitor<Domain> visitor) throws ZimbraException
+  public void visitAllDomains(@Nonnull SimpleVisitor<Domain> visitor) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Domain>(visitor, mNamedEntryDomainWrapper);
     try
@@ -487,7 +487,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitDomain(@NotNull SimpleVisitor<Account> visitor, @NotNull Domain domain) throws ZimbraException
+  public void visitDomain(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Domain domain) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
     try
@@ -523,7 +523,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void authAccount(@NotNull Account account, String password, @NotNull Protocol protocol, Map<String, Object> context)
+  public void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
     throws ZimbraException
   {
     try
@@ -579,7 +579,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Server getLocalServer()
     throws ZimbraException
   {
@@ -647,7 +647,7 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Domain assertDomainById(String domainId)
   {
@@ -662,7 +662,7 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  @NotNull
+  @Nonnull
   @Override
   public Domain assertDomainByName(String domainName)
   {
@@ -706,7 +706,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Zimlet getZimlet(String zimletName)
     throws ZimbraException
   {
@@ -729,7 +729,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void modifyAttrs(@NotNull Entry entry, Map<String, Object> attrs)
+  public void modifyAttrs(@Nonnull Entry entry, Map<String, Object> attrs)
     throws ZimbraException
   {
     try
@@ -743,7 +743,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<DistributionList> getAllDistributionLists(@NotNull Domain domain)
+  public List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -837,7 +837,7 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public DistributionList get(@NotNull ProvisioningKey.ByDistributionList id, String dlStr)
+  public DistributionList get(@Nonnull ProvisioningKey.ByDistributionList id, String dlStr)
     throws ZimbraException
   {
     try
@@ -860,7 +860,7 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Account get(@NotNull ProvisioningKey.ByAccount by, String target)
+  public Account get(@Nonnull ProvisioningKey.ByAccount by, String target)
     throws ZimbraException
   {
     try
@@ -882,7 +882,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Account assertAccountByName(String accountStr)
     throws NoSuchAccountException
   {
@@ -898,7 +898,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Account assertAccountById(String accountStr)
     throws NoSuchAccountException
   {
@@ -951,7 +951,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<Account> getAllAccounts(@NotNull Domain domain)
+  public List<Account> getAllAccounts(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -995,7 +995,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<CalendarResource> getAllCalendarResources(@NotNull Domain domain)
+  public List<CalendarResource> getAllCalendarResources(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -1062,7 +1062,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Config getConfig()
     throws ZimbraException
   {
@@ -1636,7 +1636,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
+  public void modifyIdentity(@Nonnull Account newAccount, String identityName, Map<String, Object> newAttrs)
     throws ZimbraException
   {
     try
@@ -1655,8 +1655,8 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void grantRight(
-    String targetType, @NotNull Targetby targetBy, String target,
-    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException
   {
@@ -1683,7 +1683,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void revokeRight(
     String targetType, Targetby targetBy, String target,
-    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException
   {
@@ -1711,7 +1711,7 @@ public class ProvisioningImp implements Provisioning
                           Targetby targetBy,
                           String target,
                           String granteeType,
-                          @NotNull GrantedBy granteeBy,
+                          @Nonnull GrantedBy granteeBy,
                           String grantee,
                           String right,
                           RightModifier rightModifier) throws NoSuchGrantException
@@ -1808,14 +1808,14 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mProvisioning);
   }
 
   @Override
   @Nullable
-  public Domain getDomain(@NotNull Account account)
+  public Domain getDomain(@Nonnull Account account)
     throws ZimbraException
   {
     try
@@ -1837,7 +1837,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void flushCache(@NotNull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
+  public void flushCache(@Nonnull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
     throws ZimbraException
   {
     com.zimbra.cs.account.Provisioning.CacheEntry[] cacheEntriesArray = null;
@@ -1863,7 +1863,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public CountAccountResult countAccount(@NotNull Domain domain)
+  public CountAccountResult countAccount(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -1879,7 +1879,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public long getAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos)
+  public long getAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos)
   {
     CountAccountResult accountResult = countAccount(domain);
     for (CountAccountByCos accountByCos : accountResult.getCountAccountByCos())
@@ -1893,7 +1893,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public long getMaxAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos)
+  public long getMaxAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos)
   {
     final Collection<String> cosLimits = domain.getDomainCOSMaxAccounts();
 
@@ -1926,7 +1926,7 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Server getServer(@NotNull Account acct)
+  public Server getServer(@Nonnull Account acct)
     throws ZimbraException
   {
     try
@@ -1988,7 +1988,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public boolean onLocalServer(@NotNull Account userAccount)
+  public boolean onLocalServer(@Nonnull Account userAccount)
     throws ZimbraException
   {
     try
@@ -2024,7 +2024,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public long getEffectiveQuota(@NotNull Account account)
+  public long getEffectiveQuota(@Nonnull Account account)
   {
     long acctQuota = account.getLongAttr(A_zimbraMailQuota, 0);
     Domain domain = getDomain(account);
@@ -2197,7 +2197,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   @Nullable
   public Grants getGrants(
-    @NotNull org.openzal.zal.provisioning.TargetType targetType,
+    @Nonnull org.openzal.zal.provisioning.TargetType targetType,
     Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
@@ -2232,7 +2232,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   public String getGranteeName(
     String grantee_id,
-    @NotNull String grantee_type
+    @Nonnull String grantee_type
   ) throws ZimbraException
   {
     if( grantee_type.equals(GranteeType.GT_GROUP.getCode()) )
@@ -2254,8 +2254,8 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
-  public GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit)
+  @Nonnull
+  public GalSearchResult galSearch(@Nonnull Account account, String query, int skip, int limit)
   {
     GalSearchParams searchParams = new GalSearchParams(account.toZimbra(com.zimbra.cs.account.Account.class));
 
@@ -2290,7 +2290,7 @@ public class ProvisioningImp implements Provisioning
     return result;
   }
 
-  @NotNull
+  @Nonnull
   public DistributionList assertDistributionListById(String targetId)
   {
     DistributionList distributionList = getDistributionListById(targetId);
@@ -2433,7 +2433,7 @@ public class ProvisioningImp implements Provisioning
     }
 
     @Nullable
-    public Element handleContact(@NotNull Contact contact)
+    public Element handleContact(@Nonnull Contact contact)
       throws ZimbraException
     {
       if (mCounter >= mSkip)
@@ -2455,7 +2455,7 @@ public class ProvisioningImp implements Provisioning
       return null;
     }
 
-    public void handleElement(@NotNull Element node)
+    public void handleElement(@Nonnull Element node)
     {
       if (mCounter >= mSkip)
       {
@@ -2536,7 +2536,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Group assertGroupById(String groupId)
     throws NoSuchGroupException
   {
@@ -2550,7 +2550,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  @NotNull
+  @Nonnull
   public Group assertGroupByName(String groupName)
     throws NoSuchGroupException
   {

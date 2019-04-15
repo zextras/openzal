@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
@@ -30,7 +30,7 @@ import com.zimbra.common.account.Key.GranteeBy;
 
 public class GrantedBy
 {
-  @NotNull private final GranteeBy mGranteeBy;
+  @Nonnull private final GranteeBy mGranteeBy;
 
   public static GrantedBy id   = new GrantedBy(GranteeBy.id);
   public static GrantedBy name = new GrantedBy(GranteeBy.name);

@@ -23,7 +23,7 @@ package org.openzal.zal;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.cs.mailbox.ACL;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.List;
 
@@ -49,14 +49,14 @@ public class Acl
   public static final short RIGHT_FREEBUSY = ACL.RIGHT_FREEBUSY;
   public static final short ROLE_MANAGER   = ACL.RIGHT_READ | ACL.RIGHT_WRITE | ACL.RIGHT_DELETE | ACL.RIGHT_INSERT | ACL.RIGHT_ACTION;
 
-  @NotNull private final ACL mAcl;
+  @Nonnull private final ACL mAcl;
 
   public Acl()
   {
     this(new ACL());
   }
 
-  Acl(@NotNull Object acl)
+  Acl(@Nonnull Object acl)
   {
     if (acl == null)
     {

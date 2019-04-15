@@ -20,8 +20,8 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.NoSuchAccountException;
 import org.openzal.zal.exceptions.NoSuchGrantException;
 import org.openzal.zal.exceptions.NoSuchGroupException;
@@ -37,9 +37,9 @@ public interface Provisioning
   String ZIMBRA_USER_ID = "e0fafd89-1360-11d9-8661-000a95d98ef2";
   String DEFAULT_COS_ID = "e00428a1-0c00-11d9-836a-000d93afea2a";
 
-  boolean isValidUid(@NotNull String uid);
+  boolean isValidUid(@Nonnull String uid);
 
-  @NotNull
+  @Nonnull
   Account getZimbraUser()
     throws ZimbraException;
 
@@ -53,30 +53,30 @@ public interface Provisioning
   DistributionList getDistributionListByName(String name)
     throws ZimbraException;
 
-  void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor)
+  void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor)
       throws ZimbraException;
 
-  void visitAllLocalAccountsNoDefaults(@NotNull SimpleVisitor<Account> visitor)
+  void visitAllLocalAccountsNoDefaults(@Nonnull SimpleVisitor<Account> visitor)
         throws ZimbraException;
 
-  void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
+  void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Filter<Account> filterAccounts)
           throws ZimbraException;
 
   void visitAllLocalAccountsSlow(
-    @NotNull SimpleVisitor<Account> visitor,
-    @NotNull Filter<Account> filterAccounts
+    @Nonnull SimpleVisitor<Account> visitor,
+    @Nonnull Filter<Account> filterAccounts
   )
             throws ZimbraException;
 
   void visitAccountByIdNoDefaults(SimpleVisitor<Account> visitor, ZimbraId accountId);
 
-  void visitAllDomains(@NotNull SimpleVisitor<Domain> visitor) throws ZimbraException;
+  void visitAllDomains(@Nonnull SimpleVisitor<Domain> visitor) throws ZimbraException;
 
-  void visitDomain(@NotNull SimpleVisitor<Account> visitor, @NotNull Domain domain) throws ZimbraException;
+  void visitDomain(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Domain domain) throws ZimbraException;
 
   Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException;
 
-  void authAccount(@NotNull Account account, String password, @NotNull Protocol protocol, Map<String, Object> context)
+  void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
               throws ZimbraException;
 
   Account getAccountByAccountIdOrItemId(String id);
@@ -85,7 +85,7 @@ public interface Provisioning
   Account getAccountById(String accountId)
     throws ZimbraException;
 
-  @NotNull
+  @Nonnull
   Server getLocalServer()
     throws ZimbraException;
 
@@ -96,18 +96,18 @@ public interface Provisioning
   List<Domain> getAllDomains()
       throws ZimbraException;
 
-  @NotNull
+  @Nonnull
   Zimlet getZimlet(String zimletName)
     throws ZimbraException;
 
-  void modifyAttrs(@NotNull Entry entry, Map<String, Object> attrs)
+  void modifyAttrs(@Nonnull Entry entry, Map<String, Object> attrs)
       throws ZimbraException;
 
   @Nullable
   Domain getDomainById(String domainId)
     throws ZimbraException;
 
-  List<DistributionList> getAllDistributionLists(@NotNull Domain domain)
+  List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
       throws ZimbraException;
 
   List<Group> getAllGroups(Domain domain)
@@ -125,18 +125,18 @@ public interface Provisioning
     throws ZimbraException;
 
   @Nullable
-  DistributionList get(@NotNull ProvisioningKey.ByDistributionList id, String dlStr)
+  DistributionList get(@Nonnull ProvisioningKey.ByDistributionList id, String dlStr)
     throws ZimbraException;
 
   @Nullable
-  Account get(@NotNull ProvisioningKey.ByAccount by, String target)
+  Account get(@Nonnull ProvisioningKey.ByAccount by, String target)
     throws ZimbraException;
 
-  @NotNull
+  @Nonnull
   Account assertAccountByName(String accountStr)
     throws NoSuchAccountException;
 
-  @NotNull
+  @Nonnull
   Account assertAccountById(String accountStr)
     throws NoSuchAccountException;
 
@@ -147,7 +147,7 @@ public interface Provisioning
   List<Account> getAllAdminAccounts()
     throws ZimbraException;
 
-  List<Account> getAllAccounts(@NotNull Domain domain)
+  List<Account> getAllAccounts(@Nonnull Domain domain)
     throws ZimbraException;
 
   List<Server> getAllServers()
@@ -156,7 +156,7 @@ public interface Provisioning
   List<Server> getAllServers(String service)
     throws ZimbraException;
 
-  List<CalendarResource> getAllCalendarResources(@NotNull Domain domain)
+  List<CalendarResource> getAllCalendarResources(@Nonnull Domain domain)
     throws ZimbraException;
 
   List<Zimlet> listAllZimlets()
@@ -169,7 +169,7 @@ public interface Provisioning
   GlobalGrant getGlobalGrant()
     throws ZimbraException;
 
-  @NotNull
+  @Nonnull
   Config getConfig()
     throws ZimbraException;
 
@@ -235,24 +235,24 @@ public interface Provisioning
   Server createServer(String name, Map<String, Object> attrs)
           throws ZimbraException;
 
-  void modifyIdentity(@NotNull Account newAccount, String identityName, Map<String, Object> newAttrs)
+  void modifyIdentity(@Nonnull Account newAccount, String identityName, Map<String, Object> newAttrs)
       throws ZimbraException;
 
   void grantRight(
-    String targetType, @NotNull Targetby targetBy, String target,
-    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
   ) throws ZimbraException;
 
   void revokeRight(
     String targetType, Targetby targetBy, String target,
-    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
   ) throws NoSuchGrantException;
 
   void revokeRight(
     String targetType, Targetby targetBy, String target,
-    String granteeType, @NotNull GrantedBy granteeBy, String grantee,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right, RightModifier rightModifier
   ) throws NoSuchGrantException;
 
@@ -276,24 +276,24 @@ public interface Provisioning
     boolean granteeIncludeGroupsGranteeBelongs
   );
 
-  <T> T toZimbra(@NotNull Class<T> cls);
+  <T> T toZimbra(@Nonnull Class<T> cls);
 
   @Nullable
-  Domain getDomain(@NotNull Account account)
+  Domain getDomain(@Nonnull Account account)
     throws ZimbraException;
 
-  void flushCache(@NotNull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
+  void flushCache(@Nonnull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
       throws ZimbraException;
 
-  ProvisioningImp.CountAccountResult countAccount(@NotNull Domain domain)
+  ProvisioningImp.CountAccountResult countAccount(@Nonnull Domain domain)
         throws ZimbraException;
 
-  long getAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos);
+  long getAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos);
 
-  long getMaxAccountsOnCos(@NotNull Domain domain, @NotNull Cos cos);
+  long getMaxAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos);
 
   @Nullable
-  Server getServer(@NotNull Account acct)
+  Server getServer(@Nonnull Account acct)
     throws ZimbraException;
 
   @Nullable
@@ -304,13 +304,13 @@ public interface Provisioning
   Server getServerByName(String name)
     throws ZimbraException;
 
-  boolean onLocalServer(@NotNull Account userAccount)
+  boolean onLocalServer(@Nonnull Account userAccount)
       throws ZimbraException;
 
   @Nullable
   Zimlet createZimlet(String name, Map<String, Object> attrs) throws ZimbraException;
 
-  long getEffectiveQuota(@NotNull Account account);
+  long getEffectiveQuota(@Nonnull Account account);
 
   void setZimletPriority(String zimletName, int priority);
 
@@ -333,7 +333,7 @@ public interface Provisioning
 
   @Nullable
   Grants getGrants(
-    @NotNull org.openzal.zal.provisioning.TargetType targetType,
+    @Nonnull org.openzal.zal.provisioning.TargetType targetType,
     Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
@@ -341,33 +341,33 @@ public interface Provisioning
 
   String getGranteeName(
     String grantee_id,
-    @NotNull String grantee_type
+    @Nonnull String grantee_type
   ) throws ZimbraException;
 
-  @NotNull
-  GalSearchResult galSearch(@NotNull Account account, String query, int skip, int limit);
+  @Nonnull
+  GalSearchResult galSearch(@Nonnull Account account, String query, int skip, int limit);
 
-  @NotNull
+  @Nonnull
   Domain assertDomainById(String domainId);
 
-  @NotNull
+  @Nonnull
   Domain assertDomainByName(String domainId);
 
-  @NotNull
+  @Nonnull
   Zimlet assertZimlet(String com_zextras_zextras);
 
-  @NotNull
+  @Nonnull
   DistributionList assertDistributionListById(String targetId);
 
   void deleteAccountByName(String id);
 
-  @NotNull
+  @Nonnull
   void deleteAccountById(String id);
 
-  @NotNull
+  @Nonnull
   void deleteDomainById(String id);
 
-  @NotNull
+  @Nonnull
   void deleteCosById(String id);
 
   Collection<Domain> getDomainAliases(Domain domain);
@@ -388,11 +388,11 @@ public interface Provisioning
 
   long getLastLogonTimestampFrequency();
 
-  @NotNull
+  @Nonnull
   Group assertGroupById(String groupId)
     throws NoSuchGroupException;
 
-  @NotNull
+  @Nonnull
   Group assertGroupByName(String groupName)
     throws NoSuchGroupException;
 
@@ -423,7 +423,7 @@ public interface Provisioning
 
   class GalSearchResult
   {
-    @NotNull private final LinkedList<ProvisioningImp.GalSearchResult.GalContact> mContactList;
+    @Nonnull private final LinkedList<ProvisioningImp.GalSearchResult.GalContact> mContactList;
     private                int                                                    mTotal;
     private                boolean                                                mHasMore;
 
@@ -478,7 +478,7 @@ public interface Provisioning
       mContactList = new LinkedList<ProvisioningImp.GalSearchResult.GalContact>();
     }
 
-    @NotNull
+    @Nonnull
     public List<ProvisioningImp.GalSearchResult.GalContact> getContactList()
     {
       return mContactList;

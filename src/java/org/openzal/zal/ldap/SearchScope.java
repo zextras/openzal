@@ -1,6 +1,6 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class SearchScope
 {
@@ -8,10 +8,10 @@ public class SearchScope
   public static final SearchScope BASE = new SearchScope(com.unboundid.ldap.sdk.SearchScope.BASE);
   public static final SearchScope ONE = new SearchScope(com.unboundid.ldap.sdk.SearchScope.ONE);
 
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.SearchScope mSearchScope;
 
-  public SearchScope(@NotNull Object searchScope)
+  public SearchScope(@Nonnull Object searchScope)
   {
     mSearchScope = (com.unboundid.ldap.sdk.SearchScope)searchScope;
   }
