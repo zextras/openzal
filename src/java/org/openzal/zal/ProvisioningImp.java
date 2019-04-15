@@ -404,6 +404,26 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public void visitAllLocalAccounts(@NotNull SimpleVisitor<Account> visitor)
+    throws ZimbraException
+  {
+    NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
+    try
+    {
+      com.zimbra.cs.account.Server server = mProvisioning.getLocalServer();
+
+      com.zimbra.cs.account.SearchAccountsOptions searchOptions = new com.zimbra.cs.account.SearchAccountsOptions();
+      searchOptions.setIncludeType(com.zimbra.cs.account.SearchAccountsOptions.IncludeType.ACCOUNTS_AND_CALENDAR_RESOURCES);
+
+      mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
     throws ZimbraException
   {

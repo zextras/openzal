@@ -59,6 +59,9 @@ public interface Provisioning
   void visitAllLocalAccountsNoDefaults(@NotNull SimpleVisitor<Account> visitor)
         throws ZimbraException;
 
+  void visitAllLocalAccounts(@NotNull SimpleVisitor<Account> visitor)
+        throws ZimbraException;
+
   void visitAllAccounts(@NotNull SimpleVisitor<Account> visitor, @NotNull Filter<Account> filterAccounts)
           throws ZimbraException;
 
