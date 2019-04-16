@@ -200,7 +200,7 @@ public class MailboxSessionProxy
         for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, PendingModifications.Change>) pns.modified).keySet() )
         {
        /* $elseif ZimbraX == 0 $
-        for( PendingModifications.ModificationKey mod : pns.created.keySet() )
+        for( PendingModifications.ModificationKey mod : pns.modified.keySet() )
         {
         /* $endif $ */
        /* $if ZimbraX == 0 $ */
