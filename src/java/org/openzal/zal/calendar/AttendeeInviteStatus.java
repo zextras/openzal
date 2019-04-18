@@ -28,6 +28,7 @@ import java.util.Map;
 
 public enum AttendeeInviteStatus
 {
+  ORGANIZER("OR", "ORGANIZER"),
   TENTATIVE("TE", "TENTATIVE"),
   NEEDS_ACTION("NE", "NEEDS-ACTION"),
   DELEGATED("DG", "DELEGATED"),
