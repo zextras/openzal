@@ -22,8 +22,10 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AuthTokenException;
+/* $if ZimbraX == 1 $
 import com.zimbra.cs.account.ZimbraJWToken;
 import com.zimbra.cs.service.util.JWTUtil;
+/* $endif $ */
 import java.util.Map;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
@@ -60,24 +62,33 @@ public class AuthToken
   {
     try
     {
-      if( cookies.containsKey("ZM_AUTH_TOKEN") )
-      {
-        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
-      }
-      else if( cookies.containsKey("ZM_JWT_TOKEN") && cookies.containsKey("ZM_JWT") )
+      /* $if ZimbraX == 1 $
+      if( cookies.containsKey("ZM_JWT_TOKEN") && cookies.containsKey("ZM_JWT") )
       {
         return new AuthToken(ZimbraJWToken.getJWToken(
           cookies.get("ZM_JWT_TOKEN"),
           JWTUtil.getJWTSalt(cookies.get("ZM_JWT"))
         ));
       }
+      /* $else $ */
+      if( cookies.containsKey("ZM_AUTH_TOKEN") )
+      {
+        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
+      }
+      /* $endif $ */
 
       throw new AuthTokenException("Missing auth cookies!");
     }
-    catch( AuthTokenException | ServiceException e )
+    catch( AuthTokenException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
+    /* $if ZimbraX == 1 $
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
   }
 
   public static AuthToken getAdminAuthToken(Map<String, String> cookies)
