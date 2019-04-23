@@ -20,8 +20,13 @@
 
 package org.openzal.zal;
 
-import org.openzal.zal.exceptions.ExceptionWrapper;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.ZimbraJWToken;
+import com.zimbra.cs.service.util.JWTUtil;
+import java.util.Map;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
 import javax.annotation.Nonnull;
 
 public class AuthToken
@@ -37,6 +42,7 @@ public class AuthToken
     mAuthToken = (com.zimbra.cs.account.AuthToken) authToken;
   }
 
+  @Deprecated
   public static AuthToken getAuthToken(String encoded) throws org.openzal.zal.exceptions.AuthTokenException
   {
     try
@@ -44,6 +50,49 @@ public class AuthToken
       return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(encoded));
     }
     catch (AuthTokenException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static AuthToken getAuthToken(Map<String, String> cookies)
+    throws org.openzal.zal.exceptions.AuthTokenException
+  {
+    try
+    {
+      if( cookies.containsKey("ZM_AUTH_TOKEN") )
+      {
+        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
+      }
+      else if( cookies.containsKey("ZM_JWT_TOKEN") && cookies.containsKey("ZM_JWT") )
+      {
+        return new AuthToken(ZimbraJWToken.getJWToken(
+          cookies.get("ZM_JWT_TOKEN"),
+          JWTUtil.getJWTSalt(cookies.get("ZM_JWT"))
+        ));
+      }
+
+      throw new AuthTokenException("Missing auth cookies!");
+    }
+    catch( AuthTokenException | ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static AuthToken getAdminAuthToken(Map<String, String> cookies)
+    throws org.openzal.zal.exceptions.AuthTokenException
+  {
+    try
+    {
+      if( cookies.containsKey("ZM_ADMIN_AUTH_TOKEN") )
+      {
+        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_ADMIN_AUTH_TOKEN")));
+      }
+
+      throw new AuthTokenException("Missing admin auth cookies!");
+    }
+    catch( AuthTokenException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
