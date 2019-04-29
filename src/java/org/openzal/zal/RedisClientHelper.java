@@ -1,10 +1,10 @@
 package org.openzal.zal;
 
-import java.util.Collection;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.*;
+
+import java.util.Set;
 /* $if ZimbraX == 1 $ */
-import org.redisson.api.RMap;
+import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 /* $endif $ */
 
@@ -12,7 +12,7 @@ public class RedisClientHelper
 {
   /* $if ZimbraX == 1 $ */
   private final com.zimbra.cs.mailbox.RedissonClientHolder mZObject;
-  private final RedissonClient mRedissonClient;
+  private final RedissonClient                             mRedissonClient;
   /* $endif $ */
 
   public RedisClientHelper()
@@ -24,73 +24,42 @@ public class RedisClientHelper
   }
 
   @Nullable
-  public String put(@NotNull String scope, @NotNull String key, String value)
+  public String put(@Nonnull String key, String value)
   {
     /* $if ZimbraX == 1 $ */
-    RMap<String, String> bucket = mRedissonClient.getMap(scope);
-    bucket.put(key, value);
+    RSet<String> set = mRedissonClient.getSet(key);
+    set.add(value);
     return value;
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Nullable
-  public String get(@NotNull String scope, @NotNull String key)
+  public Set<String> get(@Nonnull String key)
   {
     /* $if ZimbraX == 1 $ */
-    return get(scope, key, null);
+    RSet<String> set = mRedissonClient.getSet(key);
+    return set.readAll();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  public boolean contains(@NotNull String scope, @NotNull String key)
+  public void remove(@Nonnull String key, @Nonnull String value)
   {
     /* $if ZimbraX == 1 $ */
-    return get(scope, key, null) != null;
+    RSet<String> set = mRedissonClient.getSet(key);
+    set.remove(value);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Nullable
-  public String get(@NotNull String scope, @NotNull String key, String def)
+  public void remove(@Nonnull String key)
   {
     /* $if ZimbraX == 1 $ */
-    RMap<String, String> bucket = mRedissonClient.getMap(scope);
-    String result = bucket.get(key);
-    return result == null ? def : result;
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public Collection<String> getValuesByScope(@NotNull String scope)
-  {
-    /* $if ZimbraX == 1 $ */
-    RMap<String, String> bucket = mRedissonClient.getMap(scope);
-    return bucket.values();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public Collection<String> getValuesByScopeAndKeyPattern(@NotNull String scope, @NotNull String keyBegin, @NotNull String keyEnd)
-  {
-    /* $if ZimbraX == 1 $ */
-    RMap<String, String> bucket = mRedissonClient.getMap(scope);
-    return bucket.values(String.format("%s*%s", keyBegin, keyEnd));
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public void remove(@NotNull String scope, @NotNull String key)
-  {
-    /* $if ZimbraX == 1 $ */
-    RMap<String, String> bucket = mRedissonClient.getMap(scope);
-    bucket.remove(key);
+    RSet<String> set = mRedissonClient.getSet(key);
+    set.delete();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
