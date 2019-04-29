@@ -2811,7 +2811,7 @@ public class Mailbox
   }
   public void suspendIndexing()
   {
-    /* $if ZimbraVersion >= 8.7.0 $ */
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $ */
     mMbox.suspendIndexing();
     /* $elseif ZimbraX == 1 $
     return;
