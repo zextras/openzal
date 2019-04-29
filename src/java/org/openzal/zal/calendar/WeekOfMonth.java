@@ -23,11 +23,12 @@ package org.openzal.zal.calendar;
 public enum WeekOfMonth
 {
   First(1), Second(2), Third(3), Fourth(4), Last(-1);
+
   private final int mValue;
 
-  WeekOfMonth(int value)
+  WeekOfMonth(int zimbra)
   {
-    mValue = value;
+    mValue = zimbra;
   }
 
   public static WeekOfMonth fromZimbra(int value)
@@ -46,11 +47,50 @@ public enum WeekOfMonth
         return Fourth;
     }
 
-    throw new RuntimeException("Invalid WeekOfMonth "+value);
+    throw new RuntimeException("Invalid Zimbra WeekOfMonth "+value);
+  }
+
+  public static WeekOfMonth fromEAS(int value)
+  {
+    switch (value)
+    {
+      case 1:
+        return First;
+      case 2:
+        return Second;
+      case 3:
+        return Third;
+      case 4:
+        return Fourth;
+      case 5:
+        return Last;
+    }
+
+    throw new RuntimeException("Invalid EAS WeekOfMonth "+value);
   }
 
   public int toZimbra()
   {
     return mValue;
   }
+
+  public int toEAS()
+  {
+    switch( this )
+    {
+      case First:
+        return 1;
+      case Second:
+        return 2;
+      case Third:
+        return 3;
+      case Fourth:
+        return 4;
+      case Last:
+        return 5;
+    }
+
+    throw new RuntimeException();
+  }
+
 }

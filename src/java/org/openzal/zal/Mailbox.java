@@ -2811,7 +2811,7 @@ public class Mailbox
   }
   public void suspendIndexing()
   {
-    /* $if ZimbraVersion >= 8.7.0 $ */
+    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $ */
     mMbox.suspendIndexing();
     /* $elseif ZimbraX == 1 $
     return;
@@ -2844,7 +2844,7 @@ public class Mailbox
 
   public void checkSizeChange(long newSize) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
+    /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
     try
     {
       mMbox.checkSizeChange(newSize);
