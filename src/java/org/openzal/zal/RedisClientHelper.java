@@ -103,6 +103,7 @@ public class RedisClientHelper
 
   public Collection<String> getByPattern(@Nonnull String keyStart, @Nonnull String keyEnd)
   {
+    /* $if ZimbraX == 1 $ */
     Iterable<String> keys = mRedissonClient.getKeys().getKeysByPattern(keyStart + "*" + keyEnd);
     Set<String> results = new HashSet<>();
     for(String value : keys)
@@ -111,5 +112,8 @@ public class RedisClientHelper
     }
 
     return results;
+    /* $else $
+    return Collections.emptyList();
+    /* $endif $ */
   }
 }
