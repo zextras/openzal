@@ -27,7 +27,7 @@ import org.openzal.zal.lib.ZimbraVersion;
 public class ZalVersion
 {
   public static final    Version current = new Version(ZalBuildInfo.VERSION);
-  @Nonnull private static Version target;
+  @Nonnull public static Version target;
 
   static
   {

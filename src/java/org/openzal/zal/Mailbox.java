@@ -2844,7 +2844,7 @@ public class Mailbox
 
   public void checkSizeChange(long newSize) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
+    /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
     try
     {
       mMbox.checkSizeChange(newSize);
