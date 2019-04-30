@@ -68,7 +68,7 @@ public class AuthProvider
       return new AuthToken(
         com.zimbra.cs.service.AuthProvider.getAuthToken(
           account.toZimbra(com.zimbra.cs.account.Account.class),
-          true
+          false
         )
       );
     }

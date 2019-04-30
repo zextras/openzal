@@ -49,6 +49,11 @@ public class AuthToken
     }
   }
 
+  public long expireTimestamp()
+  {
+    return mAuthToken.getExpires();
+  }
+
   public String getAccountId()
   {
     return mAuthToken.getAccountId();
