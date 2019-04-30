@@ -2,6 +2,8 @@ package org.openzal.zal;
 
 import javax.annotation.*;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 /* $if ZimbraX == 1 $ */
 import org.redisson.api.RBucket;
@@ -97,5 +99,17 @@ public class RedisClientHelper
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
+  }
+
+  public Collection<String> getByPattern(@Nonnull String keyStart, @Nonnull String keyEnd)
+  {
+    Iterable<String> keys = mRedissonClient.getKeys().getKeysByPattern(keyStart + "*" + keyEnd);
+    Set<String> results = new HashSet<>();
+    for(String value : keys)
+    {
+      results.add(value);
+    }
+
+    return results;
   }
 }
