@@ -20,16 +20,16 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.calendar.ICalTimeZone;
 
 public class MapTimeZone
 {
-  @NotNull
+  @Nonnull
   private final TimeZoneMap mTimeZoneMap;
 
-  public MapTimeZone(@NotNull Object timeZoneMap)
+  public MapTimeZone(@Nonnull Object timeZoneMap)
   {
     if (timeZoneMap == null)
     {
@@ -44,13 +44,13 @@ public class MapTimeZone
     mTimeZoneMap = new TimeZoneMap(icaltimezone.toZimbra(ICalTimeZone.class));
   }
 
-  @NotNull
+  @Nonnull
   public ICalendarTimezone getTimeZone(String key)
   {
     return new ICalendarTimezone(mTimeZoneMap.getTimeZone(key));
   }
 
-  @NotNull
+  @Nonnull
   public ICalendarTimezone getLocalTimeZone()
   {
     return new ICalendarTimezone(mTimeZoneMap.getLocalTimeZone());

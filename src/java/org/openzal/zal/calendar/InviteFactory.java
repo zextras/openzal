@@ -21,7 +21,7 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -67,7 +67,7 @@ public class InviteFactory
   private       long               mReminderTime;
   private       MimeMessage        mMimeMessage;
   private       boolean            mHasAttachment;
-  @NotNull
+  @Nonnull
   private final Clock              mClock;
   private       RecurrenceRule     mRecurrenceRule;
   private       int                mMailItemId = 0;

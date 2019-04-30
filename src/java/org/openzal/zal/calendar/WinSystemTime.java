@@ -21,11 +21,11 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class WinSystemTime
 {
-  @NotNull
+  @Nonnull
   private final WindowsSystemTime mWindowsSystemTime;
 
   public WinSystemTime(int year, int month, int dayOfWeek, int day, int hour, int minute, int second, int ms)
@@ -42,7 +42,7 @@ public class WinSystemTime
     );
   }
 
-  public WinSystemTime(@NotNull Object windowsSystemTime)
+  public WinSystemTime(@Nonnull Object windowsSystemTime)
   {
     if (windowsSystemTime == null)
     {

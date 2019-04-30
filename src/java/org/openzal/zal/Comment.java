@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Comment extends Item
 {
-  @NotNull private final com.zimbra.cs.mailbox.Comment mComment;
+  @Nonnull private final com.zimbra.cs.mailbox.Comment mComment;
 
-  public Comment(@NotNull Object item)
+  public Comment(@Nonnull Object item)
   {
     super(item);
     mComment = (com.zimbra.cs.mailbox.Comment) item;

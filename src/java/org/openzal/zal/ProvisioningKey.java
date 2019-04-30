@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.account.Key.AccountBy;
@@ -44,19 +44,19 @@ public class ProvisioningKey
   {
     private final AccountBy mAccountBy;
 
-    @NotNull public static ByAccount adminName        = new ByAccount(AccountBy.adminName);
-    @NotNull public static ByAccount appAdminName     = new ByAccount(AccountBy.appAdminName);
-    @NotNull public static ByAccount id               = new ByAccount(AccountBy.id);
-    @NotNull public static ByAccount foreignPrincipal = new ByAccount(AccountBy.foreignPrincipal);
-    @NotNull public static ByAccount name             = new ByAccount(AccountBy.name);
-    @NotNull public static ByAccount krb5Principal    = new ByAccount(AccountBy.krb5Principal);
+    @Nonnull public static ByAccount adminName        = new ByAccount(AccountBy.adminName);
+    @Nonnull public static ByAccount appAdminName     = new ByAccount(AccountBy.appAdminName);
+    @Nonnull public static ByAccount id               = new ByAccount(AccountBy.id);
+    @Nonnull public static ByAccount foreignPrincipal = new ByAccount(AccountBy.foreignPrincipal);
+    @Nonnull public static ByAccount name             = new ByAccount(AccountBy.name);
+    @Nonnull public static ByAccount krb5Principal    = new ByAccount(AccountBy.krb5Principal);
 
     ByAccount(AccountBy accountBy)
     {
       mAccountBy = accountBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByAccount fromString(String s)
       throws ServiceException
     {
@@ -82,8 +82,8 @@ public class ProvisioningKey
 
     private final DataSourceBy mDataSourceBy;
 
-    @NotNull public static ByDataSource id   = new ByDataSource(DataSourceBy.id);
-    @NotNull public static ByDataSource name = new ByDataSource(DataSourceBy.name);
+    @Nonnull public static ByDataSource id   = new ByDataSource(DataSourceBy.id);
+    @Nonnull public static ByDataSource name = new ByDataSource(DataSourceBy.name);
 
     ByDataSource(DataSourceBy dataSourceBy)
     {
@@ -95,7 +95,7 @@ public class ProvisioningKey
       return mDataSourceBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByDataSource fromString(String s)
       throws ServiceException
     {
@@ -115,8 +115,8 @@ public class ProvisioningKey
   {
     private final IdentityBy mIdentityBy;
 
-    @NotNull public static ByIdentity id   = new ByIdentity(IdentityBy.id);
-    @NotNull public static ByIdentity name = new ByIdentity(IdentityBy.name);
+    @Nonnull public static ByIdentity id   = new ByIdentity(IdentityBy.id);
+    @Nonnull public static ByIdentity name = new ByIdentity(IdentityBy.name);
 
     ByIdentity(IdentityBy identityBy)
     {
@@ -128,7 +128,7 @@ public class ProvisioningKey
       return mIdentityBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByIdentity fromString(String s)
       throws ServiceException
     {
@@ -147,11 +147,11 @@ public class ProvisioningKey
   {
     private DomainBy mDomainBy;
 
-    @NotNull public static ByDomain id              = new ByDomain(DomainBy.id);
-    @NotNull public static ByDomain name            = new ByDomain(DomainBy.name);
-    @NotNull public static ByDomain virtualHostname = new ByDomain(DomainBy.virtualHostname);
-    @NotNull public static ByDomain krb5Realm       = new ByDomain(DomainBy.krb5Realm);
-    @NotNull public static ByDomain foreignName     = new ByDomain(DomainBy.foreignName);
+    @Nonnull public static ByDomain id              = new ByDomain(DomainBy.id);
+    @Nonnull public static ByDomain name            = new ByDomain(DomainBy.name);
+    @Nonnull public static ByDomain virtualHostname = new ByDomain(DomainBy.virtualHostname);
+    @Nonnull public static ByDomain krb5Realm       = new ByDomain(DomainBy.krb5Realm);
+    @Nonnull public static ByDomain foreignName     = new ByDomain(DomainBy.foreignName);
 
     ByDomain(DomainBy domainBy)
     {
@@ -163,7 +163,7 @@ public class ProvisioningKey
       return mDomainBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByDomain fromString(String s)
       throws ServiceException
     {
@@ -182,9 +182,9 @@ public class ProvisioningKey
   {
     private ServerBy mServerBy;
 
-    @NotNull public static ByServer id              = new ByServer(ServerBy.id);
-    @NotNull public static ByServer name            = new ByServer(ServerBy.name);
-    @NotNull public static ByServer serviceHostname = new ByServer(ServerBy.serviceHostname);
+    @Nonnull public static ByServer id              = new ByServer(ServerBy.id);
+    @Nonnull public static ByServer name            = new ByServer(ServerBy.name);
+    @Nonnull public static ByServer serviceHostname = new ByServer(ServerBy.serviceHostname);
 
     ByServer(ServerBy serverBy)
     {
@@ -196,7 +196,7 @@ public class ProvisioningKey
       return mServerBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByServer fromString(String s)
       throws ServiceException
     {
@@ -215,8 +215,8 @@ public class ProvisioningKey
   {
     private final ZimletBy mZimletBy;
 
-    @NotNull public static ByZimlet id   = new ByZimlet(ZimletBy.id);
-    @NotNull public static ByZimlet name = new ByZimlet(ZimletBy.name);
+    @Nonnull public static ByZimlet id   = new ByZimlet(ZimletBy.id);
+    @Nonnull public static ByZimlet name = new ByZimlet(ZimletBy.name);
 
     ByZimlet(ZimletBy identityBy)
     {
@@ -228,7 +228,7 @@ public class ProvisioningKey
       return mZimletBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByZimlet fromString(String s)
       throws ServiceException
     {
@@ -248,8 +248,8 @@ public class ProvisioningKey
   {
     private final SignatureBy mSignatureBy;
 
-    @NotNull public static BySignature id   = new BySignature(SignatureBy.id);
-    @NotNull public static BySignature name = new BySignature(SignatureBy.name);
+    @Nonnull public static BySignature id   = new BySignature(SignatureBy.id);
+    @Nonnull public static BySignature name = new BySignature(SignatureBy.name);
 
     BySignature(SignatureBy identityBy)
     {
@@ -261,7 +261,7 @@ public class ProvisioningKey
       return mSignatureBy;
     }
 
-    @NotNull
+    @Nonnull
     public static BySignature fromString(String s)
       throws ServiceException
     {
@@ -280,8 +280,8 @@ public class ProvisioningKey
   {
     private final CacheEntryBy mCacheEntryBy;
 
-    @NotNull public static ByCacheEntry id   = new ByCacheEntry(CacheEntryBy.id);
-    @NotNull public static ByCacheEntry name = new ByCacheEntry(CacheEntryBy.name);
+    @Nonnull public static ByCacheEntry id   = new ByCacheEntry(CacheEntryBy.id);
+    @Nonnull public static ByCacheEntry name = new ByCacheEntry(CacheEntryBy.name);
 
     ByCacheEntry(CacheEntryBy identityBy)
     {
@@ -293,7 +293,7 @@ public class ProvisioningKey
       return mCacheEntryBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByCacheEntry fromString(String s)
       throws ServiceException
     {
@@ -312,8 +312,8 @@ public class ProvisioningKey
   {
     private final CosBy mCosBy;
 
-    @NotNull public static ByCos id   = new ByCos(CosBy.id);
-    @NotNull public static ByCos name = new ByCos(CosBy.name);
+    @Nonnull public static ByCos id   = new ByCos(CosBy.id);
+    @Nonnull public static ByCos name = new ByCos(CosBy.name);
 
     ByCos(CosBy identityBy)
     {
@@ -325,7 +325,7 @@ public class ProvisioningKey
       return mCosBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByCos fromString(String s)
       throws ServiceException
     {
@@ -344,10 +344,10 @@ public class ProvisioningKey
   {
     private final CalendarResourceBy mCalendarResourceBy;
 
-    @NotNull public static ByCalendarResource id               = new ByCalendarResource(CalendarResourceBy.id);
-    @NotNull
+    @Nonnull public static ByCalendarResource id               = new ByCalendarResource(CalendarResourceBy.id);
+    @Nonnull
     public static          ByCalendarResource foreignPrincipal = new ByCalendarResource(CalendarResourceBy.foreignPrincipal);
-    @NotNull public static ByCalendarResource name             = new ByCalendarResource(CalendarResourceBy.name);
+    @Nonnull public static ByCalendarResource name             = new ByCalendarResource(CalendarResourceBy.name);
 
     ByCalendarResource(CalendarResourceBy identityBy)
     {
@@ -359,7 +359,7 @@ public class ProvisioningKey
       return mCalendarResourceBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByCalendarResource fromString(String s)
       throws ServiceException
     {
@@ -378,9 +378,9 @@ public class ProvisioningKey
   {
     private final XMPPComponentBy mXMPPComponentBy;
 
-    @NotNull public static ByXMPPComponent id              = new ByXMPPComponent(XMPPComponentBy.id);
-    @NotNull public static ByXMPPComponent serviceHostname = new ByXMPPComponent(XMPPComponentBy.serviceHostname);
-    @NotNull public static ByXMPPComponent name            = new ByXMPPComponent(XMPPComponentBy.name);
+    @Nonnull public static ByXMPPComponent id              = new ByXMPPComponent(XMPPComponentBy.id);
+    @Nonnull public static ByXMPPComponent serviceHostname = new ByXMPPComponent(XMPPComponentBy.serviceHostname);
+    @Nonnull public static ByXMPPComponent name            = new ByXMPPComponent(XMPPComponentBy.name);
 
     ByXMPPComponent(XMPPComponentBy identityBy)
     {
@@ -392,7 +392,7 @@ public class ProvisioningKey
       return mXMPPComponentBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByXMPPComponent fromString(String s)
       throws ServiceException
     {
@@ -411,8 +411,8 @@ public class ProvisioningKey
   {
     private final DistributionListBy mDistributionListBy;
 
-    @NotNull public static ByDistributionList id   = new ByDistributionList(DistributionListBy.id);
-    @NotNull public static ByDistributionList name = new ByDistributionList(DistributionListBy.name);
+    @Nonnull public static ByDistributionList id   = new ByDistributionList(DistributionListBy.id);
+    @Nonnull public static ByDistributionList name = new ByDistributionList(DistributionListBy.name);
 
     ByDistributionList(DistributionListBy identityBy)
     {
@@ -424,7 +424,7 @@ public class ProvisioningKey
       return mDistributionListBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByDistributionList fromString(String s)
       throws ServiceException
     {
@@ -443,8 +443,8 @@ public class ProvisioningKey
   {
     private final UCServiceBy mUCServiceBy;
 
-    @NotNull public static ByUCService id   = new ByUCService(UCServiceBy.id);
-    @NotNull public static ByUCService name = new ByUCService(UCServiceBy.name);
+    @Nonnull public static ByUCService id   = new ByUCService(UCServiceBy.id);
+    @Nonnull public static ByUCService name = new ByUCService(UCServiceBy.name);
 
     ByUCService(UCServiceBy identityBy)
     {
@@ -456,7 +456,7 @@ public class ProvisioningKey
       return mUCServiceBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByUCService fromString(String s)
       throws ServiceException
     {
@@ -475,7 +475,7 @@ public class ProvisioningKey
   {
     private final ShareLocatorBy mShareLocatorBy;
 
-    @NotNull public static ByShareLocator id = new ByShareLocator(ShareLocatorBy.id);
+    @Nonnull public static ByShareLocator id = new ByShareLocator(ShareLocatorBy.id);
 
     ByShareLocator(ShareLocatorBy identityBy)
     {
@@ -487,7 +487,7 @@ public class ProvisioningKey
       return mShareLocatorBy;
     }
 
-    @NotNull
+    @Nonnull
     public static ByShareLocator fromString(String s)
       throws ServiceException
     {

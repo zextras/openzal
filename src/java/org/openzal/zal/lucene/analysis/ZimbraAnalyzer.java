@@ -1,10 +1,10 @@
 package org.openzal.zal.lucene.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ZimbraAnalyzer extends Analyzer
 {
-  public ZimbraAnalyzer(@NotNull Object zObject)
+  public ZimbraAnalyzer(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     super((com.zimbra.cs.index.ZimbraAnalyzer) zObject);

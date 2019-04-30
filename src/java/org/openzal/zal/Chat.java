@@ -20,11 +20,11 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Chat extends Message
 {
-  public Chat(@NotNull Object mailItem)
+  public Chat(@Nonnull Object mailItem)
   {
     super(mailItem);
   }

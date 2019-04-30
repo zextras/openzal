@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -30,7 +30,7 @@ import java.io.InputStream;
 
 public class ParsedDocument
 {
-  @NotNull private final com.zimbra.cs.mime.ParsedDocument mParsedDocument;
+  @Nonnull private final com.zimbra.cs.mime.ParsedDocument mParsedDocument;
 
   public ParsedDocument(
     InputStream stream,
@@ -52,7 +52,7 @@ public class ParsedDocument
     }
   }
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  protected <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mParsedDocument);
   }

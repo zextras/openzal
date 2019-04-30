@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.search;
 
-import com.sun.istack.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.index.Term;
 
 public class TermQuery
@@ -16,7 +16,7 @@ public class TermQuery
     /* $endif $ */
   }
 
-  public TermQuery(@NotNull Object zObject)
+  public TermQuery(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.search.TermQuery) zObject);

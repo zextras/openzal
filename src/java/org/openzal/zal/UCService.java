@@ -20,16 +20,16 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class UCService extends Entry
 {
-  @NotNull private final com.zimbra.cs.account.UCService mUCService;
+  @Nonnull private final com.zimbra.cs.account.UCService mUCService;
 
-  protected UCService(@NotNull Object ucService)
+  protected UCService(@Nonnull Object ucService)
   {
     super(ucService);
     mUCService = (com.zimbra.cs.account.UCService) ucService;

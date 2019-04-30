@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ItemInfo extends ItemStatus
 {
@@ -32,7 +32,7 @@ public class ItemInfo extends ItemStatus
     this.itemId = itemId;
   }
 
-  public ItemInfo(int itemId, @NotNull ItemStatus itemStatus )
+  public ItemInfo(int itemId, @Nonnull ItemStatus itemStatus )
   {
     super(itemStatus.sequence,itemStatus.date);
     this.itemId = itemId;

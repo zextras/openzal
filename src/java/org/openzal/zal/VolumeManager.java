@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.VolumeServiceException;
 import org.openzal.zal.exceptions.ZimbraException;

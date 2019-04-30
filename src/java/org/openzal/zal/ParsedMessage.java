@@ -23,7 +23,7 @@ package org.openzal.zal;
 import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.mail.internet.MimeMessage;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ParsedMessage
 {
   private com.zimbra.cs.mime.ParsedMessage mParsedMessage;
 
-  protected ParsedMessage(@NotNull Object parsedMessage)
+  protected ParsedMessage(@Nonnull Object parsedMessage)
   {
     if ( parsedMessage == null )
     {
@@ -85,7 +85,7 @@ public class ParsedMessage
     }
   }
 
-  @NotNull
+  @Nonnull
   public MimeMessage getMimeMessage()
   {
     return mParsedMessage.getMimeMessage();
@@ -96,7 +96,7 @@ public class ParsedMessage
     return mParsedMessage.hasAttachments();
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mParsedMessage);
   }

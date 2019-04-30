@@ -1,13 +1,13 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LdapServerConfig
 {
-  @NotNull
+  @Nonnull
   private final com.zimbra.cs.ldap.LdapServerConfig mLdapServerConfig;
 
-  public LdapServerConfig(@NotNull Object ldapServerConfig)
+  public LdapServerConfig(@Nonnull Object ldapServerConfig)
   {
     mLdapServerConfig = (com.zimbra.cs.ldap.LdapServerConfig)ldapServerConfig;
   }

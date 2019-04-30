@@ -20,8 +20,8 @@
 
 package org.openzal.zal.redolog.op;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
@@ -57,7 +57,7 @@ public class RedoableOp
     }
   }
 
-  public RedoableOp(@NotNull Object redoableOp)
+  public RedoableOp(@Nonnull Object redoableOp)
   {
     mRedoableOp = (com.zimbra.cs.redolog.op.RedoableOp) redoableOp;
   }
@@ -78,13 +78,13 @@ public class RedoableOp
     return mRedoableOp.getTimestamp();
   }
 
-  @NotNull
+  @Nonnull
   public TransactionId getTransactionId()
   {
     return new TransactionId(mRedoableOp.getTransactionId());
   }
 
-  @NotNull
+  @Nonnull
   public Version getVersion()
     throws Exception
   {
@@ -101,7 +101,7 @@ public class RedoableOp
     return mRedoableOp.getMailboxId();
   }
 
-  @NotNull
+  @Nonnull
   public static RedoableOp deserializeOp(RedoLogInput redoLogInput)
     throws IOException
   {
@@ -117,25 +117,25 @@ public class RedoableOp
     return mRedoableOp;
   }
 
-  @NotNull
+  @Nonnull
   public CreateFolderPath toCreateFolderPath()
   {
     return new CreateFolderPath(this);
   }
 
-  @NotNull
+  @Nonnull
   public CreateMessage toCreateMessage()
   {
     return new CreateMessage(this);
   }
 
-  @NotNull
+  @Nonnull
   public CreateTag toCreateTag()
   {
     return new CreateTag(this);
   }
 
-  @NotNull
+  @Nonnull
   public Checkpoint toCheckpoint()
   {
     return new Checkpoint(this);

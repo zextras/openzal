@@ -24,18 +24,18 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import com.zimbra.common.account.ZAttrProvisioning;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class PrefExternalSendersType
 {
-  @NotNull public static PrefExternalSendersType ALLNOTINAB =
+  @Nonnull public static PrefExternalSendersType ALLNOTINAB =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
-  @NotNull public static PrefExternalSendersType ALL        =
+  @Nonnull public static PrefExternalSendersType ALL        =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
 
   private ZAttrProvisioning.PrefExternalSendersType mValue;
 
-  PrefExternalSendersType(@NotNull ZAttrProvisioning.PrefExternalSendersType value)
+  PrefExternalSendersType(@Nonnull ZAttrProvisioning.PrefExternalSendersType value)
   {
     if (value == null)
     {
@@ -49,7 +49,7 @@ public class PrefExternalSendersType
     return mValue.toString();
   }
 
-  @NotNull
+  @Nonnull
   public static PrefExternalSendersType fromString(String s)
     throws ZimbraException
   {
@@ -66,7 +66,7 @@ public class PrefExternalSendersType
   public boolean isALLNOTINAB() { return this == ALLNOTINAB;}
   public boolean isALL() { return this == ALL;}
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  protected <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mValue);
   }

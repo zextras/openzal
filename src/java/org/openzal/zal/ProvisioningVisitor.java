@@ -21,16 +21,16 @@
 package org.openzal.zal;
 
 import org.openzal.zal.lib.Filter;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ProvisioningVisitor<T> implements SimpleVisitor<T>
 {
-  @NotNull private final SimpleVisitor<T> mVisitor;
-  @NotNull private final Filter<T>        mFilter;
+  @Nonnull private final SimpleVisitor<T> mVisitor;
+  @Nonnull private final Filter<T>        mFilter;
 
   public ProvisioningVisitor(
-    @NotNull SimpleVisitor<T> visitor,
-    @NotNull Filter<T> filter
+    @Nonnull SimpleVisitor<T> visitor,
+    @Nonnull Filter<T> filter
   )
   {
     mVisitor = visitor;

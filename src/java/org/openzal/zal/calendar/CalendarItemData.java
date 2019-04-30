@@ -20,7 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.ParsedMessage;
 import com.zimbra.cs.mailbox.Mailbox;
 
@@ -46,7 +46,7 @@ public class CalendarItemData
     return mInvite;
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     Mailbox.SetCalendarItemData calendarItemData = new Mailbox.SetCalendarItemData();
     calendarItemData.invite = mInvite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class);

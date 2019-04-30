@@ -24,7 +24,7 @@ import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.TimeZoneMap;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.calendar.ZRecur;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import java.util.TimeZone;
 
 public class RecurrenceRule
 {
-  @NotNull private final ZRecur mZRecur;
+  @Nonnull private final ZRecur mZRecur;
 
   public enum Frequency
   {
@@ -89,7 +89,7 @@ public class RecurrenceRule
     return cls.cast(mZRecur);
   }
 
-  @NotNull
+  @Nonnull
   public Frequency getFrequency()
   {
     Frequency frequency = sZimbra2Zal.get(mZRecur.getFrequency());
@@ -121,7 +121,7 @@ public class RecurrenceRule
     return getByCalendarDayList(null, null);
   }
 
-  @NotNull
+  @Nonnull
   public List<WeekDayNum> getByDayList()
   {
     List<ZRecur.ZWeekDayNum> byDayList = mZRecur.getByDayList();

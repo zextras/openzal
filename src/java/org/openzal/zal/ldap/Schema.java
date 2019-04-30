@@ -1,13 +1,13 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Schema
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.schema.Schema mSchema;
 
-  public Schema(@NotNull Object schema)
+  public Schema(@Nonnull Object schema)
   {
     mSchema = (com.unboundid.ldap.sdk.schema.Schema)schema;
   }

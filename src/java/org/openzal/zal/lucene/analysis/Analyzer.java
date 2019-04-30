@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class Analyzer implements Closeable
   private final org.apache.lucene.analysis.Analyzer mZObject;
   /* $endif $ */
 
-  public Analyzer(@NotNull Object zObject)
+  public Analyzer(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.analysis.Analyzer) zObject;
@@ -26,6 +26,16 @@ public class Analyzer implements Closeable
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
+  }
+
+  public TokenStream reusableTokenStream(String fieldName, Reader reader)
+    throws IOException
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  public int getPositionIncrementGap(String fieldName) {
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -47,7 +57,7 @@ public class Analyzer implements Closeable
   }
 
   public <T> T toZimbra(
-    @NotNull Class<T> target
+    @Nonnull Class<T> target
   )
   {
     /* $if ZimbraVersion >= 8.5.0 $ */

@@ -1,16 +1,16 @@
 package org.openzal.zal.ldap;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class LdapServerType
 {
-  @NotNull
+  @Nonnull
   private final com.zimbra.cs.ldap.LdapServerType mLdapServerType;
 
   public final static LdapServerType MASTER = new LdapServerType(com.zimbra.cs.ldap.LdapServerType.MASTER);
   public final static LdapServerType REPLICA = new LdapServerType(com.zimbra.cs.ldap.LdapServerType.REPLICA);
 
-  public LdapServerType(@NotNull Object ldapServerType)
+  public LdapServerType(@Nonnull Object ldapServerType)
   {
     mLdapServerType = (com.zimbra.cs.ldap.LdapServerType)ldapServerType;
   }

@@ -23,8 +23,8 @@ package org.openzal.zal;
 /* $if ZimbraVersion >= 8.8.2 $ */
 import com.zimbra.common.mailbox.BaseItemInfo;
 /* $endif $ */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.lib.Clock;
 import org.openzal.zal.lib.ActualClock;
 
@@ -38,13 +38,13 @@ import java.util.Map;
 
 public class MailboxSessionProxy
 {
-  @NotNull private final SessionImpl mSession;
+  @Nonnull private final SessionImpl mSession;
   private                Integer     mMboxId;
   private                String      mName;
-  @NotNull private       Listener    mListener;
-  @NotNull private       Clock       mClock;
+  @Nonnull private       Listener    mListener;
+  @Nonnull private       Clock       mClock;
 
-  public MailboxSessionProxy(int mboxId, String name, String accountId, @NotNull Listener listener)
+  public MailboxSessionProxy(int mboxId, String name, String accountId, @Nonnull Listener listener)
   {
     mSession = new SessionImpl(accountId, Session.Type.SYNCLISTENER);
     mMboxId = mboxId;
@@ -86,13 +86,13 @@ public class MailboxSessionProxy
     return isRelevant;
   }
 
-  @NotNull
+  @Nonnull
   public String getLoggerName()
   {
     return "MailboxSessionProxy";
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mSession);
   }
@@ -133,7 +133,7 @@ public class MailboxSessionProxy
     }
     /* $else $ */
     @Override
-    public void notifyPendingChanges(@NotNull PendingModifications pns, int changeId, @Nullable Session source)
+    public void notifyPendingChanges(@Nonnull PendingModifications pns, int changeId, @Nullable Session source)
     {
       if( !pns.hasNotifications() )
       {
@@ -200,7 +200,7 @@ public class MailboxSessionProxy
         for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, PendingModifications.Change>) pns.modified).keySet() )
         {
        /* $elseif ZimbraX == 0 $
-        for( PendingModifications.ModificationKey mod : pns.created.keySet() )
+        for( PendingModifications.ModificationKey mod : pns.modified.keySet() )
         {
         /* $endif $ */
        /* $if ZimbraX == 0 $ */

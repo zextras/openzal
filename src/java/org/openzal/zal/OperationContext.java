@@ -20,27 +20,27 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.calendar.Attendee;
 
 
 public class OperationContext
 {
-  @NotNull private final com.zimbra.cs.mailbox.OperationContext mOperationContext;
+  @Nonnull private final com.zimbra.cs.mailbox.OperationContext mOperationContext;
 
-  public OperationContext(@NotNull Account account, boolean enableAdminRights)
+  public OperationContext(@Nonnull Account account, boolean enableAdminRights)
   {
     mOperationContext = new com.zimbra.cs.mailbox.OperationContext(
       account.toZimbra(com.zimbra.cs.account.Account.class), enableAdminRights
     );
   }
 
-  public OperationContext(@NotNull Account account)
+  public OperationContext(@Nonnull Account account)
   {
     mOperationContext = new com.zimbra.cs.mailbox.OperationContext(account.toZimbra(com.zimbra.cs.account.Account.class), false);
   }
 
-  OperationContext(@NotNull Object operationContext)
+  OperationContext(@Nonnull Object operationContext)
   {
     if (operationContext == null)
     {
@@ -49,7 +49,7 @@ public class OperationContext
     mOperationContext = (com.zimbra.cs.mailbox.OperationContext) operationContext;
   }
 
-  @NotNull
+  @Nonnull
   com.zimbra.cs.mailbox.OperationContext getOperationContext()
   {
     return mOperationContext;
@@ -60,7 +60,7 @@ public class OperationContext
     return new Account(mOperationContext.getAuthenticatedUser());
   }
 
-  public OperationContext setRequestIP (@NotNull String addr)
+  public OperationContext setRequestIP (@Nonnull String addr)
   {
     mOperationContext.setRequestIP(addr);
     return this;

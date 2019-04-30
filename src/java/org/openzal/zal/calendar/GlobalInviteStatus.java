@@ -20,7 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public enum GlobalInviteStatus
   public final String mRawStatus;
   private final AttendeeInviteStatus mAttendeeInviteStatus;
 
-  GlobalInviteStatus(String status, @NotNull AttendeeInviteStatus attendeeInviteStatus)
+  GlobalInviteStatus(String status, @Nonnull AttendeeInviteStatus attendeeInviteStatus)
   {
     mRawStatus = status;
     mAttendeeInviteStatus = attendeeInviteStatus;
@@ -49,9 +49,9 @@ public enum GlobalInviteStatus
     return mRawStatus;
   }
 
-  @NotNull
+  @Nonnull
   private final static Map<String, GlobalInviteStatus> sZimbra2Zal;
-  @NotNull
+  @Nonnull
   private final static Map<String, GlobalInviteStatus> sICal2Zimbra;
 
   static
@@ -76,7 +76,7 @@ public enum GlobalInviteStatus
     sICal2Zimbra.put("IN-PROGRESS", TASK_IN_PROGRESS);
   }
 
-  @NotNull
+  @Nonnull
   public static GlobalInviteStatus fromZimbra(String status)
   {
     GlobalInviteStatus globalInviteStatus = sZimbra2Zal.get(status);
@@ -87,7 +87,7 @@ public enum GlobalInviteStatus
     return globalInviteStatus;
   }
 
-  @NotNull
+  @Nonnull
   public static GlobalInviteStatus fromICal(String status)
   {
     GlobalInviteStatus globalInviteStatus = sICal2Zimbra.get(status);
@@ -98,7 +98,7 @@ public enum GlobalInviteStatus
     return globalInviteStatus;
   }
 
-  @NotNull
+  @Nonnull
   public AttendeeInviteStatus toAttendeeStatus()
   {
     return mAttendeeInviteStatus;

@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Tag extends Item
 {
   private final com.zimbra.cs.mailbox.Tag mTag;
 
-  public Tag(@NotNull Object item)
+  public Tag(@Nonnull Object item)
   {
     super(item);
     mTag = (com.zimbra.cs.mailbox.Tag) item;

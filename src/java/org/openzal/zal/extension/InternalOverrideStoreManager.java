@@ -31,7 +31,7 @@ import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.file.FileBlobStore;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.AnyThrow;

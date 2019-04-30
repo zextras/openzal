@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.analysis;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public class TokenStream extends AttributeSource implements Closeable
 {
   public TokenStream(
-    @NotNull
+    @Nonnull
       Object zObject
   )
   {

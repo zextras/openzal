@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.store.file.VolumeBlobProxy;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
 {
   private final com.zimbra.cs.store.file.VolumeStagedBlob mStagedBlob;
 
-  public StagedBlobWrap(@NotNull Object stagedBlob)
+  public StagedBlobWrap(@Nonnull Object stagedBlob)
   {
     mStagedBlob = (com.zimbra.cs.store.file.VolumeStagedBlob) stagedBlob;
   }

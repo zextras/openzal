@@ -20,11 +20,11 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Task extends CalendarItem
 {
-  public Task(@NotNull Object item)
+  public Task(@Nonnull Object item)
   {
     super(item);
   }

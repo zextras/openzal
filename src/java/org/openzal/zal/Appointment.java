@@ -20,11 +20,11 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Appointment extends CalendarItem
 {
-  public Appointment(@NotNull Object item)
+  public Appointment(@Nonnull Object item)
   {
     super(item);
   }

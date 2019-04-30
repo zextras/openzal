@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.localconfig.LC;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public class LocalConfig
   public static final String zimbra_ldap_password = LC.zimbra_ldap_password.key();
   public static final String ldap_root_password = LC.ldap_root_password.key();
 
-  @NotNull
+  @Nonnull
   public static List<String> getAllKeys()
   {
     return Arrays.asList(LC.getAllKeys());

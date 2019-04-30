@@ -21,7 +21,7 @@
 package org.openzal.zal.soap;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
 
@@ -29,7 +29,7 @@ import java.util.Map;
 
 class InternalDocumentHandler extends DocumentHandler
 {
-  @NotNull private final InternalDocumentHelper mInternalDocumentHelper;
+  @Nonnull private final InternalDocumentHelper mInternalDocumentHelper;
 
   InternalDocumentHandler(SoapHandler soapHandler)
   {

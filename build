@@ -7,12 +7,12 @@ ROOT="$(dirname "$0")"
 if [[ -z "${JAVA_HOME}" || ! -d "${JAVA_HOME}" ]]; then
     export JAVA_HOME="$(readlink -f /usr/bin/java | sed "s:bin/java::" | sed "s:jre/::")"
 fi
-export JAVAC="${JAVA_HOME}bin/javac"
-export JAVA="${JAVA_HOME}bin/java"
+export JAVAC="${JAVA_HOME}/bin/javac"
+export JAVA="${JAVA_HOME}/bin/java"
 
 mkdir -p "${ROOT}/tmp/build/"
 # The second argument is not fully quoted because we want to exploit shell
 # expansion
-${JAVAC} "${ROOT}"/build-src/*.java -d "${ROOT}/tmp/build/"
+${JAVAC} "${ROOT}"/builder/src/*.java -d "${ROOT}/tmp/build"
 cd "${ROOT}"
 ${JAVA} -cp tmp/build/ ZalBuilder "$@"

@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.mailbox.MailItem;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
@@ -31,14 +31,14 @@ import java.util.Map;
 
 public class ParsedContact
 {
-  @NotNull private final com.zimbra.cs.mime.ParsedContact mParsedContact;
+  @Nonnull private final com.zimbra.cs.mime.ParsedContact mParsedContact;
 
   protected ParsedContact(Object parsedContact)
   {
     mParsedContact = (com.zimbra.cs.mime.ParsedContact) parsedContact;
   }
 
-  protected <T> T toZimbra(@NotNull Class<T> cls)
+  protected <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mParsedContact);
   }
@@ -57,7 +57,7 @@ public class ParsedContact
     }
   }
 
-  public ParsedContact(Map<String, String> map, @NotNull List<Contact.ContactAttachment> list)
+  public ParsedContact(Map<String, String> map, @Nonnull List<Contact.ContactAttachment> list)
   {
     List<com.zimbra.cs.mailbox.Contact.Attachment> attachments = new ArrayList<com.zimbra.cs.mailbox.Contact.Attachment>();
     for (Contact.ContactAttachment attachment : list)
