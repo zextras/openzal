@@ -20,8 +20,8 @@
 
 package org.openzal.zal.lib;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.Connection;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
@@ -114,7 +114,7 @@ public class ZimbraDatabase
                                    pos);
   }
 
-  @NotNull
+  @Nonnull
   public static Set<String> listAccountIds(Connection conn) throws ZimbraException
   {
     try
@@ -166,8 +166,8 @@ public class ZimbraDatabase
   public static String suitableNumberOfVariables(Object[] array)  { return DbUtil.suitableNumberOfVariables(array.length); }
   public static String suitableNumberOfVariables(Collection<?> c) { return DbUtil.suitableNumberOfVariables(c.size()); }
 
-  @NotNull
-  public static CurrentVolumes getCurrentVolumes(@NotNull Connection conn) throws ZimbraException
+  @Nonnull
+  public static CurrentVolumes getCurrentVolumes(@Nonnull Connection conn) throws ZimbraException
   {
     DbVolume.CurrentVolumes cv;
     try

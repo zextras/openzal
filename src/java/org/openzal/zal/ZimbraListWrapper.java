@@ -20,8 +20,8 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.soap.SoapElement;
 import com.zimbra.common.soap.Element;
@@ -39,7 +39,7 @@ import java.util.Set;
 
 public class ZimbraListWrapper
 {
-  @NotNull
+  @Nonnull
   protected static List<Cos> wrapCoses(@Nullable List<com.zimbra.cs.account.Cos> coses)
   {
     if (coses == null || coses.size() == 0)
@@ -55,7 +55,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   protected static List<DataSource> wrapDataSources(@Nullable List<com.zimbra.cs.account.DataSource> dataSources)
   {
     if (dataSources == null || dataSources.size() == 0)
@@ -71,7 +71,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Identity> wrapIdentities(@Nullable List<com.zimbra.cs.account.Identity> identities)
   {
     if (identities == null || identities.size() == 0)
@@ -87,7 +87,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<DistributionList> wrapDistributionLists(@Nullable List<com.zimbra.cs.account.DistributionList> distributionLists)
   {
     if (distributionLists == null || distributionLists.size() == 0)
@@ -118,7 +118,7 @@ public class ZimbraListWrapper
     return zxGroups;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Signature> wrapSignatures(@Nullable List<com.zimbra.cs.account.Signature> signatures)
   {
     if (signatures == null || signatures.size() == 0)
@@ -134,7 +134,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Account> wrapAccounts(@Nullable List accounts)
   {
     if (accounts == null || accounts.size() == 0)
@@ -150,7 +150,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Domain> wrapDomain(@Nullable List<com.zimbra.cs.account.Domain> domains)
   {
     if (domains == null || domains.size() == 0)
@@ -166,7 +166,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Server> wrapServers(@Nullable List<com.zimbra.cs.account.Server> servers)
   {
     if (servers == null || servers.size() == 0)
@@ -182,7 +182,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<CalendarResource> wrapCalendarResources(@Nullable List calendarResources)
   {
     if (calendarResources == null || calendarResources.size() == 0)
@@ -198,7 +198,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Zimlet> wrapZimlets(@Nullable List zimlets)
   {
     if (zimlets == null || zimlets.size() == 0)
@@ -214,7 +214,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<XMPPComponent> wrapXmppComponents(@Nullable List<com.zimbra.cs.account.XMPPComponent> xmppComponents)
   {
     if (xmppComponents == null || xmppComponents.size() == 0)
@@ -230,7 +230,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<UCService> wrapUCServices(@Nullable List ucServices)
   {
     if (ucServices == null || ucServices.size() == 0)
@@ -248,7 +248,7 @@ public class ZimbraListWrapper
   }
 
 
-  @NotNull
+  @Nonnull
   public static List<MPartInfo> wrapMPartInfos(@Nullable List<com.zimbra.cs.mime.MPartInfo> mPartInfos)
   {
     if (mPartInfos == null || mPartInfos.size() == 0)
@@ -264,7 +264,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Contact.ContactAttachment> wrapAttachments(@Nullable List<com.zimbra.cs.mailbox.Contact.Attachment> attachments)
   {
     if (attachments == null || attachments.size() == 0)
@@ -280,7 +280,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<ProvisioningImp.CountAccountByCos> wrapCountAccountByCosList(
     @Nullable List<com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos> countAccountByCosList
   )
@@ -300,7 +300,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<AccountQuotaInfo> wrapAccountQuotaInfos(@Nullable List<com.zimbra.soap.admin.type.AccountQuotaInfo> accountQuotas)
   {
     if (accountQuotas == null || accountQuotas.size() == 0)
@@ -324,7 +324,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<SoapElement> wrapElements(@Nullable List<Element> elements)
   {
     if (elements == null || elements.size() == 0)
@@ -342,7 +342,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static Set<SoapElement.Attribute> wrapElementAttributes(@Nullable Set<Element.Attribute> attributes)
   {
     if (attributes == null || attributes.size() == 0)
@@ -360,7 +360,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static Collection<QuotaUsage> wrapQuotaUsages(@Nullable List<SoapProvisioning.QuotaUsage> quotaUsages)
   {
     if (quotaUsages == null || quotaUsages.size() == 0)
@@ -378,7 +378,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static Set<ACE> wrapACEs(@Nullable Set<RightCommand.ACE> aces)
   {
     if (aces == null || aces.size() == 0)
@@ -395,7 +395,7 @@ public class ZimbraListWrapper
     return set;
   }
 
-  @NotNull
+  @Nonnull
   public static List<CalendarItem> wrapCalendarItems(@Nullable List<com.zimbra.cs.mailbox.CalendarItem> zimbraCalendarItems)
   {
     if (zimbraCalendarItems == null || zimbraCalendarItems.size() == 0)
@@ -412,7 +412,7 @@ public class ZimbraListWrapper
     return list;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Grant> wrapGrants(@Nullable List<ACL.Grant> grants)
   {
     if (grants == null || grants.size() == 0)
@@ -428,7 +428,7 @@ public class ZimbraListWrapper
     return grantList;
   }
 
-  @NotNull
+  @Nonnull
   public static List<StoreVolume> wrapVolumes(@Nullable List<Volume> list)
   {
     if (list == null || list.size() == 0)
@@ -444,7 +444,7 @@ public class ZimbraListWrapper
     return newList;
   }
 
-  @NotNull
+  @Nonnull
   public static List<Invite> wrapInvites(@Nullable List<com.zimbra.cs.mailbox.calendar.Invite> inviteList)
   {
     if (inviteList == null || inviteList.size() == 0)

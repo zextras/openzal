@@ -23,13 +23,13 @@ package org.openzal.zal;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ContactGroup
 {
   private final com.zimbra.cs.mailbox.ContactGroup mContactGroup;
 
-  ContactGroup(@NotNull Object contactGroup)
+  ContactGroup(@Nonnull Object contactGroup)
   {
     if (contactGroup == null)
     {
@@ -58,7 +58,7 @@ public class ContactGroup
 
     private final com.zimbra.cs.mailbox.ContactGroup.Member.Type mZimbraType;
 
-    <T> T toZimbra(@NotNull Class<T> cls)
+    <T> T toZimbra(@Nonnull Class<T> cls)
     {
       return cls.cast(mZimbraType);
     }
@@ -86,7 +86,7 @@ public class ContactGroup
     }
   }
 
-  public void addMember(@NotNull Type type, String value)
+  public void addMember(@Nonnull Type type, String value)
   {
     try
     {

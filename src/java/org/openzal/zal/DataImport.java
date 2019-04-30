@@ -24,13 +24,13 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.gal.GalImport;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class DataImport
 {
-  @NotNull private final DataSource.DataImport mDataImport;
+  @Nonnull private final DataSource.DataImport mDataImport;
 
-  protected DataImport(@NotNull Object dataImport)
+  protected DataImport(@Nonnull Object dataImport)
   {
     if (dataImport == null)
     {

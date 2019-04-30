@@ -24,7 +24,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -35,7 +35,7 @@ import java.io.IOException;
 
 public class SoapTransport
 {
-  @NotNull private final SoapHttpTransport mSoapHttpTransport;
+  @Nonnull private final SoapHttpTransport mSoapHttpTransport;
 
   public SoapTransport(String adminUrl)
   {

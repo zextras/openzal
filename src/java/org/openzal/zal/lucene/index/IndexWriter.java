@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.index;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.search.Query;
 
@@ -15,7 +15,7 @@ public class IndexWriter
   private final org.apache.lucene.index.IndexWriter mZObject;
   /* $endif $ */
 
-  public IndexWriter(@NotNull Object zObject)
+  public IndexWriter(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.index.IndexWriter) zObject;
@@ -101,7 +101,7 @@ public class IndexWriter
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

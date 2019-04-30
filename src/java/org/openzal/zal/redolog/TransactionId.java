@@ -21,14 +21,14 @@
 package org.openzal.zal.redolog;
 
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.io.IOException;
 
 
 public class TransactionId
 {
-  @NotNull private final com.zimbra.cs.redolog.TransactionId mTransactionId;
+  @Nonnull private final com.zimbra.cs.redolog.TransactionId mTransactionId;
 
   public TransactionId()
   {
@@ -40,7 +40,7 @@ public class TransactionId
     mTransactionId = (com.zimbra.cs.redolog.TransactionId) transactionId;
   }
 
-  public void deserialize(@NotNull RedoLogInput redologInput)
+  public void deserialize(@Nonnull RedoLogInput redologInput)
     throws IOException
   {
     mTransactionId.deserialize(redologInput.toZimbra(com.zimbra.cs.redolog.RedoLogInput.class));

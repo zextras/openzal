@@ -21,8 +21,8 @@
 package org.openzal.zal.extension;
 
 import com.zimbra.cs.store.file.FileBlobStore;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.*;
 import org.openzal.zal.MailboxManager;
 import org.openzal.zal.StoreManager;
@@ -37,13 +37,13 @@ import java.util.Map;
 
 public class Zimbra
 {
-  @NotNull private final Provisioning                     mProvisioning;
-  @NotNull private final MailboxManager                   mMailboxManager;
-  @NotNull private final ZimbraDatabase                   mZimbraDatabase;
-  @NotNull private       InternalOverrideStoreManager     mInternalOverrideStoreManager;
-  @NotNull private final VolumeManager                    mVolumeManager;
-  @NotNull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
-  @NotNull private       StoreManager                     mStoreManager;
+  @Nonnull private final Provisioning                     mProvisioning;
+  @Nonnull private final MailboxManager                   mMailboxManager;
+  @Nonnull private final ZimbraDatabase                   mZimbraDatabase;
+  @Nonnull private       InternalOverrideStoreManager     mInternalOverrideStoreManager;
+  @Nonnull private final VolumeManager                    mVolumeManager;
+  @Nonnull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
+  @Nonnull private       StoreManager                     mStoreManager;
            private       boolean                          mCanOverrideStoreManager;
 
   public Zimbra()
@@ -134,19 +134,19 @@ public Zimbra(Zimbra zimbra)
     }
   }
 
-  @NotNull
+  @Nonnull
   public Provisioning getProvisioning()
   {
     return mProvisioning;
   }
 
-  @NotNull
+  @Nonnull
   public MailboxManager getMailboxManager()
   {
     return mMailboxManager;
   }
 
-  @NotNull
+  @Nonnull
   public ZimbraDatabase getZimbraDatabase()
   {
     return mZimbraDatabase;
@@ -158,7 +158,7 @@ public Zimbra(Zimbra zimbra)
     return mStoreManager;
   }
 
-  @NotNull
+  @Nonnull
   public VolumeManager getVolumeManager()
   {
     return mVolumeManager;

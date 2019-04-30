@@ -1,6 +1,6 @@
 package org.openzal.zal.lucene.index;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Term
 {
@@ -8,14 +8,14 @@ public class Term
   private final org.apache.lucene.index.Term mZObject;
   /* $endif $ */
 
-  public Term(@NotNull String field, @NotNull String value)
+  public Term(@Nonnull String field, @Nonnull String value)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     this(new org.apache.lucene.index.Term(field, value));
     /* $endif $ */
   }
 
-  public Term(@NotNull Object zObject)
+  public Term(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     mZObject = (org.apache.lucene.index.Term) zObject;
@@ -50,7 +50,7 @@ public class Term
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     return target.cast(mZObject);

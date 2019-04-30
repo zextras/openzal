@@ -3,7 +3,7 @@ package org.openzal.zal.lucene.index;
 /* $if ZimbraX == 0 $ */
 import com.zimbra.cs.index.LuceneIndex;
 /* $endif */
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.Folder;
 import org.openzal.zal.Item;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -28,7 +28,7 @@ public class Indexer
   /* $endif $ */
 
 
-  public Indexer(@NotNull Object zObject)
+  public Indexer(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     if( zObject.getClass().getCanonicalName().equals("com.zimbra.cs.index.LuceneIndex.LuceneIndexerImpl") )
@@ -198,7 +198,7 @@ public class Indexer
     /* $endif $ */
   }
 
-  public <T> T toZimbra(@NotNull Class<T> target)
+  public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     return target.cast(mZObject);

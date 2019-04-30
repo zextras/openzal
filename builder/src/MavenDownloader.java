@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Download maven artifacts in the specified path.
+ * Download maven artifacts in the specified path and removed unknown libraries from the destination path,
  * The args must be populated with library name and version such as:
  *   "org/example/name/artifact", "1.2.3/variant"
  */

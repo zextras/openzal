@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.mail.internet.InternetAddress;
 import java.io.UnsupportedEncodingException;
@@ -29,9 +29,9 @@ import java.util.Map;
 
 public class Identity implements Comparable<Identity>
 {
-  @NotNull private final com.zimbra.cs.account.Identity mIdentity;
+  @Nonnull private final com.zimbra.cs.account.Identity mIdentity;
 
-  protected Identity(@NotNull Object identity)
+  protected Identity(@Nonnull Object identity)
   {
     if (identity == null)
     {

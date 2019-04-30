@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ZimbraException;
 
 import java.io.IOException;

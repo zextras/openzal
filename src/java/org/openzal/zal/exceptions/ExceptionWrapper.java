@@ -24,7 +24,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.mailbox.MailServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class ExceptionWrapper
     ZimbraException create(Exception exception);
   }
 
-  @NotNull
+  @Nonnull
   private static Map<String, ExceptionWrapperCreator> mExceptionMap = new HashMap<String, ExceptionWrapperCreator>();
 
   private static final String INTERNAL_SERVER_EXCEPTION = "internalServerException";

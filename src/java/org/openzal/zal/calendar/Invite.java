@@ -42,8 +42,8 @@ import java.util.*;
 import org.openzal.zal.log.ZimbraLog;
 
 import com.zimbra.cs.mailbox.calendar.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.zimbra.common.calendar.*;
 
@@ -87,7 +87,7 @@ public class Invite
     this(invite, null);
   }
 
-  public Invite(@NotNull Object invite, MimeMessage mimeMessage)
+  public Invite(@Nonnull Object invite, MimeMessage mimeMessage)
   {
     if (invite == null)
     {
@@ -504,7 +504,7 @@ public class Invite
     return mInvite.getMethod();
   }
 
-  @NotNull
+  @Nonnull
   public RecurrenceId getRecurId()
   {
     if (mInvite.hasRecurId())

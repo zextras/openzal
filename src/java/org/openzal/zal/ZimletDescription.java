@@ -21,13 +21,13 @@
 package org.openzal.zal;
 
 import org.openzal.zal.lib.Version;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class ZimletDescription
 {
-  @NotNull private final com.zimbra.cs.zimlet.ZimletDescription mZimletDescription;
+  @Nonnull private final com.zimbra.cs.zimlet.ZimletDescription mZimletDescription;
 
-  protected ZimletDescription(@NotNull Object zimletDescription)
+  protected ZimletDescription(@Nonnull Object zimletDescription)
   {
     if (zimletDescription == null)
     {
@@ -41,7 +41,7 @@ public class ZimletDescription
     return mZimletDescription.getName();
   }
 
-  @NotNull
+  @Nonnull
   public Version getVersion()
   {
     String version = mZimletDescription.getVersion().toString();

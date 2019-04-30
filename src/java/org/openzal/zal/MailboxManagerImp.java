@@ -25,8 +25,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
 import org.apache.commons.dbutils.DbUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.NoSuchMailboxException;
 import org.openzal.zal.exceptions.ZimbraException;
@@ -53,7 +53,7 @@ public class MailboxManagerImp implements MailboxManager
   static final String TABLE_OUT_OF_OFFICE = "out_of_office";
 
   private final          com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
-  @NotNull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
+  @Nonnull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
 
   public MailboxManagerImp()
   {
@@ -355,7 +355,7 @@ public class MailboxManagerImp implements MailboxManager
   }
 
   @Override
-  public void forceDeleteMailbox(@NotNull MailboxData data)
+  public void forceDeleteMailbox(@Nonnull MailboxData data)
   {
     Connection connection = null;
     PreparedStatement statement;

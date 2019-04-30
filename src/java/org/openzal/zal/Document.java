@@ -20,16 +20,16 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class Document extends Item
 {
-  public Document(@NotNull Object item)
+  public Document(@Nonnull Object item)
   {
     super(item);
   }
 
-  public Document(@NotNull Item item)
+  public Document(@Nonnull Item item)
   {
     super(item);
   }

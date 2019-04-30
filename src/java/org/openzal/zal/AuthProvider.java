@@ -25,13 +25,13 @@ import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.service.AuthProviderException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 
 public class AuthProvider
 {
-  @NotNull
-  public static ZAuthToken getAuthToken(@NotNull Account requester)
+  @Nonnull
+  public static ZAuthToken getAuthToken(@Nonnull Account requester)
   {
     try
     {
@@ -47,8 +47,8 @@ public class AuthProvider
     }
   }
 
-  @NotNull
-  public AuthToken decodeAuthToken(@NotNull String encoded)
+  @Nonnull
+  public AuthToken decodeAuthToken(@Nonnull String encoded)
   {
     try
     {
@@ -60,8 +60,8 @@ public class AuthProvider
     }
   }
 
-  @NotNull
-  public AuthToken createAuthTokenForAccount(@NotNull Account account)
+  @Nonnull
+  public AuthToken createAuthTokenForAccount(@Nonnull Account account)
   {
     try
     {

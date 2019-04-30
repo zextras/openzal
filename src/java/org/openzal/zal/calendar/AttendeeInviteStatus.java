@@ -20,7 +20,7 @@
 
 package org.openzal.zal.calendar;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.util.HashMap;
@@ -42,9 +42,9 @@ public enum AttendeeInviteStatus
   private final String mRawStatus;
   private final String mIcalValue;
 
-  @NotNull
+  @Nonnull
   private static final Map<String, AttendeeInviteStatus> sZimbra2Zal;
-  @NotNull
+  @Nonnull
   private static final Map<String, AttendeeInviteStatus> sICal2Zimbra;
 
   static
@@ -90,7 +90,7 @@ public enum AttendeeInviteStatus
     return mIcalValue;
   }
 
-  @NotNull
+  @Nonnull
   public static AttendeeInviteStatus fromZimbra(String partStat)
   {
     AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
@@ -101,7 +101,7 @@ public enum AttendeeInviteStatus
     return attendeeInviteStatus;
   }
 
-  @NotNull
+  @Nonnull
   public static AttendeeInviteStatus fromICal(String partStat)
   {
     AttendeeInviteStatus attendeeInviteStatus = sICal2Zimbra.get(partStat);

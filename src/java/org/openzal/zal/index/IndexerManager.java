@@ -27,8 +27,8 @@ import org.apache.lucene.document.Document;
 /* $if ZimbraX == 1 $
 import org.apache.solr.common.SolrInputDocument;
 /* $endif $ */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.openzal.zal.Utils;
 import org.openzal.zal.log.ZimbraLog;
 
@@ -265,7 +265,7 @@ public class IndexerManager
       return content;
     }
 
-    @NotNull
+    @Nonnull
     private String getExtension()
     {
       String extension = "";

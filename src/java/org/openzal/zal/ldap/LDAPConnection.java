@@ -5,7 +5,7 @@ import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.extensions.StartTLSExtendedRequest;
 import com.unboundid.util.ssl.SSLUtil;
 import com.zimbra.common.net.TrustManagers;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
@@ -15,7 +15,7 @@ import java.security.GeneralSecurityException;
 
 public class LDAPConnection implements Closeable, LDAPInterface
 {
-  @NotNull
+  @Nonnull
   private final com.unboundid.ldap.sdk.LDAPConnection mLDAPConnection;
 
   public LDAPConnection(SocketFactory socketFactory, String host, int port, String bindDN, String bindPassword)

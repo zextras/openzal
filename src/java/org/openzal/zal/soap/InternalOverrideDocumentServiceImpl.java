@@ -25,7 +25,7 @@ import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.DocumentService;
 import org.dom4j.Namespace;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.util.Map;
@@ -47,7 +47,7 @@ public class InternalOverrideDocumentServiceImpl implements DocumentService
     mOriginalHandlers = originalHandlers;
   }
 
-  @NotNull
+  @Nonnull
   private DocumentHandler wrapHandler(SoapHandler soapHandler, DocumentHandler originalDocumentHandler )
   {
     if (mSoapService.isAdminService())

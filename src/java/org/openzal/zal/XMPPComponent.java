@@ -21,7 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.HashSet;
@@ -30,9 +30,9 @@ import java.util.Set;
 
 public class XMPPComponent extends Entry implements Comparable<XMPPComponent>
 {
-  @NotNull private final com.zimbra.cs.account.XMPPComponent mXmppComponent;
+  @Nonnull private final com.zimbra.cs.account.XMPPComponent mXmppComponent;
 
-  protected XMPPComponent(@NotNull Object xmppComponent)
+  protected XMPPComponent(@Nonnull Object xmppComponent)
   {
     super(xmppComponent);
     mXmppComponent = (com.zimbra.cs.account.XMPPComponent) xmppComponent;

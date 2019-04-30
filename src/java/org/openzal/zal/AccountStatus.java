@@ -22,7 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import com.zimbra.common.account.ZAttrProvisioning;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
@@ -34,11 +34,11 @@ public class AccountStatus
   public static String ACCOUNT_STATUS_ACTIVE      = Provisioning.ACCOUNT_STATUS_ACTIVE;
   public static String ACCOUNT_STATUS_CLOSED      = Provisioning.ACCOUNT_STATUS_CLOSED;
 
-  @NotNull private final ZAttrProvisioning.AccountStatus mAccountStatus;
+  @Nonnull private final ZAttrProvisioning.AccountStatus mAccountStatus;
 
   public static AccountStatus maintenance = new AccountStatus(ZAttrProvisioning.AccountStatus.maintenance);
 
-  protected AccountStatus(@NotNull Object accountStatus)
+  protected AccountStatus(@Nonnull Object accountStatus)
   {
     if (accountStatus == null)
     {
@@ -47,7 +47,7 @@ public class AccountStatus
     mAccountStatus = (ZAttrProvisioning.AccountStatus) accountStatus;
   }
 
-  public AccountStatus(@NotNull String status)
+  public AccountStatus(@Nonnull String status)
   {
     try
     {
@@ -71,7 +71,7 @@ public class AccountStatus
     return mAccountStatus.equals(object);
   }
 
-  public <T> T toZimbra(@NotNull Class<T> cls)
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mAccountStatus);
   }

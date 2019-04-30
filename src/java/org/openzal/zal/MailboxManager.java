@@ -20,7 +20,7 @@
 
 package org.openzal.zal;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ZimbraException;
 import java.util.Set;
 
@@ -62,7 +62,7 @@ public interface MailboxManager
 
   MailboxData getMailboxData(long mailboxId);
 
-  void forceDeleteMailbox(@NotNull MailboxData data);
+  void forceDeleteMailbox(@Nonnull MailboxData data);
 
   void createMailboxWithSpecificId(Connection connection, Account account, long mailboxId);
 }
