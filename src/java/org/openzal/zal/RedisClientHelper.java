@@ -57,12 +57,12 @@ public class RedisClientHelper
   }
 
   @Nullable
-  public String set(@Nonnull String key, String value)
+  public String put(@Nonnull String key, String value)
   {
     /* $if ZimbraX == 1 $ */
     RBucket<String> bucket = mRedissonClient.getBucket(key);
     bucket.set(value);
-    return value;
+    return bucket.get();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
