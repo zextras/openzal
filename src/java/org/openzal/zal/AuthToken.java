@@ -63,11 +63,11 @@ public class AuthToken
     try
     {
       /* $if ZimbraX == 1 $
-      if( cookies.containsKey("ZM_JWT_TOKEN") && cookies.containsKey("ZM_JWT") )
+      if( cookies.containsKey("ZM_AUTH_JWT") && cookies.containsKey("ZM_JWT") )
       {
         return new AuthToken(ZimbraJWToken.getJWToken(
-          cookies.get("ZM_JWT_TOKEN"),
-          JWTUtil.getJWTSalt(cookies.get("ZM_JWT"))
+          cookies.get("ZM_AUTH_JWT"),
+          cookies.get("ZM_JWT")
         ));
       }
       /* $else $ */
@@ -83,12 +83,6 @@ public class AuthToken
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $if ZimbraX == 1 $
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
   }
 
   public static AuthToken getAdminAuthToken(Map<String, String> cookies)
