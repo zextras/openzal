@@ -9,6 +9,7 @@ import java.util.Set;
 /* $if ZimbraX == 1 $ */
 import org.redisson.api.RBucket;
 import org.redisson.api.RSet;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 /* $endif $ */
 
@@ -33,6 +34,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RSet<String> set = mRedissonClient.getSet(key);
     set.add(value);
+    publishOnTopic(key);
     return set.readAll();
     /* $else $
     throw new UnsupportedOperationException();
@@ -54,6 +56,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RSet<String> set = mRedissonClient.getSet(key);
     set.remove(value);
+    publishOnTopic(key);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -65,6 +68,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RBucket<String> bucket = mRedissonClient.getBucket(key);
     bucket.set(value);
+    publishOnTopic(key);
     return bucket.get();
     /* $else $
     throw new UnsupportedOperationException();
@@ -97,6 +101,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RSet<String> set = mRedissonClient.getSet(key);
     set.delete();
+    publishOnTopic(key);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -116,5 +121,12 @@ public class RedisClientHelper
     /* $else $
     return Collections.emptyList();
     /* $endif $ */
+  }
+
+  private void publishOnTopic(@Nonnull String key)
+  {
+    String[] scopeKey = key.split("\\|");
+    RTopic topic = mRedissonClient.getTopic(scopeKey[0]);
+    topic.publish(scopeKey[1]);
   }
 }
