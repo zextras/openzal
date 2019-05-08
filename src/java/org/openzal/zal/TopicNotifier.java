@@ -1,20 +1,22 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.mailbox.RedissonClientHolder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+/* $if ZimbraX == 1 $ */
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
+import com.zimbra.cs.mailbox.RedissonClientHolder;
+/* $endif $ */
 
 import javax.annotation.Nonnull;
 
 public class TopicNotifier
 {
+  /* $if ZimbraX == 1 $ */
   private class TopicListenerWrapper implements MessageListener<String>
   {
     private final TopicListener mListener;
@@ -31,11 +33,13 @@ public class TopicNotifier
     }
   }
 
-  private static final RedissonClient sRedissonClient = RedissonClientHolder.getInstance().getRedissonClient();;
-  private static final Map<String, Set<Pair<TopicListener, TopicListenerWrapper>>> sListeners = new HashMap<>();
+  private static Map<String, Set<Pair<TopicListener, TopicListenerWrapper>>> sListeners = new HashMap<>();
+  private static final RedissonClient sRedissonClient = RedissonClientHolder.getInstance().getRedissonClient();
+  /* $endif $ */
 
   public void registerListener(String topic, final TopicListener listener)
   {
+    /* $if ZimbraX == 1 $ */
     RTopic rTopic = sRedissonClient.getTopic(topic);
     TopicListenerWrapper topicListener = new TopicListenerWrapper(listener);
     rTopic.addListener(String.class, topicListener);
@@ -50,45 +54,58 @@ public class TopicNotifier
     }
     listeners.add(new Pair<>(listener, topicListener));
     sListeners.put(topic, listeners);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void unregisterListener(TopicListener listener)
   {
+    /* $if ZimbraX == 1 $ */
     RTopic topic;
-    Pair<TopicListener, TopicListenerWrapper> topicListenerPair;
-    Map.Entry<String, Set<Pair<TopicListener, TopicListenerWrapper>>> entry;
-    Iterator<Pair<TopicListener, TopicListenerWrapper>> topicListenerIteratorPair;
-    Iterator<Map.Entry<String, Set<Pair<TopicListener, TopicListenerWrapper>>>> topicListenerEntriesIterator = sListeners
-      .entrySet().iterator();
-    while( topicListenerEntriesIterator.hasNext())
+    Set<Pair<TopicListener, TopicListenerWrapper>> noUnregisteredSet;
+    Map<String, Set<Pair<TopicListener, TopicListenerWrapper>>> newListeners = new HashMap<>();
+    for(Map.Entry<String, Set<Pair<TopicListener, TopicListenerWrapper>>> entry : sListeners.entrySet())
     {
-      entry = topicListenerEntriesIterator.next();
       topic = sRedissonClient.getTopic(entry.getKey());
-      topicListenerIteratorPair = entry.getValue().iterator();
-      while( topicListenerIteratorPair.hasNext())
+      noUnregisteredSet = new HashSet<>(entry.getValue());
+      for(Pair<TopicListener, TopicListenerWrapper> pair : entry.getValue())
       {
-        topicListenerPair = topicListenerIteratorPair.next();
-        if( topicListenerPair.getFirst().equals(listener) )
+        if( pair.getFirst().equals(listener) )
         {
-          topic.removeListener(topicListenerPair.getSecond());
-          entry.getValue().remove(topicListenerPair);
+          topic.removeListener(pair.getSecond());
+          noUnregisteredSet.remove(pair);
         }
       }
+      newListeners.put(entry.getKey(), noUnregisteredSet);
     }
+    sListeners.clear();
+    sListeners.putAll(newListeners);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public void publishOnTopic(String topic, String message)
   {
+    /* $if ZimbraX == 1 $ */
     sRedissonClient.getTopic(topic).publish(message);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 
   public Collection<TopicListener> getListeners(String topic)
   {
+    /* $if ZimbraX == 1 $ */
     Collection<TopicListener> topicListeners = new HashSet<>();
     for(Pair<TopicListener, TopicListenerWrapper> pair : sListeners.get(topic))
     {
       topicListeners.add(pair.getFirst());
     }
     return topicListeners;
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 }

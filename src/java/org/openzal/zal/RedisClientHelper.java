@@ -125,8 +125,12 @@ public class RedisClientHelper
 
   private void publishOnTopic(@Nonnull String key)
   {
+    /* $if ZimbraX == 1 $ */
     String[] scopeKey = key.split("\\|");
     RTopic topic = mRedissonClient.getTopic(scopeKey[0]);
     topic.publish(scopeKey[1]);
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
   }
 }
