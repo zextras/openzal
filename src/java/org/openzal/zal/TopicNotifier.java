@@ -9,7 +9,6 @@ import java.util.Set;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
-import com.zimbra.cs.mailbox.RedissonClientHolder;
 /* $endif $ */
 
 import javax.annotation.Nonnull;
@@ -34,7 +33,7 @@ public class TopicNotifier
   }
 
   private static Map<String, Set<Pair<TopicListener, TopicListenerWrapper>>> sListeners = new HashMap<>();
-  private static final RedissonClient sRedissonClient = RedissonClientHolder.getInstance().getRedissonClient();
+  private static final RedissonClient sRedissonClient = com.zimbra.cs.mailbox.RedissonClientHolder.getInstance().getRedissonClient();
   /* $endif $ */
 
   public void registerListener(String topic, final TopicListener listener)
