@@ -1,16 +1,13 @@
 package org.openzal.zal.lucene.analysis;
 
-import javax.annotation.Nonnull;
-
 import java.io.Closeable;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 public class TokenStream extends AttributeSource implements Closeable
 {
-  public TokenStream(
-    @Nonnull
-      Object zObject
-  )
+  public TokenStream(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
     super((org.apache.lucene.analysis.TokenStream) zObject);
