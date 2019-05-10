@@ -34,6 +34,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RSet<String> set = mRedissonClient.getSet(key);
     set.add(value);
+    publishOnTopic(key);
     return set.readAll();
     /* $else $
     throw new UnsupportedOperationException();
@@ -55,6 +56,7 @@ public class RedisClientHelper
     /* $if ZimbraX == 1 $ */
     RSet<String> set = mRedissonClient.getSet(key);
     set.remove(value);
+    publishOnTopic(key);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -124,9 +126,8 @@ public class RedisClientHelper
   private void publishOnTopic(@Nonnull String key)
   {
     /* $if ZimbraX == 1 $ */
-    String[] scopeKey = key.split("\\|");
-    RTopic topic = mRedissonClient.getTopic(scopeKey[0]);
-    topic.publish(scopeKey[1]);
+    RTopic topic = mRedissonClient.getTopic(key);
+    topic.publish(key);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
