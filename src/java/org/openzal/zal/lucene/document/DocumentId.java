@@ -11,7 +11,9 @@ public class DocumentId
   public DocumentId(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;;
+    {
+      mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;
+    }
     /* $endif $ */
   }
 
@@ -19,18 +21,26 @@ public class DocumentId
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.toString();
+    {
+      return mZObject.toString();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(mZObject);
+    {
+      return target.cast(mZObject);
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 }
