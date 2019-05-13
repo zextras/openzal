@@ -30,7 +30,7 @@ public class MailboxIndex
 
   public Analyzer getAnalyzer()
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       return new Analyzer(new ClassicAnalyzer());
     }

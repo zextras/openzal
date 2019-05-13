@@ -25,8 +25,8 @@ public class IndexWriter
   public void addDocument(Document document)
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject.addDocument(document.toZimbra(org.apache.lucene.document.Document.class));
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
+    mZObject.addDocument(document.toZimbra(com.zimbra.cs.index.IndexDocument.class).toDocument());
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

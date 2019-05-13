@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.openzal.zal.index.x.IndexDocument;
 
 import javax.annotation.Nonnull;
 
@@ -22,6 +23,13 @@ public class Document
 
   public Document(@Nonnull Object zObject)
   {
+    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
+    if(zObject instanceof org.apache.lucene.document.Document)
+    {
+      zObject = new com.zimbra.cs.index.IndexDocument((org.apache.lucene.document.Document) zObject);
+    }
+    /* $endif $ */
+
     /* $if ZimbraVersion >= 8.5.0 $ */
     {
       mZObject = (com.zimbra.cs.index.IndexDocument) zObject;
@@ -31,7 +39,7 @@ public class Document
 
   public void add(@Nonnull String field, @Nonnull String value)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       mZObject.toInputDocument().addField(field, value);
     }
@@ -90,7 +98,7 @@ public class Document
 
   public boolean has(String field)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       return mZObject.toInputDocument().containsKey(field);
     }
@@ -107,7 +115,7 @@ public class Document
 
   public String get(String field)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       return (String) mZObject.toInputDocument().getFieldValue(field);
     }
@@ -124,7 +132,7 @@ public class Document
 
   public void remove(String field)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       mZObject.toInputDocument().removeField(field);
     }
@@ -212,7 +220,7 @@ public class Document
   @Override
   public String toString()
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       return mZObject.toInputDocument().toString();
     }

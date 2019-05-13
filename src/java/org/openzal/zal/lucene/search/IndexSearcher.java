@@ -47,7 +47,7 @@ public class IndexSearcher
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
     {
-      return new TopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
+      return new TopDocs(this, mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
     }
     /* $else $
     {
@@ -63,7 +63,7 @@ public class IndexSearcher
     {
       try
       {
-        return new TopDocs(mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), null, limit, null, fieldId, fetchFields));
+        return new TopDocs(this, mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), null, limit, null, fieldId, fetchFields));
       }
       catch( ServiceException e )
       {
