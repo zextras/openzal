@@ -16,7 +16,7 @@ import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.search.Query;
 
-/* $if ZimbraX == 1 $ */
+/* $if ZimbraX == 1 $
 import org.openzal.zal.lucene.search.BooleanClause;
 import org.openzal.zal.lucene.search.BooleanQuery;
 import org.openzal.zal.lucene.search.TermQuery;
@@ -58,7 +58,7 @@ public class Indexer
     }
     /* $endif $ */
 
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       try
       {
@@ -196,7 +196,7 @@ public class Indexer
   public void deleteDocument(Object... idParts)
     throws IOException
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     {
       try
       {
@@ -253,7 +253,9 @@ public class Indexer
       mIndexWriter.deleteDocuments(term);
     }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -262,9 +264,13 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mIndexWriter.deleteDocuments(queries);
+    {
+      mIndexWriter.deleteDocuments(queries);
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -273,9 +279,13 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mIndexWriter.deleteAll();
+    {
+      mIndexWriter.deleteAll();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -284,9 +294,13 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mIndexWriter.deleteUnusuedFiles();
+    {
+      mIndexWriter.deleteUnusuedFiles();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -294,9 +308,13 @@ public class Indexer
   public void compact()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mZObject.compact();
+    {
+      mZObject.compact();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -304,22 +322,28 @@ public class Indexer
   public int maxDocs()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return mZObject.maxDocs();
+    {
+      return mZObject.maxDocs();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
   private IndexWriter getIndexWriter()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    try
     {
-      return new IndexWriter(mIndexWriterRefGet.invoke(mIndexWriterRef));
-    }
-    catch( Exception e )
-    {
-      throw ExceptionWrapper.wrap(e);
+      try
+      {
+        return new IndexWriter(mIndexWriterRefGet.invoke(mIndexWriterRef));
+      }
+      catch( Exception e )
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     /* $else $
     {
@@ -333,9 +357,13 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject.close();
+    {
+      mZObject.close();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
@@ -343,18 +371,26 @@ public class Indexer
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.toString();
+    {
+      return mZObject.toString();
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(mZObject);
+    {
+      return target.cast(mZObject);
+    }
     /* $else $
-    throw new UnsupportedOperationException();
+    {
+      throw new UnsupportedOperationException();
+    }
     /* $endif $ */
   }
 }

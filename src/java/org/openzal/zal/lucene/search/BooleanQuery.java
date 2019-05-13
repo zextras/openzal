@@ -57,49 +57,68 @@ public class BooleanQuery
 
   public static class Builder
   {
-    /* $if ZimbraX == 1 $ */
-    private final org.apache.lucene.search.BooleanQuery.Builder mZObject;
-    /* $endif $ */
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    private final Object mZObject;
+    /* $endif */
 
     public Builder()
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraX == 1 $
       this(new org.apache.lucene.search.BooleanQuery.Builder());
+
+      /* $elseif ZimbraVersion >= 8.5.0 $ */
+      this(new org.apache.lucene.search.BooleanQuery());
 
       /* $endif $ */
     }
 
     public Builder(@Nonnull Object zObject)
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraX == 1 $
       {
         mZObject = (org.apache.lucene.search.BooleanQuery.Builder) zObject;
+      }
+      /* $elseif ZimbraVersion >= 8.5.0 $ */
+      {
+        mZObject = (org.apache.lucene.search.BooleanQuery) zObject;
+      }
+       /* $else $
+      {
+        throw new UnsupportedOperationException();
       }
       /* $endif $ */
     }
 
     public void add(@Nonnull Query query, BooleanClause.Occur occur)
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraX == 1 $
       {
-        mZObject.add(query.toZimbra(org.apache.lucene.search.Query.class), org.apache.lucene.search.BooleanClause.Occur.valueOf(occur.name()));
+        toZimbra(org.apache.lucene.search.BooleanQuery.Builder.class).add(query.toZimbra(org.apache.lucene.search.Query.class), org.apache.lucene.search.BooleanClause.Occur.valueOf(occur.name()));
       }
-      /* $else $
+      /* $elseif ZimbraVersion >= 8.5.0 $ */
       {
-      throw new UnsupportedOperationException();
+        toZimbra(org.apache.lucene.search.BooleanQuery.class).add(query.toZimbra(org.apache.lucene.search.Query.class), org.apache.lucene.search.BooleanClause.Occur.valueOf(occur.name()));
+      }
+       /* $else $
+      {
+        throw new UnsupportedOperationException();
       }
       /* $endif $ */
     }
 
     public BooleanQuery build()
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraX == 1 $
       {
-        return new BooleanQuery(mZObject.build());
+        return new BooleanQuery(toZimbra(org.apache.lucene.search.BooleanQuery.Builder.class).build());
+      }
+      /* $elseif ZimbraVersion >= 8.5.0 $ */
+      {
+        return new BooleanQuery(toZimbra(org.apache.lucene.search.BooleanQuery.class));
       }
       /* $else $
       {
-      throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
       }
       /* $endif $ */
     }
@@ -107,7 +126,7 @@ public class BooleanQuery
     @Override
     public String toString()
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraVersion >= 8.5.0 $ */
       {
         return mZObject.toString();
       }
@@ -120,7 +139,7 @@ public class BooleanQuery
 
     public <T> T toZimbra(@Nonnull Class<T> target)
     {
-      /* $if ZimbraX == 1 $ */
+      /* $if ZimbraVersion >= 8.5.0 $ */
       {
         return target.cast(mZObject);
       }
