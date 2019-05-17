@@ -93,7 +93,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraTwoFactorAuthScratchCodes                      = "";
   public static String A_zimbraTwoFactorAuthSecret                            = "";
   public static String A_zimbraAppSpecificPassword                            = "";
-   */
   /* $endif $ */
 
   public static String A_zimbraIsACLGroup                                           = com.zimbra.cs.account.Provisioning.A_zimbraIsACLGroup;
