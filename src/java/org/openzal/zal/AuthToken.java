@@ -77,12 +77,11 @@ public class AuthToken
           cookies.get("ZM_JWT")
         ));
       }
-      /* $else $ */
+      /* $endif $ */
       if( cookies.containsKey("ZM_AUTH_TOKEN") )
       {
         return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
       }
-      /* $endif $ */
 
       throw new AuthTokenException("Missing auth cookies!");
     }
