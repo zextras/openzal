@@ -76,9 +76,17 @@ public class ProvisioningImp implements Provisioning
   /* $if ZimbraVersion >= 8.7.0 $ */
   public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
+  public static String A_zimbraTwoFactorAuthEnabled                           = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
+  public static String A_zimbraTwoFactorAuthScratchCodes                      = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
+  public static String A_zimbraTwoFactorAuthSecret                            = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthSecret;
+  public static String A_zimbraAppSpecificPassword                            = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPassword;
   /* $else $
   public static String A_zimbraMaxAppSpecificPasswords                        = "";
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
+  public static String A_zimbraTwoFactorAuthEnabled                           = "";
+  public static String A_zimbraTwoFactorAuthScratchCodes                      = "";
+  public static String A_zimbraTwoFactorAuthSecret                            = "";
+  public static String A_zimbraAppSpecificPassword                            = "";
   /* $endif $ */
 
   public static String A_zimbraIsACLGroup                                           = com.zimbra.cs.account.Provisioning.A_zimbraIsACLGroup;
