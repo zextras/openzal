@@ -2,7 +2,6 @@ package org.openzal.zal.lucene.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.document.DocumentId;
@@ -13,7 +12,7 @@ public class TopDocs
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
   private IndexSearcher                     mIndexSearcher;
-  private com.zimbra.cs.index.ZimbraTopDocs mZObject;
+  private com.zimbra.cs.index.ZimbraTopDocs mTopDocs;
   /* $endif $ */
 
   @Deprecated
@@ -25,36 +24,26 @@ public class TopDocs
   public TopDocs(IndexSearcher indexSearcher, @Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      mIndexSearcher = indexSearcher;
-      mZObject = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
-    }
+    mIndexSearcher = indexSearcher;
+    mTopDocs = (com.zimbra.cs.index.ZimbraTopDocs) zObject;
     /* $endif $ */
   }
 
   public int getTotalHits()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mZObject.getTotalHits();
-    }
+    return mTopDocs.getTotalHits();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public float getMaxScore()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mZObject.getMaxScore();
-    }
+    return mTopDocs.getMaxScore();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -62,20 +51,16 @@ public class TopDocs
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
+    List<ScoreDoc> scoreDocList = new ArrayList<>();
+
+    for(int i = 0; i < getTotalHits(); i++ )
     {
-      List<ScoreDoc> scoreDocList = new ArrayList<>();
-
-      for(int i = 0; i < getTotalHits(); i++ )
-      {
-        scoreDocList.add(getScoreDoc(i));
-      }
-
-      return scoreDocList;
+      scoreDocList.add(getScoreDoc(i));
     }
+
+    return scoreDocList;
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -83,21 +68,15 @@ public class TopDocs
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    com.zimbra.cs.index.ZimbraScoreDoc scoreDoc = mZObject.getScoreDoc(index);
+    com.zimbra.cs.index.ZimbraScoreDoc scoreDoc = mTopDocs.getScoreDoc(index);
     /* $endif */
 
     /* $if ZimbraX == 1 $
-    {
-      return new ScoreDoc(new Document(mZObject.getDoc(index)), scoreDoc);
-    }
+    return new ScoreDoc(new Document(mTopDocs.getDoc(index)), scoreDoc);
     /* $elseif ZimbraVersion >= 8.5.0 $ */
-    {
-      return new ScoreDoc(mIndexSearcher.getDocument(new DocumentId(scoreDoc.getDocumentID())), scoreDoc);
-    }
+    return new ScoreDoc(mIndexSearcher.getDocument(new DocumentId(scoreDoc.getDocumentID())), scoreDoc);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -105,26 +84,18 @@ public class TopDocs
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mZObject.toString();
-    }
+    return mTopDocs.toString();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return target.cast(mZObject);
-    }
+    return target.cast(mTopDocs);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 }

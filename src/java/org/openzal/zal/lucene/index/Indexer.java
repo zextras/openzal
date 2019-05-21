@@ -1,7 +1,6 @@
 package org.openzal.zal.lucene.index;
 
 
-import com.zimbra.common.service.ServiceException;
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -17,6 +16,7 @@ import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.search.Query;
 
 /* $if ZimbraX == 1 $
+import com.zimbra.common.service.ServiceException;
 import org.openzal.zal.lucene.search.BooleanClause;
 import org.openzal.zal.lucene.search.BooleanQuery;
 import org.openzal.zal.lucene.search.TermQuery;
@@ -29,7 +29,7 @@ public class Indexer
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
   private final IndexStore                  mIndexStore;
-  private final com.zimbra.cs.index.Indexer mZObject;
+  private final com.zimbra.cs.index.Indexer mIndexer;
   /* $endif $ */
 
   /* $if ZimbraX == 1 $
@@ -43,7 +43,6 @@ public class Indexer
   /* $endif $ */
 
 
-  @Deprecated
   public Indexer(@Nonnull Object zObject)
   {
     this(null, zObject);
@@ -52,45 +51,39 @@ public class Indexer
   public Indexer(IndexStore indexStore, @Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0  $ */
-    {
-      mIndexStore = indexStore;
-      mZObject = (com.zimbra.cs.index.Indexer) zObject;
-    }
+    mIndexStore = indexStore;
+    mIndexer = (com.zimbra.cs.index.Indexer) zObject;
     /* $endif $ */
 
     /* $if ZimbraX == 1 $
+    try
     {
-      try
-      {
-        Field field = com.zimbra.cs.index.solr.SolrIndex.class.getDeclaredField("solrHelper");
-        field.setAccessible(true);
+      Field field = com.zimbra.cs.index.solr.SolrIndex.class.getDeclaredField("solrHelper");
+      field.setAccessible(true);
 
-        mRequestHelper = (com.zimbra.cs.index.solr.SolrRequestHelper) field.get(mIndexStore.toZimbra(com.zimbra.cs.index.solr.SolrIndex.class));
-      }
-      catch( Exception e )
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      mRequestHelper = (com.zimbra.cs.index.solr.SolrRequestHelper) field.get(mIndexStore.toZimbra(com.zimbra.cs.index.solr.SolrIndex.class));
+    }
+    catch( Exception e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $elseif ZimbraVersion >= 8.5.0  $ */
+    try
     {
-      try
-      {
-        Field writer = zObject.getClass().getDeclaredField("writer");
-        writer.setAccessible(true);
+      Field writer = zObject.getClass().getDeclaredField("writer");
+      writer.setAccessible(true);
 
-        mIndexWriterRef = writer.get(zObject);
+      mIndexWriterRef = writer.get(zObject);
 
-        Class target = com.zimbra.cs.index.LuceneIndex.class.getClassLoader().loadClass("com.zimbra.cs.index.LuceneIndex$IndexWriterRef");
-        mIndexWriterRefGet = target.getDeclaredMethod("get");
-        mIndexWriterRefGet.setAccessible(true);
+      Class target = com.zimbra.cs.index.LuceneIndex.class.getClassLoader().loadClass("com.zimbra.cs.index.LuceneIndex$IndexWriterRef");
+      mIndexWriterRefGet = target.getDeclaredMethod("get");
+      mIndexWriterRefGet.setAccessible(true);
 
-        mIndexWriter = getIndexWriter();
-      }
-      catch( Exception e )
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      mIndexWriter = getIndexWriter();
+    }
+    catch( Exception e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $endif $ */
   }
@@ -121,7 +114,6 @@ public class Indexer
     /* $endif $ */
   }
 
-  @Deprecated
   public void addDocument(List<Document> documentList)
     throws IOException
   {
@@ -131,65 +123,51 @@ public class Indexer
       addDocument(document);
     }
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void addDocument(Document document)
     throws IOException
   {
     /* $if ZimbraX == 1 $
+    try
     {
-      try
-      {
-        org.apache.solr.client.solrj.request.UpdateRequest request = new org.apache.solr.client.solrj.request.UpdateRequest();
+      org.apache.solr.client.solrj.request.UpdateRequest request = new org.apache.solr.client.solrj.request.UpdateRequest();
 
-        request.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class).toInputDocument());
+      request.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class).toInputDocument());
 
-        mRequestHelper.executeUpdate(mIndexStore.getMailboxIndex().getMailbox().getAccountId(), request);
-      }
-      catch( ServiceException e )
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      mRequestHelper.executeUpdate(mIndexStore.getMailboxIndex().getMailbox().getAccountId(), request);
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $elseif ZimbraVersion >= 8.5.0 $ */
-    {
-      mIndexWriter.addDocument(document);
-    }
+    mIndexWriter.addDocument(document);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void addDocument(Folder folder, Item item, List<Document> documentList)
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
+    List<com.zimbra.cs.index.IndexDocument> zimbraDocumentList = new ArrayList<>();
+
+    for( Document document : documentList )
     {
-      List<com.zimbra.cs.index.IndexDocument> zimbraDocumentList = new ArrayList<>();
-
-      for( Document document : documentList )
-      {
-        zimbraDocumentList.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class));
-      }
-
-      mZObject.addDocument(
-        folder == null ? null : folder.toZimbra(com.zimbra.cs.mailbox.Folder.class),
-        item.toZimbra(com.zimbra.cs.mailbox.MailItem.class),
-        zimbraDocumentList
-      );
+      zimbraDocumentList.add(document.toZimbra(com.zimbra.cs.index.IndexDocument.class));
     }
+
+    mIndexer.addDocument(
+      folder == null ? null : folder.toZimbra(com.zimbra.cs.mailbox.Folder.class),
+      item.toZimbra(com.zimbra.cs.mailbox.MailItem.class),
+      zimbraDocumentList
+    );
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -197,53 +175,48 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraX == 1 $
+    try
     {
-      try
+      org.apache.solr.client.solrj.request.UpdateRequest request = new org.apache.solr.client.solrj.request.UpdateRequest();
+
+      String accountId = mIndexStore.getMailboxIndex().getMailbox().getAccountId();
+      String id = mRequestHelper.getSolrId(accountId, idParts);
+
+      BooleanQuery.Builder disjunctionBuilder = new BooleanQuery.Builder();
+      disjunctionBuilder.add(new TermQuery(new Term("id", id)), BooleanClause.Occur.SHOULD);
+
+      BooleanQuery.Builder query;
+      if( mRequestHelper.needsAccountFilter() )
       {
-        org.apache.solr.client.solrj.request.UpdateRequest request = new org.apache.solr.client.solrj.request.UpdateRequest();
-
-        String accountId = mIndexStore.getMailboxIndex().getMailbox().getAccountId();
-
-        String id = mRequestHelper.getSolrId(accountId, idParts);
-
-        BooleanQuery.Builder disjunctionBuilder = new BooleanQuery.Builder();
-        disjunctionBuilder.add(new TermQuery(new Term("id", id)), BooleanClause.Occur.SHOULD);
-
-        BooleanQuery.Builder query;
-        if( mRequestHelper.needsAccountFilter() )
-        {
-          query = new BooleanQuery.Builder();
-          query.add(new TermQuery(new Term("acct_id", accountId)), BooleanClause.Occur.MUST);
-          query.add(disjunctionBuilder.build(), BooleanClause.Occur.MUST);
-        }
-        else
-        {
-          query = disjunctionBuilder;
-        }
-
-        request.deleteByQuery(query.build().toString());
-
-        mRequestHelper.executeUpdate(accountId, request);
-      }catch( ServiceException e )
-      {
-        throw ExceptionWrapper.wrap(e);
+        query = new BooleanQuery.Builder();
+        query.add(new TermQuery(new Term("acct_id", accountId)), BooleanClause.Occur.MUST);
+        query.add(disjunctionBuilder.build(), BooleanClause.Occur.MUST);
       }
+      else
+      {
+        query = disjunctionBuilder;
+      }
+
+      request.deleteByQuery(query.build().toString());
+
+      mRequestHelper.executeUpdate(accountId, request);
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $elseif ZimbraVersion >= 8.5.0 $ */
+    StringJoiner joiner = new StringJoiner("_");
+
+    for( Object idPart : idParts )
     {
-      StringJoiner joiner = new StringJoiner("_");
-
-      for( Object idPart : idParts )
-      {
-        joiner.add(idPart.toString());
-      }
-
-      deleteDocuments(new Term("id", joiner.toString()));
+      joiner.add(idPart.toString());
     }
+
+    deleteDocuments(new Term("id", joiner.toString()));
     /* $endif $ */
   }
 
-  @Deprecated
   public void deleteDocuments(Term... terms)
     throws IOException
   {
@@ -253,102 +226,71 @@ public class Indexer
       mIndexWriter.deleteDocuments(term);
     }
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void deleteDocuments(Query... queries)
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      mIndexWriter.deleteDocuments(queries);
-    }
+    mIndexWriter.deleteDocuments(queries);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void deleteAll()
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      mIndexWriter.deleteAll();
-    }
+    mIndexWriter.deleteAll();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void deleteUnusuedFiles()
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      mIndexWriter.deleteUnusuedFiles();
-    }
+    mIndexWriter.deleteUnusuedFiles();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public void compact()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      mZObject.compact();
-    }
+    mIndexer.compact();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public int maxDocs()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      return mZObject.maxDocs();
-    }
+    return mIndexer.maxDocs();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   private IndexWriter getIndexWriter()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
+    try
     {
-      try
-      {
-        return new IndexWriter(mIndexWriterRefGet.invoke(mIndexWriterRef));
-      }
-      catch( Exception e )
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      return new IndexWriter(mIndexWriterRefGet.invoke(mIndexWriterRef));
+    }
+    catch( Exception e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -357,13 +299,9 @@ public class Indexer
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      mZObject.close();
-    }
+    mIndexer.close();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -371,26 +309,18 @@ public class Indexer
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mZObject.toString();
-    }
+    return mIndexer.toString();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return target.cast(mZObject);
-    }
+    return target.cast(mIndexer);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 }
