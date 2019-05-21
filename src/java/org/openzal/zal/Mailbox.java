@@ -247,7 +247,8 @@ public class Mailbox
       throw new IllegalArgumentException("mMbox is null");
     }
     this.mMbox = (com.zimbra.cs.mailbox.Mailbox) mbox;
-    mIndex = new MailboxIndex(this.mMbox.index);
+
+    mIndex = new MailboxIndex(this, this.mMbox.index);
   }
 
   @Nonnull
