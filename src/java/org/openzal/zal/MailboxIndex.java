@@ -1,15 +1,15 @@
 package org.openzal.zal;
 
-import org.apache.lucene.analysis.standard.ClassicAnalyzer;
 import org.openzal.zal.lucene.analysis.Analyzer;
 import org.openzal.zal.lucene.index.IndexStore;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MailboxIndex
 {
   private final Mailbox                            mMailbox;
-  private final com.zimbra.cs.mailbox.MailboxIndex mZObject;
+  private final com.zimbra.cs.mailbox.MailboxIndex mMailboxIndex;
 
   @Deprecated
   public MailboxIndex(@Nonnull Object zObject)
@@ -17,30 +17,27 @@ public class MailboxIndex
     this(null, zObject);
   }
 
-  public MailboxIndex(@Nonnull Mailbox mailbox, @Nonnull Object zObject)
+  public MailboxIndex(Mailbox mailbox, @Nonnull Object zObject)
   {
     mMailbox = mailbox;
-    mZObject = (com.zimbra.cs.mailbox.MailboxIndex) zObject;
+    mMailboxIndex = (com.zimbra.cs.mailbox.MailboxIndex) zObject;
   }
 
   public IndexStore getIndexStore()
   {
-    return new IndexStore(this, mZObject.getIndexStore());
+    return new IndexStore(this, mMailboxIndex.getIndexStore());
   }
 
   public Analyzer getAnalyzer()
   {
     /* $if ZimbraX == 1 $
-    {
-      return new Analyzer(new ClassicAnalyzer());
-    }
+    return new Analyzer(new org.apache.lucene.analysis.standard.ClassicAnalyzer());
     /* $else $ */
-    {
-      return new Analyzer(mZObject.getAnalyzer());
-    }
+    return new Analyzer(mMailboxIndex.getAnalyzer());
     /* $endif $ */
   }
 
+  @Nullable
   public Mailbox getMailbox()
   {
     return mMailbox;
@@ -48,6 +45,6 @@ public class MailboxIndex
 
   public <T> T toZimbra(@Nonnull Class<T> clazz)
   {
-    return clazz.cast(mZObject);
+    return clazz.cast(mMailboxIndex);
   }
 }

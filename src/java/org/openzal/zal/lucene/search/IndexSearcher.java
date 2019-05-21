@@ -13,46 +13,34 @@ public class IndexSearcher
   implements Closeable
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private final com.zimbra.cs.index.ZimbraIndexSearcher mZObject;
-
+  private final com.zimbra.cs.index.ZimbraIndexSearcher mIndexSearcher;
   private final IndexReader                             mReader;
   /* $endif $ */
 
   public IndexSearcher(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      mZObject = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
-      mReader = new IndexReader(mZObject.getIndexReader());
-    }
+    mIndexSearcher = (com.zimbra.cs.index.ZimbraIndexSearcher) zObject;
+    mReader = new IndexReader(mIndexSearcher.getIndexReader());
     /* $endif $ */
   }
 
   private IndexReader getIndexReader()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mReader;
-    }
+    return mReader;
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-  @Deprecated
   public TopDocs search(Query query, int limit)
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      return new TopDocs(this, mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
-    }
+    return new TopDocs(this, mIndexSearcher.search(query.toZimbra(org.apache.lucene.search.Query.class), limit));
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -60,50 +48,36 @@ public class IndexSearcher
     throws IOException
   {
     /* $if ZimbraX == 1 $
+    try
     {
-      try
-      {
-        return new TopDocs(this, mZObject.search(query.toZimbra(org.apache.lucene.search.Query.class), null, limit, null, fieldId, fetchFields));
-      }
-      catch( ServiceException e )
-      {
-        throw ExceptionWrapper.wrap(e);
-      }
+      return new TopDocs(this, mIndexSearcher.search(query.toZimbra(org.apache.lucene.search.Query.class), null, limit, null, fieldId, fetchFields));
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
     }
     /* $elseif ZimbraVersion >= 8.5.0 $ */
-    {
-      return search(query, limit);
-    }
+    return search(query, limit);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public int countDocuments()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      return getIndexReader().countDocuments();
-    }
+    return getIndexReader().countDocuments();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public int countDeletedDocuments()
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      return getIndexReader().countDeletedDocument();
-    }
+    return getIndexReader().countDeletedDocument();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -111,13 +85,9 @@ public class IndexSearcher
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    {
-      return new Document(mZObject.doc(id.toZimbra(com.zimbra.cs.index.ZimbraIndexDocumentID.class)));
-    }
+    return new Document(mIndexSearcher.doc(id.toZimbra(com.zimbra.cs.index.ZimbraIndexDocumentID.class)));
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -126,13 +96,9 @@ public class IndexSearcher
     throws IOException
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      mZObject.close();
-    }
+    mIndexSearcher.close();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
@@ -140,26 +106,18 @@ public class IndexSearcher
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return mZObject.toString();
-    }
+    return mIndexSearcher.toString();
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    {
-      return target.cast(mZObject);
-    }
+    return target.cast(mIndexSearcher);
     /* $else $
-    {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
     /* $endif $ */
   }
 }
