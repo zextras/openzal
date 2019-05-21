@@ -126,9 +126,13 @@ public abstract class Entry
 
   public void modify(Map<String, Object> attrs)
   {
+    modify(attrs, true);
+  }
+  public void modify(Map<String, Object> attrs, boolean checkImmutable)
+  {
     try
     {
-      mEntry.getProvisioning().modifyAttrs(mEntry, attrs);
+      mEntry.getProvisioning().modifyAttrs(mEntry, attrs, checkImmutable);
     }
     catch (ServiceException e)
     {
