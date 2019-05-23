@@ -86,6 +86,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraTwoFactorAuthScratchCodes                      = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
   public static String A_zimbraTwoFactorAuthSecret                            = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthSecret;
   public static String A_zimbraAppSpecificPassword                            = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPassword;
+  public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange     = com.zimbra.cs.account.Provisioning.A_zimbraRevokeAppSpecificPasswordsOnPasswordChange;
+  public static String A_zimbraAppSpecificPasswordDuration                    = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPasswordDuration;
   /* $else $
   public static String A_zimbraMaxAppSpecificPasswords                        = "";
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
@@ -93,6 +95,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraTwoFactorAuthScratchCodes                      = "";
   public static String A_zimbraTwoFactorAuthSecret                            = "";
   public static String A_zimbraAppSpecificPassword                            = "";
+  public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange     = "";
+  public static String A_zimbraAppSpecificPasswordDuration                    = "";
   /* $endif $ */
 
   public static String A_zimbraIsACLGroup                                           = com.zimbra.cs.account.Provisioning.A_zimbraIsACLGroup;
@@ -1330,6 +1334,13 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public Account createFakeAccount(Map<String, Object> attrs)
+    throws ZimbraException
+  {
+    return new Account("dummy_account", "", attrs, new HashMap(), this);
   }
 
   @Override
