@@ -1,11 +1,11 @@
 package org.openzal.zal;
 
 import java.util.Collection;
+/* $if ZimbraX == 1 $
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-/* $if ZimbraX == 1 $ */
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public class TopicNotifier
 {
-  /* $if ZimbraX == 1 $ */
+  /* $if ZimbraX == 1 $
   private class TopicListenerWrapper implements MessageListener<String>
   {
     private final TopicListener mListener;
@@ -38,7 +38,7 @@ public class TopicNotifier
 
   public void registerListener(String topic, final TopicListener listener)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RTopic rTopic = sRedissonClient.getTopic(topic);
     TopicListenerWrapper topicListener = new TopicListenerWrapper(listener);
     rTopic.addListener(String.class, topicListener);
@@ -53,14 +53,14 @@ public class TopicNotifier
     }
     listeners.add(new Pair<>(listener, topicListener));
     sListeners.put(topic, listeners);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public void unregisterListener(TopicListener listener)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RTopic topic;
     Set<Pair<TopicListener, TopicListenerWrapper>> noUnregisteredSet;
     Map<String, Set<Pair<TopicListener, TopicListenerWrapper>>> newListeners = new HashMap<>();
@@ -80,30 +80,30 @@ public class TopicNotifier
     }
     sListeners.clear();
     sListeners.putAll(newListeners);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public void publishOnTopic(String topic, String message)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     sRedissonClient.getTopic(topic).publish(message);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public Collection<TopicListener> getListeners(String topic)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     Collection<TopicListener> topicListeners = new HashSet<>();
     for(Pair<TopicListener, TopicListenerWrapper> pair : sListeners.get(topic))
     {
       topicListeners.add(pair.getFirst());
     }
     return topicListeners;
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }

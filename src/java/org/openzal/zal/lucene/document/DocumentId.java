@@ -5,13 +5,13 @@ import javax.annotation.Nonnull;
 public class DocumentId
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private com.zimbra.cs.index.ZimbraIndexDocumentID mZObject;
+  private com.zimbra.cs.index.ZimbraIndexDocumentID mDocumentID;
   /* $endif $ */
 
   public DocumentId(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;;
+    mDocumentID = (com.zimbra.cs.index.ZimbraIndexDocumentID) zObject;
     /* $endif $ */
   }
 
@@ -19,7 +19,7 @@ public class DocumentId
   public String toString()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.toString();
+    return mDocumentID.toString();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -28,7 +28,7 @@ public class DocumentId
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(mZObject);
+    return target.cast(mDocumentID);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

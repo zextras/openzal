@@ -35,12 +35,9 @@ public class AuthToken
 {
   @Nonnull private final com.zimbra.cs.account.AuthToken mAuthToken;
 
-  /* $if ZimbraX == 1 $
-    public final static String[] sUSER_TOKENS = {"ZM_AUTH_JWT","ZM_JWT"};
-  /* $else $ */
-  public final static String[] sUSER_TOKENS  = {"ZM_AUTH_TOKEN"};
-  /* $endif $ */
-  public final static String[] sADMIN_TOKENS = {"ZM_ADMIN_AUTH_TOKEN"};
+  public final static String[] sUSER_TOKENS_JWT = {"ZM_AUTH_JWT", "ZM_JWT"};
+  public final static String[] sUSER_TOKENS     = {"ZM_AUTH_TOKEN"};
+  public final static String[] sADMIN_TOKENS    = {"ZM_ADMIN_AUTH_TOKEN"};
 
   protected AuthToken(@Nonnull Object authToken)
   {
@@ -77,12 +74,11 @@ public class AuthToken
           cookies.get("ZM_JWT")
         ));
       }
-      /* $else $ */
+      /* $endif $ */
       if( cookies.containsKey("ZM_AUTH_TOKEN") )
       {
         return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
       }
-      /* $endif $ */
 
       throw new AuthTokenException("Missing auth cookies!");
     }
