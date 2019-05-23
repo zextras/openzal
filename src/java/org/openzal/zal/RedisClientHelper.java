@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-/* $if ZimbraX == 1 $ */
+/* $if ZimbraX == 1 $
 import org.redisson.api.RBucket;
 import org.redisson.api.RSet;
 import org.redisson.api.RTopic;
@@ -15,14 +15,14 @@ import org.redisson.api.RedissonClient;
 
 public class RedisClientHelper
 {
-  /* $if ZimbraX == 1 $ */
+  /* $if ZimbraX == 1 $
   private final com.zimbra.cs.mailbox.RedissonClientHolder mZObject;
   private final RedissonClient                             mRedissonClient;
   /* $endif $ */
 
   public RedisClientHelper()
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     mZObject = com.zimbra.cs.mailbox.RedissonClientHolder.getInstance();
     mRedissonClient = mZObject.getRedissonClient();
     /* $endif $ */
@@ -31,33 +31,33 @@ public class RedisClientHelper
   @Nullable
   public Set<String> putInSet(@Nonnull String key, String value)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RSet<String> set = mRedissonClient.getSet(key);
     set.add(value);
     publishOnTopic(key);
     return set.readAll();
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public Set<String> getSet(@Nonnull String key)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RSet<String> set = mRedissonClient.getSet(key);
     return set.readAll();
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public void removeFromSet(@Nonnull String key, @Nonnull String value)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RSet<String> set = mRedissonClient.getSet(key);
     set.remove(value);
     publishOnTopic(key);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -65,12 +65,12 @@ public class RedisClientHelper
   @Nullable
   public String put(@Nonnull String key, String value)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RBucket<String> bucket = mRedissonClient.getBucket(key);
     bucket.set(value);
     publishOnTopic(key);
     return bucket.get();
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
@@ -78,38 +78,38 @@ public class RedisClientHelper
   @Nullable
   public String get(@Nonnull String key)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RBucket<String> bucket = mRedissonClient.getBucket(key);
     return bucket.get();
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public boolean contains(@Nonnull String key)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RBucket<String> bucket = mRedissonClient.getBucket(key);
     return bucket.isExists();
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public void remove(@Nonnull String key)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RSet<String> set = mRedissonClient.getSet(key);
     set.delete();
     publishOnTopic(key);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public Collection<String> getByPattern(@Nonnull String keyStart, @Nonnull String keyEnd)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     Iterable<String> keys = mRedissonClient.getKeys().getKeysByPattern(keyStart + "*" + keyEnd);
     Set<String> results = new HashSet<>();
     for(String value : keys)
@@ -118,17 +118,17 @@ public class RedisClientHelper
     }
 
     return results;
-    /* $else $
+    /* $else $ */
     return Collections.emptyList();
     /* $endif $ */
   }
 
   private void publishOnTopic(@Nonnull String key)
   {
-    /* $if ZimbraX == 1 $ */
+    /* $if ZimbraX == 1 $
     RTopic topic = mRedissonClient.getTopic(key);
     topic.publish(key);
-    /* $else $
+    /* $else $ */
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
