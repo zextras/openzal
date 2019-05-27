@@ -37,6 +37,8 @@ public class IndexStore
     mIndex = (com.zimbra.cs.index.solr.SolrIndex) zObject;
     /* $elseif ZimbraVersion >= 8.5.0 $ */
     mIndex = (com.zimbra.cs.index.LuceneIndex) zObject;
+    /* $else$
+    mIndex = null;
     /* $endif $ */
   }
 
