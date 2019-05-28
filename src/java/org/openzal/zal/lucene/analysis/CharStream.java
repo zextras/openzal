@@ -16,6 +16,11 @@ public class CharStream
     /* $endif $ */
   }
 
+  public int correctOffset(int currentOff)
+  {
+    throw new UnsupportedOperationException();
+  }
+
   @Override
   public String toString()
   {
