@@ -219,6 +219,9 @@ public interface Provisioning
   Account createAccount(String dstAccount, @Nullable String newPassword, Map<String, Object> attrs)
     throws ZimbraException;
 
+  Account createFakeAccount(Map<String, Object> attrs)
+    throws ZimbraException;
+
   void restoreAccount(String emailAddress, Map<String, Object> attrs);
 
   DataSource restoreDataSource(Account account, DataSourceType dsType, String dsName, Map<String, Object> dataSourceAttrs);
