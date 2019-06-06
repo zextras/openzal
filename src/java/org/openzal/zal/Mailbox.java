@@ -49,6 +49,7 @@ import com.zimbra.cs.session.Session;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.openzal.zal.calendar.CalendarItemData;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.RecurrenceId;
@@ -1796,7 +1797,21 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+
     return new Message(message);
+  }
+
+  public Message saveDraft(OperationContext octxt, ParsedMessage parsedMessage, int id)
+    throws IOException, ZimbraException
+  {
+    try
+    {
+      return new Message(mMbox.saveDraft(octxt.getOperationContext(), parsedMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class), id));
+    }
+    catch( com.zimbra.common.service.ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull
