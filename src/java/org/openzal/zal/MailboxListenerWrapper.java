@@ -153,15 +153,8 @@ public abstract class MailboxListenerWrapper
           ItemChange itemChange;
           if( notification.mods.created != null )
           {
-            /* $endif $ */
-            /* $if ZimbraVersion >= 8.8.2 && ZimbraX == 0 $ */
             for( PendingModifications.ModificationKey mod : (notification.mods.created).keySet() )
             {
-        /* $elseif ZimbraX == 0 $
-        for( PendingModifications.ModificationKey mod : pns.created.keySet() )
-        {
-        /* $endif $ */
-              /* $if ZimbraX == 0 $ */
               Object whatObj = notification.mods.created.get(mod);
               if( toBackup(whatObj) )
               {
@@ -176,21 +169,11 @@ public abstract class MailboxListenerWrapper
                 notifyChanges(operation, account, itemChange);
               }
             }
-
-
           }
-
           if( notification.mods.modified != null )
           {
-            /* $endif $ */
-            /* $if ZimbraX == 0 && ZimbraVersion >= 8.8.2 $ */
             for( PendingModifications.ModificationKey mod : (notification.mods.modified).keySet() )
             {
-            /* $elseif ZimbraX == 0 $
-            for( PendingModifications.ModificationKey mod : pns.modified.keySet() )
-            {
-             /* $endif $ */
-             /* $if ZimbraX == 0 $ */
               PendingModifications.Change change = notification.mods.modified.get(mod);
               if(toBackup(change.what))
               {
