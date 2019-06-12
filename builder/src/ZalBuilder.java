@@ -543,9 +543,9 @@ public class ZalBuilder
     MavenDownloader downloader = new MavenDownloader(
       "lib/",
       "com/google/code/findbugs/jsr305", "3.0.2",
-      "com/fasterxml/jackson/core/jackson-core", "2.6.7",
-      "com/fasterxml/jackson/core/jackson-databind", "2.6.7",
-      "com/fasterxml/jackson/core/jackson-annotations", "2.6.7",
+      "com/fasterxml/jackson/core/jackson-core", "2.8.11",
+      "com/fasterxml/jackson/core/jackson-databind", "2.8.11",
+      "com/fasterxml/jackson/core/jackson-annotations", "2.8.11",
       "commons-dbutils/commons-dbutils", "1.6",
       "javax/activation/javax.activation-api", "1.2.0"
     );
