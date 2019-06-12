@@ -3,7 +3,7 @@ package org.openzal.zal;
 public enum Operation implements Comparable<Operation>
 {
   MAILBOX_CREATED(0),
-  ACCOUNT(1),
+  ACCOUNT_SCAN(1),
   MAILBOX_DELETED(2),
   ITEM_SCAN(2),
   SKIP(3);
