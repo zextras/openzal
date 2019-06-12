@@ -118,7 +118,7 @@ public abstract class MailboxListenerWrapper
             operation = Operation.ITEM_SCAN;
             break;
           case Redolog.OP_EMPTY_FOLDER:
-            operation = Operation.ACCOUNT;
+            operation = Operation.ACCOUNT_SCAN;
             break;
 
           //ignore
