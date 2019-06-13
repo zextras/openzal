@@ -2,11 +2,11 @@ package org.openzal.zal;
 
 public enum Operation implements Comparable<Operation>
 {
-  MAILBOX_CREATED(0),
-  ACCOUNT_SCAN(1),
-  MAILBOX_DELETED(2),
-  ITEM_SCAN(2),
-  SKIP(3);
+  SKIP(0),
+  MAILBOX_CREATED(1),
+  ACCOUNT_SCAN(2),
+  MAILBOX_DELETED(3),
+  ITEM_SCAN(3);
 
   private int priority;
 
