@@ -79,7 +79,6 @@ public abstract class MailboxListenerWrapper
           case Redolog.OP_CREATE_INVITE:
           case Redolog.OP_FIX_CALENDAR_ITEM_TIME_ZONE:
           case Redolog.OP_SET_CALENDAR_ITEM:
-          case Redolog.OP_RENAME_MAILBOX: // TODO: Find out what that operations mean
           case Redolog.OP_GRANT_ACCESS:   // TODO: Find out what that operations mean
           case Redolog.OP_REVOKE_ACCESS:  // TODO: Find out what that operations mean
           case Redolog.OP_SET_SUBSCRIPTION_DATA:
@@ -117,6 +116,7 @@ public abstract class MailboxListenerWrapper
           case Redolog.OP_RENAME_ITEM_PATH:
             operation = Operation.ITEM_SCAN;
             break;
+          case Redolog.OP_RENAME_MAILBOX:
           case Redolog.OP_EMPTY_FOLDER:
             operation = Operation.ACCOUNT_SCAN;
             break;
