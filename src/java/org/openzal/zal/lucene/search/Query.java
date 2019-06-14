@@ -4,17 +4,18 @@ import javax.annotation.Nonnull;
 
 public class Query
 {
-  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-  private final org.apache.lucene.search.Query mZObject;
+  /* $if ZimbraVersion >= 8.5.0 $ */
+  private final Object mQuery;
   /* $endif $ */
 
   public Query(@Nonnull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mZObject = (org.apache.lucene.search.Query) zObject;
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    mQuery = zObject;
     /* $endif $ */
   }
 
+  @Deprecated
   public Query combine(Query... queries)
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
@@ -25,7 +26,7 @@ public class Query
       zimbraQueries[i] = queries[i].toZimbra(org.apache.lucene.search.Query.class);
     }
 
-    return new Query(mZObject.combine(zimbraQueries));
+    return new Query(toZimbra(org.apache.lucene.search.Query.class).combine(zimbraQueries));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -34,8 +35,8 @@ public class Query
   @Override
   public String toString()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return mZObject.toString();
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mQuery.toString();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -43,8 +44,8 @@ public class Query
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return target.cast(mZObject);
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return target.cast(mQuery);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
