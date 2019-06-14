@@ -20,21 +20,23 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
 
 public class AdministrationConstants
 {
-  public static String GET_QUOTA_USAGE_REQUEST = AdminConstants.E_GET_QUOTA_USAGE_REQUEST;
-  public static String A_OFFSET                = AdminConstants.A_OFFSET;
-  public static String A_LIMIT                 = AdminConstants.A_LIMIT;
-  public static String A_SORT_BY               = AdminConstants.A_SORT_BY;
-  public static String A_SORT_ASCENDING        = AdminConstants.A_SORT_ASCENDING;
-  public static String A_REFRESH               = AdminConstants.A_REFRESH;
-  public static String A_DOMAIN                = AdminConstants.A_DOMAIN;
-  public static String ADMIN_SERVICE_URI       = AdminConstants.ADMIN_SERVICE_URI;
-  public static String A_NAME                  = AdminConstants.A_NAME;
-  public static String A_ID                    = AdminConstants.A_ID;
-  public static String A_QUOTA_USED            = AdminConstants.A_QUOTA_USED;
-  public static String A_QUOTA_LIMIT           = AdminConstants.A_QUOTA_LIMIT;
-  public static String E_ACCOUNT               = AdminConstants.E_ACCOUNT;
+  public static  String GET_QUOTA_USAGE_REQUEST = AdminConstants.E_GET_QUOTA_USAGE_REQUEST;
+  public static  String A_OFFSET                = AdminConstants.A_OFFSET;
+  public static  String A_LIMIT                 = AdminConstants.A_LIMIT;
+  public static  String A_SORT_BY               = AdminConstants.A_SORT_BY;
+  public static  String A_SORT_ASCENDING        = AdminConstants.A_SORT_ASCENDING;
+  public static  String A_REFRESH               = AdminConstants.A_REFRESH;
+  public static  String A_DOMAIN                = AdminConstants.A_DOMAIN;
+  public static  String ADMIN_SERVICE_URI       = AdminConstants.ADMIN_SERVICE_URI;
+  public static  String A_NAME                  = AdminConstants.A_NAME;
+  public static  String A_ID                    = AdminConstants.A_ID;
+  public static  String A_QUOTA_USED            = AdminConstants.A_QUOTA_USED;
+  public static  String A_QUOTA_LIMIT           = AdminConstants.A_QUOTA_LIMIT;
+  public static  String E_ACCOUNT               = AdminConstants.E_ACCOUNT;
+  public static final String USER_SERVICE_URI        = AccountConstants.USER_SERVICE_URI;
 }
