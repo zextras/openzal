@@ -1802,7 +1802,8 @@ public class Mailbox
     return new Message(message);
   }
 
-  public Message saveDraft(OperationContext octxt, ParsedMessage parsedMessage, int id)
+  @Nonnull
+  public Message saveDraft(@Nonnull OperationContext octxt,@Nonnull ParsedMessage parsedMessage, int id)
     throws IOException, ZimbraException
   {
     try
