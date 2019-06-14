@@ -22,6 +22,7 @@ package org.openzal.zal.calendar;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public enum FreeBusyStatus
   Free("F"),
   BusyTentative("T"),
   BusyUnavailable("O"),
-  NoData("N");
+  @JsonEnumDefaultValue NoData("N");
 
   @Nonnull
   private static final Map<String, FreeBusyStatus> sZimbra2Zal;
