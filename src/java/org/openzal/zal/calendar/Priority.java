@@ -20,13 +20,15 @@
 
 package org.openzal.zal.calendar;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public enum Priority
 {
   HIGH(1),
-  MEDIUM(5),
+  @JsonEnumDefaultValue MEDIUM(5),
   LOW(9);
 
   private int mRawPriority;

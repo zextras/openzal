@@ -21,6 +21,8 @@
 package org.openzal.zal.calendar;
 
 import javax.annotation.Nonnull;
+
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.util.HashMap;
@@ -29,7 +31,7 @@ import java.util.Map;
 public enum AttendeeInviteStatus
 {
   TENTATIVE("TE", "TENTATIVE"),
-  NEEDS_ACTION("NE", "NEEDS-ACTION"),
+  @JsonEnumDefaultValue NEEDS_ACTION("NE", "NEEDS-ACTION"),
   DELEGATED("DG", "DELEGATED"),
   DECLINED("DE", "DECLINED"),
   COMPLETED("CO", "COMPLETED"),

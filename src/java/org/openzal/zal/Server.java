@@ -192,19 +192,16 @@ public class Server extends Entry
   }
 
   @Nonnull
-  public String getAdminURL(String path) {
-    String hostname = getAttr(ProvisioningImp.A_zimbraServiceHostname);
-    int port = getIntAttr(ProvisioningImp.A_zimbraAdminPort, 0);
-    StringBuffer sb = new StringBuffer(128);
-    sb.append(LC.zimbra_admin_service_scheme.value()).append(hostname).append(":").append(port).append(path);
-    return sb.toString();
+  public String getAdminURL(String path)
+  {
+    return URLUtil.getAdminURL(mServer,path);
   }
 
   public String getServiceURL(String path)
   {
     try
     {
-      return URLUtil.getServiceURL(mServer,path,false);
+      return URLUtil.getServiceURL(mServer,path,true);
     }
     catch (ServiceException ex)
     {
