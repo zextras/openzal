@@ -52,8 +52,7 @@ class InternalOverrideBlob extends com.zimbra.cs.store.Blob
   @Override
   public boolean isCompressed() throws IOException
   {
-    // TODO check inputstream zipped?
-    throw new UnsupportedOperationException();
+    return mBlob.isCompressed();
   }
 
   @Override
