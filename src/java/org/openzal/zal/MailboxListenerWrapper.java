@@ -50,12 +50,28 @@ public abstract class MailboxListenerWrapper
     @Override
     public void notify(ChangeNotification notification)
     {
+      try
+      {
+        notifyInternal(notification);
+      }
+      catch (Exception ex)
+      {
+        ZimbraLog.mailbox.warn("Exception in notify: "+Utils.exceptionToString(ex));
+      }
+    }
+
+    public void notifyInternal(ChangeNotification notification)
+    {
      /* $if ZimbraX == 1 $
       return;
      /* $else $ */
       if( isRegistered.get() && notification.mods.hasNotifications() )
       {
         MailboxOperation op = notification.op;
+        if( op == null ) {
+          return;
+        }
+
         Operation operation = Operation.SKIP;
         Account account = new Account(notification.mailboxAccount);
 
