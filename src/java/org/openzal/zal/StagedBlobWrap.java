@@ -93,6 +93,13 @@ public class StagedBlobWrap<S extends Blob> implements StagedBlob
   }
 
   @Override
+  public boolean isCompressed()
+    throws IOException
+  {
+    return false;
+  }
+
+  @Override
   public void renameTo(String newPath) throws IOException
   {
     wrapZimbraObject(mStagedBlob).renameTo(newPath);

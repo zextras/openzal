@@ -9,59 +9,62 @@ import java.io.Reader;
 public class Analyzer implements Closeable
 {
   /* $if ZimbraVersion >= 8.5.0 $ */
-  private final org.apache.lucene.analysis.Analyzer mZObject;
+  private org.apache.lucene.analysis.Analyzer mAnalyzer;
   /* $endif $ */
 
   public Analyzer(@Nonnull Object zObject)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject = (org.apache.lucene.analysis.Analyzer) zObject;
+    mAnalyzer = (org.apache.lucene.analysis.Analyzer) zObject;
     /* $endif $ */
   }
 
   public TokenStream tokenStream(String fieldName, Reader reader)
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return new TokenStream(mZObject.tokenStream(fieldName, reader));
+    return new TokenStream(mAnalyzer.tokenStream(fieldName, reader));
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
+  @Deprecated
   public TokenStream reusableTokenStream(String fieldName, Reader reader)
     throws IOException
   {
     throw new UnsupportedOperationException();
   }
 
-  public int getPositionIncrementGap(String fieldName) {
+  @Deprecated
+  public int getPositionIncrementGap(String fieldName)
+  {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void close() {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    mZObject.close();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  @Override
-  public String toString() {
-    /* $if ZimbraVersion >= 8.5.0 $ */
-    return mZObject.toString();
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
-  }
-
-  public <T> T toZimbra(
-    @Nonnull Class<T> target
-  )
+  public void close()
   {
     /* $if ZimbraVersion >= 8.5.0 $ */
-    return target.cast(mZObject);
+    mAnalyzer.close();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  @Override
+  public String toString()
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mAnalyzer.toString();
+    /* $else $
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  public <T> T toZimbra(@Nonnull Class<T> target)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return target.cast(mAnalyzer);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */

@@ -138,6 +138,13 @@ public class BlobWrap implements Blob
     return mBlob.getFile().length();
   }
 
+  @Override
+  public boolean isCompressed()
+    throws IOException
+  {
+    return mBlob.isCompressed();
+  }
+
   public String getKey()
   {
     return mBlob.getPath();
