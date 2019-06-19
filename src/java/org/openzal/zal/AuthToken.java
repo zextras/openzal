@@ -61,6 +61,11 @@ public class AuthToken
     }
   }
 
+  public long expireTimestamp()
+  {
+    return mAuthToken.getExpires();
+  }
+
   public static AuthToken getAuthToken(Map<String, String> cookies)
     throws org.openzal.zal.exceptions.AuthTokenException
   {
