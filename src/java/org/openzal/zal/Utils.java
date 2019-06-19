@@ -22,6 +22,8 @@ package org.openzal.zal;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.zimbra.cs.db.DbMailItem;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -52,6 +54,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.openzal.zal.exceptions.ZimbraException;
 
 public abstract class Utils
 {
@@ -444,5 +447,17 @@ public abstract class Utils
     } while ( currentIdx < chars.length );
 
     return address.substring(0,address.length()-1);
+  }
+
+  public static String encodeMetadataForDb(String metadata) throws ZimbraException
+  {
+    try
+    {
+      return DbMailItem.checkMetadataLength(metadata);
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
