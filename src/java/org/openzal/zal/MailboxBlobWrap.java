@@ -104,6 +104,13 @@ public class MailboxBlobWrap implements MailboxBlob
   }
 
   @Override
+  public boolean isCompressed()
+    throws IOException
+  {
+    return mMailboxBlob.getLocalBlob().isCompressed();
+  }
+
+  @Override
   public Blob getLocalBlob()
   {
     try

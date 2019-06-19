@@ -146,4 +146,11 @@ public class ZalBlob implements Blob
   {
     return mFile.length();
   }
+
+  @Override
+  public boolean isCompressed()
+    throws IOException
+  {
+    return false;
+  }
 }

@@ -248,7 +248,8 @@ public class Mailbox
       throw new IllegalArgumentException("mMbox is null");
     }
     this.mMbox = (com.zimbra.cs.mailbox.Mailbox) mbox;
-    mIndex = new MailboxIndex(this.mMbox.index);
+
+    mIndex = new MailboxIndex(this, this.mMbox.index);
   }
 
   @Nonnull
@@ -1801,7 +1802,8 @@ public class Mailbox
     return new Message(message);
   }
 
-  public Message saveDraft(OperationContext octxt, ParsedMessage parsedMessage, int id)
+  @Nonnull
+  public Message saveDraft(@Nonnull OperationContext octxt,@Nonnull ParsedMessage parsedMessage, int id)
     throws IOException, ZimbraException
   {
     try

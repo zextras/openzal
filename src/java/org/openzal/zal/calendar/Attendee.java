@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class Attendee
 {
