@@ -201,7 +201,7 @@ public class Server extends Entry
   {
     try
     {
-      return URLUtil.getServiceURL(mServer,path,true);
+      return URLUtil.getServiceURL(mServer,path,false);
     }
     catch (ServiceException ex)
     {
