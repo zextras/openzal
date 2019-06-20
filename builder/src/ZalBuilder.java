@@ -10,7 +10,7 @@ public class ZalBuilder
   private static final int sMaxConcurrentTask = 4;
 
   private static final Version sFirstSupportedZimbraVersion = new Version("8.0.0");
-  private static final Version sLastSupportedZimbraVersion  = new Version("8.8.12");
+  private static final Version sLastSupportedZimbraVersion  = new Version("8.8.15");
   private static final Zimbra  sZimbraX          = new Zimbra(
     Zimbra.Type.x,
     new Version("8.8.8")
@@ -20,7 +20,7 @@ public class ZalBuilder
   private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
 
   private static String[] sCommonZimbraVersions = {
-    "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11", "8.8.12"
+    "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11", "8.8.12", "8.8.15"
   };
 
   private static List<String> sSkipDotClass = Arrays.asList(
