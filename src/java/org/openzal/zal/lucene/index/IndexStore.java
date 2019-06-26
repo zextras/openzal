@@ -1,40 +1,87 @@
 package org.openzal.zal.lucene.index;
 
 import com.zimbra.common.service.ServiceException;
-import javax.annotation.Nonnull;
+import java.io.IOException;
 import org.openzal.zal.Mailbox;
+import org.openzal.zal.MailboxIndex;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lucene.document.Document;
 import org.openzal.zal.lucene.search.IndexSearcher;
 
-import java.io.IOException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class IndexStore
 {
-  /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-  private final com.zimbra.cs.index.LuceneIndex mZObject;
+  /* $if ZimbraVersion >= 8.5.0 $ */
+  private final MailboxIndex mMailboxIndex;
+  /* $if ZimbraX == 0 $ */
+  private final com.zimbra.cs.index.LuceneIndex          mIndex;
+  /* $else $
+  private final com.zimbra.cs.index.solr.SolrIndex       mIndex;
   /* $endif $ */
 
   public IndexStore(@Nonnull Object zObject)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    mZObject = (com.zimbra.cs.index.LuceneIndex) zObject;
+    this(null, zObject);
+  }
+
+  public IndexStore(MailboxIndex mailboxIndex, @Nonnull Object zObject)
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    mMailboxIndex = mailboxIndex;
+    /* $endif */
+
+    /* $if ZimbraX == 1 $
+    mIndex = (com.zimbra.cs.index.solr.SolrIndex) zObject;
+    /* $elseif ZimbraVersion >= 8.5.0 $ */
+    mIndex = (com.zimbra.cs.index.LuceneIndex) zObject;
+    /* $else$
+    mIndex = null;
     /* $endif $ */
   }
 
-  public Indexer openIndexer()
-    throws IOException
+  public Document createDocument()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return new Indexer(mZObject.openIndexer());
+    /* $if ZimbraX == 1 || ZimbraVersion >= 8.5.0 $ */
+    return new Document();
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
+  public Indexer openIndexer()
+    throws IOException, ZimbraException
+  {
+    try
+    {
+      return new Indexer(this, mIndex.openIndexer());
+    }
+    catch( Exception e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public IndexSearcher openSearcher()
     throws IOException
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return new IndexSearcher(mZObject.openSearcher());
+    try
+    {
+      return new IndexSearcher(mIndex.openSearcher());
+    }
+    catch( Exception e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nullable
+  public MailboxIndex getMailboxIndex()
+  {
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return mMailboxIndex;
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
@@ -43,42 +90,41 @@ public class IndexStore
   @Override
   public String toString()
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return mZObject.toString();
+    /* $if ZimbraVersion >= 8.5.0 $ */
+      return mIndex.toString();
     /* $else $
-    throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
   public <T> T toZimbra(@Nonnull Class<T> target)
   {
-    /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    return target.cast(mZObject);
+    /* $if ZimbraVersion >= 8.5.0 $ */
+    return target.cast(mIndex);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
   }
 
-
   public static class Factory
   {
     /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-    private final com.zimbra.cs.index.LuceneIndex.Factory mZObject;
+    private final com.zimbra.cs.index.LuceneIndex.Factory mFactory;
     /* $endif $ */
 
     public Factory()
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
       this(new com.zimbra.cs.index.LuceneIndex.Factory());
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
+      /* $else $
+      throw new UnsupportedOperationException();
+      /* $endif $ */
     }
 
     public Factory(@Nonnull Object zObject)
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-      mZObject = (com.zimbra.cs.index.LuceneIndex.Factory) zObject;
+      mFactory = (com.zimbra.cs.index.LuceneIndex.Factory) zObject;
       /* $else $
       throw new UnsupportedOperationException();
       /* $endif $ */
@@ -88,7 +134,7 @@ public class IndexStore
       throws ServiceException
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-      return new IndexStore(mZObject.getIndexStore(mailbox.getMailbox()));
+      return new IndexStore(mailbox.getIndex(), mFactory.getIndexStore(mailbox.getMailbox()));
       /* $else $
       throw new UnsupportedOperationException();
       /* $endif $ */
@@ -98,7 +144,7 @@ public class IndexStore
     public String toString()
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-      return mZObject.toString();
+      return mFactory.toString();
       /* $else $
       throw new UnsupportedOperationException();
       /* $endif $ */
@@ -107,7 +153,7 @@ public class IndexStore
     public <T> T toZimbra(@Nonnull Class<T> target)
     {
       /* $if ZimbraVersion >= 8.5.0 && ZimbraX == 0 $ */
-      return target.cast(mZObject);
+      return target.cast(mFactory);
     /* $else $
     throw new UnsupportedOperationException();
     /* $endif $ */
