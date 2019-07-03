@@ -126,6 +126,11 @@ public class AuthToken
     return mAuthToken.isDelegatedAdmin();
   }
 
+  public boolean isDelegatedAuth()
+  {
+    return mAuthToken.isDelegatedAuth();
+  }
+
   public String toString()
   {
     return mAuthToken.toString();
