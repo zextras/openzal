@@ -150,6 +150,8 @@ public interface Provisioning
   List<Account> getAllAdminAccounts()
     throws ZimbraException;
 
+  //instant-kill big infrastructures
+  @Deprecated
   List<Account> getAllAccounts(@Nonnull Domain domain)
     throws ZimbraException;
 
