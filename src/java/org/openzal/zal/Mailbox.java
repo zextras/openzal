@@ -25,6 +25,7 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
+import com.zimbra.cs.db.DbTag;
 import com.zimbra.cs.fb.FreeBusyQuery;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
@@ -125,6 +126,22 @@ public class Mailbox
 
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
+
+  private static Method sCreateDefaultTags;
+
+  static
+  {
+    try
+    {
+      sCreateDefaultTags = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredMethod("createDefaultFlags");
+      sCreateDefaultTags.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
 
   public long getSize()
   {
@@ -2873,5 +2890,24 @@ public class Mailbox
     /* $elseif ZimbraX == 1 $
     return;
     /* $endif $ */
+  }
+
+  public void createDefaultFlags()  throws ZimbraException
+  {
+    try
+    {
+      beginTransaction("test", newOperationContext());
+      sCreateDefaultTags.invoke(mMbox);
+      endTransaction(true);
+    }
+    catch( Exception e )
+    {
+      endTransaction(false);
+      if( e instanceof ServiceException )
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+      throw new RuntimeException(e);
+    }
   }
 }
