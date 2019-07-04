@@ -165,6 +165,16 @@ public class Mailbox
     }
   }
 
+  public MailboxData getMailboxData()
+  {
+    return new MailboxData(
+      getId(),
+      getSchemaGroupId(),
+      getAccountId(),
+      getIndexVolume()
+    );
+  }
+
   static class FakeMailbox extends com.zimbra.cs.mailbox.Mailbox
   {
     public FakeMailbox(@Nonnull com.zimbra.cs.account.Account account)

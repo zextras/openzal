@@ -61,9 +61,9 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
-  public String getBlobPath(int mboxId, int itemId, int revision)
+  public String getBlobPath(MailboxData mbox, int itemId, int revision)
   {
-    String path = mVolume.getBlobDir(mboxId, itemId);
+    String path = mVolume.getBlobDir(mbox.getId(), itemId);
     path = path.startsWith(File.separator)?path:File.separator+path;
 
     int buflen = path.length() + 15 + (revision < 0 ? 0 : 11);
@@ -79,15 +79,15 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
-  public String getMailboxDirPath(int mboxId)
+  public String getMailboxDirPath(MailboxData mbox)
   {
-    return mVolume.getMailboxDir(mboxId, StoreVolume.TYPE_MESSAGE);
+    return mVolume.getMailboxDir(mbox.getId(), StoreVolume.TYPE_MESSAGE);
   }
 
   @Override
-  public String getMailboxDirPath(int mboxId,short type)
+  public String getMailboxDirPath(MailboxData mbox,short type)
   {
-    return mVolume.getMailboxDir(mboxId, type);
+    return mVolume.getMailboxDir(mbox.getId(), type);
   }
 
   @Override
@@ -142,6 +142,7 @@ public class FileBlobPrimaryStore implements PrimaryStore
     return link(src, destMbox, destMsgId, destRevision);
   }
 
+  @Override
   @Nonnull
   public MailboxBlob link(@Nonnull Blob src, @Nonnull Mailbox destMbox, int destMsgId, int destRevision)
     throws IOException, ZimbraException
