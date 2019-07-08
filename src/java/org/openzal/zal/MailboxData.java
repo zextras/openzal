@@ -1,17 +1,18 @@
 package org.openzal.zal;
 
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class MailboxData
 {
-  private final int mId;
+  private final Integer mId;
   private final int mSchemaGroupId;
   private final String mAccountId;
   private final Short mIndexVolumeId;
 
-  public MailboxData(int mailboxid)
+  public MailboxData(@Nonnull Integer mailboxid)
   {
     this(
       mailboxid,
@@ -21,8 +22,18 @@ public class MailboxData
     );
   }
 
+  public MailboxData(@Nonnull String accountId)
+  {
+    this(
+      null,
+      -1,
+      accountId,
+      null
+    );
+  }
+
   public MailboxData(
-    int id,
+    Integer id,
     int schemaGroupId,
     String accountId,
     Short indexVolumeId
@@ -62,13 +73,24 @@ public class MailboxData
       return false;
     }
     MailboxData that = (MailboxData) o;
-    return mId == that.mId;
+    boolean equals = true;
+    if((mId != null && !Objects.equals(mId, that.mId)) ||
+      (that.mId != null && !Objects.equals(that.mId, mId)))
+    {
+      equals = false;
+    }
+    if((mAccountId != null && !Objects.equals(mAccountId, that.mAccountId)) ||
+      (that.mAccountId != null && !Objects.equals(that.mAccountId, mAccountId)))
+    {
+      equals = false;
+    }
+    return equals;
   }
 
   @Override
   public int hashCode()
   {
-    return Objects.hash(mId);
+    return Objects.hash(mId, mAccountId);
   }
 
   @Nullable
