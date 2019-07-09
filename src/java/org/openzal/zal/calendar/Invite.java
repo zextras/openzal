@@ -386,8 +386,13 @@ public class Invite
   public List<Invite> getExceptionInstances(){
     return getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
   }
-  
+
   public List<Invite> getRecurrencesInvitees(int recurrenceType)
+  {
+    return getRecurrencesInvitees(recurrenceType, null);
+  }
+
+  public List<Invite> getRecurrencesInvitees(int recurrenceType, MimeMessage mimeMessage)
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
@@ -420,7 +425,7 @@ public class Invite
       try
       {
         com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
-        inviteList.add(new Invite(invite));
+        inviteList.add(new Invite(invite, mimeMessage));
       }
       catch (Exception ex)
       {
