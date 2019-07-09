@@ -880,4 +880,20 @@ public class Invite
      }
    }
 
+   public boolean hasResponseRequest()
+   {
+     return mInvite.hasRsvp();
+   }
+
+   public void setResponseRequest(boolean value)
+   {
+     mInvite.setRsvp(value);
+   }
+
+   public boolean getResponseRequest()
+   {
+     return mInvite.getRsvp();
+   }
+
+
 }
