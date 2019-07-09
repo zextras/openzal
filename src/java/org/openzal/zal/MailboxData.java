@@ -33,6 +33,19 @@ public class MailboxData
   }
 
   public MailboxData(
+    int mailboxId,
+    @Nonnull String accountId
+  )
+  {
+    this(
+      mailboxId,
+      (short) (((mailboxId - 1) % 100) + 1),
+      accountId,
+      null
+    );
+  }
+
+  public MailboxData(
     Integer id,
     int schemaGroupId,
     String accountId,
@@ -73,18 +86,15 @@ public class MailboxData
       return false;
     }
     MailboxData that = (MailboxData) o;
-    boolean equals = true;
-    if((mId != null && !Objects.equals(mId, that.mId)) ||
-      (that.mId != null && !Objects.equals(that.mId, mId)))
+    if(mId != null && that.mId != null && !Objects.equals(mId, that.mId))
     {
-      equals = false;
+      return false;
     }
-    if((mAccountId != null && !Objects.equals(mAccountId, that.mAccountId)) ||
-      (that.mAccountId != null && !Objects.equals(that.mAccountId, mAccountId)))
+    if(mAccountId != null && that.mAccountId != null && !Objects.equals(mAccountId, that.mAccountId))
     {
-      equals = false;
+      return false;
     }
-    return equals;
+    return true;
   }
 
   @Override
