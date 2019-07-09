@@ -194,6 +194,16 @@ public class InviteFactory
     mDescriptionHtml = descriptionHtml;
   }
 
+  public void setDescription( String description )
+  {
+    mDescription = description;
+  }
+
+  public void setDescriptionHtml( String html )
+  {
+    mDescriptionHtml = html;
+  }
+
   public void setUtcLastModifyTime(long lastModifyTimeUtc)
   {
     mLastModifyTimeUtc = lastModifyTimeUtc;

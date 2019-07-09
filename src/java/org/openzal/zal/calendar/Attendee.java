@@ -27,7 +27,6 @@ import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @JsonIgnoreProperties( ignoreUnknown = true )
 public class Attendee
