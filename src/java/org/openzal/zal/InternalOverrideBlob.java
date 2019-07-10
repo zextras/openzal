@@ -49,11 +49,11 @@ class InternalOverrideBlob extends com.zimbra.cs.store.Blob
     return mBlob.getInputStream();
   }
 
-  @Override
-  public boolean isCompressed() throws IOException
-  {
-    return mBlob.isCompressed();
-  }
+  // @Override
+  // public boolean isCompressed() throws IOException
+  // {
+  //   return mBlob.isCompressed();
+  // }
 
   @Override
   public String getDigest() throws IOException

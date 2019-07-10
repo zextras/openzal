@@ -39,6 +39,6 @@ public interface Blob
   Blob setDigest(String digest);
   Blob setSize(long size);
   long getStoredFileSize() throws IOException;
-  boolean isCompressed() throws IOException;
+  //boolean isCompressed() throws IOException;
 }
 
