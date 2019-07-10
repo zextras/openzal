@@ -104,7 +104,14 @@ public class CalendarItem extends Item
   @Nullable
   public Invite getDefaultInviteOrNull()
   {
-    return wrap(mCalendarItem.getDefaultInviteOrNull());
+    // BEWARE! never call this during item restore
+    return getDefaultInviteOrNull(null);
+  }
+
+  @Nullable
+  public Invite getDefaultInviteOrNull(@Nullable MimeMessage mimeMessage)
+  {
+    return wrap(mCalendarItem.getDefaultInviteOrNull(), mimeMessage);
   }
 
   public List<Invite> getInvites()
@@ -135,12 +142,17 @@ public class CalendarItem extends Item
 
   private Invite wrap(com.zimbra.cs.mailbox.calendar.Invite invite)
   {
+    return wrap(invite, null);
+  }
+
+  private Invite wrap(com.zimbra.cs.mailbox.calendar.Invite invite, MimeMessage mimeMessage)
+  {
     if (invite == null)
     {
       return null;
     }
 
-    return new Invite(invite);
+    return new Invite(invite, mimeMessage);
   }
 
   public void updatePartStat(
@@ -157,7 +169,7 @@ public class CalendarItem extends Item
     int sequence;
     Invite requestInvite;
 
-    Invite defaultInvite = getDefaultInviteOrNull();
+    Invite defaultInvite = getDefaultInviteOrNull(null);
     if (recurId == null)
     {
       requestInvite = defaultInvite;
