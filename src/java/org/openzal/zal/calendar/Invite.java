@@ -882,7 +882,8 @@ public class Invite
 
    public boolean hasResponseRequest()
    {
-     return mInvite.hasRsvp();
+     Boolean rsvp = mInvite.getRsvp();
+     return rsvp != null;
    }
 
    public void setResponseRequest(boolean value)
