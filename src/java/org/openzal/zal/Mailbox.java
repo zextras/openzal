@@ -25,7 +25,6 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
-import com.zimbra.cs.db.DbTag;
 import com.zimbra.cs.fb.FreeBusyQuery;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
@@ -37,8 +36,6 @@ import com.zimbra.cs.mailbox.cache.FolderCache;
 import com.zimbra.cs.mailbox.cache.LocalTagCache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
-import com.zimbra.cs.mailbox.DeliveryOptions;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
@@ -127,14 +124,14 @@ public class Mailbox
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
 
-  private static Method sCreateDefaultTags;
+  private static Method sCreateDefaultFlags;
 
   static
   {
     try
     {
-      sCreateDefaultTags = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredMethod("createDefaultFlags");
-      sCreateDefaultTags.setAccessible(true);
+      sCreateDefaultFlags = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredMethod("createDefaultFlags");
+      sCreateDefaultFlags.setAccessible(true);
     }
     catch (Throwable ex)
     {
@@ -2896,8 +2893,8 @@ public class Mailbox
   {
     try
     {
-      beginTransaction("test", newOperationContext());
-      sCreateDefaultTags.invoke(mMbox);
+      beginTransaction("createDefaultFlags", newOperationContext());
+      sCreateDefaultFlags.invoke(mMbox);
       endTransaction(true);
     }
     catch( Exception e )
