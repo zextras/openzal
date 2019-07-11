@@ -30,6 +30,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimePart;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class Mime
@@ -93,5 +94,11 @@ public class Mime
     {
       return original;
     }
+  }
+
+  public static InputStream getInputStream(MimeMessage mimeMessage)
+    throws IOException
+  {
+    return com.zimbra.cs.mime.Mime.getInputStream(mimeMessage);
   }
 }
