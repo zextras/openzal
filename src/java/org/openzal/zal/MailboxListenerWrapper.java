@@ -23,20 +23,23 @@ public abstract class MailboxListenerWrapper
 
     private boolean toBackup(Object what)
     {
+      boolean isRelevant = false;
+
       byte type = Item.TYPE_UNKNOWN;
 
       if( what instanceof MailItem.Type )
       {
         type = ((MailItem.Type) what).toByte();
+        isRelevant = true;
       }
 
       if( what instanceof MailItem )
       {
         Item item = new Item(what);
         type = item.getType();
+        isRelevant = true;
       }
 
-      boolean isRelevant = true;
       switch( type )
       {
         case Item.TYPE_MOUNTPOINT:
@@ -206,7 +209,7 @@ public abstract class MailboxListenerWrapper
                 }
                 catch( Exception e )
                 {
-                  ZimbraLog.mailbox.debug(" Unable to obtain modification informations");
+                  ZimbraLog.mailbox.debug(" Unable to obtain modification information");
                   itemChange = new ItemChange(
                     false,
                     0,
