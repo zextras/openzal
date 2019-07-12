@@ -151,6 +151,7 @@ public class Domain extends Entry
   }
 
   @Nonnull
+  @Deprecated //instant-kill big infrastructures
   public List<Account> getAllAccounts()
   {
     try
