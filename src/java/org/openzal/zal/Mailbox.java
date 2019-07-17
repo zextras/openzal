@@ -38,8 +38,6 @@ import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.DeliveryOptions;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -125,6 +123,22 @@ public class Mailbox
 
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
+
+  private static Method sCreateDefaultFlags;
+
+  static
+  {
+    try
+    {
+      sCreateDefaultFlags = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredMethod("createDefaultFlags");
+      sCreateDefaultFlags.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
 
   public long getSize()
   {
@@ -2883,5 +2897,24 @@ public class Mailbox
     /* $elseif ZimbraX == 1 $
     return;
     /* $endif $ */
+  }
+
+  public void createDefaultFlags()  throws ZimbraException
+  {
+    try
+    {
+      beginTransaction("createDefaultFlags", newOperationContext());
+      sCreateDefaultFlags.invoke(mMbox);
+      endTransaction(true);
+    }
+    catch( Exception e )
+    {
+      endTransaction(false);
+      if( e instanceof ServiceException )
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+      throw new RuntimeException(e);
+    }
   }
 }

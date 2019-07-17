@@ -87,7 +87,7 @@ public class Invite
     this(invite, null);
   }
 
-  public Invite(@Nonnull Object invite, MimeMessage mimeMessage)
+  public Invite(@Nonnull Object invite, @Nullable MimeMessage mimeMessage)
   {
     if (invite == null)
     {
@@ -389,10 +389,10 @@ public class Invite
 
   public List<Invite> getRecurrencesInvitees(int recurrenceType)
   {
-    return getRecurrencesInvitees(recurrenceType, null);
+     return getRecurrencesInvitees(recurrenceType, null);
   }
 
-  public List<Invite> getRecurrencesInvitees(int recurrenceType, MimeMessage mimeMessage)
+  public List<Invite> getRecurrencesInvitees(int recurrenceType, @Nullable MimeMessage mimeMessage)
   {
     List<Invite> inviteList = new LinkedList<Invite>();
 
