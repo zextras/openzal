@@ -220,6 +220,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServiceHostname                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceHostname;
   public static String A_zimbraMailForwardingAddress                          = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddress;
   public static String A_zimbraGalLastSuccessfulSyncTimestamp                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLastSuccessfulSyncTimestamp;
+  public static String A_zimbraFeatureGalAutoCompleteEnabled                  = com.zimbra.cs.account.Provisioning.A_zimbraFeatureGalAutoCompleteEnabled;
+  public static String A_zimbraFeatureGalEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraFeatureGalEnabled;
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
