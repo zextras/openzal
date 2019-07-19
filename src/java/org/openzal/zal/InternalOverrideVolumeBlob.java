@@ -29,7 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InternalOverrideVolumeBlob extends VolumeBlobProxy
+class InternalOverrideVolumeBlob extends VolumeBlobProxy
 {
   private final Blob   mBlob;
   private final String mVolumeId;
