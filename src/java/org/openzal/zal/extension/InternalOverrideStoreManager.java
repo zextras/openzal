@@ -29,20 +29,24 @@ import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.store.file.FileBlobStore;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
-import javax.annotation.Nullable;
-import org.openzal.zal.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import org.openzal.zal.BlobWrap;
+import org.openzal.zal.MailboxBlobWrap;
+import org.openzal.zal.PrimaryStore;
+import org.openzal.zal.StagedBlobWrap;
+import org.openzal.zal.Store;
+import org.openzal.zal.StoreVolume;
+import org.openzal.zal.Utils;
+import org.openzal.zal.VolumeManager;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.AnyThrow;
 import org.openzal.zal.log.ZimbraLog;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
+import javax.annotation.Nullable;
 
 import static com.zimbra.common.service.ServiceException.SENDERS_FAULT;
 import static com.zimbra.cs.mailbox.MailServiceException.ITEM_ID;
@@ -130,7 +134,7 @@ class InternalOverrideStoreManager
 
   public BlobBuilder getBlobBuilder() throws IOException, ServiceException
   {
-    return mStoreManager.getPrimaryStore().toZimbra(FileBlobStore.class).getBlobBuilder();
+    return mStoreManager.getPrimaryStore().getBlobBuilder().toZimbra(BlobBuilder.class);
   }
 
   public Blob storeIncoming(InputStream data, boolean storeAsIs)
