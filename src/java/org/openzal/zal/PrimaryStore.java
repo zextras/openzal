@@ -30,6 +30,7 @@ public interface PrimaryStore extends Store
   MailboxBlob renameTo(StagedBlob src, Mailbox destMbox, int destMsgId, int destRevision) throws IOException;
   boolean delete(Blob blob) throws IOException;
   InputStream getContent(Blob blob) throws IOException;
+  BlobBuilder getBlobBuilder() throws IOException;
   <T> T toZimbra(Class<T> cls);
 }
 
