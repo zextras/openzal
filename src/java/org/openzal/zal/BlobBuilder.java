@@ -42,4 +42,5 @@ public interface BlobBuilder
   void dispose();
   Blob finish() throws IOException, ZimbraException;
   Blob getBlob();
+  <T> T toZimbra(Class<T> cls);
 }
