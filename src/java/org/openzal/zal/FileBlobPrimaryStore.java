@@ -283,6 +283,20 @@ public class FileBlobPrimaryStore implements PrimaryStore
   }
 
   @Override
+  public BlobBuilder getBlobBuilder()
+    throws IOException, ZimbraException
+  {
+    try
+    {
+      return new BlobBuilderWrap(sm.getBlobBuilder());
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public <T> T toZimbra(Class<T> claz)
   {
     return claz.cast(sm.getWrappedObject());
