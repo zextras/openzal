@@ -1854,6 +1854,26 @@ public class Mailbox
   }
 
   @Nonnull
+  public List<Contact> getContacts(OperationContext octxt, int folderId)
+  {
+    List<Contact> contacts = new ArrayList<>();
+    try
+    {
+      List<com.zimbra.cs.mailbox.Contact> contactList = mMbox.getContactList(octxt.getOperationContext(), folderId);
+      for( com.zimbra.cs.mailbox.Contact contact : contactList )
+      {
+        contacts.add(new Contact(contact));
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return contacts;
+  }
+
+  @Nonnull
   public Contact createContact(OperationContext octxt, ParsedContact pc, int folderId)
   {
     return createContact(octxt, pc, folderId, Collections.<String>emptyList());
