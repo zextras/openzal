@@ -20,6 +20,8 @@
 
 package org.openzal.zal;
 
+import org.openzal.zal.extension.InternalOverrideBlobBuilder;
+
 public class InternalOverrideFactory
 {
   public static Object wrapBlob(Blob blob)
@@ -36,4 +38,6 @@ public class InternalOverrideFactory
   {
     return InternalOverrideStagedBlob.wrap(blob);
   }
+
+  public static Object wrapBlobBuilder(BlobBuilder builder) {return InternalOverrideBlobBuilder.wrap(builder); }
 }
