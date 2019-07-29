@@ -252,6 +252,8 @@ public class Account extends Entry
     }
   }
 
+  // !mAccount.getServer().mailTransportMatches(mAccount.getAttr("zimbraMailTransport"));
+  // Probably you want isIsExternalVirtualAccount
   public boolean isAccountExternal()
   {
     try
