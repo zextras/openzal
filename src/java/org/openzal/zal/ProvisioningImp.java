@@ -136,6 +136,15 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailOutgoingSieveScript                              = com.zimbra.cs.account.Provisioning.A_zimbraMailOutgoingSieveScript;
   public static String A_zimbraMailTrustedSenderListMaxNumEntries                   = com.zimbra.cs.account.Provisioning.A_zimbraMailTrustedSenderListMaxNumEntries;
   public static String A_zimbraIsExternalVirtualAccount                             = com.zimbra.cs.account.Provisioning.A_zimbraIsExternalVirtualAccount;
+  public static String A_zimbraIsSystemAccount                                      = com.zimbra.cs.account.Provisioning.A_zimbraIsSystemAccount;
+  public static String A_zimbraIsSystemResource                                     = com.zimbra.cs.account.Provisioning.A_zimbraIsSystemResource;
+  public static String A_zimbraCalResType                                           = com.zimbra.cs.account.Provisioning.A_zimbraCalResType;
+  /* $if ZimbraVersion >= 8.8.10 $ */
+  public static String A_zimbraPrefDefaultCalendarId                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultCalendarId;
+/* $else$
+  public static String A_zimbraPrefDefaultCalendarId                                = "";
+/* $endif$ */
+
 
 /* $if ZimbraVersion >= 8.5.0 $ */
   public static String A_zimbraAuthTokens                                     = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
@@ -220,6 +229,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServiceHostname                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceHostname;
   public static String A_zimbraMailForwardingAddress                          = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddress;
   public static String A_zimbraGalLastSuccessfulSyncTimestamp                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLastSuccessfulSyncTimestamp;
+  public static String A_zimbraFeatureGalAutoCompleteEnabled                  = com.zimbra.cs.account.Provisioning.A_zimbraFeatureGalAutoCompleteEnabled;
+  public static String A_zimbraFeatureGalEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraFeatureGalEnabled;
   public static String A_zimbraPrefFromAddress                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress;
   public static String A_zimbraPrefTimeZoneId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefTimeZoneId;
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
