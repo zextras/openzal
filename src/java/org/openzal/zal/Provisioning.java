@@ -36,6 +36,7 @@ public interface Provisioning
   String A_member = com.zimbra.cs.account.Provisioning.A_member;
   String ZIMBRA_USER_ID = "e0fafd89-1360-11d9-8661-000a95d98ef2";
   String DEFAULT_COS_ID = "e00428a1-0c00-11d9-836a-000d93afea2a";
+  String DEFAULT_EXTERNAL_COS_ID = "f27456a8-0c00-11d9-280a-286d93afea2g";
 
   boolean isValidUid(@Nonnull String uid);
 

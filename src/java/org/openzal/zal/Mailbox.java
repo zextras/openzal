@@ -38,8 +38,6 @@ import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.DeliveryOptions;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -49,6 +47,7 @@ import com.zimbra.cs.session.Session;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import org.openzal.zal.calendar.CalendarItemData;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.RecurrenceId;
@@ -124,6 +123,22 @@ public class Mailbox
 
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
+
+  private static Method sCreateDefaultFlags;
+
+  static
+  {
+    try
+    {
+      sCreateDefaultFlags = com.zimbra.cs.mailbox.Mailbox.class.getDeclaredMethod("createDefaultFlags");
+      sCreateDefaultFlags.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
 
   public long getSize()
   {
@@ -247,7 +262,8 @@ public class Mailbox
       throw new IllegalArgumentException("mMbox is null");
     }
     this.mMbox = (com.zimbra.cs.mailbox.Mailbox) mbox;
-    mIndex = new MailboxIndex(this.mMbox.index);
+
+    mIndex = new MailboxIndex(this, this.mMbox.index);
   }
 
   @Nonnull
@@ -1796,7 +1812,22 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+
     return new Message(message);
+  }
+
+  @Nonnull
+  public Message saveDraft(@Nonnull OperationContext octxt,@Nonnull ParsedMessage parsedMessage, int id)
+    throws IOException, ZimbraException
+  {
+    try
+    {
+      return new Message(mMbox.saveDraft(octxt.getOperationContext(), parsedMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class), id));
+    }
+    catch( com.zimbra.common.service.ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull
@@ -2856,5 +2887,24 @@ public class Mailbox
     /* $elseif ZimbraX == 1 $
     return;
     /* $endif $ */
+  }
+
+  public void createDefaultFlags()  throws ZimbraException
+  {
+    try
+    {
+      beginTransaction("createDefaultFlags", newOperationContext());
+      sCreateDefaultFlags.invoke(mMbox);
+      endTransaction(true);
+    }
+    catch( Exception e )
+    {
+      endTransaction(false);
+      if( e instanceof ServiceException )
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+      throw new RuntimeException(e);
+    }
   }
 }
