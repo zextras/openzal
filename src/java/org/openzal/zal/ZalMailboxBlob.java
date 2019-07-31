@@ -136,10 +136,10 @@ public class ZalMailboxBlob extends ZalBlob implements MailboxBlob
     return this;
   }
 
-  // @Override
-  // public boolean isCompressed()
-  //   throws IOException
-  // {
-  //   return mBlob.isCompressed();
-  // }
+  @Override
+  public boolean isCompressed()
+    throws IOException
+  {
+    return mBlob.isCompressed();
+  }
 }
