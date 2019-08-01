@@ -114,6 +114,13 @@ public class ZimbraDatabase
                                    pos);
   }
 
+  public static int setMailboxId(PreparedStatement stmt, int mailboxId, int pos) throws SQLException
+  {
+    int next = pos;
+    stmt.setInt(next++, mailboxId);
+    return next;
+  }
+
   @Nonnull
   public static Set<String> listAccountIds(Connection conn) throws ZimbraException
   {
@@ -203,9 +210,19 @@ public class ZimbraDatabase
     return getItemTableName(mbox,false);
   }
 
-  public static String getItemTableName(Mailbox mbox,boolean dumpster)
+  public static String getItemTableName(int mailboxGroupId)
   {
-    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".mail_item";
+    return getItemTableName(mailboxGroupId,false);
+  }
+
+  public static String getItemTableName(Mailbox mbox, boolean dumpster)
+  {
+    return getItemTableName(mbox.getSchemaGroupId(), dumpster);
+  }
+
+  public static String getItemTableName(int mailboxGroupId, boolean dumpster)
+  {
+    String s = "mboxgroup" + mailboxGroupId + ".mail_item";
     if (dumpster)
       s += "_dumpster";
     return s;
@@ -213,12 +230,22 @@ public class ZimbraDatabase
 
   public static String getCalendarTableName(Mailbox mbox)
   {
-    return getCalendarTableName(mbox, false);
+    return getCalendarTableName(mbox.getSchemaGroupId(), false);
   }
 
-  public static String getCalendarTableName(Mailbox mbox,boolean dumpster)
+  public static String getCalendarTableName(int mailboxGroupId)
   {
-    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".appointment";
+    return getCalendarTableName(mailboxGroupId, false);
+  }
+
+  public static String getCalendarTableName(Mailbox mbox, boolean dumpster)
+  {
+    return getCalendarTableName(mbox.getSchemaGroupId(), dumpster);
+  }
+
+  public static String getCalendarTableName(int mailboxGroupId, boolean dumpster)
+  {
+    String s = "mboxgroup" + mailboxGroupId + ".appointment";
     if (dumpster)
       s += "_dumpster";
     return s;
@@ -229,16 +256,36 @@ public class ZimbraDatabase
     return "mboxgroup" + mbox.getSchemaGroupId() + ".tombstone";
   }
 
+  public static String getTombstoneTable(int mailboxGroupId)
+  {
+    return "mboxgroup" + mailboxGroupId + ".tombstone";
+  }
+
   public static String getRevisionTableName(Mailbox mbox)
   {
-    return getRevisionTableName(mbox,false);
+    return getRevisionTableName(mbox.getSchemaGroupId(),false);
+  }
+
+  public static String getRevisionTableName(int mailboxGroupId)
+  {
+    return getRevisionTableName(mailboxGroupId,false);
   }
 
   public static String getRevisionTableName(Mailbox mbox,boolean dumpster)
   {
-    String s = "mboxgroup" + mbox.getSchemaGroupId() + ".revision";
+    return getRevisionTableName(mbox.getSchemaGroupId(), dumpster);
+  }
+
+  public static String getRevisionTableName(int mailboxGroupId, boolean dumpster)
+  {
+    String s = "mboxgroup" + mailboxGroupId + ".revision";
     if (dumpster)
       s += "_dumpster";
     return s;
+  }
+
+  public static int getMailboxGroupFromMailboxId(int mailboxId)
+  {
+    return (((mailboxId - 1) % 100) + 1);
   }
 }
