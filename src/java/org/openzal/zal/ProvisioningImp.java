@@ -79,11 +79,6 @@ import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
 {
-  /* $if ZimbraVersion >= 8.8.10 $ */
-  public static String A_zimbraPrefDefaultCalendarId                          = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultCalendarId;
-  /* $else $
-  public static String A_zimbraPrefDefaultCalendarId                          = "";
-  /* $endif $ */
   /* $if ZimbraVersion >= 8.7.0 $ */
   public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
