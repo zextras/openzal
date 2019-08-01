@@ -1,18 +1,55 @@
 package org.openzal.zal;
 
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+
 public class MailboxData
 {
-  private final int            mId;
-  private final int            mSchemaGroupId;
-  private final String         mAccountId;
-  private final short          mIndexVolumeId;
+  private final Integer mId;
+  private final int mSchemaGroupId;
+  private final String mAccountId;
+  private final Short mIndexVolumeId;
+
+  public MailboxData(@Nonnull Integer mailboxid)
+  {
+    this(
+      mailboxid,
+      (short) (((mailboxid - 1) % 100) + 1),
+      null,
+      null
+    );
+  }
+
+  public MailboxData(@Nonnull String accountId)
+  {
+    this(
+      null,
+      -1,
+      accountId,
+      null
+    );
+  }
 
   public MailboxData(
-    int id,
+    int mailboxId,
+    @Nonnull String accountId
+  )
+  {
+    this(
+      mailboxId,
+      (short) (((mailboxId - 1) % 100) + 1),
+      accountId,
+      null
+    );
+  }
+
+  public MailboxData(
+    Integer id,
     int schemaGroupId,
     String accountId,
-    short indexVolumeId
+    Short indexVolumeId
   )
   {
     mId = id;
@@ -31,12 +68,43 @@ public class MailboxData
     return mSchemaGroupId;
   }
 
+  @Nullable
   public String getAccountId()
   {
     return mAccountId;
   }
 
-  public short getIndexVolumeId()
+  @Override
+  public boolean equals(Object o)
+  {
+    if( this == o )
+    {
+      return true;
+    }
+    if( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
+    MailboxData that = (MailboxData) o;
+    if(mId != null && that.mId != null && !Objects.equals(mId, that.mId))
+    {
+      return false;
+    }
+    if(mAccountId != null && that.mAccountId != null && !Objects.equals(mAccountId, that.mAccountId))
+    {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return Objects.hash(mId, mAccountId);
+  }
+
+  @Nullable
+  public Short getIndexVolumeId()
   {
     return mIndexVolumeId;
   }
