@@ -24,9 +24,10 @@ import java.util.Calendar;
 
 public interface Clock
 {
-  long ONE_HOUR = 60L * 60L * 1000L;
-  long ONE_DAY = 24L * ONE_HOUR;
-  long HALF_DAY = 12L * ONE_DAY;
+  long ONE_MINUTE = 60L * 1000L;
+  long ONE_HOUR   = ONE_MINUTE * 60L;
+  long ONE_DAY    = 24L * ONE_HOUR;
+  long HALF_DAY   = 12L * ONE_HOUR;
 
   public long now();
   public Calendar getCurrentTime();
