@@ -197,6 +197,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraInterceptAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraInterceptAddress;
   public static String A_zimbraMailQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailQuota;
   public static String A_zimbraPrefDefaultSignatureId                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultSignatureId;
+  public static String A_zimbraPrefForwardReplySignatureId                    = com.zimbra.cs.account.Provisioning.A_zimbraPrefForwardReplySignatureId;
   public static String A_zimbraSignatureName                                  = com.zimbra.cs.account.Provisioning.A_zimbraSignatureName;
   public static String A_zimbraSignatureId                                    = com.zimbra.cs.account.Provisioning.A_zimbraSignatureId;
   public static String A_zimbraMailSieveScript                                = com.zimbra.cs.account.Provisioning.A_zimbraMailSieveScript;
