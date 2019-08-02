@@ -6,7 +6,8 @@ public enum Operation implements Comparable<Operation>
   MAILBOX_CREATED(1),
   ACCOUNT_SCAN(2),
   MAILBOX_DELETED(3),
-  ITEM_SCAN(3);
+  ITEM_SCAN(3),
+  BLOB_MOVED(4);
 
   private int priority;
 
