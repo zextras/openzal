@@ -77,15 +77,15 @@ class InternalOverrideBlob extends com.zimbra.cs.store.Blob
   @Override
   public Blob setDigest(String digest)
   {
-    throw new UnsupportedOperationException();
-    //return this;
+    mBlob.setDigest(digest);
+    return this;
   }
 
   @Override
   public Blob setRawSize(long rawSize)
   {
-    throw new UnsupportedOperationException();
-    //return this;
+    mBlob.setSize(rawSize);
+    return this;
   }
 
   @Override
