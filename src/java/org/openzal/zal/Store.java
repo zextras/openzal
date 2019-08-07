@@ -42,9 +42,9 @@ public interface Store
   boolean canBePrimary();
   String getVolumeId();
   String getVolumeName();
-  String getBlobPath(int mboxId, int itemId, int modContent);
-  String getMailboxDirPath(int mboxId);
-  String getMailboxDirPath(int mboxId,short type);
+  String getBlobPath(MailboxData mbox, int itemId, int modContent);
+  String getMailboxDirPath(MailboxData mbox);
+  String getMailboxDirPath(MailboxData mbox, short type);
   String getRootPath();
   boolean isCompressed();
   long getCompressionThreshold();
