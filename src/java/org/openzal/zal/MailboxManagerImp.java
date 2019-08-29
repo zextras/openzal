@@ -458,7 +458,6 @@ public class MailboxManagerImp implements MailboxManager
   }
 
   /* $if ZimbraVersion >= 8.8.10 $ */
-  /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
   class ZALAdditionalQuotaProvider implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
   {
     private final AdditionalQuotaProvider mAdditionalQuotaProvider;
