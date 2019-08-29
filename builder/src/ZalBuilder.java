@@ -13,7 +13,7 @@ public class ZalBuilder
   private static final Version sLastSupportedZimbraVersion  = new Version("8.8.15");
   private static final Zimbra  sZimbraX          = new Zimbra(
     Zimbra.Type.x,
-    new Version("8.8.8")
+    new Version("8.8.15")
   );
 
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
