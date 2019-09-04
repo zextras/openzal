@@ -24,6 +24,8 @@ package org.openzal.zal;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -306,6 +308,31 @@ public class MailboxManagerImp implements MailboxManager
     return getMailboxByAccountId(mailbox.getAccountId());
   }
 
+  /* $if ZimbraVersion < 8.8.10 $ */
+  private static Method sAddAdditionalQuotaProvider;
+  private static final InvocationHandler quotaHandler = new InvocationHandler() {
+    @Override
+    public Object invoke(Object o, Method method, Object[] objects)
+      throws Throwable
+    {
+      return method.invoke(o, objects);
+    }
+  };
+  static {
+    try
+    {
+      sAddAdditionalQuotaProvider = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredMethod(
+        "addAdditionalQuotaProvider",
+        Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")
+      );
+      sAddAdditionalQuotaProvider.setAccessible(true);
+    }
+    catch(Throwable ignore)
+    {
+    }
+  }
+  /* $endif $ */
+
   @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
@@ -313,8 +340,39 @@ public class MailboxManagerImp implements MailboxManager
     mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
     /* $elseif ZimbraX == 1 $
     return;
+    $else $
+    try
+    {
+      ZALAdditionalQuotaProvider quotaProvider = (ZALAdditionalQuotaProvider) Proxy.newProxyInstance(
+        ZALAdditionalQuotaProvider.class.getClassLoader(),
+        new Class[] { Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")},
+        quotaHandler
+      );
+      quotaProvider.setAdditionalQuotaProvider(additionalQuotaProvider);
+      sAddAdditionalQuotaProvider.invoke(mMailboxManager, quotaProvider);
+    }
+    catch (Throwable ignore)
+    {
+    }
     /* $endif $ */
   }
+
+  /* $if ZimbraVersion < 8.8.10 $ */
+  private static Method sRemoveAdditionalQuotaProvider;
+  static {
+    try
+    {
+      sRemoveAdditionalQuotaProvider = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredMethod(
+        "removeAdditionalQuotaProvider",
+        Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")
+      );
+      sRemoveAdditionalQuotaProvider.setAccessible(true);
+    }
+    catch(Throwable ignore)
+    {
+    }
+  }
+  /* $endif $ */
 
   @Override
   public void removeAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
@@ -323,6 +381,22 @@ public class MailboxManagerImp implements MailboxManager
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
     /* $elseif ZimbraX == 1 $
     return;
+    $else $
+    try
+    {
+      ZALAdditionalQuotaProvider quotaProvider = (ZALAdditionalQuotaProvider) Proxy.newProxyInstance(
+        ZALAdditionalQuotaProvider.class.getClassLoader(),
+        new Class[] { Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")},
+        quotaHandler
+      );
+      quotaProvider.setAdditionalQuotaProvider(additionalQuotaProvider);
+      sRemoveAdditionalQuotaProvider.invoke(
+        mMailboxManager,
+        quotaProvider);
+    }
+    catch (Throwable ignored)
+    {
+    }
     /* $endif $ */
   }
 
@@ -457,17 +531,26 @@ public class MailboxManagerImp implements MailboxManager
     /* $endif $ */
   }
 
-  /* $if ZimbraVersion >= 8.8.10 $ */
-  class ZALAdditionalQuotaProvider implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
+  class ZALAdditionalQuotaProvider
+    /* $if ZimbraVersion >= 8.8.10 $ */
+    implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
+    /* $endif $ */
   {
-    private final AdditionalQuotaProvider mAdditionalQuotaProvider;
+    private AdditionalQuotaProvider mAdditionalQuotaProvider;
 
     ZALAdditionalQuotaProvider(AdditionalQuotaProvider mAdditionalQuotaProvider)
     {
       this.mAdditionalQuotaProvider = mAdditionalQuotaProvider;
     }
 
+    void setAdditionalQuotaProvider(AdditionalQuotaProvider additionalQuotaProvider)
+    {
+      this.mAdditionalQuotaProvider = additionalQuotaProvider;
+    }
+
+    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
+    /* $endif $ */
     public boolean equals(Object o)
     {
       if (this == o)
@@ -482,13 +565,17 @@ public class MailboxManagerImp implements MailboxManager
       return Objects.equals(mAdditionalQuotaProvider, that.mAdditionalQuotaProvider);
     }
 
+    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
+    /* $endif $ */
     public int hashCode()
     {
       return Objects.hash(mAdditionalQuotaProvider);
     }
 
+    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
+    /* $endif $ */
     public long getAdditionalQuota(com.zimbra.cs.mailbox.Mailbox mailbox)
     {
       return mAdditionalQuotaProvider.getAdditionalQuota(new org.openzal.zal.Mailbox(mailbox));
