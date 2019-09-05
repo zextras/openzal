@@ -321,7 +321,6 @@ public class MailboxManagerImp implements MailboxManager
     }
     catch(Throwable ignore)
     {
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ignore));
     }
   }
   /* $endif $ */
@@ -364,7 +363,6 @@ public class MailboxManagerImp implements MailboxManager
     }
     catch(Throwable ignore)
     {
-      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ignore));
     }
   }
   /* $endif $ */
