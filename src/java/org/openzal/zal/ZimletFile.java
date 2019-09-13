@@ -20,18 +20,17 @@
 
 package org.openzal.zal;
 
-import javax.annotation.Nullable;
-
+import com.zimbra.cs.zimlet.ZimletException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-import com.zimbra.cs.zimlet.ZimletException;
-import javax.annotation.Nonnull;
-
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ZimletFile
 {
@@ -109,6 +108,7 @@ public class ZimletFile
     return mZimletFile.toByteArray();
   }
 
+  @Nullable
   public InputStream getContentStream(String name, String compressionLevel) throws IOException
   {
     com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry;
