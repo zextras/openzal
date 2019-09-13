@@ -110,6 +110,15 @@ public class ZimletFile
     return mZimletFile.toByteArray();
   }
 
+  /**
+   * This method returns the content stream a particular Zimlet file. This method uses an fallback approach: if a
+   * specified content is requested but its not available, the method recursively call itself with a secondary
+   * compression level and so on.
+   * @param name The Zimlet file
+   * @param compressionLevel A list of possible acceptable compressions
+   * @return A pair with the string containing the name of the compression selected and the InputStream itself
+   * @throws IOException
+   */
   @Nullable
   public Pair<String, InputStream> getContentStream(final String name, List<String> compressionLevel) throws IOException
   {
