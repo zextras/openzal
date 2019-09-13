@@ -21,16 +21,26 @@
 package org.openzal.zal;
 
 import javax.annotation.Nullable;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.zimlet.ZimletException;
 import javax.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.NoSuchFileException;
 
 public class ZimletFile
 {
+  public interface CompressionLevel {
+    String GZIP     = "gzip";
+    String BROTLI   = "br";
+    String IDENTITY = "identity";
+  }
+
   @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
 
   protected ZimletFile(@Nonnull Object zimletFile)
@@ -99,15 +109,48 @@ public class ZimletFile
     return mZimletFile.toByteArray();
   }
 
+  public InputStream getContentStream(String name, String compressionLevel) throws IOException
+  {
+    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry;
+    switch( compressionLevel )
+    {
+      case CompressionLevel.IDENTITY:
+      {
+        entry = mZimletFile.getEntry(name);
+        if( entry == null )
+        {
+          return null;
+        }
+        return entry.getContentStream();
+      }
+      case CompressionLevel.GZIP:
+      {
+        String compressedEntryName = name + "." + compressionLevel;
+        entry = mZimletFile.getEntry(compressedEntryName);
+        String compressedFilePath = new File(mZimletFile.getFile(), compressedEntryName).getPath();
+        if( entry == null )
+        {
+          // No cached file, create a new one and then return the InputStream
+          GzipCompressorOutputStream gzipCompressorOutputStream = new GzipCompressorOutputStream(
+            new FileOutputStream(compressedFilePath)
+          );
+          gzipCompressorOutputStream.write(mZimletFile.getEntry(name).getContents());
+          gzipCompressorOutputStream.flush();
+          gzipCompressorOutputStream.close();
+        }
+        return new FileInputStream(compressedFilePath);
+      }
+      case CompressionLevel.BROTLI:
+        // Not supported at the time of writing
+      default:
+        return null;
+    }
+  }
+
   @Nullable
   public InputStream getContentStream(String name) throws IOException
   {
-    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
-    if (entry == null)
-    {
-      return null;
-    }
-    return entry.getContentStream();
+    return getContentStream(name, CompressionLevel.IDENTITY);
   }
 
   @Nullable
