@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
@@ -43,6 +45,7 @@ public class ZimletFile
   }
 
   @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
+  private final Lock                                     mGzipGenerationLock = new ReentrantLock();
 
   protected ZimletFile(@Nonnull Object zimletFile)
   {
@@ -144,17 +147,24 @@ public class ZimletFile
       case CompressionLevel.GZIP:
       {
         String compressedEntryName = name + "." + compressCoded;
-        entry = mZimletFile.getEntry(compressedEntryName);
         String compressedFilePath = new File(mZimletFile.getFile(), compressedEntryName).getPath();
-        if( entry == null )
+        mGzipGenerationLock.lock();
+        try {
+          entry = mZimletFile.getEntry(compressedEntryName);
+          if( entry == null )
+          {
+            // No cached file, create a new one and then return the InputStream
+            GzipCompressorOutputStream gzipCompressorOutputStream = new GzipCompressorOutputStream(
+              new FileOutputStream(compressedFilePath)
+            );
+            gzipCompressorOutputStream.write(mZimletFile.getEntry(name).getContents());
+            gzipCompressorOutputStream.flush();
+            gzipCompressorOutputStream.close();
+          }
+        }
+        finally
         {
-          // No cached file, create a new one and then return the InputStream
-          GzipCompressorOutputStream gzipCompressorOutputStream = new GzipCompressorOutputStream(
-            new FileOutputStream(compressedFilePath)
-          );
-          gzipCompressorOutputStream.write(mZimletFile.getEntry(name).getContents());
-          gzipCompressorOutputStream.flush();
-          gzipCompressorOutputStream.close();
+          mGzipGenerationLock.unlock();
         }
         res = new FileInputStream(compressedFilePath);
         break;
