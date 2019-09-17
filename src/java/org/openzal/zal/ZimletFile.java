@@ -30,7 +30,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+/* $if ZimbraVersion >= 8.7.0 $
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+/* $endif$ */
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import javax.annotation.Nonnull;
@@ -39,13 +41,17 @@ import javax.annotation.Nullable;
 public class ZimletFile
 {
   public interface CompressionLevel {
+    /* $if ZimbraVersion >= 8.7.0 $
     String GZIP     = "gzip";
     String BROTLI   = "br";
+    /* $endif$ */
     String IDENTITY = "identity";
   }
 
   @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
-  private final Lock                                     mGzipGenerationLock = new ReentrantLock();
+    /* $if ZimbraVersion >= 8.7.0 $
+    private final Lock                                     mGzipGenerationLock = new ReentrantLock();
+    /* $endif$ */
 
   protected ZimletFile(@Nonnull Object zimletFile)
   {
@@ -116,7 +122,7 @@ public class ZimletFile
   /**
    * This method returns the content stream a particular Zimlet file. This method uses an fallback approach: if a
    * specified content is requested but its not available, the method recursively call itself with a secondary
-   * compression level and so on.
+   * compression level and so on for Zimbra versions >= 8.7.0.
    * @param name The Zimlet file
    * @param compressionLevel A list of possible acceptable compressions
    * @return A pair with the string containing the name of the compression selected and the InputStream itself
@@ -144,6 +150,7 @@ public class ZimletFile
         }
         break;
       }
+      /* $if ZimbraVersion >= 8.7.0 $
       case CompressionLevel.GZIP:
       {
         String compressedEntryName = name + "." + compressCoded;
@@ -180,6 +187,7 @@ public class ZimletFile
         }
         break;
       }
+      /* $endif$ */
       default:
         return null;
     }
