@@ -45,7 +45,7 @@ public class ZimletFile
   }
 
   @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
-  private final Lock                                     mGzipGenerationLock = new ReentrantLock();
+  private static final Lock                              sGzipGenerationLock = new ReentrantLock();
 
   protected ZimletFile(@Nonnull Object zimletFile)
   {
@@ -148,7 +148,7 @@ public class ZimletFile
       {
         String compressedEntryName = name + "." + compressCoded;
         String compressedFilePath = new File(mZimletFile.getFile(), compressedEntryName).getPath();
-        mGzipGenerationLock.lock();
+        sGzipGenerationLock.lock();
         try {
           entry = mZimletFile.getEntry(compressedEntryName);
           if( entry == null )
@@ -164,7 +164,7 @@ public class ZimletFile
         }
         finally
         {
-          mGzipGenerationLock.unlock();
+          sGzipGenerationLock.unlock();
         }
         res = new FileInputStream(compressedFilePath);
         break;
