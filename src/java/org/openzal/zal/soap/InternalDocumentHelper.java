@@ -62,9 +62,9 @@ public class InternalDocumentHelper
   }
 
   @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-  public Element handle(Element request, Map<String, Object> context) throws ZimbraException, ServiceException
+  public Element handle(Element request, Map<String, Object> context, InternalDocumentHandler.Proxier proxier) throws ZimbraException, ServiceException
   {
-    ZimbraContext zimbraContext = new ZimbraContextImpl(request,context);
+    ZimbraContext zimbraContext = new ZimbraContextImpl(request,context,proxier);
     ZimbraSoapContext zimbraSoapContext = (ZimbraSoapContext) context.get(SoapEngine.ZIMBRA_CONTEXT);
     Element element = zimbraSoapContext.createElement("response");
     SoapResponseImpl soapResponse = new SoapResponseImpl(element, new ElementFactory(zimbraSoapContext));

@@ -30,6 +30,7 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.session.Session;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.log.ZimbraLog;
 
 import java.lang.reflect.InvocationTargetException;
@@ -81,9 +82,22 @@ public class InternalOverrideAdminDocumentHandler extends AdminDocumentHandler
   }
 
   @Override
-  public Element handle(Element request, Map<String, Object> context) throws ServiceException
+  public Element handle(final Element request, final Map<String, Object> context) throws ServiceException
   {
-    return mInternalDocumentHelper.handle(request, context);
+    return mInternalDocumentHelper.handle(request, context, new InternalDocumentHandler.Proxier()
+    {
+      @Override
+      public Element proxy(String accountId) {
+      try
+      {
+        return InternalOverrideAdminDocumentHandler.this.proxyRequest(request, context, accountId);
+      }
+      catch (ServiceException e)
+      {
+        throw ExceptionWrapper.wrap(e);
+      }
+    }
+    });
   }
 
   @Override

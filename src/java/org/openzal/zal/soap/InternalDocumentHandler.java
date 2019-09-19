@@ -24,6 +24,7 @@ import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import java.util.Map;
 
@@ -36,10 +37,33 @@ class InternalDocumentHandler extends DocumentHandler
     mInternalDocumentHelper = new InternalDocumentHelper(soapHandler);
   }
 
-  @Override
-  public Element handle(Element request, Map<String, Object> context) throws ServiceException
+  public interface Proxier
   {
-    return mInternalDocumentHelper.handle(request, context);
+    Element proxy(String accountId);
+  }
+
+  @Override
+  public Element handle(final Element request, final Map<String, Object> context) throws ServiceException
+  {
+    return mInternalDocumentHelper.handle(request, context, new Proxier(){
+      @Override
+      public Element proxy(String accountId)
+      {
+        return InternalDocumentHandler.this.proxy(request, context, accountId);
+      }
+    });
+  }
+
+  private Element proxy(Element request, Map<String, Object> context,String accountId)
+  {
+    try
+    {
+      return proxyRequest(request, context, accountId);
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Override

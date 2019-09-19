@@ -27,6 +27,8 @@ import javax.xml.bind.Element;
 
 public interface ZimbraContext extends SoapNode
 {
+  SoapResponse proxyRequestTo(String accountId);
+
   String getTargetAccountId();
 
   String getAuthenticatedAccontId();
