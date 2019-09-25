@@ -60,6 +60,10 @@ public class MailboxData
 
   public int getId()
   {
+    if( mId == null )
+    {
+      throw new UnsupportedOperationException();
+    }
     return mId;
   }
 
