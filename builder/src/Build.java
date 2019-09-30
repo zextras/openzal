@@ -278,7 +278,10 @@ public class Build
   {
     if( path.isFile() ) {
       int length = root.getPath().length()+1;
-      fileManager.writeFile(path.getPath().substring(length), new FileInputStream(path) );
+      try( InputStream is = new FileInputStream((path)) )
+      {
+        fileManager.writeFile(path.getPath().substring(length), is );
+      }
       return;
     }
 
