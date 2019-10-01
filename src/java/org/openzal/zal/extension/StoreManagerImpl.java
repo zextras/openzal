@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.apache.commons.io.IOUtils;
 import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.FileBlobPrimaryStore;
@@ -69,12 +70,13 @@ public class StoreManagerImpl implements StoreManager
         (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
       );
 
+      InputStream is = null;
       try
       {
         Class<?> parentClass = Class.forName("com.zimbra.cs.store.file.VolumeBlob");
         ClassLoader parentClassLoader = parentClass.getClassLoader();
 
-        InputStream is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
+        is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/store/file/VolumeBlobProxy");
         byte[] buffer = new byte[6 * 1024];
         int idx = 0;
         int read = 0;
@@ -94,6 +96,10 @@ public class StoreManagerImpl implements StoreManager
         );
       }
       catch (Exception ignore) {}
+      finally
+      {
+        IOUtils.closeQuietly(is);
+      }
     }
     catch (Exception e)
     {
