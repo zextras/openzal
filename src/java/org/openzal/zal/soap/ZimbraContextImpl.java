@@ -49,6 +49,7 @@ class ZimbraContextImpl implements ZimbraContext
   @Nullable private final Element             mRequest;
   private final           Map<String, Object> mContext;
   private final           ZimbraSoapContext   mZimbraSoapContext;
+  private final InternalDocumentHandler.Proxier mProxier;
   private final           Map<String, String> mMap;
 
   public ZimbraSoapContext getZimbraSoapContext()
@@ -60,15 +61,24 @@ class ZimbraContextImpl implements ZimbraContext
   {
     mContext = context;
     mZimbraSoapContext = (ZimbraSoapContext) context.get(SoapEngine.ZIMBRA_CONTEXT);
+    mProxier = new InternalDocumentHandler.Proxier()
+    {
+      @Override
+      public Element proxy(String accountId)
+      {
+        throw new UnsupportedOperationException();
+      }
+    };
     mMap = Collections.emptyMap();
     mRequest = null;
   }
 
-  ZimbraContextImpl(Element request, Map<String, Object> context)
+  ZimbraContextImpl(Element request, Map<String, Object> context, InternalDocumentHandler.Proxier proxier)
   {
     mRequest = request;
     mContext = context;
     mZimbraSoapContext = (ZimbraSoapContext) context.get(SoapEngine.ZIMBRA_CONTEXT);
+    mProxier = proxier;
     mMap = new HashMap<String, String>(32);
 
     Set<Element.Attribute> attributes = request.listAttributes();
@@ -155,7 +165,18 @@ class ZimbraContextImpl implements ZimbraContext
       return new StubSoapNode();
     }
 
-    return new ZimbraContextImpl(subElement,mContext);
+    return new ZimbraContextImpl(subElement,mContext,mProxier);
+  }
+
+  @Override
+  public SoapResponse proxyRequestTo(String accountId)
+  {
+    Element response = mProxier.proxy(accountId);
+    SoapResponseImpl soapResponse = new SoapResponseImpl(
+      response,
+      new InternalDocumentHelper.ElementFactory(mZimbraSoapContext)
+    );
+    return soapResponse;
   }
 
   @Override

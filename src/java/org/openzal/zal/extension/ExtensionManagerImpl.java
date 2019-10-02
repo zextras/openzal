@@ -20,6 +20,7 @@
 
 package org.openzal.zal.extension;
 
+import org.apache.commons.io.IOUtils;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
@@ -195,9 +196,10 @@ class ExtensionManagerImpl implements ExtensionManager
         continue;
       }
 
+      ZipFile zipFile = null;
       try
       {
-        ZipFile zipFile = new ZipFile(file);
+        zipFile = new ZipFile(file);
 
         libraries.add(file);
 
@@ -240,9 +242,10 @@ class ExtensionManagerImpl implements ExtensionManager
         }
         finally
         {
-          if (stream != null)
+          IOUtils.closeQuietly(stream);
+          if( zipFile != null )
           {
-            stream.close();
+            zipFile.close();
           }
         }
       }

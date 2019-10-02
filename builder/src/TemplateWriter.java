@@ -38,8 +38,21 @@ public class TemplateWriter {
       template = template.replaceAll(Pattern.quote("${"+entry.getKey()+"}"), value);
     }
 
-    new FileOutputStream(new File(mFileDestination)).write(
-      template.getBytes(StandardCharsets.UTF_8)
-    );
+    FileOutputStream fileOutputStream = null;
+    try
+    {
+      File file = new File(mFileDestination);
+      fileOutputStream = new FileOutputStream(file);
+      byte[] bytes = template.getBytes(StandardCharsets.UTF_8);
+      fileOutputStream.write(bytes);
+      fileOutputStream.flush();
+    }
+    finally
+    {
+      if( fileOutputStream != null )
+      {
+        fileOutputStream.close();
+      }
+    }
   }
 }
