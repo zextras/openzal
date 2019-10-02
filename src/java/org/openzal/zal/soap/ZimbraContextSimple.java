@@ -69,6 +69,12 @@ public class ZimbraContextSimple implements ZimbraContext
   }
 
   @Override
+  public SoapResponse proxyRequestTo(String accountId)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public String getTargetAccountId()
   {
     return mTargetAccountId;

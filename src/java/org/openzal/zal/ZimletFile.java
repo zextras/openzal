@@ -20,18 +20,32 @@
 
 package org.openzal.zal;
 
-import javax.annotation.Nullable;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.cs.zimlet.ZimletException;
-import javax.annotation.Nonnull;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.NoSuchFileException;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.zip.GZIPOutputStream;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ZimletFile
 {
+  public interface CompressionLevel {
+    String GZIP     = "gzip";
+    String BROTLI   = "br";
+    String IDENTITY = "identity";
+  }
+
   @Nonnull private final com.zimbra.cs.zimlet.ZimletFile mZimletFile;
+  private static final Lock                              sGzipGenerationLock = new ReentrantLock();
 
   protected ZimletFile(@Nonnull Object zimletFile)
   {
@@ -99,15 +113,92 @@ public class ZimletFile
     return mZimletFile.toByteArray();
   }
 
+  /**
+   * This method returns the content stream a particular Zimlet file. This method uses an fallback approach: if a
+   * specified content is requested but its not available, the method recursively call itself with a secondary
+   * compression level and so on.
+   * @param name The Zimlet file
+   * @param compressionLevel A list of possible acceptable compressions
+   * @return A pair with the string containing the name of the compression selected and the InputStream itself
+   * @throws IOException
+   */
   @Nullable
-  public InputStream getContentStream(String name) throws IOException
+  public Pair<String, InputStream> getContentStream(final String name, List<String> compressionLevel) throws IOException
   {
-    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry = mZimletFile.getEntry(name);
-    if (entry == null)
+    if (compressionLevel.isEmpty())
     {
       return null;
     }
-    return entry.getContentStream();
+    final String compressCoded = compressionLevel.get(0);
+
+    com.zimbra.cs.zimlet.ZimletFile.ZimletEntry entry;
+    InputStream res = null;
+    switch( compressCoded )
+    {
+      case CompressionLevel.IDENTITY:
+      {
+        entry = mZimletFile.getEntry(name);
+        if( entry != null )
+        {
+          res = entry.getContentStream();
+        }
+        break;
+      }
+      case CompressionLevel.GZIP:
+      {
+        String compressedEntryName = name + "." + compressCoded;
+        String compressedFilePath = new File(mZimletFile.getFile(), compressedEntryName).getPath();
+        sGzipGenerationLock.lock();
+        try {
+          entry = mZimletFile.getEntry(compressedEntryName);
+          if( entry == null )
+          {
+            // No cached file, create a new one and then return the InputStream
+            GZIPOutputStream gzipCompressorOutputStream = new GZIPOutputStream(
+              new FileOutputStream(compressedFilePath)
+            );
+            gzipCompressorOutputStream.write(mZimletFile.getEntry(name).getContents());
+            gzipCompressorOutputStream.flush();
+            gzipCompressorOutputStream.close();
+          }
+        }
+        finally
+        {
+          sGzipGenerationLock.unlock();
+        }
+        res = new FileInputStream(compressedFilePath);
+        break;
+      }
+      case CompressionLevel.BROTLI:
+      {
+        String compressedEntryName = name + "." + compressCoded;
+        entry = mZimletFile.getEntry(compressedEntryName);
+        String compressedFilePath = new File(mZimletFile.getFile(), compressedEntryName).getPath();
+        if( entry != null )
+        {
+          res = new FileInputStream(compressedFilePath);
+        }
+        break;
+      }
+      default:
+        return null;
+    }
+
+    if (res != null)
+    {
+      return new Pair<>(compressCoded, res);
+    }
+    return getContentStream(name, compressionLevel.subList(1, compressionLevel.size()));
+  }
+
+  @Nullable
+  public InputStream getContentStream(String name) throws IOException
+  {
+    final Pair<String, InputStream> contentStream = getContentStream(
+      name,
+      Collections.singletonList(CompressionLevel.IDENTITY)
+    );
+    return contentStream == null? null : contentStream.getSecond();
   }
 
   @Nullable
