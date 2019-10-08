@@ -368,6 +368,16 @@ public class Item implements Comparable<Item>
     {
       return mCustomMetadata.remove(key);
     }
+
+    public int size()
+    {
+      return mCustomMetadata.size();
+    }
+
+    public Set<String> keySet()
+    {
+      return mCustomMetadata.keySet();
+    }
   }
 
   @Nullable
