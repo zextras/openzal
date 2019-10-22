@@ -56,6 +56,8 @@ public interface MailboxManager
 
   Mailbox cleanCacheAndGetUpdatedMailbox(Mailbox mailbox);
 
+  Mailbox cleanCacheAndGetUpdatedMailboxById(Mailbox mailbox, boolean skipMailhostCheck);
+
   void registerAdditionalQuotaProvider(AdditionalQuotaProvider additionalQuotaProvider);
 
   void removeAdditionalQuotaProvider(AdditionalQuotaProvider additionalQuotaProvider);
