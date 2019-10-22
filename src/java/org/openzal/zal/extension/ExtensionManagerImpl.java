@@ -143,7 +143,7 @@ class ExtensionManagerImpl implements ExtensionManager
     }
   }
 
-  private class ExtensionInfo
+  private static class ExtensionInfo
   {
     public String getExtensionClass()
     {

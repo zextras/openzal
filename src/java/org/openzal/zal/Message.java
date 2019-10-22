@@ -40,7 +40,7 @@ public class Message extends Item
     mMessage = (com.zimbra.cs.mailbox.Message) mailItem;
   }
 
-  public class CalendarInfo
+  public static class CalendarInfo
   {
     private final com.zimbra.cs.mailbox.Message.CalendarItemInfo mCalendarItemInfo;
 

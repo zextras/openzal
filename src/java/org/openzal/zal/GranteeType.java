@@ -28,10 +28,10 @@ import com.zimbra.common.service.ServiceException;
 
 public class GranteeType
 {
-  public static GranteeType GT_USER      = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_USER);
-  public static GranteeType GT_GROUP     = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_GROUP);
-  public static GranteeType GT_EXT_GROUP = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_EXT_GROUP);
-  public static GranteeType GT_DOMAIN    = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_DOMAIN);
+  public static final GranteeType GT_USER      = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_USER);
+  public static final GranteeType GT_GROUP     = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_GROUP);
+  public static final GranteeType GT_EXT_GROUP = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_EXT_GROUP);
+  public static final GranteeType GT_DOMAIN    = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_DOMAIN);
 
   private final com.zimbra.cs.account.accesscontrol.GranteeType mGranteeType;
 
