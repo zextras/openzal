@@ -158,7 +158,7 @@ public class Metadata
       }
       else
       {
-        return Integer.valueOf(value);
+        return Integer.parseInt(value);
       }
     }
     catch (ServiceException e)

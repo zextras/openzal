@@ -54,7 +54,7 @@ public class SoapServiceManager
     }
   }
 
-  class InternalHandlerMapPublisher implements HandlerMapPublisher
+  static class InternalHandlerMapPublisher implements HandlerMapPublisher
   {
     @Override
     public void receivedHandlerMap(Map<QName, DocumentHandler> handlerMap)

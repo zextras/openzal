@@ -47,8 +47,8 @@ public class ItemStatus implements Serializable
   {
     String[] values = value.split("@");
     return new ItemStatus(
-      Integer.valueOf(values[0]),
-      Long.valueOf(values[1])
+      Integer.parseInt(values[0]),
+      Long.parseLong(values[1])
     );
   }
 

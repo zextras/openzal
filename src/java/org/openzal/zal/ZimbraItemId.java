@@ -52,7 +52,7 @@ public class ZimbraItemId
       throw new RuntimeException("Invalid item id: " + string);
     }
     ZimbraId accountId = new ZimbraId(parts[0]);
-    int itemId = Integer.valueOf(parts[1]);
+    int itemId = Integer.parseInt(parts[1]);
     return new ZimbraItemId(accountId, itemId);
   }
 

@@ -298,7 +298,7 @@ public class IndexerManager
       return this;
     }
 
-    private class EmptyIndexer implements Indexer
+    private static class EmptyIndexer implements Indexer
     {
       @Override
       public boolean canHandle(String contentType, String fileExtension)
