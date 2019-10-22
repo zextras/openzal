@@ -326,6 +326,13 @@ public class MailboxManagerImp implements MailboxManager
   /* $endif $ */
 
   @Override
+  public Mailbox cleanCacheAndGetUpdatedMailboxById(Mailbox mailbox, boolean skipMailhostCheck)
+  {
+    cleanCache(mailbox);
+    return getMailboxById(mailbox.getId(), skipMailhostCheck);
+  }
+
+  @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
     /* $if ZimbraVersion >= 8.8.10 $ */
