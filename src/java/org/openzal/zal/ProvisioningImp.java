@@ -34,6 +34,7 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
+import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapException;
@@ -2567,6 +2568,37 @@ public class ProvisioningImp implements Provisioning
     try
     {
       ProxyPurgeUtil.purgeAccounts((List)null,accounts,true,(String)null);
+      List<com.zimbra.cs.account.Server> memcachedServers = mProvisioning.getAllServers("memcached");
+      List<String> routes = new ArrayList<>(accounts.size());
+      for (String account : accounts)
+      {
+        Account accountObj = getAccountByName(account);
+        if (accountObj != null)
+        {
+          routes.add("route:proto=http;zx=1;id=" + accountObj.getId());
+          routes.add("route:proto=https;zx=1;id=" + accountObj.getId());
+        }
+      }
+      ZimbraMemcachedClient zmc = new ZimbraMemcachedClient();
+      try
+      {
+        String[] addresses = new String[memcachedServers.size()];
+        int i = 0;
+        for( com.zimbra.cs.account.Server memcachedServer : memcachedServers )
+        {
+          addresses[i++] = memcachedServer.getAttr(ProvisioningImp.A_zimbraServiceHostname, "localhost") +
+            ":" + memcachedServer.getAttr("zimbraMemcachedBindPort", "11211");
+        }
+        zmc.connect(addresses, false, (String) null, 0, 5000L);
+        for( String route : routes )
+        {
+          zmc.remove(route, false);
+        }
+      }
+      finally
+      {
+        zmc.disconnect(-1);
+      }
     }
     catch (ServiceException e)
     {
