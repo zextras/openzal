@@ -106,29 +106,29 @@ public final class Flag extends Item
   }
 /* $endif$ */
 
-  public static final int BITMASK_FROM_ME           = com.zimbra.cs.mailbox.Flag.BITMASK_FROM_ME;
-  public static final int BITMASK_ATTACHED          = com.zimbra.cs.mailbox.Flag.BITMASK_ATTACHED;
-  public static final int BITMASK_REPLIED           = com.zimbra.cs.mailbox.Flag.BITMASK_REPLIED;
-  public static final int BITMASK_FORWARDED         = com.zimbra.cs.mailbox.Flag.BITMASK_FORWARDED;
-  public static final int BITMASK_COPIED            = com.zimbra.cs.mailbox.Flag.BITMASK_COPIED;
-  public static final int BITMASK_FLAGGED           = com.zimbra.cs.mailbox.Flag.BITMASK_FLAGGED;
-  public static final int BITMASK_DRAFT             = com.zimbra.cs.mailbox.Flag.BITMASK_DRAFT;
-  public static final int BITMASK_DELETED           = com.zimbra.cs.mailbox.Flag.BITMASK_DELETED;
-  public static final int BITMASK_NOTIFIED          = com.zimbra.cs.mailbox.Flag.BITMASK_NOTIFIED;
-  public static final int BITMASK_UNREAD            = com.zimbra.cs.mailbox.Flag.BITMASK_UNREAD;
-  public static final int BITMASK_HIGH_PRIORITY     = com.zimbra.cs.mailbox.Flag.BITMASK_HIGH_PRIORITY;
-  public static final int BITMASK_LOW_PRIORITY      = com.zimbra.cs.mailbox.Flag.BITMASK_LOW_PRIORITY;
-  public static final int BITMASK_VERSIONED         = com.zimbra.cs.mailbox.Flag.BITMASK_VERSIONED;
-  public static final int BITMASK_INDEXING_DEFERRED = com.zimbra.cs.mailbox.Flag.BITMASK_INDEXING_DEFERRED;
+  public static int BITMASK_FROM_ME           = com.zimbra.cs.mailbox.Flag.BITMASK_FROM_ME;
+  public static int BITMASK_ATTACHED          = com.zimbra.cs.mailbox.Flag.BITMASK_ATTACHED;
+  public static int BITMASK_REPLIED           = com.zimbra.cs.mailbox.Flag.BITMASK_REPLIED;
+  public static int BITMASK_FORWARDED         = com.zimbra.cs.mailbox.Flag.BITMASK_FORWARDED;
+  public static int BITMASK_COPIED            = com.zimbra.cs.mailbox.Flag.BITMASK_COPIED;
+  public static int BITMASK_FLAGGED           = com.zimbra.cs.mailbox.Flag.BITMASK_FLAGGED;
+  public static int BITMASK_DRAFT             = com.zimbra.cs.mailbox.Flag.BITMASK_DRAFT;
+  public static int BITMASK_DELETED           = com.zimbra.cs.mailbox.Flag.BITMASK_DELETED;
+  public static int BITMASK_NOTIFIED          = com.zimbra.cs.mailbox.Flag.BITMASK_NOTIFIED;
+  public static int BITMASK_UNREAD            = com.zimbra.cs.mailbox.Flag.BITMASK_UNREAD;
+  public static int BITMASK_HIGH_PRIORITY     = com.zimbra.cs.mailbox.Flag.BITMASK_HIGH_PRIORITY;
+  public static int BITMASK_LOW_PRIORITY      = com.zimbra.cs.mailbox.Flag.BITMASK_LOW_PRIORITY;
+  public static int BITMASK_VERSIONED         = com.zimbra.cs.mailbox.Flag.BITMASK_VERSIONED;
+  public static int BITMASK_INDEXING_DEFERRED = com.zimbra.cs.mailbox.Flag.BITMASK_INDEXING_DEFERRED;
 
-  public static final int BITMASK_SUBSCRIBED       = com.zimbra.cs.mailbox.Flag.BITMASK_SUBSCRIBED;
-  public static final int BITMASK_EXCLUDE_FREEBUSY = com.zimbra.cs.mailbox.Flag.BITMASK_EXCLUDE_FREEBUSY;
-  public static final int BITMASK_CHECKED          = com.zimbra.cs.mailbox.Flag.BITMASK_CHECKED;
-  public static final int BITMASK_NO_INHERIT       = com.zimbra.cs.mailbox.Flag.BITMASK_NO_INHERIT;
-  public static final int BITMASK_INVITE           = com.zimbra.cs.mailbox.Flag.BITMASK_INVITE;
-  public static final int BITMASK_SYNCFOLDER       = com.zimbra.cs.mailbox.Flag.BITMASK_SYNCFOLDER;
-  public static final int BITMASK_SYNC             = com.zimbra.cs.mailbox.Flag.BITMASK_SYNC;
-  public static final int BITMASK_NO_INFERIORS     = com.zimbra.cs.mailbox.Flag.BITMASK_NO_INFERIORS;
+  public static int BITMASK_SUBSCRIBED       = com.zimbra.cs.mailbox.Flag.BITMASK_SUBSCRIBED;
+  public static int BITMASK_EXCLUDE_FREEBUSY = com.zimbra.cs.mailbox.Flag.BITMASK_EXCLUDE_FREEBUSY;
+  public static int BITMASK_CHECKED          = com.zimbra.cs.mailbox.Flag.BITMASK_CHECKED;
+  public static int BITMASK_NO_INHERIT       = com.zimbra.cs.mailbox.Flag.BITMASK_NO_INHERIT;
+  public static int BITMASK_INVITE           = com.zimbra.cs.mailbox.Flag.BITMASK_INVITE;
+  public static int BITMASK_SYNCFOLDER       = com.zimbra.cs.mailbox.Flag.BITMASK_SYNCFOLDER;
+  public static int BITMASK_SYNC             = com.zimbra.cs.mailbox.Flag.BITMASK_SYNC;
+  public static int BITMASK_NO_INFERIORS     = com.zimbra.cs.mailbox.Flag.BITMASK_NO_INFERIORS;
 
   public static int BITMASK_GLOBAL   = com.zimbra.cs.mailbox.Flag.BITMASK_GLOBAL;
   public static int BITMASK_UNCACHED = com.zimbra.cs.mailbox.Flag.BITMASK_UNCACHED;
