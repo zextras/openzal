@@ -28,9 +28,9 @@ import javax.annotation.Nonnull;
 
 public class PrefExternalSendersType
 {
-  @Nonnull public static final PrefExternalSendersType ALLNOTINAB =
+  @Nonnull public static PrefExternalSendersType ALLNOTINAB =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALLNOTINAB);
-  @Nonnull public static final PrefExternalSendersType ALL        =
+  @Nonnull public static PrefExternalSendersType ALL        =
     new PrefExternalSendersType(ZAttrProvisioning.PrefExternalSendersType.ALL);
 
   private ZAttrProvisioning.PrefExternalSendersType mValue;
