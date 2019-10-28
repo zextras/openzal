@@ -357,6 +357,9 @@ public interface Provisioning
   GalSearchResult galSearch(@Nonnull Account account, String query, int skip, int limit);
 
   @Nonnull
+  GalSearchResult galSearch(@Nonnull Account account, Domain domain, String query, int skip, int limit);
+
+  @Nonnull
   Domain assertDomainById(String domainId);
 
   @Nonnull
