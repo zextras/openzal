@@ -34,7 +34,10 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
+import com.zimbra.common.soap.SoapJSProtocol;
+import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
+import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapException;
@@ -48,6 +51,9 @@ import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
 import javax.annotation.Nonnull;
+
+import com.zimbra.soap.ZimbraSoapContext;
+import org.dom4j.QName;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -277,8 +283,9 @@ public class ProvisioningImp implements Provisioning
     com.zimbra.cs.account.Provisioning.A_c,
     com.zimbra.cs.account.Provisioning.A_cn,
     com.zimbra.cs.account.Provisioning.A_co,
-
   };
+
+  private final AuthProvider mAuthProvider = new AuthProvider();
 
   public ProvisioningImp()
   {
@@ -2341,6 +2348,44 @@ public class ProvisioningImp implements Provisioning
     }
 
     return result;
+  }
+
+  @Nonnull
+  public GalSearchResult galSearch(@Nonnull Account account, Domain domain, String query, int skip, int limit)
+  {
+    AuthToken authToken = mAuthProvider.createAuthTokenForAccount(account).toZimbra(AuthToken.class);
+    try
+    {
+      ZimbraSoapContext zimbraSoapContext = new ZimbraSoapContext(authToken, account.getId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
+      GalSearchParams searchParams = new GalSearchParams(domain.toZimbra(com.zimbra.cs.account.Domain.class), zimbraSoapContext);
+
+      searchParams.createSearchParams(query);
+      searchParams.setQuery(query);
+      searchParams.setLimit(limit);
+      searchParams.setIdOnly(false);
+
+      searchParams.setType(GalSearchType.all);
+
+      GalSearchResult result = new GalSearchResult();
+      searchParams.setResponseName(new QName("result"));
+      GalSearchCallback callback = new GalSearchCallback(skip, searchParams, result);
+      searchParams.setResultCallback(callback);
+
+      //writes mResultList ans hasMore
+      GalSearchControl searchControl = new GalSearchControl(searchParams);
+
+      searchControl.autocomplete();
+      if (result.hasMore())
+      {
+        result.setTotal(result.getTotal() + 1);
+      }
+
+      return result;
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull
