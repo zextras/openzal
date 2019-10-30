@@ -26,7 +26,7 @@ public class ClassVersionChecker
       throw new RuntimeException("Syntax: <max JDK version> jar|path [jar|path] ...");
     }
 
-    int maxVersion = Integer.valueOf(args[0]);
+    int maxVersion = Integer.parseInt(args[0]);
     System.out.println("Max class version: "+maxVersion );
 
     for (int i = 1; i < args.length; i++)

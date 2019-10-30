@@ -28,7 +28,7 @@ public class RedologLogWriter
 {
   private final LogWriter mLogWriter;
 
-  public RedologLogWriter(@Nullable Object logWriter)
+  public RedologLogWriter(Object logWriter)
   {
     if (logWriter == null )
     {

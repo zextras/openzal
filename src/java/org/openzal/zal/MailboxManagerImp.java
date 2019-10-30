@@ -462,10 +462,17 @@ public class MailboxManagerImp implements MailboxManager
       }
       connection.commit();
     }
-    catch (ServiceException e )
+    catch ( ServiceException e )
     {
       connection.rollback();
       throw ExceptionWrapper.wrap(e);
+    }
+    catch (ZimbraException e )
+    {
+      if( connection != null)
+      {
+        connection.rollback();
+      }
     }
     finally
     {
