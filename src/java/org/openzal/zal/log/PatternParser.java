@@ -43,7 +43,7 @@ public class PatternParser extends org.apache.log4j.helpers.PatternParser
     }
   }
 
-  private class ZimbraPatternConverter extends PatternConverter
+  private static class ZimbraPatternConverter extends PatternConverter
   {
     ZimbraPatternConverter(FormattingInfo formattingInfo) {
       super(formattingInfo);

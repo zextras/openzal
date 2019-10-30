@@ -56,6 +56,32 @@ public class MailboxSessionProxy
   public MailboxSessionProxy(Object session)
   {
     mSession = (SessionImpl) session;
+    mListener = new Listener() {
+      @Override
+      public void setStoreContext(MailboxSessionProxy sessionProxy)
+      {
+
+      }
+
+      @Override
+      public MailboxSessionProxy getStoreContext()
+      {
+        return MailboxSessionProxy.this;
+      }
+
+      @Override
+      public void notifyChanges(long mboxId, ItemChange itemInfo)
+      {
+
+      }
+
+      @Override
+      public void sessionClosed()
+      {
+
+      }
+    };
+    mClock = new ActualClock();
   }
 
   private boolean areChangesForMobile(Object what)
