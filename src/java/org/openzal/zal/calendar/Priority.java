@@ -51,7 +51,7 @@ public enum Priority
       zimbraPriority = "9";
     }
 
-    int priority = Integer.valueOf(zimbraPriority);
+    int priority = Integer.parseInt(zimbraPriority);
 
     if( priority < MEDIUM.mRawPriority )
     {

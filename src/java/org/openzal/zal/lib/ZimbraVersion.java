@@ -37,17 +37,17 @@ public class ZimbraVersion extends Version
   }
 
   public static ZimbraVersion current = new ZimbraVersion(
-    Integer.valueOf(BuildInfo.MAJORVERSION),
-    Integer.valueOf(BuildInfo.MINORVERSION),
-    Integer.valueOf(BuildInfo.MICROVERSION)
+    Integer.parseInt(BuildInfo.MAJORVERSION),
+    Integer.parseInt(BuildInfo.MINORVERSION),
+    Integer.parseInt(BuildInfo.MICROVERSION)
   );
 
   public static void restoreVersion()
   {
     current = new ZimbraVersion(
-      Integer.valueOf(BuildInfo.MAJORVERSION),
-      Integer.valueOf(BuildInfo.MINORVERSION),
-      Integer.valueOf(BuildInfo.MICROVERSION)
+      Integer.parseInt(BuildInfo.MAJORVERSION),
+      Integer.parseInt(BuildInfo.MINORVERSION),
+      Integer.parseInt(BuildInfo.MICROVERSION)
     );
   }
 
