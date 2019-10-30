@@ -1390,7 +1390,10 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        zlc.replaceAttributes(dn, entry.getAttributes());
+        if( zlc != null )
+        {
+          zlc.replaceAttributes(dn, entry.getAttributes());
+        }
       }
       catch (LdapException e)
       {
@@ -1485,7 +1488,10 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        zlc.replaceAttributes(dn, entry.getAttributes());
+        if( zlc != null )
+        {
+          zlc.replaceAttributes(dn, entry.getAttributes());
+        }
       }
       catch (LdapException e)
       {
@@ -1602,7 +1608,10 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        zlc.replaceAttributes(dn, entry.getAttributes());
+        if( zlc != null )
+        {
+          zlc.replaceAttributes(dn, entry.getAttributes());
+        }
       }
       catch (LdapException e)
       {
@@ -1648,7 +1657,10 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        zlc.replaceAttributes(dn, entry.getAttributes());
+        if( zlc != null )
+        {
+          zlc.replaceAttributes(dn, entry.getAttributes());
+        }
       }
       catch (LdapException e)
       {

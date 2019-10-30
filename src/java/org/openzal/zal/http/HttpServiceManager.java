@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 
 public class HttpServiceManager
 {
-  class FakeZimbraExtension implements ZimbraExtension
+  static class FakeZimbraExtension implements ZimbraExtension
   {
     private final String mPath;
 

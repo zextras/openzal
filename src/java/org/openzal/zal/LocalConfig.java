@@ -45,7 +45,7 @@ public class LocalConfig
 
   public static int getInt(String key)
   {
-    return Integer.valueOf(LC.get(key));
+    return Integer.parseInt(LC.get(key));
   }
 
   public static void setDefaultTimeZonesFile(String path)

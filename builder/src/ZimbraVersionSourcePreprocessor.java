@@ -21,7 +21,7 @@ public class ZimbraVersionSourcePreprocessor implements SourcePreprocessor {
     mDevMode = devMode;
   }
 
-  private class PreprocessorError extends RuntimeException
+  private static class PreprocessorError extends RuntimeException
   {
     private final String mErrorMessage;
     private final StringBuffer mSource;
