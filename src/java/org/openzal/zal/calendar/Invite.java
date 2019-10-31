@@ -678,7 +678,7 @@ public class Invite
     String percent = mInvite.getPercentComplete();
     if( percent != null )
     {
-      return Integer.valueOf(percent);
+      return Integer.parseInt(percent);
     }
     return 0;
   }

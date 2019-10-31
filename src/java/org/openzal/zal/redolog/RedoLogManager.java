@@ -35,7 +35,7 @@ public class RedoLogManager
     this(new com.zimbra.cs.redolog.RedoLogManager(redolog, archdir, supportsCrashRecovery));
   }
 
-  public RedoLogManager(@Nullable Object redoLogManager)
+  public RedoLogManager(Object redoLogManager)
   {
     if (redoLogManager == null)
     {
