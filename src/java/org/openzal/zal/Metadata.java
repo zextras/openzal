@@ -54,9 +54,12 @@ public class Metadata
   public Metadata(@Nullable Map<String, Object> map)
   {
     this();
-    for(String key : map.keySet())
+    if( map != null )
     {
-      put(key, map.get(key));
+      for(String key : map.keySet())
+      {
+        put(key, map.get(key));
+      }
     }
   }
 
@@ -158,7 +161,7 @@ public class Metadata
       }
       else
       {
-        return Integer.valueOf(value);
+        return Integer.parseInt(value);
       }
     }
     catch (ServiceException e)
