@@ -20,30 +20,35 @@
 
 package org.openzal.zal.extension;
 
+import com.zimbra.cs.extension.ExtensionUtil;
+import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.store.file.FileBlobStore;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.openzal.zal.*;
+import java.lang.reflect.Field;
+import java.util.Map;
+import org.openzal.zal.FileBlobStoreWrapImpl;
 import org.openzal.zal.MailboxManager;
+import org.openzal.zal.MailboxManagerImp;
+import org.openzal.zal.Provisioning;
+import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.StoreManager;
+import org.openzal.zal.Utils;
+import org.openzal.zal.VolumeManager;
 import org.openzal.zal.lib.PermissiveMap;
 import org.openzal.zal.lib.ZimbraDatabase;
 import org.openzal.zal.log.ZimbraLog;
-import com.zimbra.cs.extension.ExtensionUtil;
-import com.zimbra.cs.extension.ZimbraExtension;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Zimbra
 {
   @Nonnull private final Provisioning                     mProvisioning;
   @Nonnull private final MailboxManager                   mMailboxManager;
   @Nonnull private final ZimbraDatabase                   mZimbraDatabase;
-  @Nonnull private       InternalOverrideStoreManager     mInternalOverrideStoreManager;
+           private       InternalOverrideStoreManager     mInternalOverrideStoreManager;
   @Nonnull private final VolumeManager                    mVolumeManager;
   @Nonnull private final com.zimbra.cs.store.StoreManager mZimbraStoreManager;
-  @Nonnull private       StoreManager                     mStoreManager;
+           private       StoreManager                     mStoreManager;
            private       boolean                          mCanOverrideStoreManager;
 
   public Zimbra()
@@ -85,6 +90,8 @@ public Zimbra(Zimbra zimbra)
           mCanOverrideStoreManager = false;
         }
       }
+
+      mInternalOverrideStoreManager = null;
     }
     catch (Exception ex)
     {

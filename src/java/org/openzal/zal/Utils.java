@@ -20,14 +20,6 @@
 
 package org.openzal.zal;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.zimbra.cs.db.DbMailItem;
-import org.openzal.zal.calendar.ICalendarTimezone;
-import org.openzal.zal.calendar.Invite;
-import org.openzal.zal.calendar.WinSystemTime;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.common.calendar.WellKnownTimeZones;
 import com.zimbra.common.service.ServiceException;
@@ -35,6 +27,7 @@ import com.zimbra.common.util.BEncoding;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.FileUtil;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MessageCache;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
@@ -42,27 +35,37 @@ import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
 import com.zimbra.cs.zimlet.ZimletUtil;
-
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.openzal.zal.calendar.ICalendarTimezone;
+import org.openzal.zal.calendar.Invite;
+import org.openzal.zal.calendar.WinSystemTime;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 public abstract class Utils
 {
   public static String FBTYPE_BUSY = IcalXmlStrMap.FBTYPE_BUSY;
 
-  public static String exceptionToString(Throwable e)
+
+  public static void addStackTraceElements(StringBuilder sb, Throwable e)
   {
-    StringBuilder sb = new StringBuilder(128);
     StackTraceElement elements[] = e.getStackTrace();
 
     sb.append(e.toString());
@@ -87,6 +90,12 @@ public abstract class Utils
 
       sb.append("\n");
     }
+  }
+
+  public static String exceptionToString(@Nonnull Throwable e)
+  {
+    StringBuilder sb = new StringBuilder(128);
+    addStackTraceElements(sb, e);
 
     Throwable cause = e.getCause();
     if (cause != null)
