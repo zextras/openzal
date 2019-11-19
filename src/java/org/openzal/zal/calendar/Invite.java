@@ -782,6 +782,11 @@ public class Invite
     mInvite.setMailItemId(id);
   }
 
+  public void setCancelled()
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
+  }
+
   public boolean methodIsReply()
   {
     ZCalendar.ICalTok method = ZCalendar.ICalTok.lookup( mInvite.getMethod() );
