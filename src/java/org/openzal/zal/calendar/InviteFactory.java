@@ -22,6 +22,8 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
 import javax.annotation.Nonnull;
+
+import java.time.ZoneId;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -346,8 +348,19 @@ public class InviteFactory
       // throw new ZimbraException("StartDate can not be in the future!???");
     // }
 
-    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+
+    Calendar utc = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
+    utc.setTimeInMillis(mUtcDateStart);
+    int offset = mTimezone.getTimeZone().getOffset(utc.getTimeInMillis());
+
+    long startDateAtTimezone = mUtcDateStart - offset;
+    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(startDateAtTimezone, mTimezone.toZimbra(ICalTimeZone.class));
+
+    utc.clear();
+    utc.setTimeInMillis(mUtcDateEnd);
+    offset = mTimezone.getTimeZone().getOffset(utc.getTimeInMillis());
+    long endDateAtTimezone = mUtcDateEnd - offset;
+    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(endDateAtTimezone, mTimezone.toZimbra(ICalTimeZone.class));
 
     if (mAllDayEvent || task)
     {
