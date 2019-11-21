@@ -1528,7 +1528,7 @@ public class Mailbox
     @Nonnull SortedBy sortBy,
     int chunkSize
   )
-    throws IOException, ZimbraException
+    throws ZimbraException
   {
     return search(octxt, queryString, types, sortBy, chunkSize, 0, false, false);
   }
@@ -1543,7 +1543,7 @@ public class Mailbox
     int offset,
     boolean onlyIds
   )
-          throws IOException, ZimbraException
+          throws ZimbraException
   {
     return search(octxt, queryString, types, sortBy, chunkSize, offset, onlyIds, false);
   }
@@ -1559,7 +1559,7 @@ public class Mailbox
     boolean onlyIds,
     boolean inDumpster
   )
-    throws IOException, ZimbraException
+    throws ZimbraException
   {
     try
     {
