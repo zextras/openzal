@@ -683,6 +683,7 @@ public class Invite
     return 0;
   }
 
+  @Nonnull
   public ICalendarTimezone getTimezone()
   {
     ParsedDateTime startTime = mInvite.getStartTime();
