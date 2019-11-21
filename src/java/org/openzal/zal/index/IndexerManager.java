@@ -233,6 +233,7 @@ public class IndexerManager
       return false;
     }
 
+    //this methods breaks binary compatibility for ZAL given two different parameters types
     @Override
     /* $if ZimbraX == 1 $
     protected void addFields(SolrInputDocument doc) throws MimeHandlerException
