@@ -34,6 +34,7 @@ import com.zimbra.cs.mailbox.calendar.*;
 
 import com.zimbra.common.calendar.*;
 
+import javax.annotation.Nullable;
 import javax.mail.internet.MimeMessage;
 import java.util.*;
 
@@ -62,24 +63,27 @@ public class InviteFactory
   private       String             mDescriptionHtml;
   private       long               mLastModifyTimeUtc;
   private       int                mSequence;
-  private       ICalendarTimezone  mTimezone;
-  private       boolean            mAlarmSet;
-  private       int                mAlarmTime;
-  private       long               mReminderTime;
-  private       MimeMessage        mMimeMessage;
-  private       boolean            mHasAttachment;
+  private       ICalendarTimezone mTimezone;
+  private       boolean           mAlarmSet;
+  private       int               mAlarmTime;
+  private       long              mReminderTime;
+  private       MimeMessage       mMimeMessage;
+  private       boolean           mHasAttachment;
   @Nonnull
-  private final Clock              mClock;
-  private       RecurrenceRule     mRecurrenceRule;
-  private       int                mMailItemId = 0;
-  private       String             mPartStat;
-  private       boolean            mResponseRequest;
+  private final Clock             mClock;
+  private       RecurrenceRule    mRecurrenceRule;
+  private       int               mMailItemId = 0;
+  private       String            mPartStat;
+  private       boolean           mResponseRequest;
+  private       List<Attach>      mICalAttachmentList;
 
   public InviteFactory()
   {
     mAlarmSet = false;
     mSequence = 0;
     mClock = ActualClock.sInstance;
+
+    mICalAttachmentList = new ArrayList<>();
   }
 
   public Invite createTask(Mailbox mbox)
@@ -231,15 +235,32 @@ public class InviteFactory
     mReminderTime = time;
   }
 
-  public void setAttachment( MimeMessage mimeMessage )
+  public void setAttachment(@Nullable MimeMessage mimeMessage )
   {
-    mHasAttachment = true;
+    if(mimeMessage != null)
+    {
+      mHasAttachment = true;
+    }
     mMimeMessage = mimeMessage;
   }
 
   public void setResponseRequest(Boolean rsvp)
   {
     mResponseRequest = rsvp;
+  }
+
+  public void addICalAttach(Attach attachment)
+  {
+    mICalAttachmentList.add(attachment);
+    mHasAttachment = true;
+  }
+
+  public void addICalAttaches(Iterable<Attach> attachments)
+  {
+    for( Attach attachment : attachments)
+    {
+      addICalAttach(attachment);
+    }
   }
 
   public void populateFactoryFromExistingInvite( Invite invite )
@@ -290,6 +311,8 @@ public class InviteFactory
     }
     mMailItemId = invite.getMailItemId();
     mPartStat = invite.getPartStat();
+    mResponseRequest = invite.getResponseRequest();
+    mICalAttachmentList = invite.getICalAttachList();
   }
 
 
@@ -450,7 +473,12 @@ public class InviteFactory
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
-      return new Invite(invite, mMimeMessage);
+
+      Invite newInvite = new Invite(invite, mMimeMessage);
+
+      newInvite.addICalAttaches(mICalAttachmentList);
+
+      return newInvite;
     }
     else
     {
