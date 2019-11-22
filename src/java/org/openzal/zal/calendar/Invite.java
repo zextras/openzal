@@ -376,8 +376,7 @@ public class Invite
     {
       return null;
     }
-    ZRecur zrec = null;
-    zrec = ((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule());
+    ZRecur zrec = ((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule();
     return new RecurrenceRule(zrec);
   }
 
