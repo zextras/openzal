@@ -22,6 +22,8 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
 import javax.annotation.Nonnull;
+
+import java.time.ZoneId;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;

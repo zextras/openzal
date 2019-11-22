@@ -683,6 +683,7 @@ public class Invite
     return 0;
   }
 
+  @Nonnull
   public ICalendarTimezone getTimezone()
   {
     ParsedDateTime startTime = mInvite.getStartTime();
@@ -780,6 +781,11 @@ public class Invite
   public void setMailItemId(int id)
   {
     mInvite.setMailItemId(id);
+  }
+
+  public void setCancelled()
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
   }
 
   public boolean methodIsReply()
