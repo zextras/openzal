@@ -372,15 +372,12 @@ public class Invite
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
-    if (recurrence == null)
+    if (recurrence == null || !recurrence.addRulesIterator().hasNext())
     {
       return null;
     }
-    RecurrenceRule zrec = null;
-    if (recurrence.addRulesIterator().hasNext())
-    {
-      zrec = new RecurrenceRule(((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule());
-    }
+    ZRecur zrec = null;
+    zrec = ((Recurrence.SimpleRepeatingRule) recurrence.addRulesIterator().next()).getRule());
     return new RecurrenceRule(zrec);
   }
 
