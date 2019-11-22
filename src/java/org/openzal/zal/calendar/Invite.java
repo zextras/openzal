@@ -786,6 +786,7 @@ public class Invite
   public void setCancelled()
   {
     mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
+    mInvite.setStatus(ZCalendar.ICalTok.CANCELLED.toString());
   }
 
   public boolean methodIsReply()
