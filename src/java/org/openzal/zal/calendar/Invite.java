@@ -425,7 +425,10 @@ public class Invite
       try
       {
         com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
-        inviteList.add(new Invite(invite, mimeMessage));
+        if( invite != null )
+        {
+          inviteList.add(new Invite(invite, mimeMessage));
+        }
       }
       catch (Exception ex)
       {
