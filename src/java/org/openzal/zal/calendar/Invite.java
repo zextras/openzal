@@ -372,7 +372,7 @@ public class Invite
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
-    if (recurrence == null)
+    if (recurrence == null || !recurrence.addRulesIterator().hasNext())
     {
       return null;
     }
