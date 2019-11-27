@@ -33,7 +33,7 @@ import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
 /* $if ZimbraX == 1 $
 import com.zimbra.cs.mailbox.cache.FolderCache;
-import com.zimbra.cs.mailbox.cache.Localzxsuite Cache;
+import com.zimbra.cs.mailbox.cache.LocalTagCache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
