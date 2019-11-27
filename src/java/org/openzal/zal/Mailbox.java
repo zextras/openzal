@@ -33,7 +33,7 @@ import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
 /* $if ZimbraX == 1 $
 import com.zimbra.cs.mailbox.cache.FolderCache;
-import com.zimbra.cs.mailbox.cache.LocalTagCache;
+import com.zimbra.cs.mailbox.cache.Localzxsuite Cache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
@@ -44,6 +44,7 @@ import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
+import java.util.Objects;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1428,13 +1429,18 @@ public class Mailbox
     return new Tag(tag);
   }
 
-  @Nonnull
+  @Nullable
   public Tag getTagByName(@Nonnull OperationContext octxt, String name)
     throws NoSuchItemException
   {
     try
     {
-      return new Tag(mMbox.getTagByName(octxt.getOperationContext(), name));
+      com.zimbra.cs.mailbox.Tag tagByName = mMbox.getTagByName(octxt.getOperationContext(), name);
+      if( Objects.isNull(tagByName) )
+      {
+        return null;
+      }
+      return new Tag(tagByName);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
