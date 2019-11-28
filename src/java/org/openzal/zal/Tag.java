@@ -31,4 +31,10 @@ public class Tag extends Item
     super(item);
     mTag = (com.zimbra.cs.mailbox.Tag) item;
   }
+
+  public boolean isListed()
+  {
+    return mTag.isListed();
+  }
+
 }
