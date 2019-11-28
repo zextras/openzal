@@ -20,6 +20,12 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Mailbox;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -34,7 +40,6 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
-import com.zimbra.common.soap.SoapJSProtocol;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
 import com.zimbra.cs.account.AuthToken;
@@ -271,6 +276,9 @@ public class ProvisioningImp implements Provisioning
   /* $else$
   public static String A_zimbraSSLIncludeCipherSuites                         = "";
   /* $endif$ */
+  public static String A_zimbraGalType                                        = com.zimbra.cs.account.Provisioning.A_zimbraGalType;
+  public static String A_zimbraDataSourceEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceEnabled;
+  public static String A_zimbraGalStatus                                      = com.zimbra.cs.account.Provisioning.A_zimbraGalStatus;
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -1355,6 +1363,103 @@ public class ProvisioningImp implements Provisioning
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public Account createGalAccount(String dstAccount, String newPassword, Map<String, Object> attrs)
+    throws ZimbraException
+  {
+    final HashMap<String, Object> galProp = new HashMap<>();
+    galProp.put("zimbraContactMaxNumEntries", "0");
+    galProp.put("zimbraHideInGal", "TRUE");
+    galProp.put("zimbraIsSystemAccount", "TRUE");
+    galProp.put("zimbraIsSystemResource", "TRUE");
+    galProp.putAll(attrs);
+
+    final Account account = createAccount(dstAccount, newPassword, galProp);
+    final Domain domain = getDomainByName(account.getDomainName());
+    if (domain == null)
+    {
+      throw new ZimbraException("No such domain " + account.getDomainName());
+    }
+    try
+    {
+      String acctName = account.getName();
+      String acctId = account.getId();
+      com.zimbra.cs.account.Domain zimbraDomain = domain.toZimbra(com.zimbra.cs.account.Domain.class);
+      HashSet<String> galAcctIds = new HashSet<String>(Arrays.asList(zimbraDomain.getGalAccountId()));
+      if (!galAcctIds.contains(acctId)) {
+        galAcctIds.add(acctId);
+        zimbraDomain.setGalAccountId(galAcctIds.toArray(new String[0]));
+      }
+
+      final String folder = "/_zimbra";
+      final HashMap<String, Object> dataSourceProperties = new HashMap<>();
+      dataSourceProperties.put("zimbraGalType", "zimbra");
+      dataSourceProperties.put("zimbraDataSourceFolderId", folder);
+      dataSourceProperties.put("zimbraDataSourceEnabled", "TRUE");
+      dataSourceProperties.put("zimbraGalStatus", "enabled");
+
+      final org.openzal.zal.Mailbox mailboxByAccount = new MailboxManagerImp().getMailboxByAccount(account);
+      final Mailbox zimbraMBox = mailboxByAccount.toZimbra(Mailbox.class);
+
+      Folder contactFolder;
+      try {
+         contactFolder = zimbraMBox.getFolderByPath(
+          null,
+          folder
+        );
+      }
+      catch (MailServiceException.NoSuchItemException e) {
+        contactFolder = zimbraMBox.createFolder(
+          null,
+          folder,
+          new Folder.FolderOptions().setDefaultView(MailItem.Type.CONTACT)
+        );
+      }
+
+      int folderId = contactFolder.getId();
+      for (DataSource ds : account.getAllDataSources()) {
+        if (ds.getFolderId() == folderId) {
+          throw MailServiceException.ALREADY_EXISTS("data source " + ds.toZimbra().getName() + " already contains folder " + folder);
+        }
+      }
+
+      zimbraMBox.grantAccess(
+        null,
+        folderId,
+        domain.getId(),
+        ACL.GRANTEE_DOMAIN,
+        ACL.stringToRights("r"),
+        null
+      );
+
+      // create datasource
+      Map<String, Object> dataSourceAttrs = new HashMap<>();
+      dataSourceAttrs.put("zimbraDataSourcePollingInterval", "1d");
+      dataSourceAttrs.put(A_zimbraGalType, "zimbra");
+      dataSourceAttrs.put(A_zimbraDataSourceFolderId, String.valueOf(folderId));
+      if( !dataSourceAttrs.containsKey(A_zimbraDataSourceEnabled) )
+      {
+        dataSourceAttrs.put(A_zimbraDataSourceEnabled, LdapConstants.LDAP_TRUE);
+      }
+      if( !dataSourceAttrs.containsKey(A_zimbraGalStatus) )
+      {
+        dataSourceAttrs.put(A_zimbraGalStatus, "enabled");
+      }
+      mProvisioning.createDataSource(
+        account.toZimbra(com.zimbra.cs.account.Account.class),
+        com.zimbra.soap.admin.type.DataSourceType.gal,
+        "zimbra",
+        dataSourceAttrs
+      );
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return account;
   }
 
   @Override
