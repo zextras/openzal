@@ -198,7 +198,12 @@ public class RecurrenceRule
 
   public long getUntilUtc()
   {
-    return mZRecur.getUntil().getUtcTime();
+    if(mZRecur.getUntil() != null)
+    {
+      return mZRecur.getUntil().getUtcTime();
+    }
+
+    return 0;
   }
 
   public int getCount()
@@ -266,5 +271,11 @@ public class RecurrenceRule
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public String toString()
+  {
+    return toZimbra(ZRecur.class).toString();
   }
 }
