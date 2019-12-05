@@ -2357,6 +2357,7 @@ public class Mailbox
   /*
    * Warning: unsynchronized private access to mailbox
    */
+  @Nullable
   private final Item rawGetItem(@Nonnull Item.UnderlyingData data)
     throws InternalServerException
   {
