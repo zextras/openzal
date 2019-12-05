@@ -372,7 +372,7 @@ public class Invite
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
-    if (recurrence == null)
+    if (recurrence == null || !recurrence.addRulesIterator().hasNext())
     {
       return null;
     }
@@ -425,7 +425,10 @@ public class Invite
       try
       {
         com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
-        inviteList.add(new Invite(invite, mimeMessage));
+        if( invite != null )
+        {
+          inviteList.add(new Invite(invite, mimeMessage));
+        }
       }
       catch (Exception ex)
       {
