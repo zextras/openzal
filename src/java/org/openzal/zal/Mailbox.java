@@ -1662,7 +1662,11 @@ public class Mailbox
           {
             try
             {
-              result.add(rawGetItem(data));
+              Item item = rawGetItem(data);
+              if(item != null)
+              {
+                result.add(item);
+              }
             }
             catch (Throwable ex)
             {
@@ -2353,7 +2357,6 @@ public class Mailbox
   /*
    * Warning: unsynchronized private access to mailbox
    */
-  @Nonnull
   private final Item rawGetItem(@Nonnull Item.UnderlyingData data)
     throws InternalServerException
   {
@@ -2362,7 +2365,15 @@ public class Mailbox
 
     try
     {
-      return new Item((MailItem) sRawGetItem.invoke(mMbox, parameters));
+      MailItem item = (MailItem) sRawGetItem.invoke(mMbox, parameters);
+      if(item != null)
+      {
+        return new Item(item);
+      }
+      else
+      {
+        return null;
+      }
     }
     catch (Throwable ex)
     {
@@ -2543,7 +2554,10 @@ public class Mailbox
 
       for (Object folder : folders)
       {
-        newList.add(new Folder(folder));
+        if ( folder != null)
+        {
+          newList.add(new Folder(folder));
+        }
       }
 
       return newList;
