@@ -30,6 +30,7 @@ import java.util.Map;
 
 public enum AttendeeInviteStatus
 {
+  ORGANIZER("OR", "ORGANIZER"),
   TENTATIVE("TE", "TENTATIVE"),
   @JsonEnumDefaultValue NEEDS_ACTION("NE", "NEEDS-ACTION"),
   DELEGATED("DG", "DELEGATED"),
