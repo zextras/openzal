@@ -22,9 +22,12 @@ package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
 import javax.annotation.Nonnull;
+
+import java.time.ZoneId;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ActualClock;
 import org.openzal.zal.lib.Clock;
 import com.zimbra.common.service.ServiceException;
@@ -33,6 +36,7 @@ import com.zimbra.cs.mailbox.calendar.*;
 
 import com.zimbra.common.calendar.*;
 
+import javax.annotation.Nullable;
 import javax.mail.internet.MimeMessage;
 import java.util.*;
 
@@ -61,23 +65,27 @@ public class InviteFactory
   private       String             mDescriptionHtml;
   private       long               mLastModifyTimeUtc;
   private       int                mSequence;
-  private       ICalendarTimezone  mTimezone;
-  private       boolean            mAlarmSet;
-  private       int                mAlarmTime;
-  private       long               mReminderTime;
-  private       MimeMessage        mMimeMessage;
-  private       boolean            mHasAttachment;
+  private       ICalendarTimezone mTimezone;
+  private       boolean           mAlarmSet;
+  private       int               mAlarmTime;
+  private       long              mReminderTime;
+  private       MimeMessage       mMimeMessage;
+  private       boolean           mHasAttachment;
   @Nonnull
-  private final Clock              mClock;
-  private       RecurrenceRule     mRecurrenceRule;
-  private       int                mMailItemId = 0;
-  private       String             mPartStat;
+  private final Clock             mClock;
+  private       RecurrenceRule    mRecurrenceRule;
+  private       int               mMailItemId = 0;
+  private       String            mPartStat;
+  private       boolean           mResponseRequest;
+  private       List<Attach>      mICalAttachmentList;
 
   public InviteFactory()
   {
     mAlarmSet = false;
     mSequence = 0;
     mClock = ActualClock.sInstance;
+
+    mICalAttachmentList = new ArrayList<>();
   }
 
   public Invite createTask(Mailbox mbox)
@@ -192,6 +200,16 @@ public class InviteFactory
     mDescriptionHtml = descriptionHtml;
   }
 
+  public void setDescription( String description )
+  {
+    mDescription = description;
+  }
+
+  public void setDescriptionHtml( String html )
+  {
+    mDescriptionHtml = html;
+  }
+
   public void setUtcLastModifyTime(long lastModifyTimeUtc)
   {
     mLastModifyTimeUtc = lastModifyTimeUtc;
@@ -219,10 +237,32 @@ public class InviteFactory
     mReminderTime = time;
   }
 
-  public void setAttachment( MimeMessage mimeMessage )
+  public void setAttachment(@Nullable MimeMessage mimeMessage )
   {
-    mHasAttachment = true;
+    if(mimeMessage != null)
+    {
+      mHasAttachment = true;
+    }
     mMimeMessage = mimeMessage;
+  }
+
+  public void setResponseRequest(Boolean rsvp)
+  {
+    mResponseRequest = rsvp;
+  }
+
+  public void addICalAttach(Attach attachment)
+  {
+    mICalAttachmentList.add(attachment);
+    mHasAttachment = true;
+  }
+
+  public void addICalAttaches(Iterable<Attach> attachments)
+  {
+    for( Attach attachment : attachments)
+    {
+      addICalAttach(attachment);
+    }
   }
 
   public void populateFactoryFromExistingInvite( Invite invite )
@@ -273,6 +313,8 @@ public class InviteFactory
     }
     mMailItemId = invite.getMailItemId();
     mPartStat = invite.getPartStat();
+    mResponseRequest = invite.getResponseRequest();
+    mICalAttachmentList = invite.getICalAttachList();
   }
 
 
@@ -299,38 +341,50 @@ public class InviteFactory
     List<ZAttendee> zAttendeeList = new LinkedList<ZAttendee>();
     for (Attendee attendee : mAttendeeList)
     {
-      ZAttendee zAttendee = new ZAttendee(
-        attendee.getAddress(), attendee.getName(),
-        null, null, null, null, "REQ", attendee.getStatus().getRawStatus(),
-        true, null, null, null, null
-      );
-      zAttendeeList.add(zAttendee);
+      zAttendeeList.add(attendee.toZAttendee());
     }
 
-    ParsedDateTime dateStart = null;
-    if( mUtcDateStart != 0L ) {
-      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    }
+    Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
 
-    ParsedDateTime dateEnd = null;
-    if( mUtcDateEnd != 0L ) {
-      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    if( mUtcDateStart == 0L && mUtcDateEnd == 0L) {
+      mUtcDateStart = cal.getTimeInMillis();
+      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
     }
+    else if(mUtcDateStart == 0L && mUtcDateEnd < cal.getTimeInMillis())
+    {
+      throw new ZimbraException("EndDate can not be in the past!");
+    }
+    else if(mUtcDateStart == 0L && mUtcDateEnd > cal.getTimeInMillis())
+    {
+      mUtcDateStart = cal.getTimeInMillis();
+    }
+    else if(mUtcDateStart < cal.getTimeInMillis() && mUtcDateEnd == 0L)
+    {
+      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
+    }
+    // else if(mUtcDateStart > cal.getTimeInMillis() && mUtcDateEnd == 0L)
+    // {
+      // throw new ZimbraException("StartDate can not be in the future!???");
+    // }
+
+    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
+    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
 
     if (mAllDayEvent || task)
     {
-      if( dateStart != null ) {
         dateStart.setHasTime(false);
-      }
-      if( dateEnd != null ) {
         dateEnd.setHasTime(false);
-      }
     }
 
     Recurrence.RecurrenceRule mainRecurrenceRule = null;
+    ParsedDuration eventDuration = null;
     if (mRecurrenceRule != null)
     {
-      ParsedDuration eventDuration = dateEnd.difference(dateStart);
+      eventDuration = dateEnd.difference(dateStart);
       Recurrence.IRecurrence simpleRecurrenceRule = new Recurrence.SimpleRepeatingRule(dateStart,
                                                                                        eventDuration,
                                                                                        mRecurrenceRule.toZimbra(ZRecur.class),
@@ -360,7 +414,7 @@ public class InviteFactory
       mAllDayEvent,
       dateStart,
       dateEnd,
-      null,
+      eventDuration,
       recurId,
       mainRecurrenceRule,
       isOrganizer,
@@ -382,7 +436,7 @@ public class InviteFactory
       mSequence,
       /* $endif$ */
       AttendeeInviteStatus.TENTATIVE.getRawStatus(),
-      true,
+      mResponseRequest,
       true
     );
 
@@ -421,7 +475,12 @@ public class InviteFactory
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
-      return new Invite(invite, mMimeMessage);
+
+      Invite newInvite = new Invite(invite, mMimeMessage);
+
+      newInvite.addICalAttaches(mICalAttachmentList);
+
+      return newInvite;
     }
     else
     {

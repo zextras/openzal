@@ -42,7 +42,6 @@ public abstract class MailboxListenerWrapper
 
       switch( type )
       {
-        case Item.TYPE_MOUNTPOINT:
         case Item.TYPE_VIRTUAL_CONVERSATION:
           isRelevant = false;
       }

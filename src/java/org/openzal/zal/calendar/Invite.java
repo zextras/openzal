@@ -372,7 +372,7 @@ public class Invite
   public RecurrenceRule getRecurrenceRule()
   {
     Recurrence.IRecurrence recurrence = mInvite.getRecurrence();
-    if (recurrence == null)
+    if (recurrence == null || !recurrence.addRulesIterator().hasNext())
     {
       return null;
     }
@@ -425,7 +425,10 @@ public class Invite
       try
       {
         com.zimbra.cs.mailbox.calendar.Invite invite = calendarItem.getInvite(exception.getRecurId());
-        inviteList.add(new Invite(invite, mimeMessage));
+        if( invite != null )
+        {
+          inviteList.add(new Invite(invite, mimeMessage));
+        }
       }
       catch (Exception ex)
       {
@@ -683,6 +686,7 @@ public class Invite
     return 0;
   }
 
+  @Nonnull
   public ICalendarTimezone getTimezone()
   {
     ParsedDateTime startTime = mInvite.getStartTime();
@@ -780,6 +784,12 @@ public class Invite
   public void setMailItemId(int id)
   {
     mInvite.setMailItemId(id);
+  }
+
+  public void setCancelled()
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
+    mInvite.setStatus(ZCalendar.ICalTok.CANCELLED.toString());
   }
 
   public boolean methodIsReply()
@@ -885,4 +895,48 @@ public class Invite
      }
    }
 
+   public boolean hasResponseRequest()
+   {
+     Boolean rsvp = mInvite.getRsvp();
+     return rsvp != null;
+   }
+
+   public void setResponseRequest(boolean value)
+   {
+     mInvite.setRsvp(value);
+   }
+
+   public boolean getResponseRequest()
+   {
+     return mInvite.getRsvp();
+   }
+
+   public void addICalAttach(Attach attachment)
+   {
+     /* $if ZimbraVersion > 8.5.0 $ */
+     mInvite.addIcalendarAttach(attachment.toZimbra(com.zimbra.common.calendar.Attach.class));
+     /* $endif $ */
+   }
+
+  public void addICalAttaches(Iterable<Attach> attachments)
+  {
+    for( Attach attachment : attachments)
+    {
+      addICalAttach(attachment);
+    }
+  }
+
+  public List<Attach> getICalAttachList()
+  {
+    List<Attach> attachList = new ArrayList<>();
+
+    /* $if ZimbraVersion > 8.5.0 $ */
+    for( com.zimbra.common.calendar.Attach zAttach : mInvite.getIcalendarAttaches())
+    {
+      attachList.add(new Attach(zAttach));
+    }
+    /* $endif $ */
+
+    return attachList;
+  }
 }
