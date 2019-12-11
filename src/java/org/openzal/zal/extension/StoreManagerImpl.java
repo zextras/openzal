@@ -59,16 +59,10 @@ public class StoreManagerImpl implements StoreManager
   {
     try
     {
-      Field modifiersMethod = Method.class.getDeclaredField("modifiers");
-      modifiersMethod.setAccessible(true);
       Method defineClassMethod = ClassLoader.class.getDeclaredMethod(
         "defineClass", byte[].class, int.class, int.class
       );
       defineClassMethod.setAccessible(true);
-      modifiersMethod.setInt(
-        defineClassMethod,
-        (defineClassMethod.getModifiers() & (~Modifier.FINAL) & (~Modifier.PROTECTED)) | Modifier.PUBLIC
-      );
 
       InputStream is = null;
       try
