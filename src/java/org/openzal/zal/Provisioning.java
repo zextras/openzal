@@ -222,6 +222,9 @@ public interface Provisioning
   Account createAccount(String dstAccount, @Nullable String newPassword, Map<String, Object> attrs)
     throws ZimbraException;
 
+  Account createGalAccount(String dstAccount, String newPassword, Map<String, Object> attrs)
+    throws ZimbraException;
+
   Account createFakeAccount(Map<String, Object> attrs)
     throws ZimbraException;
 

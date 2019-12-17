@@ -44,6 +44,7 @@ import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
+import java.util.Objects;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1428,13 +1429,18 @@ public class Mailbox
     return new Tag(tag);
   }
 
-  @Nonnull
+  @Nullable
   public Tag getTagByName(@Nonnull OperationContext octxt, String name)
     throws NoSuchItemException
   {
     try
     {
-      return new Tag(mMbox.getTagByName(octxt.getOperationContext(), name));
+      com.zimbra.cs.mailbox.Tag tagByName = mMbox.getTagByName(octxt.getOperationContext(), name);
+      if( Objects.isNull(tagByName) )
+      {
+        return null;
+      }
+      return new Tag(tagByName);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1656,7 +1662,11 @@ public class Mailbox
           {
             try
             {
-              result.add(rawGetItem(data));
+              Item item = rawGetItem(data);
+              if(item != null)
+              {
+                result.add(item);
+              }
             }
             catch (Throwable ex)
             {
@@ -2347,7 +2357,7 @@ public class Mailbox
   /*
    * Warning: unsynchronized private access to mailbox
    */
-  @Nonnull
+  @Nullable
   private final Item rawGetItem(@Nonnull Item.UnderlyingData data)
     throws InternalServerException
   {
@@ -2356,7 +2366,15 @@ public class Mailbox
 
     try
     {
-      return new Item((MailItem) sRawGetItem.invoke(mMbox, parameters));
+      MailItem item = (MailItem) sRawGetItem.invoke(mMbox, parameters);
+      if(item != null)
+      {
+        return new Item(item);
+      }
+      else
+      {
+        return null;
+      }
     }
     catch (Throwable ex)
     {
@@ -2537,7 +2555,10 @@ public class Mailbox
 
       for (Object folder : folders)
       {
-        newList.add(new Folder(folder));
+        if ( folder != null)
+        {
+          newList.add(new Folder(folder));
+        }
       }
 
       return newList;
