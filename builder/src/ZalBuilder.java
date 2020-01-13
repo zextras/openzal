@@ -18,6 +18,7 @@ public class ZalBuilder
 
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
   private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
+  private static AtomicBoolean sGitCheck = new AtomicBoolean(true);
 
   private static String[] sCommonZimbraVersions = {
     "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11", "8.8.12", "8.8.15"
@@ -67,6 +68,11 @@ public class ZalBuilder
       case "--help": {
         help();
         System.exit(0);
+        break;
+      }
+
+      case "--no-git": {
+        sGitCheck.set(false);
         break;
       }
 
@@ -551,7 +557,7 @@ public class ZalBuilder
     );
     downloader.download();
 
-    if (new File(".git/").exists()) {
+    if (sGitCheck.get() && new File(".git/").exists()) {
       TemplateWriter writer = new TemplateWriter(
         "src/java/org/openzal/zal/ZalBuildInfo.java",
         "package org.openzal.zal;\n" +
@@ -567,7 +573,7 @@ public class ZalBuilder
       writer.write();
       System.out.println("ZalBuildInfo generated");
     } else {
-      System.out.println("Skipped ZalBuildInfo file generation, not .git folder found");
+      System.out.println("Skipped ZalBuildInfo generation");
     }
   }
 
