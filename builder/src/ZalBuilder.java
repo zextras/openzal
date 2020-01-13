@@ -557,7 +557,7 @@ public class ZalBuilder
     );
     downloader.download();
 
-    if (sGitCheck.get() && new File(".git/").exists()) {
+    if (sGitCheck.get()) {
       TemplateWriter writer = new TemplateWriter(
         "src/java/org/openzal/zal/ZalBuildInfo.java",
         "package org.openzal.zal;\n" +
