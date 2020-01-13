@@ -551,19 +551,24 @@ public class ZalBuilder
     );
     downloader.download();
 
-    TemplateWriter writer = new TemplateWriter(
-      "src/java/org/openzal/zal/ZalBuildInfo.java",
-      "package org.openzal.zal;\n" +
-        "\n" +
-        "public class ZalBuildInfo\n" +
-        "{\n" +
-        "    public static String COMMIT=\"${COMMIT}\";\n" +
-        "    public static String VERSION=\"${VERSION}\";\n" +
-        "}"
-    );
-    writer.add("COMMIT", systemReader.readCommit());
-    writer.add("VERSION", systemReader.readVersion());
-    writer.write();
+    if (new File(".git/").exists()) {
+      TemplateWriter writer = new TemplateWriter(
+        "src/java/org/openzal/zal/ZalBuildInfo.java",
+        "package org.openzal.zal;\n" +
+          "\n" +
+          "public class ZalBuildInfo\n" +
+          "{\n" +
+          "    public static String COMMIT=\"${COMMIT}\";\n" +
+          "    public static String VERSION=\"${VERSION}\";\n" +
+          "}"
+      );
+      writer.add("COMMIT", systemReader.readCommit());
+      writer.add("VERSION", systemReader.readVersion());
+      writer.write();
+      System.out.println("ZalBuildInfo generated");
+    } else {
+      System.out.println("Skipped ZalBuildInfo file generation, not .git folder found");
+    }
   }
 
   private static Map<String, String> generateManifest(Zimbra zimbra, SystemReader systemReader) throws Exception {
