@@ -581,7 +581,9 @@ public class ZalBuilder
     HashMap<String, String> manifest = new HashMap<>();
     manifest.put("Specification-Title" ,"Zimbra Abstraction Layer" );
     manifest.put("Specification-Version" ,systemReader.readVersion().toString() );
-    manifest.put("Specification-Commit" ,systemReader.readCommit() );
+    if (sGitCheck.get()) {
+      manifest.put("Specification-Commit" ,systemReader.readCommit() );
+    }
     manifest.put("Specification-Vendor" ,"ZeXtras" );
     manifest.put("Implementation-Version" ,zimbra.toString() );
     manifest.put("Created-By" ,"ZeXtras" );
