@@ -176,6 +176,32 @@ public class Account extends Entry
     }
   }
 
+  /**
+   * Returns every zimlet the user has access to.
+   * Attribute "zimbraZimletAvailableZimlets" returns a list of the user available zimlet with an extra character
+   * that indicates whether the zimlet is mandatory, enabled or disabled for the user (based on the config):
+   * +: this zimlet is enabled for the user, therefore he/she is able to hide it through Preferences
+   * -: this zimlet is disabled for the user
+   * !: this zimlet is mandatory for the user, therefore he/she won't be able to hide it
+   * N.B. "zimbraZimletAvailableZimlets" attribute does not provide information on whether the user hid a specific
+   * zimlet from his/her Preferences. To assert this, another method should be created (or a flag should be put on
+   * this one)
+   * @return a list of {@link String} names representing user accessible zimlets
+   */
+  public List<String> getUserAccessibleZimlets()
+  {
+    String[] zimlets = mAccount.getMultiAttr("zimbraZimletAvailableZimlets");
+    List<String> toReturn = new ArrayList<>();
+    for (String zimletName : zimlets)
+    {
+      if (zimletName.charAt(0) == '!' || zimletName.charAt(0) == '+')
+      {
+        toReturn.add(zimletName.substring(1));
+      }
+    }
+    return toReturn;
+  }
+
   public boolean isIsExternalVirtualAccount()
   {
     return mAccount.isIsExternalVirtualAccount();
