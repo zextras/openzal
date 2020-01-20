@@ -3,6 +3,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 public class ZalBuilder
@@ -19,9 +20,13 @@ public class ZalBuilder
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
   private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
 
-  private static String[] sCommonZimbraVersions = {
-    "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11", "8.8.12", "8.8.15"
-  };
+  private static List<Zimbra> sCommonZimbraVersions = Arrays.asList(new Zimbra[]{
+    new Zimbra(Zimbra.Type.standard, new Version("8.6.0")),
+    new Zimbra(Zimbra.Type.standard, new Version("8.7.11")),
+    new Zimbra(Zimbra.Type.standard, new Version("8.8.12")),
+    new Zimbra(Zimbra.Type.standard, new Version("8.8.15")),
+    sZimbraX
+  });
 
   private static List<String> sSkipDotClass = Arrays.asList(
     "com/zimbra/cs/store/file/VolumeBlobProxy.class"
@@ -181,99 +186,16 @@ public class ZalBuilder
       }
 
       case "compatibility-check": {
-        if( systemReader.readVersion().getMicro() == 0  ) {
-          System.out.println("No need to check compatibility for the first micro of "+systemReader.readVersion());
-          return;
-        }
-
         List<Zimbra> zimbraVersions = extractZimbraVersions();
         //check the compatibility between latest and first release
         zimbraVersions.add( zimbraVersions.get(0) );
 
-        AtomicBoolean failed = new AtomicBoolean(false);
-        String lastVersion = "previous version binary";
-        String lastVersionPath = "bin/previous-zal-version.jar";
-        for( Zimbra zimbraVersion :zimbraVersions) {
-          final String currentVersion = "dist/"+zimbraVersion+"/zal.jar";
-          final String finalLastVersionPath = lastVersionPath;
-          final String finalLastVersion = lastVersion;
-          queueTask(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...");
-                systemReader.exec(
-                  "tools/japi-compliance-checker/japi-compliance-checker.pl",
-                  "-binary",
-                  "-l",
-                  "OpenZAL",
-                  finalLastVersionPath,
-                  currentVersion
-                );
-                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...OK");
-              } catch (Exception e) {
-                failed.set(false);
-              }
-            }
-          });
-
-          lastVersionPath = currentVersion;
-          lastVersion = zimbraVersion.toString();
-        }
-        waitTask();
-
-        if( failed.get() ) {
-          System.exit(1);
-        }
+        checkZalCompatibility(systemReader, zimbraVersions);
         return;
       }
 
       case "fast-compatibility-check": {
-        if( systemReader.readVersion().getMicro() == 0  ) {
-          System.out.println("No need to check compatibility for the first micro of "+systemReader.readVersion());
-          return;
-        }
-
-        List<Zimbra> zimbraVersions = extractZimbraVersions();
-        //check the compatibility between latest and first release
-        zimbraVersions.add( zimbraVersions.get(0) );
-
-        AtomicBoolean failed = new AtomicBoolean(false);
-        String lastVersion = "previous version binary";
-        String lastVersionPath = "bin/previous-zal-version.jar";
-        for( String rawZimbraVersion : sCommonZimbraVersions) {
-          Version zimbraVersion = new Version(rawZimbraVersion);
-          final String currentVersion = "dist/"+zimbraVersion+"/zal.jar";
-          final String finalLastVersionPath = lastVersionPath;
-          final String finalLastVersion = lastVersion;
-          queueTask(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...");
-                systemReader.exec(
-                  "tools/japi-compliance-checker/japi-compliance-checker.pl",
-                  "-binary",
-                  "-l",
-                  "OpenZAL",
-                  finalLastVersionPath,
-                  currentVersion
-                );
-                System.out.println("Checking compatibility "+ finalLastVersion +" vs "+zimbraVersion+"...OK");
-              } catch (Exception e) {
-                failed.set(false);
-              }
-            }
-          });
-
-          lastVersionPath = currentVersion;
-          lastVersion = zimbraVersion.toString();
-        }
-        waitTask();
-
-        if( failed.get() ) {
-          System.exit(1);
-        }
+        checkZalCompatibility(systemReader, sCommonZimbraVersions);
         return;
       }
 
@@ -281,13 +203,13 @@ public class ZalBuilder
         setup(systemReader);
         checkOrDownloadZimbraJars();
         checkOrDownloadMavenDependencies(systemReader);
-        for (final String rawVersion : sCommonZimbraVersions) {
+        for (final Zimbra version : sCommonZimbraVersions) {
           queueTask(new Runnable(){
             @Override
             public void run() {
               try {
                 buildFromZimbraVersion(
-                  new Zimbra(Zimbra.Type.standard,new Version(rawVersion)),
+                  version,
                   systemReader,
                   false
                 );
@@ -339,6 +261,77 @@ public class ZalBuilder
     System.out.println("Unknown command '"+command+"'");
     help();
     System.exit(1);
+  }
+
+  private static void checkZalCompatibility(SystemReader systemReader, List<Zimbra> sourceList) throws Exception
+  {
+    AtomicBoolean failed = new AtomicBoolean(false);
+
+    List<String> versionsPath = new LinkedList<>();
+    List<String> versionsName = new LinkedList<>();
+    sourceList.forEach(new Consumer<Zimbra>()
+    {
+      @Override
+      public void accept(Zimbra version)
+      {
+        versionsPath.add("dist/"+version.toString()+"/zal.jar");
+        versionsName.add(version.toString());
+      }
+    });
+
+    if( systemReader.readVersion().getMicro() == 0  )
+    {
+      System.out.println("No need to check back-compatibility for the first micro of "+systemReader.readVersion());
+    }
+    else
+    {
+      versionsName.add( "previous version binary" );
+      versionsPath.add( "bin/previous-zal-version.jar" );
+    }
+
+    String lastVersionName;
+    String lastVersionPath;
+    Iterator<String> pathIt = versionsPath.iterator();
+    Iterator<String> nameIt = versionsName.iterator();
+    {
+      lastVersionPath = pathIt.next();
+      lastVersionName = nameIt.next();
+    }
+
+    while( pathIt.hasNext() )
+    {
+      final String currentVersionName = nameIt.next();
+      final String currentVersionPath = pathIt.next();
+      final String finalLastVersionPath = lastVersionPath;
+      final String finalLastVersionName = lastVersionName;
+      queueTask(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            System.out.println("Checking compatibility "+ finalLastVersionName +" vs "+currentVersionName+"...");
+            systemReader.exec(
+              "tools/japi-compliance-checker/japi-compliance-checker.pl",
+              "-binary",
+              "-l",
+              "OpenZAL",
+              finalLastVersionPath,
+              currentVersionPath
+            );
+            System.out.println("Checking compatibility "+ finalLastVersionName +" vs "+currentVersionName+"...OK");
+          } catch (Exception e) {
+            failed.set(false);
+          }
+        }
+      });
+
+      lastVersionPath = currentVersionPath;
+      lastVersionName = currentVersionName;
+    }
+    waitTask();
+
+    if( failed.get() ) {
+      System.exit(1);
+    }
   }
 
   private static void setup(SystemReader systemReader) throws Exception

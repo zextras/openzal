@@ -3,7 +3,7 @@
 set -e
 
 VERSION=$(cat version)
-BRIEF_VERSION=$(cat version | sed -E 's/([0-9]\.[0-9])\.[0-9]/\1/')
+BRIEF_VERSION=$(cat version | sed -E 's/([0-9]+\.[0-9]+)\.[0-9]+/\1/')
 
 mkdir -p release/
 rm -rf tmp/*
