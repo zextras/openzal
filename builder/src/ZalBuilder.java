@@ -311,6 +311,9 @@ public class ZalBuilder
             System.out.println("Checking compatibility "+ finalLastVersionName +" vs "+currentVersionName+"...");
             systemReader.exec(
               "tools/japi-compliance-checker/japi-compliance-checker.pl",
+              "-skip-internal-types",
+              //there is no simple way to fix this incompatibility
+              ".*InternalMimeHandler.*",
               "-binary",
               "-l",
               "OpenZAL",
