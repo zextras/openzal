@@ -226,7 +226,8 @@ public class Account extends Entry
 
   /**
    * Returns a list of every zimlet that the user decided to not have disabled from its preferences
-   * @return a list of {@link String} names representing user hidden zimlets
+   * @return a list of {@link String} names representing hidden zimlets that the user decided
+   * to see using its preferences
    */
   public List<String> getUserPrefZimlets()
   {
