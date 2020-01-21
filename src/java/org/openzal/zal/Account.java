@@ -40,6 +40,8 @@ import com.zimbra.cs.account.accesscontrol.Right;
 import com.zimbra.cs.account.accesscontrol.generated.UserRights;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.openzal.zal.extension.ConfigZimletStatus;
 import org.openzal.zal.soap.SoapTransport;
 
 import java.io.IOException;
@@ -177,29 +179,58 @@ public class Account extends Entry
   }
 
   /**
-   * Returns every zimlet the user has access to.
-   * Attribute "zimbraZimletAvailableZimlets" returns a list of the user available zimlet with an extra character
+   * Returns every zimlet available for the user.
+   * Attribute "zimbraZimletAvailableZimlets" returns a list of the available zimlets with an extra character
    * that indicates whether the zimlet is mandatory, enabled or disabled for the user (based on the config):
    * +: this zimlet is enabled for the user, therefore he/she is able to hide it through Preferences
    * -: this zimlet is disabled for the user
    * !: this zimlet is mandatory for the user, therefore he/she won't be able to hide it
+   * {@link ConfigZimletStatus} represents these three states.
    * N.B. "zimbraZimletAvailableZimlets" attribute does not provide information on whether the user hid a specific
-   * zimlet from his/her Preferences. To assert this, another method should be created (or a flag should be put on
-   * this one)
-   * @return a list of {@link String} names representing user accessible zimlets
+   * zimlet from his/her Preferences. To assert this, use {@link #getUserPrefHiddenZimlets()} or
+   * {@link #getUserPrefZimlets()} based on what you need to achieve
+   * @return a {@link Map} with zimlet names as keys and {@link ConfigZimletStatus} as values
    */
-  public List<String> getUserAccessibleZimlets()
+  public Map<String, ConfigZimletStatus> getUserAvailableZimlets()
   {
     String[] zimlets = mAccount.getMultiAttr("zimbraZimletAvailableZimlets");
-    List<String> toReturn = new ArrayList<>();
+    Map<String, ConfigZimletStatus> toReturn = new HashMap<>();
     for (String zimletName : zimlets)
     {
-      if (zimletName.charAt(0) == '!' || zimletName.charAt(0) == '+')
+      switch (zimletName.charAt(0))
       {
-        toReturn.add(zimletName.substring(1));
+        case '!':
+          toReturn.put(zimletName.substring(1), ConfigZimletStatus.Mandatory);
+          break;
+
+        case '+':
+          toReturn.put(zimletName.substring(1), ConfigZimletStatus.Enabled);
+          break;
+
+        case '-':
+          toReturn.put(zimletName.substring(1), ConfigZimletStatus.Disabled);
+          break;
       }
     }
     return toReturn;
+  }
+
+  /**
+   * Returns a list of every zimlet that the user decided to disable from its preferences
+   * @return a list of {@link String} names representing user hidden zimlets
+   */
+  public List<String> getUserPrefHiddenZimlets()
+  {
+    return Arrays.asList(mAccount.getMultiAttr("zimbraPrefDisabledZimlets"));
+  }
+
+  /**
+   * Returns a list of every zimlet that the user decided to not have disabled from its preferences
+   * @return a list of {@link String} names representing user hidden zimlets
+   */
+  public List<String> getUserPrefZimlets()
+  {
+    return Arrays.asList(mAccount.getMultiAttr("zimbraPrefZimlets"));
   }
 
   public boolean isIsExternalVirtualAccount()
