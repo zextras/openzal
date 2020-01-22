@@ -18,6 +18,7 @@ public class ZalBuilder
 
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
   private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
+  private static AtomicBoolean sGitCheck = new AtomicBoolean(true);
 
   private static String[] sCommonZimbraVersions = {
     "8.0.0", "8.0.9", "8.6.0", "8.7.11", "8.8.10", "8.8.11", "8.8.12", "8.8.15"
@@ -67,6 +68,11 @@ public class ZalBuilder
       case "--help": {
         help();
         System.exit(0);
+        break;
+      }
+
+      case "--no-git": {
+        sGitCheck.set(false);
         break;
       }
 
@@ -551,26 +557,33 @@ public class ZalBuilder
     );
     downloader.download();
 
-    TemplateWriter writer = new TemplateWriter(
-      "src/java/org/openzal/zal/ZalBuildInfo.java",
-      "package org.openzal.zal;\n" +
-        "\n" +
-        "public class ZalBuildInfo\n" +
-        "{\n" +
-        "    public static String COMMIT=\"${COMMIT}\";\n" +
-        "    public static String VERSION=\"${VERSION}\";\n" +
-        "}"
-    );
-    writer.add("COMMIT", systemReader.readCommit());
-    writer.add("VERSION", systemReader.readVersion());
-    writer.write();
+    if (sGitCheck.get()) {
+      TemplateWriter writer = new TemplateWriter(
+        "src/java/org/openzal/zal/ZalBuildInfo.java",
+        "package org.openzal.zal;\n" +
+          "\n" +
+          "public class ZalBuildInfo\n" +
+          "{\n" +
+          "    public static String COMMIT=\"${COMMIT}\";\n" +
+          "    public static String VERSION=\"${VERSION}\";\n" +
+          "}"
+      );
+      writer.add("COMMIT", systemReader.readCommit());
+      writer.add("VERSION", systemReader.readVersion());
+      writer.write();
+      System.out.println("ZalBuildInfo generated");
+    } else {
+      System.out.println("Skipped ZalBuildInfo generation");
+    }
   }
 
   private static Map<String, String> generateManifest(Zimbra zimbra, SystemReader systemReader) throws Exception {
     HashMap<String, String> manifest = new HashMap<>();
     manifest.put("Specification-Title" ,"Zimbra Abstraction Layer" );
     manifest.put("Specification-Version" ,systemReader.readVersion().toString() );
-    manifest.put("Specification-Commit" ,systemReader.readCommit() );
+    if (sGitCheck.get()) {
+      manifest.put("Specification-Commit" ,systemReader.readCommit() );
+    }
     manifest.put("Specification-Vendor" ,"ZeXtras" );
     manifest.put("Implementation-Version" ,zimbra.toString() );
     manifest.put("Created-By" ,"ZeXtras" );
