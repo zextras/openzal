@@ -23,6 +23,8 @@ package org.openzal.zal.calendar;
 import com.google.common.annotations.VisibleForTesting;
 import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.cs.mailbox.Metadata;
+import java.io.StringWriter;
+import java.io.Writer;
 import org.openzal.zal.Item;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
@@ -744,6 +746,13 @@ public class Invite
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public String getICS() throws IOException
+  {
+    Writer w = new StringWriter();
+    newToICalendar(true).toICalendar(w);
+    return w.toString();
   }
 
   public boolean hasEndDate()
