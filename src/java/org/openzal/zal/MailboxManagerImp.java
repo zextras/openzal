@@ -54,6 +54,29 @@ public class MailboxManagerImp implements MailboxManager
   static final String TABLE_METADATA      = "mailbox_metadata";
   static final String TABLE_OUT_OF_OFFICE = "out_of_office";
 
+  public static final String[] sTABLES = { // TODO: ZAL
+                                           "mail_item",
+                                           "appointment",
+                                           "data_source_item",
+                                           "imap_folder",
+                                           "imap_message",
+                                           "open_conversation",
+                                           "pop3_message",
+                                           "revision",
+                                           "tag",
+                                           "tagged_item",
+                                           "tombstone",
+                                           "mail_item_dumpster",
+                                           "appointment_dumpster",
+                                           "revision_dumpster",
+                                           "zimbra.mailbox",
+                                           "zimbra.mailbox_metadata",
+                                           "zimbra.mobile_devices",
+                                           "zimbra.out_of_office",
+                                           "zimbra.pending_acl_push",
+                                           "zimbra.scheduled_task"
+  };
+
   private final          com.zimbra.cs.mailbox.MailboxManager                           mMailboxManager;
   @Nonnull private final HashMap<MailboxManagerListener, MailboxManagerListenerWrapper> mListenerMap;
 
@@ -431,7 +454,7 @@ public class MailboxManagerImp implements MailboxManager
   public void forceDeleteMailbox(@Nonnull MailboxData data)
   {
     Connection connection = null;
-    PreparedStatement statement;
+    PreparedStatement statement = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
@@ -441,26 +464,39 @@ public class MailboxManagerImp implements MailboxManager
         connection.toZimbra(DbPool.DbConnection.class),
         mailbox.toZimbra(com.zimbra.cs.mailbox.Mailbox.class)
       );
-      String tables[] = {TABLE_OUT_OF_OFFICE, TABLE_METADATA, TABLE_MAILBOX};
-      String query = "DELETE FROM zimbra.%s WHERE id=?";
-      for( String table : tables )
+      String query = "DELETE FROM %s WHERE %s=?";
+      for( String table : sTABLES )
       {
-        statement = null;
+        boolean zimbraNameSpace = table.startsWith("zimbra.");
+        String tableName = table;
+        String columnName = "id";
+
+        if (!table.equals("zimbra.mailbox"))
+        {
+          columnName = "mailbox_id";
+        }
+
+        if (!zimbraNameSpace)
+        {
+          tableName = "mboxgroup" + mailbox.getSchemaGroupId() + "." + table;
+        }
         try
         {
-          statement = connection.prepareStatement(String.format(query, table));
+          statement = connection.prepareStatement(String.format(query, tableName, columnName));
           statement.setInt(1, data.getId());
           statement.executeUpdate();
-        }
-        catch (SQLException e)
-        {
         }
         finally
         {
           DbUtils.closeQuietly(statement);
+          statement = null;
         }
       }
       connection.commit();
+    }
+    catch (SQLException e)
+    {
+      connection.rollback();
     }
     catch ( ServiceException e )
     {
