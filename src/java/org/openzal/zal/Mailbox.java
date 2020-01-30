@@ -2791,38 +2791,25 @@ public class Mailbox
       throw new SQLException("metadata is too big to be saved");
     }
 
-    String updateQuery = "UPDATE zimbra.mailbox_metadata SET metadata=? WHERE mailbox_id=? AND section=?";
+    String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
     Connection connection = null;
-    PreparedStatement updateStatement = null;
-    PreparedStatement insertStatement = null;
+    PreparedStatement replaceStatement = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
 
-      updateStatement = connection.prepareStatement(updateQuery);
-      updateStatement.setString(1, metadata);
-      updateStatement.setInt(2, getId());
-      updateStatement.setString(3, section);
+      replaceStatement = connection.prepareStatement(insertQuery);
+      replaceStatement.setInt(1, getId());
+      replaceStatement.setString(2, section);
+      replaceStatement.setString(3, metadata);
 
-      int res = updateStatement.executeUpdate();
-      if (res == 0)
-      {
-        String insertQuery = "INSERT INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
-
-        insertStatement = connection.prepareStatement(insertQuery);
-        insertStatement.setInt(1, getId());
-        insertStatement.setString(2, section);
-        insertStatement.setString(3, metadata);
-
-        res = insertStatement.executeUpdate();
-      }
+      replaceStatement.executeUpdate();
 
       connection.commit();
     }
     finally
     {
-      DbUtils.closeQuietly(insertStatement);
-      DbUtils.closeQuietly(updateStatement);
+      DbUtils.closeQuietly(replaceStatement);
       if (connection != null)
       {
         connection.close();
