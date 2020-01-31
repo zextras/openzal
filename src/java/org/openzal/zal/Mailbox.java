@@ -88,6 +88,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
@@ -536,6 +538,22 @@ public class Mailbox
       throw new NoSuchItemException(id+"-"+revision);
     }
     return new Item(item);
+  }
+
+  public List<Item> getAllRevisionsIncludeDumpster(@Nonnull OperationContext zContext, int id, byte type)
+  {
+    List<Item> revisions = new ArrayList<>();
+    try
+    {
+      revisions.addAll(getAllRevisions(zContext, id, type, false));
+    }
+    catch( Exception ignored ) {}
+    try
+    {
+      revisions.addAll(getAllRevisions(zContext, id, type, true));
+    }
+    catch( Exception ignored ) {}
+    return revisions;
   }
 
   @Nonnull
