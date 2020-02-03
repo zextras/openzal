@@ -538,6 +538,22 @@ public class Mailbox
     return new Item(item);
   }
 
+  public List<Item> getAllRevisionsIncludeDumpster(@Nonnull OperationContext zContext, int id, byte type)
+  {
+    List<Item> revisions = new ArrayList<>();
+    try
+    {
+      revisions.addAll(getAllRevisions(zContext, id, type, false));
+    }
+    catch( Exception ignored ) {}
+    try
+    {
+      revisions.addAll(getAllRevisions(zContext, id, type, true));
+    }
+    catch( Exception ignored ) {}
+    return revisions;
+  }
+
   @Nonnull
   public List<Item> getAllRevisions(@Nonnull OperationContext zContext, int id, byte type)
   {
