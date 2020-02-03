@@ -44,6 +44,16 @@ public class ZimbraLog
       mLog = log;
     }
 
+    public void trace(String msg)
+    {
+      mLog.info(msg);
+    }
+
+    public void trace(String msg, Object ... content)
+    {
+      mLog.info(msg, content);
+    }
+
     public void debug(String msg)
     {
       mLog.info(msg);
