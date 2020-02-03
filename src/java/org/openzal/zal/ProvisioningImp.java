@@ -241,6 +241,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMobilePolicyDevicePasswordExpiration           = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyDevicePasswordExpiration;
   public static String A_zimbraMobilePolicyDevicePasswordHistory              = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyDevicePasswordHistory;
   public static String A_zimbraMobilePolicyMaxInactivityTimeDeviceLock        = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyMaxInactivityTimeDeviceLock;
+  public static String A_zimbraMobilePolicyUnapprovedInROMApplicationList     = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyUnapprovedInROMApplication;
+  public static String A_zimbraMobilePolicyApprovedApplicationList            = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyApprovedApplicationList;
   public static String A_zimbraPrefMailDefaultCharset                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefMailDefaultCharset;
   public static String A_zimbraHsmPolicy                                      = com.zimbra.cs.account.Provisioning.A_zimbraHsmPolicy;
   public static String A_zimbraDefaultDomainName                              = com.zimbra.cs.account.Provisioning.A_zimbraDefaultDomainName;
