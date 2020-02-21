@@ -1727,12 +1727,18 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        if( zlc != null )
+        if( zlc != null && entry != null ) // Just tell me why? 
         {
           zlc.replaceAttributes(dn, entry.getAttributes());
+
+          String acctBaseDn = ((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
+          if (!acctBaseDn.equals(dn)) {
+            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
+          }
         }
       }
-      catch (LdapException e)
+      catch( ServiceException e )
       {
         throw ExceptionWrapper.wrap(e);
       }
