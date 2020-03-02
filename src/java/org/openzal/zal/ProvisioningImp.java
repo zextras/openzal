@@ -232,6 +232,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraNotes                                          = com.zimbra.cs.account.Provisioning.A_zimbraNotes;
   public static String A_zimbraFeatureMobileSyncEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraFeatureMobileSyncEnabled;
   public static String A_zimbraHttpProxyURL                                   = com.zimbra.cs.account.Provisioning.A_zimbraHttpProxyURL;
+  public static String A_zimbraAttachmentsBlocked                             = com.zimbra.cs.account.Provisioning.A_zimbraAttachmentsBlocked;
   public static String A_zimbraMobilePolicyPasswordRecoveryEnabled            = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyPasswordRecoveryEnabled;
   public static String A_zimbraMobilePolicyMinDevicePasswordLength            = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyMinDevicePasswordLength;
   public static String A_zimbraMobilePolicyMinDevicePasswordComplexCharacters = com.zimbra.cs.account.Provisioning.A_zimbraMobilePolicyMinDevicePasswordComplexCharacters;
