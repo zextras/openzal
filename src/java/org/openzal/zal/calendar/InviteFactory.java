@@ -24,6 +24,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import javax.annotation.Nonnull;
 
 import java.time.ZoneId;
+import java.util.concurrent.TimeUnit;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -43,6 +44,9 @@ import java.util.*;
 
 public class InviteFactory
 {
+
+  private static long MINUTES_30 = TimeUnit.MINUTES.toMillis(30);
+
   private       String             mMethod;
   private       MapTimeZone        mTimeZoneMap;
   private       String             mUid;
@@ -350,9 +354,10 @@ public class InviteFactory
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
 
+    // see https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-ascal/d36fecc3-9224-4c65-b58d-b4ddb354e93e
     if( mUtcDateStart == 0L && mUtcDateEnd == 0L) {
       mUtcDateStart = cal.getTimeInMillis();
-      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
+      mUtcDateEnd = mUtcDateStart + MINUTES_30;
     }
     else if(mUtcDateStart == 0L && mUtcDateEnd < cal.getTimeInMillis())
     {
@@ -364,12 +369,12 @@ public class InviteFactory
     }
     else if(mUtcDateStart < cal.getTimeInMillis() && mUtcDateEnd == 0L)
     {
-      mUtcDateEnd = mUtcDateStart + 30 * 60 * 1000L;
+      mUtcDateEnd = mUtcDateStart + MINUTES_30;
     }
-    // else if(mUtcDateStart > cal.getTimeInMillis() && mUtcDateEnd == 0L)
-    // {
-      // throw new ZimbraException("StartDate can not be in the future!???");
-    // }
+    else if(mUtcDateStart > cal.getTimeInMillis() && mUtcDateEnd == 0L)
+    {
+      throw new ZimbraException("StartDate can not be in the future if end time is not specified");
+    }
 
     ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
     ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
