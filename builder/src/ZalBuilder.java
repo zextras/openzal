@@ -275,15 +275,6 @@ public class ZalBuilder
 
     List<String> versionsPath = new LinkedList<>();
     List<String> versionsName = new LinkedList<>();
-    sourceList.forEach(new Consumer<Zimbra>()
-    {
-      @Override
-      public void accept(Zimbra version)
-      {
-        versionsPath.add("dist/"+version.toString()+"/zal.jar");
-        versionsName.add(version.toString());
-      }
-    });
 
     if( systemReader.readVersion().getMicro() == 0  )
     {
@@ -294,6 +285,16 @@ public class ZalBuilder
       versionsName.add( "previous version binary" );
       versionsPath.add( "bin/previous-zal-version.jar" );
     }
+
+    sourceList.forEach(new Consumer<Zimbra>()
+    {
+      @Override
+      public void accept(Zimbra version)
+      {
+        versionsPath.add("dist/"+version.toString()+"/zal.jar");
+        versionsName.add(version.toString());
+      }
+    });
 
     String lastVersionName;
     String lastVersionPath;
@@ -328,7 +329,7 @@ public class ZalBuilder
             );
             System.out.println("Checking compatibility "+ finalLastVersionName +" vs "+currentVersionName+"...OK");
           } catch (Exception e) {
-            failed.set(false);
+            failed.set(true);
           }
         }
       });
