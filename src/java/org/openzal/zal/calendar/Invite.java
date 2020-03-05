@@ -948,4 +948,9 @@ public class Invite
 
     return attachList;
   }
+
+  public boolean descInMeta()
+  {
+    return mInvite.descInMeta();
+  }
 }
