@@ -11,7 +11,7 @@ public class ZalBuilder
   private static final int sMaxConcurrentTask = 4;
 
   private static final Version sFirstSupportedZimbraVersion = new Version("8.0.0");
-  private static final Version sLastSupportedZimbraVersion  = new Version("8.8.15");
+  private static final Version sLastSupportedZimbraVersion  = new Version("9.0.0");
   private static final Zimbra  sZimbraX          = new Zimbra(
     Zimbra.Type.x,
     new Version("8.8.15")
