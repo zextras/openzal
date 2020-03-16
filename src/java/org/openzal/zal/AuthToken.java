@@ -20,13 +20,13 @@
 
 package org.openzal.zal;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.AuthTokenException;
 /* $if ZimbraX == 1 $
 import com.zimbra.cs.account.ZimbraJWToken;
 import com.zimbra.cs.service.util.JWTUtil;
 /* $endif $ */
-import java.util.Map;
+
+import com.zimbra.cs.service.AuthProviderException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import javax.annotation.Nonnull;
@@ -39,7 +39,30 @@ public class AuthToken
   public final static String[] sUSER_TOKENS     = {"ZM_AUTH_TOKEN"};
   public final static String[] sADMIN_TOKENS    = {"ZM_ADMIN_AUTH_TOKEN"};
 
-  protected AuthToken(@Nonnull Object authToken)
+  /**
+   * Token is no longer valid
+   */
+  public static class TokenExpired extends Exception
+  {
+    private final AuthToken mAuthToken;
+
+    public TokenExpired(String reason, AuthToken authToken)
+    {
+      super(reason);
+      mAuthToken = authToken;
+    }
+
+    /**
+     * This token is invalid, in case you still want to know who it belongs to
+     * @return the invalid auth token
+     */
+    public AuthToken getAuthToken()
+    {
+      return mAuthToken;
+    }
+  }
+
+  private AuthToken(@Nonnull Object authToken)
   {
     if (authToken == null)
     {
@@ -48,15 +71,45 @@ public class AuthToken
     mAuthToken = (com.zimbra.cs.account.AuthToken) authToken;
   }
 
-  @Deprecated
-  public static AuthToken getAuthToken(String encoded) throws org.openzal.zal.exceptions.AuthTokenException
+  /**
+   * Internal API.
+   * To create an AuthToken it MUST goes through validation to avoid security issues.
+   * The only exception is when you create a new AuthToken.
+   */
+  static AuthToken validate(com.zimbra.cs.account.AuthToken zimbraToken) throws TokenExpired
   {
-    try
+    AuthToken authToken = new AuthToken(zimbraToken);
+
+    if( zimbraToken.isExpired() )
     {
-      return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(encoded));
+      throw new TokenExpired("token is expired", authToken);
     }
-    catch (AuthTokenException e)
+
+    /* $if ZimbraVersion >= 8.5.0$ */
+    if( !zimbraToken.isRegistered() )
     {
+      throw new TokenExpired("token is not registered", authToken);
+    }
+    /* $endif$ */
+
+    return authToken;
+  }
+
+  /**
+   * Internal API.
+   * Create a new token for the provided user.
+   */
+  static AuthToken createNewToken(Account account)
+  {
+    try {
+      return new AuthToken(
+        com.zimbra.cs.service.AuthProvider.getAuthToken(
+          account.toZimbra(com.zimbra.cs.account.Account.class),
+          false
+        )
+      );
+    } catch (
+      AuthProviderException e) {
       throw ExceptionWrapper.wrap(e);
     }
   }
@@ -64,51 +117,6 @@ public class AuthToken
   public long expireTimestamp()
   {
     return mAuthToken.getExpires();
-  }
-
-  public static AuthToken getAuthToken(Map<String, String> cookies)
-    throws org.openzal.zal.exceptions.AuthTokenException
-  {
-    try
-    {
-      /* $if ZimbraX == 1 $
-      if( cookies.containsKey("ZM_AUTH_JWT") && cookies.containsKey("ZM_JWT") )
-      {
-        return new AuthToken(ZimbraJWToken.getJWToken(
-          cookies.get("ZM_AUTH_JWT"),
-          cookies.get("ZM_JWT")
-        ));
-      }
-      /* $endif $ */
-      if( cookies.containsKey("ZM_AUTH_TOKEN") )
-      {
-        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_AUTH_TOKEN")));
-      }
-
-      throw new AuthTokenException("Missing auth cookies!");
-    }
-    catch( AuthTokenException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public static AuthToken getAdminAuthToken(Map<String, String> cookies)
-    throws org.openzal.zal.exceptions.AuthTokenException
-  {
-    try
-    {
-      if( cookies.containsKey("ZM_ADMIN_AUTH_TOKEN") )
-      {
-        return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(cookies.get("ZM_ADMIN_AUTH_TOKEN")));
-      }
-
-      throw new AuthTokenException("Missing admin auth cookies!");
-    }
-    catch( AuthTokenException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
   }
 
   public String getAccountId()
