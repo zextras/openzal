@@ -20,14 +20,22 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.common.calendar.ZCalendar;
 import com.zimbra.common.service.ServiceException;
-import javax.annotation.Nullable;
+import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import org.openzal.zal.Mime;
 import org.openzal.zal.MimeConstants;
+import org.openzal.zal.Pair;
 import org.openzal.zal.Utils;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 
+import javax.annotation.Nullable;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -35,12 +43,6 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.util.*;
-
-import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
-
-import com.zimbra.common.calendar.*;
 
 
 public class CalendarMime
@@ -63,8 +65,21 @@ public class CalendarMime
     throws ZimbraException, IOException, MessagingException
   {
     String subject = inv.getSubject();
-    String desc = inv.getDescription();
-    String descHtml = inv.getDescriptionHtml();
+
+    String desc;
+    String descHtml;
+    if( inv.descInMeta() )
+    {
+      desc = inv.getDescription();
+      descHtml = inv.getDescriptionHtml();
+    }
+    else
+    {
+      Pair<String, String> descriptions = extractDescriptionFromMimeMessage(previousMimeMessage, inv.getMailItemId());
+      desc = descriptions.getFirst();
+      descHtml = descriptions.getSecond();
+      inv.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class).setDescription(desc, descHtml);
+    }
     ZCalendar.ZVCalendar cal = inv.newToICalendar(true);
 
     List<BodyPart> bodyPartList = extractAttachmentFromOriginalMime(previousMimeMessage, inv.getMailItemId());
@@ -123,6 +138,33 @@ public class CalendarMime
       }
     }
     return bodyPartList;
+  }
+
+  private Pair<String, String> extractDescriptionFromMimeMessage(MimeMessage mimeMessage, int inviteId) throws MessagingException, IOException
+  {
+    String descriptionTextPlain = null;
+    String descriptionHtml = null;
+    try
+    {
+      MimeMultipart mimeMultipart = (MimeMultipart) mimeMessage.getContent();
+      MimeMessage subMimeMessage = (MimeMessage) mimeMultipart.getBodyPart(0).getContent();
+      for( int n = 0; n < mimeMultipart.getCount(); ++n )
+      {
+        BodyPart part = mimeMultipart.getBodyPart(n);
+        String[] headerInvId = part.getHeader("invId");
+        if( headerInvId != null && headerInvId.length > 0 && headerInvId[0].equals(String.valueOf(inviteId)) )
+        {
+          subMimeMessage = (MimeMessage) part.getContent();
+        }
+      }
+      descriptionTextPlain = com.zimbra.cs.mailbox.calendar.Invite.getDescription(subMimeMessage, "text/plain");
+      descriptionHtml = com.zimbra.cs.mailbox.calendar.Invite.getDescription(subMimeMessage, "text/html");
+    }
+    catch( Exception e )
+    {
+      throw new ZimbraException("Unable to retrieve calendar item description", e);
+    }
+    return new Pair<>(descriptionTextPlain, descriptionHtml);
   }
 
   private MimeMessage createCalendarMessage(
