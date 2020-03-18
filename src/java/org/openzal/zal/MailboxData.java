@@ -25,7 +25,7 @@ public class MailboxData
   public MailboxData(@Nonnull String accountId)
   {
     this(
-      null,
+      -1,
       -1,
       accountId,
       null
