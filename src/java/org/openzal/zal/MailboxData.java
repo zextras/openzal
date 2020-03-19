@@ -112,4 +112,21 @@ public class MailboxData
   {
     return mIndexVolumeId;
   }
+
+  public boolean hasContent()
+  {
+    return true;
+  }
+
+  public static MailboxData empty()
+  {
+    return new MailboxData(-1)
+    {
+      @Override
+      public boolean hasContent()
+      {
+        return false;
+      }
+    };
+  }
 }
