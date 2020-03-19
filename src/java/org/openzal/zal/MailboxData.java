@@ -25,7 +25,7 @@ public class MailboxData
   public MailboxData(@Nonnull String accountId)
   {
     this(
-      null,
+      -1,
       -1,
       accountId,
       null
@@ -111,5 +111,22 @@ public class MailboxData
   public Short getIndexVolumeId()
   {
     return mIndexVolumeId;
+  }
+
+  public boolean hasContent()
+  {
+    return true;
+  }
+
+  public static MailboxData empty()
+  {
+    return new MailboxData(-1)
+    {
+      @Override
+      public boolean hasContent()
+      {
+        return false;
+      }
+    };
   }
 }
