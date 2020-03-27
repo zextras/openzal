@@ -20,20 +20,27 @@
 
 package org.openzal.zal;
 
-import java.lang.reflect.*;
-import java.io.*;
-import java.util.*;
-
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.*;
-import javax.annotation.Nullable;
-import org.openzal.zal.exceptions.*;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.MailItem;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.NoSuchFolderException;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ZimbraVersion;
-
 import org.openzal.zal.log.ZimbraLog;
-import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.document.Document;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 public class Item implements Comparable<Item>
@@ -62,13 +69,9 @@ public class Item implements Comparable<Item>
   // FIXME clone of Item.UnderlyingData.FIELD_INDEX_ID
   public static final String FN_INDEX_ID = "idx";
 
-  public Item(@Nonnull Object item)
+  public Item(Object item)
   {
-    if (item == null)
-    {
-      throw new NullPointerException();
-    }
-    mMailItem = (MailItem)item;
+    mMailItem = (MailItem) Objects.requireNonNull(item);
   }
 
   public Item(@Nonnull Item item)
