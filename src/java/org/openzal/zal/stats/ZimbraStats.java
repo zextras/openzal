@@ -54,7 +54,9 @@ public class ZimbraStats
     sStatMap.put(StatName.pop, ZimbraPerf.POP_TRACKER);
     sStatMap.put(StatName.ldap, ZimbraPerf.LDAP_TRACKER);
     sStatMap.put(StatName.sync, ZimbraPerf.SYNC_TRACKER);
+/* $if ZimbraVersion >= 8.5.0 $ */
     sStatMap.put(StatName.sql, ZimbraPerf.SQL_TRACKER);
+/* $endif$ */
 
     try
     {
