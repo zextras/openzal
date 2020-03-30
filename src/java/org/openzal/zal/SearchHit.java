@@ -22,7 +22,9 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.index.ZimbraHit;
+import com.zimbra.cs.mailbox.MailItem;
 import java.util.Optional;
+import java.util.function.Function;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import javax.annotation.Nonnull;
@@ -40,7 +42,14 @@ public class SearchHit
   {
     try
     {
-      return Optional.ofNullable(mZimbraHit.getMailItem()).map(Item::new);
+      return Optional.ofNullable(mZimbraHit.getMailItem()).map(new Function<MailItem, Item>()
+      {
+        @Override
+        public Item apply(MailItem mailItem)
+        {
+          return new Item(mailItem);
+        }
+      });
     }
     catch (ServiceException e)
     {
