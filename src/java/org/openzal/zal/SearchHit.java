@@ -20,10 +20,14 @@
 
 package org.openzal.zal;
 
-import javax.annotation.Nonnull;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.index.ZimbraHit;
+import com.zimbra.cs.mailbox.MailItem;
+import java.util.Optional;
+import java.util.function.Function;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
+import javax.annotation.Nonnull;
 
 public class SearchHit
 {
@@ -34,11 +38,18 @@ public class SearchHit
     mZimbraHit = (ZimbraHit) zimbraHit;
   }
 
-  public Item getMailItem()
+  public Optional<Item> getMailItem()
   {
     try
     {
-      return new Item(mZimbraHit.getMailItem());
+      return Optional.ofNullable(mZimbraHit.getMailItem()).map(new Function<MailItem, Item>()
+      {
+        @Override
+        public Item apply(MailItem mailItem)
+        {
+          return new Item(mailItem);
+        }
+      });
     }
     catch (ServiceException e)
     {
