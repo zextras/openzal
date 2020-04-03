@@ -795,10 +795,40 @@ public class Invite
     mInvite.setMailItemId(id);
   }
 
-  public void setCancelled()
+  public void setCancelled(String subject, Locale locale)
   {
     mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
-    mInvite.setStatus(ZCalendar.ICalTok.CANCELLED.toString());
+    mInvite.setStatus("CANC");
+    mInvite.setName(
+      CalendarMailSender.getCancelSubject(subject, locale)
+    );
+  }
+
+  public void setCancelReply(String subject, Locale locale)
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
+    mInvite.setStatus("CONF");
+    mInvite.setName(
+      CalendarMailSender.getReplySubject(CalendarMailSender.VERB_DECLINE, subject, locale)
+    );
+  }
+
+  public void setTentativeReply(String subject, Locale locale)
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
+    mInvite.setStatus("CONF");
+    mInvite.setName(
+      CalendarMailSender.getReplySubject(CalendarMailSender.VERB_TENTATIVE, subject, locale)
+    );
+  }
+
+  public void setAcceptReply(String subject, Locale locale)
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
+    mInvite.setStatus("CONF");
+    mInvite.setName(
+      CalendarMailSender.getReplySubject(CalendarMailSender.VERB_ACCEPT, subject, locale)
+    );
   }
 
   public boolean methodIsReply()
