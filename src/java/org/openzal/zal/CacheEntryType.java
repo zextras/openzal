@@ -20,9 +20,10 @@
 
 package org.openzal.zal;
 
-import javax.annotation.Nonnull;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
+
+import java.util.Objects;
 
 
 public class CacheEntryType
@@ -40,12 +41,12 @@ public class CacheEntryType
   public static CacheEntryType server  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.server);
   public static CacheEntryType zimlet  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.zimlet);
 
-  static CacheEntryType acl         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.acl);
-  static CacheEntryType uistrings   = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.uistrings);
-  static CacheEntryType all         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.all);
-  static CacheEntryType globalgrant = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.globalgrant);
-  static CacheEntryType mime        = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.mime);
-  static CacheEntryType galgroup    = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.galgroup);
+  public static CacheEntryType acl         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.acl);
+  public static CacheEntryType uistrings   = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.uistrings);
+  public static CacheEntryType all         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.all);
+  public static CacheEntryType globalgrant = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.globalgrant);
+  public static CacheEntryType mime        = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.mime);
+  public static CacheEntryType galgroup    = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.galgroup);
 
   CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType cacheEntryType)
   {
@@ -72,5 +73,20 @@ public class CacheEntryType
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CacheEntryType that = (CacheEntryType) o;
+    return mCacheEntryType == that.mCacheEntryType;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return Objects.hash(mCacheEntryType);
   }
 }

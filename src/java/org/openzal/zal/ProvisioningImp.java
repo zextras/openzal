@@ -2031,6 +2031,12 @@ public class ProvisioningImp implements Provisioning
   public void flushCache(@Nonnull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
     throws ZimbraException
   {
+    if( CacheEntryType.acl.equals(cacheEntryType) )
+    {
+      PermissionCache.invalidateAllCache();
+      return;
+    }
+
     com.zimbra.cs.account.Provisioning.CacheEntry[] cacheEntriesArray = null;
     if (cacheEntries != null)
     {
@@ -2046,6 +2052,9 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.flushCache(cacheEntryType.getType(), cacheEntriesArray);
+      if( CacheEntryType.all.equals(cacheEntryType) ) {
+        PermissionCache.invalidateCache();
+      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
