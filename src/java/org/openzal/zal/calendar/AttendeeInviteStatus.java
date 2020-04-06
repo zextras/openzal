@@ -21,6 +21,7 @@
 package org.openzal.zal.calendar;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import org.openzal.zal.log.ZimbraLog;
@@ -102,6 +103,13 @@ public enum AttendeeInviteStatus
       attendeeInviteStatus = sZimbra2Zal.get("NE");
     }
     return attendeeInviteStatus;
+  }
+
+  @Nullable
+  public static AttendeeInviteStatus fromZimbraOrNull(String partStat)
+  {
+    AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
+    return null;
   }
 
   @Nonnull
