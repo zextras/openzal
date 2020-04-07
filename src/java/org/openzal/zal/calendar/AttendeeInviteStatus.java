@@ -108,8 +108,7 @@ public enum AttendeeInviteStatus
   @Nullable
   public static AttendeeInviteStatus fromZimbraOrNull(String partStat)
   {
-    AttendeeInviteStatus attendeeInviteStatus = sZimbra2Zal.get(partStat);
-    return null;
+    return sZimbra2Zal.get(partStat);
   }
 
   @Nonnull
