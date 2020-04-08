@@ -28,6 +28,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import org.openzal.zal.Item;
 import org.openzal.zal.Provisioning;
+import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.Utils;
 import org.openzal.zal.Account;
 import org.openzal.zal.ZimbraListWrapper;
@@ -800,11 +801,15 @@ public class Invite
 
   private Locale getLocaleForAccount(Account account)
   {
-    String zimbraPrefLocale = account.getAttr("zimbraPrefLocale");
-    Locale locale = null;
-    if( zimbraPrefLocale != null )
+    String localeString = account.getAttr(ProvisioningImp.A_zimbraPrefLocale);
+    if( Objects.isNull(localeString) )
     {
-      locale = Locale.forLanguageTag(zimbraPrefLocale);
+      localeString = account.getAttr(ProvisioningImp.A_zimbraLocale);
+    }
+    Locale locale = null;
+    if( Objects.nonNull(localeString) )
+    {
+      locale = Locale.forLanguageTag(localeString);
     }
     return locale;
   }
