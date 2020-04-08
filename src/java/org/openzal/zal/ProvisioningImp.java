@@ -288,6 +288,9 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraDataSourceEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceEnabled;
   public static String A_zimbraGalStatus                                      = com.zimbra.cs.account.Provisioning.A_zimbraGalStatus;
 
+  public static String A_zimbraPrefLocale                                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefLocale;
+  public static String A_zimbraLocale                                         = com.zimbra.cs.account.Provisioning.A_zimbraLocale;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
