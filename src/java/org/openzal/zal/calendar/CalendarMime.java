@@ -78,6 +78,10 @@ public class CalendarMime
       Pair<String, String> descriptions = extractDescriptionFromMimeMessage(previousMimeMessage, inv.getMailItemId());
       desc = descriptions.getFirst();
       descHtml = descriptions.getSecond();
+      if( descHtml == null )
+      {
+        descHtml = "";
+      }
       inv.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class).setDescription(desc, descHtml);
     }
     ZCalendar.ZVCalendar cal = inv.newToICalendar(true);
