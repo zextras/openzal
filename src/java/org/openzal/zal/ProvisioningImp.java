@@ -111,6 +111,10 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraAppSpecificPasswordDuration                    = "";
   /* $endif $ */
 
+  public static String A_zimbraFeatureTasksEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraFeatureTasksEnabled;
+  public static String A_zimbraFeatureCalendarEnabled                               = com.zimbra.cs.account.Provisioning.A_zimbraFeatureCalendarEnabled;
+  public static String A_zimbraFeatureContactsEnabled                               = com.zimbra.cs.account.Provisioning.A_zimbraFeatureContactsEnabled;
+  public static String A_zimbraFeatureEmailEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraFeatureMailEnabled;
   public static String A_zimbraIsACLGroup                                           = com.zimbra.cs.account.Provisioning.A_zimbraIsACLGroup;
   public static String A_memberURL                                                  = com.zimbra.cs.account.Provisioning.A_memberURL;
   public static String A_zimbraMailDomainQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailDomainQuota;
