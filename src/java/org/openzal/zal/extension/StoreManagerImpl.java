@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
 import org.openzal.zal.CacheableStoreBuilder;
 import org.openzal.zal.FileBlobPrimaryStore;
@@ -210,7 +211,7 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public Store getStore(String volumeId)
+  public Store getStore(final String volumeId)
   {
     if (!mCacheableStoreBuilderMap.containsKey(volumeId))
     {
@@ -219,38 +220,22 @@ public class StoreManagerImpl implements StoreManager
         mVolumeManager.getById(volumeId)
       );
     }
-    
-    if (!mStoresCached.containsKey(volumeId))
-    {
-      Store cacheableStore = mCacheableStoreBuilderMap.get(volumeId).make(volumeId);
-      mStoresCached.put(volumeId, cacheableStore);
-      return cacheableStore;
-    }
-    return mStoresCached.get(volumeId);
+
+    return mStoresCached.computeIfAbsent(
+      volumeId, new Function<String, Store>() {
+        @Override
+        public Store apply(String s)
+        {
+          return mCacheableStoreBuilderMap.get(volumeId).make(volumeId);
+        }
+      }
+    );
   }
 
   @Override
   public Store getStoreByName(String name)
   {
-    if (!mCacheableStoreBuilderMap.containsKey(name))
-    {
-      StoreVolume volume = mVolumeManager.getVolumeByName(name);
-      if( volume == null ) {
-        throw new StoreNotFoundException(name);
-      }
-      return mPrimaryStoreBuilder.build(
-        mFileBlobStore,
-        volume
-      );
-    }
-
-    if (!mStoresCached.containsKey(name))
-    {
-      Store cacheableStore = mCacheableStoreBuilderMap.get(name).make(name);
-      mStoresCached.put(name, cacheableStore);
-      return cacheableStore;
-    }
-    return mStoresCached.get(name);
+    return getStore(mVolumeManager.getVolumeByName(name).getId());
   }
 
   @Override
