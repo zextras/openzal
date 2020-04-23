@@ -21,13 +21,34 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
+import java.io.InputStream;
+import java.util.List;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
+
 import javax.annotation.Nonnull;
-
 import javax.mail.internet.MimeMessage;
-import java.util.List;
 
+/**
+ * A parsed message is a wrapper of a {@link MimeMessage} that contains the option to perform automatic indexing of
+ * possible attachments. It is used with the {@link Mailbox} operations.
+ * <h1>Usage examples</h1>
+ * An example of editing a message and saving it is:
+ * <pre>
+ *   Message message = userMailbox.getMessageById(operationContext, Integer.parseInt(messageId.get()));
+ *   MimeMessage mimeMessage = message.getMimeMessage();
+ *   // Modify the mimeMessage as you wish...
+ *   message = userMailbox.saveDraft(
+ *    operationContext,
+ *    new ParsedMessage(mimeMessage, true), // Save the message again, wrapping it in a ParsedMessage
+ *    Integer.parseInt(messageId.get())
+ *   );
+ * </pre>
+ *
+ * @see MimeMessage
+ * @see Mailbox
+ * @see com.zimbra.cs.mime.ParsedMessage
+ */
 public class ParsedMessage
 {
   private com.zimbra.cs.mime.ParsedMessage mParsedMessage;
@@ -53,8 +74,13 @@ public class ParsedMessage
     }
   }
 
-  /*
-   * This triggers MimeMessage.parse(InputStream) to set internal headers and DataSources
+  /**
+   * Creates a new message from a {@link MimeMessage}, with the option of indexing the passed attachments.
+   * This triggers {@link MimeMessage#parse(InputStream)} to set internal headers and DataSources
+   *
+   * @param msg              the {@link MimeMessage} to wrapper
+   * @param indexAttachments flag option to signal the {@link Mailbox} if it needs to index the attachments
+   * @throws ZimbraException if something Zimbra-related goes wrong
    */
   public ParsedMessage(MimeMessage msg, boolean indexAttachments) throws ZimbraException
   {

@@ -31,11 +31,6 @@ import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
-/* $if ZimbraX == 1 $
-import com.zimbra.cs.mailbox.cache.FolderCache;
-import com.zimbra.cs.mailbox.cache.LocalTagCache;
-import com.zimbra.cs.mailbox.cache.RedisTagCache;
-/* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
@@ -44,30 +39,6 @@ import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
-import java.util.Objects;
-import org.apache.commons.dbutils.DbUtils;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.openzal.zal.calendar.CalendarItemData;
-import org.openzal.zal.calendar.Invite;
-import org.openzal.zal.calendar.RecurrenceId;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-import org.openzal.zal.exceptions.InternalServerException;
-import org.openzal.zal.exceptions.NoSuchAccountException;
-import org.openzal.zal.exceptions.NoSuchCalendarException;
-import org.openzal.zal.exceptions.NoSuchConversationException;
-import org.openzal.zal.exceptions.NoSuchFolderException;
-import org.openzal.zal.exceptions.NoSuchFreeBusyException;
-import org.openzal.zal.exceptions.NoSuchItemException;
-import org.openzal.zal.exceptions.NoSuchMessageException;
-import org.openzal.zal.exceptions.PermissionDeniedException;
-import org.openzal.zal.exceptions.ZimbraException;
-import org.openzal.zal.lib.ZimbraConnectionWrapper;
-import org.openzal.zal.lib.ZimbraDatabase;
-import org.openzal.zal.log.ZimbraLog;
-
-import javax.mail.internet.MimeMessage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +58,36 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import org.apache.commons.dbutils.DbUtils;
+import org.openzal.zal.calendar.CalendarItemData;
+import org.openzal.zal.calendar.Invite;
+import org.openzal.zal.calendar.RecurrenceId;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.InternalServerException;
+import org.openzal.zal.exceptions.NoSuchAccountException;
+import org.openzal.zal.exceptions.NoSuchCalendarException;
+import org.openzal.zal.exceptions.NoSuchConversationException;
+import org.openzal.zal.exceptions.NoSuchFolderException;
+import org.openzal.zal.exceptions.NoSuchFreeBusyException;
+import org.openzal.zal.exceptions.NoSuchItemException;
+import org.openzal.zal.exceptions.NoSuchMessageException;
+import org.openzal.zal.exceptions.PermissionDeniedException;
+import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lib.ZimbraConnectionWrapper;
+import org.openzal.zal.lib.ZimbraDatabase;
+import org.openzal.zal.log.ZimbraLog;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.internet.MimeMessage;
+
+/* $if ZimbraX == 1 $
+import com.zimbra.cs.mailbox.cache.FolderCache;
+import com.zimbra.cs.mailbox.cache.LocalTagCache;
+import com.zimbra.cs.mailbox.cache.RedisTagCache;
+/* $endif $ */
 
 //import com.zimbra.cs.fb.FreeBusy;
 
@@ -620,6 +620,16 @@ public class Mailbox
     }
   }
 
+  /**
+   * Retrieves a message from the {@link Mailbox} system, given the message id
+   *
+   * @param zContext the operation context
+   * @param id       an {@link Integer} representation of the message id
+   * @return a {@link Message} retrieved from the {@link Mailbox}. Note that the message can't be <code>null</code>.
+   * In the case the retrieved message from the {@link Mailbox} is null a {@link NullPointerException} is
+   * automatically thrown.
+   * @throws NoSuchMessageException if the desired message was not found in the {@link Mailbox}
+   */
   @Nonnull
   public Message getMessageById(@Nonnull OperationContext zContext, int id)
     throws NoSuchMessageException
@@ -1852,13 +1862,26 @@ public class Mailbox
     return new Message(message);
   }
 
+  /**
+   * Saves a draft into the {@link Mailbox} system.
+   * @param octxt the context of the operation
+   * @param parsedMessage the {@link ParsedMessage}, that is a wrapper of {@link MimeMessage}
+   * @param id the previous message id
+   * @return a new {@link Message} that has been saved in the {@link Mailbox} system
+   * @throws IOException if something in the Zimbra side goes wrong
+   * @throws ZimbraException if something in the Zimbra side goes wrong
+   */
   @Nonnull
-  public Message saveDraft(@Nonnull OperationContext octxt,@Nonnull ParsedMessage parsedMessage, int id)
+  public Message saveDraft(@Nonnull OperationContext octxt, @Nonnull ParsedMessage parsedMessage, int id)
     throws IOException, ZimbraException
   {
     try
     {
-      return new Message(mMbox.saveDraft(octxt.getOperationContext(), parsedMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class), id));
+      return new Message(mMbox.saveDraft(
+        octxt.getOperationContext(),
+        parsedMessage.toZimbra(com.zimbra.cs.mime.ParsedMessage.class),
+        id
+      ));
     }
     catch( com.zimbra.common.service.ServiceException e )
     {
