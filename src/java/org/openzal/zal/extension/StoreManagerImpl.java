@@ -20,30 +20,29 @@
 
 package org.openzal.zal.extension;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
+import org.openzal.zal.CacheableStoreBuilder;
+import org.openzal.zal.FileBlobPrimaryStore;
 import org.openzal.zal.FileBlobStoreWrap;
 import org.openzal.zal.PrimaryStore;
-import org.openzal.zal.FileBlobPrimaryStore;
 import org.openzal.zal.PrimaryStoreBuilder;
 import org.openzal.zal.Store;
-import org.openzal.zal.CacheableStoreBuilder;
 import org.openzal.zal.StoreManager;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.VolumeManager;
 import org.openzal.zal.log.ZimbraLog;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class StoreManagerImpl implements StoreManager
 {
@@ -128,28 +127,36 @@ public class StoreManagerImpl implements StoreManager
   {
     mVolumeManager = volumeManager;
     mLock = new ReentrantLock();
-    mCacheableStoreBuilderMap = new HashMap<String, CacheableStoreBuilder>();
-    mStoresCached = new HashMap<String, Store>();
+    mCacheableStoreBuilderMap = new ConcurrentHashMap<>();
+    mStoresCached = new ConcurrentHashMap<>();
     mFileBlobStore = fileBlobStore;
     mPrimaryStoreBuilder = primaryStoreBuilder;
   }
 
   @Override
-  public void register(CacheableStoreBuilder cacheableStoreBuilder, String volumeId)
+  public void register(final CacheableStoreBuilder cacheableStoreBuilder, final String volumeId)
   {
     mLock.lock();
     try
     {
-      mStoresCached.remove(volumeId);
-      if (mVolumeManager.isValidVolume(volumeId))
-      {
-        mCacheableStoreBuilderMap.put(volumeId,
-                                      cacheableStoreBuilder);
-      }
-      else
-      {
-        ZimbraLog.extensions.warn("Cannot register custom store for unknown volume " + volumeId);
-      }
+      mStoresCached.compute(volumeId,
+        new BiFunction<String, Store, Store>()
+        {
+          @Override
+          public Store apply(String vId, Store value)
+          {
+            if( mVolumeManager.isValidVolume(volumeId) )
+            {
+              mCacheableStoreBuilderMap.put(volumeId, cacheableStoreBuilder);
+            }
+            else
+            {
+              ZimbraLog.extensions.warn("Cannot register custom store for unknown volume " + volumeId);
+            }
+            return null;
+          }
+        }
+      );
     }
     finally
     {
@@ -204,7 +211,7 @@ public class StoreManagerImpl implements StoreManager
   }
 
   @Override
-  public Store getStore(String volumeId)
+  public Store getStore(final String volumeId)
   {
     if (!mCacheableStoreBuilderMap.containsKey(volumeId))
     {
@@ -213,38 +220,22 @@ public class StoreManagerImpl implements StoreManager
         mVolumeManager.getById(volumeId)
       );
     }
-    
-    if (!mStoresCached.containsKey(volumeId))
-    {
-      Store cacheableStore = mCacheableStoreBuilderMap.get(volumeId).make(volumeId);
-      mStoresCached.put(volumeId, cacheableStore);
-      return cacheableStore;
-    }
-    return mStoresCached.get(volumeId);
+
+    return mStoresCached.computeIfAbsent(
+      volumeId, new Function<String, Store>() {
+        @Override
+        public Store apply(String s)
+        {
+          return mCacheableStoreBuilderMap.get(volumeId).make(volumeId);
+        }
+      }
+    );
   }
 
   @Override
   public Store getStoreByName(String name)
   {
-    if (!mCacheableStoreBuilderMap.containsKey(name))
-    {
-      StoreVolume volume = mVolumeManager.getVolumeByName(name);
-      if( volume == null ) {
-        throw new StoreNotFoundException(name);
-      }
-      return mPrimaryStoreBuilder.build(
-        mFileBlobStore,
-        volume
-      );
-    }
-
-    if (!mStoresCached.containsKey(name))
-    {
-      Store cacheableStore = mCacheableStoreBuilderMap.get(name).make(name);
-      mStoresCached.put(name, cacheableStore);
-      return cacheableStore;
-    }
-    return mStoresCached.get(name);
+    return getStore(mVolumeManager.getVolumeByName(name).getId());
   }
 
   @Override
