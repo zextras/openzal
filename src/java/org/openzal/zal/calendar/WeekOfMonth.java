@@ -38,6 +38,7 @@ public enum WeekOfMonth
       case -1:
         return Last;
       case 1:
+      default:
         return First;
       case 2:
         return Second;
@@ -46,14 +47,6 @@ public enum WeekOfMonth
       case 4:
         return Fourth;
     }
-
-    // These values are out standard and it fix strange issues from the customers.
-    switch( value ) {
-      case 6:                 // MOB-202
-        return First;
-    }
-
-    throw new RuntimeException("Invalid Zimbra WeekOfMonth "+value);
   }
 
   public static WeekOfMonth fromEAS(int value)
