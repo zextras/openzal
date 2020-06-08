@@ -38,6 +38,7 @@ public enum WeekOfMonth
       case -1:
         return Last;
       case 1:
+      default:
         return First;
       case 2:
         return Second;
@@ -46,8 +47,6 @@ public enum WeekOfMonth
       case 4:
         return Fourth;
     }
-
-    throw new RuntimeException("Invalid Zimbra WeekOfMonth "+value);
   }
 
   public static WeekOfMonth fromEAS(int value)
