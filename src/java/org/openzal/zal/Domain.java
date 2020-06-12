@@ -175,6 +175,7 @@ public class Domain extends Entry
     return mDomain.getLongAttr(name, defaultValue);
   }
 
+  @Nullable
   public String getPublicHostname()
   {
     return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
