@@ -22,16 +22,30 @@ package org.openzal.zal;
 
 
 import com.zimbra.cs.account.AuthTokenException;
-import com.zimbra.cs.service.AuthProviderException;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
 
+/* $if ZimbraX == 1 $
+import com.zimbra.cs.account.ZimbraJWToken;
+import com.zimbra.cs.service.util.JWTUtil;
+/* $endif $ */
 
+
+/**
+ * Create new zimbra authentication tokens and parse existing one.
+ * It also verify the validity of the tokens.
+ */
 public class AuthProvider
 {
+  /**
+   * Create a ZAuthToken to communicate via SOAP.
+   * The generated token can be admin level.
+   * @param requester the account to create the token for
+   * @return the ZAuthToken, to be used with zimbra SOAP library
+   */
   @Nonnull
-  public static ZAuthToken getAuthToken(@Nonnull Account requester)
+  public static ZAuthToken createZAuthToken(@Nonnull Account requester)
   {
     try
     {
@@ -47,12 +61,19 @@ public class AuthProvider
     }
   }
 
+  /**
+   * Parse the provided encoded token in a zal token.
+   * The token will be validated before being returned.
+   * @param encoded String containing the encoded token
+   * @throws AuthToken.TokenExpired, AuthTokenException
+   */
   @Nonnull
   public AuthToken decodeAuthToken(@Nonnull String encoded)
+    throws AuthToken.TokenExpired, AuthTokenException
   {
     try
     {
-      return new AuthToken(com.zimbra.cs.account.AuthToken.getAuthToken(encoded));
+      return AuthToken.validate(com.zimbra.cs.account.AuthToken.getAuthToken(encoded));
     }
     catch (AuthTokenException e)
     {
@@ -60,21 +81,28 @@ public class AuthProvider
     }
   }
 
+  /**
+   * Create a non-admin level authentication token for the provided account
+   */
   @Nonnull
   public AuthToken createAuthTokenForAccount(@Nonnull Account account)
   {
+    return AuthToken.createNewToken(account);
+  }
+
+  public AuthToken decodeJwtAuthToken(String zm_auth_jwt, String zm_jwt) throws AuthToken.TokenExpired
+  {
+    /* $if ZimbraX == 1 $
     try
     {
-      return new AuthToken(
-        com.zimbra.cs.service.AuthProvider.getAuthToken(
-          account.toZimbra(com.zimbra.cs.account.Account.class),
-          false
-        )
-      );
+      return AuthToken.validate(ZimbraJWToken.getJWToken(zm_auth_jwt, zm_jwt));
     }
-    catch (AuthProviderException e)
+    catch (AuthTokenException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
+    /* $else$  */
+    throw new UnsupportedOperationException();
+    /* $endif$ */
   }
 }

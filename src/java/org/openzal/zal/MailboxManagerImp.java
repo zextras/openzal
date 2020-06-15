@@ -54,7 +54,7 @@ public class MailboxManagerImp implements MailboxManager
   static final String TABLE_METADATA      = "mailbox_metadata";
   static final String TABLE_OUT_OF_OFFICE = "out_of_office";
 
-  public static final String[] sTABLES = { // TODO: ZAL
+  public static final String[] sTABLES = {
                                            "mail_item",
                                            "appointment",
                                            "data_source_item",

@@ -141,6 +141,11 @@ public class Mailbox
     }
   }
 
+  public MailboxMaintenance getMaintenance()
+  {
+    return new MailboxMaintenance(mMbox.getMaintenance());
+  }
+
   public long getSize()
   {
     return mMbox.getSize();
