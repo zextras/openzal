@@ -22,10 +22,20 @@ public class MailboxData
     );
   }
 
+  public MailboxData(@Nonnull Mailbox mailbox)
+  {
+    this(
+      mailbox.getId(),
+      (short) mailbox.getSchemaGroupId(),
+      mailbox.getAccountId(),
+      mailbox.getIndexVolume()
+    );
+  }
+
   public MailboxData(@Nonnull String accountId)
   {
     this(
-      null,
+      -1,
       -1,
       accountId,
       null

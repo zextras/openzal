@@ -279,7 +279,7 @@ public abstract class Utils
   {
     try
     {
-      return JMSession.getSmtpSession(null);
+      return JMSession.getSmtpSession((com.zimbra.cs.account.Account) null);
     }
     catch (MessagingException e)
     {
