@@ -21,22 +21,25 @@
 package org.openzal.zal;
 
 import com.google.common.annotations.VisibleForTesting;
-import javax.annotation.Nullable;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
-import javax.annotation.Nonnull;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Domain extends Entry
 {
   @Nonnull private final com.zimbra.cs.account.Domain mDomain;
 
-  public Domain(@Nonnull Object domain)
+  public Domain(
+    @Nonnull
+      Object domain
+  )
   {
     super(domain);
     mDomain = (com.zimbra.cs.account.Domain) domain;
@@ -47,7 +50,8 @@ public class Domain extends Entry
     String id,
     Map<String, Object> attrs,
     Map<String, Object> defaults,
-    @Nonnull Provisioning prov
+    @Nonnull
+      Provisioning prov
   )
   {
     this(
@@ -67,7 +71,7 @@ public class Domain extends Entry
     {
       mDomain.unsetPasswordChangeListener();
     }
-    catch (ServiceException e)
+    catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -99,13 +103,16 @@ public class Domain extends Entry
     return mDomain.getMailDomainQuota();
   }
 
-  public void setDomainCOSMaxAccounts(@Nonnull Collection<String> zimbraDomainCOSMaxAccounts)
+  public void setDomainCOSMaxAccounts(
+    @Nonnull
+      Collection<String> zimbraDomainCOSMaxAccounts
+  )
   {
     try
     {
       mDomain.setDomainCOSMaxAccounts(zimbraDomainCOSMaxAccounts.toArray(new String[zimbraDomainCOSMaxAccounts.size()]));
     }
-    catch (ServiceException e)
+    catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -133,7 +140,7 @@ public class Domain extends Entry
     {
       mDomain.setDomainTypeAsString(zimbraDomainType);
     }
-    catch (ServiceException e)
+    catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -158,14 +165,17 @@ public class Domain extends Entry
     {
       return ZimbraListWrapper.wrapAccounts(mDomain.getAllAccounts());
     }
-    catch (ServiceException e)
+    catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @VisibleForTesting
-  public <T> T toZimbra(@Nonnull Class<T> cls)
+  public <T> T toZimbra(
+    @Nonnull
+      Class<T> cls
+  )
   {
     return cls.cast(mDomain);
   }
@@ -181,26 +191,34 @@ public class Domain extends Entry
     return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
   }
 
-  @Override
-  public boolean equals(Object o)
+  @Nullable
+  public String getPublicProtocol()
   {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    if (!super.equals(o))
-      return false;
-
-    Domain domain = (Domain) o;
-
-    return mDomain.getId().equals(domain.mDomain.getId());
-
+    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceProtocol, null);
   }
 
-  @Override
-  public int hashCode()
+  private String defaultPort()
   {
-    return mDomain.getId().hashCode();
+    switch( getPublicProtocol().toLowerCase() )
+    {
+      case "https":
+        return "443";
+      case "http":
+        return "80";
+      default:
+        return null;
+    }
   }
+
+  @Nullable
+  public String getPublicPort()
+  {
+    return mDomain.getAttr(
+      ProvisioningImp.A_zimbraPublicServicePort,
+      defaultPort()
+    );
+  }
+
+
 }
 
