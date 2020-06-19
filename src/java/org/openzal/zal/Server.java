@@ -251,5 +251,18 @@ public class Server extends Entry
   {
     return getServerHostname().hashCode();
   }
+
+  /**
+   * Return true if zimbraMailMode is https and false when both or http.
+   * Both is treated as http to avoid issues with clients who have broken SSL
+   * setup, most zimbra calls {@code URLUtil.getServiceURL()} with
+   * {@code preferSSL} at {@code false}.
+   *
+   * @see com.zimbra.cs.httpclient.URLUtil#getServiceURL
+   */
+  public boolean isMailModeHttps()
+  {
+    return "https".equals(getAttr("zimbraMailMode", "http"));
+  }
 }
 
