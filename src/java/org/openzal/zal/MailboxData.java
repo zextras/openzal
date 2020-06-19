@@ -139,4 +139,23 @@ public class MailboxData
       }
     };
   }
+
+  @Override
+  public String toString()
+  {
+    StringBuilder stringBuilder = new StringBuilder();
+    if( Objects.nonNull(mId) )
+    {
+      stringBuilder.append("mid=").append(mId);
+    }
+    if( Objects.nonNull(mAccountId) )
+    {
+      if( stringBuilder.length() > 0 )
+      {
+        stringBuilder.append(" ");
+      }
+      stringBuilder.append("accountId=").append(mId);
+    }
+    return stringBuilder.toString();
+  }
 }
