@@ -20,6 +20,17 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.ldap.LdapConstants;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Mailbox;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.regex.Pattern;
+
 import com.unboundid.asn1.ASN1OctetString;
 import com.unboundid.ldap.sdk.Attribute;
 import com.unboundid.ldap.sdk.LDAPConnection;
@@ -29,98 +40,66 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
-import com.zimbra.common.account.Key;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
-import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AuthToken;
-import com.zimbra.cs.account.GalContact;
-import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.SearchDirectoryOptions;
-import com.zimbra.cs.account.accesscontrol.ACLUtil;
-import com.zimbra.cs.account.accesscontrol.PermissionCache;
-import com.zimbra.cs.account.accesscontrol.Right;
-import com.zimbra.cs.account.accesscontrol.RightCommand;
-import com.zimbra.cs.account.accesscontrol.RightManager;
-import com.zimbra.cs.account.accesscontrol.TargetType;
-import com.zimbra.cs.account.accesscontrol.ZimbraACE;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
-import com.zimbra.cs.gal.GalSearchControl;
-import com.zimbra.cs.gal.GalSearchParams;
-import com.zimbra.cs.gal.GalSearchResultCallback;
 import com.zimbra.cs.ldap.LdapClient;
-import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.LdapUsage;
 import com.zimbra.cs.ldap.LdapUtil;
 import com.zimbra.cs.ldap.ZLdapContext;
-import com.zimbra.cs.ldap.ZLdapFilter;
-import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.cs.ldap.ZMutableEntry;
 import com.zimbra.cs.ldap.ZSearchControls;
 import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
-import com.zimbra.cs.mailbox.ACL;
-import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.MailServiceException;
-import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.util.ProxyPurgeUtil;
+import javax.annotation.Nonnull;
+
 import com.zimbra.soap.ZimbraSoapContext;
-import com.zimbra.soap.type.GalSearchType;
-import com.zimbra.soap.type.TargetBy;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
 import org.dom4j.QName;
-import org.openzal.zal.exceptions.ExceptionWrapper;
-import org.openzal.zal.exceptions.InvalidRequestException;
-import org.openzal.zal.exceptions.NoSuchAccountException;
-import org.openzal.zal.exceptions.NoSuchDistributionListException;
-import org.openzal.zal.exceptions.NoSuchDomainException;
-import org.openzal.zal.exceptions.NoSuchGrantException;
-import org.openzal.zal.exceptions.NoSuchGroupException;
-import org.openzal.zal.exceptions.NoSuchZimletException;
-import org.openzal.zal.exceptions.UnableToFindDistributionListException;
+import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
-import org.openzal.zal.log.ZimbraLog;
-import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.zimbra.cs.account.*;
+import com.zimbra.cs.account.accesscontrol.*;
+import com.zimbra.cs.gal.GalSearchControl;
+import com.zimbra.cs.gal.GalSearchParams;
+import com.zimbra.cs.gal.GalSearchResultCallback;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.ldap.ZLdapFilter;
+import com.zimbra.cs.ldap.ZLdapFilterFactory;
+import com.zimbra.soap.type.GalSearchType;
+import com.zimbra.soap.type.TargetBy;
 /* $if ZimbraVersion < 8.0.6 $
 import com.zimbra.common.account.Key.GranteeBy;
 /* $endif$ */
+
 /* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $endif$ */
 
+import com.zimbra.cs.mailbox.Contact;
+
+import javax.annotation.Nullable;
+import org.openzal.zal.log.ZimbraLog;
+import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
+
 public class ProvisioningImp implements Provisioning
 {
   /* $if ZimbraVersion >= 8.7.0 $ */
-  public static String A_zimbraMaxAppSpecificPasswords                    = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
-  public static String A_zimbraZimletUserPropertiesMaxNumEntries          = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
-  public static String A_zimbraTwoFactorAuthEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
-  public static String A_zimbraTwoFactorAuthScratchCodes                  = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
-  public static String A_zimbraTwoFactorAuthSecret                        = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthSecret;
-  public static String A_zimbraAppSpecificPassword                        = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPassword;
-  public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange = com.zimbra.cs.account.Provisioning.A_zimbraRevokeAppSpecificPasswordsOnPasswordChange;
-  public static String A_zimbraAppSpecificPasswordDuration                = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPasswordDuration;
+  public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
+  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
+  public static String A_zimbraTwoFactorAuthEnabled                           = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
+  public static String A_zimbraTwoFactorAuthScratchCodes                      = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
+  public static String A_zimbraTwoFactorAuthSecret                            = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthSecret;
+  public static String A_zimbraAppSpecificPassword                            = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPassword;
+  public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange     = com.zimbra.cs.account.Provisioning.A_zimbraRevokeAppSpecificPasswordsOnPasswordChange;
+  public static String A_zimbraAppSpecificPasswordDuration                    = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPasswordDuration;
   /* $else $
   public static String A_zimbraMaxAppSpecificPasswords                        = "";
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
@@ -183,8 +162,8 @@ public class ProvisioningImp implements Provisioning
 /* $endif$ */
 
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
-  public static String A_zimbraAuthTokens = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
+/* $if ZimbraVersion >= 8.5.0 $ */
+  public static String A_zimbraAuthTokens                                     = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
 /* $else$
   public static String A_zimbraAuthTokens                                     = "";
 /* $endif$ */
@@ -288,47 +267,47 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
-  public static String A_zimbraNetworkModulesNGEnabled = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
-  public static String A_zimbraNetworkMobileNGEnabled  = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
-  public static String A_zimbraNetworkAdminEnabled     = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
-  public static String A_zimbraNetworkAdminNGEnabled   = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
+  public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
+  public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
+  public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
+  public static String A_zimbraNetworkAdminNGEnabled                          = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
   /* $else$
   public static String A_zimbraNetworkModulesNGEnabled                        = "";
   public static String A_zimbraNetworkMobileNGEnabled                         = "";
   public static String A_zimbraNetworkAdminEnabled                            = "";
   public static String A_zimbraNetworkAdminNGEnabled                          = "";
   /* $endif$ */
-  public static int    DATASOURCE_PASSWORD_MAX_LENGTH  = 128;
+  public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
   /* $if ZimbraVersion >= 8.6.0 $ */
-  public static String A_zimbraMailboxdSSLProtocols    = com.zimbra.cs.account.Provisioning.A_zimbraMailboxdSSLProtocols;
+  public static String A_zimbraMailboxdSSLProtocols                           = com.zimbra.cs.account.Provisioning.A_zimbraMailboxdSSLProtocols;
   /* $else$
   public static String A_zimbraMailboxdSSLProtocols                           = "";
   /* $endif$ */
-  public static String A_zimbraSSLExcludeCipherSuites  = com.zimbra.cs.account.Provisioning.A_zimbraSSLExcludeCipherSuites;
+  public static String A_zimbraSSLExcludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLExcludeCipherSuites;
   /* $if ZimbraVersion >= 8.5.0 $ */
-  public static String A_zimbraSSLIncludeCipherSuites  = com.zimbra.cs.account.Provisioning.A_zimbraSSLIncludeCipherSuites;
+  public static String A_zimbraSSLIncludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLIncludeCipherSuites;
   /* $else$
   public static String A_zimbraSSLIncludeCipherSuites                         = "";
   /* $endif$ */
-  public static String A_zimbraGalType                 = com.zimbra.cs.account.Provisioning.A_zimbraGalType;
-  public static String A_zimbraDataSourceEnabled       = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceEnabled;
-  public static String A_zimbraGalStatus               = com.zimbra.cs.account.Provisioning.A_zimbraGalStatus;
+  public static String A_zimbraGalType                                        = com.zimbra.cs.account.Provisioning.A_zimbraGalType;
+  public static String A_zimbraDataSourceEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceEnabled;
+  public static String A_zimbraGalStatus                                      = com.zimbra.cs.account.Provisioning.A_zimbraGalStatus;
 
-  public static String A_zimbraPrefLocale = com.zimbra.cs.account.Provisioning.A_zimbraPrefLocale;
-  public static String A_zimbraLocale     = com.zimbra.cs.account.Provisioning.A_zimbraLocale;
+  public static String A_zimbraPrefLocale                                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefLocale;
+  public static String A_zimbraLocale                                         = com.zimbra.cs.account.Provisioning.A_zimbraLocale;
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
   @Nonnull
-  private final        NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
+  private final NamedEntryWrapper<Account> mNamedEntryAccountWrapper;
   @Nonnull
-  private final        NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
-  private final static String[]                   mAccountAttrs = {
+  private final NamedEntryWrapper<Domain>  mNamedEntryDomainWrapper;
+  private final static String[] mAccountAttrs = {
     com.zimbra.cs.account.Provisioning.A_c,
     com.zimbra.cs.account.Provisioning.A_cn,
     com.zimbra.cs.account.Provisioning.A_co,
-    };
+  };
 
   private final AuthProvider mAuthProvider = new AuthProvider();
 
@@ -363,18 +342,13 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public boolean isValidUid(
-    @Nonnull
-      String uid
-  )
+  public boolean isValidUid(@Nonnull String uid)
   {
     return uid.length() == 36 &&
-      (
-        uid.charAt(8) == '-' &&
-          uid.charAt(13) == '-' &&
-          uid.charAt(18) == '-' &&
-          uid.charAt(23) == '-'
-      );
+      (uid.charAt(8) == '-' &&
+        uid.charAt(13) == '-' &&
+        uid.charAt(18) == '-' &&
+        uid.charAt(23) == '-');
   }
 
   @Override
@@ -403,11 +377,8 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(
-        ProvisioningKey.ByDistributionList.id.toZimbra(),
-        id
-      );
-      if( distributionList == null )
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.id.toZimbra(), id);
+      if (distributionList == null)
       {
         return null;
       }
@@ -416,7 +387,7 @@ public class ProvisioningImp implements Provisioning
         return new DistributionList(distributionList);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -429,9 +400,8 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.name
-        .toZimbra(), name);
-      if( distributionList == null )
+      com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(ProvisioningKey.ByDistributionList.name.toZimbra(), name);
+      if (distributionList == null)
       {
         return null;
       }
@@ -440,13 +410,13 @@ public class ProvisioningImp implements Provisioning
         return new DistributionList(distributionList);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       try
       {
         throw ExceptionWrapper.wrap(e);
       }
-      catch( InvalidRequestException e1 )
+      catch(InvalidRequestException e1)
       {
         return null;
       }
@@ -454,10 +424,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void visitAllAccounts(
-    @Nonnull
-      SimpleVisitor<Account> visitor
-  )
+  public void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -472,17 +439,14 @@ public class ProvisioningImp implements Provisioning
       );
       mProvisioning.searchDirectory(searchOptions, namedEntryVisitor);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void visitAllLocalAccountsNoDefaults(
-    @Nonnull
-      SimpleVisitor<Account> visitor
-  )
+  public void visitAllLocalAccountsNoDefaults(@Nonnull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -496,17 +460,14 @@ public class ProvisioningImp implements Provisioning
 
       mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void visitAllLocalAccounts(
-    @Nonnull
-      SimpleVisitor<Account> visitor
-  )
+  public void visitAllLocalAccounts(@Nonnull SimpleVisitor<Account> visitor)
     throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
@@ -519,19 +480,14 @@ public class ProvisioningImp implements Provisioning
 
       mProvisioning.searchAccountsOnServer(server, searchOptions, namedEntryVisitor);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void visitAllAccounts(
-    @Nonnull
-      SimpleVisitor<Account> visitor,
-    @Nonnull
-      Filter<Account> filterAccounts
-  )
+  public void visitAllAccounts(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Filter<Account> filterAccounts)
     throws ZimbraException
   {
     ProvisioningVisitor<Account> accountProvisioningVisitor = new ProvisioningVisitor<Account>(
@@ -544,10 +500,8 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void visitAllLocalAccountsSlow(
-    @Nonnull
-      SimpleVisitor<Account> visitor,
-    @Nonnull
-      Filter<Account> filterAccounts
+    @Nonnull SimpleVisitor<Account> visitor,
+    @Nonnull Filter<Account> filterAccounts
   )
     throws ZimbraException
   {
@@ -566,7 +520,7 @@ public class ProvisioningImp implements Provisioning
     );
     visitAllLocalAccountsNoDefaults(accountListBuilderVisitor);
 
-    for( Account account : allAccounts )
+    for (Account account : allAccounts)
     {
       visitor.visit(account);
     }
@@ -577,10 +531,7 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(
-        visitor,
-        mNamedEntryAccountWrapper
-      );
+      ZimbraVisitorWrapper<Account> zimbraVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
 
       SearchDirectoryOptions searchOptions = new SearchDirectoryOptions();
       searchOptions.setMakeObjectOpt(SearchDirectoryOptions.MakeObjectOpt.NO_DEFAULTS);
@@ -592,38 +543,28 @@ public class ProvisioningImp implements Provisioning
 
       mProvisioning.searchDirectory(searchOptions, zimbraVisitor);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void visitAllDomains(
-    @Nonnull
-      SimpleVisitor<Domain> visitor
-  )
-    throws ZimbraException
+  public void visitAllDomains(@Nonnull SimpleVisitor<Domain> visitor) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Domain>(visitor, mNamedEntryDomainWrapper);
     try
     {
       mProvisioning.getAllDomains(namedEntryVisitor, null);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void visitDomain(
-    @Nonnull
-      SimpleVisitor<Account> visitor,
-    @Nonnull
-      Domain domain
-  )
-    throws ZimbraException
+  public void visitDomain(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Domain domain) throws ZimbraException
   {
     NamedEntry.Visitor namedEntryVisitor = new ZimbraVisitorWrapper<Account>(visitor, mNamedEntryAccountWrapper);
     try
@@ -633,41 +574,33 @@ public class ProvisioningImp implements Provisioning
         namedEntryVisitor
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public Collection<String> getGroupMembers(String list)
-    throws UnableToFindDistributionListException
+  public Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException
   {
     try
     {
       com.zimbra.cs.account.Group distributionList =
         mProvisioning.getGroup(ProvisioningKey.ByDistributionList.name.toZimbra(), list);
-      if( distributionList == null )
+      if (distributionList == null)
       {
         throw ExceptionWrapper.createUnableToFindDistributionList(list);
       }
       return Arrays.asList(distributionList.getAllMembers());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.createUnableToFindDistributionList(list, e);
     }
   }
 
   @Override
-  public void authAccount(
-    @Nonnull
-      Account account,
-    String password,
-    @Nonnull
-      Protocol protocol,
-    Map<String, Object> context
-  )
+  public void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
     throws ZimbraException
   {
     try
@@ -679,7 +612,7 @@ public class ProvisioningImp implements Provisioning
         context
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -689,7 +622,7 @@ public class ProvisioningImp implements Provisioning
   public Account getAccountByAccountIdOrItemId(String id)
   {
     int index = id.indexOf("/");
-    if( index > 0 )
+    if (index > 0)
     {
       return getAccountById(id.substring(0, index));
     }
@@ -707,7 +640,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Account account = mProvisioning.getAccountById(accountId);
-      if( account == null )
+      if (account == null)
       {
         return null;
       }
@@ -716,7 +649,7 @@ public class ProvisioningImp implements Provisioning
         return new Account(account);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -730,7 +663,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Server server = mProvisioning.getLocalServer();
-      if( server == null )
+      if (server == null)
       {
         throw new RuntimeException();
       }
@@ -739,7 +672,7 @@ public class ProvisioningImp implements Provisioning
         return new Server(server);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -753,7 +686,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Domain domain = mProvisioning.getDomainByName(domainName);
-      if( domain == null )
+      if (domain == null)
       {
         return null;
       }
@@ -762,7 +695,7 @@ public class ProvisioningImp implements Provisioning
         return new Domain(domain);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -776,7 +709,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Domain domain = mProvisioning.getDomainById(domainId);
-      if( domain == null )
+      if (domain == null)
       {
         return null;
       }
@@ -785,7 +718,7 @@ public class ProvisioningImp implements Provisioning
         return new Domain(domain);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -843,7 +776,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapDomain(mProvisioning.getAllDomains());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -857,7 +790,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Zimlet zimlet = mProvisioning.getZimlet(zimletName);
-      if( zimlet == null )
+      if (zimlet == null)
       {
         throw ExceptionWrapper.createNoSuchZimletException("Zimlet " + zimletName + " not found.");
       }
@@ -866,34 +799,28 @@ public class ProvisioningImp implements Provisioning
         return new Zimlet(zimlet);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.createNoSuchZimletException(e);
     }
   }
 
   @Override
-  public void modifyAttrs(
-    @Nonnull
-      Entry entry, Map<String, Object> attrs
-  )
+  public void modifyAttrs(@Nonnull Entry entry, Map<String, Object> attrs)
     throws ZimbraException
   {
     try
     {
       mProvisioning.modifyAttrs(entry.toZimbra(), attrs);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public List<DistributionList> getAllDistributionLists(
-    @Nonnull
-      Domain domain
-  )
+  public List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -902,7 +829,7 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.getAllDistributionLists(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -918,7 +845,7 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.getAllGroups(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -932,7 +859,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Cos cos = mProvisioning.getCosById(cosId);
-      if( cos == null )
+      if (cos == null)
       {
         return null;
       }
@@ -941,7 +868,7 @@ public class ProvisioningImp implements Provisioning
         return new Cos(cos);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -955,7 +882,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapCoses(mProvisioning.getAllCos());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -970,7 +897,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Cos cos = mProvisioning.getCosByName(cosStr);
-      if( cos == null )
+      if (cos == null)
       {
         return null;
       }
@@ -979,7 +906,7 @@ public class ProvisioningImp implements Provisioning
         return new Cos(cos);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -987,16 +914,13 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public DistributionList get(
-    @Nonnull
-      ProvisioningKey.ByDistributionList id, String dlStr
-  )
+  public DistributionList get(@Nonnull ProvisioningKey.ByDistributionList id, String dlStr)
     throws ZimbraException
   {
     try
     {
       com.zimbra.cs.account.DistributionList distributionList = mProvisioning.get(id.toZimbra(), dlStr);
-      if( distributionList == null )
+      if (distributionList == null)
       {
         return null;
       }
@@ -1005,7 +929,7 @@ public class ProvisioningImp implements Provisioning
         return new DistributionList(distributionList);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1013,16 +937,13 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Account get(
-    @Nonnull
-      ProvisioningKey.ByAccount by, String target
-  )
+  public Account get(@Nonnull ProvisioningKey.ByAccount by, String target)
     throws ZimbraException
   {
     try
     {
       com.zimbra.cs.account.Account account = mProvisioning.get(by.toZimbra(), target);
-      if( account == null )
+      if (account == null)
       {
         return null;
       }
@@ -1031,7 +952,7 @@ public class ProvisioningImp implements Provisioning
         return new Account(account);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1043,7 +964,7 @@ public class ProvisioningImp implements Provisioning
     throws NoSuchAccountException
   {
     Account account = getAccountByName(accountStr);
-    if( account == null )
+    if (account == null)
     {
       throw new NoSuchAccountException(accountStr);
     }
@@ -1059,7 +980,7 @@ public class ProvisioningImp implements Provisioning
     throws NoSuchAccountException
   {
     Account account = getAccountById(accountStr);
-    if( account == null )
+    if (account == null)
     {
       throw new NoSuchAccountException(accountStr);
     }
@@ -1077,7 +998,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Account account = mProvisioning.getAccountByName(accountStr);
-      if( account == null )
+      if (account == null)
       {
         return null;
       }
@@ -1086,7 +1007,7 @@ public class ProvisioningImp implements Provisioning
         return new Account(account);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1100,17 +1021,14 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapAccounts(mProvisioning.getAllAdminAccounts());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public List<Account> getAllAccounts(
-    @Nonnull
-      Domain domain
-  )
+  public List<Account> getAllAccounts(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -1119,7 +1037,7 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.getAllAccounts(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1133,7 +1051,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapServers(mProvisioning.getAllServers());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1147,17 +1065,14 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapServers(mProvisioning.getAllServers(service));
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public List<CalendarResource> getAllCalendarResources(
-    @Nonnull
-      Domain domain
-  )
+  public List<CalendarResource> getAllCalendarResources(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -1166,7 +1081,7 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.getAllCalendarResources(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1180,7 +1095,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapZimlets(mProvisioning.listAllZimlets());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1194,7 +1109,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapXmppComponents(mProvisioning.getAllXMPPComponents());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1208,7 +1123,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.GlobalGrant globalGrant = mProvisioning.getGlobalGrant();
-      if( globalGrant == null )
+      if (globalGrant == null)
       {
         return null;
       }
@@ -1217,7 +1132,7 @@ public class ProvisioningImp implements Provisioning
         return new GlobalGrant(globalGrant);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1231,7 +1146,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Config config = mProvisioning.getConfig();
-      if( config == null )
+      if (config == null)
       {
         throw new RuntimeException("Unable to retrieve global config");
       }
@@ -1240,7 +1155,7 @@ public class ProvisioningImp implements Provisioning
         return new Config(config);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1254,7 +1169,7 @@ public class ProvisioningImp implements Provisioning
     {
       return ZimbraListWrapper.wrapUCServices(mProvisioning.getAllUCServices());
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1268,7 +1183,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.CalendarResource calendarResource = mProvisioning.getCalendarResourceByName(resourceName);
-      if( calendarResource == null )
+      if (calendarResource == null)
       {
         return null;
       }
@@ -1277,7 +1192,7 @@ public class ProvisioningImp implements Provisioning
         return new CalendarResource(calendarResource);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1291,7 +1206,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.CalendarResource calendarResource = mProvisioning.getCalendarResourceById(resourceId);
-      if( calendarResource == null )
+      if (calendarResource == null)
       {
         return null;
       }
@@ -1300,7 +1215,7 @@ public class ProvisioningImp implements Provisioning
         return new CalendarResource(calendarResource);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1313,11 +1228,9 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.Domain domain = mProvisioning.createDomain(
-        currentDomainName,
-        stringObjectMap
-      );
-      if( domain == null )
+      com.zimbra.cs.account.Domain domain = mProvisioning.createDomain(currentDomainName,
+        stringObjectMap);
+      if (domain == null)
       {
         return null;
       }
@@ -1326,7 +1239,7 @@ public class ProvisioningImp implements Provisioning
         return new Domain(domain);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1339,11 +1252,9 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.Cos cos = mProvisioning.createCos(
-        cosname,
-        stringObjectMap
-      );
-      if( cos == null )
+      com.zimbra.cs.account.Cos cos = mProvisioning.createCos(cosname,
+        stringObjectMap);
+      if (cos == null)
       {
         return null;
       }
@@ -1352,7 +1263,7 @@ public class ProvisioningImp implements Provisioning
         return new Cos(cos);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1377,7 +1288,7 @@ public class ProvisioningImp implements Provisioning
         dlistName,
         stringObjectMap
       );
-      if( distributionList == null )
+      if (distributionList == null)
       {
         return null;
       }
@@ -1386,7 +1297,7 @@ public class ProvisioningImp implements Provisioning
         return new DistributionList(distributionList);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1407,11 +1318,9 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      com.zimbra.cs.account.Group group = mProvisioning.createDynamicGroup(
-        groupName,
-        stringObjectMap
-      );
-      if( group == null )
+      com.zimbra.cs.account.Group group = mProvisioning.createDynamicGroup(groupName,
+        stringObjectMap);
+      if (group == null)
       {
         return null;
       }
@@ -1420,7 +1329,7 @@ public class ProvisioningImp implements Provisioning
         return new Group(group);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1434,7 +1343,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Account calendar = mProvisioning.createCalendarResource(dstAccount, newPassword, attrs);
-      if( calendar == null )
+      if (calendar == null)
       {
         return null;
       }
@@ -1443,7 +1352,7 @@ public class ProvisioningImp implements Provisioning
         return new Account(calendar);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1457,7 +1366,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Account account = mProvisioning.createAccount(dstAccount, newPassword, attrs);
-      if( account == null )
+      if (account == null)
       {
         return null;
       }
@@ -1466,7 +1375,7 @@ public class ProvisioningImp implements Provisioning
         return new Account(account);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1485,7 +1394,7 @@ public class ProvisioningImp implements Provisioning
 
     final Account account = createAccount(dstAccount, newPassword, galProp);
     final Domain domain = getDomainByName(account.getDomainName());
-    if( domain == null )
+    if (domain == null)
     {
       throw new ZimbraException("No such domain " + account.getDomainName());
     }
@@ -1495,8 +1404,7 @@ public class ProvisioningImp implements Provisioning
       String acctId = account.getId();
       com.zimbra.cs.account.Domain zimbraDomain = domain.toZimbra(com.zimbra.cs.account.Domain.class);
       HashSet<String> galAcctIds = new HashSet<String>(Arrays.asList(zimbraDomain.getGalAccountId()));
-      if( !galAcctIds.contains(acctId) )
-      {
+      if (!galAcctIds.contains(acctId)) {
         galAcctIds.add(acctId);
         zimbraDomain.setGalAccountId(galAcctIds.toArray(new String[0]));
       }
@@ -1512,15 +1420,13 @@ public class ProvisioningImp implements Provisioning
       final Mailbox zimbraMBox = mailboxByAccount.toZimbra(Mailbox.class);
 
       Folder contactFolder;
-      try
-      {
-        contactFolder = zimbraMBox.getFolderByPath(
+      try {
+         contactFolder = zimbraMBox.getFolderByPath(
           null,
           folder
         );
       }
-      catch( MailServiceException.NoSuchItemException e )
-      {
+      catch (MailServiceException.NoSuchItemException e) {
         contactFolder = zimbraMBox.createFolder(
           null,
           folder,
@@ -1529,14 +1435,9 @@ public class ProvisioningImp implements Provisioning
       }
 
       int folderId = contactFolder.getId();
-      for( DataSource ds : account.getAllDataSources() )
-      {
-        if( ds.getFolderId() == folderId )
-        {
-          throw MailServiceException.ALREADY_EXISTS("data source "
-            + ds.toZimbra().getName()
-            + " already contains folder "
-            + folder);
+      for (DataSource ds : account.getAllDataSources()) {
+        if (ds.getFolderId() == folderId) {
+          throw MailServiceException.ALREADY_EXISTS("data source " + ds.toZimbra().getName() + " already contains folder " + folder);
         }
       }
 
@@ -1596,7 +1497,7 @@ public class ProvisioningImp implements Provisioning
       entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attrs);
       //dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
-      LdapProvisioning provisioning = (LdapProvisioning) mProvisioning;
+      LdapProvisioning provisioning = (LdapProvisioning)mProvisioning;
 
       String[] parts = emailAddress.split("@");
       String localPart = parts[0];
@@ -1610,10 +1511,10 @@ public class ProvisioningImp implements Provisioning
       );
 
       entry.setDN(dn);
-      ZimbraLog.mailbox.info("Restoring account " + dn);
+      ZimbraLog.mailbox.info("Restoring account "+dn);
       zlc.createEntry(entry);
     }
-    catch( LdapException.LdapEntryAlreadyExistException ex )
+    catch (LdapException.LdapEntryAlreadyExistException ex)
     {
       try
       {
@@ -1622,12 +1523,12 @@ public class ProvisioningImp implements Provisioning
           zlc.replaceAttributes(dn, entry.getAttributes());
         }
       }
-      catch( LdapException e )
+      catch (LdapException e)
       {
         throw ExceptionWrapper.wrap(e);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1638,12 +1539,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public DataSource restoreDataSource(
-    Account account,
-    DataSourceType dsType,
-    String dsName,
-    Map<String, Object> dataSourceAttrs
-  )
+  public DataSource restoreDataSource(Account account, DataSourceType dsType, String dsName, Map<String, Object> dataSourceAttrs)
   {
     try
     {
@@ -1656,7 +1552,7 @@ public class ProvisioningImp implements Provisioning
         )
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1675,7 +1571,7 @@ public class ProvisioningImp implements Provisioning
         )
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1694,7 +1590,7 @@ public class ProvisioningImp implements Provisioning
         )
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1711,12 +1607,12 @@ public class ProvisioningImp implements Provisioning
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_COS);
       entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
-      dn = "cn=" + LdapUtil.escapeRDNValue(attributes.get("cn").toString()) + ",cn=cos,cn=zimbra";
+      dn = "cn="+LdapUtil.escapeRDNValue(attributes.get("cn").toString())+",cn=cos,cn=zimbra";
       entry.setDN(dn);
-      ZimbraLog.mailbox.info("Restoring cos " + dn);
+      ZimbraLog.mailbox.info("Restoring cos "+dn);
       zlc.createEntry(entry);
     }
-    catch( LdapException.LdapEntryAlreadyExistException ex )
+    catch (LdapException.LdapEntryAlreadyExistException ex)
     {
       try
       {
@@ -1725,12 +1621,12 @@ public class ProvisioningImp implements Provisioning
           zlc.replaceAttributes(dn, entry.getAttributes());
         }
       }
-      catch( LdapException e )
+      catch (LdapException e)
       {
         throw ExceptionWrapper.wrap(e);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1741,7 +1637,6 @@ public class ProvisioningImp implements Provisioning
   }
 
   private final static Method sCreateParentDomains;
-
   static
   {
     try
@@ -1754,7 +1649,7 @@ public class ProvisioningImp implements Provisioning
       );
       sCreateParentDomains.setAccessible(true);
     }
-    catch( Throwable ex )
+    catch (Throwable ex)
     {
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
@@ -1762,32 +1657,31 @@ public class ProvisioningImp implements Provisioning
   }
 
 
-  private void createParentDomains(ZLdapContext zlc, String[] parts, String[] dns)
-    throws ServiceException
+  private void createParentDomains(ZLdapContext zlc, String[] parts, String[] dns) throws ServiceException
   {
     try
     {
-      sCreateParentDomains.invoke(mProvisioning, zlc, parts, dns);
+      sCreateParentDomains.invoke(mProvisioning,zlc,parts,dns);
     }
-    catch( IllegalAccessException e )
+    catch (IllegalAccessException e)
     {
       throw new RuntimeException(e);
     }
-    catch( InvocationTargetException e )
+    catch (InvocationTargetException e)
     {
       try
       {
         throw e.getCause();
       }
-      catch( RuntimeException ex )
+      catch (RuntimeException ex)
       {
         throw ex;
       }
-      catch( ServiceException ex )
+      catch (ServiceException ex)
       {
         throw ex;
       }
-      catch( Throwable throwable )
+      catch (Throwable throwable)
       {
         throw new RuntimeException(throwable);
       }
@@ -1813,11 +1707,11 @@ public class ProvisioningImp implements Provisioning
           .append(LdapUtil.escapeRDNValue(part))
           .append(",");
       }
-      dn = stringBuffer.substring(0, stringBuffer.length() - 1);
+      dn = stringBuffer.substring(0, stringBuffer.length()-1);
 
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DOMAIN);
 
-      LdapProvisioning provisioning = (LdapProvisioning) mProvisioning;
+      LdapProvisioning provisioning = (LdapProvisioning)mProvisioning;
 
       if( parts.length > 1 )
       {
@@ -1828,46 +1722,28 @@ public class ProvisioningImp implements Provisioning
       entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
       entry.setDN(dn);
-      ZimbraLog.mailbox.info("Restoring domain " + dn);
+      ZimbraLog.mailbox.info("Restoring domain "+dn);
 
       zlc.createEntry(entry);
 
       String acctBaseDn = provisioning.getDIT().domainDNToAccountBaseDN(dn);
-      if( !acctBaseDn.equals(dn) )
-      {
-        zlc.createEntry(
-          provisioning.getDIT().domainDNToAccountBaseDN(dn),
-          "organizationalRole",
-          new String[]{"ou", "people", "cn", "people"}
-        );
-        zlc.createEntry(
-          provisioning.getDIT().domainDNToDynamicGroupsBaseDN(dn),
-          "organizationalRole",
-          new String[]{"cn", "groups", "description", "dynamic groups base"}
-        );
+      if (!acctBaseDn.equals(dn)) {
+        zlc.createEntry(provisioning.getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+        zlc.createEntry(provisioning.getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
       }
     }
-    catch( LdapException.LdapEntryAlreadyExistException ex )
+    catch (LdapException.LdapEntryAlreadyExistException ex)
     {
       try
       {
-        if( zlc != null && entry != null ) // Just tell me why? 
+        if( zlc != null && entry != null ) // Just tell me why?
         {
           zlc.replaceAttributes(dn, entry.getAttributes());
 
-          String acctBaseDn = ((LdapProvisioning) mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
-          if( !acctBaseDn.equals(dn) )
-          {
-            zlc.createEntry(
-              ((LdapProvisioning) mProvisioning).getDIT().domainDNToAccountBaseDN(dn),
-              "organizationalRole",
-              new String[]{"ou", "people", "cn", "people"}
-            );
-            zlc.createEntry(
-              ((LdapProvisioning) mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn),
-              "organizationalRole",
-              new String[]{"cn", "groups", "description", "dynamic groups base"}
-            );
+          String acctBaseDn = ((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
+          if (!acctBaseDn.equals(dn)) {
+            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
           }
         }
       }
@@ -1876,7 +1752,7 @@ public class ProvisioningImp implements Provisioning
         throw ExceptionWrapper.wrap(e);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1899,20 +1775,19 @@ public class ProvisioningImp implements Provisioning
       String domain = parts[1];
 
       StringBuffer dc = new StringBuffer();
-      for( String token : domain.split(Pattern.quote(".")) )
-      {
+      for( String token : domain.split(Pattern.quote(".")) ) {
         dc.append(",dc=").append(LdapUtil.escapeRDNValue(token));
       }
 
-      dn = "uid=" + LdapUtil.escapeRDNValue(local) + ",ou=people" + dc;
+      dn = "uid="+LdapUtil.escapeRDNValue(local)+",ou=people"+dc;
       zlc = LdapClient.getContext(LdapServerType.MASTER, LdapUsage.CREATE_DISTRIBUTIONLIST);
       entry = LdapClient.createMutableEntry();
       entry.mapToAttrs(attributes);
       entry.setDN(dn);
-      ZimbraLog.mailbox.info("Restoring distribution list " + dn);
+      ZimbraLog.mailbox.info("Restoring distribution list "+dn);
       zlc.createEntry(entry);
     }
-    catch( LdapException.LdapEntryAlreadyExistException ex )
+    catch (LdapException.LdapEntryAlreadyExistException ex)
     {
       try
       {
@@ -1921,12 +1796,12 @@ public class ProvisioningImp implements Provisioning
           zlc.replaceAttributes(dn, entry.getAttributes());
         }
       }
-      catch( LdapException e )
+      catch (LdapException e)
       {
         throw ExceptionWrapper.wrap(e);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1939,12 +1814,12 @@ public class ProvisioningImp implements Provisioning
   @Override
   @Nullable
   public Server createServer(String name, Map<String, Object> attrs)
-    throws ZimbraException
+          throws ZimbraException
   {
     try
     {
       com.zimbra.cs.account.Server server = mProvisioning.createServer(name, attrs);
-      if( server == null )
+      if (server == null)
       {
         return null;
       }
@@ -1953,17 +1828,14 @@ public class ProvisioningImp implements Provisioning
         return new Server(server);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void modifyIdentity(
-    @Nonnull
-      Account newAccount, String identityName, Map<String, Object> newAttrs
-  )
+  public void modifyIdentity(@Nonnull Account newAccount, String identityName, Map<String, Object> newAttrs)
     throws ZimbraException
   {
     try
@@ -1974,7 +1846,7 @@ public class ProvisioningImp implements Provisioning
         newAttrs
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -1982,15 +1854,10 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   public void grantRight(
-    String targetType,
-    @Nonnull
-      Targetby targetBy, String target,
-    String granteeType,
-    @Nonnull
-      GrantedBy granteeBy, String grantee,
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
-  )
-    throws ZimbraException
+  ) throws ZimbraException
   {
     try
     {
@@ -2006,7 +1873,7 @@ public class ProvisioningImp implements Provisioning
         null
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2015,12 +1882,9 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void revokeRight(
     String targetType, Targetby targetBy, String target,
-    String granteeType,
-    @Nonnull
-      GrantedBy granteeBy, String grantee,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
     String right
-  )
-    throws NoSuchGrantException
+  ) throws NoSuchGrantException
   {
     try
     {
@@ -2035,40 +1899,36 @@ public class ProvisioningImp implements Provisioning
         null
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void revokeRight(
-    String targetType,
-    Targetby targetBy,
-    String target,
-    String granteeType,
-    @Nonnull
-      GrantedBy granteeBy,
-    String grantee,
-    String right,
-    RightModifier rightModifier
-  )
-    throws NoSuchGrantException
+  public void revokeRight(String targetType,
+                          Targetby targetBy,
+                          String target,
+                          String granteeType,
+                          @Nonnull GrantedBy granteeBy,
+                          String grantee,
+                          String right,
+                          RightModifier rightModifier) throws NoSuchGrantException
   {
     try
     {
       mProvisioning.revokeRight(
         targetType,
-        targetBy != null ? targetBy.toZimbra(TargetBy.class) : null,
-        target != null ? target : null,
+        targetBy!=null?targetBy.toZimbra(TargetBy.class):null,
+        target!=null?target:null,
         granteeType,
         granteeBy.toZimbra(GranteeBy.class),
         grantee,
         right,
-        rightModifier != null ? rightModifier.toZimbra() : null
+        rightModifier!=null?rightModifier.toZimbra():null
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2085,7 +1945,7 @@ public class ProvisioningImp implements Provisioning
     GrantedBy granteeBy,
     String granteeVal,
     String right
-  )
+                            )
   {
     try
     {
@@ -2100,7 +1960,7 @@ public class ProvisioningImp implements Provisioning
         null
       );
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2120,8 +1980,8 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      TargetBy targetBy1 = targetBy == null ? null : targetBy.toZimbra(TargetBy.class);
-      GranteeBy granteeBy1 = granteeBy == null ? null : granteeBy.toZimbra(GranteeBy.class);
+      TargetBy targetBy1 = targetBy==null?null:targetBy.toZimbra(TargetBy.class);
+      GranteeBy granteeBy1 = granteeBy==null?null:granteeBy.toZimbra(GranteeBy.class);
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType,
         targetBy1,
@@ -2130,8 +1990,8 @@ public class ProvisioningImp implements Provisioning
         granteeBy1,
         grantee,
         granteeIncludeGroupsGranteeBelongs
-      );
-      if( grants == null )
+        );
+      if (grants == null)
       {
         return null;
       }
@@ -2140,33 +2000,27 @@ public class ProvisioningImp implements Provisioning
         return new Grants(grants);
       }
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public <T> T toZimbra(
-    @Nonnull
-      Class<T> cls
-  )
+  public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mProvisioning);
   }
 
   @Override
   @Nullable
-  public Domain getDomain(
-    @Nonnull
-      Account account
-  )
+  public Domain getDomain(@Nonnull Account account)
     throws ZimbraException
   {
     try
     {
       com.zimbra.cs.account.Domain domain = mProvisioning.getDomain(account.toZimbra(com.zimbra.cs.account.Account.class));
-      if( domain == null )
+      if (domain == null)
       {
         return null;
       }
@@ -2175,19 +2029,14 @@ public class ProvisioningImp implements Provisioning
         return new Domain(domain);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public void flushCache(
-    @Nonnull
-      CacheEntryType cacheEntryType,
-    @Nullable
-      Collection<CacheEntry> cacheEntries
-  )
+  public void flushCache(@Nonnull CacheEntryType cacheEntryType, @Nullable Collection<CacheEntry> cacheEntries)
     throws ZimbraException
   {
     if( CacheEntryType.acl.equals(cacheEntryType) )
@@ -2197,11 +2046,11 @@ public class ProvisioningImp implements Provisioning
     }
 
     com.zimbra.cs.account.Provisioning.CacheEntry[] cacheEntriesArray = null;
-    if( cacheEntries != null )
+    if (cacheEntries != null)
     {
       cacheEntriesArray = new com.zimbra.cs.account.Provisioning.CacheEntry[cacheEntries.size()];
       int i = 0;
-      for( CacheEntry cacheEntry : cacheEntries )
+      for (CacheEntry cacheEntry : cacheEntries)
       {
         cacheEntriesArray[i] = cacheEntry.toZimbra(com.zimbra.cs.account.Provisioning.CacheEntry.class);
         i++;
@@ -2211,22 +2060,18 @@ public class ProvisioningImp implements Provisioning
     try
     {
       mProvisioning.flushCache(cacheEntryType.getType(), cacheEntriesArray);
-      if( CacheEntryType.all.equals(cacheEntryType) )
-      {
+      if( CacheEntryType.all.equals(cacheEntryType) ) {
         PermissionCache.invalidateCache();
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public CountAccountResult countAccount(
-    @Nonnull
-      Domain domain
-  )
+  public CountAccountResult countAccount(@Nonnull Domain domain)
     throws ZimbraException
   {
     try
@@ -2235,24 +2080,19 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.countAccount(domain.toZimbra(com.zimbra.cs.account.Domain.class))
       );
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public long getAccountsOnCos(
-    @Nonnull
-      Domain domain,
-    @Nonnull
-      Cos cos
-  )
+  public long getAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos)
   {
     CountAccountResult accountResult = countAccount(domain);
-    for( CountAccountByCos accountByCos : accountResult.getCountAccountByCos() )
+    for (CountAccountByCos accountByCos : accountResult.getCountAccountByCos())
     {
-      if( accountByCos.getCosId().equals(cos.getId()) )
+      if (accountByCos.getCosId().equals(cos.getId()))
       {
         return accountByCos.getCount();
       }
@@ -2261,33 +2101,28 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public long getMaxAccountsOnCos(
-    @Nonnull
-      Domain domain,
-    @Nonnull
-      Cos cos
-  )
+  public long getMaxAccountsOnCos(@Nonnull Domain domain, @Nonnull Cos cos)
   {
     final Collection<String> cosLimits = domain.getDomainCOSMaxAccounts();
 
     final String mCosId = cos.getId();
 
-    for( final String cosLimit : cosLimits )
+    for(final String cosLimit : cosLimits)
     {
-      final String[] parts = cosLimit.split(":");
+      final String [] parts = cosLimit.split(":");
 
-      if( parts.length != 2 )
+      if(parts.length != 2)
       {
         continue;
       }
 
-      if( parts[0].equals(mCosId) )
+      if(parts[0].equals(mCosId))
       {
         try
         {
           return Long.parseLong(parts[1]);
         }
-        catch( NumberFormatException e )
+        catch(NumberFormatException e)
         {
           return -1;
         }
@@ -2299,16 +2134,13 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Server getServer(
-    @Nonnull
-      Account acct
-  )
+  public Server getServer(@Nonnull Account acct)
     throws ZimbraException
   {
     try
     {
       com.zimbra.cs.account.Server server = mProvisioning.getServer(acct.toZimbra(com.zimbra.cs.account.Account.class));
-      if( server == null )
+      if (server == null)
       {
         return null;
       }
@@ -2317,7 +2149,7 @@ public class ProvisioningImp implements Provisioning
         return new Server(server);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2331,13 +2163,13 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Server server = mProvisioning.getServerById(id);
-      if( server == null )
+      if(server == null)
       {
         return null;
       }
       return new Server(server);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2351,30 +2183,27 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Server server = mProvisioning.getServerByName(name);
-      if( server == null )
+      if(server == null)
       {
         return null;
       }
       return new Server(server);
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public boolean onLocalServer(
-    @Nonnull
-      Account userAccount
-  )
+  public boolean onLocalServer(@Nonnull Account userAccount)
     throws ZimbraException
   {
     try
     {
       return mProvisioning.onLocalServer(userAccount.toZimbra(com.zimbra.cs.account.Account.class));
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2382,13 +2211,12 @@ public class ProvisioningImp implements Provisioning
 
   @Override
   @Nullable
-  public Zimlet createZimlet(String name, Map<String, Object> attrs)
-    throws org.openzal.zal.exceptions.ZimbraException
+  public Zimlet createZimlet(String name, Map<String, Object> attrs) throws org.openzal.zal.exceptions.ZimbraException
   {
     try
     {
       com.zimbra.cs.account.Zimlet zimlet = mProvisioning.createZimlet(name, attrs);
-      if( zimlet == null )
+      if (zimlet == null)
       {
         return null;
       }
@@ -2397,30 +2225,27 @@ public class ProvisioningImp implements Provisioning
         return new Zimlet(zimlet);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
 
   @Override
-  public long getEffectiveQuota(
-    @Nonnull
-      Account account
-  )
+  public long getEffectiveQuota(@Nonnull Account account)
   {
     long acctQuota = account.getLongAttr(A_zimbraMailQuota, 0);
     Domain domain = getDomain(account);
     long domainQuota = 0;
-    if( domain != null )
+    if (domain != null)
     {
       domainQuota = domain.getLongAttr(A_zimbraMailDomainQuota, 0);
     }
-    if( acctQuota == 0 )
+    if (acctQuota == 0)
     {
       return domainQuota;
     }
-    else if( domainQuota == 0 )
+    else if (domainQuota == 0)
     {
       return acctQuota;
     }
@@ -2440,8 +2265,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<Account> getAllDelegatedAdminAccounts()
-    throws ZimbraException
+  public List<Account> getAllDelegatedAdminAccounts() throws ZimbraException
   {
     List<NamedEntry> entryList;
     SearchDirectoryOptions opts = new SearchDirectoryOptions();
@@ -2456,7 +2280,7 @@ public class ProvisioningImp implements Provisioning
       opts.setTypes(SearchDirectoryOptions.ObjectType.accounts);
       entryList = mProvisioning.searchDirectory(opts);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2472,7 +2296,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.id, dlStr);
-      if( group == null )
+      if (group == null)
       {
         return null;
       }
@@ -2481,7 +2305,7 @@ public class ProvisioningImp implements Provisioning
         return new Group(group);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2495,7 +2319,7 @@ public class ProvisioningImp implements Provisioning
     try
     {
       com.zimbra.cs.account.Group group = mProvisioning.getGroup(Key.DistributionListBy.name, dlStr);
-      if( group == null )
+      if (group == null)
       {
         return null;
       }
@@ -2504,13 +2328,13 @@ public class ProvisioningImp implements Provisioning
         return new Group(group);
       }
     }
-    catch( com.zimbra.common.service.ServiceException e )
+    catch (com.zimbra.common.service.ServiceException e)
     {
       try
       {
         throw ExceptionWrapper.wrap(e);
       }
-      catch( InvalidRequestException e1 )
+      catch(InvalidRequestException e1)
       {
         return null;
       }
@@ -2523,8 +2347,7 @@ public class ProvisioningImp implements Provisioning
     String grantee_id,
     String granteeType,
     String right
-  )
-    throws ZimbraException
+  ) throws ZimbraException
   {
     try
     {
@@ -2539,9 +2362,7 @@ public class ProvisioningImp implements Provisioning
           target
         );
       }
-      catch( Exception ignore )
-      {
-      }
+      catch (Exception ignore) {}
 
       if( targetEntry == null )
       {
@@ -2570,12 +2391,12 @@ public class ProvisioningImp implements Provisioning
         targetEntry,
         aces
       );
-      if( revoked.isEmpty() )
+      if (revoked.isEmpty())
       {
         throw AccountServiceException.NO_SUCH_GRANT(ace.dump(true));
       }
     }
-    catch( ServiceException ex )
+    catch (ServiceException ex)
     {
       throw ExceptionWrapper.wrap(ex);
     }
@@ -2584,8 +2405,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   @Nullable
   public Grants getGrants(
-    @Nonnull
-      org.openzal.zal.provisioning.TargetType targetType,
+    @Nonnull org.openzal.zal.provisioning.TargetType targetType,
     Targetby name,
     String targetName,
     boolean granteeIncludeGroupsGranteeBelongs
@@ -2595,14 +2415,14 @@ public class ProvisioningImp implements Provisioning
     {
       RightCommand.Grants grants = mProvisioning.getGrants(
         targetType.getCode(),
-        name != null ? name.toZimbra(TargetBy.class) : null,
+        name!=null?name.toZimbra(TargetBy.class):null,
         targetName,
         null,
         null,
         null,
         granteeIncludeGroupsGranteeBelongs
       );
-      if( grants == null )
+      if (grants == null)
       {
         return null;
       }
@@ -2611,7 +2431,7 @@ public class ProvisioningImp implements Provisioning
         return new Grants(grants);
       }
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2620,35 +2440,30 @@ public class ProvisioningImp implements Provisioning
   @Override
   public String getGranteeName(
     String grantee_id,
-    @Nonnull
-      String grantee_type
-  )
-    throws ZimbraException
+    @Nonnull String grantee_type
+  ) throws ZimbraException
   {
     if( grantee_type.equals(GranteeType.GT_GROUP.getCode()) )
     {
       DistributionList distributionList = getDistributionListById(grantee_id);
       return distributionList.getName();
     }
-    else if( grantee_type.equals(GranteeType.GT_USER.getCode()) )
+    else if ( grantee_type.equals(GranteeType.GT_USER.getCode()) )
     {
       Account granteeAccount = getAccountById(grantee_id);
-      if( granteeAccount == null )
+      if ( granteeAccount == null )
       {
         throw new NoSuchAccountException(grantee_id);
       }
       return granteeAccount.getName();
     }
 
-    throw new RuntimeException("Unknown grantee type: " + grantee_type);
+    throw new RuntimeException("Unknown grantee type: "+grantee_type);
   }
 
   @Override
   @Nonnull
-  public GalSearchResult galSearch(
-    @Nonnull
-      Account account, String query, int skip, int limit
-  )
+  public GalSearchResult galSearch(@Nonnull Account account, String query, int skip, int limit)
   {
     GalSearchParams searchParams = new GalSearchParams(account.toZimbra(com.zimbra.cs.account.Account.class));
 
@@ -2670,12 +2485,12 @@ public class ProvisioningImp implements Provisioning
     {
       searchControl.autocomplete();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
 
-    if( result.hasMore() )
+    if (result.hasMore())
     {
       result.setTotal(result.getTotal() + 1);
     }
@@ -2684,24 +2499,13 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Nonnull
-  public GalSearchResult galSearch(
-    @Nonnull
-      Account account, Domain domain, String query, int skip, int limit
-  )
+  public GalSearchResult galSearch(@Nonnull Account account, Domain domain, String query, int skip, int limit)
   {
     AuthToken authToken = mAuthProvider.createAuthTokenForAccount(account).toZimbra(AuthToken.class);
     try
     {
-      ZimbraSoapContext zimbraSoapContext = new ZimbraSoapContext(
-        authToken,
-        account.getId(),
-        SoapProtocol.Soap12,
-        SoapProtocol.Soap12
-      );
-      GalSearchParams searchParams = new GalSearchParams(
-        domain.toZimbra(com.zimbra.cs.account.Domain.class),
-        zimbraSoapContext
-      );
+      ZimbraSoapContext zimbraSoapContext = new ZimbraSoapContext(authToken, account.getId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
+      GalSearchParams searchParams = new GalSearchParams(domain.toZimbra(com.zimbra.cs.account.Domain.class), zimbraSoapContext);
 
       searchParams.createSearchParams(query);
       searchParams.setQuery(query);
@@ -2719,14 +2523,14 @@ public class ProvisioningImp implements Provisioning
       GalSearchControl searchControl = new GalSearchControl(searchParams);
 
       searchControl.autocomplete();
-      if( result.hasMore() )
+      if (result.hasMore())
       {
         result.setTotal(result.getTotal() + 1);
       }
 
       return result;
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2736,7 +2540,7 @@ public class ProvisioningImp implements Provisioning
   public DistributionList assertDistributionListById(String targetId)
   {
     DistributionList distributionList = getDistributionListById(targetId);
-    if( distributionList == null )
+    if (distributionList == null)
     {
       throw new NoSuchDistributionListException(targetId);
     }
@@ -2752,12 +2556,12 @@ public class ProvisioningImp implements Provisioning
     try
     {
       Account account = getAccountByName(name);
-      if( account != null )
+      if( account != null)
       {
         mProvisioning.deleteAccount(account.getId());
       }
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2770,7 +2574,7 @@ public class ProvisioningImp implements Provisioning
     {
       mProvisioning.deleteAccount(id);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2783,7 +2587,7 @@ public class ProvisioningImp implements Provisioning
     {
       mProvisioning.deleteDomain(id);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2796,7 +2600,7 @@ public class ProvisioningImp implements Provisioning
     {
       mProvisioning.deleteCos(id);
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2807,13 +2611,13 @@ public class ProvisioningImp implements Provisioning
     return getWithDomainAliasesExpansion(address, new HashMap<String, Collection<Domain>>());
   }
 
-  public Collection<String> getWithDomainAliasesExpansion(String address, Map<String, Collection<Domain>> domainCache)
+  public Collection<String> getWithDomainAliasesExpansion(String address, Map<String,Collection<Domain>> domainCache)
   {
     Set<String> addresses = new HashSet<String>();
-    if( address.contains("@") )
+    if (address.contains("@"))
     {
       String[] parts = address.split("@");
-      if( parts.length == 2 )
+      if (parts.length == 2)
       {
         String aliasName = parts[0];
         String domainName = parts[1];
@@ -2822,7 +2626,7 @@ public class ProvisioningImp implements Provisioning
         if( domainAliases == null )
         {
           Domain domain = getDomainByName(domainName);
-          if( domain != null )
+          if (domain != null)
           {
             domainAliases = getDomainAliases(domain);
             domainCache.put(domainName, domainAliases);
@@ -2833,7 +2637,7 @@ public class ProvisioningImp implements Provisioning
           }
         }
 
-        for( Domain domainAlias : domainAliases )
+        for (Domain domainAlias : domainAliases)
         {
           String alias = aliasName + '@' + domainAlias.getName();
           addresses.add(alias);
@@ -2847,7 +2651,7 @@ public class ProvisioningImp implements Provisioning
   {
     private final int             mSkip;
     private final GalSearchResult mSearchResult;
-    private       int             mCounter = 0;
+    private int mCounter = 0;
 
 
     public GalSearchCallback(int skip, GalSearchParams params, GalSearchResult result)
@@ -2860,7 +2664,7 @@ public class ProvisioningImp implements Provisioning
     public void handleContact(GalContact galContact)
       throws ZimbraException
     {
-      if( mCounter >= mSkip )
+      if (mCounter >= mSkip)
       {
         mSearchResult.addContact(new GalSearchResult.GalContact(galContact));
       }
@@ -2875,19 +2679,16 @@ public class ProvisioningImp implements Provisioning
     }
 
     @Nullable
-    public Element handleContact(
-      @Nonnull
-        Contact contact
-    )
+    public Element handleContact(@Nonnull Contact contact)
       throws ZimbraException
     {
-      if( mCounter >= mSkip )
+      if (mCounter >= mSkip)
       {
         Map<String, Object> galAttrs = new HashMap<String, Object>();
         String tag_id = String.valueOf(contact.getId());
 
         Map<String, String> fields = contact.getFields();
-        for( String key : fields.keySet() )
+        for (String key : fields.keySet())
         {
           galAttrs.put(key, fields.get(key));
         }
@@ -2900,12 +2701,9 @@ public class ProvisioningImp implements Provisioning
       return null;
     }
 
-    public void handleElement(
-      @Nonnull
-        Element node
-    )
+    public void handleElement(@Nonnull Element node)
     {
-      if( mCounter >= mSkip )
+      if (mCounter >= mSkip)
       {
         Map<String, Object> galAttrs = new HashMap<String, Object>();
         String tag_id;
@@ -2913,20 +2711,20 @@ public class ProvisioningImp implements Provisioning
         {
           tag_id = node.getAttribute("id");
         }
-        catch( ServiceException e )
+        catch (ServiceException e)
         {
           throw ExceptionWrapper.wrap(e);
         }
         List<Element> tagList = node.listElements("a");
 
-        for( Element tag : tagList )
+        for (Element tag : tagList)
         {
           String tag_n;
           try
           {
             tag_n = tag.getAttribute("n");
           }
-          catch( ServiceException e )
+          catch (ServiceException e)
           {
             throw ExceptionWrapper.wrap(e);
           }
@@ -2943,7 +2741,7 @@ public class ProvisioningImp implements Provisioning
 
   public Collection<Domain> getDomainAliases(Domain domain)
   {
-    if( domain.isAliasDomain() )
+    if (domain.isAliasDomain())
     {
       return Collections.emptyList();
     }
@@ -2962,13 +2760,13 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      ProxyPurgeUtil.purgeAccounts((List) null, accounts, true, (String) null);
+      ProxyPurgeUtil.purgeAccounts((List)null,accounts,true,(String)null);
       List<com.zimbra.cs.account.Server> memcachedServers = mProvisioning.getAllServers("memcached");
       List<String> routes = new ArrayList<>(accounts.size());
-      for( String account : accounts )
+      for (String account : accounts)
       {
         Account accountObj = getAccountByName(account);
-        if( accountObj != null )
+        if (accountObj != null)
         {
           routes.add("route:proto=http;zx=1;id=" + accountObj.getId());
           routes.add("route:proto=https;zx=1;id=" + accountObj.getId());
@@ -2995,7 +2793,7 @@ public class ProvisioningImp implements Provisioning
         zmc.disconnect(-1);
       }
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -3008,7 +2806,7 @@ public class ProvisioningImp implements Provisioning
     {
       return mProvisioning.getConfig().getLastLogonTimestampFrequency();
     }
-    catch( ServiceException e )
+    catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -3020,7 +2818,7 @@ public class ProvisioningImp implements Provisioning
     throws NoSuchGroupException
   {
     Group group = getGroupById(groupId);
-    if( group == null )
+    if (group == null)
     {
       throw new NoSuchGroupException(groupId);
     }
@@ -3034,7 +2832,7 @@ public class ProvisioningImp implements Provisioning
     throws NoSuchGroupException
   {
     Group group = getGroupByName(groupName);
-    if( group == null )
+    if (group == null)
     {
       throw new NoSuchGroupException(groupName);
     }
@@ -3052,8 +2850,7 @@ public class ProvisioningImp implements Provisioning
   public void rawQuery(String base, final String query, LdapVisitor visitor, String[] fields)
   {
     UBIDLdapContext zlc = null;
-    try
-    {
+    try {
       zlc = ((UBIDLdapContext) LdapClient.getContext(LdapServerType.REPLICA, LdapUsage.GENERIC));
       LDAPConnection connection = zlc.getNative();
 
@@ -3066,12 +2863,12 @@ public class ProvisioningImp implements Provisioning
         );
         searchRequest.setAttributes(fields);
 
-        HashMap<String, String> map = new HashMap<>(
+        HashMap<String,String> map = new HashMap<>(
           fields == null ? 100 : fields.length, 1.0f
         );
 
         ASN1OctetString resumeCookie = null;
-        while( true )
+        while (true)
         {
           searchRequest.setControls(
             new SimplePagedResultsControl(
@@ -3081,14 +2878,13 @@ public class ProvisioningImp implements Provisioning
           );
           SearchResult searchResult = connection.search(searchRequest);
 
-          for( SearchResultEntry current : searchResult.getSearchEntries() )
+          for (SearchResultEntry current : searchResult.getSearchEntries())
           {
             String dn = current.getDN();
             String address = Utils.dnToName(dn);
 
             map.clear();
-            for( Attribute attribute : current.getAttributes() )
-            {
+            for( Attribute attribute : current.getAttributes() ) {
               map.put(attribute.getName(), attribute.getValue());
             }
             visitor.visit(
@@ -3101,7 +2897,7 @@ public class ProvisioningImp implements Provisioning
           SimplePagedResultsControl responseControl = SimplePagedResultsControl.get(
             searchResult
           );
-          if( responseControl.moreResultsToReturn() )
+          if (responseControl.moreResultsToReturn())
           {
             resumeCookie = responseControl.getCookie();
           }
@@ -3111,17 +2907,13 @@ public class ProvisioningImp implements Provisioning
           }
         }
       }
-    }
-    catch( ServiceException ex )
-    {
+    } catch (ServiceException ex) {
       throw ExceptionWrapper.wrap(ex);
     }
-    catch( LDAPException ex )
-    {
+    catch (LDAPException ex) {
       throw ExceptionWrapper.wrap(ex);
     }
-    finally
-    {
+    finally {
       LdapClient.closeContext(zlc);
     }
   }
@@ -3139,17 +2931,17 @@ public class ProvisioningImp implements Provisioning
       );
 
       zlc = LdapClient.getContext(LdapServerType.REPLICA, LdapUsage.GENERIC);
-      return (int) zlc.countEntries(
+      return (int)zlc.countEntries(
         base,
         DirectQueryFilterBuilder.create(query),
         searchControls
       );
     }
-    catch( ServiceException ex )
+    catch (ServiceException ex)
     {
       throw ExceptionWrapper.wrap(ex);
     }
-    catch( LDAPException ex )
+    catch (LDAPException ex)
     {
       throw ExceptionWrapper.wrap(ex);
     }
@@ -3162,10 +2954,7 @@ public class ProvisioningImp implements Provisioning
   @Override
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
-    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(
-      com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC,
-      new ChangePasswordListenerWrapper(listener)
-    );
+    com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
   }
 
   @Override
