@@ -1727,7 +1727,9 @@ public class ProvisioningImp implements Provisioning
 
       String acctBaseDn = provisioning.getDIT().domainDNToAccountBaseDN(dn);
       if (!acctBaseDn.equals(dn)) {
+        zlc.deleteEntry(provisioning.getDIT().domainDNToAccountBaseDN(dn));
         zlc.createEntry(provisioning.getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+        zlc.deleteEntry(provisioning.getDIT().domainDNToDynamicGroupsBaseDN(dn));
         zlc.createEntry(provisioning.getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
       }
     }
@@ -1741,7 +1743,9 @@ public class ProvisioningImp implements Provisioning
 
           String acctBaseDn = ((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
           if (!acctBaseDn.equals(dn)) {
+            zlc.deleteEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn));
             zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
+            zlc.deleteEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn));
             zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
           }
         }
