@@ -41,7 +41,7 @@ public class MailSession
     }
     else
     {
-      return JMSession.getSmtpSession(null);
+      return JMSession.getSmtpSession((com.zimbra.cs.account.Account) null);
     }
   }
 
