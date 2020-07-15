@@ -78,6 +78,8 @@ public interface Provisioning
 
   void visitDomain(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Domain domain) throws ZimbraException;
 
+  void visitDomainsWithAttributes(@Nonnull SimpleVisitor<Domain> visitor, Map<String, Object> attributes) throws ZimbraException;
+
   Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException;
 
   void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
