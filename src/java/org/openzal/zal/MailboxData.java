@@ -144,7 +144,7 @@ public class MailboxData
   public String toString()
   {
     StringBuilder stringBuilder = new StringBuilder();
-    if( Objects.nonNull(mId) )
+    if( Objects.nonNull(mId) && mId > -1 )
     {
       stringBuilder.append("mid=").append(mId);
     }
@@ -154,7 +154,7 @@ public class MailboxData
       {
         stringBuilder.append(" ");
       }
-      stringBuilder.append("accountId=").append(mId);
+      stringBuilder.append("accountId=").append(mAccountId);
     }
     return stringBuilder.toString();
   }
