@@ -194,7 +194,7 @@ public class CalendarItem extends Item
 
     List<Invite> exceptions = defaultInvite.getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
 
-    List<CalendarItemData> newExceptions = new ArrayList<CalendarItemData>(exceptions.size());
+    List<CalendarItemData> newExceptions = new ArrayList<>(exceptions.size());
     for (Invite exception : exceptions)
     {
       if (recurId != null && recurId.equals(exception.getRecurId()))
@@ -317,7 +317,7 @@ public class CalendarItem extends Item
       if (invitedUser.addressMatchesAccount(attendee.getAddress()))
       {
         attendeesIterator.set(new Attendee(
-          attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType())
+          attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType(), attendee.getRsvp())
         );
         updated = true;
       }
