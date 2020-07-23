@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import org.openzal.zal.Mime;
 import org.openzal.zal.MimeConstants;
 import org.openzal.zal.Pair;
@@ -101,25 +102,39 @@ public class CalendarMime
     String descHtml = inv.getDescriptionHtml();
     ZCalendar.ZVCalendar cal = inv.newToICalendar(true);
 
-    return createCalendarMessage(subject, desc, descHtml, cal, Collections.<BodyPart>emptyList());
+    MimeMessage attachment = inv.getAttachment();
+    List<BodyPart> bodyPartList;
+    if( Objects.nonNull(attachment) )
+    {
+      bodyPartList = extractAttachmentFromOriginalMime((MimeMultipart) attachment.getContent());
+    }
+    else
+    {
+      bodyPartList = Collections.emptyList();
+    }
+    return createCalendarMessage(subject, desc, descHtml, cal, bodyPartList);
   }
 
   private List<BodyPart> extractAttachmentFromOriginalMime(MimeMessage mimeMessage, int inviteId) throws MessagingException, IOException
   {
-    MimeMultipart mimeMultipart = (MimeMultipart)mimeMessage.getContent();
-    MimeMessage subMimeMessage = (MimeMessage)mimeMultipart.getBodyPart(0).getContent();
-    for (int n = 0; n < mimeMultipart.getCount(); ++n)
+    MimeMultipart mimeMultipart = (MimeMultipart) mimeMessage.getContent();
+    MimeMessage subMimeMessage = (MimeMessage) mimeMultipart.getBodyPart(0).getContent();
+    for( int n = 0; n < mimeMultipart.getCount(); ++n )
     {
       BodyPart part = mimeMultipart.getBodyPart(n);
       String[] headerInvId = part.getHeader("invId");
-      if (headerInvId != null && headerInvId.length > 0 && headerInvId[0].equals(String.valueOf(inviteId)))
+      if( headerInvId != null && headerInvId.length > 0 && headerInvId[0].equals(String.valueOf(inviteId)) )
       {
         subMimeMessage = (MimeMessage) part.getContent();
       }
     }
     MimeMultipart subMultipart = (MimeMultipart)subMimeMessage.getContent();
+    return extractAttachmentFromOriginalMime(subMultipart);
+  }
 
-    List<BodyPart> bodyPartList = new LinkedList<BodyPart>();
+  private List<BodyPart> extractAttachmentFromOriginalMime(MimeMultipart subMultipart) throws MessagingException
+  {
+    List<BodyPart> bodyPartList = new LinkedList<>();
     for( int n=0; n < subMultipart.getCount(); ++n )
     {
       BodyPart bodyPart = subMultipart.getBodyPart(n);
