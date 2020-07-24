@@ -652,7 +652,8 @@ public class Invite
       attendee.getAddress(),
       attendee.getCn(),
       AttendeeInviteStatus.fromZimbra(attendee.getPartStat()),
-      type
+      type,
+      attendee.getRsvp()
     );
   }
 
@@ -873,7 +874,7 @@ public class Invite
   public String setDeclineReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_DECLINED);
     try
     {
@@ -892,7 +893,7 @@ public class Invite
   public String setTentativeReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_TENTATIVE);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_TENTATIVE);
     try
     {
@@ -911,7 +912,7 @@ public class Invite
   public String setAcceptReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_CONFIRMED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_ACCEPTED);
     try
     {
