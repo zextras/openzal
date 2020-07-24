@@ -59,6 +59,7 @@ import javax.annotation.Nonnull;
 
 import com.zimbra.soap.ZimbraSoapContext;
 import org.dom4j.QName;
+import org.jfree.util.Log;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -1768,15 +1769,9 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        if( zlc != null && entry != null ) // Just tell me why?
+        if( zlc != null )
         {
           zlc.replaceAttributes(dn, entry.getAttributes());
-
-          String acctBaseDn = ((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
-          if (!acctBaseDn.equals(dn)) {
-            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
-            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
-          }
         }
       }
       catch( ServiceException e )
