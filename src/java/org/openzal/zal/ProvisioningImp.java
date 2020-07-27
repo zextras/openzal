@@ -581,6 +581,38 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  public void visitDomainsWithAttributes(@Nonnull SimpleVisitor<Domain> visitor, Map<String, Object> attributes)
+    throws ZimbraException
+  {
+    SearchDirectoryOptions options = new SearchDirectoryOptions();
+    ZLdapFilterFactory zLdapFilterFactory = ZLdapFilterFactory.getInstance();
+
+    ZLdapFilter filter = null;
+    ZLdapFilter lastFilter = null;
+    try
+    {
+      for(String id : attributes.keySet())
+      {
+        filter = zLdapFilterFactory.fromFilterString(
+          ZLdapFilterFactory.FilterId.ALL_DOMAINS,
+          zLdapFilterFactory.equalityFilter(id, attributes.get(id).toString(), true)
+        );
+
+        if(lastFilter != null) {
+         filter = zLdapFilterFactory.andWith(lastFilter, filter);
+        }
+        lastFilter = filter;
+      }
+      options.setFilter(filter);
+      options.addType(SearchDirectoryOptions.ObjectType.domains);
+      mProvisioning.searchDirectory(options, new ZimbraVisitorWrapper<>(visitor, mNamedEntryDomainWrapper));
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   public Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException
   {
