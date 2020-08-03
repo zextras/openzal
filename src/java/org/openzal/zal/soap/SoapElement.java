@@ -22,10 +22,12 @@ package org.openzal.zal.soap;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.SoapParseException;
+import com.zimbra.common.soap.XmlParseException;
 import java.util.List;
 import java.util.Set;
-import org.dom4j.QName;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
@@ -91,9 +93,9 @@ public class SoapElement
   {
     try
     {
-      return new SoapElement(Element.parseJSON(json));
+      return parseJSON(new JSONObject(json));
     }
-    catch(SoapParseException e)
+    catch( JSONException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -103,13 +105,25 @@ public class SoapElement
   {
     try
     {
-      return new SoapElement(Element.JSONElement.parseJSON(
-        json,
-        new QName(qname),
-        new Element.JSONElement("").getFactory()
-      ));
+      JSONObject container = new JSONObject();
+      container.put(qname, new JSONObject(json));
+      return parseJSON(container);
     }
-    catch( SoapParseException e )
+    catch( JSONException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  private static SoapElement parseJSON(JSONObject jsonObject)
+  {
+    try
+    {
+      // Element.parseJSON is broken for strings array.
+      String xml = XML.toString(jsonObject);
+      return new SoapElement(Element.parseXML(xml));
+    }
+    catch( JSONException | XmlParseException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
