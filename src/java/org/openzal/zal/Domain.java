@@ -236,5 +236,17 @@ public class Domain extends Entry
       defaultPortForProtocol(getPublicProtocol())
     );
   }
+
+  @Nullable
+  public String getSkinLogoAppBanner()
+  {
+    return mDomain.getSkinLogoAppBanner();
+  }
+
+  @Nullable
+  public String getSkinLogoURL()
+  {
+    return mDomain.getSkinLogoURL();
+  }
 }
 
