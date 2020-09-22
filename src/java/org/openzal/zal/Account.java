@@ -269,6 +269,18 @@ public class Account extends Entry
     }
   }
 
+  public Identity getDefaultIdentity() throws NoSuchAccountException
+  {
+    try
+    {
+       return new Identity(mAccount.getDefaultIdentity());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Nonnull
   public Collection<String> getMultiAttr(String name)
   {
