@@ -85,6 +85,9 @@ public interface Provisioning
   void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
               throws ZimbraException;
 
+  void authAccountWithLdap(@Nonnull Account account, String password, Map<String, Object> context)
+    throws ZimbraException;
+
   Account getAccountByAccountIdOrItemId(String id);
 
   @Nullable

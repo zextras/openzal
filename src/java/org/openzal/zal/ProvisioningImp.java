@@ -655,6 +655,25 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public void authAccountWithLdap(@Nonnull Account account,
+      String password, Map<String, Object> context) throws ZimbraException {
+    try
+    {
+      if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
+        ((LdapProvisioning) mProvisioning).zimbraLdapAuthenticate(
+                account.toZimbra(com.zimbra.cs.account.Account.class), password, context);
+      }
+      else {
+        throw new ZimbraException("The provisioning is not an LdapProvisioning implementation");
+      }
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public Account getAccountByAccountIdOrItemId(String id)
   {
     int index = id.indexOf("/");
