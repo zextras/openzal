@@ -25,9 +25,11 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapParseException;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.Nonnull;
+import org.dom4j.QName;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
+
+import javax.annotation.Nonnull;
 
 public class SoapElement
 {
@@ -92,6 +94,22 @@ public class SoapElement
       return new SoapElement(Element.parseJSON(json));
     }
     catch(SoapParseException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public static SoapElement parseJSON(String json, String qname)
+  {
+    try
+    {
+      return new SoapElement(Element.JSONElement.parseJSON(
+        json,
+        new QName(qname),
+        new Element.JSONElement("").getFactory()
+      ));
+    }
+    catch( SoapParseException e )
     {
       throw ExceptionWrapper.wrap(e);
     }

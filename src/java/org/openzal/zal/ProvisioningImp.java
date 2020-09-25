@@ -59,6 +59,7 @@ import javax.annotation.Nonnull;
 
 import com.zimbra.soap.ZimbraSoapContext;
 import org.dom4j.QName;
+import org.jfree.util.Log;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -264,6 +265,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
   public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
   public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
+  public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
@@ -572,6 +574,38 @@ public class ProvisioningImp implements Provisioning
         domain.toZimbra(com.zimbra.cs.account.Domain.class),
         namedEntryVisitor
       );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void visitDomainsWithAttributes(@Nonnull SimpleVisitor<Domain> visitor, Map<String, Object> attributes)
+    throws ZimbraException
+  {
+    SearchDirectoryOptions options = new SearchDirectoryOptions();
+    ZLdapFilterFactory zLdapFilterFactory = ZLdapFilterFactory.getInstance();
+
+    ZLdapFilter filter = null;
+    ZLdapFilter lastFilter = null;
+    try
+    {
+      for(String id : attributes.keySet())
+      {
+        filter = zLdapFilterFactory.fromFilterString(
+          ZLdapFilterFactory.FilterId.ALL_DOMAINS,
+          zLdapFilterFactory.equalityFilter(id, attributes.get(id).toString(), true)
+        );
+
+        if(lastFilter != null) {
+         filter = zLdapFilterFactory.andWith(lastFilter, filter);
+        }
+        lastFilter = filter;
+      }
+      options.setFilter(filter);
+      options.addType(SearchDirectoryOptions.ObjectType.domains);
+      mProvisioning.searchDirectory(options, new ZimbraVisitorWrapper<>(visitor, mNamedEntryDomainWrapper));
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1735,15 +1769,9 @@ public class ProvisioningImp implements Provisioning
     {
       try
       {
-        if( zlc != null && entry != null ) // Just tell me why? 
+        if( zlc != null )
         {
           zlc.replaceAttributes(dn, entry.getAttributes());
-
-          String acctBaseDn = ((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn);
-          if (!acctBaseDn.equals(dn)) {
-            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToAccountBaseDN(dn), "organizationalRole", new String[]{"ou", "people", "cn", "people"});
-            zlc.createEntry(((LdapProvisioning)mProvisioning).getDIT().domainDNToDynamicGroupsBaseDN(dn), "organizationalRole", new String[]{"cn", "groups", "description", "dynamic groups base"});
-          }
         }
       }
       catch( ServiceException e )

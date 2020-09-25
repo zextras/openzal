@@ -22,6 +22,8 @@ package org.openzal.zal;
 
 import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.Nullable;
+
+import java.util.Objects;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
@@ -175,6 +177,7 @@ public class Domain extends Entry
     return mDomain.getLongAttr(name, defaultValue);
   }
 
+  @Nullable
   public String getPublicHostname()
   {
     return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
@@ -200,6 +203,38 @@ public class Domain extends Entry
   public int hashCode()
   {
     return mDomain.getId().hashCode();
+  }
+
+  @Nullable
+  public String getPublicProtocol()
+  {
+    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceProtocol, null);
+  }
+
+  private String defaultPortForProtocol(String protocol)
+  {
+    if( Objects.isNull(protocol))
+    {
+      return null;
+    }
+    switch( protocol.toLowerCase() )
+    {
+      case "https":
+        return "443";
+      case "http":
+        return "80";
+      default:
+        return null;
+    }
+  }
+
+  @Nullable
+  public String getPublicPort()
+  {
+    return mDomain.getAttr(
+      ProvisioningImp.A_zimbraPublicServicePort,
+      defaultPortForProtocol(getPublicProtocol())
+    );
   }
 }
 
