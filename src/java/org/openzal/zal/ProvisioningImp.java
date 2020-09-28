@@ -667,8 +667,10 @@ public class ProvisioningImp implements Provisioning
           context.put("proto", AuthContext.Protocol.client_certificate);
         case "http_basic":
           context.put("proto", AuthContext.Protocol.http_basic);
+        /* $if ZimbraVersion > 8.6.0 $ */
         case "http_dav":
           context.put("proto", AuthContext.Protocol.http_dav);
+        /* $endif $ */
         case "im":
           context.put("proto", AuthContext.Protocol.im);
         case "imap":
