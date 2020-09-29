@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
@@ -661,6 +662,54 @@ public class ProvisioningImp implements Provisioning
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public void authAccountWithLdap(@Nonnull Account account,
+      String password, Map<String, Object> context) throws ZimbraException {
+    try
+    {
+      String proto = context.get("proto").toString();
+      switch (proto)
+      {
+        case "client_certificate":
+          context.put("proto", AuthContext.Protocol.client_certificate);
+        case "http_basic":
+          context.put("proto", AuthContext.Protocol.http_basic);
+        /* $if ZimbraVersion > 8.6.0 $ */
+        case "http_dav":
+          context.put("proto", AuthContext.Protocol.http_dav);
+        /* $endif $ */
+        case "im":
+          context.put("proto", AuthContext.Protocol.im);
+        case "imap":
+          context.put("proto", AuthContext.Protocol.imap);
+        case "pop3":
+          context.put("proto", AuthContext.Protocol.pop3);
+        case "soap":
+          context.put("proto", AuthContext.Protocol.soap);
+        case "spnego":
+          context.put("proto", AuthContext.Protocol.spnego);
+        case "zsync":
+          context.put("proto", AuthContext.Protocol.zsync);
+        case "test":
+          context.put("proto", AuthContext.Protocol.test);
+        default:
+          context.put("proto", AuthContext.Protocol.http_basic);
+      }
+      if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
+        ((LdapProvisioning) mProvisioning).zimbraLdapAuthenticate(
+                account.toZimbra(com.zimbra.cs.account.Account.class), password, context);
+      }
+      else {
+        mProvisioning.authAccount(account.toZimbra(com.zimbra.cs.account.Account.class), password,
+            (AuthContext.Protocol) context.get("proto"));
+      }
+    }
+    catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
