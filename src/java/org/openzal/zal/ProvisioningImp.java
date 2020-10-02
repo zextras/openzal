@@ -1113,6 +1113,16 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
+  public Locale getLocale(Entry entry)
+    throws ZimbraException {
+    try {
+      return mProvisioning.getLocale(entry.toZimbra());
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
   public List<Account> getAllAccounts(@Nonnull Domain domain)
     throws ZimbraException
   {

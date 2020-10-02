@@ -156,6 +156,9 @@ public interface Provisioning
   List<Account> getAllAdminAccounts()
     throws ZimbraException;
 
+  Locale getLocale(Entry entry)
+    throws ZimbraException;
+
   //instant-kill big infrastructures
   @Deprecated
   List<Account> getAllAccounts(@Nonnull Domain domain)
