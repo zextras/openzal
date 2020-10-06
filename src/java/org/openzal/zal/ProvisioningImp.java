@@ -20,6 +20,7 @@
 
 package org.openzal.zal;
 
+import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
@@ -299,6 +300,18 @@ public class ProvisioningImp implements Provisioning
 
   public static String A_zimbraPrefLocale                                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefLocale;
   public static String A_zimbraLocale                                         = com.zimbra.cs.account.Provisioning.A_zimbraLocale;
+
+  public static String A_zimbraPasswordMinLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLength;
+  public static String A_zimbraPasswordMaxLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMaxLength;
+  public static String A_zimbraPasswordEnforceHistory = com.zimbra.cs.account.Provisioning.A_zimbraPasswordEnforceHistory;
+  public static String A_zimbraPasswordMinUpperCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinUpperCaseChars;
+  public static String A_zimbraPasswordMinLowerCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLowerCaseChars;
+  public static String A_zimbraPasswordMinPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinPunctuationChars;
+  public static String A_zimbraPasswordMinNumericChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinNumericChars;
+  public static String A_zimbraPasswordMinAlphaChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinAlphaChars;
+  public static String A_zimbraPasswordAllowedChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedChars;
+  public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
+  public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -659,12 +672,41 @@ public class ProvisioningImp implements Provisioning
       String password, Map<String, Object> context) throws ZimbraException {
     try
     {
+      String proto = context.get("proto").toString();
+      switch (proto)
+      {
+        case "client_certificate":
+          context.put("proto", AuthContext.Protocol.client_certificate);
+        case "http_basic":
+          context.put("proto", AuthContext.Protocol.http_basic);
+        /* $if ZimbraVersion > 8.6.0 $ */
+        case "http_dav":
+          context.put("proto", AuthContext.Protocol.http_dav);
+        /* $endif $ */
+        case "im":
+          context.put("proto", AuthContext.Protocol.im);
+        case "imap":
+          context.put("proto", AuthContext.Protocol.imap);
+        case "pop3":
+          context.put("proto", AuthContext.Protocol.pop3);
+        case "soap":
+          context.put("proto", AuthContext.Protocol.soap);
+        case "spnego":
+          context.put("proto", AuthContext.Protocol.spnego);
+        case "zsync":
+          context.put("proto", AuthContext.Protocol.zsync);
+        case "test":
+          context.put("proto", AuthContext.Protocol.test);
+        default:
+          context.put("proto", AuthContext.Protocol.http_basic);
+      }
       if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
         ((LdapProvisioning) mProvisioning).zimbraLdapAuthenticate(
                 account.toZimbra(com.zimbra.cs.account.Account.class), password, context);
       }
       else {
-        throw new ZimbraException("The provisioning is not an LdapProvisioning implementation");
+        mProvisioning.authAccount(account.toZimbra(com.zimbra.cs.account.Account.class), password,
+            (AuthContext.Protocol) context.get("proto"));
       }
     }
     catch( ServiceException e )
@@ -1078,6 +1120,16 @@ public class ProvisioningImp implements Provisioning
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public Locale getLocale(Entry entry)
+    throws ZimbraException {
+    try {
+      return mProvisioning.getLocale(entry.toZimbra());
+    } catch (com.zimbra.common.service.ServiceException e) {
       throw ExceptionWrapper.wrap(e);
     }
   }
