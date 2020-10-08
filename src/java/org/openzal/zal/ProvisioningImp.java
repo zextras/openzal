@@ -301,6 +301,19 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefLocale                                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefLocale;
   public static String A_zimbraLocale                                         = com.zimbra.cs.account.Provisioning.A_zimbraLocale;
 
+  public static String A_zimbraPasswordMinLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLength;
+  public static String A_zimbraPasswordMaxLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMaxLength;
+  
+  public static String A_zimbraPasswordEnforceHistory = com.zimbra.cs.account.Provisioning.A_zimbraPasswordEnforceHistory;
+  public static String A_zimbraPasswordMinUpperCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinUpperCaseChars;
+  public static String A_zimbraPasswordMinLowerCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLowerCaseChars;
+  public static String A_zimbraPasswordMinPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinPunctuationChars;
+  public static String A_zimbraPasswordMinNumericChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinNumericChars;
+  public static String A_zimbraPasswordMinAlphaChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinAlphaChars;
+  public static String A_zimbraPasswordAllowedChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedChars;
+  public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
+  public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
