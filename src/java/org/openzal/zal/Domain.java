@@ -236,5 +236,10 @@ public class Domain extends Entry
       defaultPortForProtocol(getPublicProtocol())
     );
   }
+
+  public List<String> getGalAccountIds()
+  {
+    return Arrays.asList(mDomain.getGalAccountId());
+  }
 }
 
