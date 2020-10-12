@@ -130,4 +130,8 @@ public class Folder extends Item
   {
      return ((com.zimbra.cs.mailbox.Folder) mMailItem).isHidden();
   }
+
+  public String getPath() {
+    return ((com.zimbra.cs.mailbox.Folder) mMailItem).getPath();
+  }
 }
