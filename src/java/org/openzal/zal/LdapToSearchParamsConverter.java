@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.log.ZimbraLog;
 
 public class LdapToSearchParamsConverter
 {
@@ -72,19 +73,42 @@ public class LdapToSearchParamsConverter
     }
 
     private String formatFilter(String key, String operator, String value) {
-      Collection<String> conversionSet = conversionKeyMap.getOrDefault(key, Collections.singleton(key));
-      if( conversionSet.size() < 1 ) {
-        throw new UnsupportedOperationException();
-      } else if ( conversionSet.size() == 1 ) {
-        return String.format(FILTER_FORMAT, conversionSet.iterator().next(), operator, value);
-      } else {
+      if( "objectClass".equalsIgnoreCase(key) ) {
         StringBuilder builder = new StringBuilder(OPEN_PARENTHESIS);
-        for( String convertedKey : conversionSet ) {
-          builder.append(String.format(FILTER_FORMAT, convertedKey, operator, value)).append(OR);
+
+        // Currently "objectClass" filtering is skipped
+        switch (value) {
+          case STAR:
+            break;
+          default:
+            ZimbraLog.mailbox.warn("ignoring objectClass filter value " + value);
+            break;
         }
-        builder.setLength(builder.length() - OR.length());
-        builder.append(")");
+
+        builder.append(String.format(FILTER_FORMAT, "zimbraCalResType", EQUALS_OPERATOR, "location")).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "zimbraCalResType", EQUALS_OPERATOR, "equipment")).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "type", EQUALS_OPERATOR, "group")).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "firstName", EQUALS_OPERATOR, STAR)).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "lastName", EQUALS_OPERATOR, STAR)).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "fullName", EQUALS_OPERATOR, STAR)).append(OR);
+        builder.append(String.format(FILTER_FORMAT, "zimbraId", EQUALS_OPERATOR, STAR)).append(")");
         return builder.toString();
+      } else {
+        Collection<String> conversionSet =
+            conversionKeyMap.getOrDefault(key, Collections.singleton(key));
+        if (conversionSet.size() < 1) {
+          throw new UnsupportedOperationException();
+        } else if (conversionSet.size() == 1) {
+          return String.format(FILTER_FORMAT, conversionSet.iterator().next(), operator, value);
+        } else {
+          StringBuilder builder = new StringBuilder(OPEN_PARENTHESIS);
+          for (String convertedKey : conversionSet) {
+            builder.append(String.format(FILTER_FORMAT, convertedKey, operator, value)).append(OR);
+          }
+          builder.setLength(builder.length() - OR.length());
+          builder.append(")");
+          return builder.toString();
+        }
       }
     }
 
