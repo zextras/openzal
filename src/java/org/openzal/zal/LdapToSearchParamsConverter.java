@@ -292,7 +292,7 @@ public class LdapToSearchParamsConverter
   }
 
   public static String convertToQueryString(String ldapQuery) {
-    return convertToQueryString(new HashMap<>(), ldapQuery);
+    return convertToQueryString(new HashMap<String, Collection<String>>(), ldapQuery);
   }
 
   public static SearchParams convertToSearchParams(Map<String, Collection<String>> conversionKeyMap, String ldapQuery) {
