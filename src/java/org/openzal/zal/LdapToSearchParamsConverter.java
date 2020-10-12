@@ -59,9 +59,9 @@ public class LdapToSearchParamsConverter
 
     private final StringBuilder filter;
     private final Deque<Integer> orStack;
-    private final Map<String, Set<String>> conversionKeyMap;
+    private final Map<String, Collection<String>> conversionKeyMap;
 
-    public LdapQueryVisitorConverter(Map<String, Set<String>> conversionKeyMap) {
+    public LdapQueryVisitorConverter(Map<String, Collection<String>> conversionKeyMap) {
       this.conversionKeyMap = conversionKeyMap;
       filter = new StringBuilder();
       orStack = new ArrayDeque<>();
@@ -279,7 +279,7 @@ public class LdapToSearchParamsConverter
     }
   }
 
-  public static String convertToQueryString(Map<String, Set<String>> conversionKeyMap, String ldapQuery) {
+  public static String convertToQueryString(Map<String, Collection<String>> conversionKeyMap, String ldapQuery) {
     try {
       Term term = LdapFilterParser.parse(ldapQuery);
       EntrySearchFilter filter = new EntrySearchFilter(term);
@@ -292,10 +292,10 @@ public class LdapToSearchParamsConverter
   }
 
   public static String convertToQueryString(String ldapQuery) {
-    return convertToQueryString(new HashMap<String, Set<String>>(), ldapQuery);
+    return convertToQueryString(new HashMap<>(), ldapQuery);
   }
 
-  public static SearchParams convertToSearchParams(Map<String, Set<String>> conversionKeyMap, String ldapQuery) {
+  public static SearchParams convertToSearchParams(Map<String, Collection<String>> conversionKeyMap, String ldapQuery) {
     com.zimbra.cs.index.SearchParams searchParams = new com.zimbra.cs.index.SearchParams();
     searchParams.setQueryString(convertToQueryString(conversionKeyMap, ldapQuery));
     return new SearchParams(searchParams);
