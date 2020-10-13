@@ -52,17 +52,6 @@ public abstract class CustomAuth
 
   private void authenticateInternal(Account account, String password, Map<String, Object> context)
   {
-    try
-    {
-      (mProvisioning.toZimbra(LdapProvisioning.class)).zimbraLdapAuthenticate(
-        account.toZimbra(com.zimbra.cs.account.Account.class),
-        password,
-        context
-      );
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
+    mProvisioning.authAccountWithLdap(account, password, context);
   }
 }

@@ -241,5 +241,17 @@ public class Domain extends Entry
   {
     return Arrays.asList(mDomain.getGalAccountId());
   }
+
+  @Nullable
+  public String getSkinLogoAppBanner()
+  {
+    return mDomain.getSkinLogoAppBanner();
+  }
+
+  @Nullable
+  public String getSkinLogoURL()
+  {
+    return mDomain.getSkinLogoURL();
+  }
 }
 
