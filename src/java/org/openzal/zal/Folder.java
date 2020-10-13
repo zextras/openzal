@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.*;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -38,6 +39,7 @@ public class Folder extends Item
   public Folder(@Nonnull Item item)
   {
     super(item);
+    Objects.requireNonNull(mMailItem);
   }
 
   @Nullable
