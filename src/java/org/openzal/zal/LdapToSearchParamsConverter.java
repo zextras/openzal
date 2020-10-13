@@ -50,7 +50,7 @@ public class LdapToSearchParamsConverter
     private static final String CLOSE_PARENTHESIS = ") ";
     private static final String OPEN_NOT = OPEN_PARENTHESIS + "NOT ";
     private static final String CLOSE_NOT = CLOSE_PARENTHESIS;
-    private static final String OR = " OR ";
+    public static final String OR = " OR ";
     public static final String FILTER_FORMAT = "FIELD[%s]%s%s";
     public static final String EQUALS_OPERATOR = ":";
     public static final String STAR = "*";
