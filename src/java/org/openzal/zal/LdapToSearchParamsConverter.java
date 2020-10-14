@@ -121,11 +121,11 @@ public class LdapToSearchParamsConverter
     }
 
     private String formatEndsWith(String key, String value) {
-      return formatEquals(key, value + STAR);
+      return formatEquals(key, STAR + value);
     }
 
     private String formatStartsWith(String key, String value) {
-      return formatEquals(key, STAR + value);
+      return formatEquals(key, value + STAR);
     }
 
     private String formatLessOrEqual(String key, String value) {
