@@ -77,6 +77,7 @@ public class Item implements Comparable<Item>
   public Item(@Nonnull Item item)
   {
     mMailItem = item.mMailItem;
+    Objects.requireNonNull(mMailItem);
   }
 
   public int getId()
