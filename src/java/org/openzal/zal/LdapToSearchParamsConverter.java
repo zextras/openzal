@@ -72,6 +72,10 @@ public class LdapToSearchParamsConverter
       return filter.toString();
     }
 
+    private static String removeRedundantStars(String filter) {
+      return filter.replaceAll("[\\*]+", "*");
+    }
+
     private String formatFilter(String key, String operator, String value) {
       if( "objectClass".equalsIgnoreCase(key) ) {
         StringBuilder builder = new StringBuilder(OPEN_PARENTHESIS);
@@ -99,7 +103,7 @@ public class LdapToSearchParamsConverter
         if (conversionSet.size() < 1) {
           throw new UnsupportedOperationException();
         } else if (conversionSet.size() == 1) {
-          return String.format(FILTER_FORMAT, conversionSet.iterator().next(), operator, value);
+          return removeRedundantStars(String.format(FILTER_FORMAT, conversionSet.iterator().next(), operator, value));
         } else {
           StringBuilder builder = new StringBuilder(OPEN_PARENTHESIS);
           for (String convertedKey : conversionSet) {
@@ -107,7 +111,7 @@ public class LdapToSearchParamsConverter
           }
           builder.setLength(builder.length() - OR.length());
           builder.append(")");
-          return builder.toString();
+          return removeRedundantStars(builder.toString());
         }
       }
     }
@@ -281,7 +285,7 @@ public class LdapToSearchParamsConverter
 
   public static String convertToQueryString(Map<String, Collection<String>> conversionKeyMap, String ldapQuery) {
     try {
-      Term term = LdapFilterParser.parse(ldapQuery);
+      Term term = LdapFilterParser.parse(ldapQuery.replaceAll("\\\\2a", ""));
       EntrySearchFilter filter = new EntrySearchFilter(term);
       LdapQueryVisitorConverter visitor = new LdapQueryVisitorConverter(conversionKeyMap);
       filter.traverse(visitor);
