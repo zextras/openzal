@@ -256,6 +256,7 @@ public class ZalBuilder
       }
 
       case "zal-x": {
+        setup(systemReader);
         buildFromZimbraVersion(sZimbraX, systemReader, false);
         return;
       }
@@ -265,6 +266,7 @@ public class ZalBuilder
     }
 
     if( command.startsWith("zal-") ) {
+      setup(systemReader);
       Version zimbraVersion = new Version(command.substring(4));
       buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard, zimbraVersion), systemReader, false);
       return;
