@@ -167,9 +167,14 @@ public class AuthToken
    * @return tokenId if available. May return <code>null</code> if tokenId is missing.
    */
   public Integer getZimbraTokenId() {
-    if (mAuthToken instanceof ZimbraAuthToken) {
+    if (ZimbraAuthToken.class.isAssignableFrom(mAuthToken.getClass())) {
       ZimbraAuthToken zat = (ZimbraAuthToken) mAuthToken;
-      Integer tokenId = zat.getProperties().getTokenID();
+      Integer tokenId;
+      /* $if ZimbraVersion >= 8.8.9$ */
+      tokenId = zat.getProperties().getTokenID();
+      /* $else $
+      tokenId = -1;
+      /* $endif$ */
       if (tokenId == -1) return null;
       else return tokenId;
     } else {
