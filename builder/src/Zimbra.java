@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Zimbra implements Comparable<Zimbra>
 {
   public Type getType()
@@ -22,6 +24,22 @@ public class Zimbra implements Comparable<Zimbra>
       return -1;
     }
     return mVersion.compareTo(zimbra.mVersion);
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Zimbra zimbra = (Zimbra) o;
+    return mType == zimbra.mType &&
+      mVersion.equals(zimbra.mVersion);
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return Objects.hash(mType, mVersion);
   }
 
 
