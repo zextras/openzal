@@ -1766,6 +1766,33 @@ public class Mailbox
   }
 
   @Nonnull
+  public SearchFolder getSearchFolderById(@Nonnull OperationContext zContext, int id) throws NoSuchFolderException {
+    MailItem folder;
+
+    try
+    {
+      folder = mMbox.getSearchFolderById(zContext.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new SearchFolder(folder);
+  }
+
+  public void modifySearchFolder(OperationContext zContext, int id, String query, String types, String sort) {
+    try
+    {
+      mMbox.modifySearchFolder(zContext.getOperationContext(), id, query, types, sort);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nonnull
   public Tag createTag(@Nonnull OperationContext octxt, String name, @Nonnull Item.Color color)
     throws ZimbraException
   {
