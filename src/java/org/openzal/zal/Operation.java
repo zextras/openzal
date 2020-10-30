@@ -102,6 +102,10 @@ public enum Operation implements Comparable<Operation>
     this.operationCode = operationCode;
   }
 
+  public int opCode() {
+    return operationCode;
+  }
+
   public static Operation fromOperationCode(int code) {
     switch (code) {
       case 1:

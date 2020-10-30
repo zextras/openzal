@@ -20,6 +20,7 @@
 
 package org.openzal.zal.redolog.op;
 
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.Utils;
@@ -33,7 +34,6 @@ import java.lang.reflect.Method;
 
 public class RedoableOp
 {
-
   public static final String REDO_MAGIC     = com.zimbra.cs.redolog.op.RedoableOp.REDO_MAGIC;
   public static final int    UNKNOWN_ID     = com.zimbra.cs.redolog.op.RedoableOp.UNKNOWN_ID;
   public static final int    MAILBOX_ID_ALL = com.zimbra.cs.redolog.op.RedoableOp.MAILBOX_ID_ALL;
@@ -141,6 +141,12 @@ public class RedoableOp
     return new Checkpoint(this);
   }
 
+  @Nonnull
+  public AlterItemTag toAlterItemTag()
+  {
+    return new AlterItemTag(this);
+  }
+
   public boolean isCheckPointOp()
   {
     return mRedoableOp instanceof com.zimbra.cs.redolog.op.Checkpoint;
@@ -150,4 +156,10 @@ public class RedoableOp
   {
     return mRedoableOp.getOperation().getCode();
   }
+
+  public Data extractData() throws Exception {
+    throw new UnsupportedOperationException();
+  }
+
+  public interface Data {}
 }
