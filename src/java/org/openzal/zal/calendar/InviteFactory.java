@@ -376,8 +376,16 @@ public class InviteFactory
       throw new ZimbraException("StartDate can not be in the future if end time is not specified");
     }
 
-    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    ParsedDateTime dateStart;
+    ParsedDateTime dateEnd;
+    if( mAllDayEvent ){
+      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart);
+      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd);
+    }
+    else {
+      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
+      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    }
 
     if (mAllDayEvent || task)
     {
