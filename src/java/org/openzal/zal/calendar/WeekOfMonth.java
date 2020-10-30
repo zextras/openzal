@@ -22,13 +22,15 @@ package org.openzal.zal.calendar;
 
 public enum WeekOfMonth
 {
-  First(1), Second(2), Third(3), Fourth(4), Last(-1);
+  First(1), Second(2), Third(3), Fourth(4), Last(-1), Custom(-256);
 
   private final int mValue;
+  private Integer customValue;
 
   WeekOfMonth(int zimbra)
   {
     mValue = zimbra;
+    customValue = null;
   }
 
   public static WeekOfMonth fromZimbra(int value)
@@ -90,6 +92,14 @@ public enum WeekOfMonth
     }
 
     throw new RuntimeException();
+  }
+
+  public void set(int value) {
+    customValue = value;
+  }
+
+  public int get() {
+    return customValue;
   }
 
 }
