@@ -20,9 +20,13 @@
 
 package org.openzal.zal.redolog.op;
 
+import com.zimbra.cs.redolog.op.DataExtractor;
+import java.io.DataInputStream;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.openzal.zal.Operation;
 import org.openzal.zal.Utils;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
@@ -30,6 +34,7 @@ import org.openzal.zal.redolog.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import org.openzal.zal.redolog.RedoLogOutput.Reader;
 
 
 public class RedoableOp
@@ -101,17 +106,6 @@ public class RedoableOp
     return mRedoableOp.getMailboxId();
   }
 
-  @Nonnull
-  public static RedoableOp deserializeOp(RedoLogInput redoLogInput)
-    throws IOException
-  {
-    return new RedoableOp(
-      com.zimbra.cs.redolog.op.RedoableOp.deserializeOp(
-        redoLogInput.toZimbra(com.zimbra.cs.redolog.RedoLogInput.class)
-      )
-    );
-  }
-
   com.zimbra.cs.redolog.op.RedoableOp getProxiedObject()
   {
     return mRedoableOp;
@@ -141,12 +135,6 @@ public class RedoableOp
     return new Checkpoint(this);
   }
 
-  @Nonnull
-  public AlterItemTag toAlterItemTag()
-  {
-    return new AlterItemTag(this);
-  }
-
   public boolean isCheckPointOp()
   {
     return mRedoableOp instanceof com.zimbra.cs.redolog.op.Checkpoint;
@@ -157,9 +145,15 @@ public class RedoableOp
     return mRedoableOp.getOperation().getCode();
   }
 
-  public Data extractData() throws Exception {
-    throw new UnsupportedOperationException();
+  protected DataInputStream getDataInputStream() throws IOException {
+    return new DataInputStream(getProxiedObject().getInputStream());
   }
 
-  public interface Data {}
+  public void extractData(Map<Integer, RedoLogOutput.Reader> map) throws Exception {
+    DataExtractor.extract(mRedoableOp, new RedoLogOutput(map));
+  }
+
+  public void extractData(RedoLogOutput redoLogOutput) throws Exception {
+    DataExtractor.extract(mRedoableOp, redoLogOutput);
+  }
 }

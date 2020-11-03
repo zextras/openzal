@@ -1090,6 +1090,19 @@ public class Mailbox
     }
   }
 
+  public void alterTag(@Nonnull OperationContext octxt, int itemId, byte type, String tagName, boolean addTag)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.alterTag(octxt.getOperationContext(), itemId, Item.convertType(type), tagName, addTag, null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void setTags(@Nonnull OperationContext octxt, int itemId, byte type, @Nullable Collection<String> tags)
     throws ZimbraException
   {
