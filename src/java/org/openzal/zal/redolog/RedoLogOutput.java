@@ -8,13 +8,13 @@ import java.util.List;
 public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
 
   public interface Reader<T> {
-    void read(T read);
+    void read(int pos, T read);
   }
 
   private final List<Reader> readers;
   public static final Reader SKIP = new Reader() {
     @Override
-    public void read(Object read) {}
+    public void read(int pos, Object read) {}
   };
 
   int counter;
@@ -43,6 +43,10 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
     return this;
   }
 
+  public RedoLogOutput addSkip(int i) {
+    return addReader(i, SKIP);
+  }
+
   @Override
   public void write(byte[] b) throws IOException {
     throw new UnsupportedOperationException();
@@ -50,7 +54,8 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
 
   private void callReader(Object o) {
     if( counter < readers.size() ) {
-      readers.get(counter++).read(o);
+      readers.get(counter).read(counter, o);
+      counter++;
     }
   }
 
