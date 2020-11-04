@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
@@ -40,6 +41,8 @@ import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.redolog.RedoLogManager;
+import com.zimbra.cs.redolog.op.SetConfig;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
@@ -88,6 +91,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.openzal.zal.redolog.RedoLogProvider;
+import org.openzal.zal.redolog.op.RawSetConfig;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
@@ -2856,30 +2861,36 @@ public class Mailbox
 
   public void rawSetConfig(
     @Nonnull String section,
-    @Nonnull String metadata
+    @Nullable String metadata
   )
     throws SQLException, ZimbraException
   {
-    if (metadata.length() > MAX_METADATA_SIZE)
+    if (metadata != null && metadata.length() > MAX_METADATA_SIZE)
     {
       throw new SQLException("metadata is too big to be saved");
     }
 
-    String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
     Connection connection = null;
     PreparedStatement replaceStatement = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
-
-      replaceStatement = connection.prepareStatement(insertQuery);
-      replaceStatement.setInt(1, getId());
-      replaceStatement.setString(2, section);
-      replaceStatement.setString(3, metadata);
+      if (metadata != null) {
+        String query = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        replaceStatement = connection.prepareStatement(query);
+        replaceStatement.setInt(1, getId());
+        replaceStatement.setString(2, section);
+        replaceStatement.setString(3, metadata);
+      } else {
+        String query = "DELETE FROM zimbra.mailbox_metadata WHERE mailbox_id = ? AND section = ?";
+        replaceStatement = connection.prepareStatement(query);
+        replaceStatement.setInt(1, getId());
+        replaceStatement.setString(2, section);
+      }
 
       replaceStatement.executeUpdate();
-
       connection.commit();
+      RedoLogProvider.getRedoLogProvider().getRedoLogManager().commit(new RawSetConfig(getId(), section, metadata));
     }
     finally
     {
