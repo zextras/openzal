@@ -1252,6 +1252,32 @@ public class Mailbox
     }
   }
 
+  public void move(@Nonnull OperationContext octxt, int[] itemIds, byte type, int targetId) throws ZimbraException
+  {
+    try
+    {
+      mMbox.move(octxt.getOperationContext(), itemIds, Item.convertType(type), targetId, null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void createFolderPath(@Nonnull OperationContext octxt, String path) throws ZimbraException
+  {
+    try
+    {
+      mMbox.createFolderForMsgs(octxt.getOperationContext(), path);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+
+
   public int move(@Nonnull Account dstAccount,@Nonnull OperationContext octxt, int itemId, byte type, int targetId)
     throws ZimbraException
   {
