@@ -149,10 +149,6 @@ public class RedoableOp
     return new DataInputStream(getProxiedObject().getInputStream());
   }
 
-  public void extractData(Map<Integer, RedoLogOutput.Reader> map) throws Exception {
-    DataExtractor.extract(mRedoableOp, new RedoLogOutput(map));
-  }
-
   public void extractData(RedoLogOutput redoLogOutput) throws Exception {
     DataExtractor.extract(mRedoableOp, redoLogOutput);
   }

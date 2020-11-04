@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
 
@@ -21,24 +19,17 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
 
   int counter;
 
-  public RedoLogOutput(Map<Integer, Reader> readers) {
+  public RedoLogOutput() {
     super((RandomAccessFile) null);
     this.readers = new ArrayList<>();
-
-    Set<Integer> integers = readers.keySet();
-    int i = 0;
-    for( int j : integers ) {
-      while( i < j ) {
-        this.readers.add(SKIP);
-        i++;
-      }
-      this.readers.add(readers.get(i));
-      i++;
-    }
-    counter = 0;
   }
 
-  public void addReader(int i, Reader reader) {
+  public RedoLogOutput addReader(Reader reader) {
+    readers.add(reader);
+    return this;
+  }
+
+  public RedoLogOutput addReader(int i, Reader reader) {
     int j = readers.size();
     if( j == i ) {
       readers.add(reader);
@@ -49,6 +40,7 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
       }
       readers.add(i, reader);
     }
+    return this;
   }
 
   @Override
