@@ -21,16 +21,17 @@
 package org.openzal.zal.redolog.op;
 
 
-public class CreateSavedSearch
+public class CreateFolder
 {
   private final RedoableOp op;
 
-  public CreateSavedSearch(RedoableOp op)
+  public CreateFolder(RedoableOp op)
   {
     this.op = op;
   }
 
-  public int getSearchId() {
-    return ((com.zimbra.cs.redolog.op.CreateSavedSearch) op.getProxiedObject()).getSearchId();
+  public int getFolderId()
+  {
+    return ((com.zimbra.cs.redolog.op.CreateFolder) op.getProxiedObject()).getFolderId();
   }
 }

@@ -39,7 +39,16 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
   }
 
   public void addReader(int i, Reader reader) {
-    readers.add(i, reader);
+    int j = readers.size();
+    if( j == i ) {
+      readers.add(reader);
+    } else {
+      while( j < i ) {
+        this.readers.add(SKIP);
+        j++;
+      }
+      readers.add(i, reader);
+    }
   }
 
   @Override
@@ -48,7 +57,9 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
   }
 
   private void callReader(Object o) {
-    readers.get(counter++).read(o);
+    if( counter < readers.size() ) {
+      readers.get(counter++).read(o);
+    }
   }
 
   @Override

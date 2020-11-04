@@ -953,6 +953,19 @@ public class Mailbox
     }
   }
 
+  public void delete(@Nonnull OperationContext octxt, int[] itemIds, byte type)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.delete(octxt.getOperationContext(), itemIds, Item.convertType(type), null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void setPermissions(@Nonnull OperationContext zContext, int folderId, @Nonnull Acl acl)
     throws ZimbraException
   {
