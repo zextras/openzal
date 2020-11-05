@@ -1266,6 +1266,7 @@ public class Mailbox
 
   public void createFolderPath(@Nonnull OperationContext octxt, String path) throws ZimbraException
   {
+    /* $if ZimbraVersion >= 8.8.10 $ */
     try
     {
       mMbox.createFolderForMsgs(octxt.getOperationContext(), path);
@@ -1274,6 +1275,7 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
+    /* $endif$ */
   }
 
 
