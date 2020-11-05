@@ -3,10 +3,8 @@ package org.openzal.zal.lucene.search;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.openzal.zal.lucene.document.Document;
-import org.openzal.zal.lucene.document.DocumentId;
-
 import javax.annotation.Nonnull;
+import org.openzal.zal.lucene.document.DocumentId;
 
 public class TopDocs
 {
@@ -53,7 +51,7 @@ public class TopDocs
     /* $if ZimbraVersion >= 8.5.0 $ */
     List<ScoreDoc> scoreDocList = new ArrayList<>();
 
-    for(int i = 0; i < getTotalHits(); i++ )
+    for(int i = 0; i < mTopDocs.getScoreDocs().size(); i++ )
     {
       scoreDocList.add(getScoreDoc(i));
     }
