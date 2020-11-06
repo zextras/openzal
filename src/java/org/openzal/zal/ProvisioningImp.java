@@ -270,6 +270,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
   public static String A_zimbraVirtualHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraVirtualHostname;
+  public static String A_zimbraGalLdapAttrMap                                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLdapAttrMap;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
@@ -303,7 +304,7 @@ public class ProvisioningImp implements Provisioning
 
   public static String A_zimbraPasswordMinLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLength;
   public static String A_zimbraPasswordMaxLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMaxLength;
-  
+
   public static String A_zimbraPasswordEnforceHistory = com.zimbra.cs.account.Provisioning.A_zimbraPasswordEnforceHistory;
   public static String A_zimbraPasswordMinUpperCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinUpperCaseChars;
   public static String A_zimbraPasswordMinLowerCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLowerCaseChars;
