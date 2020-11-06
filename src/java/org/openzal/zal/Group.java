@@ -50,6 +50,14 @@ public class Group extends Entry
     return cls.cast(mGroup);
   }
 
+  public Domain getDomain() {
+    try {
+      return new Domain(mGroup.getDomain());
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Nonnull
   public Set<String> getAllMembersSet()
   {
