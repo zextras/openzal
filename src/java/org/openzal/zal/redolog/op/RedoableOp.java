@@ -20,14 +20,19 @@
 
 package org.openzal.zal.redolog.op;
 
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.redolog.op.DataExtractor;
 import java.io.DataInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.commons.io.IOUtils;
 import org.openzal.zal.Operation;
 import org.openzal.zal.Utils;
+import org.openzal.zal.extension.BootstrapClassLoader;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.redolog.*;
@@ -151,5 +156,55 @@ public class RedoableOp
 
   public void extractData(RedoLogOutput redoLogOutput) throws Exception {
     DataExtractor.extract(mRedoableOp, redoLogOutput);
+  }
+
+  public org.openzal.zal.OperationContext getOperationContext() {
+    return org.openzal.zal.OperationContext.buildFromZimbra(mRedoableOp.getOperationContext());
+  }
+
+  static
+  {
+    try
+    {
+      Method defineClassMethod = ClassLoader.class.getDeclaredMethod(
+          "defineClass", byte[].class, int.class, int.class
+      );
+      defineClassMethod.setAccessible(true);
+
+      InputStream is = null;
+      try
+      {
+        Class<?> parentClass = Class.forName("com.zimbra.cs.redolog.op.RedoableOp");
+        ClassLoader parentClassLoader = parentClass.getClassLoader();
+
+        is = BootstrapClassLoader.class.getResourceAsStream("/com/zimbra/cs/redolog/op/DataExtractor");
+        byte[] buffer = new byte[6 * 1024];
+        int idx = 0;
+        int read = 0;
+        while (read > -1)
+        {
+          idx += read;
+          if (buffer.length == idx)
+          {
+            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+          }
+          read = is.read(buffer, idx, buffer.length - idx);
+        }
+
+        defineClassMethod.invoke(
+            parentClassLoader,
+            buffer, 0, idx
+        );
+      }
+      catch (Exception ignore) {}
+      finally
+      {
+        IOUtils.closeQuietly(is);
+      }
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 }

@@ -30,7 +30,8 @@ public class ZalBuilder
   });
 
   private static List<String> sSkipDotClass = Arrays.asList(
-    "com/zimbra/cs/store/file/VolumeBlobProxy.class"
+    "com/zimbra/cs/store/file/VolumeBlobProxy.class",
+    "com/zimbra/cs/redolog/op/DataExtractor.class"
   );
 
   public static void main(String args[])

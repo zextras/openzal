@@ -49,6 +49,10 @@ public class OperationContext
     mOperationContext = (com.zimbra.cs.mailbox.OperationContext) operationContext;
   }
 
+  public static OperationContext buildFromZimbra(Object operationContext) {
+    return new OperationContext(operationContext);
+  }
+
   @Nonnull
   com.zimbra.cs.mailbox.OperationContext getOperationContext()
   {

@@ -21,16 +21,11 @@
 package com.zimbra.cs.redolog.op;
 
 
-import com.zimbra.cs.mailbox.MailboxOperation;
 import com.zimbra.cs.redolog.RedoLogOutput;
 import java.io.IOException;
 
-public abstract class DataExtractor extends RedoableOp
+public class DataExtractor
 {
-  private DataExtractor(MailboxOperation op) {
-    super(op);
-  }
-
   public static void extract(RedoableOp redoableOp, RedoLogOutput out) throws IOException {
     redoableOp.serializeData(out);
   }
