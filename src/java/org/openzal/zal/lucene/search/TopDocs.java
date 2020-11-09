@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.openzal.zal.lucene.document.DocumentId;
+import org.openzal.zal.lucene.document.Document;
 
 public class TopDocs
 {
