@@ -200,6 +200,14 @@ public class Mailbox
     );
   }
 
+  public void deleteFromDumpster(OperationContext newOperationContext, int[] ids) {
+    try {
+      mMbox.deleteFromDumpster(newOperationContext.getOperationContext(), ids);
+    } catch( ServiceException e ) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   static class FakeMailbox extends com.zimbra.cs.mailbox.Mailbox
   {
     public FakeMailbox(@Nonnull com.zimbra.cs.account.Account account)
@@ -945,6 +953,14 @@ public class Mailbox
     }
   }
 
+  public void renameMailbox(OperationContext operationContext, String oldName, String newName) {
+    try {
+      mMbox.renameMailbox(operationContext.getOperationContext(), oldName, newName);
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void delete(@Nonnull OperationContext octxt, int itemId, byte type)
     throws ZimbraException
   {
@@ -1257,6 +1273,23 @@ public class Mailbox
     try
     {
       mMbox.move(octxt.getOperationContext(), itemIds, Item.convertType(type), targetId, null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<Item> copy(@Nonnull OperationContext octxt, int[] itemIds, byte type, int targetId) throws ZimbraException
+  {
+    try
+    {
+      List<MailItem> copiedItems = mMbox.copy(octxt.getOperationContext(), itemIds, Item.convertType(type), targetId);
+      List<Item> result = new ArrayList<>(copiedItems.size());
+      for( MailItem mailItem : copiedItems ) {
+        result.add(new Item(mailItem));
+      }
+      return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -3056,6 +3089,22 @@ public class Mailbox
         throw ExceptionWrapper.wrap(e);
       }
       throw new RuntimeException(e);
+    }
+  }
+
+  public void purgeImapDeleted(OperationContext operationContext) {
+    try{
+      mMbox.purgeImapDeleted(operationContext.getOperationContext());
+    } catch( ServiceException e ) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void setFolderUrl(OperationContext operationContext, int folderId, String url) {
+    try{
+      mMbox.setFolderUrl(operationContext.getOperationContext(), folderId, url);
+    } catch( ServiceException e ) {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 }
