@@ -253,5 +253,14 @@ public class Domain extends Entry
   {
     return mDomain.getSkinLogoURL();
   }
+
+  public String getAuthMech() {
+    return mDomain.getAuthMech();
+  }
+
+  public String getAuthMechAdmin() {
+    return mDomain.getAuthMechAdmin();
+  }
+
 }
 

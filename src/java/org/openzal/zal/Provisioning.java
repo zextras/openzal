@@ -88,6 +88,9 @@ public interface Provisioning
   void authAccountWithLdap(@Nonnull Account account, String password, Map<String, Object> context)
     throws ZimbraException;
 
+  void authAccountSkippingCustom(@Nonnull Account account, String password, Map<String, Object> context, @Nullable String customName)
+      throws ZimbraException;
+
   Account getAccountByAccountIdOrItemId(String id);
 
   @Nullable
