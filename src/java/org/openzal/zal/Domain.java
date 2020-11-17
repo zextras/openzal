@@ -33,9 +33,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Domain extends Entry
 {
+  public static final String HTTPS = "https";
+  public static final String HTTP = "http";
   @Nonnull private final com.zimbra.cs.account.Domain mDomain;
 
   public Domain(@Nonnull Object domain)
@@ -180,7 +183,7 @@ public class Domain extends Entry
   @Nullable
   public String getPublicHostname()
   {
-    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
+    return mDomain.getPublicServiceHostname();
   }
 
   @Override
@@ -206,9 +209,9 @@ public class Domain extends Entry
   }
 
   @Nullable
-  public String getPublicProtocol()
-  {
-    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceProtocol, null);
+  public String getPublicProtocol() {
+    return Optional.ofNullable(mDomain.getPublicServiceProtocol())
+        .orElse(HTTPS);
   }
 
   private String defaultPortForProtocol(String protocol)
@@ -219,22 +222,24 @@ public class Domain extends Entry
     }
     switch( protocol.toLowerCase() )
     {
-      case "https":
+      case HTTPS:
         return "443";
-      case "http":
-        return "80";
+      case HTTP:
       default:
-        return null;
+        return "80";
     }
   }
 
   @Nullable
   public String getPublicPort()
   {
-    return mDomain.getAttr(
-      ProvisioningImp.A_zimbraPublicServicePort,
-      defaultPortForProtocol(getPublicProtocol())
-    );
+    int publicServicePort = mDomain.getPublicServicePort();
+    if (publicServicePort > 0) {
+      return String.valueOf(publicServicePort);
+    }
+    else {
+      return String.valueOf(defaultPortForProtocol(getPublicProtocol()));
+    }
   }
 
   public List<String> getGalAccountIds()
