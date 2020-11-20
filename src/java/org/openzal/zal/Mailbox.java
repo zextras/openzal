@@ -1638,13 +1638,13 @@ public class Mailbox
     /* $endif $ */
   }
 
-  public void clearFolderCache() throws ZimbraException
+  public void clearCache(byte type) throws ZimbraException
   {
     /* $if ZimbraX == 1 $
     try
     {
     /* $endif $ */
-      mMbox.purge(Item.convertType(Item.TYPE_FOLDER));
+      mMbox.purge(Item.convertType(type));
     /* $if ZimbraX == 1 $
     }
     catch( ServiceException e )
