@@ -1638,6 +1638,22 @@ public class Mailbox
     /* $endif $ */
   }
 
+  public void clearFolderCache() throws ZimbraException
+  {
+    /* $if ZimbraX == 1 $
+    try
+    {
+    /* $endif $ */
+      mMbox.purge(Item.convertType(Item.TYPE_FOLDER));
+    /* $if ZimbraX == 1 $
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
+  }
+
 
   @Nonnull
   public QueryResults search(
