@@ -21,22 +21,72 @@
 package org.openzal.zal.redolog;
 
 
-import javax.annotation.Nonnull;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.redolog.RedoConfig;
+import com.zimbra.cs.redolog.op.RedoableOp;
+import java.io.File;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import org.openzal.zal.Utils;
+import org.openzal.zal.log.ZimbraLog;
 
-public class RedoLogProvider
-{
-  private final com.zimbra.cs.redolog.RedoLogProvider mRedologProvider;
+public class RedoLogProvider extends com.zimbra.cs.redolog.RedoLogProvider {
 
-  public RedoLogProvider()
-  {
-    mRedologProvider = com.zimbra.cs.redolog.RedoLogProvider.getInstance();
+  private final AtomicReference<RedoLogListenerManager> redoLogListenerManagerRef;
+
+  public RedoLogProvider() throws ServiceException {
+    redoLogListenerManagerRef = new AtomicReference<>();
+    super.mRedoLogManager = new RedoLogManager();
   }
 
-  @Nonnull
-  public RedoLogManager getRedoLogManager()
-  {
-    return new RedoLogManager(
-      mRedologProvider.getRedoLogManager()
-    );
+  @Override
+  public boolean isMaster() {
+    return true;
+  }
+
+  @Override
+  public boolean isSlave() {
+    return false;
+  }
+
+  @Override
+  public void startup() {}
+
+  @Override
+  public void shutdown() {}
+
+  @Override
+  public void initRedoLogManager() {
+  }
+
+  public static RedoLogProvider getRedoLogProvider() {
+    return (RedoLogProvider) com.zimbra.cs.redolog.RedoLogProvider.getInstance();
+  }
+
+  public void setListener(RedoLogListenerManager redoLogListenerManager) {
+    redoLogListenerManagerRef.set(redoLogListenerManager);
+  }
+
+  public void removeListener() {
+    redoLogListenerManagerRef.set(null);
+  }
+
+  public class RedoLogManager extends com.zimbra.cs.redolog.RedoLogManager {
+
+    @Override
+    public void commit(RedoableOp op) {
+      try {
+        if (Objects.nonNull(redoLogListenerManagerRef.get())) {
+          redoLogListenerManagerRef.get().commit(new org.openzal.zal.redolog.op.RedoableOp(op));
+        }
+      } catch (Throwable e) {
+        ZimbraLog.mailbox.error(Utils.exceptionToString(e));
+      }
+      super.commit(op);
+    }
+
+    public RedoLogManager() {
+      super(new File(com.zimbra.cs.redolog.RedoConfig.redoLogPath()), new File(RedoConfig.redoLogArchiveDir()), true);
+    }
   }
 }
