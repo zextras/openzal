@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.auth.AuthContext;
+import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
@@ -671,13 +672,29 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public void authAccountWithLdap(@Nonnull Account account,
-      String password, Map<String, Object> context) throws ZimbraException {
-    try
-    {
+  public void authAccountWithLdap(@Nonnull Account account, String password, Map<String, Object> context) throws ZimbraException {
+    try {
+      if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
+        ((LdapProvisioning) mProvisioning)
+            .zimbraLdapAuthenticate(
+                account.toZimbra(com.zimbra.cs.account.Account.class), password, context);
+      } else {
+        mProvisioning.authAccount(
+            account.toZimbra(com.zimbra.cs.account.Account.class),
+            password,
+            (AuthContext.Protocol) context.get("proto"));
+      }
+    }
+    catch( ServiceException e ) {
+        throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void authAccountSkippingCustom(@Nonnull Account account,
+      String password, @Nonnull Map<String, Object> context, @Nullable String customName) throws ZimbraException {
+    try {
       String proto = context.get("proto").toString();
-      switch (proto)
-      {
+      switch (proto) {
         case "client_certificate":
           context.put("proto", AuthContext.Protocol.client_certificate);
         case "http_basic":
@@ -704,19 +721,57 @@ public class ProvisioningImp implements Provisioning
           context.put("proto", AuthContext.Protocol.http_basic);
       }
       if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
-        ((LdapProvisioning) mProvisioning).zimbraLdapAuthenticate(
-                account.toZimbra(com.zimbra.cs.account.Account.class), password, context);
+        final Domain domain = requiredDomain(account);
+        final AuthMechanism authMechanism = AuthMechanism.newInstance(account.toZimbra(com.zimbra.cs.account.Account.class), context);
+        if(Objects.nonNull(customName) && authMechanism.getMechanism() == AuthMechanism.AuthMech.custom) {
+          customName = customName.startsWith(AuthMechanism.AuthMech.custom.name()+":") ?
+              customName :
+              String.format("%s:%s",AuthMechanism.AuthMech.custom.name(),customName);
+          if(!customName.equalsIgnoreCase(getAuthMechForDomain(domain, context))) {
+            doAuth(authMechanism, account, password, context);
+            return;
+          }
+        }
+        else {
+          doAuth(authMechanism, account, password, context);
+          return;
+        }
       }
-      else {
-        mProvisioning.authAccount(account.toZimbra(com.zimbra.cs.account.Account.class), password,
-            (AuthContext.Protocol) context.get("proto"));
-      }
+      authAccountWithLdap(account, password, context);
     }
     catch( ServiceException e )
     {
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  private String getAuthMechForDomain(Domain domain, Map<String, Object> context) {
+    String authMech = domain.getAuthMech();
+    final String authMechAdmin = domain.getAuthMechAdmin();
+    Object isAdminObj = context.get(AuthContext.AC_AS_ADMIN);
+    if (Objects.nonNull(isAdminObj) && ((Boolean)isAdminObj)) {
+      if(Objects.nonNull(authMechAdmin)) {
+        authMech = authMechAdmin;
+      }
+    }
+    return authMech;
+  }
+
+  private Domain requiredDomain(Account account) {
+    return Objects.requireNonNull(getDomain(account), String.format("missing domain for %s", account.getName()));
+  }
+
+  private void doAuth(AuthMechanism mechanism, Account account, String password, Map<String, Object> context)
+      throws ServiceException {
+    mechanism.doAuth(
+        (LdapProvisioning)mProvisioning,
+        requiredDomain(account).toZimbra(com.zimbra.cs.account.Domain.class),
+        account.toZimbra(com.zimbra.cs.account.Account.class),
+        password,
+        context
+    );
+  }
+
 
   @Override
   public Account getAccountByAccountIdOrItemId(String id)
