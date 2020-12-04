@@ -1,14 +1,9 @@
 package org.openzal.zal;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
-import com.zimbra.cs.account.ldap.LdapProvisioning;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public abstract class CustomAuth
 {
