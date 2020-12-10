@@ -836,16 +836,6 @@ public class Invite
   {
     mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
     mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
-    try
-    {
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getCancelSubject(getSubject(), getLocaleForAccount(account));
   }
 
@@ -876,17 +866,6 @@ public class Invite
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
     mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_DECLINED);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_DECLINE, getSubject(), getLocaleForAccount(account));
   }
 
@@ -895,17 +874,6 @@ public class Invite
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
     mInvite.setStatus(IcalXmlStrMap.STATUS_TENTATIVE);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_TENTATIVE);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_TENTATIVE, getSubject(), getLocaleForAccount(account));
   }
 
@@ -914,17 +882,6 @@ public class Invite
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
     mInvite.setStatus(IcalXmlStrMap.STATUS_CONFIRMED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_ACCEPTED);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_ACCEPT, getSubject(), getLocaleForAccount(account));
   }
 
