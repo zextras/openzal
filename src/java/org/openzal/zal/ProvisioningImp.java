@@ -937,6 +937,16 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Nullable
+  @Override
+  public Domain getDomainByVirtualHostname(String host) throws ZimbraException {
+    try {
+      return new Domain(mProvisioning.getDomainByVirtualHostname(host));
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   @Nonnull
   public Zimlet getZimlet(String zimletName)

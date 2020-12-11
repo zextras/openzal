@@ -119,6 +119,10 @@ public interface Provisioning
   Domain getDomainById(String domainId)
     throws ZimbraException;
 
+  @Nullable
+  Domain getDomainByVirtualHostname(String host)
+    throws ZimbraException;
+
   List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
       throws ZimbraException;
 
