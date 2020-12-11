@@ -343,6 +343,8 @@ public interface Provisioning
 
   List<Account> getAllDelegatedAdminAccounts() throws ZimbraException;
 
+  void visitAllDelegatedAdminAccounts(SimpleVisitor<Account> visitor) throws ZimbraException;
+
   @Nullable
   Group getGroupById(String dlStr)
     throws ZimbraException;
