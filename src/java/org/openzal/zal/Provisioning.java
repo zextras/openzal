@@ -119,6 +119,10 @@ public interface Provisioning
   Domain getDomainById(String domainId)
     throws ZimbraException;
 
+  @Nullable
+  Domain getDomainByVirtualHostname(String host)
+    throws ZimbraException;
+
   List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
       throws ZimbraException;
 
@@ -338,6 +342,8 @@ public interface Provisioning
   void setZimletPriority(String zimletName, int priority);
 
   List<Account> getAllDelegatedAdminAccounts() throws ZimbraException;
+
+  void visitAllDelegatedAdminAccounts(SimpleVisitor<Account> visitor) throws ZimbraException;
 
   @Nullable
   Group getGroupById(String dlStr)
