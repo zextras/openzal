@@ -39,6 +39,7 @@ import org.openzal.zal.log.ZimbraLog;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.openzal.zal.redolog.RedoLogProvider;
 
 public class Zimbra
 {
@@ -217,6 +218,22 @@ public Zimbra(Zimbra zimbra)
     }
   }
 
+  private static Field sRedoLogProviderInstance;
+
+  static
+  {
+    try
+    {
+      sRedoLogProviderInstance = com.zimbra.cs.redolog.RedoLogProvider.class.getDeclaredField("theInstance");
+      sRedoLogProviderInstance.setAccessible(true);
+    }
+    catch (Throwable ex)
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
+      throw new RuntimeException(ex);
+    }
+  }
+
   public boolean removeExtension(String extensionName)
   {
     try
@@ -256,6 +273,20 @@ public Zimbra(Zimbra zimbra)
     overrideZimbraStoreManager(
       mStoreManager
     );
+  }
+
+  public void overrideZimbraRedoLogProvider(RedoLogProvider redoLogProvider)
+  {
+    ZimbraLog.extensions.info("ZAL override Zimbra RedoLog");
+    try
+    {
+      sRedoLogProviderInstance.set(null, redoLogProvider);
+    }
+    catch( IllegalAccessException e )
+    {
+      ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(e));
+      throw new RuntimeException(e);
+    }
   }
 
   public void overrideZimbraStoreManager(StoreManager storeManager)
