@@ -48,9 +48,7 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
   }
 
   @Override
-  public void write(byte[] b) throws IOException {
-    throw new UnsupportedOperationException();
-  }
+  public void write(byte[] b) throws IOException {}
 
   private void callReader(Object o) {
     if( counter < readers.size() ) {
