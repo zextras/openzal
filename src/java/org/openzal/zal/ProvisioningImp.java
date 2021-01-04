@@ -937,6 +937,22 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  @Nullable
+  @Override
+  public Domain getDomainByVirtualHostname(String host) throws ZimbraException {
+    try {
+      com.zimbra.cs.account.Domain domain = mProvisioning.getDomainByVirtualHostname(host);
+      if (domain == null) {
+        return null;
+      } else {
+        return new Domain(domain);
+      }
+    }
+    catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Override
   @Nonnull
   public Zimlet getZimlet(String zimletName)
@@ -2445,6 +2461,33 @@ public class ProvisioningImp implements Provisioning
     }
 
     return ZimbraListWrapper.wrapAccounts(entryList);
+  }
+
+  public void visitAllDelegatedAdminAccounts(SimpleVisitor<Account> visitor) throws ZimbraException
+  {
+    List<NamedEntry> entryList;
+    SearchDirectoryOptions opts = new SearchDirectoryOptions();
+    ZLdapFilterFactory zLdapFilterFactory = ZLdapFilterFactory.getInstance();
+    try
+    {
+      ZLdapFilter filter = zLdapFilterFactory.andWith(
+          ZLdapFilterFactory.getInstance().fromFilterString(
+              ZLdapFilterFactory.FilterId.ALL_ACCOUNTS_ONLY,
+              zLdapFilterFactory.equalityFilter(A_zimbraIsDelegatedAdminAccount, "TRUE", true)
+          ),
+          ZLdapFilterFactory.getInstance().fromFilterString(
+              ZLdapFilterFactory.FilterId.ALL_ACCOUNTS_ONLY,
+              zLdapFilterFactory.equalityFilter(A_zimbraAccountStatus, "active", true)
+          )
+      );
+      opts.setFilter(filter);
+      opts.setTypes(SearchDirectoryOptions.ObjectType.accounts);
+      mProvisioning.searchDirectory(opts, new ZimbraVisitorWrapper<>(visitor, mNamedEntryAccountWrapper));
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Override
