@@ -4,6 +4,7 @@ package org.openzal.zal;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
+import org.openzal.zal.lib.ZimbraDatabase;
 
 public class MailboxData
 {
@@ -16,7 +17,7 @@ public class MailboxData
   {
     this(
       mailboxid,
-      (short) (((mailboxid - 1) % 100) + 1),
+      (short) ZimbraDatabase.getMailboxGroupFromMailboxId(mailboxid),
       null,
       null
     );
@@ -49,7 +50,7 @@ public class MailboxData
   {
     this(
       mailboxId,
-      (short) (((mailboxId - 1) % 100) + 1),
+      (short) ZimbraDatabase.getMailboxGroupFromMailboxId(mailboxId),
       accountId,
       null
     );
