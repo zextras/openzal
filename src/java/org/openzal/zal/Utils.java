@@ -35,6 +35,10 @@ import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zimlet.ZimletException;
 import com.zimbra.cs.zimlet.ZimletUtil;
+import com.zimbra.soap.admin.message.FlushCacheRequest;
+import com.zimbra.soap.admin.type.CacheEntrySelector;
+import com.zimbra.soap.admin.type.CacheEntrySelector.CacheEntryBy;
+import com.zimbra.soap.admin.type.CacheSelector;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +50,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.http.HttpResponse;
+import org.apache.http.concurrent.FutureCallback;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -58,6 +64,8 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import org.openzal.zal.log.ZimbraLog;
+import org.openzal.zal.soap.SoapTransport;
 
 public abstract class Utils
 {
@@ -468,5 +476,32 @@ public abstract class Utils
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public static void flushAllServersCache(SoapTransport soapTransport, List<String> accounts)
+      throws IOException {
+    CacheSelector cacheSelector = new CacheSelector();
+    cacheSelector.setAllServers(true);
+    cacheSelector.setTypes(CacheEntryType.account.name());
+    if (accounts != null && !accounts.isEmpty()) {
+      List<CacheEntrySelector> entries = new ArrayList<>(accounts.size());
+      for (String account : accounts) {
+        entries.add(new CacheEntrySelector(CacheEntryBy.id, account));
+      }
+      cacheSelector.setEntries(entries);
+    }
+    FlushCacheRequest request = new FlushCacheRequest(cacheSelector);
+    soapTransport.invokeAsync(request, new FutureCallback<HttpResponse>() {
+      @Override
+      public void completed(HttpResponse httpResponse) {}
+
+      @Override
+      public void failed(Exception e) {
+        ZimbraLog.mailbox.warn(Utils.exceptionToString(e));
+      }
+
+      @Override
+      public void cancelled() {}
+    });
   }
 }
