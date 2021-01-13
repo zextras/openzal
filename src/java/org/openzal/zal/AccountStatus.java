@@ -37,6 +37,7 @@ public class AccountStatus
   @Nonnull private final ZAttrProvisioning.AccountStatus mAccountStatus;
 
   public static AccountStatus maintenance = new AccountStatus(ZAttrProvisioning.AccountStatus.maintenance);
+  public static AccountStatus active = new AccountStatus(ZAttrProvisioning.AccountStatus.active);
 
   protected AccountStatus(@Nonnull Object accountStatus)
   {
