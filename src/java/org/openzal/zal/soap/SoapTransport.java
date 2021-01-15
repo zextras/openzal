@@ -25,8 +25,10 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
 import java.util.Map;
 import javax.annotation.Nonnull;
+/* $if ZimbraVersion > 8.8.2 $ */
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
+/*$endif$ */
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -134,6 +136,7 @@ public class SoapTransport
     customHeaders.put(header, value);
   }
 
+  /* $if ZimbraVersion > 8.8.2 $ */
   public void invokeAsync(Object requestObject, FutureCallback<HttpResponse> callback) throws IOException {
     try  {
       Element req = JaxbUtil.jaxbToElement(requestObject, SoapProtocol.Soap12.getFactory());
@@ -142,4 +145,5 @@ public class SoapTransport
       throw ExceptionWrapper.wrap(e);
     }
   }
+   /*$endif$ */
 }

@@ -50,8 +50,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+/* $if ZimbraVersion > 8.8.2 $ */
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
+/*$endif$*/
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -491,6 +493,7 @@ public abstract class Utils
       cacheSelector.setEntries(entries);
     }
     FlushCacheRequest request = new FlushCacheRequest(cacheSelector);
+    /* $if ZimbraVersion > 8.8.2 $ */
     soapTransport.invokeAsync(request, new FutureCallback<HttpResponse>() {
       @Override
       public void completed(HttpResponse httpResponse) {}
@@ -503,5 +506,8 @@ public abstract class Utils
       @Override
       public void cancelled() {}
     });
+    /* $else$
+    soapTransport.invoke(request);
+    /*$endif $*/
   }
 }
