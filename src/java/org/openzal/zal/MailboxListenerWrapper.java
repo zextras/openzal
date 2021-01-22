@@ -4,6 +4,7 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailboxOperation;
 import com.zimbra.cs.session.PendingModifications;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.openzal.zal.ItemChange.ChangeType;
 import org.openzal.zal.lib.Clock;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.redolog.Redolog;
@@ -178,7 +179,7 @@ public abstract class MailboxListenerWrapper
               {
                 Item what = new Item(whatObj);
                 itemChange = new ItemChange(
-                  false,
+                  ChangeType.CREATED,
                   what.getFolderId(),
                   what.getId(),
                   what.getModifiedSequence(),
@@ -199,7 +200,7 @@ public abstract class MailboxListenerWrapper
                 {
                   Item item = new Item(change.what);
                   itemChange = new ItemChange(
-                    false,
+                    ChangeType.MODIFIED,
                     item.getFolderId(),
                     item.getId(),
                     item.getModifiedSequence(),
@@ -210,7 +211,7 @@ public abstract class MailboxListenerWrapper
                 {
                   ZimbraLog.mailbox.debug(" Unable to obtain modification information");
                   itemChange = new ItemChange(
-                    false,
+                    ChangeType.MODIFIED,
                     0,
                     mod.getItemId(),
                     0,
@@ -230,7 +231,7 @@ public abstract class MailboxListenerWrapper
               if( toBackup( change.what ))
               {
                 itemChange = new ItemChange(
-                  true,
+                  ChangeType.DELETED,
                   0,
                   mod.getItemId(),
                   0,
