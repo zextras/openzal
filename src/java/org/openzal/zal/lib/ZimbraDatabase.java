@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.Connection;
 import org.openzal.zal.Item;
+import org.openzal.zal.LocalConfig;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -286,6 +287,6 @@ public class ZimbraDatabase
 
   public static int getMailboxGroupFromMailboxId(int mailboxId)
   {
-    return (((mailboxId - 1) % 100) + 1);
+    return (((mailboxId - 1) % LocalConfig.getInt(LocalConfig.zimbra_mailbox_groups)) + 1);
   }
 }
