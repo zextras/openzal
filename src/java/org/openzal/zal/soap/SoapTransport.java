@@ -46,6 +46,10 @@ public class SoapTransport
     mSoapHttpTransport = new SoapHttpTransport(adminUrl);
   }
 
+  public void shutdown() {
+    mSoapHttpTransport.shutdown();
+  }
+
   public void setAuthToken(ZAuthToken authToken)
   {
     mSoapHttpTransport.setAuthToken(

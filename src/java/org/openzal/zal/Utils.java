@@ -480,7 +480,7 @@ public abstract class Utils
     }
   }
 
-  public static void flushAllServersCache(SoapTransport soapTransport, List<String> accounts)
+  public static void flushAllServersCache(final SoapTransport soapTransport, List<String> accounts)
       throws IOException {
     CacheSelector cacheSelector = new CacheSelector();
     cacheSelector.setAllServers(true);
@@ -496,18 +496,27 @@ public abstract class Utils
     /* $if ZimbraVersion > 8.8.2 $ */
     soapTransport.invokeAsync(request, new FutureCallback<HttpResponse>() {
       @Override
-      public void completed(HttpResponse httpResponse) {}
+      public void completed(HttpResponse httpResponse) {
+        soapTransport.shutdown();
+      }
 
       @Override
       public void failed(Exception e) {
         ZimbraLog.mailbox.warn(Utils.exceptionToString(e));
+        soapTransport.shutdown();
       }
 
       @Override
-      public void cancelled() {}
+      public void cancelled() {
+        soapTransport.shutdown();
+      }
     });
     /* $else$
-    soapTransport.invoke(request);
+    try {
+      soapTransport.invoke(request);
+    } finally {
+      soapTransport.shutdown();
+    }
     /*$endif $*/
   }
 }
