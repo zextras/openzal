@@ -1,0 +1,1140 @@
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.0/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.1/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.2/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.3/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.4/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.5/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.6/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.7/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.8/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.0.9/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.0.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.0/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.5.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.5.1/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.5.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.6.0/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.6.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.0/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.1/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.1;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.10/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.11/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.2/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.3/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.4/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.5/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.6/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.7/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.7.9/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.7.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.10/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.10;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.11/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.11;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.12/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.12;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.15/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.15;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.2/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.2;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.3/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.3;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.4/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.4;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.5/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.5;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.6/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.6;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.7/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.7;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.8/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.8;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/8.8.9/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=8.8.9;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/9.0.0/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=9.0.0;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbraclient.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbraclient -Dversion=x;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbra-native.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-native -Dversion=x;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbra-charset.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbra-charset -Dversion=x;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbracommon.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbracommon -Dversion=x;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbrastore.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrastore -Dversion=x;
+mvn deploy:deploy-file \
+-Durl=file://zimbra-repo \
+-Dfile=zimbra/x/jars/zimbrasoap.jar \
+-Dpackaging=jar \
+-DgroupId=com.zextras -DartifactId=zimbrasoap -Dversion=x;

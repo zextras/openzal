@@ -416,7 +416,7 @@ public class ZalBuilder
     Build build = new Build(
       Build.JavaVersion.Java7,
       Arrays.asList("lib/", "../zm-zcs-lib/", "../zm-mailbox/" ),
-      Arrays.asList("src/java/"),
+      Arrays.asList("src/main/java/"),
       Collections.emptyList(),
       Collections.emptyList(),
       Collections.emptyList(),
@@ -434,7 +434,7 @@ public class ZalBuilder
     Build build = new Build(
       Build.JavaVersion.Java7,
       Arrays.asList("lib/", "/opt/zimbra/lib/jars/", "/opt/zimbra/common/jetty_home/lib/" ),
-      Arrays.asList("src/java/"),
+      Arrays.asList("src/main/java/"),
       Collections.emptyList(),
       Collections.emptyList(),
       Collections.emptyList(),
@@ -456,7 +456,7 @@ public class ZalBuilder
     Build build = new Build(
       Build.JavaVersion.Java7,
       Arrays.asList("lib/", "zimbra/"+zimbra+"/jars/"),
-      Arrays.asList("src/java/"),
+      Arrays.asList("src/main/java/"),
       Collections.emptyList(),
       Collections.emptyList(),
       Collections.emptyList(),
@@ -556,7 +556,7 @@ public class ZalBuilder
 
     if (sGitCheck.get()) {
       TemplateWriter writer = new TemplateWriter(
-        "src/java/org/openzal/zal/ZalBuildInfo.java",
+        "src/main/java/org/openzal/zal/ZalBuildInfo.java",
         "package org.openzal.zal;\n" +
           "\n" +
           "public class ZalBuildInfo\n" +
