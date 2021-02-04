@@ -6,155 +6,85 @@
 
   <groupId>com.zextras</groupId>
   <artifactId>open-zal</artifactId>
-  <version>0.1</version>
-  <packaging>jar</packaging>
+  <version>0.0.1</version>
+  <packaging>pom</packaging>
 
   <properties>
     <zimbra.version>8.8.15</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <junit.version>4.13.1</junit.version>
-    <jetty-version>9.3.5.v20151012</jetty-version>
-    <jfreechart.version>1.0.15</jfreechart.version>
-    <servlet.version>3.1.0</servlet.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <commit.id>0</commit.id>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>3.0.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>1.4</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-dbutils</groupId>
+        <artifactId>commons-dbutils</artifactId>
+        <version>1.6</version>
+      </dependency>
+
+      <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>1.5.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>1.4.5</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.unboundid</groupId>
+        <artifactId>unboundid-ldapsdk</artifactId>
+        <version>2.3.5</version>
+      </dependency>
+
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.16</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>3.0.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>javax.activation-api</artifactId>
-      <version>1.2.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-http</artifactId>
-      <version>${jetty-version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-continuation</artifactId>
-      <version>${jetty-version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.zextras</groupId>
-      <artifactId>zimbracommon</artifactId>
-      <version>${zimbra.version}</version>
+      <artifactId>zimbra-preprocessor</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
     </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zimbracommon</artifactId>
-      <version>${zimbra.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zimbraclient</artifactId>
-      <version>${zimbra.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zimbra-native</artifactId>
-      <version>${zimbra.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zimbrastore</artifactId>
-      <version>${zimbra.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zimbrasoap</artifactId>
-      <version>${zimbra.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>${servlet.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>13.0.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.4</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-dbutils</groupId>
-      <artifactId>commons-dbutils</artifactId>
-      <version>1.6</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
-      <version>${jfreechart.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.5.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>javax.mail-api</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.unboundid</groupId>
-      <artifactId>unboundid-ldapsdk</artifactId>
-      <version>2.3.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <repositories>
@@ -165,385 +95,118 @@
     </repository>
   </repositories>
 
-  <profiles>
-    <profile>
-      <id>zimbra-8.0.0</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.0</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.2.z4</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>com.zextras.PreprocessMain</mainClass>
+          <arguments>
+            <argument>${project.basedir}/core/src/main/java</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
 
-    <profile>
-      <id>zimbra-8.0.1</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.1</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.2.z4</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <archive>
+              <index>true</index>
+              <manifest>
+                <addClasspath>true</addClasspath>
+              </manifest>
+              <manifestEntries>
+                <Specification-Title>Zimbra Abstraction Layer</Specification-Title>
+                <Specification-Version>${project.version}</Specification-Version>
+                <Specification-Commit>${commit.id}</Specification-Commit>
+                <Specification-Vendor>ZeXtras</Specification-Vendor>
+                <Implementation-Version>${zimbra.version}</Implementation-Version>
+                <Created-By>ZeXtras</Created-By>
+                <Zimbra-Extension-Class>org.openzal.zal.extension.ZalEntrypointImpl
+                </Zimbra-Extension-Class>
+              </manifestEntries>
+            </archive>
+            <excludes>
+              <exclude>com/zimbra/cs/store/file/VolumeBlobProxy.class</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.coderplus.maven.plugins</groupId>
+          <artifactId>copy-rename-maven-plugin</artifactId>
+          <version>1.0.1</version>
+          <executions>
+            <execution>
+              <phase>compile</phase>
+              <goals>
+                <goal>copy</goal>
+              </goals>
+              <configuration>
+                <sourceFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy.class</sourceFile>
+                <destinationFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy</destinationFile>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
-    <profile>
-      <id>zimbra-8.0.2</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.2</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.2.z4</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
+  <modules>
+    <module>open-zal-8.0.0</module>
+    <module>open-zal-8.0.1</module>
+    <module>open-zal-8.0.2</module>
+    <module>open-zal-8.0.3</module>
+    <module>open-zal-8.0.4</module>
+    <module>open-zal-8.0.5</module>
+    <module>open-zal-8.0.6</module>
+    <module>open-zal-8.0.7</module>
+    <module>open-zal-8.0.8</module>
+    <module>open-zal-8.0.9</module>
+    <module>open-zal-8.5.0</module>
+    <module>open-zal-8.5.1</module>
+    <module>open-zal-8.6.0</module>
+    <module>open-zal-8.7.0</module>
+    <module>open-zal-8.7.1</module>
+    <module>open-zal-8.7.10</module>
+    <module>open-zal-8.7.11</module>
+    <module>open-zal-8.7.2</module>
+    <module>open-zal-8.7.3</module>
+    <module>open-zal-8.7.4</module>
+    <module>open-zal-8.7.5</module>
+    <module>open-zal-8.7.6</module>
+    <module>open-zal-8.7.7</module>
+    <module>open-zal-8.7.9</module>
+    <module>open-zal-8.8.10</module>
+    <module>open-zal-8.8.11</module>
+    <module>open-zal-8.8.12</module>
+    <module>open-zal-8.8.15</module>
+    <module>open-zal-8.8.2</module>
+    <module>open-zal-8.8.3</module>
+    <module>open-zal-8.8.4</module>
+    <module>open-zal-8.8.5</module>
+    <module>open-zal-8.8.6</module>
+    <module>open-zal-8.8.7</module>
+    <module>open-zal-8.8.8</module>
+    <module>open-zal-8.8.9</module>
+    <module>open-zal-9.0.0</module>
+    <module>open-zal-x</module>
+  </modules>
 
-    <profile>
-      <id>zimbra-8.0.3</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.3</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.2.z4</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.4</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.4</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.10.z5</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.5</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.5</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.12.v20130726</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.14</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.6</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.6</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.12.v20130726</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.7</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.7</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.12.v20130726</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.8</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.8</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.12.v20130726</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.0.9</id>
-      <properties>
-        <zimbra.zimbraVersion>8.0.9</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>7.6.12.v20130726</jetty.zimbraVersion>
-        <servlet.version>2.5</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.5.0</id>
-      <properties>
-        <zimbra.zimbraVersion>8.5.0</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.1.5.v20140505</jetty.zimbraVersion>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.5.1</id>
-      <properties>
-        <zimbra.zimbraVersion>8.5.1</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.1.5.v20140505</jetty.zimbraVersion>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.6.0</id>
-      <properties>
-        <zimbra.zimbraVersion>8.6.0</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.1.5.v20140505</jetty.zimbraVersion>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.0</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.0</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.1</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.1</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.10</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.10</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.11</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.11</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.2</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.2</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.3</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.3</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.4</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.4</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.5</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.5</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.6</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.6</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.7</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.7</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.9</id>
-      <properties>
-        <zimbra.zimbraVersion>8.7.9</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.10</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.10</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.11</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.11</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.12</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.12</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.15</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.15</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.4.18.v20190429</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.2</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.2</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.3</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.3</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.4</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.4</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.5</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.5</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.6</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.6</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.7</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.7</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.8</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.8</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.9</id>
-      <properties>
-        <zimbra.zimbraVersion>8.8.9</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-9.0.0</id>
-      <properties>
-        <zimbra.zimbraVersion>9.0.0</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.4.18.v20190429</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-x</id>
-      <properties>
-        <zimbra.zimbraVersion>x</zimbra.zimbraVersion>
-        <jetty.zimbraVersion>9.3.5.v20151012</jetty.zimbraVersion>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
-      </properties>
-    </profile>
-  </profiles>
 </project>
