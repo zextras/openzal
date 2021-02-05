@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.zextras</groupId>
+  <artifactId>open-zal-core</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <zimbra.version>8.8.15</zimbra.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jackson.version>2.8.11</jackson.version>
+    <guava.version>13.0.1</guava.version>
+    <junit.version>4.13.1</junit.version>
+    <jetty-version>9.3.5.v20151012</jetty-version>
+    <jfreechart.version>1.0.15</jfreechart.version>
+    <servlet-api-artifact-id>javax.servlet-api</servlet-api-artifact-id>
+    <servlet.version>3.1.0</servlet.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <commit.id>0</commit.id>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-http</artifactId>
+      <version>${jetty-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-continuation</artifactId>
+      <version>${jetty-version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbracommon</artifactId>
+      <version>${zimbra.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbraclient</artifactId>
+      <version>${zimbra.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbra-native</artifactId>
+      <version>${zimbra.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbrastore</artifactId>
+      <version>${zimbra.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbrasoap</artifactId>
+      <version>${zimbra.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>${servlet-api-artifact-id}</artifactId>
+      <version>${servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-dbutils</groupId>
+      <artifactId>commons-dbutils</artifactId>
+      <version>1.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>${jfreechart.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.5.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>javax.mail-api</artifactId>
+      <version>1.4.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.unboundid</groupId>
+      <artifactId>unboundid-ldapsdk</artifactId>
+      <version>2.3.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zimbra-preprocessor</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>zimbra-repo</id>
+      <name>zimbra-repo</name>
+      <url>file://${project.basedir}/../zimbra-repo</url>
+    </repository>
+  </repositories>
+
+</project>
