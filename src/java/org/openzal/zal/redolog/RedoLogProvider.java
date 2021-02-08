@@ -21,7 +21,6 @@
 package org.openzal.zal.redolog;
 
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.redolog.RedoConfig;
 import com.zimbra.cs.redolog.op.RedoableOp;
 import java.io.File;
@@ -34,7 +33,7 @@ public class RedoLogProvider extends com.zimbra.cs.redolog.RedoLogProvider {
 
   private final AtomicReference<RedoLogListenerManager> redoLogListenerManagerRef;
 
-  public RedoLogProvider() throws ServiceException {
+  public RedoLogProvider() {
     redoLogListenerManagerRef = new AtomicReference<>();
     super.mRedoLogManager = new RedoLogManager();
   }
@@ -59,8 +58,16 @@ public class RedoLogProvider extends com.zimbra.cs.redolog.RedoLogProvider {
   public void initRedoLogManager() {
   }
 
+  private static RedoLogProvider wrap(com.zimbra.cs.redolog.RedoLogProvider rp) {
+    if( rp instanceof RedoLogProvider) {
+      return (RedoLogProvider)rp;
+    } else {
+      return new RedoLogProvider();
+    }
+  }
+
   public static RedoLogProvider getRedoLogProvider() {
-    return (RedoLogProvider) com.zimbra.cs.redolog.RedoLogProvider.getInstance();
+    return wrap(com.zimbra.cs.redolog.RedoLogProvider.getInstance());
   }
 
   public void setListener(RedoLogListenerManager redoLogListenerManager) {
