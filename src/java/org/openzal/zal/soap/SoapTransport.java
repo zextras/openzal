@@ -140,14 +140,16 @@ public class SoapTransport
     customHeaders.put(header, value);
   }
 
+  public void invokeAsync(Object requestObject, Object callback) throws IOException {
   /* $if ZimbraVersion > 8.8.2 $ */
-  public void invokeAsync(Object requestObject, FutureCallback<HttpResponse> callback) throws IOException {
     try  {
       Element req = JaxbUtil.jaxbToElement(requestObject, SoapProtocol.Soap12.getFactory());
-      mSoapHttpTransport.invokeAsync(req, callback);
+      mSoapHttpTransport.invokeAsync(req, (FutureCallback<HttpResponse>)callback);
     } catch (ServiceException e) {
       throw ExceptionWrapper.wrap(e);
     }
+  /*$else$
+    throw new UnsupportedOperationException();
+  /*$endif$ */
   }
-   /*$endif$ */
 }
