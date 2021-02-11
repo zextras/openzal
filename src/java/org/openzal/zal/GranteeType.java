@@ -32,6 +32,7 @@ public class GranteeType
   public static GranteeType GT_GROUP     = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_GROUP);
   public static GranteeType GT_EXT_GROUP = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_EXT_GROUP);
   public static GranteeType GT_DOMAIN    = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_DOMAIN);
+  public static GranteeType GT_AUTHUSER    = new GranteeType(com.zimbra.cs.account.accesscontrol.GranteeType.GT_AUTHUSER);
 
   private final com.zimbra.cs.account.accesscontrol.GranteeType mGranteeType;
 

@@ -271,6 +271,12 @@ public interface Provisioning
     String right
   ) throws ZimbraException;
 
+  void grantRight(
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws ZimbraException;
+
   void revokeRight(
     String targetType, Targetby targetBy, String target,
     String granteeType, @Nonnull GrantedBy granteeBy, String grantee,

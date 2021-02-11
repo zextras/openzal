@@ -20,7 +20,9 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
 
 public class RightModifier
 {
@@ -45,5 +47,13 @@ public class RightModifier
 
   public char getModifier() {
     return mRightModifier.getModifier();
+  }
+
+  public static RightModifier fromChar(char modifier) {
+    try {
+      return new RightModifier(com.zimbra.cs.account.accesscontrol.RightModifier.fromChar(modifier));
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }

@@ -2034,6 +2034,16 @@ public class ProvisioningImp implements Provisioning
     String right
   ) throws ZimbraException
   {
+    grantRight(targetType, targetBy, target, granteeType, granteeBy, grantee, right, null);
+  }
+
+  @Override
+  public void grantRight(
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws ZimbraException
+  {
     try
     {
       mProvisioning.grantRight(
@@ -2045,7 +2055,7 @@ public class ProvisioningImp implements Provisioning
         grantee,
         null,
         right,
-        null
+        (rightModifier == null) ? null : rightModifier.toZimbra()
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -2658,6 +2668,10 @@ public class ProvisioningImp implements Provisioning
         throw new NoSuchAccountException(grantee_id);
       }
       return granteeAccount.getName();
+    }
+    else if ( grantee_type.equals(GranteeType.GT_AUTHUSER.getCode()) )
+    {
+      return "00000000-0000-0000-0000-000000000000";
     }
 
     throw new RuntimeException("Unknown grantee type: "+grantee_type);
