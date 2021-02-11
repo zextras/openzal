@@ -20,19 +20,6 @@
 
 package org.openzal.zal;
 
-import com.zimbra.cs.account.auth.AuthContext;
-import com.zimbra.cs.account.auth.AuthMechanism;
-import com.zimbra.cs.ldap.LdapConstants;
-import com.zimbra.cs.mailbox.ACL;
-import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.MailServiceException;
-import com.zimbra.cs.mailbox.Mailbox;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.regex.Pattern;
-
 import com.unboundid.asn1.ASN1OctetString;
 import com.unboundid.ldap.sdk.Attribute;
 import com.unboundid.ldap.sdk.LDAPConnection;
@@ -42,55 +29,89 @@ import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.ldap.sdk.controls.SimplePagedResultsControl;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.GalContact;
+import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.SearchDirectoryOptions;
+import com.zimbra.cs.account.accesscontrol.ACLUtil;
+import com.zimbra.cs.account.accesscontrol.PermissionCache;
+import com.zimbra.cs.account.accesscontrol.Right;
+import com.zimbra.cs.account.accesscontrol.RightCommand;
+import com.zimbra.cs.account.accesscontrol.RightManager;
+import com.zimbra.cs.account.accesscontrol.TargetType;
+import com.zimbra.cs.account.accesscontrol.ZimbraACE;
+import com.zimbra.cs.account.auth.AuthContext;
+import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
+import com.zimbra.cs.gal.GalSearchControl;
+import com.zimbra.cs.gal.GalSearchParams;
+import com.zimbra.cs.gal.GalSearchResultCallback;
 import com.zimbra.cs.ldap.LdapClient;
+import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.ldap.LdapException;
 import com.zimbra.cs.ldap.LdapServerType;
 import com.zimbra.cs.ldap.LdapUsage;
 import com.zimbra.cs.ldap.LdapUtil;
 import com.zimbra.cs.ldap.ZLdapContext;
+import com.zimbra.cs.ldap.ZLdapFilter;
+import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.cs.ldap.ZMutableEntry;
 import com.zimbra.cs.ldap.ZSearchControls;
 import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.Folder;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.util.ProxyPurgeUtil;
-import javax.annotation.Nonnull;
-
 import com.zimbra.soap.ZimbraSoapContext;
-import org.dom4j.QName;
-import org.jfree.util.Log;
-import org.openzal.zal.exceptions.*;
-import org.openzal.zal.exceptions.ZimbraException;
-import org.openzal.zal.lib.Filter;
-
-import com.zimbra.cs.account.*;
-import com.zimbra.cs.account.accesscontrol.*;
-import com.zimbra.cs.gal.GalSearchControl;
-import com.zimbra.cs.gal.GalSearchParams;
-import com.zimbra.cs.gal.GalSearchResultCallback;
-import com.zimbra.common.soap.Element;
-import com.zimbra.common.account.Key;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.ldap.ZLdapFilter;
-import com.zimbra.cs.ldap.ZLdapFilterFactory;
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.soap.type.GalSearchType;
 import com.zimbra.soap.type.TargetBy;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.dom4j.QName;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.InvalidRequestException;
+import org.openzal.zal.exceptions.NoSuchAccountException;
+import org.openzal.zal.exceptions.NoSuchDistributionListException;
+import org.openzal.zal.exceptions.NoSuchDomainException;
+import org.openzal.zal.exceptions.NoSuchGrantException;
+import org.openzal.zal.exceptions.NoSuchGroupException;
+import org.openzal.zal.exceptions.NoSuchZimletException;
+import org.openzal.zal.exceptions.UnableToFindDistributionListException;
+import org.openzal.zal.exceptions.ZimbraException;
+import org.openzal.zal.lib.Filter;
+import org.openzal.zal.log.ZimbraLog;
+import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
+
 /* $if ZimbraVersion < 8.0.6 $
 import com.zimbra.common.account.Key.GranteeBy;
 /* $endif$ */
-
 /* $if ZimbraVersion >= 8.0.6 $*/
-import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 /* $endif$ */
-
-import com.zimbra.cs.mailbox.Contact;
-
-import javax.annotation.Nullable;
-import org.openzal.zal.log.ZimbraLog;
-import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
 {
@@ -273,6 +294,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
   public static String A_zimbraVirtualHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraVirtualHostname;
   public static String A_zimbraGalLdapAttrMap                                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLdapAttrMap;
+  public static String A_zimbraPrefGalAutoCompleteEnabled                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefGalAutoCompleteEnabled;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
