@@ -2673,6 +2673,10 @@ public class ProvisioningImp implements Provisioning
     {
       return "00000000-0000-0000-0000-000000000000";
     }
+    else if ( grantee_type.equals(GranteeType.GT_PUBLIC.getCode()) )
+    {
+      return "99999999-9999-9999-9999-999999999999";
+    }
 
     throw new RuntimeException("Unknown grantee type: "+grantee_type);
   }
