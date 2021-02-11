@@ -20,13 +20,13 @@
 
 package org.openzal.zal.soap;
 
-import javax.annotation.Nonnull;
-
 import java.util.HashMap;
+
+import javax.annotation.Nonnull;
 
 public class SoapResponseSimple implements SoapResponse
 {
-  @Nonnull private final HashMap<String, Object> mMap;
+  @Nonnull private  HashMap<String, Object> mMap;
 
   public SoapResponseSimple()
   {
@@ -60,13 +60,16 @@ public class SoapResponseSimple implements SoapResponse
   @Override
   public void setResponse(SoapResponse soapResponse)
   {
-    throw new UnsupportedOperationException();
+    SoapResponseSimple simple = (SoapResponseSimple) soapResponse;
+    mMap = simple.getMap();
   }
 
   @Override
   public SoapResponse createNode(String name)
   {
-    throw new UnsupportedOperationException();
+    SoapResponse node = new SoapResponseSimple();
+    mMap.put(name, node);
+    return node;
   }
 
   public Object getAttribute(String responses)

@@ -22,15 +22,20 @@ package org.openzal.zal.exceptions;
 
 import com.zimbra.cs.account.AccountServiceException;
 
-public class NoSuchAccountException extends ZimbraException
-{
-  protected NoSuchAccountException(Exception exception)
-  {
+public class NoSuchAccountException extends ZimbraException {
+
+  private String account;
+
+  protected NoSuchAccountException(Exception exception) {
     super(exception);
   }
 
-  public NoSuchAccountException(String account)
-  {
+  public NoSuchAccountException(String account) {
     super(AccountServiceException.NO_SUCH_ACCOUNT(account));
+    this.account = account;
+  }
+
+  public String getAccount() {
+    return account;
   }
 }

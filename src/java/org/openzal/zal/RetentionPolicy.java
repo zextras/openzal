@@ -18,22 +18,31 @@
  * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openzal.zal.exceptions;
+package org.openzal.zal;
 
-public class NoSuchServerException extends ZimbraException {
+import javax.annotation.Nonnull;
 
-  private String serverName;
+public class RetentionPolicy {
+  private final com.zimbra.soap.mail.type.RetentionPolicy retentionPolicy;
 
-  public NoSuchServerException(String serverName) {
-    super("no such server " + serverName);
-    this.serverName=serverName;
+  public RetentionPolicy(@Nonnull Object retentionPolicy) {
+    this.retentionPolicy = (com.zimbra.soap.mail.type.RetentionPolicy) retentionPolicy;
   }
 
-  protected NoSuchServerException(Exception exception) {
-    super(exception);
+  public RetentionPolicy() {
+    this.retentionPolicy = new com.zimbra.soap.mail.type.RetentionPolicy();
   }
 
-  public String getServerName() {
-    return serverName;
+  public boolean isSet() {
+    return retentionPolicy.isSet();
+  }
+
+  @Override
+  public String toString() {
+    return retentionPolicy.toString();
+  }
+
+  public <T> T toZimbra(@Nonnull Class<T> cls) {
+    return cls.cast(retentionPolicy);
   }
 }

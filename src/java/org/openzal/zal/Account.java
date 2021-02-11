@@ -1287,5 +1287,15 @@ public class Account extends Entry
     return mAccount.getPrefTrashLifetime();
   }
 
+  public Identity getDefaultIdentity() {
+    try
+    {
+      return new Identity(mAccount.getDefaultIdentity());
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 

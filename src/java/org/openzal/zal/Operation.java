@@ -7,7 +7,9 @@ public enum Operation implements Comparable<Operation>
   ACCOUNT_SCAN(2),
   MAILBOX_DELETED(3),
   ITEM_SCAN(3),
-  BLOB_MOVED(4);
+  BLOB_MOVED(4),
+  ACCOUNT_INFO(3),
+  ;
 
   private int priority;
 

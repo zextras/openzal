@@ -21,6 +21,8 @@
 package org.openzal.zal.calendar;
 
 import com.zimbra.cs.mailbox.MailItem;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
 
 import java.time.ZoneId;
@@ -302,10 +304,15 @@ public class InviteFactory
     mSequence = invite.getSequence();
     mPercentage = invite.getTaskPercentComplete();
     mSubject = invite.getSubject();
-    mUtcDateStart = invite.getUtcStartTime();
-    mUtcDateEnd = invite.getUtcEndTime();
-    mLastModifyTimeUtc = mClock.now();
     mTimezone = invite.getTimezone();
+    if( mAllDayEvent ) {
+      mUtcDateStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(invite.getUtcStartTime()), ZoneId.of(mTimezone.getID())).atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+      mUtcDateEnd = LocalDateTime.ofInstant(Instant.ofEpochMilli(invite.getUtcEndTime()), ZoneId.of(mTimezone.getID())).atZone(ZoneId.of("UTC")).toInstant().toEpochMilli();
+    } else {
+      mUtcDateStart = invite.getUtcStartTime();
+      mUtcDateEnd = invite.getUtcEndTime();
+    }
+    mLastModifyTimeUtc = mClock.now();
     mTimeZoneMap = invite.getTimezoneMap();
     if( invite.hasRecurId() )
     {
@@ -376,8 +383,16 @@ public class InviteFactory
       throw new ZimbraException("StartDate can not be in the future if end time is not specified");
     }
 
-    ParsedDateTime dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
-    ParsedDateTime dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    ParsedDateTime dateStart;
+    ParsedDateTime dateEnd;
+    if( mAllDayEvent ){
+      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, ICalTimeZone.getUTC());
+      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, ICalTimeZone.getUTC());
+    }
+    else {
+      dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, mTimezone.toZimbra(ICalTimeZone.class));
+      dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
+    }
 
     if (mAllDayEvent || task)
     {

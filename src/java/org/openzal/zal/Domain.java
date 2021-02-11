@@ -22,6 +22,8 @@ package org.openzal.zal;
 
 import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.Nullable;
+
+import java.util.Objects;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
@@ -31,9 +33,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Domain extends Entry
 {
+  public static final String HTTPS = "https";
+  public static final String HTTP = "http";
   @Nonnull private final com.zimbra.cs.account.Domain mDomain;
 
   public Domain(@Nonnull Object domain)
@@ -175,9 +180,10 @@ public class Domain extends Entry
     return mDomain.getLongAttr(name, defaultValue);
   }
 
+  @Nullable
   public String getPublicHostname()
   {
-    return mDomain.getAttr(ProvisioningImp.A_zimbraPublicServiceHostname, null);
+    return mDomain.getPublicServiceHostname();
   }
 
   @Override
@@ -201,5 +207,65 @@ public class Domain extends Entry
   {
     return mDomain.getId().hashCode();
   }
+
+  @Nullable
+  public String getPublicProtocol() {
+    return Optional.ofNullable(mDomain.getPublicServiceProtocol())
+        .orElse(HTTPS);
+  }
+
+  private String defaultPortForProtocol(String protocol)
+  {
+    if( Objects.isNull(protocol))
+    {
+      return null;
+    }
+    switch( protocol.toLowerCase() )
+    {
+      case HTTPS:
+        return "443";
+      case HTTP:
+      default:
+        return "80";
+    }
+  }
+
+  @Nullable
+  public String getPublicPort()
+  {
+    int publicServicePort = mDomain.getPublicServicePort();
+    if (publicServicePort > 0) {
+      return String.valueOf(publicServicePort);
+    }
+    else {
+      return String.valueOf(defaultPortForProtocol(getPublicProtocol()));
+    }
+  }
+
+  public List<String> getGalAccountIds()
+  {
+    return Arrays.asList(mDomain.getGalAccountId());
+  }
+
+  @Nullable
+  public String getSkinLogoAppBanner()
+  {
+    return mDomain.getSkinLogoAppBanner();
+  }
+
+  @Nullable
+  public String getSkinLogoURL()
+  {
+    return mDomain.getSkinLogoURL();
+  }
+
+  public String getAuthMech() {
+    return mDomain.getAuthMech();
+  }
+
+  public String getAuthMechAdmin() {
+    return mDomain.getAuthMechAdmin();
+  }
+
 }
 
