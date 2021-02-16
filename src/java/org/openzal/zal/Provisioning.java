@@ -505,6 +505,27 @@ public interface Provisioning
         return values;
       }
 
+      /**
+       *
+       * @param regex
+       * @return A list of key-value attributes that match with regex.
+       */
+      public List<Pair<String, String>> matchAttrs(String regex)
+      {
+        Map<String,Object> attr = mGalContact.getAttrs();
+        List<Pair<String, String>> values = new ArrayList<>(0);
+
+        for (String key : attr.keySet())
+        {
+          if (key.matches(regex))
+          {
+            values.add(new Pair<>(key, getSingleAttr(key)));
+          }
+        }
+
+        return values;
+      }
+
       public String getId()
       {
         return mGalContact.getId();
