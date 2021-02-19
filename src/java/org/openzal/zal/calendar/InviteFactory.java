@@ -20,28 +20,40 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.common.calendar.ParsedDateTime;
+import com.zimbra.common.calendar.ParsedDuration;
+import com.zimbra.common.calendar.TimeZoneMap;
+import com.zimbra.common.calendar.ZCalendar;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.calendar.Alarm;
+import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
+import com.zimbra.cs.mailbox.calendar.RecurId;
+import com.zimbra.cs.mailbox.calendar.Recurrence;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mailbox.calendar.ZOrganizer;
+import com.zimbra.cs.mailbox.calendar.ZRecur;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import javax.annotation.Nonnull;
-
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.internet.MimeMessage;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ActualClock;
 import org.openzal.zal.lib.Clock;
-import com.zimbra.common.service.ServiceException;
-
-import com.zimbra.cs.mailbox.calendar.*;
-
-import com.zimbra.common.calendar.*;
-
-import javax.annotation.Nullable;
-import javax.mail.internet.MimeMessage;
-import java.util.*;
 
 
 public class InviteFactory
@@ -386,6 +398,9 @@ public class InviteFactory
     ParsedDateTime dateStart;
     ParsedDateTime dateEnd;
     if( mAllDayEvent ){
+      if(TimeUnit.MILLISECONDS.toHours(mUtcDateEnd - mUtcDateStart) < 24) {
+        mUtcDateEnd = mUtcDateStart + TimeUnit.HOURS.toMillis(24);
+      }
       dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, ICalTimeZone.getUTC());
       dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, ICalTimeZone.getUTC());
     }
@@ -404,7 +419,9 @@ public class InviteFactory
     ParsedDuration eventDuration = null;
     if (mRecurrenceRule != null)
     {
-      eventDuration = dateEnd.difference(dateStart);
+      if (!mAllDayEvent && !task) {
+        eventDuration = dateEnd.difference(dateStart);
+      }
       Recurrence.IRecurrence simpleRecurrenceRule = new Recurrence.SimpleRepeatingRule(dateStart,
                                                                                        eventDuration,
                                                                                        mRecurrenceRule.toZimbra(ZRecur.class),
