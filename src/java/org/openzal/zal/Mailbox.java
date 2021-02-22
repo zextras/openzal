@@ -38,6 +38,7 @@ import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailItem.Type;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -1753,6 +1754,20 @@ public class Mailbox
     }
 
     return new Folder(folder);
+  }
+
+  public void setFolderRetentionPolicy(@Nonnull OperationContext octxt, int folderId, RetentionPolicy retentionPolicy)
+      throws ZimbraException {
+    try {
+      mMbox.setRetentionPolicy(
+          octxt.getOperationContext(),
+          folderId,
+          Type.FOLDER,
+          retentionPolicy.toZimbra(com.zimbra.soap.mail.type.RetentionPolicy.class)
+      );
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull
