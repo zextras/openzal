@@ -46,7 +46,6 @@ import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
