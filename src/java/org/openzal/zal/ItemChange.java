@@ -25,10 +25,16 @@ import javax.annotation.Nonnull;
 
 public class ItemChange extends PlacedItemInfo
 {
-  public boolean deleted;
+  public enum ChangeType {
+    DELETED,
+    MODIFIED,
+    CREATED
+  }
+
+  public ChangeType changeType;
 
   public ItemChange(
-    boolean deleted,
+    ChangeType changeType,
     int folderId,
     int itemId,
     int sequence,
@@ -36,23 +42,23 @@ public class ItemChange extends PlacedItemInfo
   )
   {
     super( folderId, itemId, sequence, date);
-    this.deleted = deleted;
+    this.changeType = changeType;
   }
 
   public ItemChange(
-    boolean deleted,
+    ChangeType changeType,
     int folderId,
     @Nonnull ItemInfo itemInfo
   )
   {
     super(folderId, itemInfo.itemId, itemInfo.sequence, itemInfo.date);
-    this.deleted = deleted;
+    this.changeType = changeType;
   }
 
   @Override
   public String toString()
   {
     return
-      "deleted: " + deleted + " " +super.toString();
+      "changeType: " + changeType + " " +super.toString();
   }
 }
