@@ -20,34 +20,48 @@
 
 package org.openzal.zal.calendar;
 
+import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.common.calendar.ParsedDateTime;
+import com.zimbra.common.calendar.ParsedDuration;
+import com.zimbra.common.calendar.TimeZoneMap;
+import com.zimbra.common.calendar.ZCalendar;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.calendar.Alarm;
+import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
+import com.zimbra.cs.mailbox.calendar.RecurId;
+import com.zimbra.cs.mailbox.calendar.Recurrence;
+import com.zimbra.cs.mailbox.calendar.Recurrence.IRecurrence;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mailbox.calendar.ZOrganizer;
+import com.zimbra.cs.mailbox.calendar.ZRecur;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import javax.annotation.Nonnull;
-
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.internet.MimeMessage;
 import org.openzal.zal.Item;
 import org.openzal.zal.Mailbox;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.ActualClock;
 import org.openzal.zal.lib.Clock;
-import com.zimbra.common.service.ServiceException;
-
-import com.zimbra.cs.mailbox.calendar.*;
-
-import com.zimbra.common.calendar.*;
-
-import javax.annotation.Nullable;
-import javax.mail.internet.MimeMessage;
-import java.util.*;
 
 
 public class InviteFactory
 {
 
-  private static long MINUTES_30 = TimeUnit.MINUTES.toMillis(30);
+  private static final long MINUTES_30 = TimeUnit.MINUTES.toMillis(30);
 
   private       String             mMethod;
   private       MapTimeZone        mTimeZoneMap;
@@ -299,8 +313,8 @@ public class InviteFactory
     }
 
     mRecurrenceRule = invite.getRecurrenceRule();
-    mOrganizerAddress = invite.hasOrganizer() ? invite.getOrganizer().getAddress() : null;
-    mOrganizerName = invite.hasOrganizer() ? invite.getOrganizer().getName() : null;
+    mOrganizerAddress = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getAddress() : null;
+    mOrganizerName = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getName() : null;
     mSequence = invite.getSequence();
     mPercentage = invite.getTaskPercentComplete();
     mSubject = invite.getSubject();
@@ -346,10 +360,14 @@ public class InviteFactory
       recurId = null;
     }
 
-    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
-    ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
+    ZOrganizer organizer = new ZOrganizer(mbox.getAccount().getName(), mbox.getAccount().getDisplayName());
 
-    List<ZAttendee> zAttendeeList = new LinkedList<ZAttendee>();
+    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
+    if(!isOrganizer) {
+      organizer.setSentBy(mOrganizerAddress);
+    }
+
+    List<ZAttendee> zAttendeeList = new LinkedList<>();
     for (Attendee attendee : mAttendeeList)
     {
       zAttendeeList.add(attendee.toZAttendee());
@@ -412,8 +430,8 @@ public class InviteFactory
       mainRecurrenceRule = new Recurrence.RecurrenceRule(dateStart,
                                                          eventDuration,
                                                          null,
-                                                         Arrays.asList(simpleRecurrenceRule),
-                                                         new ArrayList<Recurrence.IRecurrence>());
+                                                         Collections.singletonList(simpleRecurrenceRule),
+                                                         Collections.<IRecurrence>emptyList());
     }
 
     setTypeRequest();
@@ -437,7 +455,7 @@ public class InviteFactory
       eventDuration,
       recurId,
       mainRecurrenceRule,
-      isOrganizer,
+      true,   //this is always true because ZOrganizer has the account owner of this mailbox and sent-by with the account requester
       organizer,
       zAttendeeList,
       mSubject,
