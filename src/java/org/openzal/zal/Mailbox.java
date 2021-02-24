@@ -46,6 +46,7 @@ import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.Session;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.dbutils.DbUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -759,6 +760,26 @@ public class Mailbox
     return new Folder(folder);
   }
 
+  @Nonnull
+  public List<Folder> getFolderList(@Nonnull OperationContext zContext)
+      throws NoSuchFolderException
+  {
+    List<Folder> folderList = new ArrayList<>(0);
+    try
+    {
+      for (com.zimbra.cs.mailbox.Folder folder : mMbox
+          .getFolderList(zContext.getOperationContext(), SortBy.NONE)) {
+        folderList.add(new Folder(folder));
+      }
+
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return folderList;
+  }
 
   @Nonnull
   public Item getItemByPath(@Nonnull OperationContext zContext, String path)
