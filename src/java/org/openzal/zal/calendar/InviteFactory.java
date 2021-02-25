@@ -78,6 +78,7 @@ public class InviteFactory
   private       long               mExceptionStartTime;
   private       String             mOrganizerAddress;
   private       String             mOrganizerName;
+  private       String             sentByAddress;
   private       List<Attendee>     mAttendeeList;
   private       String             mSubject;
   private       String             mLocation;
@@ -104,6 +105,8 @@ public class InviteFactory
     mAlarmSet = false;
     mSequence = 0;
     mClock = ActualClock.sInstance;
+
+    this.sentByAddress = null;
 
     mICalAttachmentList = new ArrayList<>();
   }
@@ -193,10 +196,13 @@ public class InviteFactory
     mExceptionStartTime = exceptionStartTime;
   }
 
-  public void setOrganizer( String organizerAddress, String organizerName )
-  {
+  public void setOrganizer( String organizerAddress, String organizerName ) {
     mOrganizerAddress = organizerAddress;
     mOrganizerName = organizerName;
+  }
+
+  public void setSentByAddress(String sentByAddress) {
+    this.sentByAddress = sentByAddress;
   }
 
   public void setAttendeeList(List<Attendee> attendeeList)
@@ -314,6 +320,7 @@ public class InviteFactory
 
     mRecurrenceRule = invite.getRecurrenceRule();
     mOrganizerAddress = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getAddress() : null;
+    sentByAddress = invite.getSentBy();
     mOrganizerName = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getName() : null;
     mSequence = invite.getSequence();
     mPercentage = invite.getTaskPercentComplete();
@@ -362,12 +369,19 @@ public class InviteFactory
       recurId = null;
     }
 
-    ZOrganizer organizer = new ZOrganizer(mbox.getAccount().getName(), mbox.getAccount().getDisplayName());
-
-    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
-    if(!isOrganizer) {
-      organizer.setSentBy(mOrganizerAddress);
+    if(Objects.isNull(mOrganizerAddress) || mOrganizerAddress.trim().isEmpty()) {
+      mOrganizerAddress = mbox.getAccount().getName();
     }
+
+    if(Objects.isNull(mOrganizerName) || mOrganizerName.trim().isEmpty()) {
+      mOrganizerName = mbox.getAccount().getDisplayName();
+    }
+
+    ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
+    organizer.setSentBy(sentByAddress);
+
+    // This flag says whether the mailbox owner is the organizer of this event
+    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
 
     List<ZAttendee> zAttendeeList = new LinkedList<>();
     for (Attendee attendee : mAttendeeList)
@@ -462,7 +476,7 @@ public class InviteFactory
       eventDuration,
       recurId,
       mainRecurrenceRule,
-      true,   //this is always true because ZOrganizer has the account owner of this mailbox and sent-by with the account requester
+      isOrganizer,
       organizer,
       zAttendeeList,
       mSubject,
@@ -480,7 +494,7 @@ public class InviteFactory
       /* $if ZimbraVersion >= 8.0.2 $ */
       mSequence,
       /* $endif$ */
-      AttendeeInviteStatus.TENTATIVE.getRawStatus(),
+      isOrganizer ? AttendeeInviteStatus.ACCEPTED.getRawStatus() : mPartStat,
       mResponseRequest,
       true
     );
@@ -512,11 +526,6 @@ public class InviteFactory
       invite.setInviteId(mMailItemId);
     }
 
-    if (mPartStat != null && !invite.isOrganizer())
-    {
-      invite.setPartStat(mPartStat);
-    }
-
     if( mHasAttachment )
     {
       invite.setHasAttachment(true);
@@ -538,6 +547,7 @@ public class InviteFactory
     mRecurrenceRule = recurrenceRule;
   }
 
+  // PartStat => Participation Status
   public void setPartStat(String partStat)
   {
     mPartStat = partStat;
