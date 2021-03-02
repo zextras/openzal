@@ -336,7 +336,9 @@ public class InviteFactory
     }
     mMailItemId = invite.getMailItemId();
     mPartStat = invite.getPartStat();
-    mResponseRequest = invite.getResponseRequest();
+    if(invite.hasResponseRequest()) {
+      mResponseRequest = invite.getResponseRequest();
+    }
     mICalAttachmentList = invite.getICalAttachList();
   }
 
