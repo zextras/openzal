@@ -25,6 +25,7 @@ import com.zimbra.common.mailbox.BaseItemInfo;
 /* $endif $ */
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.openzal.zal.ItemChange.ChangeType;
 import org.openzal.zal.lib.Clock;
 import org.openzal.zal.lib.ActualClock;
 
@@ -208,7 +209,7 @@ public class MailboxSessionProxy
             mListener.notifyChanges(
               mMboxId,
               new ItemChange(
-                false,
+                ChangeType.CREATED,
                 what.getFolderId(),
                 what.getId(),
                 what.getModifiedSequence(),
@@ -239,7 +240,7 @@ public class MailboxSessionProxy
             {
               MailItem item = (MailItem) change.what;
               itemChange = new ItemChange(
-                false,
+                ChangeType.MODIFIED,
                 item.getFolderId(),
                 item.getId(),
                 item.getModifiedSequence(),
@@ -250,7 +251,7 @@ public class MailboxSessionProxy
             {
               ZimbraLog.mailbox.debug(getLoggerName() + " Unable to obtain modification informations");
               itemChange = new ItemChange(
-                false,
+                ChangeType.MODIFIED,
                 0,
                 mod.getItemId(),
                 0,
@@ -271,7 +272,7 @@ public class MailboxSessionProxy
           if( areChangesForMobile( change.what ))
           {
             ItemChange itemChange = new ItemChange(
-              true,
+              ChangeType.DELETED,
               0,
               mod.getItemId(),
               0,

@@ -31,6 +31,13 @@ import com.zimbra.cs.mailbox.calendar.Alarm;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.calendar.Recurrence;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mailbox.calendar.ZOrganizer;
+import com.zimbra.cs.mailbox.calendar.ZRecur;
+import com.zimbra.cs.mailbox.calendar.Alarm;
+import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
+import com.zimbra.cs.mailbox.calendar.RecurId;
+import com.zimbra.cs.mailbox.calendar.Recurrence;
 import com.zimbra.cs.mailbox.calendar.Recurrence.IRecurrence;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
@@ -38,6 +45,13 @@ import com.zimbra.cs.mailbox.calendar.ZRecur;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TimeZone;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -420,6 +434,9 @@ public class InviteFactory
     ParsedDateTime dateStart;
     ParsedDateTime dateEnd;
     if( mAllDayEvent ){
+      if(TimeUnit.MILLISECONDS.toHours(mUtcDateEnd - mUtcDateStart) < 24) {
+        mUtcDateEnd = mUtcDateStart + TimeUnit.HOURS.toMillis(24);
+      }
       dateStart = ParsedDateTime.fromUTCTime(mUtcDateStart, ICalTimeZone.getUTC());
       dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, ICalTimeZone.getUTC());
     }
@@ -438,7 +455,9 @@ public class InviteFactory
     ParsedDuration eventDuration = null;
     if (mRecurrenceRule != null)
     {
-      eventDuration = dateEnd.difference(dateStart);
+      if (!mAllDayEvent && !task) {
+        eventDuration = dateEnd.difference(dateStart);
+      }
       Recurrence.IRecurrence simpleRecurrenceRule = new Recurrence.SimpleRepeatingRule(dateStart,
                                                                                        eventDuration,
                                                                                        mRecurrenceRule.toZimbra(ZRecur.class),
