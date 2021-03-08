@@ -1297,5 +1297,9 @@ public class Account extends Entry
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public String getMailSieveScript() {
+    return mAccount.getMailSieveScript();
+  }
 }
 
