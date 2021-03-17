@@ -37,6 +37,7 @@ import com.zimbra.cs.mailbox.cache.LocalTagCache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.Folder.FolderOptions;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailItem.Type;
 import com.zimbra.cs.mailbox.calendar.RecurId;
@@ -759,6 +760,26 @@ public class Mailbox
     return new Folder(folder);
   }
 
+  @Nonnull
+  public List<Folder> getFolderList(@Nonnull OperationContext zContext)
+      throws NoSuchFolderException
+  {
+    List<Folder> folderList = new ArrayList<>(0);
+    try
+    {
+      for (com.zimbra.cs.mailbox.Folder folder : mMbox
+          .getFolderList(zContext.getOperationContext(), SortBy.NONE)) {
+        folderList.add(new Folder(folder));
+      }
+
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return folderList;
+  }
 
   @Nonnull
   public Item getItemByPath(@Nonnull OperationContext zContext, String path)
@@ -1753,6 +1774,21 @@ public class Mailbox
       throw ExceptionWrapper.wrap(e);
     }
 
+    return new Folder(folder);
+  }
+
+  @Nonnull
+  public Folder createFolder(
+      OperationContext operationContext,
+      String path
+  ) {
+    MailItem folder;
+    try {
+      FolderOptions fopts = new FolderOptions();
+      folder = mMbox.createFolder(operationContext.getOperationContext(), path, fopts);
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
     return new Folder(folder);
   }
 
