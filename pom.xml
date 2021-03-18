@@ -108,18 +108,10 @@
   <dependencies>
     <dependency>
       <groupId>com.zextras</groupId>
-      <artifactId>zimbra-preprocessor</artifactId>
+      <artifactId>zextras-preprocessor</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>zimbra-repo</id>
-      <name>zimbra-repo</name>
-      <url>file://${project.basedir}/../zimbra-repo</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
@@ -161,7 +153,7 @@
               <goal>java</goal>
             </goals>
             <configuration>
-              <mainClass>com.zextras.PreprocessMain</mainClass>
+              <mainClass>com.zextras.OpenZALPreprocessMain</mainClass>
               <arguments>
                 <argument>${project.basedir}/core</argument>
               </arguments>
