@@ -8,6 +8,7 @@
     <groupId>com.zextras</groupId>
     <artifactId>open-zal</artifactId>
     <version>0.0.1</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>open-zal-x</artifactId>
