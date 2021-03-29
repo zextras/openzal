@@ -273,6 +273,9 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
   public static String A_zimbraVirtualHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraVirtualHostname;
   public static String A_zimbraGalLdapAttrMap                                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLdapAttrMap;
+  public static String A_zimbraPrefGalAutoCompleteEnabled                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefGalAutoCompleteEnabled;
+  public static String A_zimbraPrefSharedAddrBookAutoCompleteEnabled          = com.zimbra.cs.account.Provisioning.A_zimbraPrefSharedAddrBookAutoCompleteEnabled;
+  public static String A_zimbraPrefAutoAddressEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefAutoAddAddressEnabled;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
@@ -2034,6 +2037,16 @@ public class ProvisioningImp implements Provisioning
     String right
   ) throws ZimbraException
   {
+    grantRight(targetType, targetBy, target, granteeType, granteeBy, grantee, right, null);
+  }
+
+  @Override
+  public void grantRight(
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws ZimbraException
+  {
     try
     {
       mProvisioning.grantRight(
@@ -2045,7 +2058,7 @@ public class ProvisioningImp implements Provisioning
         grantee,
         null,
         right,
-        null
+        (rightModifier == null) ? null : rightModifier.toZimbra()
       );
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -2658,6 +2671,14 @@ public class ProvisioningImp implements Provisioning
         throw new NoSuchAccountException(grantee_id);
       }
       return granteeAccount.getName();
+    }
+    else if ( grantee_type.equals(GranteeType.GT_AUTHUSER.getCode()) )
+    {
+      return "00000000-0000-0000-0000-000000000000";
+    }
+    else if ( grantee_type.equals(GranteeType.GT_PUBLIC.getCode()) )
+    {
+      return "99999999-9999-9999-9999-999999999999";
     }
 
     throw new RuntimeException("Unknown grantee type: "+grantee_type);

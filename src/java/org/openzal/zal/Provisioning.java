@@ -271,6 +271,12 @@ public interface Provisioning
     String right
   ) throws ZimbraException;
 
+  void grantRight(
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws ZimbraException;
+
   void revokeRight(
     String targetType, Targetby targetBy, String target,
     String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
@@ -493,6 +499,27 @@ public interface Provisioning
           if (key.matches(regex))
           {
             values.add(getSingleAttr(key));
+          }
+        }
+
+        return values;
+      }
+
+      /**
+       *
+       * @param regex
+       * @return A list of key-value attributes that match with regex.
+       */
+      public List<Pair<String, String>> matchAttrs(String regex)
+      {
+        Map<String,Object> attr = mGalContact.getAttrs();
+        List<Pair<String, String>> values = new ArrayList<>(0);
+
+        for (String key : attr.keySet())
+        {
+          if (key.matches(regex))
+          {
+            values.add(new Pair<>(key, getSingleAttr(key)));
           }
         }
 

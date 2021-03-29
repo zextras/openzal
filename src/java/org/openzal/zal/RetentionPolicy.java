@@ -20,45 +20,29 @@
 
 package org.openzal.zal;
 
-
 import javax.annotation.Nonnull;
 
-public class ItemChange extends PlacedItemInfo
-{
-  public enum ChangeType {
-    DELETED,
-    MODIFIED,
-    CREATED
+public class RetentionPolicy {
+  private final com.zimbra.soap.mail.type.RetentionPolicy retentionPolicy;
+
+  public RetentionPolicy(@Nonnull Object retentionPolicy) {
+    this.retentionPolicy = (com.zimbra.soap.mail.type.RetentionPolicy) retentionPolicy;
   }
 
-  public ChangeType changeType;
-
-  public ItemChange(
-    ChangeType changeType,
-    int folderId,
-    int itemId,
-    int sequence,
-    long date
-  )
-  {
-    super( folderId, itemId, sequence, date);
-    this.changeType = changeType;
+  public RetentionPolicy() {
+    this.retentionPolicy = new com.zimbra.soap.mail.type.RetentionPolicy();
   }
 
-  public ItemChange(
-    ChangeType changeType,
-    int folderId,
-    @Nonnull ItemInfo itemInfo
-  )
-  {
-    super(folderId, itemInfo.itemId, itemInfo.sequence, itemInfo.date);
-    this.changeType = changeType;
+  public boolean isSet() {
+    return retentionPolicy.isSet();
   }
 
   @Override
-  public String toString()
-  {
-    return
-      "changeType: " + changeType + " " +super.toString();
+  public String toString() {
+    return retentionPolicy.toString();
+  }
+
+  public <T> T toZimbra(@Nonnull Class<T> cls) {
+    return cls.cast(retentionPolicy);
   }
 }
