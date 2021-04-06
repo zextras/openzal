@@ -1027,18 +1027,23 @@ public class Mailbox
 
     try
     {
-      return new CalendarItem(
-        mMbox.setCalendarItem(
-          octxt.getOperationContext(),
-          folderId,
-          flags,
-          tags,
-          defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class),
-          zimbraExceptions,
-          replies,
-          nextAlarm
-        )
+      com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      String oldMethod = calendarItemData.invite.getMethod();
+      calendarItemData.invite.setMethod("PUBLISH");
+      CalendarItem result = new CalendarItem(
+          mMbox.setCalendarItem(
+              octxt.getOperationContext(),
+              folderId,
+              flags,
+              tags,
+              calendarItemData,
+              zimbraExceptions,
+              replies,
+              nextAlarm
+          )
       );
+      calendarItemData.invite.setMethod(oldMethod);
+      return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
