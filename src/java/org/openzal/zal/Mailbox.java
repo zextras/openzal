@@ -127,6 +127,8 @@ public class Mailbox
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
 
+  private static final Set<String> CREATE_CALENDAR_ITEM_ALLOWED_METHODS = new HashSet<>(Arrays.asList("PUBLISH", "REQUEST"));
+
   private static Method sCreateDefaultFlags;
 
   static
@@ -1028,8 +1030,9 @@ public class Mailbox
     try
     {
       com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      boolean patchCalendarItemMethod = !CREATE_CALENDAR_ITEM_ALLOWED_METHODS.contains(calendarItemData.invite.getMethod());
       String oldMethod = calendarItemData.invite.getMethod();
-      calendarItemData.invite.setMethod("PUBLISH");
+      if (patchCalendarItemMethod) calendarItemData.invite.setMethod("PUBLISH");
       CalendarItem result = new CalendarItem(
           mMbox.setCalendarItem(
               octxt.getOperationContext(),
@@ -1042,7 +1045,21 @@ public class Mailbox
               nextAlarm
           )
       );
-      calendarItemData.invite.setMethod(oldMethod);
+      if (patchCalendarItemMethod) {
+        calendarItemData.invite.setMethod(oldMethod);
+        result = new CalendarItem(
+            mMbox.setCalendarItem(
+                octxt.getOperationContext(),
+                folderId,
+                flags,
+                tags,
+                calendarItemData,
+                zimbraExceptions,
+                replies,
+                nextAlarm
+            )
+        );
+      }
       return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
