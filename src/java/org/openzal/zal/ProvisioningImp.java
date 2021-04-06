@@ -273,6 +273,9 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
   public static String A_zimbraVirtualHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraVirtualHostname;
   public static String A_zimbraGalLdapAttrMap                                 = com.zimbra.cs.account.Provisioning.A_zimbraGalLdapAttrMap;
+  public static String A_zimbraPrefGalAutoCompleteEnabled                     = com.zimbra.cs.account.Provisioning.A_zimbraPrefGalAutoCompleteEnabled;
+  public static String A_zimbraPrefSharedAddrBookAutoCompleteEnabled          = com.zimbra.cs.account.Provisioning.A_zimbraPrefSharedAddrBookAutoCompleteEnabled;
+  public static String A_zimbraPrefAutoAddressEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefAutoAddAddressEnabled;
 
   /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;

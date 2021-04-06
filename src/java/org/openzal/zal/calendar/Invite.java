@@ -21,7 +21,6 @@
 package org.openzal.zal.calendar;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
 import com.zimbra.common.calendar.ParsedDateTime;
 import com.zimbra.common.calendar.ZCalendar;
 import com.zimbra.common.service.ServiceException;
@@ -29,7 +28,6 @@ import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.calendar.Alarm;
 import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
-import com.zimbra.cs.mailbox.calendar.FriendlyCalendaringDescription;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.Recurrence;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
@@ -52,6 +50,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 import org.openzal.zal.Account;
 import org.openzal.zal.Item;
 import org.openzal.zal.Provisioning;
@@ -61,12 +64,6 @@ import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.log.ZimbraLog;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
 
 public class Invite
 {
@@ -306,6 +303,19 @@ public class Invite
       return null;
     }
     return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
+  }
+
+  @Nullable
+  public String getSentBy() {
+    ZOrganizer organizer = mInvite.getOrganizer();
+    if (organizer == null) {
+      return null;
+    }
+    final String sentBy = organizer.getSentBy();
+    if(sentBy == null || sentBy.trim().isEmpty()) {
+      return null;
+    }
+    return sentBy;
   }
 
   @VisibleForTesting
