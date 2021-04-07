@@ -46,6 +46,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.mail.internet.MimeMessage;
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -468,5 +469,9 @@ public abstract class Utils
     {
       throw ExceptionWrapper.wrap(e);
     }
+  }
+
+  public static MimeMessage createMimeMessage(InputStream inputStream) throws MessagingException {
+    return new MimeMessage(MailSession.getSession(), inputStream);
   }
 }
