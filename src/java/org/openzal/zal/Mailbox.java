@@ -1032,7 +1032,10 @@ public class Mailbox
       com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
       boolean patchCalendarItemMethod = !CREATE_CALENDAR_ITEM_ALLOWED_METHODS.contains(calendarItemData.invite.getMethod());
       String oldMethod = calendarItemData.invite.getMethod();
-      if (patchCalendarItemMethod) calendarItemData.invite.setMethod("PUBLISH");
+      if (patchCalendarItemMethod) {
+        calendarItemData.invite.setMethod("PUBLISH");
+        ZimbraLog.extensions.warn("Setting metadata method to 'PUBLISH', '%s' is not supported" + oldMethod);
+      }
       CalendarItem result = new CalendarItem(
           mMbox.setCalendarItem(
               octxt.getOperationContext(),
@@ -1045,21 +1048,6 @@ public class Mailbox
               nextAlarm
           )
       );
-      if (patchCalendarItemMethod) {
-        calendarItemData.invite.setMethod(oldMethod);
-        result = new CalendarItem(
-            mMbox.setCalendarItem(
-                octxt.getOperationContext(),
-                folderId,
-                flags,
-                tags,
-                calendarItemData,
-                zimbraExceptions,
-                replies,
-                nextAlarm
-            )
-        );
-      }
       return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
