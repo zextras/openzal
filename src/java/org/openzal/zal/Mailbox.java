@@ -1034,7 +1034,11 @@ public class Mailbox
       String oldMethod = calendarItemData.invite.getMethod();
       if (patchCalendarItemMethod) {
         calendarItemData.invite.setMethod("PUBLISH");
-        ZimbraLog.extensions.warn("Setting metadata method to 'PUBLISH', '%s' is not supported" + oldMethod);
+        String cid = String.format("Message Id: %s from sender %s",
+            calendarItemData.message.getMessageID(),
+            calendarItemData.message.getSender()
+        );
+        ZimbraLog.extensions.warn(String.format("Setting metadata method to 'PUBLISH', '%s' is not supported for calendar item %s", oldMethod, cid));
       }
       CalendarItem result = new CalendarItem(
           mMbox.setCalendarItem(
