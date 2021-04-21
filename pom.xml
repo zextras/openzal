@@ -18,6 +18,10 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commit.id>1.1.1</commit.id>
+
+    <zimbra.zimbraVersion>8.8.15</zimbra.zimbraVersion>
+    <jetty.version>9.3.5.v20151012</jetty.version>
+    <servlet.version>3.1.0</servlet.version>
   </properties>
 
   <dependencies>
@@ -222,8 +226,6 @@
       <properties>
         <zimbra.zimbraVersion>8.6.0</zimbra.zimbraVersion>
         <jetty.version>9.1.5.v20140505</jetty.version>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
       </properties>
     </profile>
 
@@ -238,8 +240,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.0</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
       </properties>
     </profile>
 
@@ -254,8 +254,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.1</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1</servlet.version>
-        <jfreechart.version>1.0.16</jfreechart.version>
       </properties>
     </profile>
 
@@ -270,8 +268,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.10</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -286,8 +282,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.11</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -302,8 +296,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.2</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -318,8 +310,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.3</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -334,8 +324,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.4</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -350,8 +338,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.5</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -366,8 +352,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.6</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -382,8 +366,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.7</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -398,8 +380,6 @@
       <properties>
         <zimbra.zimbraVersion>8.7.9</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -414,8 +394,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.10</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -430,8 +408,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.11</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -446,8 +422,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.12</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -462,8 +436,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.15</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -478,8 +450,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.2</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -494,8 +464,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.3</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -510,8 +478,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.4</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -526,8 +492,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.5</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -542,8 +506,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.6</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -558,8 +520,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.7</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -574,8 +534,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.8</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -590,8 +548,6 @@
       <properties>
         <zimbra.zimbraVersion>8.8.9</zimbra.zimbraVersion>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
@@ -606,8 +562,6 @@
       <properties>
         <zimbra.zimbraVersion>9.0.0</zimbra.zimbraVersion>
         <jetty.version>9.4.18.v20190429</jetty.version>
-        <servlet.version>3.1.0</servlet.version>
-        <jfreechart.version>1.0.15</jfreechart.version>
       </properties>
     </profile>
 
