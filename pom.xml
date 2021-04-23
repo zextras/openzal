@@ -186,7 +186,7 @@
         <executions>
           <execution>
             <id>generate-buildinfo</id>
-            <phase>generate-sources</phase>
+            <phase>initialize</phase>
             <goals>
               <goal>java</goal>
             </goals>
