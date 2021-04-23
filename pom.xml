@@ -9,6 +9,14 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
+  <repositories>
+    <repository>
+      <id>the-lucky-gunslingers</id>
+      <name>Zextras Artifact Manager-releases</name>
+      <url>https://zextras.jfrog.io/artifactory/the-lucky-gunslingers-java-sdk</url>
+    </repository>
+  </repositories>
+
   <properties>
     <zimbra.version>8.8.15</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -191,6 +199,10 @@
               <goal>java</goal>
             </goals>
             <configuration>
+              <executableDependency>
+                <groupId>com.zextras</groupId>
+                <artifactId>gen-build-info</artifactId>
+              </executableDependency>
               <mainClass>com.zextras.GenerateBuildInfo</mainClass>
               <arguments>
                 <argument>${project.basedir}</argument>
