@@ -4,6 +4,9 @@ doc/html/
 rpm/
 src/main/java/org/openzal/zal/ZalBuildInfo.java
 src/zal.iml
+target/
+.idea/
+*.iml
 compat_reports/
 openzal-*.deb
 openzal-*.rpm
