@@ -282,16 +282,6 @@
               <packaging>jar</packaging>
               <repositoryId>${artifactory_id}</repositoryId>
               <url>${artifactory_url}</url>
-
-              <!-- the we can refer to this specific artifact with
-              <dependency>
-                  <groupId>com.zextras</groupId>
-                  <artifactId>open-zal</artifactId>
-                  <version>0.0.1-20210429.083900-11</version>
-                  <classifier>zimbra-8.6.0</classifier>
-              </dependency>
-              -->
-
               <classifier>zimbra-${zimbra.version}</classifier>
             </configuration>
           </execution>
