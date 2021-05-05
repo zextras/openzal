@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <servers>
+    <server>
+      <username>${artifactory-username}</username>
+      <password>${artifactory-password}</password>
+      <id>artifactory</id>
+    </server>
+    <server>
+      <username>${artifactory-username}</username>
+      <password>${artifactory-password}</password>
+      <id>the-lucky-gunslingers</id>
+    </server>
+    <server>
+      <username>${artifactory-username}</username>
+      <password>${artifactory-password}</password>
+      <id>snapshots</id>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <id>default</id>
+          <name>Maven public</name>
+          <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+          <id>the-lucky-gunslingers</id>
+          <name>Zextras Artifact Manager-releases</name>
+          <url>https://zextras.jfrog.io/artifactory/the-lucky-gunslingers-java-sdk</url>
+        </repository>
+        <repository>
+          <id>zextras-public-snapshots</id>
+          <name>Zextras public snaposhots</name>
+          <url>https://repo.zextras.io/maven/snapshot</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <id>zextras-public-release</id>
+          <name>Zextras public releases</name>
+          <url>https://repo.zextras.io/maven/release</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>artifactory</id>
+          <name>java-sdk</name>
+          <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
+        </repository>
+        <repository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>java-sdk</name>
+          <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>artifactory</id>
+          <name>java-sdk</name>
+          <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
+        </pluginRepository>
+        <pluginRepository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>java-sdk</name>
+          <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>artifactory</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>artifactory</activeProfile>
+  </activeProfiles>
+</settings>
