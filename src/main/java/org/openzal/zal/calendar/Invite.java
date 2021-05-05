@@ -21,36 +21,49 @@
 package org.openzal.zal.calendar;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
+import com.zimbra.common.calendar.ParsedDateTime;
+import com.zimbra.common.calendar.ZCalendar;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.calendar.Alarm;
+import com.zimbra.cs.mailbox.calendar.CalendarMailSender;
+import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
+import com.zimbra.cs.mailbox.calendar.Recurrence;
+import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mailbox.calendar.ZOrganizer;
+import com.zimbra.cs.mailbox.calendar.ZRecur;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import org.openzal.zal.Account;
 import org.openzal.zal.Item;
 import org.openzal.zal.Provisioning;
 import org.openzal.zal.ProvisioningImp;
 import org.openzal.zal.Utils;
-import org.openzal.zal.Account;
 import org.openzal.zal.ZimbraListWrapper;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 import org.openzal.zal.exceptions.ZimbraException;
-import com.zimbra.common.service.ServiceException;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
-import java.util.*;
 import org.openzal.zal.log.ZimbraLog;
-
-import com.zimbra.cs.mailbox.calendar.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.zimbra.common.calendar.*;
 
 public class Invite
 {
@@ -59,6 +72,7 @@ public class Invite
   public static int TYPE_EXCEPTION = Recurrence.TYPE_EXCEPTION;
   public static int TYPE_CANCELLATION = Recurrence.TYPE_CANCELLATION;
 
+  @Nullable
   public MimeMessage getAttachment()
   {
     return mMimeMessage;
@@ -289,6 +303,19 @@ public class Invite
       return null;
     }
     return new Attendee(organizer.getAddress(), organizer.getCn(), AttendeeInviteStatus.ACCEPTED, AttendeeType.Required);
+  }
+
+  @Nullable
+  public String getSentBy() {
+    ZOrganizer organizer = mInvite.getOrganizer();
+    if (organizer == null) {
+      return null;
+    }
+    final String sentBy = organizer.getSentBy();
+    if(sentBy == null || sentBy.trim().isEmpty()) {
+      return null;
+    }
+    return sentBy;
   }
 
   @VisibleForTesting
@@ -635,7 +662,8 @@ public class Invite
       attendee.getAddress(),
       attendee.getCn(),
       AttendeeInviteStatus.fromZimbra(attendee.getPartStat()),
-      type
+      type,
+      attendee.getRsvp()
     );
   }
 
@@ -818,16 +846,6 @@ public class Invite
   {
     mInvite.setMethod(ZCalendar.ICalTok.CANCEL.toString());
     mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
-    try
-    {
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getCancelSubject(getSubject(), getLocaleForAccount(account));
   }
 
@@ -856,57 +874,24 @@ public class Invite
   public String setDeclineReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_DECLINED);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_DECLINE, getSubject(), getLocaleForAccount(account));
   }
 
   public String setTentativeReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_TENTATIVE);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_TENTATIVE);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_TENTATIVE, getSubject(), getLocaleForAccount(account));
   }
 
   public String setAcceptReply(Provisioning provisioning, Account account)
   {
     mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus("CONF");
+    mInvite.setStatus(IcalXmlStrMap.STATUS_CONFIRMED);
     formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_ACCEPTED);
-    try
-    {
-      mInvite.setDescription("", "");
-      FriendlyCalendaringDescription friendlyCalendaringDescription = new FriendlyCalendaringDescription(
-        Lists.newArrayList(this.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)),
-        account.toZimbra(com.zimbra.cs.account.Account.class)
-      );
-      mInvite.setDescription(friendlyCalendaringDescription.getAsPlainText(), friendlyCalendaringDescription.getAsHtml());
-    }
-    catch( ServiceException e )
-    {}
     return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_ACCEPT, getSubject(), getLocaleForAccount(account));
   }
 

@@ -255,12 +255,16 @@ public class IndexerManager
     {
       if (content == null)
       {
-        content = getIndexer().extractPlainText(
-                getDataSource(),
-                getContentType(),
-                getExtension(),
-                getFilename()
-        );
+        try {
+          content = getIndexer().extractPlainText(
+              getDataSource(),
+              getContentType(),
+              getExtension(),
+              getFilename()
+          );
+        } catch (Exception e) {
+          throw new MimeHandlerException(e);
+        }
       }
 
       return content;

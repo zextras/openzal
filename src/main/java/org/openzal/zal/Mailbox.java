@@ -37,7 +37,9 @@ import com.zimbra.cs.mailbox.cache.LocalTagCache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.Folder.FolderOptions;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailItem.Type;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -125,6 +127,8 @@ public class Mailbox
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
 
+  private static final Set<String> CREATE_CALENDAR_ITEM_ALLOWED_METHODS = new HashSet<>(Arrays.asList("PUBLISH", "REQUEST"));
+
   private static Method sCreateDefaultFlags;
 
   static
@@ -139,6 +143,11 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
+  }
+
+  public MailboxMaintenance getMaintenance()
+  {
+    return new MailboxMaintenance(mMbox.getMaintenance());
   }
 
   public long getSize()
@@ -753,6 +762,26 @@ public class Mailbox
     return new Folder(folder);
   }
 
+  @Nonnull
+  public List<Folder> getFolderList(@Nonnull OperationContext zContext)
+      throws NoSuchFolderException
+  {
+    List<Folder> folderList = new ArrayList<>(0);
+    try
+    {
+      for (com.zimbra.cs.mailbox.Folder folder : mMbox
+          .getFolderList(zContext.getOperationContext(), SortBy.NONE)) {
+        folderList.add(new Folder(folder));
+      }
+
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return folderList;
+  }
 
   @Nonnull
   public Item getItemByPath(@Nonnull OperationContext zContext, String path)
@@ -1000,18 +1029,31 @@ public class Mailbox
 
     try
     {
-      return new CalendarItem(
-        mMbox.setCalendarItem(
-          octxt.getOperationContext(),
-          folderId,
-          flags,
-          tags,
-          defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class),
-          zimbraExceptions,
-          replies,
-          nextAlarm
-        )
+      com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      boolean patchCalendarItemMethod = !CREATE_CALENDAR_ITEM_ALLOWED_METHODS.contains(calendarItemData.invite.getMethod());
+      String oldMethod = calendarItemData.invite.getMethod();
+      if (patchCalendarItemMethod) {
+        calendarItemData.invite.setMethod("PUBLISH");
+        com.zimbra.cs.mailbox.CalendarItem calendarItem = calendarItemData.invite.getCalendarItem();
+        String cid = String.format("Message Id: %s from account id %s",
+            calendarItem.getId(),
+            calendarItem.getAccount().getId()
+        );
+        ZimbraLog.extensions.warn(String.format("Setting metadata method to 'PUBLISH', '%s' is not supported for calendar item %s", oldMethod, cid));
+      }
+      CalendarItem result = new CalendarItem(
+          mMbox.setCalendarItem(
+              octxt.getOperationContext(),
+              folderId,
+              flags,
+              tags,
+              calendarItemData,
+              zimbraExceptions,
+              replies,
+              nextAlarm
+          )
       );
+      return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1570,6 +1612,26 @@ public class Mailbox
     return search(octxt, queryString, types, sortBy, chunkSize, offset, onlyIds, false);
   }
 
+  public QueryResults search(
+    OperationContext operationContext,
+    org.openzal.zal.SearchParams  searchParams
+  ) {
+    ZimbraQueryResults result;
+    try {
+      result = mMbox.index.search(
+          SoapProtocol.Soap12,
+          operationContext.getOperationContext(),
+          searchParams.toZimbra(SearchParams.class)
+      );
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new QueryResults(
+        result
+    );
+  }
+
   @Nonnull
   public QueryResults search(
     @Nonnull OperationContext octxt,
@@ -1728,6 +1790,35 @@ public class Mailbox
     }
 
     return new Folder(folder);
+  }
+
+  @Nonnull
+  public Folder createFolder(
+      OperationContext operationContext,
+      String path
+  ) {
+    MailItem folder;
+    try {
+      FolderOptions fopts = new FolderOptions();
+      folder = mMbox.createFolder(operationContext.getOperationContext(), path, fopts);
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+    return new Folder(folder);
+  }
+
+  public void setFolderRetentionPolicy(@Nonnull OperationContext octxt, int folderId, RetentionPolicy retentionPolicy)
+      throws ZimbraException {
+    try {
+      mMbox.setRetentionPolicy(
+          octxt.getOperationContext(),
+          folderId,
+          Type.FOLDER,
+          retentionPolicy.toZimbra(com.zimbra.soap.mail.type.RetentionPolicy.class)
+      );
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull

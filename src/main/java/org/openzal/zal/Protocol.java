@@ -25,8 +25,15 @@ import javax.annotation.Nonnull;
 
 public class Protocol
 {
+  public static          Protocol clientCertificate  = new Protocol(AuthContext.Protocol.client_certificate);
+  public static          Protocol httpBasic  = new Protocol(AuthContext.Protocol.http_basic);
+  public static          Protocol im = new Protocol(AuthContext.Protocol.im);
+  public static          Protocol imap = new Protocol(AuthContext.Protocol.imap);
+  public static          Protocol pop3 = new Protocol(AuthContext.Protocol.pop3);
+  public static          Protocol soap = new Protocol(AuthContext.Protocol.soap);
+  public static          Protocol spnego = new Protocol(AuthContext.Protocol.spnego);
   @Nonnull public static Protocol zsync = new Protocol(AuthContext.Protocol.zsync);
-  public static          Protocol im    = new Protocol(AuthContext.Protocol.im);
+  public static          Protocol test = new Protocol(AuthContext.Protocol.test);
 
   private final com.zimbra.cs.account.auth.AuthContext.Protocol mProtocol;
 

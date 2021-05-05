@@ -31,6 +31,7 @@ public class LocalConfig
   public static final String zimbra_ldap_userdn = LC.zimbra_ldap_userdn.key();
   public static final String zimbra_ldap_password = LC.zimbra_ldap_password.key();
   public static final String ldap_root_password = LC.ldap_root_password.key();
+  public static final String zimbra_mailbox_groups = LC.zimbra_mailbox_groups.key();
 
   @Nonnull
   public static List<String> getAllKeys()

@@ -20,14 +20,20 @@
 
 package org.openzal.zal.exceptions;
 
-public class NoSuchServerException extends ZimbraException
-{
-  public NoSuchServerException(String serverName)
-  {
-    super("no such server "+serverName);
+public class NoSuchServerException extends ZimbraException {
+
+  private String serverName;
+
+  public NoSuchServerException(String serverName) {
+    super("no such server " + serverName);
+    this.serverName=serverName;
   }
-  protected NoSuchServerException(Exception exception)
-  {
+
+  protected NoSuchServerException(Exception exception) {
     super(exception);
+  }
+
+  public String getServerName() {
+    return serverName;
   }
 }

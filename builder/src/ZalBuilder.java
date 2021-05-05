@@ -20,6 +20,7 @@ public class ZalBuilder
   private static AtomicBoolean sCheckedDependencies = new AtomicBoolean(false);
   private static AtomicBoolean sSetupPerformed  = new AtomicBoolean(false);
   private static AtomicBoolean sGitCheck = new AtomicBoolean(true);
+  private static AtomicBoolean sSkipLast = new AtomicBoolean(false);
 
   private static List<Zimbra> sCommonZimbraVersions = Arrays.asList(new Zimbra[]{
     new Zimbra(Zimbra.Type.standard, new Version("8.6.0")),
@@ -78,6 +79,11 @@ public class ZalBuilder
 
       case "--no-git": {
         sGitCheck.set(false);
+        break;
+      }
+
+      case "--skip-last": {
+        sSkipLast.set(true);
         break;
       }
 
@@ -250,6 +256,7 @@ public class ZalBuilder
       }
 
       case "zal-x": {
+        setup(systemReader);
         buildFromZimbraVersion(sZimbraX, systemReader, false);
         return;
       }
@@ -259,6 +266,7 @@ public class ZalBuilder
     }
 
     if( command.startsWith("zal-") ) {
+      setup(systemReader);
       Version zimbraVersion = new Version(command.substring(4));
       buildFromZimbraVersion(new Zimbra(Zimbra.Type.standard, zimbraVersion), systemReader, false);
       return;
@@ -275,15 +283,6 @@ public class ZalBuilder
 
     List<String> versionsPath = new LinkedList<>();
     List<String> versionsName = new LinkedList<>();
-    sourceList.forEach(new Consumer<Zimbra>()
-    {
-      @Override
-      public void accept(Zimbra version)
-      {
-        versionsPath.add("dist/"+version.toString()+"/zal.jar");
-        versionsName.add(version.toString());
-      }
-    });
 
     if( systemReader.readVersion().getMicro() == 0  )
     {
@@ -294,6 +293,16 @@ public class ZalBuilder
       versionsName.add( "previous version binary" );
       versionsPath.add( "bin/previous-zal-version.jar" );
     }
+
+    sourceList.forEach(new Consumer<Zimbra>()
+    {
+      @Override
+      public void accept(Zimbra version)
+      {
+        versionsPath.add("dist/"+version.toString()+"/zal.jar");
+        versionsName.add(version.toString());
+      }
+    });
 
     String lastVersionName;
     String lastVersionPath;
@@ -447,6 +456,10 @@ public class ZalBuilder
 
   private static void buildFromZimbraVersion(Zimbra zimbra, SystemReader systemReader, boolean devMode) throws Exception
   {
+    if( sSkipLast.get() && zimbra.equals(new Zimbra(Zimbra.Type.standard,sLastSupportedZimbraVersion)) ) {
+      return;
+    }
+
     File zimbraDir = new File("zimbra/"+zimbra);
     if( !zimbraDir.exists() ) {
       throw new RuntimeException("Zimbra version "+zimbra+" not found, maybe you need to cleanup zimbra/");

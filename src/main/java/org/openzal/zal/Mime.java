@@ -85,6 +85,13 @@ public class Mime
   {
     return new com.zimbra.cs.mime.Mime.FixedMimeMessage(session);
   }
+  
+  @Nonnull
+  public static MimeMessage buildFixedMimeMessage(MimeMessage mimeMessage)
+    throws MessagingException
+  {
+    return new com.zimbra.cs.mime.Mime.FixedMimeMessage(mimeMessage);
+  }
 
 /*
   Apply zimbra own modifiers, for example it explode ms-tnef
