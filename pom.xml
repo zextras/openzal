@@ -16,18 +16,45 @@
     </repository>
   </distributionManagement>
 
-  <repositories>
-    <repository>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>default</id>
+      <name>Maven public</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
+    </pluginRepository>
+    <pluginRepository>
       <id>the-lucky-gunslingers</id>
       <name>Zextras Artifact Manager-releases</name>
       <url>https://zextras.jfrog.io/artifactory/the-lucky-gunslingers-java-sdk</url>
-    </repository>
-    <repository>
-      <id>zextras-java-sdk</id>
-      <name>Zextras Artifact Manager-releases</name>
-      <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
-    </repository>
-  </repositories>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jitpack.io</id>
+      <name>Jitpack</name>
+      <url>https://jitpack.io</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>zextras-public-snapshots</id>
+      <name>Zextras public snaposhots</name>
+      <url>https://repo.zextras.io/maven/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>zextras-public-release</id>
+      <name>Zextras public releases</name>
+      <url>https://repo.zextras.io/maven/release</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <properties>
     <zimbra.version>8.8.15</zimbra.version>
