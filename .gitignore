@@ -15,3 +15,4 @@ openzal-*.rpm
 /release
 /tmp
 /private
+generated

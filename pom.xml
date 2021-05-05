@@ -9,25 +9,88 @@
   <version>2.23.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <distributionManagement>
-    <repository>
-      <id>${artifactory_id}</id>
-      <url>${artifactory_url}</url>
-    </repository>
-  </distributionManagement>
-
   <repositories>
     <repository>
-      <id>the-lucky-gunslingers</id>
-      <name>Zextras Artifact Manager-releases</name>
-      <url>https://zextras.jfrog.io/artifactory/the-lucky-gunslingers-java-sdk</url>
+      <id>default</id>
+      <name>Maven public</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
     </repository>
     <repository>
-      <id>zextras-java-sdk</id>
-      <name>Zextras Artifact Manager-releases</name>
-      <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
+      <id>jitpack.io</id>
+      <name>Jitpack</name>
+      <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+      <id>zextras-public-snapshots</id>
+      <name>Zextras public snaposhots</name>
+      <url>https://repo.zextras.io/maven/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>zextras-public-release</id>
+      <name>Zextras public releases</name>
+      <url>https://repo.zextras.io/maven/release</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>default</id>
+      <name>Maven public</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jitpack.io</id>
+      <name>Jitpack</name>
+      <url>https://jitpack.io</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>zextras-public-snapshots</id>
+      <name>Zextras public snaposhots</name>
+      <url>https://repo.zextras.io/maven/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>zextras-public-release</id>
+      <name>Zextras public releases</name>
+      <url>https://repo.zextras.io/maven/release</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>zextras-public</id>
+      <name>Zextras snapshots</name>
+      <url>${zextras-public-repo.url}/maven/snapshot</url>
+    </snapshotRepository>
+    <repository>
+      <id>zextras-public</id>
+      <name>Zextras releases</name>
+      <url>${zextras-public-repo.url}/maven/release</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <zimbra.version>8.8.15</zimbra.version>
@@ -38,9 +101,10 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commit.id>1.1.1</commit.id>
-
     <jetty.version>9.3.5.v20151012</jetty.version>
     <servlet.version>3.1.0</servlet.version>
+    <maven-s3-storage.version>3.0.1</maven-s3-storage.version>
+    <zextras-public-repo.url>s3://zextras-public-repositories</zextras-public-repo.url>
   </properties>
 
   <dependencies>
@@ -181,6 +245,14 @@
   </dependencies>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>com.github.ZeXtras</groupId>
+        <artifactId>maven-s3-storage</artifactId>
+        <version>${maven-s3-storage.version}</version>
+      </extension>
+    </extensions>
+
     <plugins>
       <plugin>
         <groupId>pl.project13.maven</groupId>
@@ -261,28 +333,6 @@
             <configuration>
               <sourceFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy.class</sourceFile>
               <destinationFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy</destinationFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>deploy-zimbra-specific-openzal</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy-file</goal>
-            </goals>
-            <configuration>
-              <file>${project.build.directory}/${project.build.finalName}.jar</file>
-              <artifactId>${project.artifactId}</artifactId>
-              <groupId>${project.groupId}</groupId>
-              <version>${project.version}</version>
-              <packaging>jar</packaging>
-              <repositoryId>${artifactory_id}</repositoryId>
-              <url>${artifactory_url}</url>
-              <classifier>zimbra-${zimbra.version}</classifier>
             </configuration>
           </execution>
         </executions>
