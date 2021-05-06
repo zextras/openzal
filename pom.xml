@@ -352,6 +352,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.0</version>
         <configuration>
+          <classifier>zimbra-${zimbra.version}</classifier>
           <archive>
             <index>true</index>
             <manifestEntries>
