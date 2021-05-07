@@ -11,24 +11,9 @@
 
   <repositories>
     <repository>
-      <id>the-lucky-gunslingers</id>
-      <name>Zextras Artifact Manager-releases</name>
-      <url>https://zextras.jfrog.io/artifactory/the-lucky-gunslingers-java-sdk</url>
-    </repository>
-    <repository>
-      <id>zextras-java-sdk</id>
-      <name>Zextras Artifact Manager-releases</name>
-      <url>https://zextras.jfrog.io/artifactory/java-sdk</url>
-    </repository>
-    <repository>
       <id>default</id>
       <name>Maven public</name>
       <url>https://repo.maven.apache.org/maven2/</url>
-    </repository>
-    <repository>
-      <id>jitpack.io</id>
-      <name>Jitpack</name>
-      <url>https://jitpack.io</url>
     </repository>
     <repository>
       <id>zextras-public-snapshots</id>
