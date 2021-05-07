@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+N=4
+i=0
+for j in $@; do
+  ((i=$i+1)); (($i%$N==0)) && wait
+   mvn install -Pcompatibility-check-output-dir -Dzimbra.version=$j &
+done
+wait

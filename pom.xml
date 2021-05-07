@@ -115,6 +115,7 @@
     <servlet.version>3.1.0</servlet.version>
     <maven-s3-storage.version>3.0.1</maven-s3-storage.version>
     <zextras-public-repo.url>s3://zextras-public-repositories</zextras-public-repo.url>
+    <execute.fast.compatibility>true</execute.fast.compatibility>
   </properties>
 
   <dependencies>
@@ -243,6 +244,12 @@
       <groupId>com.zextras</groupId>
       <artifactId>gen-build-info</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zextras</groupId>
+      <artifactId>zal-compatibility-checker</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -699,6 +706,47 @@
       </properties>
     </profile>
 
+    <profile>
+      <id>compatibility-check-output-dir</id>
+      <build>
+        <directory>dist/${zimbra.version}</directory>
+      </build>
+    </profile>
+
+    <profile>
+      <id>compatibility-check</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <id>compatibility-check</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>java</goal>
+                </goals>
+                <configuration>
+                  <executableDependency>
+                    <groupId>com.zextras</groupId>
+                    <artifactId>zal-compatibility-checker</artifactId>
+                  </executableDependency>
+                  <mainClass>com.zextras.CompatibilityChecker</mainClass>
+                  <arguments>
+                    <argument>${execute.fast.compatibility}</argument>
+                    <argument>${project.version}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
 </project>
