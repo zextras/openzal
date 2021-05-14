@@ -113,6 +113,7 @@ public class InviteFactory
   private       String            mPartStat;
   private       boolean           mResponseRequest;
   private       List<Attach>      mICalAttachmentList;
+  private boolean isOutlook;
 
   public InviteFactory()
   {
@@ -305,6 +306,12 @@ public class InviteFactory
     }
   }
 
+  public void setIsOutlook(boolean outlook) {
+    isOutlook = outlook;
+  }
+
+
+
   public void populateFactoryFromExistingInvite( Invite invite )
   {
     mUid = invite.getUid();
@@ -433,7 +440,7 @@ public class InviteFactory
 
     ParsedDateTime dateStart;
     ParsedDateTime dateEnd;
-    if( mAllDayEvent ){
+    if( mAllDayEvent && !isOutlook ){
       if(TimeUnit.MILLISECONDS.toHours(mUtcDateEnd - mUtcDateStart) < 24) {
         mUtcDateEnd = mUtcDateStart + TimeUnit.HOURS.toMillis(24);
       }
