@@ -71,13 +71,17 @@ public class Folder extends Item
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getAttributes();
   }
 
+  public boolean isActiveSyncDisabled() {
+    return ((com.zimbra.cs.mailbox.Folder) mMailItem).isActiveSyncDisabled();
+  }
+
   public boolean isParentOf(Folder folder)
-    throws ZimbraException
+      throws ZimbraException
   {
     try
     {
       return ((com.zimbra.cs.mailbox.Folder) mMailItem).isDescendant(
-        folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
+          folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
       );
     }
     catch (ServiceException e)
