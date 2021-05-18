@@ -45,7 +45,8 @@ public class Version implements Comparable<Version>
   {
     final List<Integer> versionParts = new ArrayList<Integer>(3);
 
-    for(String part : version.split("\\."))
+    int bound = version.indexOf('-') > -1 ? version.indexOf('-') : version.length();
+    for(String part : version.substring(0, bound).split("\\."))
     {
       versionParts.add(Integer.valueOf(part));
     }
