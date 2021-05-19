@@ -3052,4 +3052,12 @@ public class Mailbox
       throw new RuntimeException(e);
     }
   }
+
+  public void setActiveSyncDisabled(OperationContext octxt, int folderId, boolean disableActiveSync) {
+    try {
+      mMbox.setActiveSyncDisabled(octxt.getOperationContext(), folderId, disableActiveSync);
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }

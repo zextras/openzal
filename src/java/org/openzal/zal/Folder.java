@@ -75,14 +75,6 @@ public class Folder extends Item
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).isActiveSyncDisabled();
   }
 
-  public void setActiveSyncDisabled(boolean disableActiveSync) throws ZimbraException {
-    try {
-      ((com.zimbra.cs.mailbox.Folder) mMailItem).setActiveSyncDisabled(disableActiveSync);
-    } catch (ServiceException e) {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
   public boolean isParentOf(Folder folder)
       throws ZimbraException
   {
