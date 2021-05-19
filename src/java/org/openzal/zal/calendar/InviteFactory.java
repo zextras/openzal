@@ -34,32 +34,18 @@ import com.zimbra.cs.mailbox.calendar.Recurrence;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mailbox.calendar.ZOrganizer;
 import com.zimbra.cs.mailbox.calendar.ZRecur;
-import com.zimbra.cs.mailbox.calendar.Alarm;
-import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
-import com.zimbra.cs.mailbox.calendar.RecurId;
-import com.zimbra.cs.mailbox.calendar.Recurrence;
 import com.zimbra.cs.mailbox.calendar.Recurrence.IRecurrence;
-import com.zimbra.cs.mailbox.calendar.ZAttendee;
-import com.zimbra.cs.mailbox.calendar.ZOrganizer;
-import com.zimbra.cs.mailbox.calendar.ZRecur;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -113,7 +99,7 @@ public class InviteFactory
   private       String            mPartStat;
   private       boolean           mResponseRequest;
   private       List<Attach>      mICalAttachmentList;
-  private boolean isOutlook;
+  private boolean isAtLeastEas16;
 
   public InviteFactory()
   {
@@ -306,8 +292,8 @@ public class InviteFactory
     }
   }
 
-  public void setIsOutlook(boolean outlook) {
-    isOutlook = outlook;
+  public void setIsAtLeastEas16(boolean isAtLeastEas16) {
+    this.isAtLeastEas16 = isAtLeastEas16;
   }
 
 
@@ -440,7 +426,7 @@ public class InviteFactory
 
     ParsedDateTime dateStart;
     ParsedDateTime dateEnd;
-    if( mAllDayEvent && !isOutlook ){
+    if (mAllDayEvent && isAtLeastEas16) {
       if(TimeUnit.MILLISECONDS.toHours(mUtcDateEnd - mUtcDateStart) < 24) {
         mUtcDateEnd = mUtcDateStart + TimeUnit.HOURS.toMillis(24);
       }
