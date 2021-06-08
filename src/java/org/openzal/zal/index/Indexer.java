@@ -22,9 +22,10 @@ package org.openzal.zal.index;
 
 
 import javax.activation.DataSource;
+import org.openzal.zal.TemporaryIndexingError;
 
 public interface Indexer
 {
   boolean canHandle(String contentType, String fileExtension);
-  String extractPlainText(DataSource dataSource, String contentType, String fileExtension, String fileName);
+  String extractPlainText(DataSource dataSource, String contentType, String fileExtension, String fileName) throws TemporaryIndexingError;
 }
