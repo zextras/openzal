@@ -6,7 +6,7 @@
 
   <groupId>com.zextras</groupId>
   <artifactId>open-zal</artifactId>
-  <version>2.23.1-SNAPSHOT</version>
+  <version>2.33.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -119,6 +119,7 @@
       <groupId>javax.activation</groupId>
       <artifactId>javax.activation-api</artifactId>
       <version>1.2.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -192,6 +193,16 @@
       <groupId>org.jfree</groupId>
       <artifactId>jfreechart</artifactId>
       <version>${jfreechart.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.lowagie</groupId>
+          <artifactId>itext</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -246,6 +257,7 @@
       <groupId>javax.mail</groupId>
       <artifactId>javax.mail-api</artifactId>
       <version>1.4.5</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -372,7 +384,7 @@
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.0</version>
         <configuration>
-          <classifier>zimbra-${zimbra.version}</classifier>
+<!--          <classifier>zimbra-${zimbra.version}</classifier>-->
           <archive>
             <index>true</index>
             <manifestEntries>
@@ -753,6 +765,21 @@
                     <argument>${execute.fast.compatibility}</argument>
                     <argument>${project.version}</argument>
                   </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>deploy-zimbra-specific-openzal</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>deploy-file</goal>
+                </goals>
+                <configuration>
+                  <classifier>zimbra-${zimbra.version}</classifier>
                 </configuration>
               </execution>
             </executions>
