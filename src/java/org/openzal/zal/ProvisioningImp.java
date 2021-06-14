@@ -237,6 +237,14 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
   public static String A_zimbraZimletEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraZimletEnabled;
   public static String SERVICE_MAILBOX                                        = com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX;
+  public static final String SERVICE_PROXY                                    = com.zimbra.cs.account.Provisioning.SERVICE_PROXY;
+  public static final String SERVICE_MEMCACHED                                = com.zimbra.cs.account.Provisioning.SERVICE_MEMCACHED;
+  public static final String SERVICE_WEBCLIENT                                = com.zimbra.cs.account.Provisioning.SERVICE_WEBCLIENT;
+  public static final String SERVICE_ADMINCLIENT                              = com.zimbra.cs.account.Provisioning.SERVICE_ADMINCLIENT;
+  public static final String SERVICE_ZIMLET                                   = com.zimbra.cs.account.Provisioning.SERVICE_ZIMLET;
+  public static final String SERVICE_MAILCLIENT                               = com.zimbra.cs.account.Provisioning.SERVICE_MAILCLIENT;
+  public static final String SERVICE_IMAP                                     = com.zimbra.cs.account.Provisioning.SERVICE_IMAP;
+  public static final String[] SERVICES = {SERVICE_MAILBOX, SERVICE_PROXY, SERVICE_MEMCACHED, SERVICE_WEBCLIENT, SERVICE_ADMINCLIENT, SERVICE_ZIMLET, SERVICE_MAILCLIENT, SERVICE_IMAP};
   public static String A_zimbraAdminPort                                      = com.zimbra.cs.account.Provisioning.A_zimbraAdminPort;
   public static String A_zimbraNotebookAccount                                = com.zimbra.cs.account.Provisioning.A_zimbraNotebookAccount;
   public static String A_zimbraNotes                                          = com.zimbra.cs.account.Provisioning.A_zimbraNotes;
@@ -319,6 +327,10 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPasswordAllowedChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedChars;
   public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
   public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
+
+  public static String A_zimbraServerVersionMajor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMajor;
+  public static String A_zimbraServerVersionMinor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMinor;
+  public static String A_zimbraServerVersionMicro = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMicro;
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
