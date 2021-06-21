@@ -237,27 +237,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
   public static String A_zimbraZimletEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraZimletEnabled;
   public static String SERVICE_MAILBOX                                        = com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX;
-  /* $if ZimbraVersion >= 8.8.0 $ */
-  private static final String SERVICE_PROXY                                    = com.zimbra.cs.account.Provisioning.SERVICE_PROXY;
-  private static final String SERVICE_MEMCACHED                                = com.zimbra.cs.account.Provisioning.SERVICE_MEMCACHED;
-  private static final String SERVICE_WEBCLIENT                                = com.zimbra.cs.account.Provisioning.SERVICE_WEBCLIENT;
-  private static final String SERVICE_ADMINCLIENT                              = com.zimbra.cs.account.Provisioning.SERVICE_ADMINCLIENT;
-  private static final String SERVICE_ZIMLET                                   = com.zimbra.cs.account.Provisioning.SERVICE_ZIMLET;
-  private static final String SERVICE_MAILCLIENT                               = com.zimbra.cs.account.Provisioning.SERVICE_MAILCLIENT;
-  private static final String SERVICE_IMAP                                     = com.zimbra.cs.account.Provisioning.SERVICE_IMAP;
-  public static final String[] SERVICES = {SERVICE_MAILBOX, SERVICE_PROXY, SERVICE_MEMCACHED, SERVICE_WEBCLIENT, SERVICE_ADMINCLIENT, SERVICE_ZIMLET, SERVICE_MAILCLIENT, SERVICE_IMAP};
-  /* $elseif ZimbraVersion >= 8.6.0 $
-  private static final String SERVICE_PROXY                                    = com.zimbra.cs.account.Provisioning.SERVICE_PROXY;
-  private static final String SERVICE_MEMCACHED                                = com.zimbra.cs.account.Provisioning.SERVICE_MEMCACHED;
-  private static final String SERVICE_WEBCLIENT                                = com.zimbra.cs.account.Provisioning.SERVICE_WEBCLIENT;
-  private static final String SERVICE_ADMINCLIENT                              = com.zimbra.cs.account.Provisioning.SERVICE_ADMINCLIENT;
-  private static final String SERVICE_ZIMLET                                   = com.zimbra.cs.account.Provisioning.SERVICE_ZIMLET;
-  private static final String SERVICE_MAILCLIENT                               = com.zimbra.cs.account.Provisioning.SERVICE_MAILCLIENT;
-  public static final String[] SERVICES = {SERVICE_MAILBOX, SERVICE_PROXY, SERVICE_MEMCACHED, SERVICE_WEBCLIENT, SERVICE_ADMINCLIENT, SERVICE_ZIMLET, SERVICE_MAILCLIENT};
-  /* $else$
-  public static final String[] SERVICES = {SERVICE_MAILBOX};
-  /* $endif$ */
-
   public static String A_zimbraAdminPort                                      = com.zimbra.cs.account.Provisioning.A_zimbraAdminPort;
   public static String A_zimbraNotebookAccount                                = com.zimbra.cs.account.Provisioning.A_zimbraNotebookAccount;
   public static String A_zimbraNotes                                          = com.zimbra.cs.account.Provisioning.A_zimbraNotes;
