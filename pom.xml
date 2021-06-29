@@ -174,7 +174,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>13.0.1</version>
+      <version>${guava.version}</version>
     </dependency>
 
     <dependency>
@@ -313,7 +313,7 @@
       <plugin>
         <groupId>com.zextras</groupId>
         <artifactId>preprocess-maven-plugin</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
         <configuration>
           <zimbraVersion>${zimbra.version}</zimbraVersion>
         </configuration>
@@ -424,6 +424,7 @@
       </activation>
       <properties>
         <jetty.version>9.1.5.v20140505</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -437,6 +438,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -450,6 +452,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -463,6 +466,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -476,6 +480,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -489,6 +494,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -502,6 +508,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -515,6 +522,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -528,6 +536,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -541,6 +550,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -554,6 +564,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -567,58 +578,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.10</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.10</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.11</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.11</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.12</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.12</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.15</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.15</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -632,6 +592,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -645,6 +606,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -658,6 +620,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -671,6 +634,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -684,6 +648,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -697,6 +662,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -710,6 +676,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>13.0.1</guava.version>
       </properties>
     </profile>
 
@@ -722,6 +689,63 @@
         </property>
       </activation>
       <properties>
+        <jetty.version>9.3.5.v20151012</jetty.version>
+        <guava.version>25.1-jre</guava.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>zimbra-8.8.10</id>
+      <activation>
+        <property>
+          <name>zimbra.version</name>
+          <value>8.8.10</value>
+        </property>
+      </activation>
+      <properties>
+        <guava.version>25.1-jre</guava.version>
+        <jetty.version>9.3.5.v20151012</jetty.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>zimbra-8.8.11</id>
+      <activation>
+        <property>
+          <name>zimbra.version</name>
+          <value>8.8.11</value>
+        </property>
+      </activation>
+      <properties>
+        <guava.version>25.1-jre</guava.version>
+        <jetty.version>9.3.5.v20151012</jetty.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>zimbra-8.8.12</id>
+      <activation>
+        <property>
+          <name>zimbra.version</name>
+          <value>8.8.12</value>
+        </property>
+      </activation>
+      <properties>
+        <guava.version>25.1-jre</guava.version>
+        <jetty.version>9.3.5.v20151012</jetty.version>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>zimbra-8.8.15</id>
+      <activation>
+        <property>
+          <name>zimbra.version</name>
+          <value>8.8.15</value>
+        </property>
+      </activation>
+      <properties>
+        <guava.version>25.1-jre</guava.version>
         <jetty.version>9.3.5.v20151012</jetty.version>
       </properties>
     </profile>
@@ -736,6 +760,7 @@
       </activation>
       <properties>
         <jetty.version>9.4.18.v20190429</jetty.version>
+        <guava.version>25.1-jre</guava.version>
       </properties>
     </profile>
 

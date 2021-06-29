@@ -94,7 +94,12 @@ public class SoapServiceManager
         /* $if ZimbraVersion >= 8.8.9 || ZimbraX == 1 $ */
         ((LoadingCache<String, List<DocumentService>>) sExtraServices.get(null)).invalidate(soapService.getServiceName());
         /* $else $
-        ((Map<String, List<DocumentService>>) sExtraServices.get(null)).remove(soapService.getServiceName());
+        Object entry = sExtraServices.get(null);
+        if (entry instanceof java.util.Map) {
+          ((Map) entry).remove(soapService.getServiceName());
+        } else {
+          ((com.google.common.cache.LoadingCache) entry).invalidate(soapService.getServiceName());
+        }
         /* $endif $ */
       }
     }
