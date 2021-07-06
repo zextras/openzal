@@ -267,5 +267,9 @@ public class Domain extends Entry
     return mDomain.getAuthMechAdmin();
   }
 
+  @Nullable
+  public String getWebClientLoginURL() {
+    return mDomain.getWebClientLoginURL();
+  }
 }
 

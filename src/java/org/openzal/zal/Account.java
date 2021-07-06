@@ -593,6 +593,14 @@ public class Account extends Entry
     return mAccount.isMobilePolicyAllowPartialProvisioning();
   }
 
+  public void authAccount(String password, @Nonnull Protocol proto, Map<String, Object> authCtxt) {
+    try {
+      mAccount.getProvisioning().authAccount(mAccount, password, proto.toZimbra(), authCtxt);
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void authAccount(String password, @Nonnull Protocol proto)
   {
     try

@@ -132,6 +132,8 @@ public class Mailbox
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
 
+  private static final Set<String> CREATE_CALENDAR_ITEM_ALLOWED_METHODS = new HashSet<>(Arrays.asList("PUBLISH", "REQUEST"));
+
   private static Method sCreateDefaultFlags;
 
   static
@@ -1061,18 +1063,31 @@ public class Mailbox
 
     try
     {
-      return new CalendarItem(
-        mMbox.setCalendarItem(
-          octxt.getOperationContext(),
-          folderId,
-          flags,
-          tags,
-          defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class),
-          zimbraExceptions,
-          replies,
-          nextAlarm
-        )
+      com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      boolean patchCalendarItemMethod = !CREATE_CALENDAR_ITEM_ALLOWED_METHODS.contains(calendarItemData.invite.getMethod());
+      String oldMethod = calendarItemData.invite.getMethod();
+      if (patchCalendarItemMethod) {
+        calendarItemData.invite.setMethod("PUBLISH");
+        com.zimbra.cs.mailbox.CalendarItem calendarItem = calendarItemData.invite.getCalendarItem();
+        String cid = String.format("Message Id: %s from account id %s",
+            calendarItem.getId(),
+            calendarItem.getAccount().getId()
+        );
+        ZimbraLog.extensions.warn(String.format("Setting metadata method to 'PUBLISH', '%s' is not supported for calendar item %s", oldMethod, cid));
+      }
+      CalendarItem result = new CalendarItem(
+          mMbox.setCalendarItem(
+              octxt.getOperationContext(),
+              folderId,
+              flags,
+              tags,
+              calendarItemData,
+              zimbraExceptions,
+              replies,
+              nextAlarm
+          )
       );
+      return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -3188,9 +3203,17 @@ public class Mailbox
   }
 
   public void setFolderUrl(OperationContext operationContext, int folderId, String url) {
-    try{
+    try {
       mMbox.setFolderUrl(operationContext.getOperationContext(), folderId, url);
-    } catch( ServiceException e ) {
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void setActiveSyncDisabled(OperationContext octxt, int folderId, boolean disableActiveSync) {
+    try {
+      mMbox.setActiveSyncDisabled(octxt.getOperationContext(), folderId, disableActiveSync);
+    } catch (ServiceException e) {
       throw ExceptionWrapper.wrap(e);
     }
   }

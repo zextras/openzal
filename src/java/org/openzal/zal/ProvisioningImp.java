@@ -320,6 +320,16 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
   public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
 
+  /* $if ZimbraVersion >= 8.5.0 $ */
+  public static String A_zimbraServerVersionMajor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMajor;
+  public static String A_zimbraServerVersionMinor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMinor;
+  public static String A_zimbraServerVersionMicro = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMicro;
+  /* $else$
+  public static String A_zimbraServerVersionMajor = "";
+  public static String A_zimbraServerVersionMinor = "";
+  public static String A_zimbraServerVersionMicro = "";
+  /* $endif$ */
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
@@ -700,28 +710,39 @@ public class ProvisioningImp implements Provisioning
       switch (proto) {
         case "client_certificate":
           context.put("proto", AuthContext.Protocol.client_certificate);
+          break;
         case "http_basic":
           context.put("proto", AuthContext.Protocol.http_basic);
+          break;
         /* $if ZimbraVersion > 8.6.0 $ */
         case "http_dav":
           context.put("proto", AuthContext.Protocol.http_dav);
+          break;
         /* $endif $ */
         case "im":
           context.put("proto", AuthContext.Protocol.im);
+          break;
         case "imap":
           context.put("proto", AuthContext.Protocol.imap);
+          break;
         case "pop3":
           context.put("proto", AuthContext.Protocol.pop3);
+          break;
         case "soap":
           context.put("proto", AuthContext.Protocol.soap);
+          break;
         case "spnego":
           context.put("proto", AuthContext.Protocol.spnego);
+          break;
         case "zsync":
           context.put("proto", AuthContext.Protocol.zsync);
+          break;
         case "test":
           context.put("proto", AuthContext.Protocol.test);
+          break;
         default:
           context.put("proto", AuthContext.Protocol.http_basic);
+          break;
       }
       if (LdapProvisioning.class.isAssignableFrom(mProvisioning.getClass())) {
         final Domain domain = requiredDomain(account);
