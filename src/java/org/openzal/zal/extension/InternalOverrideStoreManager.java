@@ -447,7 +447,7 @@ class InternalOverrideStoreManager extends com.zimbra.cs.store.StoreManager {
     }
   }
 
-  public boolean deleteStore(Mailbox mbox, final Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
+  public boolean deleteStore(final Mailbox mbox, final Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
   {
     org.openzal.zal.Mailbox mailbox = new org.openzal.zal.Mailbox(mbox);
     for (StoreVolume volume : mVolumeManager.getAll())
@@ -473,7 +473,7 @@ class InternalOverrideStoreManager extends com.zimbra.cs.store.StoreManager {
                 MailboxBlobInfo next = iterator.next();
 
                 return new Pair<MailboxData, ZalItemData>(
-                    new MailboxData(next.mailboxId, next.accountId),
+                    new MailboxData(mbox.getId(), next.accountId),
                     new ZalItemData(next.itemId, next.revision)
                 );
               }
