@@ -40,6 +40,7 @@ import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.Folder.FolderOptions;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailItem.Type;
+import com.zimbra.cs.mailbox.Mailbox.DeleteBlobs;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
@@ -2929,6 +2930,18 @@ public class Mailbox
     try
     {
       mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void deleteMailboxButStore()
+  {
+    try
+    {
+      mMbox.deleteMailbox(DeleteBlobs.NEVER);
     }
     catch (ServiceException e)
     {
