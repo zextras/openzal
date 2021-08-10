@@ -12,3 +12,4 @@ openzal-*.rpm
 /release
 /tmp
 /private
+/target
