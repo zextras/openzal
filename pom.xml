@@ -303,9 +303,9 @@
 
     <plugins>
       <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <version>4.0.0</version>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>5.0.0</version>
         <executions>
           <execution>
             <id>get-the-git-infos</id>
@@ -313,6 +313,11 @@
               <goal>revision</goal>
             </goals>
             <phase>initialize</phase>
+            <configuration>
+              <dotGitDirectory>${project.parent.basedir}/.git</dotGitDirectory>
+              <generateGitPropertiesFile>false</generateGitPropertiesFile>
+              <commitIdGenerationMode>full</commitIdGenerationMode>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -357,7 +362,7 @@
               <systemProperties>
                 <systemProperty>
                   <key>PROJECT_COMMIT</key>
-                  <value>${git.commit.id}</value>
+                  <value>${git.commit.id.full}</value>
                 </systemProperty>
                 <systemProperty>
                   <key>PROJECT_VERSION</key>
@@ -414,7 +419,7 @@
                 <manifestEntries>
                   <Specification-Title>Zimbra Abstraction Layer</Specification-Title>
                   <Specification-Version>${project.version}</Specification-Version>
-                  <Specification-Commit>${git.commit.id}</Specification-Commit>
+                  <Specification-Commit>${git.commit.id.full}</Specification-Commit>
                   <Specification-Vendor>ZeXtras</Specification-Vendor>
                   <Implementation-Version>${zimbra.version}</Implementation-Version>
                   <Created-By>ZeXtras</Created-By>
