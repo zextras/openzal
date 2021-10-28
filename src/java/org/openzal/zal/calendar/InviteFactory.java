@@ -43,6 +43,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.Collections;
 import java.util.Objects;
@@ -326,9 +327,15 @@ public class InviteFactory
     }
 
     mRecurrenceRule = invite.getRecurrenceRule();
-    mOrganizerAddress = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getAddress() : null;
+    if (invite.hasOrganizer()) {
+      Attendee organizer = invite.getOrganizer();
+      mOrganizerAddress = organizer.getAddress().trim().isEmpty() ? null : organizer.getAddress();
+      mOrganizerName = organizer.getName();
+    } else {
+      mOrganizerAddress = null;
+      mOrganizerName = null;
+    }
     sentByAddress = invite.getSentBy();
-    mOrganizerName = invite.hasOrganizer() ? Objects.requireNonNull(invite.getOrganizer()).getName() : null;
     mSequence = invite.getSequence();
     mPercentage = invite.getTaskPercentComplete();
     mSubject = invite.getSubject();
@@ -380,11 +387,7 @@ public class InviteFactory
       mOrganizerAddress = mbox.getAccount().getName();
     }
 
-    if(Objects.isNull(mOrganizerName) || mOrganizerName.trim().isEmpty()) {
-      mOrganizerName = mbox.getAccount().getDisplayName();
-    }
-
-    ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, mOrganizerName);
+    ZOrganizer organizer = new ZOrganizer(mOrganizerAddress, Optional.ofNullable(mOrganizerName).orElse(""));
     organizer.setSentBy(sentByAddress);
 
     // This flag says whether the mailbox owner is the organizer of this event

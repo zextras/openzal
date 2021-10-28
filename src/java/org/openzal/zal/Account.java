@@ -1309,5 +1309,9 @@ public class Account extends Entry
   public String getMailSieveScript() {
     return mAccount.getMailSieveScript();
   }
+
+  public boolean mustChangePassword() {
+    return mAccount.isPasswordMustChange();
+  }
 }
 
