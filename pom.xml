@@ -4,12 +4,18 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.zextras</groupId>
-  <artifactId>open-zal</artifactId>
-  <version>2.33.6-SNAPSHOT</version>
+  <groupId>org.openzal</groupId>
+  <artifactId>zal</artifactId>
+  <version>3.10.0</version>
   <packaging>jar</packaging>
 
   <repositories>
+    <repository>
+      <!-- artifactory should be temporary solution -->
+      <id>artifactory</id>
+      <name>Zextras public maven repo</name>
+      <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
+    </repository>
     <repository>
       <id>default</id>
       <name>Maven public</name>
@@ -75,20 +81,15 @@
   </pluginRepositories>
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>zextras-public</id>
-      <name>Zextras snapshots</name>
-      <url>${zextras-public-repo.url}/maven/snapshot</url>
-    </snapshotRepository>
     <repository>
-      <id>zextras-public</id>
+      <id>artifactory</id>
       <name>Zextras releases</name>
-      <url>${zextras-public-repo.url}/maven/release</url>
+      <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
     </repository>
   </distributionManagement>
 
   <properties>
-    <zimbra.version>8.8.15</zimbra.version>
+    <zimbra.version>22.1.0</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
@@ -123,33 +124,63 @@
     </dependency>
 
     <dependency>
-      <groupId>com.zimbra</groupId>
-      <artifactId>zimbracommon</artifactId>
+      <groupId>${zimbra.group}</groupId>
+      <artifactId>${zimbra.common}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>com.zimbra</groupId>
-      <artifactId>zimbraclient</artifactId>
+      <groupId>${zimbra.group}</groupId>
+      <artifactId>${zimbra.client}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>com.zimbra</groupId>
-      <artifactId>zimbra-native</artifactId>
+      <groupId>${zimbra.group}</groupId>
+      <artifactId>${zimbra.native}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>com.zimbra</groupId>
-      <artifactId>zimbrastore</artifactId>
+      <groupId>${zimbra.group}</groupId>
+      <artifactId>${zimbra.store}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>com.zimbra</groupId>
-      <artifactId>zimbrasoap</artifactId>
+      <groupId>${zimbra.group}</groupId>
+      <artifactId>${zimbra.soap}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -422,7 +453,7 @@
                   <Specification-Commit>${git.commit.id.full}</Specification-Commit>
                   <Specification-Vendor>ZeXtras</Specification-Vendor>
                   <Implementation-Version>${zimbra.version}</Implementation-Version>
-                  <Created-By>ZeXtras</Created-By>
+                  <Created-By>Zextras</Created-By>
                   <Zimbra-Extension-Class>org.openzal.zal.extension.ZalEntrypointImpl</Zimbra-Extension-Class>
                 </manifestEntries>
               </archive>
@@ -438,200 +469,6 @@
   </build>
 
   <profiles>
-    <profile>
-      <id>zimbra-8.6.0</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.6.0</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.1.5.v20140505</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.0</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.0</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.1</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.1</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.10</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.10</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.11</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.11</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.2</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.2</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.3</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.3</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.4</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.4</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.5</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.5</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.6</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.6</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.7</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.7</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.7.9</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.7.9</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.10</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.10</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.11</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.11</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.12</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.12</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
 
     <profile>
       <id>zimbra-8.8.15</id>
@@ -643,123 +480,28 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
+        <zimbra.group>com.zimbra</zimbra.group>
+        <zimbra.native>zimbra-native</zimbra.native>
+        <zimbra.soap>zimbrasoap</zimbra.soap>
+        <zimbra.client>zimbraclient</zimbra.client>
+        <zimbra.store>zimbrastore</zimbra.store>
+        <zimbra.common>zimbracommon</zimbra.common>
       </properties>
     </profile>
 
     <profile>
-      <id>zimbra-8.8.2</id>
+      <id>carbonio</id>
       <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.2</value>
-        </property>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.3</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.3</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.4</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.4</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.5</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.5</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.6</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.6</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.7</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.7</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.8</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.8</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-8.8.9</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.9</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>zimbra-9.0.0</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>9.0.0</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.4.18.v20190429</jetty.version>
+        <zimbra.group>zimbra</zimbra.group>
+        <zimbra.native>zm-native</zimbra.native>
+        <zimbra.soap>zm-soap</zimbra.soap>
+        <zimbra.client>zm-client</zimbra.client>
+        <zimbra.store>zm-store</zimbra.store>
+        <zimbra.common>zm-common</zimbra.common>
       </properties>
     </profile>
 
