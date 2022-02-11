@@ -89,7 +89,7 @@
   </distributionManagement>
 
   <properties>
-    <zimbra.version>8.8.15</zimbra.version>
+    <zimbra.version>22.1.0</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
@@ -127,30 +127,60 @@
       <groupId>${zimbra.group}</groupId>
       <artifactId>${zimbra.common}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>${zimbra.group}</groupId>
       <artifactId>${zimbra.client}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>${zimbra.group}</groupId>
       <artifactId>${zimbra.native}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>${zimbra.group}</groupId>
       <artifactId>${zimbra.store}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>${zimbra.group}</groupId>
       <artifactId>${zimbra.soap}</artifactId>
       <version>${zimbra.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -423,7 +453,7 @@
                   <Specification-Commit>${git.commit.id.full}</Specification-Commit>
                   <Specification-Vendor>ZeXtras</Specification-Vendor>
                   <Implementation-Version>${zimbra.version}</Implementation-Version>
-                  <Created-By>ZeXtras</Created-By>
+                  <Created-By>Zextras</Created-By>
                   <Zimbra-Extension-Class>org.openzal.zal.extension.ZalEntrypointImpl</Zimbra-Extension-Class>
                 </manifestEntries>
               </archive>
@@ -460,12 +490,9 @@
     </profile>
 
     <profile>
-      <id>carbonio-21.0</id>
+      <id>carbonio</id>
       <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>21.00.0</value>
-        </property>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
