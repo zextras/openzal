@@ -265,13 +265,13 @@ class ExtensionManagerImpl implements ExtensionManager
     for( ExtensionInfo info : extensionInfoList )
     {
 /* $if DevMode != 1 $*/
-//      if( !info.isCompatible(ZalVersion.current) )
-//      {
-//        ZimbraLog.extensions.warn(
-//          "Unable to load extension "+info.getZalExtensionName()+": it requires ZAL version "+info.getRequiredVersion().toString()+" but current version is "+ZalVersion.current.toString()
-//        );
-//        continue;
-//      }
+      if( !info.isCompatible(ZalVersion.current) )
+      {
+        ZimbraLog.extensions.warn(
+          "Unable to load extension "+info.getZalExtensionName()+": it requires ZAL version "+info.getRequiredVersion().toString()+" but current version is "+ZalVersion.current.toString()
+        );
+        continue;
+      }
 /* $endif$ */
 
       try

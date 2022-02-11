@@ -45,10 +45,10 @@ public class ZalVersion
   public static void checkCompatibility()
   {
     /* $if ZimbraX == 0 $ */
-//    if (!ZimbraVersion.current.equals(ZalVersion.target))
-//    {
-//      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
-//    }
+    if (!ZimbraVersion.current.equals(ZalVersion.target))
+    {
+      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
+    }
     /* $endif $ */
   }
 
