@@ -1313,5 +1313,12 @@ public class Account extends Entry
   public boolean mustChangePassword() {
     return mAccount.isPasswordMustChange();
   }
+
+  static Account wrap(com.zimbra.cs.account.Account zAccount) {
+    if (zAccount == null) {
+      return null;
+    }
+    return new Account(zAccount);
+  }
 }
 
