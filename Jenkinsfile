@@ -24,7 +24,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=8.8.15  package'
-                sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=21.00.0 package'
+                //build latest
+                sh 'mvn --settings settings-jenkins.xml package'
             }
         }
         stage('Publish tagged version') {
@@ -35,7 +36,8 @@ pipeline {
             }
             steps {
                 sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=8.8.15  deploy'
-                sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=21.00.0 deploy'
+                //deploy latest
+                sh 'mvn --settings settings-jenkins.xml deploy'
             }
         }
     }
