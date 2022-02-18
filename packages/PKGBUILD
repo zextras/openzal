@@ -11,7 +11,7 @@ pkgdesclong=(
 )
 maintainer="Zextras <packages@zextras.com>"
 arch="amd64"
-license=("PROPRIETARY")
+license=("GPLv2")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
