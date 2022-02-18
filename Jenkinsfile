@@ -59,7 +59,7 @@ pipeline {
           stages {
               stage('Stash') {
                   steps {
-                      sh 'cp target/zal*.jar packages/'
+                      sh "cp target/zal-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar packages/zal.jar"
                       stash includes: "packages/**", name: 'binaries'
                   }
               }
