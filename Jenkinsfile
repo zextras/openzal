@@ -59,7 +59,7 @@ pipeline {
           stages {
               stage('Stash') {
                   steps {
-                      sh 'cp target/zal-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar packages/zal.jar'
+                      sh 'cp target/zal-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)-zimbra-$(mvn help:evaluate -Dexpression=zimbra.version -q -DforceStdout).jar packages/zal.jar'
                       stash includes: "pacur.json,packages/**", name: 'binaries'
                   }
               }
