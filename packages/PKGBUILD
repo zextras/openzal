@@ -1,0 +1,34 @@
+targets=(
+  "centos"
+  "ubuntu"
+)
+pkgname="carbonio-zal"
+pkgver="3.10.0"
+pkgrel="1"
+pkgdesc="Carbonio extras"
+pkgdesclong=(
+  "Abstraction Layer for Carbonios"
+)
+maintainer="Zextras <packages@zextras.com>"
+arch="amd64"
+license=("PROPRIETARY")
+section="admin"
+priority="optional"
+url="https://www.zextras.com/"
+
+build() {
+}
+
+package() {
+  cd "${srcdir}"
+  install -Dm 744 zal.jar "${pkgdir}/opt/zextras/zal/current.jar"
+}
+
+postinst() {
+}
+
+prerm() {
+}
+
+postrm() {
+}
