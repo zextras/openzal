@@ -28,9 +28,9 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=8.8.15  package'
+                sh 'mvn -B --settings settings-jenkins.xml -Dzimbra.version=8.8.15  package'
                 //build latest
-                sh 'mvn --settings settings-jenkins.xml package'
+                sh 'mvn -B --settings settings-jenkins.xml package'
             }
         }
         stage('Publish tagged version') {
@@ -40,9 +40,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn --settings settings-jenkins.xml -Dzimbra.version=8.8.15  deploy'
+                sh 'mvn -B --settings settings-jenkins.xml -Dzimbra.version=8.8.15  deploy'
                 //deploy latest
-                sh 'mvn --settings settings-jenkins.xml deploy'
+                sh 'mvn -B --settings settings-jenkins.xml deploy'
             }
         }
         stage('Build deb/rpm') {
@@ -60,7 +60,7 @@ pipeline {
               stage('Stash') {
                   steps {
                       sh 'cp target/zal-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar packages/zal.jar'
-                      stash includes: "packages/**", name: 'binaries'
+                      stash includes: "pacur.json,packages/**", name: 'binaries'
                   }
               }
               stage('pacur') {

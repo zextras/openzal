@@ -15,6 +15,12 @@ license=("PROPRIETARY")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
+sources=(
+  "zal.jar"
+)
+hashsums=(
+  "SKIP"
+)
 
 build() {
 }
