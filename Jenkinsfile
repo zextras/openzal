@@ -59,10 +59,8 @@ pipeline {
           stages {
               stage('Stash') {
                   steps {
-                      dir (BASE_FOLDER) {
-                          sh 'cp target/zal*.jar packages/'
-                          stash includes: "packages/**", name: 'binaries'
-                      }
+                      sh 'cp target/zal*.jar packages/'
+                      stash includes: "packages/**", name: 'binaries'
                   }
               }
               stage('pacur') {
