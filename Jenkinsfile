@@ -28,9 +28,9 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn -B --settings settings-jenkins.xml -Dzimbra.version=8.8.15  package'
+                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dzimbra.version=8.8.15  package'
                 //build latest
-                sh 'mvn -B --settings settings-jenkins.xml package'
+                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn package'
             }
         }
         stage('Publish tagged version') {
@@ -40,9 +40,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn -B --settings settings-jenkins.xml -Dzimbra.version=8.8.15  deploy'
+                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dzimbra.version=8.8.15  deploy'
                 //deploy latest
-                sh 'mvn -B --settings settings-jenkins.xml deploy'
+                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn deploy'
             }
         }
         stage('Build deb/rpm') {
