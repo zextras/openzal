@@ -92,9 +92,6 @@ pipeline {
                           steps {
                               unstash 'binaries'
                               sh 'sudo pacur build centos'
-                              dir("artifacts/") {
-                                  sh 'echo carbonio-zal* | sed -E "s#(carbonio-zal[0-9.]*).*#\\0 \\1.x86_64.rpm#" | xargs sudo mv'
-                              }
                               stash includes: 'artifacts/', name: 'artifacts-rpm'
                           }
                           post {
@@ -104,6 +101,31 @@ pipeline {
                           }
                       }
                   }
+              }
+          }
+      }
+      stage('Upload To Devel') {
+          when {
+            branch 'main'
+          }
+          steps {
+              unstash 'artifacts-deb'
+              script {
+                  def server = Artifactory.server 'zextras-artifactory'
+                  def buildInfo
+                  def uploadSpec
+
+                  buildInfo = Artifactory.newBuildInfo()
+                  uploadSpec = '''{
+                      "files": [
+                          {
+                              "pattern": "artifacts/*.deb",
+                              "target": "ubuntu-devel/pool/",
+                              "props": "deb.distribution=focal;deb.component=main;deb.architecture=all"
+                          }
+                      ]
+                  }'''
+                  server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
               }
           }
       }
@@ -128,12 +150,12 @@ pipeline {
                           {
                               "pattern": "artifacts/carbonio-zal*.deb",
                               "target": "ubuntu-playground/pool/",
-                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=amd64"
+                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
                           },
                           {
                               "pattern": "artifacts/(carbonio-zal)-(*).rpm",
                               "target": "centos8-playground/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""
@@ -165,7 +187,7 @@ pipeline {
                           {
                               "pattern": "artifacts/carbonio-zal*.deb",
                               "target": "ubuntu-rc/pool/",
-                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=amd64"
+                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
                           }
                       ]
                   }"""
@@ -192,7 +214,7 @@ pipeline {
                           {
                               "pattern": "artifacts/(carbonio-zal)-(*).rpm",
                               "target": "centos8-rc/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""

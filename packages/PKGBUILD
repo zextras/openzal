@@ -10,7 +10,7 @@ pkgdesclong=(
   "Abstraction Layer for Carbonios"
 )
 maintainer="Zextras <packages@zextras.com>"
-arch="amd64"
+arch="any"
 license=("GPLv2")
 section="admin"
 priority="optional"
