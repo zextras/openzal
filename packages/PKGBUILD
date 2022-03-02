@@ -1,5 +1,5 @@
 targets=(
-  "centos"
+  "centos-8"
   "ubuntu"
 )
 pkgname="carbonio-zal"

@@ -91,7 +91,7 @@ pipeline {
                           }
                           steps {
                               unstash 'binaries'
-                              sh 'sudo pacur build centos'
+                              sh 'sudo pacur build centos-8'
                               stash includes: 'artifacts/', name: 'artifacts-rpm'
                           }
                           post {
