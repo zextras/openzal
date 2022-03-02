@@ -451,7 +451,7 @@
                   <Specification-Title>Zimbra Abstraction Layer</Specification-Title>
                   <Specification-Version>${project.version}</Specification-Version>
                   <Specification-Commit>${git.commit.id.full}</Specification-Commit>
-                  <Specification-Vendor>ZeXtras</Specification-Vendor>
+                  <Specification-Vendor>Zextras</Specification-Vendor>
                   <Implementation-Version>${zimbra.version}</Implementation-Version>
                   <Created-By>Zextras</Created-By>
                   <Zimbra-Extension-Class>org.openzal.zal.extension.ZalEntrypointImpl</Zimbra-Extension-Class>
