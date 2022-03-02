@@ -83,15 +83,15 @@ pipeline {
                           }
                       }
 
-                      stage('Centos 8') {
+                      stage('Rocky 8') {
                           agent {
                               node {
-                                  label 'pacur-agent-centos-8-v1'
+                                  label 'pacur-agent-rocky-8-v1'
                               }
                           }
                           steps {
                               unstash 'binaries'
-                              sh 'sudo pacur build centos-8'
+                              sh 'sudo pacur build centos'
                               stash includes: 'artifacts/', name: 'artifacts-rpm'
                           }
                           post {
