@@ -1314,7 +1314,7 @@ public class Account extends Entry
     return mAccount.isPasswordMustChange();
   }
 
-  public boolean is2FAEnabled() {
+  public boolean isNE2FAEnabled() {
     /* $if ZimbraVersion < 8.7.0 $
       return false;
     /* $else $ */
