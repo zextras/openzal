@@ -40,9 +40,12 @@ public class Version implements Comparable<Version>
     mVersionParts = Arrays.copyOf(versionParts,versionParts.length);
   }
 
-  public Version(@Nonnull String version)
+  public Version(@Nonnull String v)
     throws NumberFormatException
   {
+    int snapshotIndex = v.indexOf("-SNAPSHOT");
+
+    String version = (snapshotIndex > 0) ? v.substring(0, snapshotIndex) : v;
     final List<Integer> versionParts = new ArrayList<Integer>(3);
 
     for(String part : version.split("\\."))
