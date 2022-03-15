@@ -1324,5 +1324,13 @@ public class Account extends Entry
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public boolean isNE2FAEnabled() {
+    /* $if ZimbraVersion < 8.7.0 $
+      return false;
+    /* $else $ */
+    return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
+    /* $endif $ */
+  }
 }
 
