@@ -1313,5 +1313,16 @@ public class Account extends Entry
   public boolean mustChangePassword() {
     return mAccount.isPasswordMustChange();
   }
+
+  public void unsetMailQuota() {
+    try
+    {
+      this.mAccount.unsetMailQuota();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 
