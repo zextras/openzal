@@ -1321,5 +1321,19 @@ public class Account extends Entry
     return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
     /* $endif $ */
   }
+
+  public boolean invalidateAllTokens() {
+    try {
+      if (!mAccount.getProvisioning().getConfig().isAuthTokenValidityValueEnabled()) {
+        return false;
+      }
+
+      int validityValue = mAccount.getAuthTokenValidityValue();
+      mAccount.setAuthTokenValidityValue(validityValue == Integer.MAX_VALUE ? 0 : ++validityValue);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 
