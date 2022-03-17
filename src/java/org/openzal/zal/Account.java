@@ -1320,5 +1320,16 @@ public class Account extends Entry
     }
     return new Account(zAccount);
   }
+
+  public void unsetMailQuota() {
+    try
+    {
+      this.mAccount.unsetMailQuota();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }
 
