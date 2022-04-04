@@ -1313,5 +1313,24 @@ public class Account extends Entry
   public boolean mustChangePassword() {
     return mAccount.isPasswordMustChange();
   }
+
+  public void unsetMailQuota() {
+    try
+    {
+      this.mAccount.unsetMailQuota();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean isNE2FAEnabled() {
+    /* $if ZimbraVersion < 8.7.0 $
+      return false;
+    /* $else $ */
+    return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
+    /* $endif $ */
+  }
 }
 
