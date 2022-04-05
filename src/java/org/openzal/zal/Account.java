@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.mailbox.calendar.Util;
 
 import com.zimbra.soap.account.message.GetSMIMEPublicCertsRequest;
@@ -1328,6 +1329,35 @@ public class Account extends Entry
     }
     catch (ServiceException e)
     {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public boolean isNE2FAEnabled() {
+    /* $if ZimbraVersion < 8.7.0 $
+      return false;
+    /* $else $ */
+    return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
+    /* $endif $ */
+  }
+
+  public List<String> getAuthTokenEncoded() {
+    Object encodedTokens = mAccount.getAttrs(false).get(ProvisioningImp.A_zimbraAuthTokens);
+    if (encodedTokens == null) {
+      return new ArrayList<>();
+    } else if (encodedTokens instanceof String) {
+      return Collections.singletonList((String) encodedTokens);
+    } else if (encodedTokens instanceof String[]) {
+      return Arrays.asList((String[]) encodedTokens);
+    }
+    throw new UnsupportedOperationException();
+  }
+
+  public boolean invalidateToken(String id, String version) {
+    try {
+      mAccount.removeAuthTokens(id, version);
+      return true;
+    } catch (ServiceException e) {
       throw ExceptionWrapper.wrap(e);
     }
   }
