@@ -21,6 +21,7 @@
 package org.openzal.zal;
 
 import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.mailbox.calendar.Util;
 
 import com.zimbra.soap.account.message.GetSMIMEPublicCertsRequest;
@@ -1330,6 +1331,42 @@ public class Account extends Entry
       return false;
     /* $else $ */
     return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
+    /* $endif $ */
+  }
+
+  public List<String> getAuthTokenEncoded() {
+    /* $if ZimbraVersion < 8.5.0 $
+      return new ArrayList<>();
+    /* $else $ */
+    Object encodedTokens = mAccount.getAttrs(false).get(ProvisioningImp.A_zimbraAuthTokens);
+    if (encodedTokens == null) {
+      return new ArrayList<>();
+    } else if (encodedTokens instanceof String) {
+      return Collections.singletonList((String) encodedTokens);
+    } else if (encodedTokens instanceof String[]) {
+      return Arrays.asList((String[]) encodedTokens);
+    }
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  public boolean invalidateToken(String id, String version) {
+    /* $if ZimbraVersion < 8.5.0 $
+      return false;
+    /* $elseif ZimbraVersion > 8.7.5 $ */
+    try {
+      mAccount.removeAuthTokens(id, version);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $else $
+    try {
+      mAccount.removeAuthTokens(id);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
     /* $endif $ */
   }
 
