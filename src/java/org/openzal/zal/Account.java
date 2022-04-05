@@ -1332,5 +1332,12 @@ public class Account extends Entry
     return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
     /* $endif $ */
   }
+
+  static Account wrap(com.zimbra.cs.account.Account zAccount) {
+    if (zAccount == null) {
+      return null;
+    }
+    return new Account(zAccount);
+  }
 }
 
