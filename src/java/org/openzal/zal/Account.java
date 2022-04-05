@@ -1314,6 +1314,17 @@ public class Account extends Entry
     return mAccount.isPasswordMustChange();
   }
 
+  public void unsetMailQuota() {
+    try
+    {
+      this.mAccount.unsetMailQuota();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public boolean isNE2FAEnabled() {
     /* $if ZimbraVersion < 8.7.0 $
       return false;
