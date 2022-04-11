@@ -434,6 +434,12 @@ public interface Provisioning
   Group assertGroupByName(String groupName)
     throws NoSuchGroupException;
 
+  boolean doExternalLdapAuth(Domain domain, String account, String password, Map<String, Object> context);
+
+  Account getForeignAccount(String principal);
+
+  Account autoProvisioningAndAuthenticate(Domain domain, String account, String password);
+
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;
