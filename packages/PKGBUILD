@@ -21,6 +21,13 @@ sources=(
 hashsums=(
   "SKIP"
 )
+depends=(
+    # require the mailboxd to be installed
+    "carbonio-appserver >= 4.0.7"
+)
+conflicts=(
+    "carbonio-appserver >= 4.0.8"
+)
 
 build() {
 }
