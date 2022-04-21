@@ -20,8 +20,6 @@
 
 package org.openzal.zal;
 
-import java.io.IOException;
-import java.util.Properties;
 import javax.annotation.Nonnull;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
@@ -29,7 +27,7 @@ import org.openzal.zal.log.ZimbraLog;
 
 public class ZalVersion
 {
-  public static final    Version current = new Version(ZalBuildInfo.VERSION);
+  public static final    Version current = new Version(BuildProperties.getProjectVersion());
   @Nonnull public static Version target;
 
   static
@@ -48,11 +46,11 @@ public class ZalVersion
   public static void checkCompatibility()
   {
     /* $if ZimbraX == 0 $ */
-    if (!ZimbraVersion.current.equals(ZalVersion.target) && !isDevBuild()) {
-      if (isDevBuild()) {
-        ZimbraLog.extensions.warn("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target + " (dev build)");
+    if (!ZimbraVersion.current.equals(ZalVersion.target)) {
+      if (BuildProperties.isDevBuild()) {
+        ZimbraLog.extensions.warn("Carbonio version mismatch - ZAL built for Carbonio: " + ZalVersion.target + " (dev build)");
       } else {
-        throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
+        throw new RuntimeException("Carbonio version mismatch - ZAL built for Carbonio: " + ZalVersion.target.toString());
       }
     }
     /* $endif $ */
@@ -70,27 +68,16 @@ public class ZalVersion
   public static void main(String args[])
   {
     System.out.println("zal_version: " + current.toString());
-    System.out.println("zal_commit: " + ZalBuildInfo.COMMIT);
+    System.out.println("zal_commit: " + BuildProperties.getCommitFull());
     /* $if ZimbraX == 1 $
     System.out.println("target_zimbra_version: Zimbra X");
     /* $else $ */
     System.out.println("target_zimbra_version: " + target.toString());
     /* $endif $ */
-    if (isDevBuild()) {
+    if (BuildProperties.isDevBuild()) {
       System.out.println("dev build");
     }
 
     System.exit(0);
-  }
-
-  private static boolean isDevBuild() {
-    Properties projectProperties = new Properties();
-
-    try {
-      projectProperties.load(ZalVersion.class.getClassLoader().getResourceAsStream("build.properties"));
-      return Boolean.parseBoolean(projectProperties.getProperty("dev.build", "false"));
-    } catch (Exception ignore) {}
-
-    return false;
   }
 }

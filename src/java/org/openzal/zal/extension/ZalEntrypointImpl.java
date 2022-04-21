@@ -21,7 +21,7 @@
 package org.openzal.zal.extension;
 
 import javax.annotation.Nullable;
-import org.openzal.zal.ZalBuildInfo;
+import org.openzal.zal.BuildProperties;
 import org.openzal.zal.ZalVersion;
 import org.openzal.zal.lib.JarAccessor;
 import org.openzal.zal.lib.Version;
@@ -50,7 +50,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   private WeakReference<ClassLoader> mPreviousExtension;
 
   private static final String ZAL_FILE     = "/zal.jar";
-  private static final String ZEXTRAS_FILE = "/zextras.jar";
+  private static final String ZEXTRAS_FILE = "/carbonio.jar";
 
   public ZalEntrypointImpl()
   {
@@ -118,12 +118,7 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   @Override
   public void init()
   {
-    ZimbraLog.mailbox.info(
-      "Starting ZAL version " +
-        ZalVersion.current +
-        " commit " +
-        ZalBuildInfo.COMMIT
-    );
+    ZimbraLog.mailbox.info("Starting ZAL version " + ZalVersion.current + " commit " + BuildProperties.getCommitFull());
 /* $if DevMode != 1 $*/
     ZalVersion.checkCompatibility();
 /* $endif$ */

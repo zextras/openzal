@@ -109,6 +109,8 @@
     <classifier.value>zimbra-${zimbra.version}</classifier.value>
     <dev.build>false</dev.build>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+    <build.version>${project.version}</build.version>
+    <build.timestamp>${maven.build.timestamp}</build.timestamp>
   </properties>
 
   <dependencies>
@@ -376,43 +378,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <inherited>false</inherited>
-        <executions>
-          <execution>
-            <id>generate-buildinfo</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>java</goal>
-            </goals>
-            <configuration>
-              <executableDependency>
-                <groupId>com.zextras</groupId>
-                <artifactId>gen-build-info</artifactId>
-              </executableDependency>
-              <mainClass>com.zextras.GenerateBuildInfo</mainClass>
-              <arguments>
-                <argument>${project.basedir}</argument>
-                <argument>org.openzal.zal</argument>
-                <argument>ZalBuildInfo</argument>
-              </arguments>
-              <systemProperties>
-                <systemProperty>
-                  <key>PROJECT_COMMIT</key>
-                  <value>${git.commit.id.full}</value>
-                </systemProperty>
-                <systemProperty>
-                  <key>PROJECT_VERSION</key>
-                  <value>${project.version}</value>
-                </systemProperty>
-              </systemProperties>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.coderplus.maven.plugins</groupId>
         <artifactId>copy-rename-maven-plugin</artifactId>
         <version>1.0.1</version>
@@ -484,10 +449,10 @@
               <goal>write-project-properties</goal>
             </goals>
             <configuration>
-              <outputFile>${project.build.outputDirectory}/build.properties</outputFile>
+              <outputFile>${project.build.outputDirectory}/zalbuild.properties</outputFile>
               <includes>
-                <include>PROJECT_VERSION</include>
-                <include>BUILD_TIMESTAMP</include>
+                <include>build.version</include>
+                <include>build.timestamp</include>
                 <include>maven.build.timestamp.format</include>
                 <include>dev.build</include>
                 <include>git.dirty</include>
