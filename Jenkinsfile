@@ -24,7 +24,7 @@ def deployForAllSupportedVersions() {
     }
 
     // dev version
-    mvnCmd("--settings settings-jenkins.xml package -Pdev")
+    mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
 
     // latest with no classifier
     mvnCmd("--settings settings-jenkins.xml deploy")
@@ -68,7 +68,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                mvnCmd("--settings settings-jenkins.xml package -Pdev")
+                mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
             }
         }
         stage('Publish tagged version') {
