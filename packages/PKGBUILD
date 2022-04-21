@@ -21,7 +21,7 @@ build() {
 
 package() {
   cd "${srcdir}"
-  find . -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
+  find .. -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
 }
 
 postinst() {
