@@ -20,8 +20,8 @@ build() {
 }
 
 package() {
-  cd "${srcdir}"
-  find .. -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
+  cd ..
+  find . -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
 }
 
 postinst() {
@@ -29,7 +29,7 @@ postinst() {
   ZAL_JAR="/opt/zextras/zal/zal-${pkgver}-zimbra-$ZIMBRA_VERSION.jar"
 
   if test -f "$ZAL_JAR"; then
-    rm -f "/opt/zextras/lib/ext/carbonio/zal.jar"
+    rm -f /opt/zextras/lib/ext/carbonio/zal.jar
     ln -s $ZAL_JAR "/opt/zextras/lib/ext/carbonio/zal.jar"
     echo "======================================================"
     echo "Carbonio ZAL installed successfully!"
