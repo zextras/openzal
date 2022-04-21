@@ -7,7 +7,7 @@ pkgver="3.10.11"
 pkgrel="1"
 pkgdesc="Carbonio extras"
 pkgdesclong=(
-  "Abstraction Layer for Carbonios"
+  "Abstraction Layer for Carbonio"
 )
 maintainer="Zextras <packages@zextras.com>"
 arch="all"
@@ -15,22 +15,31 @@ license=("GPLv2")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
-sources=(
-  "zal.jar"
-)
-hashsums=(
-  "SKIP"
-)
 
 build() {
 }
 
 package() {
   cd "${srcdir}"
-  install -Dm 744 zal.jar "${pkgdir}/opt/zextras/zal/current.jar"
+  find . -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
 }
 
 postinst() {
+  ZIMBRA_VERSION=$(/opt/zextras/bin/zmjava com.zimbra.cs.util.BuildInfo | grep '^Version:' | sed -E "s#^Version: ([.0-9]+).*#\1#")
+  ZAL_JAR="/opt/zextras/zal/zal-${pkgver}-zimbra-$ZIMBRA_VERSION.jar"
+
+  if test -f "$ZAL_JAR"; then
+    rm -f "/opt/zextras/lib/ext/carbonio/zal.jar"
+    ln -s $ZAL_JAR "/opt/zextras/lib/ext/carbonio/zal.jar"
+    echo "======================================================"
+    echo "Carbonio ZAL installed successfully!"
+    echo "======================================================"
+  else
+    echo "======================================================"
+    echo "Error: unrecognized Carbonio version $ZIMBRA_VERSION"
+    echo "======================================================"
+    exit 1
+  fi
 }
 
 prerm() {

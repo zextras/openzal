@@ -78,6 +78,11 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
+    <pluginRepository>
+      <id>artifactory</id>
+      <name>Zextras public maven repo</name>
+      <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
+    </pluginRepository>
   </pluginRepositories>
 
   <distributionManagement>
@@ -101,6 +106,9 @@
     <maven-s3-storage.version>3.0.1</maven-s3-storage.version>
     <zextras-public-repo.url>s3://zextras-public-repositories</zextras-public-repo.url>
     <execute.fast.compatibility>true</execute.fast.compatibility>
+    <classifier.value>zimbra-${zimbra.version}</classifier.value>
+    <dev.build>false</dev.build>
+    <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
   </properties>
 
   <dependencies>
@@ -444,7 +452,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>zimbra-${zimbra.version}</classifier>
+              <classifier>${classifier.value}</classifier>
               <archive>
                 <index>true</index>
                 <manifestEntries>
@@ -461,6 +469,32 @@
                 <exclude>com/zimbra/cs/redolog/op/DataExtractor.class</exclude>
                 <exclude>com/zimbra/cs/store/file/VolumeBlobProxy.class</exclude>
               </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.zextras</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>write-project-properties</goal>
+            </goals>
+            <configuration>
+              <outputFile>${project.build.outputDirectory}/build.properties</outputFile>
+              <includes>
+                <include>PROJECT_VERSION</include>
+                <include>BUILD_TIMESTAMP</include>
+                <include>maven.build.timestamp.format</include>
+                <include>dev.build</include>
+                <include>git.dirty</include>
+                <include>git.commit.id.abbrev</include>
+                <include>git.commit.id.full</include>
+                <include>zimbra.version</include>
+              </includes>
             </configuration>
           </execution>
         </executions>
@@ -557,6 +591,21 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>dev</id>
+      <properties>
+        <jetty.version>9.3.5.v20151012</jetty.version>
+        <zimbra.group>zimbra</zimbra.group>
+        <zimbra.native>zm-native</zimbra.native>
+        <zimbra.soap>zm-soap</zimbra.soap>
+        <zimbra.client>zm-client</zimbra.client>
+        <zimbra.store>zm-store</zimbra.store>
+        <zimbra.common>zm-common</zimbra.common>
+        <classifier.value>dev</classifier.value>
+        <dev.build>true</dev.build>
+      </properties>
     </profile>
   </profiles>
 
