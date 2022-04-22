@@ -47,4 +47,5 @@ prerm() {
 }
 
 postrm() {
+  rm -f /opt/zextras/lib/ext/carbonio/zal.jar
 }
