@@ -30,6 +30,7 @@ postinst() {
 
   if test -f "$ZAL_JAR"; then
     rm -f /opt/zextras/lib/ext/carbonio/zal.jar
+    mkdir -p /opt/zextras/lib/ext/carbonio
     ln -s $ZAL_JAR "/opt/zextras/lib/ext/carbonio/zal.jar"
     echo "======================================================"
     echo "Carbonio ZAL installed successfully!"
