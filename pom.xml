@@ -464,6 +464,44 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <inherited>false</inherited>
+        <executions>
+        <execution>
+        <id>generate-buildinfo</id>
+        <phase>initialize</phase>
+        <goals>
+        <goal>java</goal>
+        </goals>
+        <configuration>
+        <executableDependency>
+        <groupId>com.zextras</groupId>
+        <artifactId>gen-build-info</artifactId>
+        </executableDependency>
+        <mainClass>com.zextras.GenerateBuildInfo</mainClass>
+        <arguments>
+        <argument>${project.basedir}</argument>
+        <argument>org.openzal.zal</argument>
+        <argument>ZalBuildInfo</argument>
+        </arguments>
+        <systemProperties>
+        <systemProperty>
+        <key>PROJECT_COMMIT</key>
+        <value>${git.commit.id.full}</value>
+        </systemProperty>
+        <systemProperty>
+        <key>PROJECT_VERSION</key>
+        <value>${project.version}</value>
+        </systemProperty>
+        </systemProperties>
+        </configuration>
+        </execution>
+        </executions>
+        </plugin>
+
     </plugins>
   </build>
 
