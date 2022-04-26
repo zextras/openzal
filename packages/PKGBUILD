@@ -4,7 +4,7 @@ targets=(
 )
 pkgname="carbonio-zal"
 pkgver="3.10.11"
-pkgrel="1"
+pkgrel="2"
 pkgdesc="Carbonio extras"
 pkgdesclong=(
   "Abstraction Layer for Carbonio"
