@@ -3,7 +3,7 @@ targets=(
   "ubuntu"
 )
 pkgname="carbonio-zal"
-pkgver="3.10.11"
+pkgver="3.10.12"
 pkgrel="1"
 pkgdesc="Carbonio extras"
 pkgdesclong=(
@@ -20,6 +20,13 @@ sources=(
 )
 hashsums=(
   "SKIP"
+)
+depends=(
+    # require the mailboxd to be installed
+    "carbonio-appserver >= 4.0.7"
+)
+conflicts=(
+    "carbonio-appserver >= 4.0.8"
 )
 
 build() {
