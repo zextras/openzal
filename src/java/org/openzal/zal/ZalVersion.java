@@ -23,10 +23,11 @@ package org.openzal.zal;
 import javax.annotation.Nonnull;
 import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
+import org.openzal.zal.log.ZimbraLog;
 
 public class ZalVersion
 {
-  public static final    Version current = new Version(ZalBuildInfo.VERSION);
+  public static final    Version current = new Version(BuildProperties.getProjectVersion());
   @Nonnull public static Version target;
 
   static
@@ -45,9 +46,12 @@ public class ZalVersion
   public static void checkCompatibility()
   {
     /* $if ZimbraX == 0 $ */
-    if (!ZimbraVersion.current.equals(ZalVersion.target))
-    {
-      throw new RuntimeException("Zimbra version mismatch - ZAL built for Zimbra: " + ZalVersion.target.toString());
+    if (!ZimbraVersion.current.equals(ZalVersion.target)) {
+      if (BuildProperties.isDevBuild()) {
+        ZimbraLog.extensions.warn("Carbonio version mismatch - ZAL built for Carbonio: " + ZalVersion.target + " (dev build)");
+      } else {
+        throw new RuntimeException("Carbonio version mismatch - ZAL built for Carbonio: " + ZalVersion.target.toString());
+      }
     }
     /* $endif $ */
   }
@@ -64,12 +68,15 @@ public class ZalVersion
   public static void main(String args[])
   {
     System.out.println("zal_version: " + current.toString());
-    System.out.println("zal_commit: " + ZalBuildInfo.COMMIT);
+    System.out.println("zal_commit: " + BuildProperties.getCommitFull());
     /* $if ZimbraX == 1 $
     System.out.println("target_zimbra_version: Zimbra X");
     /* $else $ */
     System.out.println("target_zimbra_version: " + target.toString());
     /* $endif $ */
+    if (BuildProperties.isDevBuild()) {
+      System.out.println("dev build");
+    }
 
     System.exit(0);
   }

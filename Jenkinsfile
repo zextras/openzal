@@ -1,3 +1,35 @@
+def mvnCmd(String cmd) {
+  sh 'mvn -B -Djooq.codegen.logging=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn ' + cmd
+}
+
+def supportedVersions() {
+    return ["8.8.15", "22.3.0", "22.3.1", "22.4.0"]
+}
+
+def buildForAllSupportedVersions() {
+    supportedVersions().eachWithIndex { version, idx ->
+      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version package")
+    }
+
+    // dev version
+    mvnCmd("--settings settings-jenkins.xml package -Pdev")
+
+    // latest with no classifier
+    mvnCmd("--settings settings-jenkins.xml package")
+}
+
+def deployForAllSupportedVersions() {
+    supportedVersions().eachWithIndex { version, idx ->
+      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version deploy")
+    }
+
+    // dev version
+    mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
+
+    // latest with no classifier
+    mvnCmd("--settings settings-jenkins.xml deploy")
+}
+
 pipeline {
     agent {
         node {
@@ -28,9 +60,15 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dzimbra.version=8.8.15  package'
-                //build latest
-                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn package'
+                buildForAllSupportedVersions()
+            }
+        }
+        stage('Publish dev version') {
+            when {
+                branch 'main'
+            }
+            steps {
+                mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
             }
         }
         stage('Publish tagged version') {
@@ -40,9 +78,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dzimbra.version=8.8.15  deploy'
-                //deploy latest
-                sh 'mvn -B --settings settings-jenkins.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn deploy'
+                deployForAllSupportedVersions()
             }
         }
         stage('Build deb/rpm') {
@@ -59,7 +95,7 @@ pipeline {
           stages {
               stage('Stash') {
                   steps {
-                      sh 'cp target/zal-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)-zimbra-$(mvn help:evaluate -Dexpression=zimbra.version -q -DforceStdout).jar packages/zal.jar'
+                      sh 'cp target/zal-*-zimbra-*.jar packages/'
                       stash includes: "pacur.json,packages/**", name: 'binaries'
                   }
               }
@@ -104,31 +140,6 @@ pipeline {
               }
           }
       }
-      stage('Upload To Devel') {
-          when {
-            branch 'main'
-          }
-          steps {
-              unstash 'artifacts-deb'
-              script {
-                  def server = Artifactory.server 'zextras-artifactory'
-                  def buildInfo
-                  def uploadSpec
-
-                  buildInfo = Artifactory.newBuildInfo()
-                  uploadSpec = '''{
-                      "files": [
-                          {
-                              "pattern": "artifacts/*.deb",
-                              "target": "ubuntu-devel/pool/",
-                              "props": "deb.distribution=focal;deb.component=main;deb.architecture=all"
-                          }
-                      ]
-                  }'''
-                  server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
-              }
-          }
-      }
       stage('Upload To Playground') {
           when {
               anyOf {
@@ -159,6 +170,31 @@ pipeline {
                           }
                       ]
                   }"""
+                  server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
+              }
+          }
+      }
+      stage('Upload To Devel') {
+          when {
+            branch 'main'
+          }
+          steps {
+              unstash 'artifacts-deb'
+              script {
+                  def server = Artifactory.server 'zextras-artifactory'
+                  def buildInfo
+                  def uploadSpec
+
+                  buildInfo = Artifactory.newBuildInfo()
+                  uploadSpec = '''{
+                      "files": [
+                          {
+                              "pattern": "artifacts/*.deb",
+                              "target": "ubuntu-devel/pool/",
+                              "props": "deb.distribution=focal;deb.component=main;deb.architecture=all"
+                          }
+                      ]
+                  }'''
                   server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
               }
           }
