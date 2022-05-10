@@ -200,24 +200,7 @@ public class CalendarItem extends Item
     List<CalendarItemData> newExceptions = new ArrayList<>(exceptions.size());
     for (Invite exception : exceptions)
     {
-      if (recurId != null && recurId.equals(exception.getRecurId()))
-      {
-        continue;
-//        Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, exception);
-//        newExceptions.add(
-//          new CalendarItemData(
-//            updatedInvite,
-//            getParsedMessage(
-//              textParser,
-//              mailbox,
-//              mimeMessage,
-//              updatedInvite
-//            )
-//          )
-//        );
-      }
-      else
-      {
+      if (recurId == null || !recurId.equals(exception.getRecurId())) {
         newExceptions.add(
           new CalendarItemData(
             exception,
