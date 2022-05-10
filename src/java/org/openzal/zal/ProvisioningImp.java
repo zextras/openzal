@@ -20,8 +20,12 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.account.ZAttrProvisioning;
+import com.zimbra.common.account.ZAttrProvisioning.AutoProvAuthMech;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
+import com.zimbra.cs.account.auth.AuthMechanism.AuthMech;
+import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
@@ -3207,4 +3211,56 @@ public class ProvisioningImp implements Provisioning
     TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
   }
 
+  public boolean doExternalLdapAuth(
+      Domain domain, String account, String password, Map<String, Object> context
+  ) {
+    try {
+      if (LdapProv.class.isAssignableFrom(mProvisioning.getClass())) {
+        com.zimbra.cs.account.Account zAccount = mProvisioning.getAccount(account);
+        LdapProv ldapProv = (LdapProv) this.mProvisioning;
+        com.zimbra.cs.account.Domain zDomain = domain.toZimbra(com.zimbra.cs.account.Domain.class);
+
+        if (zAccount == null) {
+          ldapProv.externalLdapAuth(zDomain, AuthMech.ldap, account, password, context);
+        } else {
+          ldapProv.externalLdapAuth(zDomain, AuthMech.ldap, zAccount, password, context);
+        }
+        return true;
+      }
+      return false;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public Account getForeignAccount(String principal) {
+    try {
+      Account account = Account.wrap(mProvisioning.getAccountByForeignPrincipal(principal));
+      if (account != null) {
+        return account;
+      }
+
+      com.zimbra.cs.account.Domain zDomain = mProvisioning.getDomainByEmailAddr(principal);
+      if (zDomain == null) {
+        return null;
+      }
+
+      return Account.wrap(mProvisioning.getAccountByForeignName(principal, null, zDomain));
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public Account autoProvisioningAndAuthenticate(Domain domain, String account, String password) {
+    try {
+      return Account.wrap(mProvisioning.autoProvAccountLazy(
+          domain.toZimbra(com.zimbra.cs.account.Domain.class),
+          account,
+          password,
+          AutoProvAuthMech.LDAP
+          ));
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
 }

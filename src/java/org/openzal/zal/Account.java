@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 import com.zimbra.common.calendar.ICalTimeZone;
+import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.calendar.Util;
 
 import com.zimbra.soap.account.message.GetSMIMEPublicCertsRequest;
@@ -1331,6 +1333,85 @@ public class Account extends Entry
     /* $else $ */
     return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
     /* $endif $ */
+  }
+
+  public List<String> getAuthTokenEncoded() {
+    /* $if ZimbraVersion < 8.5.0 $
+      return new ArrayList<>();
+    /* $else $ */
+    Object encodedTokens = mAccount.getAttrs(false).get(ProvisioningImp.A_zimbraAuthTokens);
+    if (encodedTokens == null) {
+      return new ArrayList<>();
+    } else if (encodedTokens instanceof String) {
+      return Collections.singletonList((String) encodedTokens);
+    } else if (encodedTokens instanceof String[]) {
+      return Arrays.asList((String[]) encodedTokens);
+    }
+    throw new UnsupportedOperationException();
+    /* $endif $ */
+  }
+
+  public boolean invalidateToken(String id, String version) {
+    /* $if ZimbraVersion < 8.5.0 $
+      return false;
+    /* $elseif ZimbraVersion > 8.7.5 $ */
+    try {
+      mAccount.removeAuthTokens(id, version);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $else $
+    try {
+      mAccount.removeAuthTokens(id);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
+  }
+
+  public boolean invalidateAllTokens() {
+    try {
+      if (!mAccount.getProvisioning().getConfig().isAuthTokenValidityValueEnabled()) {
+        return false;
+      }
+
+      int validityValue = mAccount.getAuthTokenValidityValue();
+      mAccount.setAuthTokenValidityValue(validityValue == Integer.MAX_VALUE ? 0 : ++validityValue);
+      return true;
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  static Account wrap(com.zimbra.cs.account.Account zAccount) {
+    if (zAccount == null) {
+      return null;
+    }
+    return new Account(zAccount);
+  }
+
+  public void cancelAllDataSources() {
+    try {
+      List<com.zimbra.cs.account.DataSource> dataSources = com.zimbra.cs.account.Provisioning.getInstance().getAllDataSources(mAccount);
+      for (com.zimbra.cs.account.DataSource ds : dataSources) {
+        DataSourceManager.cancelSchedule(mAccount, ds.getId());
+      }
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void updateAllDataSources() {
+    try {
+      List<com.zimbra.cs.account.DataSource> dataSources = com.zimbra.cs.account.Provisioning.getInstance().getAllDataSources(mAccount);
+      for (com.zimbra.cs.account.DataSource ds : dataSources) {
+        DataSourceManager.updateSchedule(mAccount, ds);
+      }
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 }
 

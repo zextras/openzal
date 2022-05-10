@@ -21,6 +21,8 @@
 package org.openzal.zal;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.zimbra.common.account.ZAttrProvisioning;
+import java.util.Set;
 import javax.annotation.Nullable;
 
 import java.util.Objects;
@@ -270,6 +272,20 @@ public class Domain extends Entry
   @Nullable
   public String getWebClientLoginURL() {
     return mDomain.getWebClientLoginURL();
+  }
+
+  public boolean isExternalLdapAuthAvailable() {
+    Set<String> url = mDomain.getMultiAttrSet(com.zimbra.cs.account.Provisioning.A_zimbraAuthLdapURL);
+    return url != null && url.size() > 0;
+  }
+
+  @Nullable
+  public DomainStatus getStatus() {
+    ZAttrProvisioning.DomainStatus domainStatus = mDomain.getDomainStatus();
+    if (domainStatus == null) {
+      return null;
+    }
+    return new DomainStatus(domainStatus);
   }
 }
 
