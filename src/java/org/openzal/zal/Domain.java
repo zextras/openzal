@@ -287,5 +287,9 @@ public class Domain extends Entry
     }
     return new DomainStatus(domainStatus);
   }
+
+  public boolean isAuthFallbackToLocal() {
+    return mDomain.isAuthFallbackToLocal();
+  }
 }
 
