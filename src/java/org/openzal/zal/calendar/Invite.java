@@ -1052,4 +1052,8 @@ public class Invite
   {
     return mInvite.descInMeta();
   }
+
+  public void setMethod(String method) {
+    mInvite.setMethod(method);
+  }
 }
