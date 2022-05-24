@@ -77,7 +77,7 @@ public class FileDownloader {
 
   public void downloadAndUnpack(String destinationDir) throws IOException, InterruptedException {
 
-    if( !new File("/usr/bin/brotli").exists() ) {
+    if( !new File("/usr/bin/brotli").exists()  && !new File("/opt/homebrew/bin/brotli").exists() ) {
       throw new RuntimeException("brotli is not installed, run: sudo apt-get install -y brotli");
     }
 
