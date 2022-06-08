@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>3.12.0</version>
+  <version>3.12.1</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -94,7 +94,7 @@
   </distributionManagement>
 
   <properties>
-    <zimbra.version>22.5.1</zimbra.version>
+    <zimbra.version>22.6.0</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
