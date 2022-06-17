@@ -88,6 +88,7 @@ pipeline {
                   branch 'custom/*'
                   branch 'beta/*'
                   branch 'playground/*'
+                  branch 'main'
                   expression { params.PLAYGROUND == true }
                   buildingTag()
               }
