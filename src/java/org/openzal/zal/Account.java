@@ -21,7 +21,6 @@
 package org.openzal.zal;
 
 import com.zimbra.common.calendar.ICalTimeZone;
-import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.calendar.Util;
 
@@ -1398,6 +1397,25 @@ public class Account extends Entry
       for (com.zimbra.cs.account.DataSource ds : dataSources) {
         DataSourceManager.cancelSchedule(mAccount, ds.getId());
       }
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<String> cancelAllDataSourcesAndGetRunningIds(Collection<String> ids) {
+    try {
+      List<com.zimbra.cs.account.DataSource> dataSources = com.zimbra.cs.account.Provisioning.getInstance().getAllDataSources(mAccount);
+      List<String> runningIds = new ArrayList<>();
+      for (com.zimbra.cs.account.DataSource ds : dataSources) {
+        if(ids == null || ids.isEmpty() || ids.contains(ds.getId())) {
+          if (DataSourceManager.getImportStatus(mAccount, ds).isRunning()) {
+            runningIds.add(ds.getId());
+          } else {
+            DataSourceManager.cancelSchedule(mAccount, ds.getId());
+          }
+        }
+      }
+      return runningIds;
     } catch (ServiceException e) {
       throw ExceptionWrapper.wrap(e);
     }
