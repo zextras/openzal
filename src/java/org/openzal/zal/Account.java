@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.calendar.ICalTimeZone;
 import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.common.util.Constants;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.mailbox.calendar.Util;
 
@@ -1322,6 +1323,27 @@ public class Account extends Entry
     }
     return new Account(zAccount);
   }
+
+  public boolean isPasswordExpired() {
+    int maxAge = mAccount.getIntAttr(com.zimbra.cs.account.Provisioning.A_zimbraPasswordMaxAge, 0);
+
+    if (maxAge > 0) {
+      Date lastChange =
+          mAccount.getGeneralizedTimeAttr(
+              com.zimbra.cs.account.Provisioning.A_zimbraPasswordModifiedTime, null);
+      if (lastChange != null) {
+        long last = lastChange.getTime();
+        long curr = System.currentTimeMillis();
+        return (last + (Constants.MILLIS_PER_DAY * maxAge)) < curr;
+      }
+    }
+    return false;
+  }
+
+  public boolean isPasswordNoMoreValid() {
+    return mustChangePassword() || isPasswordExpired();
+  }
+
 
   public void unsetMailQuota() {
     try
