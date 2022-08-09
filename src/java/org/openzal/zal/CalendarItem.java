@@ -249,7 +249,9 @@ public class CalendarItem extends Item
         ZAttendee matchingAttendee = localException.getMatchingAttendee(
             invitedUser.toZimbra(com.zimbra.cs.account.Account.class));
 
-        matchingAttendee.setPartStat(partStat);
+        if (matchingAttendee != null) {
+          matchingAttendee.setPartStat(partStat);
+        }
         mailbox.setCalendarItem(
             operationContext,
             getFolderId(),
