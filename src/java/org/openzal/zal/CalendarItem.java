@@ -235,26 +235,44 @@ public class CalendarItem extends Item
     CalendarItemData defaultCalendarItemData;
     if (recurId == null)
     {
-      Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, defaultInvite);
-      defaultCalendarItemData = new CalendarItemData(
-        updatedInvite,
-        getParsedMessage(
-          textParser,
-          mailbox,
-          mimeMessage,
-          updatedInvite
-        )
-      );
-      mailbox.setCalendarItem(
-          operationContext,
-          getFolderId(),
-          getFlagBitmask(),
-          getTags(),
-          defaultCalendarItemData,
-          newExceptions,
-          updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
-          0L
-      );
+      try {
+        Invite refetchedInvite;
+        CalendarItem refetchedCalendarItem;
+        com.zimbra.cs.mailbox.calendar.Invite localException = defaultInvite
+                .toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)
+                .getCalendarItem()
+                .getDefaultInviteOrNull();
+
+        localException.setPartStat(partStat);
+        localException.setMethod(ICalTok.REPLY.toString());
+
+        ZAttendee matchingAttendee = localException.getMatchingAttendee(
+            invitedUser.toZimbra(com.zimbra.cs.account.Account.class));
+
+        if (matchingAttendee != null) {
+          matchingAttendee.setPartStat(partStat);
+        }
+        mailbox.setCalendarItem(
+            operationContext,
+            getFolderId(),
+            getFlagBitmask(),
+            getTags(),
+            new CalendarItemData(
+                this.getDefaultInviteOrNull(),
+                this.getParsedMessage(
+                    textParser,
+                    mailbox,
+                    mimeMessage,
+                    this.getDefaultInviteOrNull()
+                )
+            ),
+            newExceptions,
+            null,
+            0L
+        );
+      } catch (ServiceException e) {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     else
     {
