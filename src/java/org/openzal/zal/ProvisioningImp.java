@@ -700,7 +700,7 @@ public class ProvisioningImp implements Provisioning
         mProvisioning.authAccount(
             account.toZimbra(com.zimbra.cs.account.Account.class),
             password,
-            (AuthContext.Protocol) context.get("proto"));
+            context.get("proto") instanceof AuthContext.Protocol ? (AuthContext.Protocol) context.get("proto") : AuthContext.Protocol.valueOf(context.get("proto").toString()));
       }
     }
     catch( ServiceException e ) {
