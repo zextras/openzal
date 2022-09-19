@@ -328,12 +328,13 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraServerVersionMajor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMajor;
   public static String A_zimbraServerVersionMinor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMinor;
   public static String A_zimbraServerVersionMicro = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMicro;
-  public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
   /* $else$
   public static String A_zimbraServerVersionMajor = "";
   public static String A_zimbraServerVersionMinor = "";
   public static String A_zimbraServerVersionMicro = "";
   /* $endif$ */
+
+  public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
