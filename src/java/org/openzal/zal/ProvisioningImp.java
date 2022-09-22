@@ -334,6 +334,8 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraServerVersionMicro = "";
   /* $endif$ */
 
+  public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
