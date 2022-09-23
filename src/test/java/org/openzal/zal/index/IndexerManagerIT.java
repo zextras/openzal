@@ -1,14 +1,11 @@
 package org.openzal.zal.index;
 
-import com.zimbra.cs.mailbox.ZimbraSimulator;
+import com.zimbra.cs.mailbox.ZalZimbraSimulator;
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openzal.zal.ParsedMessage;
 import org.openzal.zal.TemporaryIndexingError;
-import org.openzal.zal.lib.ZimbraVersion;
 
 import javax.activation.DataSource;
 import javax.mail.Session;
@@ -29,11 +26,11 @@ public class IndexerManagerIT {
     private MimeMessage mMimeMessage;
     private ParsedMessage mParsedMessage;
     private Indexer mIndexer;
-    private ZimbraSimulator mZimbraSimulator;
+    private ZalZimbraSimulator mZimbraSimulator;
 
     @Before
     public void setup() throws Exception {
-        mZimbraSimulator = new ZimbraSimulator();
+        mZimbraSimulator = new ZalZimbraSimulator();
         mIndexerManager = new IndexerManager();
         mIndexerManager.attachToZimbra();
         mMimeMessage = createMimeMessageWithAttachment();

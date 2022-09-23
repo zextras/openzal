@@ -1,19 +1,17 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.mailbox.ZimbraSimulator;
+import com.zimbra.cs.mailbox.ZalZimbraSimulator;
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MailboxIT
 {
-  private ZimbraSimulator mZimbraSimulator;
+  private ZalZimbraSimulator mZimbraSimulator;
 
   @Before
   public void setup() throws Exception {
-    mZimbraSimulator = new ZimbraSimulator();
+    mZimbraSimulator = new ZalZimbraSimulator();
   }
 
   @After

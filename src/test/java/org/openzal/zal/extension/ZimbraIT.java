@@ -1,23 +1,14 @@
 package org.openzal.zal.extension;
-import com.zimbra.cs.mailbox.ZimbraSimulator;
-import javax.annotation.Nonnull;
+import com.zimbra.cs.mailbox.ZalZimbraSimulator;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openzal.zal.lib.PermissiveMap;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import org.openzal.zal.lib.ZimbraVersion;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,7 +16,7 @@ import static org.junit.Assert.assertFalse;
 public class ZimbraIT
 {
   @Rule
-  public ZimbraSimulator mZimbraSimulator = new ZimbraSimulator();
+  public ZalZimbraSimulator mZimbraSimulator = new ZalZimbraSimulator();
 
   @Test
   public void reflection_initialization()

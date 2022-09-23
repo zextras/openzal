@@ -20,29 +20,28 @@ import org.openzal.zal.Provisioning;
 import org.openzal.zal.extension.Zimbra;
 
 // for testing purpose only
-public class ZimbraSimulator extends ExternalResource
+public class ZalZimbraSimulator extends ExternalResource
 {
-
-  static Logger logger = Logger.getLogger(ZimbraSimulator.class);
+  static Logger logger = Logger.getLogger(ZalZimbraSimulator.class);
 
   private MailboxManager mMailboxManager;
 
   protected File mTmpDir;
 
-  private List<ZimbraSimulatorExtension> extensions = new ArrayList<>();
+  private final List<ZimbraSimulatorExtension> extensions;
 
-  public ZimbraSimulator(ZimbraSimulatorExtension ...extensions)
+  public ZalZimbraSimulator(ZimbraSimulatorExtension ...extensions)
   {
+    this.extensions = Arrays.asList(extensions);
     initHsql();
     init();
-    this.extensions = Arrays.asList(extensions);
   }
 
-  public ZimbraSimulator(Zimbra zimbra, ZimbraSimulatorExtension ...extensions)
+  public ZalZimbraSimulator(Zimbra zimbra, ZimbraSimulatorExtension ...extensions)
   {
+    this.extensions = Arrays.asList(extensions);
     initHsql();
     init(zimbra);
-    this.extensions = Arrays.asList(extensions);
   }
 
   private static void initHsql() {
@@ -100,7 +99,7 @@ public class ZimbraSimulator extends ExternalResource
       mZimbra = new Zimbra(zimbra);
       initMailboxManager(zimbra);
 
-      extensions.forEach( ext -> ext.setup(zimbra));
+      extensions.forEach( ext -> ext.setup(mZimbra, zimbra));
       /* $if ZimbraVersion < 8.0.0 $
       Volume.reloadVolumes();
        $endif$ */
@@ -192,33 +191,17 @@ public class ZimbraSimulator extends ExternalResource
     MailboxIndex.startup();
   }
 
-//  private void initStorageManager(Zimbra zimbra) throws Exception
-//  {
-//    //LC.zimbra_class_store.setDefault(StoreManagerSimulator.class.getName());
-//    //com.zimbra.cs.store.StoreManager.getInstance().startup();
-//    mVolumeManager = new VolumeManager();
-//    mStoreSimulator = new StoreManagerSimulator();
-//    mStoreSimulator.startup();
-//    mStoreRoot = mStoreSimulator.getStoreRoot();
-//    FileBlobStoreWrap storeManagerSimulator = new FileBlobStoreSimulatorWrap(mStoreSimulator);
-//    mStoreManager = new StoreManagerImpl(
-//            storeManagerSimulator,
-//            mVolumeManager
-//    );
-//
-//    if (zimbra == null)
-//    {
-//      mZimbra.overrideZimbraStoreManager(mStoreManager);
-//    }
-//  }
-
   private void initProvisioning() throws Exception
   {
-    com.zimbra.cs.account.Provisioning.setInstance(new MockProvisioning());
+    com.zimbra.cs.account.Provisioning.setInstance(createProvisioning());
     ZLdapFilterFactorySimulator.setInstance();
     /* $if ZimbraVersion >= 8.7.6$ */
     EphemeralStore.registerFactory("in-memory", "com.zimbra.cs.ephemeral.InMemoryEphemeralStore$Factory");
     /* $endif$ */
+  }
+
+  protected com.zimbra.cs.account.Provisioning createProvisioning() {
+    return new MockProvisioning();
   }
 
   public void initHSQLDatabase() throws Exception
@@ -235,7 +218,7 @@ public class ZimbraSimulator extends ExternalResource
     HSQLZimbraDatabase.clearDatabase();
     extensions.forEach( ext -> {
       try {
-        ext.cleanup();
+        ext.cleanup(mZimbra);
       } catch (Exception e) {
         logger.warn("Ignoring exception on close ", e);
       }

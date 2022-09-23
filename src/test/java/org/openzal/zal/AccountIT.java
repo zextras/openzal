@@ -1,6 +1,6 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.mailbox.ZimbraSimulator;
+import com.zimbra.cs.mailbox.ZalZimbraSimulator;
 import com.zimbra.soap.account.message.GetSMIMEPublicCertsRequest;
 import com.zimbra.soap.account.message.GetSMIMEPublicCertsResponse;
 import com.zimbra.soap.account.type.SMIMEPublicCertInfo;
@@ -14,14 +14,11 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.openzal.zal.extension.ConfigZimletStatus;
-import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.soap.SoapTransport;
 
 import static org.junit.Assert.assertEquals;
@@ -34,7 +31,7 @@ import static org.mockito.Mockito.when;
 @SuppressWarnings("ConstantConditions")
 public class AccountIT
 {
-  private ZimbraSimulator mZimbraSimulator;
+  private ZalZimbraSimulator mZimbraSimulator;
   private Provisioning    mProvisioning;
   private Account         mAccount;
   private Domain          mMainDomain;
@@ -42,7 +39,7 @@ public class AccountIT
   @Before
   public void setup() throws Exception
   {
-    mZimbraSimulator = new ZimbraSimulator();
+    mZimbraSimulator = new ZalZimbraSimulator();
     mProvisioning = mZimbraSimulator.getProvisioning();
     mMainDomain = mProvisioning.createDomain("example.com",new HashMap<String, Object>());
     mAccount = mProvisioning.createAccount("test@example.com","",new HashMap<String, Object>());

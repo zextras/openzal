@@ -1,10 +1,9 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.mailbox.ZimbraSimulator;
+import com.zimbra.cs.mailbox.ZalZimbraSimulator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openzal.zal.lib.ZimbraVersion;
 
 import java.util.HashMap;
 import static org.junit.Assume.assumeTrue;
@@ -12,14 +11,14 @@ import static org.mockito.Mockito.*;
 
 public class QuotaProviderIT
 {
-  private ZimbraSimulator mZimbraSimulator;
+  private ZalZimbraSimulator mZimbraSimulator;
   private Account                   mUser;
 
   @Before
   public void setup()
     throws Exception
   {
-    mZimbraSimulator = new ZimbraSimulator();
+    mZimbraSimulator = new ZalZimbraSimulator();
     mUser = mZimbraSimulator.getProvisioning().createAccount("user@example.com", "", new HashMap<>());
   }
 

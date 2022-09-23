@@ -92,12 +92,12 @@ class MaintenanceModeAccountExceptionStub extends MaintenanceModeAccountExceptio
   }
 }
 
-public final class MockProvisioning extends Provisioning
+public class MockProvisioning extends Provisioning
 {
   public static final String DEFAULT_ACCOUNT_ID = new UUID(0L, 0L).toString();
 
   private final Map<String, Account>            id2account   = new HashMap<String, Account>();
-  private final Map<String, Account>            name2account = new HashMap<String, Account>();
+  protected final Map<String, Account>            name2account = new HashMap<String, Account>();
   private final Map<String, Domain>             id2domain    = new HashMap<String, Domain>();
   private final Map<String, Domain>             name2domain  = new HashMap<String, Domain>();
   private final Map<String, Cos>                id2cos       = new HashMap<String, Cos>();
@@ -641,7 +641,7 @@ public final class MockProvisioning extends Provisioning
     SearchGalResult result = params.getResult();
     GalSearchResultCallback callback = params.createResultCallback();
 
-    String regex = RegexUtil.sqlPatternToRegex(query);
+    String regex = sqlPatternToRegex(query);
     for (String name:name2account.keySet())
     {
       {
@@ -659,6 +659,10 @@ public final class MockProvisioning extends Provisioning
     }
 
     callback.setHasMoreResult(false);
+  }
+
+  protected String sqlPatternToRegex(String query) {
+    return RegexUtil.sqlPatternToRegex(query);
   }
 
   public Domain get(Key.DomainBy keyType, String key)
