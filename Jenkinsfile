@@ -102,10 +102,10 @@ pipeline {
               }
               stage('pacur') {
                   parallel {
-                      stage('Ubuntu 18.04') {
+                      stage('Ubuntu 20.04') {
                           agent {
                               node {
-                                  label 'pacur-agent-ubuntu-18.04-v1'
+                                  label 'pacur-agent-ubuntu-20.04-v1'
                               }
                           }
                           steps {
