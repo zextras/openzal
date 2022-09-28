@@ -51,7 +51,7 @@ public class FileDownloader {
 
     try
     {
-      InputStream inputStream = openStream(useProxy);
+      InputStream inputStream = openStream();
       FileOutputStream output = new FileOutputStream(mDestinationPath);
       copyStream(inputStream, output);
       System.out.println("OK");
@@ -82,7 +82,7 @@ public class FileDownloader {
     }
 
     System.out.print("Download and unpacking to "+destinationDir+"...");
-    InputStream inputStream = openStream(true);
+    InputStream inputStream = openStream();
     new File(destinationDir).mkdirs();
 
     Process process = Runtime.getRuntime().exec(
