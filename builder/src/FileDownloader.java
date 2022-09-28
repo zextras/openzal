@@ -102,20 +102,8 @@ public class FileDownloader {
     System.out.println("OK");
   }
 
-  private InputStream openStream(boolean useProxy) throws IOException {
-    URL url;
-    String buildProxyEnv = System.getenv().get("BUILD_PROXY");
-    if( useProxy && buildProxyEnv != null && !buildProxyEnv.isEmpty()) {
-      System.out.print("(Using Proxy)...");
-      URL proxyUrl = new URL(buildProxyEnv);
-      url = new URL(proxyUrl.getProtocol(), proxyUrl.getHost(), proxyUrl.getPort(), mUrl.toExternalForm());
-    }
-    else {
-      System.out.print("(Direct)...");
-      url = mUrl;
-    }
-
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+  private InputStream openStream() throws IOException {
+    HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
     connection.setRequestMethod("GET");
     connection.setConnectTimeout(1000 * 30);
     connection.setReadTimeout(1000 * 30);
