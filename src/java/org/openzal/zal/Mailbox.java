@@ -22,6 +22,7 @@ package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.util.Pair;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbPool;
@@ -37,9 +38,14 @@ import com.zimbra.cs.mailbox.cache.LocalTagCache;
 import com.zimbra.cs.mailbox.cache.RedisTagCache;
 /* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
+import com.zimbra.cs.mailbox.Folder.FolderOptions;
 import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailItem.Type;
+import com.zimbra.cs.mailbox.Mailbox.DeleteBlobs;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.util.TypedIdList;
+import com.zimbra.cs.redolog.RedoLogManager;
+import com.zimbra.cs.redolog.op.SetConfig;
 import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.mail.ItemActionHelper;
 import com.zimbra.cs.service.util.ItemId;
@@ -88,6 +94,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.openzal.zal.redolog.RedoLogProvider;
+import org.openzal.zal.redolog.op.RawSetConfig;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
@@ -125,6 +133,8 @@ public class Mailbox
   private static final int HIGHEST_SYSTEM_ID = com.zimbra.cs.mailbox.Mailbox.HIGHEST_SYSTEM_ID;
   public static final  int FIRST_USER_ID     = com.zimbra.cs.mailbox.Mailbox.FIRST_USER_ID;
 
+  private static final Set<String> CREATE_CALENDAR_ITEM_ALLOWED_METHODS = new HashSet<>(Arrays.asList("PUBLISH", "REQUEST"));
+
   private static Method sCreateDefaultFlags;
 
   static
@@ -139,6 +149,11 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
+  }
+
+  public MailboxMaintenance getMaintenance()
+  {
+    return new MailboxMaintenance(mMbox.getMaintenance());
   }
 
   public long getSize()
@@ -188,6 +203,14 @@ public class Mailbox
       getAccountId(),
       getIndexVolume()
     );
+  }
+
+  public void deleteFromDumpster(OperationContext newOperationContext, int[] ids) {
+    try {
+      mMbox.deleteFromDumpster(newOperationContext.getOperationContext(), ids);
+    } catch( ServiceException e ) {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   static class FakeMailbox extends com.zimbra.cs.mailbox.Mailbox
@@ -753,6 +776,26 @@ public class Mailbox
     return new Folder(folder);
   }
 
+  @Nonnull
+  public List<Folder> getFolderList(@Nonnull OperationContext zContext)
+      throws NoSuchFolderException
+  {
+    List<Folder> folderList = new ArrayList<>(0);
+    try
+    {
+      for (com.zimbra.cs.mailbox.Folder folder : mMbox
+          .getFolderList(zContext.getOperationContext(), SortBy.NONE)) {
+        folderList.add(new Folder(folder));
+      }
+
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return folderList;
+  }
 
   @Nonnull
   public Item getItemByPath(@Nonnull OperationContext zContext, String path)
@@ -935,12 +978,33 @@ public class Mailbox
     }
   }
 
+  public void renameMailbox(OperationContext operationContext, String oldName, String newName) {
+    try {
+      mMbox.renameMailbox(operationContext.getOperationContext(), oldName, newName);
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   public void delete(@Nonnull OperationContext octxt, int itemId, byte type)
     throws ZimbraException
   {
     try
     {
       mMbox.delete(octxt.getOperationContext(), itemId, Item.convertType(type));
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void delete(@Nonnull OperationContext octxt, int[] itemIds, byte type)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.delete(octxt.getOperationContext(), itemIds, Item.convertType(type), null);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1000,18 +1064,38 @@ public class Mailbox
 
     try
     {
-      return new CalendarItem(
-        mMbox.setCalendarItem(
-          octxt.getOperationContext(),
-          folderId,
-          flags,
-          tags,
-          defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class),
-          zimbraExceptions,
-          replies,
-          nextAlarm
-        )
+      com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData calendarItemData = defaultInv.toZimbra(com.zimbra.cs.mailbox.Mailbox.SetCalendarItemData.class);
+      boolean patchCalendarItemMethod = !CREATE_CALENDAR_ITEM_ALLOWED_METHODS.contains(calendarItemData.invite.getMethod());
+      String oldMethod = calendarItemData.invite.getMethod();
+      if (patchCalendarItemMethod) {
+        calendarItemData.invite.setMethod("PUBLISH");
+        com.zimbra.cs.mailbox.CalendarItem calendarItem = calendarItemData.invite.getCalendarItem();
+        String cid = String.format("Message Id: %s from account id %s",
+            calendarItem.getId(),
+            calendarItem.getAccount().getId()
+        );
+        ZimbraLog.extensions.warn(String.format("Setting metadata method to 'PUBLISH', '%s' is not supported for calendar item %s", oldMethod, cid));
+      }
+
+      com.zimbra.cs.mailbox.CalendarItem inviteCalendarItem = calendarItemData.invite.getCalendarItem();
+      List<ReplyInfo> newReplies = replies;
+      if (calendarItemData.invite != null && calendarItemData.invite.getCalendarItem() != null) {
+        newReplies = replies == null ? calendarItemData.invite.getCalendarItem().getAllReplies() : null;
+      }
+
+      CalendarItem result = new CalendarItem(
+          mMbox.setCalendarItem(
+              octxt.getOperationContext(),
+              folderId,
+              flags,
+              tags,
+              calendarItemData,
+              zimbraExceptions,
+              newReplies,
+              nextAlarm
+          )
       );
+      return result;
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1078,6 +1162,19 @@ public class Mailbox
     try
     {
       mMbox.alterTag(octxt.getOperationContext(), itemId, Item.convertType(type), Flag.of(tagId), addTag, null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void alterTag(@Nonnull OperationContext octxt, int itemId, byte type, String tagName, boolean addTag)
+    throws ZimbraException
+  {
+    try
+    {
+      mMbox.alterTag(octxt.getOperationContext(), itemId, Item.convertType(type), tagName, addTag, null);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1215,6 +1312,51 @@ public class Mailbox
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public void move(@Nonnull OperationContext octxt, int[] itemIds, byte type, int targetId) throws ZimbraException
+  {
+    try
+    {
+      mMbox.move(octxt.getOperationContext(), itemIds, Item.convertType(type), targetId, null);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public List<Item> copy(@Nonnull OperationContext octxt, int[] itemIds, byte type, int targetId) throws ZimbraException
+  {
+    try
+    {
+      List<MailItem> copiedItems = mMbox.copy(octxt.getOperationContext(), itemIds, Item.convertType(type), targetId);
+      List<Item> result = new ArrayList<>(copiedItems.size());
+      for( MailItem mailItem : copiedItems ) {
+        result.add(new Item(mailItem));
+      }
+      return result;
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void createFolderPath(@Nonnull OperationContext octxt, String path) throws ZimbraException
+  {
+    /* $if ZimbraVersion >= 8.8.10 $ */
+    try
+    {
+      mMbox.createFolderForMsgs(octxt.getOperationContext(), path);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif$ */
+  }
+
+
 
   public int move(@Nonnull Account dstAccount,@Nonnull OperationContext octxt, int itemId, byte type, int targetId)
     throws ZimbraException
@@ -1541,6 +1683,22 @@ public class Mailbox
     /* $endif $ */
   }
 
+  public void clearCache(byte type) throws ZimbraException
+  {
+    /* $if ZimbraX == 1 $
+    try
+    {
+    /* $endif $ */
+      mMbox.purge(Item.convertType(type));
+    /* $if ZimbraX == 1 $
+    }
+    catch( ServiceException e )
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+    /* $endif $ */
+  }
+
 
   @Nonnull
   public QueryResults search(
@@ -1568,6 +1726,26 @@ public class Mailbox
           throws ZimbraException
   {
     return search(octxt, queryString, types, sortBy, chunkSize, offset, onlyIds, false);
+  }
+
+  public QueryResults search(
+    OperationContext operationContext,
+    org.openzal.zal.SearchParams  searchParams
+  ) {
+    ZimbraQueryResults result;
+    try {
+      result = mMbox.index.search(
+          SoapProtocol.Soap12,
+          operationContext.getOperationContext(),
+          searchParams.toZimbra(SearchParams.class)
+      );
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new QueryResults(
+        result
+    );
   }
 
   @Nonnull
@@ -1731,6 +1909,35 @@ public class Mailbox
   }
 
   @Nonnull
+  public Folder createFolder(
+      OperationContext operationContext,
+      String path
+  ) {
+    MailItem folder;
+    try {
+      FolderOptions fopts = new FolderOptions();
+      folder = mMbox.createFolder(operationContext.getOperationContext(), path, fopts);
+    } catch (com.zimbra.common.service.ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+    return new Folder(folder);
+  }
+
+  public void setFolderRetentionPolicy(@Nonnull OperationContext octxt, int folderId, RetentionPolicy retentionPolicy)
+      throws ZimbraException {
+    try {
+      mMbox.setRetentionPolicy(
+          octxt.getOperationContext(),
+          folderId,
+          Type.FOLDER,
+          retentionPolicy.toZimbra(com.zimbra.soap.mail.type.RetentionPolicy.class)
+      );
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Nonnull
   public SearchFolder createSearchFolder(
     @Nonnull OperationContext octxt, int folderId, String name,
                                          String query, String types, String sort,
@@ -1758,6 +1965,33 @@ public class Mailbox
     }
 
     return new SearchFolder(item);
+  }
+
+  @Nonnull
+  public SearchFolder getSearchFolderById(@Nonnull OperationContext zContext, int id) throws NoSuchFolderException {
+    MailItem folder;
+
+    try
+    {
+      folder = mMbox.getSearchFolderById(zContext.getOperationContext(), id);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+
+    return new SearchFolder(folder);
+  }
+
+  public void modifySearchFolder(OperationContext zContext, int id, String query, String types, String sort) {
+    try
+    {
+      mMbox.modifySearchFolder(zContext.getOperationContext(), id, query, types, sort);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
   }
 
   @Nonnull
@@ -2123,6 +2357,28 @@ public class Mailbox
         discardExistingInvites,
         addRevision
       ).calItemId;
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void addInvite(@Nonnull OperationContext octxt, @Nonnull Invite inv, int folderId)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.mime.ParsedMessage parsedMessage = null;
+      mMbox.addInvite(
+        octxt.getOperationContext(),
+        inv.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class),
+        folderId,
+        null,
+        true,
+        false,
+        true
+      );
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -2798,30 +3054,36 @@ public class Mailbox
 
   public void rawSetConfig(
     @Nonnull String section,
-    @Nonnull String metadata
+    @Nullable String metadata
   )
     throws SQLException, ZimbraException
   {
-    if (metadata.length() > MAX_METADATA_SIZE)
+    if (metadata != null && metadata.length() > MAX_METADATA_SIZE)
     {
       throw new SQLException("metadata is too big to be saved");
     }
 
-    String insertQuery = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
     Connection connection = null;
     PreparedStatement replaceStatement = null;
     try
     {
       connection = ZimbraDatabase.legacyGetConnection();
-
-      replaceStatement = connection.prepareStatement(insertQuery);
-      replaceStatement.setInt(1, getId());
-      replaceStatement.setString(2, section);
-      replaceStatement.setString(3, metadata);
+      if (metadata != null) {
+        String query = "REPLACE INTO zimbra.mailbox_metadata (mailbox_id,section,metadata) VALUES(?,?,?)";
+        replaceStatement = connection.prepareStatement(query);
+        replaceStatement.setInt(1, getId());
+        replaceStatement.setString(2, section);
+        replaceStatement.setString(3, metadata);
+      } else {
+        String query = "DELETE FROM zimbra.mailbox_metadata WHERE mailbox_id = ? AND section = ?";
+        replaceStatement = connection.prepareStatement(query);
+        replaceStatement.setInt(1, getId());
+        replaceStatement.setString(2, section);
+      }
 
       replaceStatement.executeUpdate();
-
       connection.commit();
+      RedoLogProvider.getRedoLogProvider().getRedoLogManager().commit(new RawSetConfig(getId(), section, metadata));
     }
     finally
     {
@@ -2838,6 +3100,18 @@ public class Mailbox
     try
     {
       mMbox.deleteMailbox();
+    }
+    catch (ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void deleteMailboxButStore()
+  {
+    try
+    {
+      mMbox.deleteMailbox(DeleteBlobs.NEVER);
     }
     catch (ServiceException e)
     {
@@ -2959,6 +3233,30 @@ public class Mailbox
         throw ExceptionWrapper.wrap(e);
       }
       throw new RuntimeException(e);
+    }
+  }
+
+  public void purgeImapDeleted(OperationContext operationContext) {
+    try{
+      mMbox.purgeImapDeleted(operationContext.getOperationContext());
+    } catch( ServiceException e ) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void setFolderUrl(OperationContext operationContext, int folderId, String url) {
+    try {
+      mMbox.setFolderUrl(operationContext.getOperationContext(), folderId, url);
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  public void setActiveSyncDisabled(OperationContext octxt, int folderId, boolean disableActiveSync) {
+    try {
+      mMbox.setActiveSyncDisabled(octxt.getOperationContext(), folderId, disableActiveSync);
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
     }
   }
 }

@@ -20,8 +20,11 @@
 
 package org.openzal.zal;
 
+import com.zimbra.common.calendar.ParsedDateTime;
+import com.zimbra.common.calendar.ZCalendar.ICalTok;
 import com.zimbra.cs.mailbox.calendar.RecurId;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import java.util.Objects;
 import org.openzal.zal.calendar.Attendee;
 import org.openzal.zal.calendar.AttendeeInviteStatus;
 import org.openzal.zal.calendar.CalendarItemData;
@@ -194,23 +197,24 @@ public class CalendarItem extends Item
 
     List<Invite> exceptions = defaultInvite.getRecurrencesInvitees(Invite.TYPE_EXCEPTION);
 
-    List<CalendarItemData> newExceptions = new ArrayList<CalendarItemData>(exceptions.size());
+    List<CalendarItemData> newExceptions = new ArrayList<>(exceptions.size());
     for (Invite exception : exceptions)
     {
       if (recurId != null && recurId.equals(exception.getRecurId()))
       {
-        Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, exception);
-        newExceptions.add(
-          new CalendarItemData(
-            updatedInvite,
-            getParsedMessage(
-              textParser,
-              mailbox,
-              mimeMessage,
-              updatedInvite
-            )
-          )
-        );
+        continue;
+//        Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, exception);
+//        newExceptions.add(
+//          new CalendarItemData(
+//            updatedInvite,
+//            getParsedMessage(
+//              textParser,
+//              mailbox,
+//              mimeMessage,
+//              updatedInvite
+//            )
+//          )
+//        );
       }
       else
       {
@@ -231,40 +235,116 @@ public class CalendarItem extends Item
     CalendarItemData defaultCalendarItemData;
     if (recurId == null)
     {
-      Invite updatedInvite = updateInvitePartStat(mailbox, invitedUser, partStat, defaultInvite);
-      defaultCalendarItemData = new CalendarItemData(
-        updatedInvite,
-        getParsedMessage(
-          textParser,
-          mailbox,
-          mimeMessage,
-          updatedInvite
-        )
-      );
+      try {
+        Invite refetchedInvite;
+        CalendarItem refetchedCalendarItem;
+        com.zimbra.cs.mailbox.calendar.Invite localException = defaultInvite
+                .toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)
+                .getCalendarItem()
+                .getDefaultInviteOrNull();
+
+        localException.setPartStat(partStat);
+        localException.setMethod(ICalTok.REPLY.toString());
+
+        ZAttendee matchingAttendee = localException.getMatchingAttendee(
+            invitedUser.toZimbra(com.zimbra.cs.account.Account.class));
+
+        if (matchingAttendee != null) {
+          matchingAttendee.setPartStat(partStat);
+        }
+        mailbox.setCalendarItem(
+            operationContext,
+            getFolderId(),
+            getFlagBitmask(),
+            getTags(),
+            new CalendarItemData(
+                this.getDefaultInviteOrNull(),
+                this.getParsedMessage(
+                    textParser,
+                    mailbox,
+                    mimeMessage,
+                    this.getDefaultInviteOrNull()
+                )
+            ),
+            newExceptions,
+            null,
+            0L
+        );
+      } catch (ServiceException e) {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
     else
     {
-      defaultCalendarItemData = new CalendarItemData(
-        defaultInvite,
-        getParsedMessage(
-          textParser,
-          mailbox,
-          mimeMessage,
-          defaultInvite
-        )
-      );
+      try {
+        Invite refetchedInvite;
+        CalendarItem refetchedCalendarItem;
+        com.zimbra.cs.mailbox.calendar.Invite localException = defaultInvite.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class)
+            .makeInstanceInvite(ParsedDateTime.fromUTCTime(recurId.getExceptionStartTimeUtc()));
+
+        localException.setPartStat(partStat);
+        localException.setMethod(ICalTok.REPLY.toString());
+
+        ZAttendee matchingAttendee = localException.getMatchingAttendee(
+            invitedUser.toZimbra(com.zimbra.cs.account.Account.class));
+
+        matchingAttendee.setPartStat(partStat);
+
+        Invite newInvite = new Invite(localException);
+        newInvite.setMethod(ICalTok.REPLY.toString());
+
+        mailbox.addInvite(
+            operationContext,
+            newInvite,
+            mCalendarItem.getFolderId()
+        );
+
+        refetchedCalendarItem = mailbox.getCalendarItemById(operationContext, this.getId());
+        refetchedInvite = refetchedCalendarItem.getInvite(recurId);
+
+        Attendee invitedAttendee = refetchedInvite.getMatchingAttendee(invitedUser);
+
+
+        if (Objects.equals(matchingAttendee.getCn(), mailbox.getAccount().getCn())) {
+          mailbox.modifyPartStat(
+              operationContext,
+              refetchedCalendarItem.getId(),
+              recurId,
+              invitedUser.getCn(),
+              matchingAttendee.getAddress(),
+              null,
+              matchingAttendee.getRole(),
+              partStat,
+              Boolean.FALSE,
+              refetchedCalendarItem.getModifiedSequence(),
+              time
+          );
+        } else {
+          mailbox.setCalendarItem(
+            operationContext,
+            getFolderId(),
+            getFlagBitmask(),
+            getTags(),
+            new CalendarItemData(
+                refetchedCalendarItem.getDefaultInviteOrNull(),
+                refetchedCalendarItem.getParsedMessage(
+                    textParser,
+                    mailbox,
+                    mimeMessage,
+                    refetchedCalendarItem.getDefaultInviteOrNull()
+                )
+            ),
+            newExceptions,
+            null,
+            0L
+        );
+        }
+      } catch (ServiceException e) {
+        throw ExceptionWrapper.wrap(e);
+      }
     }
 
-    mailbox.setCalendarItem(
-      operationContext,
-      getFolderId(),
-      getFlagBitmask(),
-      getTags(),
-      defaultCalendarItemData,
-      newExceptions,
-      updateAttendeePartStat(invitedUser, partStat, time, sequence, recurId),
-      0L
-    );
+
   }
 
   @Nullable
@@ -317,7 +397,7 @@ public class CalendarItem extends Item
       if (invitedUser.addressMatchesAccount(attendee.getAddress()))
       {
         attendeesIterator.set(new Attendee(
-          attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType())
+          attendee.getAddress(), attendee.getName(), AttendeeInviteStatus.fromZimbra(partStat), attendee.getType(), attendee.getRsvp())
         );
         updated = true;
       }
@@ -336,9 +416,8 @@ public class CalendarItem extends Item
 
     inviteFactory.setAttendeeList(attendees);
     inviteFactory.setPartStat(partStat);
-    Invite updatedInvite = inviteFactory.createAppointment(mailbox);
 
-    return updatedInvite;
+    return inviteFactory.createAppointment(mailbox);
   }
 
   private List<com.zimbra.cs.mailbox.CalendarItem.ReplyInfo> updateAttendeePartStat(
@@ -387,5 +466,29 @@ public class CalendarItem extends Item
   public boolean isPublic()
   {
     return mCalendarItem.isPublic();
+  }
+
+  private com.zimbra.cs.mailbox.calendar.Invite matchingInvite(RecurId recurId) {
+    com.zimbra.cs.mailbox.calendar.Invite[] invites = mCalendarItem.getInvites();
+    if (invites == null) {
+      return null;
+    }
+    for (com.zimbra.cs.mailbox.calendar.Invite invite : invites) {
+      if ((invite.getRecurId() != null && invite.getRecurId().equals(recurId)) ||
+          (invite.getRecurId() == null && recurId == null)) {
+        return invite;
+      }
+    }
+    return null;
+  }
+
+  public Invite matchingInvite(long recurrence) {
+    com.zimbra.cs.mailbox.calendar.Invite matchingInvite = matchingInvite(
+        new RecurrenceId(recurrence).toZimbra(RecurId.class)
+    );
+    if (matchingInvite == null) {
+      return null;
+    }
+    return new Invite(matchingInvite);
   }
 }

@@ -43,6 +43,14 @@ public class SearchParams
     mParams.setInDumpster(false);
   }
 
+  public SearchParams(com.zimbra.cs.index.SearchParams params)
+  {
+    mParams = params;
+    mParams.setSortBy(SortBy.DATE_DESC);
+    mParams.setFetchMode(com.zimbra.cs.index.SearchParams.Fetch.NORMAL);
+    mParams.setInDumpster(false);
+  }
+
   public <T> T toZimbra(@Nonnull Class<T> cls)
   {
     return cls.cast(mParams);

@@ -51,7 +51,7 @@ public class FileDownloader {
 
     try
     {
-      InputStream inputStream = openStream(useProxy);
+      InputStream inputStream = openStream();
       FileOutputStream output = new FileOutputStream(mDestinationPath);
       copyStream(inputStream, output);
       System.out.println("OK");
@@ -77,12 +77,12 @@ public class FileDownloader {
 
   public void downloadAndUnpack(String destinationDir) throws IOException, InterruptedException {
 
-    if( !new File("/usr/bin/brotli").exists() ) {
+    if( !new File("/usr/bin/brotli").exists()  && !new File("/opt/homebrew/bin/brotli").exists() ) {
       throw new RuntimeException("brotli is not installed, run: sudo apt-get install -y brotli");
     }
 
     System.out.print("Download and unpacking to "+destinationDir+"...");
-    InputStream inputStream = openStream(true);
+    InputStream inputStream = openStream();
     new File(destinationDir).mkdirs();
 
     Process process = Runtime.getRuntime().exec(

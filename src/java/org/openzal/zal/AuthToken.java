@@ -26,7 +26,9 @@ import com.zimbra.cs.account.ZimbraJWToken;
 import com.zimbra.cs.service.util.JWTUtil;
 /* $endif $ */
 
+import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.service.AuthProviderException;
+import java.util.Optional;
 import org.openzal.zal.exceptions.ExceptionWrapper;
 
 import javax.annotation.Nonnull;
@@ -158,6 +160,25 @@ public class AuthToken
     catch (AuthTokenException e)
     {
       throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  /**
+   * @return tokenId if available. May return <code>null</code> if tokenId is missing.
+   */
+  public Integer getZimbraTokenId() {
+    if (ZimbraAuthToken.class.isAssignableFrom(mAuthToken.getClass())) {
+      ZimbraAuthToken zat = (ZimbraAuthToken) mAuthToken;
+      Integer tokenId;
+      /* $if ZimbraVersion >= 8.8.9$ */
+      tokenId = zat.getProperties().getTokenID();
+      /* $else $
+      tokenId = -1;
+      /* $endif$ */
+      if (tokenId == -1) return null;
+      else return tokenId;
+    } else {
+      return null;
     }
   }
 }

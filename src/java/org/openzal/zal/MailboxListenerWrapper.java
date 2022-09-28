@@ -4,9 +4,9 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailboxOperation;
 import com.zimbra.cs.session.PendingModifications;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.openzal.zal.ItemChange.ChangeType;
 import org.openzal.zal.lib.Clock;
 import org.openzal.zal.log.ZimbraLog;
-import org.openzal.zal.redolog.Redolog;
 
 public abstract class MailboxListenerWrapper
 {
@@ -21,7 +21,7 @@ public abstract class MailboxListenerWrapper
       isRegistered = new AtomicBoolean(false);
     }
 
-    private boolean toBackup(Object what)
+    private boolean isNotVirtualConversation(Object what)
     {
       boolean isRelevant = false;
 
@@ -74,97 +74,8 @@ public abstract class MailboxListenerWrapper
           return;
         }
 
-        Operation operation = Operation.SKIP;
+        Operation operation = map(op.getCode());
         Account account = new Account(notification.mailboxAccount);
-
-        switch( op.getCode() )
-        {
-          // to be managed with MailboxManager$Listener
-          case Redolog.OP_CREATE_MAILBOX:
-          case Redolog.OP_DELETE_MAILBOX:
-            break;
-          case Redolog.OP_CREATE_SAVED_SEARCH:
-          case Redolog.OP_MODIFY_SAVED_SEARCH:
-          case Redolog.OP_CREATE_TAG:
-          case Redolog.OP_RENAME_TAG:
-          case Redolog.OP_CREATE_CONTACT:
-          case Redolog.OP_MODIFY_CONTACT:
-          case Redolog.OP_EDIT_NOTE:
-          case Redolog.OP_REPOSITION_NOTE:
-          case Redolog.OP_CREATE_NOTE:
-          case Redolog.OP_CREATE_LINK:
-          case Redolog.OP_MODIFY_INVITE_PARTSTAT:
-          case Redolog.OP_CREATE_INVITE:
-          case Redolog.OP_FIX_CALENDAR_ITEM_TIME_ZONE:
-          case Redolog.OP_SET_CALENDAR_ITEM:
-          case Redolog.OP_GRANT_ACCESS:   // TODO: Find out what that operations mean
-          case Redolog.OP_REVOKE_ACCESS:  // TODO: Find out what that operations mean
-          case Redolog.OP_SET_SUBSCRIPTION_DATA:
-          case Redolog.OP_SET_PERMISSIONS:
-          case Redolog.OP_SET_FOLDER_URL:
-          case Redolog.OP_ADD_DOCUMENT_REVISION:
-          case Redolog.OP_SAVE_CHAT:
-          case Redolog.OP_CREATE_CHAT:
-          case Redolog.OP_DATE_ITEM:
-          case Redolog.OP_FIX_CALENDAR_ITEM_TZ:
-          case Redolog.OP_FIX_CALENDAR_ITEM_END_TIME:
-          case Redolog.OP_DISMISS_CALENDAR_ITEM_ALARM:
-          case Redolog.OP_SET_FOLDER_DEFAULT_VIEW:
-          case Redolog.OP_SET_CUSTOM_DATA:
-          case Redolog.OP_SNOOZE_CALENDAR_ITEM_ALARM:
-          case Redolog.OP_CREATE_COMMENT:
-          case Redolog.OP_FIX_CALENDAR_ITEM_PRIORITY:
-          case Redolog.OP_MOVE_ITEM:
-          case Redolog.OP_COLOR_ITEM:
-          case Redolog.OP_SET_ITEM_TAGS:
-          case Redolog.OP_ALTER_ITEM_TAG:
-          case Redolog.OP_DELETE_ITEM:
-          case Redolog.OP_COPY_ITEM:
-          case Redolog.OP_CREATE_FOLDER_PATH:
-          case Redolog.OP_RENAME_FOLDER_PATH:
-          case Redolog.OP_SAVE_DRAFT:
-          case Redolog.OP_CREATE_MESSAGE:
-          case Redolog.OP_SAVE_WIKI:
-          case Redolog.OP_SAVE_DOCUMENT:
-          case Redolog.OP_IMAP_COPY_ITEM:
-          case Redolog.OP_CREATE_FOLDER:
-          case Redolog.OP_CREATE_MOUNTPOINT:
-          case Redolog.OP_RENAME_FOLDER:
-          case Redolog.OP_RENAME_ITEM:
-          case Redolog.OP_RENAME_ITEM_PATH:
-            operation = Operation.ITEM_SCAN;
-            break;
-          case Redolog.OP_RENAME_MAILBOX:
-          case Redolog.OP_EMPTY_FOLDER:
-            operation = Operation.ACCOUNT_SCAN;
-            break;
-
-          //ignore
-          case Redolog.OP_PURGE_OLD_MESSAGES:
-          case Redolog.OP_REINDEX_MAILBOX:
-          case Redolog.OP_SET_IMAP_UID:
-          case Redolog.OP_INDEX_DEFERRED_ITEMS:
-          case Redolog.OP_PURGE_IMAP_DELETED:
-          case Redolog.OP_TRACK_SYNC:
-          case Redolog.OP_TRACK_IMAP:
-          case Redolog.OP_CREATE_VOLUME:
-          case Redolog.OP_MODIFY_VOLUME:
-          case Redolog.OP_DELETE_VOLUME:
-          case Redolog.OP_SET_CURRENT_VOLUME:
-          case Redolog.OP_MOVE_BLOBS:
-          case Redolog.OP_ROLLOVER:
-          case Redolog.OP_STORE_INCOMING_BLOB:
-            // ignore?
-          case Redolog.OP_ICAL_REPLY:
-            // obsolete
-          case Redolog.OP_BACKUP_MAILBOX:
-          case Redolog.OP_MODIFY_INVITE_FLAG:
-            //Mailbox.setConfig( "section", metadata );
-            //not backupped yet, so ignore it...
-          case Redolog.OP_SET_CONFIG:
-          default:
-            break;
-        }
 
         if( operation != Operation.SKIP )
         {
@@ -174,11 +85,11 @@ public abstract class MailboxListenerWrapper
             for( PendingModifications.ModificationKey mod : (notification.mods.created).keySet() )
             {
               Object whatObj = notification.mods.created.get(mod);
-              if( toBackup(whatObj) )
+              if( isNotVirtualConversation(whatObj) )
               {
                 Item what = new Item(whatObj);
                 itemChange = new ItemChange(
-                  false,
+                  ChangeType.CREATED,
                   what.getFolderId(),
                   what.getId(),
                   what.getModifiedSequence(),
@@ -193,13 +104,13 @@ public abstract class MailboxListenerWrapper
             for( PendingModifications.ModificationKey mod : (notification.mods.modified).keySet() )
             {
               PendingModifications.Change change = notification.mods.modified.get(mod);
-              if(toBackup(change.what))
+              if(isNotVirtualConversation(change.what))
               {
                 try
                 {
                   Item item = new Item(change.what);
                   itemChange = new ItemChange(
-                    false,
+                    ChangeType.MODIFIED,
                     item.getFolderId(),
                     item.getId(),
                     item.getModifiedSequence(),
@@ -210,7 +121,7 @@ public abstract class MailboxListenerWrapper
                 {
                   ZimbraLog.mailbox.debug(" Unable to obtain modification information");
                   itemChange = new ItemChange(
-                    false,
+                    ChangeType.MODIFIED,
                     0,
                     mod.getItemId(),
                     0,
@@ -227,10 +138,10 @@ public abstract class MailboxListenerWrapper
             for( PendingModifications.ModificationKey mod : notification.mods.deleted.keySet() )
             {
               PendingModifications.Change change = notification.mods.deleted.get(mod);
-              if( toBackup( change.what ))
+              if( isNotVirtualConversation(change.what ))
               {
                 itemChange = new ItemChange(
-                  true,
+                  ChangeType.DELETED,
                   0,
                   mod.getItemId(),
                   0,
@@ -261,6 +172,8 @@ public abstract class MailboxListenerWrapper
       isRegistered.set(false);
     }
   }
+
+  public abstract Operation map(int opCode);
 
   private final MailboxListener mMailboxListener;
 

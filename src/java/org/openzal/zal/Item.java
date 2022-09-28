@@ -77,6 +77,7 @@ public class Item implements Comparable<Item>
   public Item(@Nonnull Item item)
   {
     mMailItem = item.mMailItem;
+    Objects.requireNonNull(mMailItem);
   }
 
   public int getId()
@@ -628,6 +629,23 @@ public class Item implements Comparable<Item>
     public <T> T toZimbra(@Nonnull Class<T> cls)
     {
       return cls.cast(mColor);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      Color color = (Color) o;
+      return Objects.equals(mColor, color.mColor);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(mColor);
     }
   }
 

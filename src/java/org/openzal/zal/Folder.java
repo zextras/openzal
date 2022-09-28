@@ -21,7 +21,11 @@
 package org.openzal.zal;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.*;
+import com.zimbra.cs.mailbox.ACL;
+import com.zimbra.cs.mailbox.MailItem;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -67,13 +71,17 @@ public class Folder extends Item
     return ((com.zimbra.cs.mailbox.Folder) mMailItem).getAttributes();
   }
 
+  public boolean isActiveSyncDisabled() {
+    return ((com.zimbra.cs.mailbox.Folder) mMailItem).isActiveSyncDisabled();
+  }
+
   public boolean isParentOf(Folder folder)
-    throws ZimbraException
+      throws ZimbraException
   {
     try
     {
       return ((com.zimbra.cs.mailbox.Folder) mMailItem).isDescendant(
-        folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
+          folder.toZimbra(com.zimbra.cs.mailbox.Folder.class)
       );
     }
     catch (ServiceException e)
@@ -129,5 +137,25 @@ public class Folder extends Item
   public boolean isHidden()
   {
      return ((com.zimbra.cs.mailbox.Folder) mMailItem).isHidden();
+  }
+
+  public String getPath() {
+    return ((com.zimbra.cs.mailbox.Folder) mMailItem).getPath();
+  }
+
+  public RetentionPolicy getRetentionPolicy() {
+    return Optional.ofNullable(((com.zimbra.cs.mailbox.Folder) mMailItem).getRetentionPolicy())
+        .map(new Function<com.zimbra.soap.mail.type.RetentionPolicy, RetentionPolicy>() {
+          @Override
+          public RetentionPolicy apply(com.zimbra.soap.mail.type.RetentionPolicy retentionPolicy) {
+            return new RetentionPolicy(retentionPolicy);
+          }
+        })
+        .orElseGet(new Supplier<RetentionPolicy>() {
+          @Override
+          public RetentionPolicy get() {
+            return new RetentionPolicy();
+          }
+        });
   }
 }

@@ -78,10 +78,18 @@ public interface Provisioning
 
   void visitDomain(@Nonnull SimpleVisitor<Account> visitor, @Nonnull Domain domain) throws ZimbraException;
 
+  void visitDomainsWithAttributes(@Nonnull SimpleVisitor<Domain> visitor, Map<String, Object> attributes) throws ZimbraException;
+
   Collection<String> getGroupMembers(String list) throws UnableToFindDistributionListException;
 
   void authAccount(@Nonnull Account account, String password, @Nonnull Protocol protocol, Map<String, Object> context)
               throws ZimbraException;
+
+  void authAccountWithLdap(@Nonnull Account account, String password, Map<String, Object> context)
+    throws ZimbraException;
+
+  void authAccountSkippingCustom(@Nonnull Account account, String password, Map<String, Object> context, @Nullable String customName)
+      throws ZimbraException;
 
   Account getAccountByAccountIdOrItemId(String id);
 
@@ -109,6 +117,10 @@ public interface Provisioning
 
   @Nullable
   Domain getDomainById(String domainId)
+    throws ZimbraException;
+
+  @Nullable
+  Domain getDomainByVirtualHostname(String host)
     throws ZimbraException;
 
   List<DistributionList> getAllDistributionLists(@Nonnull Domain domain)
@@ -149,6 +161,9 @@ public interface Provisioning
     throws NoSuchAccountException;
 
   List<Account> getAllAdminAccounts()
+    throws ZimbraException;
+
+  Locale getLocale(Entry entry)
     throws ZimbraException;
 
   //instant-kill big infrastructures
@@ -256,6 +271,12 @@ public interface Provisioning
     String right
   ) throws ZimbraException;
 
+  void grantRight(
+    String targetType, @Nonnull Targetby targetBy, String target,
+    String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
+    String right, RightModifier rightModifier
+  ) throws ZimbraException;
+
   void revokeRight(
     String targetType, Targetby targetBy, String target,
     String granteeType, @Nonnull GrantedBy granteeBy, String grantee,
@@ -327,6 +348,8 @@ public interface Provisioning
   void setZimletPriority(String zimletName, int priority);
 
   List<Account> getAllDelegatedAdminAccounts() throws ZimbraException;
+
+  void visitAllDelegatedAdminAccounts(SimpleVisitor<Account> visitor) throws ZimbraException;
 
   @Nullable
   Group getGroupById(String dlStr)
@@ -411,6 +434,12 @@ public interface Provisioning
   Group assertGroupByName(String groupName)
     throws NoSuchGroupException;
 
+  boolean doExternalLdapAuth(Domain domain, String account, String password, Map<String, Object> context);
+
+  Account getForeignAccount(String principal);
+
+  Account autoProvisioningAndAuthenticate(Domain domain, String account, String password);
+
   class CountAccountByCos
   {
     private final com.zimbra.cs.account.Provisioning.CountAccountResult.CountAccountByCos mCountAccountByCos;
@@ -476,6 +505,27 @@ public interface Provisioning
           if (key.matches(regex))
           {
             values.add(getSingleAttr(key));
+          }
+        }
+
+        return values;
+      }
+
+      /**
+       *
+       * @param regex
+       * @return A list of key-value attributes that match with regex.
+       */
+      public List<Pair<String, String>> matchAttrs(String regex)
+      {
+        Map<String,Object> attr = mGalContact.getAttrs();
+        List<Pair<String, String>> values = new ArrayList<>(0);
+
+        for (String key : attr.keySet())
+        {
+          if (key.matches(regex))
+          {
+            values.add(new Pair<>(key, getSingleAttr(key)));
           }
         }
 

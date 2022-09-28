@@ -54,7 +54,7 @@ public class MailboxManagerImp implements MailboxManager
   static final String TABLE_METADATA      = "mailbox_metadata";
   static final String TABLE_OUT_OF_OFFICE = "out_of_office";
 
-  public static final String[] sTABLES = { // TODO: ZAL
+  public static final String[] sTABLES = {
                                            "mail_item",
                                            "appointment",
                                            "data_source_item",
@@ -366,10 +366,12 @@ public class MailboxManagerImp implements MailboxManager
     try
     {
       Class additionalQuotaProviderClass = Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider");
+      Class zalProxyObjectClass = ZalProxyObject.class;
+
       ZALAdditionalQuotaProvider quotaProvider = new ZALAdditionalQuotaProvider(additionalQuotaProvider);
       Object quotaProviderProxy = Proxy.newProxyInstance(
         quotaProvider.getClass().getClassLoader(),
-        new Class[]{ additionalQuotaProviderClass },
+        new Class[]{ additionalQuotaProviderClass, zalProxyObjectClass },
         new ZALAdditionalQuotaProviderHandler(quotaProvider)
       );
       sAddAdditionalQuotaProvider.invoke(mMailboxManager, additionalQuotaProviderClass.cast(quotaProviderProxy));
@@ -408,10 +410,12 @@ public class MailboxManagerImp implements MailboxManager
     try
     {
       Class additionalQuotaProviderClass = Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider");
+      Class zalProxyObjectClass = ZalProxyObject.class;
+
       ZALAdditionalQuotaProvider quotaProvider = new ZALAdditionalQuotaProvider(additionalQuotaProvider);
       Object quotaProviderProxy = Proxy.newProxyInstance(
         quotaProvider.getClass().getClassLoader(),
-        new Class[]{ additionalQuotaProviderClass },
+        new Class[]{ additionalQuotaProviderClass, zalProxyObjectClass },
         new ZALAdditionalQuotaProviderHandler(quotaProvider)
       );
       sRemoveAdditionalQuotaProvider.invoke(mMailboxManager, additionalQuotaProviderClass.cast(quotaProviderProxy));
@@ -420,6 +424,11 @@ public class MailboxManagerImp implements MailboxManager
     {
     }
     /* $endif $ */
+  }
+
+  private interface ZalProxyObject
+  {
+    Object getProxiedObject();
   }
 
   @Override
@@ -630,13 +639,45 @@ public class MailboxManagerImp implements MailboxManager
 
     @Override
     public Object invoke(Object o, Method method, Object[] objects)
-      throws Throwable
     {
-      if (method.getName().equalsIgnoreCase("getAdditionalQuota"))
+      if (method.getName().equals("getAdditionalQuota"))
       {
         return mAdditionalQuotaProvider.getAdditionalQuota((com.zimbra.cs.mailbox.Mailbox) objects[0]);
       }
+
+      if (method.getName().equals("equals"))
+      {
+        return equals(objects[0]);
+      }
+
+      if (method.getName().equals("hashCode"))
+      {
+        return hashCode();
+      }
+
+      if (method.getName().equals("getProxiedObject"))
+      {
+        return mAdditionalQuotaProvider;
+      }
+
       return null;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+      if(o instanceof ZalProxyObject)
+      {
+        return mAdditionalQuotaProvider.equals(((ZalProxyObject) o).getProxiedObject());
+      }
+
+      return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return Objects.hash(mAdditionalQuotaProvider);
     }
   }
   /* $endif $ */

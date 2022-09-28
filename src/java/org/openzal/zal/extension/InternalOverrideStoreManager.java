@@ -27,6 +27,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.BlobBuilder;
 import com.zimbra.cs.store.MailboxBlob;
+import com.zimbra.cs.store.MailboxBlob.MailboxBlobInfo;
 import com.zimbra.cs.store.StagedBlob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.store.file.VolumeStagedBlob;
@@ -34,11 +35,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import org.openzal.zal.BlobWrap;
 import org.openzal.zal.MailboxBlobWrap;
+import org.openzal.zal.MailboxData;
+import org.openzal.zal.Pair;
 import org.openzal.zal.PrimaryStore;
 import org.openzal.zal.StagedBlobWrap;
 import org.openzal.zal.Store;
+import org.openzal.zal.StoreFeature;
 import org.openzal.zal.StoreVolume;
 import org.openzal.zal.Utils;
 import org.openzal.zal.VolumeManager;
@@ -53,9 +58,8 @@ import static com.zimbra.cs.mailbox.MailServiceException.ITEM_ID;
 import static com.zimbra.cs.mailbox.MailServiceException.NO_SUCH_BLOB;
 import static com.zimbra.cs.mailbox.MailServiceException.REVISION;
 
-class InternalOverrideStoreManager
-  extends com.zimbra.cs.store.StoreManager
-{
+class InternalOverrideStoreManager extends com.zimbra.cs.store.StoreManager {
+
   private final org.openzal.zal.StoreManager mStoreManager;
   private final VolumeManager mVolumeManager;
 
@@ -90,7 +94,7 @@ class InternalOverrideStoreManager
         return supportedByAll(feature);
       case SINGLE_INSTANCE_SERVER_CREATE:
         return supportedByAll(feature);
-      /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 1 $
+      /* $if ZimbraVersion >= 8.8.10 || ZimbraX == 1 $
       case CUSTOM_STORE_API:
         return supportedAtLeasOnce(feature);
       /* $endif $ */
@@ -443,12 +447,40 @@ class InternalOverrideStoreManager
     }
   }
 
-  public boolean deleteStore(Mailbox mbox, Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
+  public boolean deleteStore(final Mailbox mbox, final Iterable<MailboxBlob.MailboxBlobInfo> blobs) throws IOException, ServiceException
   {
     org.openzal.zal.Mailbox mailbox = new org.openzal.zal.Mailbox(mbox);
     for (StoreVolume volume : mVolumeManager.getAll())
     {
-      mStoreManager.getStore(volume.getId()).delete(mailbox, blobs);
+      Store store = mStoreManager.getStore(volume.getId());
+
+      // blobs should be always != null if BULK_DELETE feature is not supported
+      if (store.supports(org.openzal.zal.StoreFeature.BULK_DELETE) || blobs == null) {
+        store.delete(mailbox, null);
+      } else {
+        store.delete(mailbox, new Iterable() {
+          @Override
+          public Iterator iterator() {
+            final Iterator<MailboxBlobInfo> iterator = blobs.iterator();
+            return new Iterator() {
+              @Override
+              public boolean hasNext() {
+                return iterator.hasNext();
+              }
+
+              @Override
+              public Object next() {
+                MailboxBlobInfo next = iterator.next();
+
+                return new Pair<MailboxData, ZalItemData>(
+                    new MailboxData(mbox.getId(), next.accountId),
+                    new ZalItemData(next.itemId, next.revision)
+                );
+              }
+            };
+          }
+        });
+      }
     }
     return true;
   }

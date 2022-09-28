@@ -20,12 +20,13 @@
 
 package org.openzal.zal;
 
-import org.openzal.zal.exceptions.*;
-import org.openzal.zal.exceptions.ZimbraException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.ACL;
-import javax.annotation.Nonnull;
-
+import com.zimbra.cs.mailbox.MailServiceException;
 import java.util.List;
+import javax.annotation.Nonnull;
+import org.openzal.zal.exceptions.ExceptionWrapper;
+import org.openzal.zal.exceptions.ZimbraException;
 
 
 public class Acl
@@ -87,12 +88,22 @@ public class Acl
     throws ZimbraException
   {
     ACL.Grant grant;
-    try
-    {
+    try {
       grant = mAcl.grantAccess(zimbraId, type, rights, secret);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
+    } catch (com.zimbra.common.service.ServiceException e) {
+      if (!e.getCode().equals(MailServiceException.GRANT_EXISTS)) {
+        throw ExceptionWrapper.wrap(e);
+      }
+
+      List<ACL.Grant> grants = mAcl.getGrants();
+      for (ACL.Grant g : grants) {
+        //getting the grant even in case a GRANT_EXISTS exception has been thrown
+        if (g.isGrantee(zimbraId) && g.getGrantedRights() == rights &&
+            ((type != GRANTEE_GUEST && type != GRANTEE_KEY) ||
+                StringUtil.equal(g.getPassword(), secret))) {
+          return new Grant(g);
+        }
+      }
       throw ExceptionWrapper.wrap(e);
     }
     return new Grant(grant);

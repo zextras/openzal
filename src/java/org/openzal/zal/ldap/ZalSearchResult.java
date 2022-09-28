@@ -5,12 +5,12 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResult
+public class ZalSearchResult
 {
   @Nonnull
   private final com.unboundid.ldap.sdk.SearchResult mSearchResult;
 
-  public SearchResult(@Nonnull Object searchResult)
+  ZalSearchResult(@Nonnull Object searchResult)
   {
     mSearchResult = (com.unboundid.ldap.sdk.SearchResult)searchResult;
   }
@@ -20,14 +20,14 @@ public class SearchResult
     return cls.cast(mSearchResult);
   }
 
-  public List<SearchResultEntry> getSearchEntries()
+  public List<ZalSearchResultEntry> getSearchEntries()
   {
     List<com.unboundid.ldap.sdk.SearchResultEntry> entries = mSearchResult.getSearchEntries();
-    List<SearchResultEntry> result = new ArrayList<SearchResultEntry>();
+    List<ZalSearchResultEntry> result = new ArrayList<ZalSearchResultEntry>();
 
     for (com.unboundid.ldap.sdk.SearchResultEntry entry : entries)
     {
-      result.add(new SearchResultEntry(entry));
+      result.add(new ZalSearchResultEntry(entry));
     }
 
     return result;

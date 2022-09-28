@@ -25,6 +25,10 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.soap.JaxbUtil;
 import java.util.Map;
 import javax.annotation.Nonnull;
+/* $if ZimbraVersion > 8.8.2 $ */
+import org.apache.http.HttpResponse;
+import org.apache.http.concurrent.FutureCallback;
+/*$endif$ */
 import org.openzal.zal.XMLElement;
 import org.openzal.zal.ZAuthToken;
 import org.openzal.zal.exceptions.ExceptionWrapper;
@@ -40,6 +44,10 @@ public class SoapTransport
   public SoapTransport(String adminUrl)
   {
     mSoapHttpTransport = new SoapHttpTransport(adminUrl);
+  }
+
+  public void shutdown() {
+    mSoapHttpTransport.shutdown();
   }
 
   public void setAuthToken(ZAuthToken authToken)
@@ -130,5 +138,18 @@ public class SoapTransport
   {
     Map<String, String> customHeaders = mSoapHttpTransport.getCustomHeaders();
     customHeaders.put(header, value);
+  }
+
+  public void invokeAsync(Object requestObject, Object callback) throws IOException {
+  /* $if ZimbraVersion > 8.8.2 $ */
+    try  {
+      Element req = JaxbUtil.jaxbToElement(requestObject, SoapProtocol.Soap12.getFactory());
+      mSoapHttpTransport.invokeAsync(req, (FutureCallback<HttpResponse>)callback);
+    } catch (ServiceException e) {
+      throw ExceptionWrapper.wrap(e);
+    }
+  /*$else$
+    throw new UnsupportedOperationException();
+  /*$endif$ */
   }
 }
