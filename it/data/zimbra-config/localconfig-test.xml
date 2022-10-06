@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<localconfig>
+  <key name="zimbra_mailbox_groups">
+    <value>100</value>
+  </key>
+  <key name="tombstone_max_age_ms">
+    <value>8035200000</value>
+  </key>
+  <key name="debug_disable_share_expiration_listener">
+    <value>true</value>
+  </key>
+  <key name="timezone_file">
+    <value>it/data/timezones.ics</value>
+  </key>
+</localconfig>

@@ -13,3 +13,4 @@ openzal-*.rpm
 /tmp
 /private
 /target
+.idea/
