@@ -6,13 +6,17 @@ import java.util.function.Function;
 
 public class LDAPAttributeReader<S, A> {
 
+  public static LDAPAttributeReader<org.openzal.zal.Entry,Boolean> bool(String name, boolean defaultValue) {
+    return new LDAPAttributeReader<>(name, defaultValue, (entry) -> entry.getBooleanAttr(name, defaultValue));
+  }
+
+  public static LDAPAttributeReader<org.openzal.zal.Entry,String> string(String name, String defaultValue) {
+    return new LDAPAttributeReader<>(name, defaultValue, (entry) -> entry.getAttr(name, defaultValue));
+  }
+
   private final String attributeName;
   private final A defaultValue;
   private final Function<S, A> readFunction;
-
-  private static <A> LDAPAttributeReader entry(String attributeName, A defaultValue, Function<Entry, A> readFunction) {
-    return new LDAPAttributeReader(attributeName, defaultValue, readFunction);
-  }
 
   public LDAPAttributeReader(String attributeName, A defaultValue, Function<S, A> readFunction) {
     this.attributeName = attributeName;

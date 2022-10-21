@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public abstract class Entry
 {
@@ -182,27 +181,9 @@ public abstract class Entry
     }
   }
 
-  private static <A> LDAPAttributeReader entry(String attributeName, A defaultValue, Function<Entry, A> readFunction) {
-    return new LDAPAttributeReader(attributeName, defaultValue, readFunction);
-  }
-
-  public static LDAPAttributeReader<Entry,Boolean> bool(String name, boolean defaultValue) {
-    return entry(name, defaultValue, (entry) -> entry.getBooleanAttr(name, defaultValue));
-  }
-
-  public Integer getIntAttr(String name, Integer defaultValue) {
-    return mEntry.getIntAttr(name, defaultValue);
-  }
   public Boolean getBooleanAttr(String name, Boolean defaultValue) {
     return mEntry.getBooleanAttr(name, defaultValue);
   }
 
-  public static LDAPAttributeReader<Entry,Integer> integer(String name, Integer defaultValue) {
-    return entry(name, defaultValue, (entry) -> entry.getIntAttr(name, defaultValue));
-  }
-
-  public static LDAPAttributeReader<Entry,String> string(String name, String defaultValue) {
-    return entry(name, defaultValue, (entry) -> entry.getAttr(name, defaultValue));
-  }
 }
 
