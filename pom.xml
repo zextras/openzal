@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>3.15.1</version>
+  <version>3.16.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -15,6 +15,18 @@
       <id>artifactory</id>
       <name>Zextras public maven repo</name>
       <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
+    </repository>
+    <repository>
+      <!-- artifactory should be temporary solution -->
+      <id>artifactory-snapshot</id>
+      <name>Zextras public snapshot repo</name>
+      <url>https://zextras.jfrog.io/artifactory/maven-snapshot/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
     <repository>
       <id>default</id>
@@ -94,7 +106,7 @@
   </distributionManagement>
 
   <properties>
-    <zimbra.version>22.10.0</zimbra.version>
+    <zimbra.version>22.11.0-SNAPSHOT</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
@@ -546,7 +558,7 @@
       <plugin>
         <groupId>com.zextras</groupId>
         <artifactId>preprocess-maven-plugin</artifactId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.5-SNAPSHOT</version>
         <configuration>
           <zimbraVersion>${zimbra.version}</zimbraVersion>
         </configuration>

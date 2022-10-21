@@ -113,5 +113,13 @@ public class Config extends Entry
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public <A> A readAttribute(LDAPAttributeReader<Config,A> attr) {
+    return attr.read(this);
+  }
+
+  public static <A> LDAPAttributeReader<Config,A> createAttribute(LDAPAttributeReader<Entry, A> attr) {
+    return attr.compose(config ->  config);
+  }
 }
 

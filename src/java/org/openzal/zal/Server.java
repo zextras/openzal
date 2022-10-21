@@ -177,7 +177,7 @@ public class Server extends Entry
     return cls.cast(mServer);
   }
 
-  public int getIntAttr(String name, int defaultValue)
+  public Integer getIntAttr(String name, int defaultValue)
   {
     return mServer.getIntAttr(name, defaultValue);
   }

@@ -291,5 +291,13 @@ public class Domain extends Entry
   public boolean isAuthFallbackToLocal() {
     return mDomain.isAuthFallbackToLocal();
   }
+
+  public <A> A readAttribute(LDAPAttributeReader<Domain,A> attr) {
+    return attr.read(this);
+  }
+
+  public static <A> LDAPAttributeReader<Domain,A> createAttribute(LDAPAttributeReader<Entry, A> attr) {
+    return attr.compose(domain ->  domain);
+  }
 }
 
