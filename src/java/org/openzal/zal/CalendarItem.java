@@ -276,10 +276,13 @@ public class CalendarItem extends Item
         Invite newInvite = new Invite(localException);
         newInvite.setMethod(ICalTok.REPLY.toString());
 
+        MimeMessage mmInv = mCalendarItem.getSubpartMessage(defaultInvite.getMailItemId());
+
         mailbox.addInvite(
             operationContext,
             newInvite,
-            mCalendarItem.getFolderId()
+            mCalendarItem.getFolderId(),
+            mmInv
         );
 
         refetchedCalendarItem = mailbox.getCalendarItemById(operationContext, this.getId());
@@ -302,25 +305,6 @@ public class CalendarItem extends Item
               refetchedCalendarItem.getModifiedSequence(),
               time
           );
-        } else {
-          mailbox.setCalendarItem(
-            operationContext,
-            getFolderId(),
-            getFlagBitmask(),
-            getTags(),
-            new CalendarItemData(
-                refetchedCalendarItem.getDefaultInviteOrNull(),
-                refetchedCalendarItem.getParsedMessage(
-                    textParser,
-                    mailbox,
-                    mimeMessage,
-                    refetchedCalendarItem.getDefaultInviteOrNull()
-                )
-            ),
-            newExceptions,
-            null,
-            0L
-        );
         }
       } catch (ServiceException e) {
         throw ExceptionWrapper.wrap(e);
