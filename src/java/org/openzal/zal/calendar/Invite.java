@@ -491,7 +491,7 @@ public class Invite
 
     Recurrence.RecurrenceRule recurrence;
     recurrence = (Recurrence.RecurrenceRule) calendarItem.getRecurrence();
-    
+
     Iterator<Recurrence.IException> it = recurrence.exceptionsIter();
     while (it.hasNext())
     {
@@ -869,30 +869,6 @@ public class Invite
     accountAttendee.setPartStat(partStat);
     mInvite.clearAttendees();
     mInvite.addAttendee(accountAttendee);
-  }
-
-  public String setDeclineReply(Provisioning provisioning, Account account)
-  {
-    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus(IcalXmlStrMap.STATUS_CANCELLED);
-    formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_DECLINED);
-    return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_DECLINE, getSubject(), getLocaleForAccount(account));
-  }
-
-  public String setTentativeReply(Provisioning provisioning, Account account)
-  {
-    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus(IcalXmlStrMap.STATUS_TENTATIVE);
-    formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_TENTATIVE);
-    return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_TENTATIVE, getSubject(), getLocaleForAccount(account));
-  }
-
-  public String setAcceptReply(Provisioning provisioning, Account account)
-  {
-    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
-    mInvite.setStatus(IcalXmlStrMap.STATUS_CONFIRMED);
-    formatAttendeeStatus(provisioning, account, IcalXmlStrMap.PARTSTAT_ACCEPTED);
-    return CalendarMailSender.getReplySubject(CalendarMailSender.VERB_ACCEPT, getSubject(), getLocaleForAccount(account));
   }
 
   public void setDescription(String description, String descriptionHtml)
