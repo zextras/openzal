@@ -2386,6 +2386,28 @@ public class Mailbox
     }
   }
 
+  public void addInvite(@Nonnull OperationContext octxt, @Nonnull Invite inv, int folderId, @Nullable MimeMessage mimeMessage)
+    throws ZimbraException
+  {
+    try
+    {
+      com.zimbra.cs.mime.ParsedMessage parsedMessage = null;
+      mMbox.addInvite(
+        octxt.getOperationContext(),
+        inv.toZimbra(com.zimbra.cs.mailbox.calendar.Invite.class),
+        folderId,
+        mimeMessage != null ? new com.zimbra.cs.mime.ParsedMessage(mimeMessage, false) : null,
+        true,
+        true,
+        true
+      );
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
   @Nonnull
   public Mountpoint createMountpoint(
     @Nonnull OperationContext octxt, int folderId,
