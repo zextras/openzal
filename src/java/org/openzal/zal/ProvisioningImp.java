@@ -3265,4 +3265,14 @@ public class ProvisioningImp implements Provisioning
       throw ExceptionWrapper.wrap(e);
     }
   }
+
+  public void reloadAccount(Account account) {
+    if (!onLocalServer(account)) {
+      try {
+        mProvisioning.reload(account.toZimbra(com.zimbra.cs.account.Account.class), false);
+      } catch (ServiceException e) {
+        throw ExceptionWrapper.wrap(e);
+      }
+    }
+  }
 }
