@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>3.16.1</version>
+  <version>3.16.2</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -546,7 +546,7 @@
       <plugin>
         <groupId>com.zextras</groupId>
         <artifactId>preprocess-maven-plugin</artifactId>
-        <version>0.0.4-SNAPSHOT</version>
+        <version>0.0.5-SNAPSHOT</version>
         <configuration>
           <zimbraVersion>${zimbra.version}</zimbraVersion>
         </configuration>

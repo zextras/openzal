@@ -180,5 +180,10 @@ public abstract class Entry
       return mEntryType.getName();
     }
   }
+
+  public Boolean getBooleanAttr(String name, Boolean defaultValue) {
+    return mEntry.getBooleanAttr(name, defaultValue);
+  }
+
 }
 

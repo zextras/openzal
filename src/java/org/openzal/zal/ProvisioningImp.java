@@ -336,6 +336,27 @@ public class ProvisioningImp implements Provisioning
 
   public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
 
+  public static final String A_carbonioWebUiDarkMode             = com.zimbra.cs.account.Provisioning.A_carbonioWebUiDarkMode;
+  public static final String A_carbonioWebUiLoginLogo            = com.zimbra.cs.account.Provisioning.A_carbonioWebUiLoginLogo;
+  public static final String A_carbonioWebUiDarkLoginLogo        = com.zimbra.cs.account.Provisioning.A_carbonioWebUiDarkLoginLogo;
+  public static final String A_carbonioWebUiLoginBackground      = com.zimbra.cs.account.Provisioning.A_carbonioWebUiLoginBackground;
+  public static final String A_carbonioWebUiDarkLoginBackground  = com.zimbra.cs.account.Provisioning.A_carbonioWebUiDarkLoginBackground;
+  public static final String A_carbonioWebUiAppLogo              = com.zimbra.cs.account.Provisioning.A_carbonioWebUiAppLogo;
+  public static final String A_carbonioWebUiDarkAppLogo          = com.zimbra.cs.account.Provisioning.A_carbonioWebUiDarkAppLogo;
+  public static final String A_carbonioWebUiFavicon              = com.zimbra.cs.account.Provisioning.A_carbonioWebUiFavicon;
+  public static final String A_carbonioWebUiTitle                = com.zimbra.cs.account.Provisioning.A_carbonioWebUiTitle;
+  public static final String A_carbonioWebUiDescription          = com.zimbra.cs.account.Provisioning.A_carbonioWebUiDescription;
+  public static final String A_carbonioAdminUiLoginLogo          = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiLoginLogo;
+  public static final String A_carbonioAdminUiDarkLoginLogo      = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiDarkLoginLogo;
+  public static final String A_carbonioAdminUiAppLogo            = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiAppLogo;
+  public static final String A_carbonioAdminUiDarkAppLogo        = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiDarkAppLogo;
+  public static final String A_carbonioAdminUiBackground         = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiBackground;
+  public static final String A_carbonioAdminUiDarkBackground     = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiDarkBackground;
+  public static final String A_carbonioAdminUiFavicon            = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiFavicon;
+  public static final String A_carbonioAdminUiTitle              = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiTitle;
+  public static final String A_carbonioAdminUiDescription        = com.zimbra.cs.account.Provisioning.A_carbonioAdminUiDescription;
+  public static final String A_carbonioPrefWebUiDarkMode         = com.zimbra.cs.account.Provisioning.A_carbonioPrefWebUiDarkMode;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
