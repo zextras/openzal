@@ -600,4 +600,6 @@ public interface Provisioning
       return ZimbraListWrapper.wrapCountAccountByCosList(mCountAccountResult.getCountAccountByCos());
     }
   }
+
+  void reloadAccount(Account account);
 }
