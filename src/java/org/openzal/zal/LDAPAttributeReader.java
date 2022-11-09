@@ -1,7 +1,7 @@
 package org.openzal.zal;
 
-import com.zimbra.cs.account.Entry;
-
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 public class LDAPAttributeReader<S, A> {
@@ -12,6 +12,10 @@ public class LDAPAttributeReader<S, A> {
 
   public static LDAPAttributeReader<org.openzal.zal.Entry,String> string(String name, String defaultValue) {
     return new LDAPAttributeReader<>(name, defaultValue, (entry) -> entry.getAttr(name, defaultValue));
+  }
+
+  public static LDAPAttributeReader<org.openzal.zal.Entry, Set<String>> stringSet(String name) {
+    return new LDAPAttributeReader<>(name, new HashSet<>(), (entry) -> entry.getMultiAttrSet(name));
   }
 
   private final String attributeName;
