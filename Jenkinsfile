@@ -28,7 +28,7 @@ def deployForAllSupportedVersions() {
 }
 
 def runTests() {
-    mvnCmd("--settings settings-jenkins.xml test")
+    mvnCmd("--settings settings-jenkins.xml verify")
 }
 
 pipeline {
