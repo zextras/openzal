@@ -6,28 +6,29 @@ def supportedVersions() {
     return ["22.11.0"]
 }
 
-def buildForAllSupportedVersions() {
+def executeForAllSupportedVersions(String command) {
     supportedVersions().eachWithIndex { version, idx ->
-      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version package")
+      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version $command")
     }
 
     // dev version
-    mvnCmd("--settings settings-jenkins.xml package -Pdev")
+    mvnCmd("--settings settings-jenkins.xml $command -Pdev")
 
     // latest with no classifier
-    mvnCmd("--settings settings-jenkins.xml package")
+    mvnCmd("--settings settings-jenkins.xml $command")
+}
+
+
+def buildForAllSupportedVersions() {
+    executeForAllSupportedVersions("package")
 }
 
 def deployForAllSupportedVersions() {
-    supportedVersions().eachWithIndex { version, idx ->
-      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version deploy")
-    }
+    executeForAllSupportedVersions("deploy")
+}
 
-    // dev version
-    mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
-
-    // latest with no classifier
-    mvnCmd("--settings settings-jenkins.xml deploy")
+def runTests() {
+    mvnCmd("--settings settings-jenkins.xml test")
 }
 
 pipeline {
@@ -61,6 +62,11 @@ pipeline {
         stage('Build') {
             steps {
                 buildForAllSupportedVersions()
+            }
+        }
+        stage('Tests') {
+            steps {
+                runTests()
             }
         }
         stage('Publish dev version') {
