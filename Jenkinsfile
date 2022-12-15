@@ -1,5 +1,5 @@
 def mvnCmd(String cmd) {
-  sh 'mvn -B -Djooq.codegen.logging=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn ' + cmd
+  sh 'mvn --settings settings-jenkins.xml -B -Djooq.codegen.logging=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn ' + cmd
 }
 
 def supportedVersions() {
@@ -8,14 +8,14 @@ def supportedVersions() {
 
 def executeForAllSupportedVersions(String command) {
     supportedVersions().eachWithIndex { version, idx ->
-      mvnCmd("--settings settings-jenkins.xml -Dzimbra.version=$version $command")
+      mvnCmd("-Dzimbra.version=$version $command")
     }
 
     // dev version
-    mvnCmd("--settings settings-jenkins.xml $command -Pdev")
+    mvnCmd("$command -Pdev")
 
     // latest with no classifier
-    mvnCmd("--settings settings-jenkins.xml $command")
+    mvnCmd("$command")
 }
 
 
@@ -28,7 +28,7 @@ def deployForAllSupportedVersions() {
 }
 
 def runTests() {
-    mvnCmd("--settings settings-jenkins.xml verify")
+    mvnCmd("verify")
 }
 
 pipeline {
@@ -74,7 +74,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                mvnCmd("--settings settings-jenkins.xml deploy -Pdev")
+                mvnCmd("deploy -Pdev")
             }
         }
         stage('Publish tagged version') {
