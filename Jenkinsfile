@@ -3,7 +3,7 @@ def mvnCmd(String cmd) {
 }
 
 def supportedVersions() {
-    return ["22.12.0"]
+    return ["23.1.0"]
 }
 
 def buildForAllSupportedVersions() {
