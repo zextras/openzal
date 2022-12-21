@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>3.17.0</version>
+  <version>3.18.0</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -94,7 +94,7 @@
   </distributionManagement>
 
   <properties>
-    <zimbra.version>22.12.0</zimbra.version>
+    <zimbra.version>23.1.0</zimbra.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
@@ -170,17 +170,6 @@
       </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>${zimbra.group}</groupId>
-      <artifactId>${zimbra.store}</artifactId>
-      <version>${zimbra.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
     <dependency>
       <groupId>${zimbra.group}</groupId>
@@ -312,7 +301,7 @@
       <groupId>com.unboundid</groupId>
       <artifactId>unboundid-ldapsdk</artifactId>
       <version>2.3.5</version>
-      </dependency>
+    </dependency>
 
     <dependency>
       <groupId>log4j</groupId>
@@ -403,10 +392,11 @@
     </dependency>
 
     <dependency>
-      <groupId>zimbra</groupId>
+      <groupId>${zimbra.group}</groupId>
       <artifactId>zm-store</artifactId>
       <version>${zimbra.version}</version>
-      <scope>test</scope>
+      <scope>compile</scope>
+      <classifier>classes</classifier>
       <exclusions>
         <exclusion>
           <groupId>org.mockito</groupId>
@@ -705,7 +695,7 @@
       </activation>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <zimbra.group>zimbra</zimbra.group>
+        <zimbra.group>zextras</zimbra.group>
         <zimbra.native>zm-native</zimbra.native>
         <zimbra.soap>zm-soap</zimbra.soap>
         <zimbra.client>zm-client</zimbra.client>
@@ -772,7 +762,7 @@
       <id>dev</id>
       <properties>
         <jetty.version>9.3.5.v20151012</jetty.version>
-        <zimbra.group>zimbra</zimbra.group>
+        <zimbra.group>zextras</zimbra.group>
         <zimbra.native>zm-native</zimbra.native>
         <zimbra.soap>zm-soap</zimbra.soap>
         <zimbra.client>zm-client</zimbra.client>
