@@ -310,18 +310,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>gen-build-info</artifactId>
-      <version>0.0.3-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.zextras</groupId>
-      <artifactId>zal-compatibility-checker</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
@@ -560,8 +548,10 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <sourceFile>${project.build.directory}/classes/com/zimbra/cs/redolog/op/DataExtractor.class</sourceFile>
-              <destinationFile>${project.build.directory}/classes/com/zimbra/cs/redolog/op/DataExtractor</destinationFile>
+              <sourceFile>
+                ${project.build.directory}/classes/com/zimbra/cs/redolog/op/DataExtractor.class</sourceFile>
+              <destinationFile>
+                ${project.build.directory}/classes/com/zimbra/cs/redolog/op/DataExtractor</destinationFile>
             </configuration>
           </execution>
           <execution>
@@ -571,8 +561,10 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <sourceFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy.class</sourceFile>
-              <destinationFile>${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy</destinationFile>
+              <sourceFile>
+                ${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy.class</sourceFile>
+              <destinationFile>
+                ${project.build.directory}/classes/com/zimbra/cs/store/file/VolumeBlobProxy</destinationFile>
             </configuration>
           </execution>
         </executions>
@@ -584,7 +576,10 @@
         <configuration>
           <trimStackTrace>false</trimStackTrace>
           <forkCount>1</forkCount>
-          <argLine>--illegal-access=permit -Xmx1024m -XX:MaxPermSize=256m -ea -Duser.timezone=Europe/Rome -Djava.awt.headless=true -Dzimbra.config=it/data/zimbra-config/localconfig-test.xml -Dzimbra.version=${zimbra.version} -Dfile.encoding=UTF-8</argLine>
+          <argLine>--illegal-access=permit -Xmx1024m -XX:MaxPermSize=256m -ea
+            -Duser.timezone=Europe/Rome -Djava.awt.headless=true
+            -Dzimbra.config=it/data/zimbra-config/localconfig-test.xml
+            -Dzimbra.version=${zimbra.version} -Dfile.encoding=UTF-8</argLine>
         </configuration>
         <executions>
           <execution>
@@ -716,32 +711,6 @@
 
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <inherited>false</inherited>
-            <executions>
-              <execution>
-                <id>compatibility-check</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-                <configuration>
-                  <executableDependency>
-                    <groupId>com.zextras</groupId>
-                    <artifactId>zal-compatibility-checker</artifactId>
-                  </executableDependency>
-                  <mainClass>com.zextras.CompatibilityChecker</mainClass>
-                  <arguments>
-                    <argument>${execute.fast.compatibility}</argument>
-                    <argument>${project.version}</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <artifactId>maven-deploy-plugin</artifactId>
             <executions>
