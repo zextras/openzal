@@ -30,17 +30,17 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
 
   public ZLdapFilter allAddressLists()
   {
-    return null;
+    return new FakeLdapFilter(FilterId.ALL_ADDRESS_LISTS);
   }
 
   public ZLdapFilter addressListById(String s)
   {
-    return null;
+    return new FakeLdapFilter(FilterId.ADDRESS_LIST_BY_ID);
   }
 
   public ZLdapFilter addressListByName(String s)
   {
-    return null;
+    return new FakeLdapFilter(FilterId.ADDRESS_LIST_BY_NAME);
   }
 
   /* $endif$ */

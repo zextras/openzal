@@ -1,5 +1,5 @@
 def mvnCmd(String cmd) {
-  sh 'mvn --settings settings-jenkins.xml -B -Djooq.codegen.logging=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn ' + cmd
+  sh 'mvn --settings settings.xml -B ' + cmd
 }
 
 def supportedVersions() {
@@ -24,7 +24,7 @@ def buildForAllSupportedVersions() {
 }
 
 def deployForAllSupportedVersions() {
-    executeForAllSupportedVersions("deploy")
+    executeForAllSupportedVersions("deploy -DskipTests")
 }
 
 def runTests() {
@@ -55,7 +55,7 @@ pipeline {
             steps {
                 checkout scm
                 withCredentials([file(credentialsId: 'jenkins-maven-settings.xml', variable: 'SETTINGS_PATH')]) {
-                    sh "cp ${SETTINGS_PATH} settings-jenkins.xml"
+                    sh "cp ${SETTINGS_PATH} settings.xml"
                 }
             }
         }
@@ -74,7 +74,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                mvnCmd("deploy -Pdev")
+                mvnCmd("deploy -DskipTests -Pdev")
             }
         }
         stage('Publish tagged version') {
