@@ -87,8 +87,10 @@ pipeline {
         }
 
         stage('SonarQube PR') {
-             allOf {
-                expression { JOB_BASE_NAME ==~ /PR-\d+/ }
+             when {
+                allOf {
+                    expression { JOB_BASE_NAME ==~ /PR-\d+/ }
+                }
             }
             environment {
                 SCANNER_HOME = tool 'SonarScanner'
