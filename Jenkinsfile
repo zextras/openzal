@@ -69,35 +69,13 @@ pipeline {
                 runTests()
             }
         }
-        stage('SonarQube branch') {
-             when {
-                anyOf {
-                    branch 'main'
-                    branch 'rc/*'
-                }
-            }
+        stage('SonarQube') {
             environment {
                 SCANNER_HOME = tool 'SonarScanner'
             }
             steps {
                 withSonarQubeEnv(credentialsId: 'sonarqube-user-token', installationName: 'SonarQube instance') {
-                    mvnCmd('sonar:sonar')
-                }
-            }
-        }
-
-        stage('SonarQube PR') {
-             when {
-                allOf {
-                    expression { JOB_BASE_NAME ==~ /PR-\d+/ }
-                }
-            }
-            environment {
-                SCANNER_HOME = tool 'SonarScanner'
-            }
-            steps {
-                withSonarQubeEnv(credentialsId: 'sonarqube-user-token', installationName: 'SonarQube instance') {
-                    mvnCmd('sonar:sonar -Dsonar.pullrequest.key=${JOB_BASE_NAME} -Dsonar.pullrequest.branch=${CHANGE_BRANCH} -Dsonar.pullrequest.base=${CHANGE_TARGET}')
+                    mvnCmd('-Dsonar.sources=src/java sonar:sonar')
                 }
             }
         }
