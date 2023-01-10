@@ -493,7 +493,6 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/java</sourceDirectory>
     <extensions>
       <extension>
         <groupId>com.github.ZeXtras</groupId>
