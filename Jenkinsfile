@@ -69,6 +69,16 @@ pipeline {
                 runTests()
             }
         }
+        stage('SonarQube') {
+            environment {
+                SCANNER_HOME = tool 'SonarScanner'
+            }
+            steps {
+                withSonarQubeEnv(credentialsId: 'sonarqube-user-token', installationName: 'SonarQube instance') {
+                    mvnCmd('-Dsonar.sources=src/java sonar:sonar')
+                }
+            }
+        }
         stage('Publish dev version') {
             when {
                 branch 'main'
