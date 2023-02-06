@@ -362,6 +362,8 @@ public class ProvisioningImp implements Provisioning
   public static final String A_carbonioWebUiBannerText           = com.zimbra.cs.account.Provisioning.A_carbonioWebUiBannerText;
   public static final String A_carbonioAdminWebUiBannerText      = com.zimbra.cs.account.Provisioning.A_carbonioAdminWebUiBannerText;
 
+  public static final String A_carbonioLogoUrl      = com.zimbra.cs.account.Provisioning.A_carbonioLogoUrl;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
