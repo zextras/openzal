@@ -51,9 +51,27 @@ class InternalHttpHandler extends ExtensionHttpHandler
     mHttpHandler.doGet(req, resp);
   }
 
-
+  @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
   {
     mHttpHandler.doPost(req, resp);
+  }
+
+  @Override
+  public void doPut(HttpServletRequest req, HttpServletResponse resp)
+    throws IOException, ServletException {
+    mHttpHandler.doPut(req, resp);
+  }
+
+  @Override
+  public void doDelete(HttpServletRequest req, HttpServletResponse resp)
+    throws IOException, ServletException {
+    mHttpHandler.doDelete(req, resp);
+  }
+
+  @Override
+  public void doPatch(HttpServletRequest req, HttpServletResponse resp)
+    throws IOException, ServletException {
+    mHttpHandler.doPatch(req, resp);
   }
 }
