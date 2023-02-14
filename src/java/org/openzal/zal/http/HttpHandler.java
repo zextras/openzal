@@ -36,5 +36,14 @@ public interface HttpHandler
   public void doOptions(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException;
 
+  public void doPut(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException;
+
+  public void doDelete(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException;
+
+  public void doPatch(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException;
+
   public String getPath();
 }
