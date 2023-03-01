@@ -1,10 +1,10 @@
 def mvnCmd(String cmd) {
-  sh 'mvn --settings settings.xml -B ' + cmd, returnStdout: true
+  return sh(script: 'mvn --settings settings.xml -B ' + cmd, returnStdout: true)
 }
 
 def supportedVersions() {
     def zimbraVersion = mvnCmd("help:evaluate -Dexpression=zimbra.version -q -DforceStdout");
-    echo zimbraVersion;
+    echo "Zimbra version ${zimbraVersion}"
     return [zimbraVersion]
 }
 
