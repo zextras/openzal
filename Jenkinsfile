@@ -1,9 +1,9 @@
 def mvnCmd(String cmd) {
-  sh 'mvn --settings settings.xml -B ' + cmd
+  return sh 'mvn --settings settings.xml -B ' + cmd, returnStdout: true
 }
 
 def supportedVersions() {
-    return ["23.2.0"]
+    return [mvn("help:evaluate -Dexpression=zimbra.version -q -DforceStdout")]
 }
 
 def executeForAllSupportedVersions(String command) {
