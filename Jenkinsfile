@@ -3,7 +3,7 @@ def mvnCmd(String cmd) {
 }
 
 def supportedVersions() {
-    def zimbraVersion = mvn("help:evaluate -Dexpression=zimbra.version -q -DforceStdout");
+    def zimbraVersion = mvnCmd("help:evaluate -Dexpression=zimbra.version -q -DforceStdout");
     echo zimbraVersion;
     return [zimbraVersion]
 }
