@@ -3,7 +3,7 @@ targets=(
   "ubuntu"
 )
 pkgname="carbonio-zal"
-pkgver="3.19.0"
+pkgver="3.20.0"
 pkgrel="1"
 pkgdesc="Carbonio extras"
 pkgdesclong=(
