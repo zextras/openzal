@@ -39,6 +39,7 @@ pipeline {
     }
     parameters {
         booleanParam defaultValue: false, description: 'Whether to upload the packages in playground repositories', name: 'PLAYGROUND'
+        booleanParam defaultValue: false, description: 'Publish artifact to artifactory', name: 'PUBLISH_TO_ARTIFACTORY'
     }
     environment {
         JAVA_OPTS="-Dfile.encoding=UTF8"
@@ -90,6 +91,7 @@ pipeline {
         stage('Publish tagged version') {
             when {
                 anyOf {
+                    expression { params.PUBLISH_TO_ARTIFACTORY == true }
                     buildingTag()
                 }
             }
