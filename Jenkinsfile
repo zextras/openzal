@@ -88,7 +88,7 @@ pipeline {
                 mvnCmd("deploy -DskipTests -Pdev")
             }
         }
-        stage('Publish tagged version') {
+        stage('Publish version') {
             when {
                 anyOf {
                     expression { params.PUBLISH_TO_ARTIFACTORY == true }
