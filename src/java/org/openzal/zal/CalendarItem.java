@@ -288,7 +288,9 @@ public class CalendarItem extends Item
         ZAttendee matchingAttendee = localException.getMatchingAttendee(
             invitedUser.toZimbra(com.zimbra.cs.account.Account.class));
 
-        matchingAttendee.setPartStat(partStat);
+        if (matchingAttendee != null) {
+          matchingAttendee.setPartStat(partStat);
+        }
 
         Invite newInvite = new Invite(localException);
         newInvite.setMethod(ICalTok.REPLY.toString());
@@ -305,10 +307,11 @@ public class CalendarItem extends Item
         refetchedCalendarItem = mailbox.getCalendarItemById(operationContext, this.getId());
         refetchedInvite = refetchedCalendarItem.getInvite(recurId);
 
-        Attendee invitedAttendee = refetchedInvite.getMatchingAttendee(invitedUser);
+        if (refetchedInvite != null) {
+          refetchedInvite.getMatchingAttendee(invitedUser);
+        }
 
-
-        if (Objects.equals(matchingAttendee.getCn(), mailbox.getAccount().getCn())) {
+        if (matchingAttendee != null && Objects.equals(matchingAttendee.getCn(), mailbox.getAccount().getCn())) {
           mailbox.modifyPartStat(
               operationContext,
               refetchedCalendarItem.getId(),
