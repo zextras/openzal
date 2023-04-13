@@ -24,9 +24,6 @@ import com.zimbra.cs.convert.AttachmentInfo;
 import com.zimbra.cs.convert.ConversionException;
 import com.zimbra.cs.mime.*;
 import org.apache.lucene.document.Document;
-/* $if ZimbraX == 1 $
-import org.apache.solr.common.SolrInputDocument;
-/* $endif $ */
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.Utils;
@@ -235,11 +232,7 @@ public class IndexerManager
 
     //this methods breaks binary compatibility for ZAL given two different parameters types
     @Override
-    /* $if ZimbraX == 1 $
-    protected void addFields(SolrInputDocument doc) throws MimeHandlerException
-    /* $else $ */
     protected void addFields(Document doc) throws MimeHandlerException
-    /* $endif $ */
     {
 
     }

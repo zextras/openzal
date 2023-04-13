@@ -61,11 +61,7 @@ public class Message extends Item
 
     public int getCalendarItemId()
     {
-      /* $if ZimbraVersion >= 8.0.5 $ */
       return mCalendarItemInfo.getCalendarItemId().getId();
-      /* $else$
-      return mCalendarItemInfo.getCalendarItemId();
-      /* $endif$ */
     }
   }
 

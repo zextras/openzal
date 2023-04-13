@@ -52,17 +52,7 @@ public class Identity implements Comparable<Identity>
 
   public InternetAddress getFriendlyEmailAddress() throws UnsupportedEncodingException
   {
-    /* $if ZimbraVersion >= 8.0.7 $ */
     return mIdentity.getFriendlyEmailAddress();
-    /* $else $
-    String address = mIdentity.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraPrefFromAddress);
-    String personal = mIdentity.getAttr(com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay);
-    if (personal != null && personal.trim().equals(""))
-    {
-      personal = null;
-    }
-    return new InternetAddress(address, personal, "UTF-8");
-    /* $endif $ */
   }
 
   @Override

@@ -1,9 +1,7 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.Account;
-/* $if ZimbraVersion >= 8.7.0 $ */
 import com.zimbra.cs.account.auth.twofactor.TwoFactorAuth;
-/* $endif $ */
 
 public class TwoFactorAuthChangeListenerWrapper
 {
@@ -16,7 +14,6 @@ public class TwoFactorAuthChangeListenerWrapper
 
   public void register(String name)
   {
-    /* $if ZimbraVersion >= 8.7.0 $ */
     TwoFactorAuth.TwoFactorChangeListener.register(name, new TwoFactorAuth.TwoFactorChangeListener()
     {
       @Override
@@ -37,7 +34,6 @@ public class TwoFactorAuthChangeListenerWrapper
         mListener.appSpecificPasswordRevoked(new org.openzal.zal.Account(acct), appName);
       }
     });
-    /* $endif $ */
   }
 
   public static TwoFactorAuthChangeListenerWrapper wrap(TwoFactorAuthChangeListener listener)

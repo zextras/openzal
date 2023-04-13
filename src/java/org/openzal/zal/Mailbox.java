@@ -32,11 +32,6 @@ import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.CalendarItem.ReplyInfo;
-/* $if ZimbraX == 1 $
-import com.zimbra.cs.mailbox.cache.FolderCache;
-import com.zimbra.cs.mailbox.cache.LocalTagCache;
-import com.zimbra.cs.mailbox.cache.RedisTagCache;
-/* $endif $ */
 import com.zimbra.cs.mailbox.DeliveryOptions;
 import com.zimbra.cs.mailbox.Folder.FolderOptions;
 import com.zimbra.cs.mailbox.MailItem;
@@ -99,9 +94,6 @@ import org.openzal.zal.redolog.op.RawSetConfig;
 
 //import com.zimbra.cs.fb.FreeBusy;
 
-/* $if ZimbraVersion != 8.0.1 && ZimbraVersion != 8.0.0 && ZimbraVersion < 8.5.0 $
-import com.zimbra.cs.db.DbMailItem.SearchOpts;
-/* $endif$ */
 
 
 public class Mailbox
@@ -370,18 +362,11 @@ public class Mailbox
 
   public Object getListener(String listenerName)
   {
-    /* $if ZimbraX == 1 $
-    return null;
-    /* $else $ */
     return mMbox.getListener(listenerName);
-    /* $endif $ */
   }
 
   public void registerListener(@Nonnull Listener listener)
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $else $ */
     try
     {
       mMbox.addListener(listener.getStoreContext().toZimbra(Session.class));
@@ -392,25 +377,16 @@ public class Mailbox
                                mMbox.getId() + ": " +
                                e.getMessage());
     }
-    /* $endif $ */
   }
 
   public void unregisterListener(@Nonnull Listener listener)
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $else $ */
     mMbox.removeListener(listener.getStoreContext().toZimbra(Session.class));
-    /* $endif $ */
   }
 
   public void unregisterListener(@Nonnull MailboxSessionProxy session)
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $else $ */
     mMbox.removeListener(session.toZimbra(Session.class));
-    /* $endif $ */
   }
 
   private static int getMailboxSyncCutoff(@Nonnull com.zimbra.cs.mailbox.Mailbox mMbox)
@@ -730,11 +706,7 @@ public class Mailbox
   {
     try
     {
-  /* $if ZimbraVersion >= 8.0.7 $ */
       return mMbox.getTombstones(sequence).getAllIds();
-  /* $else$
-      return mMbox.listTombstones( sequence );
-  /* $endif$ */
     }
     catch (com.zimbra.common.service.ServiceException serviceException)
     {
@@ -1344,7 +1316,6 @@ public class Mailbox
 
   public void createFolderPath(@Nonnull OperationContext octxt, String path) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
     try
     {
       mMbox.createFolderForMsgs(octxt.getOperationContext(), path);
@@ -1353,7 +1324,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif$ */
   }
 
 
@@ -1375,11 +1345,7 @@ public class Mailbox
                                                   null,
                                                   zimbraItemId);
       List<String> createdIds;
-      /* $if ZimbraVersion >= 8.8.2 $ */
       createdIds = op.getResult().getSuccessIds();
-      /* $else $
-      createdIds = op.getCreatedIds();
-      /* $endif $ */
       if (createdIds == null)
       {
         return itemId;
@@ -1432,14 +1398,6 @@ public class Mailbox
 
     try
     {
-      /* $if ZimbraVersion == 8.0.0 |! ZimbraVersion == 8.0.1 $
-      itemIds = mMbox.getItemListByDates(octxt.getOperationContext(), Item.convertType(type),
-                                      start, end, folderId, descending);
-      /* $elseif ZimbraVersion < 8.5.0 $
-      DbMailItem.SearchOpts options = new DbMailItem.SearchOpts(start, end, descending);
-      itemIds = mMbox.getItemIdList(octxt.getOperationContext(), Item.convertType(type),
-                                   folderId, options);
-      /* $else $ */
       DbMailItem.QueryParams options = new DbMailItem.QueryParams();
       options.setFolderIds(Collections.singletonList(folderId));
       options.setIncludedTypes(Collections.singletonList(Item.convertType(type)));
@@ -1454,7 +1412,6 @@ public class Mailbox
         options.setOrderBy(Collections.singletonList("date ASC"));
       }
       itemIds = mMbox.getItemIdList(octxt.getOperationContext(), options);
-      /* $endif */
       return itemIds;
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1669,34 +1626,12 @@ public class Mailbox
 
   public void clearItemCache() throws ZimbraException
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-    /* $endif $ */
-      mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
-    /* $if ZimbraX == 1 $
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
+    mMbox.purge(Item.convertType(Item.TYPE_UNKNOWN));
   }
 
   public void clearCache(byte type) throws ZimbraException
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-    /* $endif $ */
-      mMbox.purge(Item.convertType(type));
-    /* $if ZimbraX == 1 $
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
+   mMbox.purge(Item.convertType(type));
   }
 
 
@@ -2544,7 +2479,6 @@ public class Mailbox
 
   static
   {
-    /* $if ZimbraX == 0 $ */
     try
     {
       Class partypes[] = new Class[1];
@@ -2558,14 +2492,12 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
-    /* $endif $ */
   }
 
   @Nullable private static Method sBeginTransactionMethod = null;
 
   static
   {
-    /* $if ZimbraX == 0 $ */
     try
     {
       Class partypes[] = new Class[2];
@@ -2580,7 +2512,6 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
-    /* $endif $ */
   }
 
   public void beginTransaction(String name, @Nonnull OperationContext context)
@@ -2591,9 +2522,6 @@ public class Mailbox
   private final void beginTransaction(String name, com.zimbra.cs.mailbox.OperationContext zContext)
     throws ZimbraException
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $else $ */
     try
     {
       Object parameters[] = new Object[2];
@@ -2606,15 +2534,11 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(ex);
     }
-    /* $endif $ */
   }
 
   public final void endTransaction(boolean success)
     throws ZimbraException
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $else $ */
     Object parameters[] = new Object[1];
     parameters[0] = success;
 
@@ -2626,7 +2550,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(ex);
     }
-    /* $endif $ */
   }
 
   private static Method sRawGetItem;
@@ -2749,17 +2672,7 @@ public class Mailbox
     try
     {
       Map<Object, com.zimbra.cs.mailbox.Tag> tagsMap;
-      /* $if ZimbraX == 1 $
-      RedisTagCache tagCache = (RedisTagCache) sTagCache.get(mMbox);
-      Collection<com.zimbra.cs.mailbox.Tag> tags = tagCache.values();
-      tagsMap = new HashMap<Object, com.zimbra.cs.mailbox.Tag>(tags.size());
-      for (com.zimbra.cs.mailbox.Tag tag : tags)
-      {
-        tagsMap.put(tag.getTagId(), tag);
-      }
-      /* $else $ */
       tagsMap = (Map<Object, com.zimbra.cs.mailbox.Tag>) sTagCache.get(mMbox);
-      /* $endif $ */
       return tagsMap;
     }
     catch (Throwable ex)
@@ -2788,7 +2701,6 @@ public class Mailbox
 
   static
   {
-    /* $if ZimbraX == 0 $ */
     try
     {
       Class cls = null;
@@ -2822,7 +2734,6 @@ public class Mailbox
       ZimbraLog.extensions.fatal("ZAL Reflection Initialization Exception: " + Utils.exceptionToString(ex));
       throw new RuntimeException(ex);
     }
-    /* $endif $ */
   }
 
   /*
@@ -2834,17 +2745,8 @@ public class Mailbox
     try
     {
       Collection<com.zimbra.cs.mailbox.Folder> folders = Collections.emptyList();
-      /* $if ZimbraX == 1 $
-      FolderCache folderCache = (FolderCache) sFolderCache.get(mMbox);
-      if(folderCache != null)
-      {
-        folders = folderCache.values();
-      }
-      /* $else $*/
       folders = (Collection<com.zimbra.cs.mailbox.Folder>) (((Map<Integer, com.zimbra.cs.mailbox.Folder>) sFolderCacheMap
         .get(sFolderCache.get(mMbox))).values());
-
-      /* $endif $  */
       ArrayList<Folder> newList = new ArrayList<Folder>(folders.size());
 
       for (Object folder : folders)
@@ -3163,11 +3065,7 @@ public class Mailbox
   {
     try
     {
-      /* $if ZimbraX == 1 $
-      mMbox.index.startReIndex(mMbox.getOperationContext());
-      /* $else $ */
       mMbox.index.startReIndex();
-      /* $endif $ */
     }
     catch (ServiceException e)
     {
@@ -3177,35 +3075,16 @@ public class Mailbox
 
   public void deleteIndex() throws IOException, ZimbraException
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-    /* $endif $ */
-      mMbox.index.deleteIndex();
-    /* $if ZimbraX == 1 $
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
+    mMbox.index.deleteIndex();
   }
   public void suspendIndexing()
   {
-    /* $if ZimbraVersion >= 8.7.0 && ZimbraX == 0 $ */
     mMbox.suspendIndexing();
-    /* $elseif ZimbraX == 1 $
-    return;
-    /* $endif $ */
   }
 
   public void resumeIndexing()
   {
-    /* $if ZimbraX == 1 $
-    return;
-    /* $elseif ZimbraVersion >= 8.7.0 $ */
     mMbox.resumeIndexing();
-    /* $endif $ */
   }
 
   public boolean isReIndexInProgress()
@@ -3225,7 +3104,6 @@ public class Mailbox
 
   public void checkSizeChange(long newSize) throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.8.10 && ZimbraX == 0 $ */
     try
     {
       mMbox.checkSizeChange(newSize);
@@ -3234,9 +3112,6 @@ public class Mailbox
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $elseif ZimbraX == 1 $
-    return;
-    /* $endif $ */
   }
 
   public void createDefaultFlags()  throws ZimbraException
