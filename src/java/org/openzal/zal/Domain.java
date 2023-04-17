@@ -299,5 +299,13 @@ public class Domain extends Entry
   public static <A> LDAPAttributeReader<Domain,A> createAttribute(LDAPAttributeReader<Entry, A> attr) {
     return attr.compose(domain ->  domain);
   }
+
+  public String getNotificationFrom() {
+    return mDomain.getCarbonioNotificationFrom();
+  }
+
+  public String[] getNotificationRecipients() {
+    return mDomain.getCarbonioNotificationRecipients();
+  }
 }
 
