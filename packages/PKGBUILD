@@ -15,27 +15,29 @@ license=("GPLv2")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
+sources=(
+  "zal.jar"
+)
+hashsums=(
+  "skip"
+)
 
 build() {
 }
 
 package() {
-  cd ..
-  install -Dm 744 $i "${pkgdir}/opt/zextras/zal/zal.jar"
+  install -Dm 744 "${srcdir}/zal.jar" \
+    "${pkgdir}/opt/zextras/zal/zal.jar"
+  mkdir -p "${pkgdir}/opt/zextras/lib/ext/carbonio"
+  ln -s "/opt/zextras/zal/zal.jar" \
+    "${pkgdir}/opt/zextras/lib/ext/carbonio/zal.jar"
 }
 
 postinst() {
-  rm -f /opt/zextras/lib/ext/carbonio/zal.jar
-  mkdir -p /opt/zextras/lib/ext/carbonio
-  ln -s "/opt/zextras/zal/zal.jar" "/opt/zextras/lib/ext/carbonio/zal.jar"
   echo "======================================================"
   echo "Carbonio ZAL installed successfully!"
   echo "======================================================"
 }
 
 prerm() {
-}
-
-postrm() {
-  rm -f /opt/zextras/lib/ext/carbonio/zal.jar
 }
