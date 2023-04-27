@@ -62,9 +62,11 @@ pipeline {
         }
         stage('Publish') {
             when {
-                expression { deployJfrog() }
-                buildingTag()
-                branch 'main'
+                anyOf {
+                    expression { deployJfrog() }
+                    buildingTag()
+                    branch 'main'
+                }
             }
             steps {
                 mvnCmd("deploy -DskipTests")
