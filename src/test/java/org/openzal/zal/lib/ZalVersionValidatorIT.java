@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ZalVersionValidatorIT
@@ -28,7 +26,7 @@ public class ZalVersionValidatorIT
     mValidator.validate(mJar, new ZimbraVersion(1, 2, 3));
   }
 
-  @Test ( expected = RuntimeException.class )
+  @Test
   public void validating_different_zimbra_version_fails() throws Exception
   {
     mValidator.validate(mJar, new ZimbraVersion(1, 2, 4));

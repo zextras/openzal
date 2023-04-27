@@ -24,20 +24,10 @@ public class ZimbraDatabaseIT
   public void mail_item_table_name_doesnt_change()
   {
     final String zimbraTableName;
-/*$if ZimbraVersion >= 8.0.2 $*/
     zimbraTableName = DbMailItem.getMailItemTableName(
       32,
       false
     );
-/*$endif $*/
-
-/*$if ZimbraVersion < 8.0.2 $
-    zimbraTableName = DbMailItem.getMailItemTableName(
-      32,
-      32,
-      false
-    );
-/*$endif $*/
 
     Mailbox mbox = Mockito.mock(Mailbox.class);
     when( mbox.getSchemaGroupId() ).thenReturn(32);
@@ -69,20 +59,10 @@ public class ZimbraDatabaseIT
   {
     final String zimbraTableName;
 
-/*$if ZimbraVersion >= 8.0.2 $*/
     zimbraTableName = DbMailItem.getRevisionTableName(
       32,
       false
     );
-/*$endif $*/
-
-/*$if ZimbraVersion < 8.0.2 $
-    zimbraTableName = DbMailItem.getRevisionTableName(
-      32,
-      32,
-      false
-    );
-/*$endif $*/
 
     Mailbox mbox = Mockito.mock(Mailbox.class);
     when( mbox.getSchemaGroupId() ).thenReturn(32);

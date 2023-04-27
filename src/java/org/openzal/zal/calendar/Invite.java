@@ -997,9 +997,7 @@ public class Invite
 
    public void addICalAttach(Attach attachment)
    {
-     /* $if ZimbraVersion > 8.5.0 $ */
      mInvite.addIcalendarAttach(attachment.toZimbra(com.zimbra.common.calendar.Attach.class));
-     /* $endif $ */
    }
 
   public void addICalAttaches(Iterable<Attach> attachments)
@@ -1014,12 +1012,10 @@ public class Invite
   {
     List<Attach> attachList = new ArrayList<>();
 
-    /* $if ZimbraVersion > 8.5.0 $ */
     for( com.zimbra.common.calendar.Attach zAttach : mInvite.getIcalendarAttaches())
     {
       attachList.add(new Attach(zAttach));
     }
-    /* $endif $ */
 
     return attachList;
   }

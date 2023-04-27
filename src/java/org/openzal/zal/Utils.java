@@ -50,10 +50,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-/* $if ZimbraVersion > 8.8.2 $ */
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
-/*$endif$*/
 import org.openzal.zal.calendar.ICalendarTimezone;
 import org.openzal.zal.calendar.Invite;
 import org.openzal.zal.calendar.WinSystemTime;
@@ -194,11 +192,6 @@ public abstract class Utils
   {
     try
     {
-      /* $if ZimbraVersion <= 8.0.9$
-      ZimletUtil.deployZimletBySoap(zimlet.getZimletPath(), null, null, true);
-      /* $endif$ */
-
-      /* $if ZimbraVersion >= 8.5.0 $ */
       provisioning.flushCache(CacheEntryType.zimlet, null);
       ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
 
@@ -226,19 +219,16 @@ public abstract class Utils
       }
       // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
       provisioning.flushCache(CacheEntryType.zimlet, null);
-      /* $endif$ */
     }
     catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $if ZimbraVersion >= 8.5.0 $ */
     catch (ZimletException e)
     {
       provisioning.flushCache(CacheEntryType.zimlet, null);
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif$ */
   }
 
   public static boolean isGzipped(File file) throws IOException
@@ -493,7 +483,6 @@ public abstract class Utils
       cacheSelector.setEntries(entries);
     }
     FlushCacheRequest request = new FlushCacheRequest(cacheSelector);
-    /* $if ZimbraVersion > 8.8.2 $ */
     soapTransport.invokeAsync(request, new FutureCallback<HttpResponse>() {
       @Override
       public void completed(HttpResponse httpResponse) {
@@ -511,12 +500,5 @@ public abstract class Utils
         soapTransport.shutdown();
       }
     });
-    /* $else$
-    try {
-      soapTransport.invoke(request);
-    } finally {
-      soapTransport.shutdown();
-    }
-    /*$endif $*/
   }
 }

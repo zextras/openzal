@@ -67,15 +67,11 @@ public class StoreVolume
   public String getLocator() { return mVolume.getLocator(); }
   public String getRootPath() { return mVolume.getRootPath(); }
   public String getMailboxDir(int id, short type) {
-/* $if ZimbraVersion >= 8.5.0 $ */
     try {
-/* $endif$ */
       return mVolume.getMailboxDir(id, type);
-/* $if ZimbraVersion >= 8.5.0 $ */
     } catch (ServiceException e) {
       throw new RuntimeException(e);
     }
-/* $endif$ */
   }
   public String getIncomingMsgDir() { return mVolume.getIncomingMsgDir(); }
   public IncomingDirectory getIncomingDirectory() {
@@ -305,14 +301,10 @@ public class StoreVolume
 
   public String getBlobDir(int mboxId, int itemId)
   {
-/* $if ZimbraVersion >= 8.5.0 $ */
     try {
-/* $endif$ */
       return mVolume.getBlobDir(mboxId, itemId);
-/* $if ZimbraVersion >= 8.5.0 $ */
     } catch (ServiceException e) {
       throw new RuntimeException(e);
     }
-/* $endif$ */
   }
 }

@@ -22,7 +22,6 @@ package org.openzal.zal;
 
 import java.lang.reflect.*;
 
-import javax.annotation.Nullable;
 import org.openzal.zal.log.ZimbraLog;
 import javax.annotation.Nonnull;
 
@@ -104,7 +103,6 @@ public final class Flag extends Item
       throw new RuntimeException(ex);
     }
   }
-/* $endif$ */
 
   public static int BITMASK_FROM_ME           = com.zimbra.cs.mailbox.Flag.BITMASK_FROM_ME;
   public static int BITMASK_ATTACHED          = com.zimbra.cs.mailbox.Flag.BITMASK_ATTACHED;

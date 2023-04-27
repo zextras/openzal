@@ -26,12 +26,6 @@ import org.openzal.zal.exceptions.ExceptionWrapper;
 import com.zimbra.common.service.ServiceException;
 import javax.annotation.Nonnull;
 
-/* $if ZimbraX == 1 $
-import com.zimbra.cs.account.ZimbraJWToken;
-import com.zimbra.cs.service.util.JWTUtil;
-/* $endif $ */
-
-
 /**
  * Create new zimbra authentication tokens and parse existing one.
  * It also verify the validity of the tokens.
@@ -92,17 +86,6 @@ public class AuthProvider
 
   public AuthToken decodeJwtAuthToken(String zm_auth_jwt, String zm_jwt) throws AuthToken.TokenExpired
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-      return AuthToken.validate(ZimbraJWToken.getJWToken(zm_auth_jwt, zm_jwt));
-    }
-    catch (AuthTokenException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $else$  */
     throw new UnsupportedOperationException();
-    /* $endif$ */
   }
 }

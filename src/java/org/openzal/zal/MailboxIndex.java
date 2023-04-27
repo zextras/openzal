@@ -30,11 +30,7 @@ public class MailboxIndex
 
   public Analyzer getAnalyzer()
   {
-    /* $if ZimbraX == 1 $
-    return new Analyzer(new org.apache.lucene.analysis.standard.ClassicAnalyzer());
-    /* $else $ */
     return new Analyzer(mMailboxIndex.getAnalyzer());
-    /* $endif $ */
   }
 
   @Nullable

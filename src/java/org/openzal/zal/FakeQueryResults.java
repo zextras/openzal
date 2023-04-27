@@ -94,21 +94,12 @@ public class FakeQueryResults extends QueryResults
 
         }
 
-        /* $if ZimbraVersion >= 8.0.2 $ */
         @Override
         public boolean isPreSorted()
         {
           return false;
         }
-        /* $endif $ */
 
-        /* $if ZimbraX == 1 $
-        @Override
-        public boolean isRelevanceSortSupported()
-        {
-          return false;
-        }
-        /* $endif $ */
       }
     );
     mZimbraQueryResults = zimbraQueryResults;
