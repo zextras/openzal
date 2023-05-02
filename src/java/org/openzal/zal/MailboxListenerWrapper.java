@@ -64,9 +64,6 @@ public abstract class MailboxListenerWrapper
 
     public void notifyInternal(ChangeNotification notification)
     {
-     /* $if ZimbraX == 1 $
-      return;
-     /* $else $ */
       if( isRegistered.get() && notification.mods.hasNotifications() )
       {
         MailboxOperation op = notification.op;
@@ -154,7 +151,6 @@ public abstract class MailboxListenerWrapper
           }
         }
       }
-      /* $endif $ */
     }
 
     private void register()

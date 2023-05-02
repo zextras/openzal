@@ -501,9 +501,7 @@ public class InviteFactory
       mLastModifyTimeUtc,
       mLastModifyTimeUtc,
       mSequence,
-      /* $if ZimbraVersion >= 8.0.2 $ */
       mSequence,
-      /* $endif$ */
       isOrganizer ? AttendeeInviteStatus.ACCEPTED.getRawStatus() : mPartStat,
       mResponseRequest,
       true

@@ -3,7 +3,7 @@ targets=(
   "ubuntu"
 )
 pkgname="carbonio-zal"
-pkgver="3.21.0"
+pkgver="23.5.0"
 pkgrel="1"
 pkgdesc="Carbonio extras"
 pkgdesclong=(
@@ -15,37 +15,29 @@ license=("GPLv2")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
+sources=(
+  "zal.jar"
+)
+hashsums=(
+  "skip"
+)
 
 build() {
 }
 
 package() {
-  cd ..
-  find . -name "zal-${pkgver}-*.jar" | while read i; do install -Dm 744 $i "${pkgdir}/opt/zextras/zal/$i"; done
+  install -Dm 744 "${srcdir}/zal.jar" \
+    "${pkgdir}/opt/zextras/zal/zal.jar"
+  mkdir -p "${pkgdir}/opt/zextras/lib/ext/carbonio"
+  ln -s "/opt/zextras/zal/zal.jar" \
+    "${pkgdir}/opt/zextras/lib/ext/carbonio/zal.jar"
 }
 
 postinst() {
-  ZIMBRA_VERSION=$(/opt/zextras/bin/zmjava com.zimbra.cs.util.BuildInfo | grep '^Version:' | sed -E "s#^Version: ([.0-9]+).*#\1#")
-  ZAL_JAR="/opt/zextras/zal/zal-${pkgver}-zimbra-$ZIMBRA_VERSION.jar"
-
-  if test -f "$ZAL_JAR"; then
-    rm -f /opt/zextras/lib/ext/carbonio/zal.jar
-    mkdir -p /opt/zextras/lib/ext/carbonio
-    ln -s $ZAL_JAR "/opt/zextras/lib/ext/carbonio/zal.jar"
-    echo "======================================================"
-    echo "Carbonio ZAL installed successfully!"
-    echo "======================================================"
-  else
-    echo "======================================================"
-    echo "Error: unrecognized Carbonio version $ZIMBRA_VERSION"
-    echo "======================================================"
-    exit 1
-  fi
+  echo "======================================================"
+  echo "Carbonio ZAL installed successfully!"
+  echo "======================================================"
 }
 
 prerm() {
-}
-
-postrm() {
-  rm -f /opt/zextras/lib/ext/carbonio/zal.jar
 }

@@ -170,11 +170,7 @@ public class Contact extends Item
   {
     VCard vCard = VCard.formatContact(mContact);
     String formatted;
-    /* $if ZimbraVersion >= 8.5.0 $ */
     formatted = vCard.getFormatted();
-    /* $else  $
-    formatted = vCard.formatted;
-    /* $endif$ */
     return new ByteArrayInputStream(formatted.getBytes("UTF-8"));
   }
 

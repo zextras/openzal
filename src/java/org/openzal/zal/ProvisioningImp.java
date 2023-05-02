@@ -82,13 +82,7 @@ import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.soap.type.GalSearchType;
 import com.zimbra.soap.type.TargetBy;
-/* $if ZimbraVersion < 8.0.6 $
-import com.zimbra.common.account.Key.GranteeBy;
-/* $endif$ */
-
-/* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
-/* $endif$ */
 
 import com.zimbra.cs.mailbox.Contact;
 
@@ -98,7 +92,6 @@ import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
 {
-  /* $if ZimbraVersion >= 8.7.0 $ */
   public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
   public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
   public static String A_zimbraTwoFactorAuthEnabled                           = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
@@ -107,16 +100,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraAppSpecificPassword                            = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPassword;
   public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange     = com.zimbra.cs.account.Provisioning.A_zimbraRevokeAppSpecificPasswordsOnPasswordChange;
   public static String A_zimbraAppSpecificPasswordDuration                    = com.zimbra.cs.account.Provisioning.A_zimbraAppSpecificPasswordDuration;
-  /* $else $
-  public static String A_zimbraMaxAppSpecificPasswords                        = "";
-  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = "";
-  public static String A_zimbraTwoFactorAuthEnabled                           = "";
-  public static String A_zimbraTwoFactorAuthScratchCodes                      = "";
-  public static String A_zimbraTwoFactorAuthSecret                            = "";
-  public static String A_zimbraAppSpecificPassword                            = "";
-  public static String A_zimbraRevokeAppSpecificPasswordsOnPasswordChange     = "";
-  public static String A_zimbraAppSpecificPasswordDuration                    = "";
-  /* $endif $ */
 
   public static String A_zimbraFeatureTasksEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraFeatureTasksEnabled;
   public static String A_zimbraFeatureCalendarEnabled                               = com.zimbra.cs.account.Provisioning.A_zimbraFeatureCalendarEnabled;
@@ -164,18 +147,10 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraCalResType                                           = com.zimbra.cs.account.Provisioning.A_zimbraCalResType;
   public static String A_zimbraSkinLogoAppBanner                                    = com.zimbra.cs.account.Provisioning.A_zimbraSkinLogoAppBanner;
   public static String A_zimbraSkinLogoURL                                          = com.zimbra.cs.account.Provisioning.A_zimbraSkinLogoURL;
-  /* $if ZimbraVersion >= 8.8.10 $ */
   public static String A_zimbraPrefDefaultCalendarId                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultCalendarId;
-/* $else$
-  public static String A_zimbraPrefDefaultCalendarId                                = "";
-/* $endif$ */
 
 
-/* $if ZimbraVersion >= 8.5.0 $ */
   public static String A_zimbraAuthTokens                                     = com.zimbra.cs.account.Provisioning.A_zimbraAuthTokens;
-/* $else$
-  public static String A_zimbraAuthTokens                                     = "";
-/* $endif$ */
 
 
   public static String A_zimbraACE                                            = com.zimbra.cs.account.Provisioning.A_zimbraACE;
@@ -281,29 +256,15 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefSharedAddrBookAutoCompleteEnabled          = com.zimbra.cs.account.Provisioning.A_zimbraPrefSharedAddrBookAutoCompleteEnabled;
   public static String A_zimbraPrefAutoAddressEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefAutoAddAddressEnabled;
 
-  /* $if ZimbraVersion >= 8.8.0 $ */
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
   public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
   public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
   public static String A_zimbraNetworkAdminNGEnabled                          = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
-  /* $else$
-  public static String A_zimbraNetworkModulesNGEnabled                        = "";
-  public static String A_zimbraNetworkMobileNGEnabled                         = "";
-  public static String A_zimbraNetworkAdminEnabled                            = "";
-  public static String A_zimbraNetworkAdminNGEnabled                          = "";
-  /* $endif$ */
+
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
-  /* $if ZimbraVersion >= 8.6.0 $ */
   public static String A_zimbraMailboxdSSLProtocols                           = com.zimbra.cs.account.Provisioning.A_zimbraMailboxdSSLProtocols;
-  /* $else$
-  public static String A_zimbraMailboxdSSLProtocols                           = "";
-  /* $endif$ */
   public static String A_zimbraSSLExcludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLExcludeCipherSuites;
-  /* $if ZimbraVersion >= 8.5.0 $ */
   public static String A_zimbraSSLIncludeCipherSuites                         = com.zimbra.cs.account.Provisioning.A_zimbraSSLIncludeCipherSuites;
-  /* $else$
-  public static String A_zimbraSSLIncludeCipherSuites                         = "";
-  /* $endif$ */
   public static String A_zimbraGalType                                        = com.zimbra.cs.account.Provisioning.A_zimbraGalType;
   public static String A_zimbraDataSourceEnabled                              = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceEnabled;
   public static String A_zimbraGalStatus                                      = com.zimbra.cs.account.Provisioning.A_zimbraGalStatus;
@@ -324,15 +285,9 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
   public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
 
-  /* $if ZimbraVersion >= 8.5.0 $ */
   public static String A_zimbraServerVersionMajor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMajor;
   public static String A_zimbraServerVersionMinor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMinor;
   public static String A_zimbraServerVersionMicro = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMicro;
-  /* $else$
-  public static String A_zimbraServerVersionMajor = "";
-  public static String A_zimbraServerVersionMinor = "";
-  public static String A_zimbraServerVersionMicro = "";
-  /* $endif$ */
 
   public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
 
@@ -754,11 +709,9 @@ public class ProvisioningImp implements Provisioning
         case "http_basic":
           context.put("proto", AuthContext.Protocol.http_basic);
           break;
-        /* $if ZimbraVersion > 8.6.0 $ */
         case "http_dav":
           context.put("proto", AuthContext.Protocol.http_dav);
           break;
-        /* $endif $ */
         case "im":
           context.put("proto", AuthContext.Protocol.im);
           break;

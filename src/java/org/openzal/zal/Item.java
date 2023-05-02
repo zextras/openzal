@@ -137,7 +137,6 @@ public class Item implements Comparable<Item>
   public static Item constructItem(@Nonnull Mailbox mbox, @Nonnull UnderlyingData data, boolean skipCache)
     throws ZimbraException
   {
-    /* $if ZimbraVersion >= 8.5.0 $ */
     try
     {
       return new Item(
@@ -152,26 +151,12 @@ public class Item implements Comparable<Item>
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $else $
-    throw new UnsupportedOperationException();
-    /* $endif $ */
   }
 
   @Nonnull
   public Mailbox getMailbox()
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-    /* $endif $ */
     return new Mailbox(mMailItem.getMailbox());
-    /* $if ZimbraX == 1 $
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
   }
 
   public int getMailboxId()
@@ -454,11 +439,7 @@ public class Item implements Comparable<Item>
     public void deserialize(Metadata metadata)
       throws ServiceException
     {
-      /* $if ZimbraVersion >= 8.5.0 $ */
       mUnderlyingData.deserialize(metadata.toZimbra(com.zimbra.cs.mailbox.Metadata.class));
-      /* $else $
-      throw new UnsupportedOperationException();
-      /* $endif $ */
     }
 
     public <T> T toZimbra(@Nonnull Class<T> cls)
@@ -586,18 +567,7 @@ public class Item implements Comparable<Item>
   @Nonnull
   public UnderlyingData getUnderlyingData()
   {
-    /* $if ZimbraX == 1 $
-    try
-    {
-      /* $endif $ */
-      return new UnderlyingData(mMailItem.getUnderlyingData());
-      /* $if ZimbraX == 1 $
-    }
-    catch( ServiceException e )
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    /* $endif $ */
+    return new UnderlyingData(mMailItem.getUnderlyingData());
   }
 
   public static class Color

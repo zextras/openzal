@@ -94,7 +94,6 @@ public class MailboxManagerImp implements MailboxManager
     mListenerMap = new HashMap<MailboxManagerListener, MailboxManagerListenerWrapper>();
   }
 
-  /* $if ZimbraX == 0 $ */
   private static final Field sMaintenanceLocks;
   private static final Field sMailboxIds;
   private static final Field sCache;
@@ -116,7 +115,6 @@ public class MailboxManagerImp implements MailboxManager
       throw new RuntimeException(ex);
     }
   }
-  /* $endif $ */
 
   public MailboxManagerImp(Object mailboxManager)
   {
@@ -331,23 +329,6 @@ public class MailboxManagerImp implements MailboxManager
     return getMailboxByAccountId(mailbox.getAccountId());
   }
 
-  /* $if ZimbraVersion < 8.8.10 $ */
-  private static Method sAddAdditionalQuotaProvider;
-  static {
-    try
-    {
-      sAddAdditionalQuotaProvider = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredMethod(
-        "addAdditionalQuotaProvider",
-        Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")
-      );
-      sAddAdditionalQuotaProvider.setAccessible(true);
-    }
-    catch(Throwable ignore)
-    {
-    }
-  }
-  /* $endif $ */
-
   @Override
   public Mailbox cleanCacheAndGetUpdatedMailboxById(Mailbox mailbox, boolean skipMailhostCheck)
   {
@@ -358,72 +339,13 @@ public class MailboxManagerImp implements MailboxManager
   @Override
   public void registerAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.addAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
-    /* $elseif ZimbraX == 1 $
-    return;
-    $else $
-    try
-    {
-      Class additionalQuotaProviderClass = Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider");
-      Class zalProxyObjectClass = ZalProxyObject.class;
-
-      ZALAdditionalQuotaProvider quotaProvider = new ZALAdditionalQuotaProvider(additionalQuotaProvider);
-      Object quotaProviderProxy = Proxy.newProxyInstance(
-        quotaProvider.getClass().getClassLoader(),
-        new Class[]{ additionalQuotaProviderClass, zalProxyObjectClass },
-        new ZALAdditionalQuotaProviderHandler(quotaProvider)
-      );
-      sAddAdditionalQuotaProvider.invoke(mMailboxManager, additionalQuotaProviderClass.cast(quotaProviderProxy));
-    }
-    catch (Throwable ignore)
-    {
-    }
-    /* $endif $ */
   }
-
-  /* $if ZimbraVersion < 8.8.10 $ */
-  private static Method sRemoveAdditionalQuotaProvider;
-  static {
-    try
-    {
-      sRemoveAdditionalQuotaProvider = com.zimbra.cs.mailbox.MailboxManager.class.getDeclaredMethod(
-        "removeAdditionalQuotaProvider",
-        Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider")
-      );
-      sRemoveAdditionalQuotaProvider.setAccessible(true);
-    }
-    catch(Throwable ignore)
-    {
-    }
-  }
-  /* $endif $ */
 
   @Override
   public void removeAdditionalQuotaProvider(final AdditionalQuotaProvider additionalQuotaProvider)
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
     mMailboxManager.removeAdditionalQuotaProvider(new ZALAdditionalQuotaProvider(additionalQuotaProvider));
-    /* $elseif ZimbraX == 1 $
-    return;
-    $else $
-    try
-    {
-      Class additionalQuotaProviderClass = Class.forName("com.zimbra.cs.mailbox.AdditionalQuotaProvider");
-      Class zalProxyObjectClass = ZalProxyObject.class;
-
-      ZALAdditionalQuotaProvider quotaProvider = new ZALAdditionalQuotaProvider(additionalQuotaProvider);
-      Object quotaProviderProxy = Proxy.newProxyInstance(
-        quotaProvider.getClass().getClassLoader(),
-        new Class[]{ additionalQuotaProviderClass, zalProxyObjectClass },
-        new ZALAdditionalQuotaProviderHandler(quotaProvider)
-      );
-      sRemoveAdditionalQuotaProvider.invoke(mMailboxManager, additionalQuotaProviderClass.cast(quotaProviderProxy));
-    }
-    catch (Throwable ignore)
-    {
-    }
-    /* $endif $ */
   }
 
   private interface ZalProxyObject
@@ -530,7 +452,6 @@ public class MailboxManagerImp implements MailboxManager
 /*
     Remove mailbox entry from mailbox manager caches, it never existed....muhahaha
 */
-    /* $if ZimbraX == 0 $ */
     try
     {
       synchronized (mMailboxManager)
@@ -544,7 +465,6 @@ public class MailboxManagerImp implements MailboxManager
     {
       throw new RuntimeException(ex);
     }
-    /* $endif $ */
   }
 
   @Override
@@ -565,7 +485,6 @@ public class MailboxManagerImp implements MailboxManager
       throw ExceptionWrapper.wrap(e);
     }
 
-    /* $if ZimbraX == 0 $ */
     try
     {
       synchronized (mMailboxManager)
@@ -579,13 +498,10 @@ public class MailboxManagerImp implements MailboxManager
     {
       throw new RuntimeException(ex);
     }
-    /* $endif $ */
   }
 
   class ZALAdditionalQuotaProvider
-    /* $if ZimbraVersion >= 8.8.10 $ */
     implements com.zimbra.cs.mailbox.AdditionalQuotaProvider
-    /* $endif $ */
   {
     private AdditionalQuotaProvider mAdditionalQuotaProvider;
 
@@ -594,9 +510,7 @@ public class MailboxManagerImp implements MailboxManager
       this.mAdditionalQuotaProvider = mAdditionalQuotaProvider;
     }
 
-    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
-    /* $endif $ */
     public boolean equals(Object o)
     {
       if (this == o)
@@ -611,74 +525,16 @@ public class MailboxManagerImp implements MailboxManager
       return Objects.equals(mAdditionalQuotaProvider, that.mAdditionalQuotaProvider);
     }
 
-    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
-    /* $endif $ */
     public int hashCode()
     {
       return Objects.hash(mAdditionalQuotaProvider);
     }
 
-    /* $if ZimbraVersion >= 8.8.10 $ */
     @Override
-    /* $endif $ */
     public long getAdditionalQuota(com.zimbra.cs.mailbox.Mailbox mailbox)
     {
       return mAdditionalQuotaProvider.getAdditionalQuota(new org.openzal.zal.Mailbox(mailbox));
     }
   }
-
-  /* $if ZimbraVersion < 8.8.10 $ */
-  class ZALAdditionalQuotaProviderHandler implements InvocationHandler
-  {
-    private final ZALAdditionalQuotaProvider mAdditionalQuotaProvider;
-    ZALAdditionalQuotaProviderHandler(ZALAdditionalQuotaProvider additionalQuotaProvider)
-    {
-      mAdditionalQuotaProvider = additionalQuotaProvider;
-    }
-
-    @Override
-    public Object invoke(Object o, Method method, Object[] objects)
-    {
-      if (method.getName().equals("getAdditionalQuota"))
-      {
-        return mAdditionalQuotaProvider.getAdditionalQuota((com.zimbra.cs.mailbox.Mailbox) objects[0]);
-      }
-
-      if (method.getName().equals("equals"))
-      {
-        return equals(objects[0]);
-      }
-
-      if (method.getName().equals("hashCode"))
-      {
-        return hashCode();
-      }
-
-      if (method.getName().equals("getProxiedObject"))
-      {
-        return mAdditionalQuotaProvider;
-      }
-
-      return null;
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-      if(o instanceof ZalProxyObject)
-      {
-        return mAdditionalQuotaProvider.equals(((ZalProxyObject) o).getProxiedObject());
-      }
-
-      return false;
-    }
-
-    @Override
-    public int hashCode()
-    {
-      return Objects.hash(mAdditionalQuotaProvider);
-    }
-  }
-  /* $endif $ */
 }

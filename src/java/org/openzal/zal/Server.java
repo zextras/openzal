@@ -85,11 +85,7 @@ public class Server extends Entry
 
   public boolean isLdapGentimeFractionalSecondsEnabled()
   {
-    /*$if ZimbraVersion >= 8.7.0 $ */
     return mServer.isLdapGentimeFractionalSecondsEnabled();
-    /*$else $
-    return false;
-    /*$endif $ */
   }
 
   public void setHsmPolicy(@Nonnull Collection<String> zimbraHsmPolicy)

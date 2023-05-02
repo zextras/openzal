@@ -6,12 +6,11 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>3.21.1</version>
+  <version>23.5.0</version>
   <packaging>jar</packaging>
 
   <repositories>
     <repository>
-      <!-- artifactory should be temporary solution -->
       <id>artifactory</id>
       <name>Zextras public maven repo</name>
       <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
@@ -94,7 +93,7 @@
   </distributionManagement>
 
   <properties>
-    <zimbra.version>23.4.0</zimbra.version>
+    <carbonio.version>23.5.0</carbonio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
@@ -107,8 +106,6 @@
     <maven-s3-storage.version>3.0.1</maven-s3-storage.version>
     <zextras-public-repo.url>s3://zextras-public-repositories</zextras-public-repo.url>
     <execute.fast.compatibility>true</execute.fast.compatibility>
-    <classifier.value>zimbra-${zimbra.version}</classifier.value>
-    <dev.build>false</dev.build>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     <build.version>${project.version}</build.version>
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
@@ -135,9 +132,9 @@
     </dependency>
 
     <dependency>
-      <groupId>${zimbra.group}</groupId>
-      <artifactId>${zimbra.common}</artifactId>
-      <version>${zimbra.version}</version>
+      <groupId>zextras</groupId>
+      <artifactId>zm-common</artifactId>
+      <version>${carbonio.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -147,9 +144,9 @@
     </dependency>
 
     <dependency>
-      <groupId>${zimbra.group}</groupId>
-      <artifactId>${zimbra.client}</artifactId>
-      <version>${zimbra.version}</version>
+      <groupId>zextras</groupId>
+      <artifactId>zm-client</artifactId>
+      <version>${carbonio.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -159,9 +156,9 @@
     </dependency>
 
     <dependency>
-      <groupId>${zimbra.group}</groupId>
-      <artifactId>${zimbra.native}</artifactId>
-      <version>${zimbra.version}</version>
+      <groupId>zextras</groupId>
+      <artifactId>zm-native</artifactId>
+      <version>${carbonio.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -172,9 +169,9 @@
 
 
     <dependency>
-      <groupId>${zimbra.group}</groupId>
-      <artifactId>${zimbra.soap}</artifactId>
-      <version>${zimbra.version}</version>
+      <groupId>zextras</groupId>
+      <artifactId>zm-soap</artifactId>
+      <version>${carbonio.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -380,9 +377,9 @@
     </dependency>
 
     <dependency>
-      <groupId>${zimbra.group}</groupId>
+      <groupId>zextras</groupId>
       <artifactId>zm-store</artifactId>
-      <version>${zimbra.version}</version>
+      <version>${carbonio.version}</version>
       <scope>compile</scope>
       <classifier>classes</classifier>
       <exclusions>
@@ -542,21 +539,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.zextras</groupId>
-        <artifactId>preprocess-maven-plugin</artifactId>
-        <version>0.0.5-SNAPSHOT</version>
-        <configuration>
-          <zimbraVersion>${zimbra.version}</zimbraVersion>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>preprocess</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.coderplus.maven.plugins</groupId>
         <artifactId>copy-rename-maven-plugin</artifactId>
         <version>1.0.1</version>
@@ -599,7 +581,7 @@
           <argLine>--illegal-access=permit -Xmx1024m -XX:MaxPermSize=256m -ea
             -Duser.timezone=Europe/Rome -Djava.awt.headless=true
             -Dzimbra.config=it/data/zimbra-config/localconfig-test.xml
-            -Dzimbra.version=${zimbra.version} -Dfile.encoding=UTF-8</argLine>
+            -Dfile.encoding=UTF-8</argLine>
         </configuration>
         <executions>
           <execution>
@@ -628,24 +610,23 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.0</version>
         <executions>
           <execution>
-            <id>jar</id>
+            <id>default-jar</id>
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>${classifier.value}</classifier>
+              <finalName>zal</finalName>
               <archive>
-                <index>true</index>
                 <manifestEntries>
                   <Specification-Title>Zimbra Abstraction Layer</Specification-Title>
                   <Specification-Version>${project.version}</Specification-Version>
                   <Specification-Commit>${git.commit.id.full}</Specification-Commit>
                   <Specification-Vendor>Zextras</Specification-Vendor>
-                  <Implementation-Version>${zimbra.version}</Implementation-Version>
+                  <Implementation-Version>${carbonio.version}</Implementation-Version>
                   <Created-By>Zextras</Created-By>
                   <Zimbra-Extension-Class>org.openzal.zal.extension.ZalEntrypointImpl</Zimbra-Extension-Class>
                 </manifestEntries>
@@ -684,11 +665,10 @@
                 <include>build.version</include>
                 <include>build.timestamp</include>
                 <include>maven.build.timestamp.format</include>
-                <include>dev.build</include>
                 <include>git.dirty</include>
                 <include>git.commit.id.abbrev</include>
                 <include>git.commit.id.full</include>
-                <include>zimbra.version</include>
+                <include>carbonio.version</include>
               </includes>
             </configuration>
           </execution>
@@ -696,86 +676,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-
-    <profile>
-      <id>zimbra-8.8.15</id>
-      <activation>
-        <property>
-          <name>zimbra.version</name>
-          <value>8.8.15</value>
-        </property>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-        <zimbra.group>com.zimbra</zimbra.group>
-        <zimbra.native>zimbra-native</zimbra.native>
-        <zimbra.soap>zimbrasoap</zimbra.soap>
-        <zimbra.client>zimbraclient</zimbra.client>
-        <zimbra.store>zimbrastore</zimbra.store>
-        <zimbra.common>zimbracommon</zimbra.common>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>carbonio</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-        <zimbra.group>zextras</zimbra.group>
-        <zimbra.native>zm-native</zimbra.native>
-        <zimbra.soap>zm-soap</zimbra.soap>
-        <zimbra.client>zm-client</zimbra.client>
-        <zimbra.store>zm-store</zimbra.store>
-        <zimbra.common>zm-common</zimbra.common>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>compatibility-check-output-dir</id>
-      <build>
-        <directory>dist/${zimbra.version}</directory>
-      </build>
-    </profile>
-
-    <profile>
-      <id>compatibility-check</id>
-
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-deploy-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>deploy-zimbra-specific-openzal</id>
-                <phase>deploy</phase>
-                <goals>
-                  <goal>deploy-file</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>dev</id>
-      <properties>
-        <jetty.version>9.3.5.v20151012</jetty.version>
-        <zimbra.group>zextras</zimbra.group>
-        <zimbra.native>zm-native</zimbra.native>
-        <zimbra.soap>zm-soap</zimbra.soap>
-        <zimbra.client>zm-client</zimbra.client>
-        <zimbra.store>zm-store</zimbra.store>
-        <zimbra.common>zm-common</zimbra.common>
-        <classifier.value>dev</classifier.value>
-        <dev.build>true</dev.build>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>

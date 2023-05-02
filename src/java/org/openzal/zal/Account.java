@@ -93,18 +93,14 @@ public class Account extends Entry
 
   public String getLastLogonTime()
   {
-    /* $if ZimbraVersion >= 8.7.6 $ */
     try
     {
-    /* $endif $ */
       return mAccount.getLastLogonTimestampAsString();
-    /* $if ZimbraVersion >= 8.7.6 $ */
     }
     catch (ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
-    /* $endif $ */
   }
 
   public void setLastLogonTime(String time)
@@ -1245,11 +1241,7 @@ public class Account extends Entry
 
     List<SMIMEPublicCertsInfo> certsList;
 
-    /* $if ZimbraVersion >= 8.8.12 $ */
     certsList = response.getCerts();
-    /* $else$
-    certsList = Collections.singletonList( response.getCerts() );
-    /* $endif$ */
 
     for( SMIMEPublicCertsInfo current : certsList )
     {
@@ -1356,11 +1348,7 @@ public class Account extends Entry
   }
 
   public boolean isNE2FAEnabled() {
-    /* $if ZimbraVersion < 8.7.0 $
-      return false;
-    /* $else $ */
     return mAccount.isTwoFactorAuthEnabled() || mAccount.isFeatureTwoFactorAuthRequired();
-    /* $endif $ */
   }
 
   public List<String> getAuthTokenEncoded() {

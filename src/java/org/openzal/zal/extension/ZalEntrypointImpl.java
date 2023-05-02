@@ -28,17 +28,13 @@ import org.openzal.zal.lib.Version;
 import org.openzal.zal.lib.ZimbraVersion;
 import org.openzal.zal.log.ZimbraLog;
 import org.openzal.zal.tools.JarUtils;
-import org.openzal.zal.lib.ZalVersionValidator;
 import org.openzal.zal.lib.ExtensionVersionValidator;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.net.URLClassLoader;
 
 public class ZalEntrypointImpl implements ZalEntrypoint
 {
-  private final ExtensionVersionValidator mExtensionVersionValidator;
-  private final ZalVersionValidator       mZalVersionValidator;
   private       String                    mDirectoryName;
   private       File                      mDirectory;
   private       ExtensionManager          mExtensionManager;
@@ -61,8 +57,6 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     mZalEntryPoint = null;
     mCustomExtensionDirectory = null;
     mPreviousExtension = new WeakReference<ClassLoader>(null);
-    mZalVersionValidator = new ZalVersionValidator();
-    mExtensionVersionValidator = new ExtensionVersionValidator();
   }
 
   private ExtensionManager getExtensionManager()
@@ -119,9 +113,6 @@ public class ZalEntrypointImpl implements ZalEntrypoint
   public void init()
   {
     ZimbraLog.mailbox.info("Starting ZAL version " + ZalVersion.current + " commit " + BuildProperties.getCommitFull());
-/* $if DevMode != 1 $*/
-    ZalVersion.checkCompatibility();
-/* $endif$ */
 
     File extensionPathFile = new File(mDirectory, "extension-path");
     mExtensionPathExists = extensionPathFile.exists();
@@ -167,24 +158,6 @@ public class ZalEntrypointImpl implements ZalEntrypoint
       }
     }
 
-    private void checkTargetExtension(File extensionDirectory)
-    {
-      try
-      {
-        File zalJar = new File(extensionDirectory.getAbsolutePath() + ZAL_FILE);
-        JarAccessor zalJarAccessor = new JarAccessor(zalJar);
-        Version zalVersion = mZalVersionValidator.validate(zalJarAccessor, ZimbraVersion.current);
-
-        File extensionJar = new File(extensionDirectory.getAbsolutePath() + ZEXTRAS_FILE);
-        JarAccessor extensionJarAccessor = new JarAccessor(extensionJar);
-        mExtensionVersionValidator.validate(extensionJarAccessor, zalVersion);
-      }
-      catch (Exception e)
-      {
-        throw new RuntimeException(e);
-      }
-    }
-
     @Override
     public void shutdown()
     {
@@ -205,7 +178,6 @@ public class ZalEntrypointImpl implements ZalEntrypoint
     public void reload(File extensionDirectory, WeakReference<ClassLoader> previousClassLoader)
     {
       checkState();
-      checkTargetExtension(extensionDirectory);
       mPreviousExtension = previousClassLoader;
       destroy();
       mCustomExtensionDirectory = extensionDirectory;

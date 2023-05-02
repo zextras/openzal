@@ -22,11 +22,7 @@ package org.openzal.zal;
 
 import javax.annotation.Nonnull;
 
-/* $if ZimbraVersion >= 8.0.6 $*/
 import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
-/* $else $
-import com.zimbra.common.account.Key.GranteeBy;
-/* $endif$ */
 
 public class GrantedBy
 {

@@ -21,10 +21,6 @@
 package org.openzal.zal;
 
 import com.zimbra.cs.account.AuthTokenException;
-/* $if ZimbraX == 1 $
-import com.zimbra.cs.account.ZimbraJWToken;
-import com.zimbra.cs.service.util.JWTUtil;
-/* $endif $ */
 
 import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.service.AuthProviderException;
@@ -87,12 +83,10 @@ public class AuthToken
       throw new TokenExpired("token is expired", authToken);
     }
 
-    /* $if ZimbraVersion >= 8.5.0$ */
     if( !zimbraToken.isRegistered() )
     {
       throw new TokenExpired("token is not registered", authToken);
     }
-    /* $endif$ */
 
     return authToken;
   }
@@ -170,11 +164,7 @@ public class AuthToken
     if (ZimbraAuthToken.class.isAssignableFrom(mAuthToken.getClass())) {
       ZimbraAuthToken zat = (ZimbraAuthToken) mAuthToken;
       Integer tokenId;
-      /* $if ZimbraVersion >= 8.8.9$ */
       tokenId = zat.getProperties().getTokenID();
-      /* $else $
-      tokenId = -1;
-      /* $endif$ */
       if (tokenId == -1) return null;
       else return tokenId;
     } else {

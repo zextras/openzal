@@ -20,9 +20,7 @@
 
 package org.openzal.zal;
 
-/* $if ZimbraVersion >= 8.8.2 $ */
 import com.zimbra.common.mailbox.BaseItemInfo;
-/* $endif $ */
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.openzal.zal.ItemChange.ChangeType;
@@ -152,13 +150,6 @@ public class MailboxSessionProxy
       return 0;
     }
 
-    /* $if ZimbraX == 1 $
-    @Override
-    public void notifyPendingChanges(PendingModifications pns, int changeId, com.zimbra.cs.session.Session.SourceSessionInfo source)
-    {
-      return;
-    }
-    /* $else $ */
     @Override
     public void notifyPendingChanges(@Nonnull PendingModifications pns, int changeId, @Nullable Session source)
     {
@@ -189,15 +180,8 @@ public class MailboxSessionProxy
 
       if( pns.created != null )
       {
-        /* $endif $ */
-        /* $if ZimbraVersion >= 8.8.2 && ZimbraX == 0 $ */
         for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, BaseItemInfo>) pns.created).keySet() )
         {
-        /* $elseif ZimbraX == 0 $
-        for( PendingModifications.ModificationKey mod : pns.created.keySet() )
-        {
-        /* $endif $ */
-    /* $if ZimbraX == 0 $ */
           Object whatObj = pns.created.get(mod);
           if (! (whatObj instanceof MailItem))
           {
@@ -222,15 +206,8 @@ public class MailboxSessionProxy
 
       if( pns.modified != null )
       {
-      /* $endif $ */
-        /* $if ZimbraX == 0 && ZimbraVersion >= 8.8.2 $ */
         for( PendingModifications.ModificationKey mod : ((Map<PendingModifications.ModificationKey, PendingModifications.Change>) pns.modified).keySet() )
         {
-       /* $elseif ZimbraX == 0 $
-        for( PendingModifications.ModificationKey mod : pns.modified.keySet() )
-        {
-        /* $endif $ */
-       /* $if ZimbraX == 0 $ */
           PendingModifications.Change change = (PendingModifications.Change) pns.modified.get(mod);
 
           if( areChangesForMobile( change.what ))
@@ -284,7 +261,6 @@ public class MailboxSessionProxy
         }
       }
     }
-    /* $endif $ */
 
     @Override
     protected void cleanup()

@@ -94,10 +94,8 @@ class InternalOverrideStoreManager extends com.zimbra.cs.store.StoreManager {
         return supportedByAll(feature);
       case SINGLE_INSTANCE_SERVER_CREATE:
         return supportedByAll(feature);
-      /* $if ZimbraVersion >= 8.8.10 || ZimbraX == 1 $
       case CUSTOM_STORE_API:
         return supportedAtLeasOnce(feature);
-      /* $endif $ */
       default:
         return false;
     }
@@ -105,11 +103,7 @@ class InternalOverrideStoreManager extends com.zimbra.cs.store.StoreManager {
 
   public boolean supports(StoreManager.StoreFeature storeFeature, String s)
   {
-    /* $if ZimbraVersion >= 8.8.10 $ */
     return mStoreManager.getStore(s).supports(org.openzal.zal.StoreFeature.fromZimbra(storeFeature));
-    /* $else $
-    return supports(storeFeature);
-    /* $endif $ */
   }
 
   private boolean supportedAtLeasOnce(StoreFeature feature)

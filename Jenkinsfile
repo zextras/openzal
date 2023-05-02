@@ -2,33 +2,13 @@ def mvnCmd(String cmd) {
   sh 'mvn --settings settings.xml -B ' + cmd
 }
 
-def supportedVersions() {
-    return ["23.4.0"]
-}
-
-def executeForAllSupportedVersions(String command) {
-    supportedVersions().eachWithIndex { version, idx ->
-      mvnCmd("-Dzimbra.version=$version $command")
-    }
-
-    // dev version
-    mvnCmd("$command -Pdev")
-
-    // latest with no classifier
-    mvnCmd("$command")
-}
-
-
-def buildForAllSupportedVersions() {
-    executeForAllSupportedVersions("package")
-}
-
-def deployForAllSupportedVersions() {
-    executeForAllSupportedVersions("deploy -DskipTests")
-}
-
 def runTests() {
     mvnCmd("verify")
+}
+
+def deployJfrog() {
+    def result = sh (script: "git log -1 | grep '.*\\[deploy jfrog\\].*'", returnStatus: true)
+    return (result == 0) || (params.PUBLISH_TO_ARTIFACTORY == true)
 }
 
 pipeline {
@@ -62,7 +42,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                buildForAllSupportedVersions()
+                mvnCmd("package")
             }
         }
         stage('Tests') {
@@ -80,23 +60,16 @@ pipeline {
                 }
             }
         }
-        stage('Publish dev version') {
-            when {
-                branch 'main'
-            }
-            steps {
-                mvnCmd("deploy -DskipTests -Pdev")
-            }
-        }
-        stage('Publish version') {
+        stage('Publish') {
             when {
                 anyOf {
-                    expression { params.PUBLISH_TO_ARTIFACTORY == true }
+                    expression { deployJfrog() }
                     buildingTag()
+                    branch 'main'
                 }
             }
             steps {
-                deployForAllSupportedVersions()
+                mvnCmd("deploy -DskipTests")
             }
         }
         stage('Build deb/rpm') {
@@ -114,7 +87,7 @@ pipeline {
           stages {
               stage('Stash') {
                   steps {
-                      sh 'cp target/zal-*-zimbra-*.jar packages/'
+                      sh 'cp target/zal.jar packages/'
                       stash includes: "pacur.json,packages/**", name: 'binaries'
                   }
               }

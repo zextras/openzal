@@ -13,7 +13,7 @@ public class BuildProperties {
   private static final String COMMIT_DIRTY = "git.dirty";
   private static final String GIT_COMMIT_ABBREV = "git.commit.id.abbrev";
   private static final String GIT_COMMIT_FULL = "git.commit.id.full";
-  private static final String MAILBOX_VERSION = "zimbra.version";
+  private static final String MAILBOX_VERSION = "carbonio.version";
 
   private static volatile Properties projectProperties;
   private static final Object lock = new Object();
