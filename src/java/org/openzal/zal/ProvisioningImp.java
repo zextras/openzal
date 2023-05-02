@@ -322,6 +322,9 @@ public class ProvisioningImp implements Provisioning
   public static final String A_carbonioFeatureTeamEnabled        = com.zimbra.cs.account.Provisioning.A_carbonioFeatureChatsEnabled;
   public static final String A_carbonioFeatureMailsAppEnabled    = com.zimbra.cs.account.Provisioning.A_carbonioFeatureMailsAppEnabled;
 
+  public static final String A_carbonioNotificationFrom    = com.zimbra.cs.account.Provisioning.A_carbonioNotificationFrom;
+  public static final String A_carbonioNotificationRecipients    = com.zimbra.cs.account.Provisioning.A_carbonioNotificationRecipients;
+
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
 
