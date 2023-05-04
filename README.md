@@ -5,8 +5,6 @@ ZAL - The Abstraction Layer for Zimbra.
 
 ZAL is distributed under the terms of GNU General Public License version 2 <http://www.gnu.org/licenses/gpl-2.0.html>.
 
-API documentation is available at <https://zextras.github.io/OpenZAL/>
-
 ### Download ###
 
 Latest ZAL can be downloaded from `git@github.com:ZeXtras/OpenZAL.git`
