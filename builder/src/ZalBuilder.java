@@ -122,7 +122,8 @@ public class ZalBuilder
       if( !Pattern.matches("[0-9.]*", rawZimbraVersion) ) {
         continue;
       }
-      zimbraVersions.add( new Zimbra(Zimbra.Type.standard, new Version(rawZimbraVersion)) );
+      Zimbra zimbra = new Zimbra(Zimbra.Type.standard, new Version(rawZimbraVersion));
+      zimbraVersions.add(zimbra);
     }
     Collections.sort(zimbraVersions);
 
@@ -149,9 +150,41 @@ public class ZalBuilder
     return zimbraVersions;
   }
 
+  static Zimbra parseVersion(String rawZimbraVersion) {
+    if( "x".equals(rawZimbraVersion) ) {
+      return sZimbraX;
+    }
+    Zimbra zimbra = new Zimbra(Zimbra.Type.standard, new Version(rawZimbraVersion));
+    return zimbra;
+  }
+
   private static void executeCommand(String command, final SystemReader systemReader) throws Exception {
 
+    if (command.startsWith("zal-version-")) {
+      String rawZimbraVersion = command.substring("zal-version-".length());
+      Zimbra version = parseVersion(rawZimbraVersion);
+      queueTask(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            buildFromZimbraVersion(version, systemReader, false);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+      });
+
+      waitTask();
+      return;
+    }
+
     switch (command) {
+      case "download-versions": {
+        setup(systemReader);
+        checkOrDownloadZimbraJars();
+        checkOrDownloadMavenDependencies(systemReader);
+        return;
+      }
       case "help": {
         help();
         System.exit(0);
