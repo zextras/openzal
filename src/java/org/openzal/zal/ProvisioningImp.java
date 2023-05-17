@@ -175,7 +175,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraLastLogonTimestampFrequency                    = com.zimbra.cs.account.Provisioning.A_zimbraLastLogonTimestampFrequency;
   public static String A_zimbraPrefIdentityName                               = com.zimbra.cs.account.Provisioning.A_zimbraPrefIdentityName;
   public static String A_zimbraPrefWhenInFolderIds                            = com.zimbra.cs.account.Provisioning.A_zimbraPrefWhenInFolderIds;
-  public static String A_zimbraPrefWhenInFoldersEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraPrefWhenInFoldersEnabled;
   public static String A_zimbraPrefIdentityId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefIdentityId;
   public static String A_zimbraCreateTimestamp                                = com.zimbra.cs.account.Provisioning.A_zimbraCreateTimestamp;
   public static String A_zimbraDataSourceId                                   = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceId;
@@ -189,7 +188,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraDomainType                                     = com.zimbra.cs.account.Provisioning.A_zimbraDomainType;
   public static String A_cn                                                   = com.zimbra.cs.account.Provisioning.A_cn;
   public static String A_zimbraMailHostPool                                   = com.zimbra.cs.account.Provisioning.A_zimbraMailHostPool;
-  public static String A_zimbraShareInfo                                      = com.zimbra.cs.account.Provisioning.A_zimbraShareInfo;
   public static String A_zimbraDataSourceType                                 = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceType;
   public static String A_zimbraGivenName                                      = com.zimbra.cs.account.Provisioning.A_givenName;
   public static String A_zimbraSn                                             = com.zimbra.cs.account.Provisioning.A_sn;
@@ -197,9 +195,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraCOSId                                          = com.zimbra.cs.account.Provisioning.A_zimbraCOSId;
   public static String A_zimbraPublicServiceProtocol                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceProtocol;
   public static String A_zimbraMyoneloginSamlSigningCert                      = com.zimbra.cs.account.Provisioning.A_zimbraMyoneloginSamlSigningCert;
-  public static String A_zimbraChildAccount                                   = com.zimbra.cs.account.Provisioning.A_zimbraChildAccount;
-  public static String A_zimbraPrefChildVisibleAccount                        = com.zimbra.cs.account.Provisioning.A_zimbraPrefChildVisibleAccount;
-  public static String A_zimbraChildVisibleAccount                            = com.zimbra.cs.account.Provisioning.A_zimbraChildVisibleAccount;
   public static String A_zimbraInterceptAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraInterceptAddress;
   public static String A_zimbraMailQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailQuota;
   public static String A_zimbraPrefDefaultSignatureId                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultSignatureId;
@@ -217,7 +212,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraZimletEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraZimletEnabled;
   public static String SERVICE_MAILBOX                                        = com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX;
   public static String A_zimbraAdminPort                                      = com.zimbra.cs.account.Provisioning.A_zimbraAdminPort;
-  public static String A_zimbraNotebookAccount                                = com.zimbra.cs.account.Provisioning.A_zimbraNotebookAccount;
   public static String A_zimbraNotes                                          = com.zimbra.cs.account.Provisioning.A_zimbraNotes;
   public static String A_zimbraFeatureMobileSyncEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraFeatureMobileSyncEnabled;
   public static String A_zimbraHttpProxyURL                                   = com.zimbra.cs.account.Provisioning.A_zimbraHttpProxyURL;
@@ -258,7 +252,6 @@ public class ProvisioningImp implements Provisioning
 
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
   public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
-  public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
   public static String A_zimbraNetworkAdminNGEnabled                          = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
 
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
@@ -1650,7 +1643,6 @@ public class ProvisioningImp implements Provisioning
 
       // create datasource
       Map<String, Object> dataSourceAttrs = new HashMap<>();
-      dataSourceAttrs.put("zimbraDataSourcePollingInterval", "1d");
       dataSourceAttrs.put(A_zimbraGalType, "zimbra");
       dataSourceAttrs.put(A_zimbraDataSourceFolderId, String.valueOf(folderId));
       if( !dataSourceAttrs.containsKey(A_zimbraDataSourceEnabled) )
