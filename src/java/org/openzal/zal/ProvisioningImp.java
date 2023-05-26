@@ -65,7 +65,6 @@ import javax.annotation.Nonnull;
 
 import com.zimbra.soap.ZimbraSoapContext;
 import org.dom4j.QName;
-import org.jfree.util.Log;
 import org.openzal.zal.exceptions.*;
 import org.openzal.zal.exceptions.ZimbraException;
 import org.openzal.zal.lib.Filter;
@@ -93,7 +92,6 @@ import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 public class ProvisioningImp implements Provisioning
 {
   public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
-  public static String A_zimbraZimletUserPropertiesMaxNumEntries              = com.zimbra.cs.account.Provisioning.A_zimbraZimletUserPropertiesMaxNumEntries;
   public static String A_zimbraTwoFactorAuthEnabled                           = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
   public static String A_zimbraTwoFactorAuthScratchCodes                      = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
   public static String A_zimbraTwoFactorAuthSecret                            = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthSecret;
@@ -145,8 +143,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraIsSystemAccount                                      = com.zimbra.cs.account.Provisioning.A_zimbraIsSystemAccount;
   public static String A_zimbraIsSystemResource                                     = com.zimbra.cs.account.Provisioning.A_zimbraIsSystemResource;
   public static String A_zimbraCalResType                                           = com.zimbra.cs.account.Provisioning.A_zimbraCalResType;
-  public static String A_zimbraSkinLogoAppBanner                                    = com.zimbra.cs.account.Provisioning.A_zimbraSkinLogoAppBanner;
-  public static String A_zimbraSkinLogoURL                                          = com.zimbra.cs.account.Provisioning.A_zimbraSkinLogoURL;
   public static String A_zimbraPrefDefaultCalendarId                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultCalendarId;
 
 
@@ -174,8 +170,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraLastLogonTimestamp                             = com.zimbra.cs.account.Provisioning.A_zimbraLastLogonTimestamp;
   public static String A_zimbraLastLogonTimestampFrequency                    = com.zimbra.cs.account.Provisioning.A_zimbraLastLogonTimestampFrequency;
   public static String A_zimbraPrefIdentityName                               = com.zimbra.cs.account.Provisioning.A_zimbraPrefIdentityName;
-  public static String A_zimbraPrefWhenInFolderIds                            = com.zimbra.cs.account.Provisioning.A_zimbraPrefWhenInFolderIds;
-  public static String A_zimbraPrefWhenInFoldersEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraPrefWhenInFoldersEnabled;
   public static String A_zimbraPrefIdentityId                                 = com.zimbra.cs.account.Provisioning.A_zimbraPrefIdentityId;
   public static String A_zimbraCreateTimestamp                                = com.zimbra.cs.account.Provisioning.A_zimbraCreateTimestamp;
   public static String A_zimbraDataSourceId                                   = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceId;
@@ -189,7 +183,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraDomainType                                     = com.zimbra.cs.account.Provisioning.A_zimbraDomainType;
   public static String A_cn                                                   = com.zimbra.cs.account.Provisioning.A_cn;
   public static String A_zimbraMailHostPool                                   = com.zimbra.cs.account.Provisioning.A_zimbraMailHostPool;
-  public static String A_zimbraShareInfo                                      = com.zimbra.cs.account.Provisioning.A_zimbraShareInfo;
   public static String A_zimbraDataSourceType                                 = com.zimbra.cs.account.Provisioning.A_zimbraDataSourceType;
   public static String A_zimbraGivenName                                      = com.zimbra.cs.account.Provisioning.A_givenName;
   public static String A_zimbraSn                                             = com.zimbra.cs.account.Provisioning.A_sn;
@@ -197,9 +190,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraCOSId                                          = com.zimbra.cs.account.Provisioning.A_zimbraCOSId;
   public static String A_zimbraPublicServiceProtocol                          = com.zimbra.cs.account.Provisioning.A_zimbraPublicServiceProtocol;
   public static String A_zimbraMyoneloginSamlSigningCert                      = com.zimbra.cs.account.Provisioning.A_zimbraMyoneloginSamlSigningCert;
-  public static String A_zimbraChildAccount                                   = com.zimbra.cs.account.Provisioning.A_zimbraChildAccount;
-  public static String A_zimbraPrefChildVisibleAccount                        = com.zimbra.cs.account.Provisioning.A_zimbraPrefChildVisibleAccount;
-  public static String A_zimbraChildVisibleAccount                            = com.zimbra.cs.account.Provisioning.A_zimbraChildVisibleAccount;
   public static String A_zimbraInterceptAddress                               = com.zimbra.cs.account.Provisioning.A_zimbraInterceptAddress;
   public static String A_zimbraMailQuota                                      = com.zimbra.cs.account.Provisioning.A_zimbraMailQuota;
   public static String A_zimbraPrefDefaultSignatureId                         = com.zimbra.cs.account.Provisioning.A_zimbraPrefDefaultSignatureId;
@@ -213,11 +203,7 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraSpamIsNotSpamAccount                           = com.zimbra.cs.account.Provisioning.A_zimbraSpamIsNotSpamAccount;
   public static String A_zimbraServiceHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraServiceHostname;
   public static String A_objectClass                                          = com.zimbra.cs.account.Provisioning.A_objectClass;
-  public static String A_zimbraZimletPriority                                 = com.zimbra.cs.account.Provisioning.A_zimbraZimletPriority;
-  public static String A_zimbraZimletEnabled                                  = com.zimbra.cs.account.Provisioning.A_zimbraZimletEnabled;
   public static String SERVICE_MAILBOX                                        = com.zimbra.cs.account.Provisioning.SERVICE_MAILBOX;
-  public static String A_zimbraAdminPort                                      = com.zimbra.cs.account.Provisioning.A_zimbraAdminPort;
-  public static String A_zimbraNotebookAccount                                = com.zimbra.cs.account.Provisioning.A_zimbraNotebookAccount;
   public static String A_zimbraNotes                                          = com.zimbra.cs.account.Provisioning.A_zimbraNotes;
   public static String A_zimbraFeatureMobileSyncEnabled                       = com.zimbra.cs.account.Provisioning.A_zimbraFeatureMobileSyncEnabled;
   public static String A_zimbraHttpProxyURL                                   = com.zimbra.cs.account.Provisioning.A_zimbraHttpProxyURL;
@@ -246,8 +232,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPrefFromDisplay                                = com.zimbra.cs.account.Provisioning.A_zimbraPrefFromDisplay;
   public static String A_zimbraContactMaxNumEntries                           = com.zimbra.cs.account.Provisioning.A_zimbraContactMaxNumEntries;
   public static String A_zimbraMailSignatureMaxLength                         = com.zimbra.cs.account.Provisioning.A_zimbraMailSignatureMaxLength;
-  public static String A_zimbraMailForwardingAddressMaxLength                 = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxLength;
-  public static String A_zimbraMailForwardingAddressMaxNumAddrs               = com.zimbra.cs.account.Provisioning.A_zimbraMailForwardingAddressMaxNumAddrs;
   public static String A_zimbraRedoLogDeleteOnRollover                        = com.zimbra.cs.account.Provisioning.A_zimbraRedoLogDeleteOnRollover;
   public static String A_zimbraPublicServicePort                              = com.zimbra.cs.account.Provisioning.A_zimbraPublicServicePort;
   public static String A_zimbraVirtualHostname                                = com.zimbra.cs.account.Provisioning.A_zimbraVirtualHostname;
@@ -258,8 +242,6 @@ public class ProvisioningImp implements Provisioning
 
   public static String A_zimbraNetworkModulesNGEnabled                        = com.zimbra.cs.account.Provisioning.A_zimbraNetworkModulesNGEnabled;
   public static String A_zimbraNetworkMobileNGEnabled                         = com.zimbra.cs.account.Provisioning.A_zimbraNetworkMobileNGEnabled;
-  public static String A_zimbraNetworkAdminEnabled                            = "zimbraNetworkAdminEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminEnabled;
-  public static String A_zimbraNetworkAdminNGEnabled                          = "zimbraNetworkAdminNGEnabled";//com.zimbra.cs.account.Provisioning.A_zimbraNetworkAdminNGEnabled;
 
   public static int    DATASOURCE_PASSWORD_MAX_LENGTH                         = 128;
   public static String A_zimbraMailboxdSSLProtocols                           = com.zimbra.cs.account.Provisioning.A_zimbraMailboxdSSLProtocols;
@@ -275,7 +257,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPasswordMinLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLength;
   public static String A_zimbraPasswordMaxLength = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMaxLength;
 
-  public static String A_zimbraPasswordEnforceHistory = com.zimbra.cs.account.Provisioning.A_zimbraPasswordEnforceHistory;
   public static String A_zimbraPasswordMinUpperCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinUpperCaseChars;
   public static String A_zimbraPasswordMinLowerCaseChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinLowerCaseChars;
   public static String A_zimbraPasswordMinPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinPunctuationChars;
@@ -284,10 +265,6 @@ public class ProvisioningImp implements Provisioning
   public static String A_zimbraPasswordAllowedChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedChars;
   public static String A_zimbraPasswordMinDigitsOrPuncs = com.zimbra.cs.account.Provisioning.A_zimbraPasswordMinDigitsOrPuncs;
   public static String A_zimbraPasswordAllowedPunctuationChars = com.zimbra.cs.account.Provisioning.A_zimbraPasswordAllowedPunctuationChars;
-
-  public static String A_zimbraServerVersionMajor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMajor;
-  public static String A_zimbraServerVersionMinor = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMinor;
-  public static String A_zimbraServerVersionMicro = com.zimbra.cs.account.Provisioning.A_zimbraServerVersionMicro;
 
   public static String A_carbonioVideoServerRecordingEnabled = com.zimbra.cs.account.Provisioning.A_carbonioVideoServerRecordingEnabled;
 
@@ -1650,7 +1627,6 @@ public class ProvisioningImp implements Provisioning
 
       // create datasource
       Map<String, Object> dataSourceAttrs = new HashMap<>();
-      dataSourceAttrs.put("zimbraDataSourcePollingInterval", "1d");
       dataSourceAttrs.put(A_zimbraGalType, "zimbra");
       dataSourceAttrs.put(A_zimbraDataSourceFolderId, String.valueOf(folderId));
       if( !dataSourceAttrs.containsKey(A_zimbraDataSourceEnabled) )
@@ -2457,14 +2433,14 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  @Override
-  public void setZimletPriority(String zimletName, int priority)
-  {
-    Zimlet zimlet = getZimlet(zimletName);
-    Map<String, Object> attrs = zimlet.getAttrs(false);
-    attrs.put(A_zimbraZimletPriority, String.valueOf(priority));
-    modifyAttrs(zimlet, attrs);
-  }
+//  @Override
+//  public void setZimletPriority(String zimletName, int priority)
+//  {
+//    Zimlet zimlet = getZimlet(zimletName);
+//    Map<String, Object> attrs = zimlet.getAttrs(false);
+//    attrs.put(A_zimbraZimletPriority, String.valueOf(priority));
+//    modifyAttrs(zimlet, attrs);
+//  }
 
   @Override
   public List<Account> getAllDelegatedAdminAccounts() throws ZimbraException

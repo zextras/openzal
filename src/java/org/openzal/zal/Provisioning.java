@@ -345,8 +345,6 @@ public interface Provisioning
 
   long getEffectiveQuota(@Nonnull Account account);
 
-  void setZimletPriority(String zimletName, int priority);
-
   List<Account> getAllDelegatedAdminAccounts() throws ZimbraException;
 
   void visitAllDelegatedAdminAccounts(SimpleVisitor<Account> visitor) throws ZimbraException;

@@ -284,12 +284,6 @@ public class Account extends Entry
     return mAccount.isIsSystemResource();
   }
 
-  @Nonnull
-  public Collection<String> getChildAccount()
-  {
-    return Arrays.asList(mAccount.getChildAccount());
-  }
-
   public String getAttr(String name, String defaultValue)
   {
     return mAccount.getAttr(name, defaultValue);
@@ -708,12 +702,6 @@ public class Account extends Entry
   }
 
   @Nonnull
-  public Collection<String> getPrefChildVisibleAccount()
-  {
-    return Arrays.asList(mAccount.getPrefChildVisibleAccount());
-  }
-
-  @Nonnull
   public Signature createSignature(String signatureName, Map<String, Object> attrs)
     throws NoSuchAccountException
   {
@@ -725,12 +713,6 @@ public class Account extends Entry
     {
       throw ExceptionWrapper.wrap(e);
     }
-  }
-
-  @Nonnull
-  public Collection<String> getChildVisibleAccount()
-  {
-    return Arrays.asList(mAccount.getChildVisibleAccount());
   }
 
   public void setPrefOutOfOfficeExternalReply(String zimbraPrefOutOfOfficeExternalReply)

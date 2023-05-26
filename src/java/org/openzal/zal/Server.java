@@ -139,11 +139,6 @@ public class Server extends Entry
     return mServer.getAttr(string1);
   }
 
-  public boolean isXMPPEnabled()
-  {
-    return mServer.isXMPPEnabled();
-  }
-
   @Nonnull
   public Set<String> getMultiAttrSet(String name)
   {

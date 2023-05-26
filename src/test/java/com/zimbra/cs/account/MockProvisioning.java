@@ -999,7 +999,6 @@ public class MockProvisioning extends Provisioning
     attrs.put(A_zimbraPrefFromAddress, ia.getAddress());
     attrs.put(A_zimbraPrefFromDisplay, ia.getPersonal());
     attrs.put(A_zimbraPrefIdentityId, account.getId());
-    attrs.put(A_zimbraPrefForwardReplyFormat, MAIL_FORMAT_TEXT);
 
     return new Identity(account, ProvisioningConstants.DEFAULT_IDENTITY_NAME, account.getId(), attrs, this);
   }
