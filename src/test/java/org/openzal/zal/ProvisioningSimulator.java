@@ -468,12 +468,6 @@ public class ProvisioningSimulator extends ProvisioningImp
     );
   }
 
-  public List<UCService> getAllUCServices()
-      throws ZimbraException
-  {
-    throw new RuntimeException("Provisioning method not implemented");
-  }
-
   public CalendarResource getCalendarResourceByName(String resourceName)
       throws ZimbraException
   {

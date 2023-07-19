@@ -158,7 +158,6 @@ public abstract class Entry
     EntryType IDENTITY                  = new EntryType(com.zimbra.cs.account.Entry.EntryType.IDENTITY);
     EntryType MIMETYPE                  = new EntryType(com.zimbra.cs.account.Entry.EntryType.MIMETYPE);
     EntryType SERVER                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.SERVER);
-    EntryType UCSERVICE                 = new EntryType(com.zimbra.cs.account.Entry.EntryType.UCSERVICE);
     EntryType SIGNATURE                 = new EntryType(com.zimbra.cs.account.Entry.EntryType.SIGNATURE);
     EntryType XMPPCOMPONENT             = new EntryType(com.zimbra.cs.account.Entry.EntryType.XMPPCOMPONENT);
     EntryType ZIMLET                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.ZIMLET);

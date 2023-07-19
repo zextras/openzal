@@ -32,8 +32,10 @@ import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -61,6 +63,7 @@ import com.zimbra.cs.ldap.ZSearchControls;
 import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.ldap.unboundid.UBIDLdapContext;
 import com.zimbra.cs.util.ProxyPurgeUtil;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import com.zimbra.soap.ZimbraSoapContext;
@@ -1221,13 +1224,35 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
+  public static final int HEALTH_CHECK_PORT = 8743;
+  private static boolean isReachable(com.zimbra.cs.account.Server server) {
+    Socket socket = null;
+    try {
+      String ipAddress = server.getIPAddress();
+      socket = new Socket(ipAddress, HEALTH_CHECK_PORT);
+      return true;
+    } catch (Exception e) {
+      ZimbraLog.extensions.warn(String.format("Address %s:%s is not reachable", server.getHostname(), HEALTH_CHECK_PORT));
+      return false;
+    } finally {
+      try {
+        if (socket != null) socket.close();
+      } catch (IOException e) {
+      }
+    }
+  }
+
   @Override
   public List<Server> getAllServers()
     throws ZimbraException
   {
     try
     {
-      return ZimbraListWrapper.wrapServers(mProvisioning.getAllServers());
+      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers()
+          .stream()
+          .filter(ProvisioningImp::isReachable)
+          .collect(Collectors.toList());
+      return ZimbraListWrapper.wrapServers(allServers);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1241,7 +1266,11 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      return ZimbraListWrapper.wrapServers(mProvisioning.getAllServers(service));
+      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers(service)
+          .stream()
+          .filter(ProvisioningImp::isReachable)
+          .collect(Collectors.toList());
+      return ZimbraListWrapper.wrapServers(allServers);
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -1332,20 +1361,6 @@ public class ProvisioningImp implements Provisioning
       {
         return new Config(config);
       }
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  public List<UCService> getAllUCServices()
-    throws ZimbraException
-  {
-    try
-    {
-      return ZimbraListWrapper.wrapUCServices(mProvisioning.getAllUCServices());
     }
     catch (com.zimbra.common.service.ServiceException e)
     {
@@ -3171,12 +3186,6 @@ public class ProvisioningImp implements Provisioning
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
     com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
-  }
-
-  @Override
-  public void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener)
-  {
-    TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
   }
 
   public boolean doExternalLdapAuth(
