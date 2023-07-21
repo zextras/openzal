@@ -134,12 +134,12 @@ public class ZalZimbraSimulator extends ExternalResource
     System.setProperty("mail.mime.multipart.allowempty",    "true");
 
     System.setProperty("zimbra.native.required", "false");
-    System.setProperty("log4j.configuration", "it/data/carbonio/config/log4j-test.properties");
+    System.setProperty("log4j.configurationFile", "it/data/carbonio/config/log4j2-test.properties");
     System.setProperty("zimbra.config", "it/data/carbonio/config/localconfig-test.xml");
 
     LC.zimbra_attrs_directory.setDefault("it/data/carbonio/attrs/");
     LC.zimbra_rights_directory.setDefault("it/data/carbonio/rights/");
-    ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j-test.properties");
+    ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j2-test.properties");
 
     mTmpDir = createTmpDir("junit_tmp_");
     LC.calendar_cache_directory.setDefault(mTmpDir.getAbsolutePath());

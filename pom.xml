@@ -20,31 +20,31 @@
       <name>Maven public</name>
       <url>https://repo.maven.apache.org/maven2/</url>
     </repository>
+<!--    <repository>-->
+<!--      <id>zextras-public-snapshots</id>-->
+<!--      <name>Zextras public snaposhots</name>-->
+<!--      <url>https://repo.zextras.io/maven/snapshot</url>-->
+<!--      <releases>-->
+<!--        <enabled>false</enabled>-->
+<!--      </releases>-->
+<!--      <snapshots>-->
+<!--        <enabled>true</enabled>-->
+<!--      </snapshots>-->
+<!--    </repository>-->
+<!--    <repository>-->
+<!--      <id>zextras-public-release</id>-->
+<!--      <name>Zextras public releases</name>-->
+<!--      <url>https://repo.zextras.io/maven/release</url>-->
+<!--      <releases>-->
+<!--        <enabled>true</enabled>-->
+<!--      </releases>-->
+<!--      <snapshots>-->
+<!--        <enabled>false</enabled>-->
+<!--      </snapshots>-->
+<!--    </repository>-->
     <repository>
       <id>zextras-public-snapshots</id>
-      <name>Zextras public snaposhots</name>
-      <url>https://repo.zextras.io/maven/snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>zextras-public-release</id>
-      <name>Zextras public releases</name>
-      <url>https://repo.zextras.io/maven/release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>carbonio-ce-snaphot-repository</id>
-      <name>carbonio-ce snaphot repository</name>
+      <name>Zextras public maven snapshot repository</name>
       <url>https://zextras.jfrog.io/artifactory/maven-snapshot</url>
       <releases>
         <enabled>false</enabled>
