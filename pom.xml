@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>23.6.1</version>
+  <version>23.6.2</version>
   <packaging>jar</packaging>
 
   <repositories>
