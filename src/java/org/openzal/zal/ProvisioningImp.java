@@ -1248,10 +1248,7 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers()
-          .stream()
-          .filter(ProvisioningImp::isReachable)
-          .collect(Collectors.toList());
+      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers();
       return ZimbraListWrapper.wrapServers(allServers);
     }
     catch (com.zimbra.common.service.ServiceException e)
@@ -1266,7 +1263,22 @@ public class ProvisioningImp implements Provisioning
   {
     try
     {
-      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers(service)
+      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers(service);
+      return ZimbraListWrapper.wrapServers(allServers);
+    }
+    catch (com.zimbra.common.service.ServiceException e)
+    {
+      throw ExceptionWrapper.wrap(e);
+    }
+  }
+
+  @Override
+  public List<Server> getAllReachableMailboxes()
+      throws ZimbraException
+  {
+    try
+    {
+      List<com.zimbra.cs.account.Server> allServers = mProvisioning.getAllServers(ProvisioningImp.SERVICE_MAILBOX)
           .stream()
           .filter(ProvisioningImp::isReachable)
           .collect(Collectors.toList());
