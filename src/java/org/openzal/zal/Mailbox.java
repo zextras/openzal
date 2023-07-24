@@ -2044,33 +2044,6 @@ public class Mailbox
 
     return new Contact(contact);
   }
-
-  @Nonnull
-  public Note createNote(
-    @Nonnull OperationContext octxt, String content,
-                         @Nonnull Note.Rectangle rectangle, @Nonnull Item.Color color,
-                         int folderId
-  )
-    throws ZimbraException
-  {
-    MailItem note;
-    try
-    {
-      note = mMbox.createNote(
-        octxt.getOperationContext(),
-        content,
-        rectangle.toZimbra(com.zimbra.cs.mailbox.Note.Rectangle.class),
-        color.toZimbra(com.zimbra.common.mailbox.Color.class),
-        folderId);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Note(note);
-  }
-
   public int addInvite(
     @Nonnull OperationContext octxt, @Nonnull Invite inv,
                        int folderId, @Nullable ParsedMessage pm,

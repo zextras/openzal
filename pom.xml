@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>23.7.1</version>
+  <version>23.7.2</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -20,28 +20,6 @@
       <name>Maven public</name>
       <url>https://repo.maven.apache.org/maven2/</url>
     </repository>
-<!--    <repository>-->
-<!--      <id>zextras-public-snapshots</id>-->
-<!--      <name>Zextras public snaposhots</name>-->
-<!--      <url>https://repo.zextras.io/maven/snapshot</url>-->
-<!--      <releases>-->
-<!--        <enabled>false</enabled>-->
-<!--      </releases>-->
-<!--      <snapshots>-->
-<!--        <enabled>true</enabled>-->
-<!--      </snapshots>-->
-<!--    </repository>-->
-<!--    <repository>-->
-<!--      <id>zextras-public-release</id>-->
-<!--      <name>Zextras public releases</name>-->
-<!--      <url>https://repo.zextras.io/maven/release</url>-->
-<!--      <releases>-->
-<!--        <enabled>true</enabled>-->
-<!--      </releases>-->
-<!--      <snapshots>-->
-<!--        <enabled>false</enabled>-->
-<!--      </snapshots>-->
-<!--    </repository>-->
     <repository>
       <id>zextras-public-snapshots</id>
       <name>Zextras public maven snapshot repository</name>
@@ -104,7 +82,7 @@
   </distributionManagement>
 
   <properties>
-    <carbonio.version>23.8.0-SNAPSHOT</carbonio.version>
+    <carbonio.version>23.8.0</carbonio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>

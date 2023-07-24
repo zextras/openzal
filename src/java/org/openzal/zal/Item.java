@@ -54,7 +54,6 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_CONVERSATION         = 4;
   public static final byte TYPE_MESSAGE              = 5;
   public static final byte TYPE_CONTACT              = 6;
-  public static final byte TYPE_NOTE                 = 9;
   public static final byte TYPE_FLAG                 = 10;
   public static final byte TYPE_APPOINTMENT          = 11;
   public static final byte TYPE_VIRTUAL_CONVERSATION = 12;
@@ -234,12 +233,6 @@ public class Item implements Comparable<Item>
   public Flag toFlag()
   {
     return new Flag(mMailItem);
-  }
-
-  @Nonnull
-  public Note toNote()
-  {
-    return new Note(mMailItem);
   }
 
   @Nonnull

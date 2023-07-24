@@ -32,7 +32,6 @@ public class MailItemType
   public static          MailItemType TAG                  = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.TAG);
   public static          MailItemType CONVERSATION         = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.CONVERSATION);
   public static          MailItemType MESSAGE              = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.MESSAGE);
-  public static          MailItemType NOTE                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.NOTE);
   public static          MailItemType FLAG                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.FLAG);
   public static          MailItemType APPOINTMENT          = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.APPOINTMENT);
   public static          MailItemType VIRTUAL_CONVERSATION = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.VIRTUAL_CONVERSATION);
