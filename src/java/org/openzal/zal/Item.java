@@ -58,7 +58,6 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_APPOINTMENT          = 11;
   public static final byte TYPE_VIRTUAL_CONVERSATION = 12;
   public static final byte TYPE_MOUNTPOINT           = 13;
-  public static final byte TYPE_TASK                 = 15;
   public static final byte TYPE_CHAT                 = 16;
 
   // FIXME clone of Item.UnderlyingData.FIELD_INDEX_ID

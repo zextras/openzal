@@ -113,14 +113,9 @@ public class InviteFactory
     mICalAttachmentList = new ArrayList<>();
   }
 
-  public Invite createTask(Mailbox mbox)
-  {
-    return createInvite(mbox, true);
-  }
-
   public Invite createAppointment(Mailbox mbox)
   {
-    return createInvite(mbox, false);
+    return createInvite(mbox);
   }
 
   public void setTypeRequest()
@@ -366,9 +361,9 @@ public class InviteFactory
   }
 
 
-  private Invite createInvite(Mailbox mbox, boolean task)
+  private Invite createInvite(Mailbox mbox)
   {
-    byte type = (task ? Item.TYPE_TASK : Item.TYPE_APPOINTMENT);
+    byte type = Item.TYPE_APPOINTMENT;
 
     RecurId recurId;
     if(mExceptionStartTime != 0L)
@@ -391,7 +386,7 @@ public class InviteFactory
     organizer.setSentBy(sentByAddress);
 
     // This flag says whether the mailbox owner is the organizer of this event
-    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress) || (mOrganizerAddress == null && task);
+    boolean isOrganizer = mbox.getAccount().hasAddress(mOrganizerAddress);
 
     List<ZAttendee> zAttendeeList = new LinkedList<>();
     for (Attendee attendee : mAttendeeList)
@@ -441,7 +436,7 @@ public class InviteFactory
       dateEnd = ParsedDateTime.fromUTCTime(mUtcDateEnd, mTimezone.toZimbra(ICalTimeZone.class));
     }
 
-    if (mAllDayEvent || task)
+    if (mAllDayEvent)
     {
         dateStart.setHasTime(false);
         dateEnd.setHasTime(false);
@@ -451,7 +446,7 @@ public class InviteFactory
     ParsedDuration eventDuration = null;
     if (mRecurrenceRule != null)
     {
-      if (!mAllDayEvent && !task) {
+      if (!mAllDayEvent) {
         eventDuration = dateEnd.difference(dateStart);
       }
       Recurrence.IRecurrence simpleRecurrenceRule = new Recurrence.SimpleRepeatingRule(dateStart,
@@ -512,14 +507,7 @@ public class InviteFactory
       if( mAlarmSet )
       {
         Alarm alarm;
-        if (task)
-        {
-          alarm = Alarm.fromSimpleTime(ParsedDateTime.fromUTCTime(mReminderTime));
-        }
-        else
-        {
-          alarm = Alarm.fromSimpleReminder(mAlarmTime);
-        }
+        alarm = Alarm.fromSimpleReminder(mAlarmTime);
 
         invite.addAlarm(alarm);
       }

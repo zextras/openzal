@@ -36,8 +36,6 @@ public class MailItemType
   public static          MailItemType APPOINTMENT          = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.APPOINTMENT);
   public static          MailItemType VIRTUAL_CONVERSATION = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.VIRTUAL_CONVERSATION);
   public static          MailItemType MOUNTPOINT           = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.MOUNTPOINT);
-  @Deprecated
-  public static          MailItemType TASK                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.TASK);
   public static          MailItemType CHAT                 = new MailItemType(com.zimbra.cs.mailbox.MailItem.Type.CHAT);
 
   private final com.zimbra.cs.mailbox.MailItem.Type mType;

@@ -31,7 +31,6 @@ public class CacheEntryType
   private final com.zimbra.soap.admin.type.CacheEntryType mCacheEntryType;
 
   public static CacheEntryType locale  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.locale);
-  public static CacheEntryType skin    = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.skin);
   public static CacheEntryType license = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.license);
   public static CacheEntryType account = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.account);
   public static CacheEntryType config  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.config);
