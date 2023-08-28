@@ -22,8 +22,8 @@
     </repository>
     <repository>
       <id>zextras-public-snapshots</id>
-      <name>Zextras public snaposhots</name>
-      <url>https://repo.zextras.io/maven/snapshot</url>
+      <name>Zextras public maven snapshot repository</name>
+      <url>https://zextras.jfrog.io/artifactory/maven-snapshot</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -97,6 +97,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
+    <log4j.version>2.20.0</log4j.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commit.id>1.1.1</commit.id>
@@ -301,9 +302,9 @@
     </dependency>
 
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
 
     <dependency>

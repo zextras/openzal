@@ -10,10 +10,10 @@ import com.zimbra.cs.ephemeral.EphemeralStore;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import com.zimbra.cs.util.JMSession;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.MailboxManagerImp;
 import org.openzal.zal.Provisioning;
@@ -22,7 +22,7 @@ import org.openzal.zal.extension.Zimbra;
 // for testing purpose only
 public class ZalZimbraSimulator extends ExternalResource
 {
-  static Logger logger = Logger.getLogger(ZalZimbraSimulator.class);
+  static Logger logger = LogManager.getLogger(ZalZimbraSimulator.class);
 
   private MailboxManager mMailboxManager;
 
@@ -134,12 +134,12 @@ public class ZalZimbraSimulator extends ExternalResource
     System.setProperty("mail.mime.multipart.allowempty",    "true");
 
     System.setProperty("zimbra.native.required", "false");
-    System.setProperty("log4j.configuration", "it/data/carbonio/config/log4j-test.properties");
+    System.setProperty("log4j.configurationFile", "it/data/carbonio/config/log4j2-test.properties");
     System.setProperty("zimbra.config", "it/data/carbonio/config/localconfig-test.xml");
 
     LC.zimbra_attrs_directory.setDefault("it/data/carbonio/attrs/");
     LC.zimbra_rights_directory.setDefault("it/data/carbonio/rights/");
-    ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j-test.properties");
+    ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j2-test.properties");
 
     mTmpDir = createTmpDir("junit_tmp_");
     LC.calendar_cache_directory.setDefault(mTmpDir.getAbsolutePath());

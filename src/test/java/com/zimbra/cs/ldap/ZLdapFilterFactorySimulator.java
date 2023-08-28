@@ -253,14 +253,6 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
   }
 
   @Override
-  public ZLdapFilter accountsOnUCService(String ucServiceId) {
-    ZLdapFilter filter = Mockito.mock(ZLdapFilter.class);
-    when(filter.toFilterString()).thenReturn("");
-
-    return filter;
-  }
-
-  @Override
   public ZLdapFilter externalAccountsHomedOnServer(String serverServiceHostname) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class);     when(filter.toFilterString()).thenReturn("");      return filter;
   }
@@ -327,11 +319,6 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
 
   @Override
   public ZLdapFilter cosesByMailHostPool(String serverId) {
-     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
-  }
-
-  @Override
-  public ZLdapFilter cosesOnUCService(String ucServiceId) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
 
@@ -464,11 +451,6 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
   }
 
   @Override
-  public ZLdapFilter domainsOnUCService(String ucServiceId) {
-     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
-  }
-
-  @Override
   public ZLdapFilter globalConfig() {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
@@ -505,16 +487,6 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
 
   @Override
   public ZLdapFilter serverByService(String service) {
-     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
-  }
-
-  @Override
-  public ZLdapFilter allUCServices() {
-     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
-  }
-
-  @Override
-  public ZLdapFilter ucServiceById(String id) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
 

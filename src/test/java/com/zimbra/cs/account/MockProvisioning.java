@@ -1301,28 +1301,6 @@ public class MockProvisioning extends Provisioning
   public void deleteShareLocator(String id) throws ServiceException {
     shareLocators.remove(id);
   }
-
-  public UCService createUCService(String name, Map<String, Object> attrs)
-    throws ServiceException {
-    throw new UnsupportedOperationException();
-  }
-
-  public void deleteUCService(String zimbraId) throws ServiceException {
-    throw new UnsupportedOperationException();
-  }
-
-  public UCService get(Key.UCServiceBy keyName, String key) throws ServiceException {
-    throw new UnsupportedOperationException();
-  }
-
-  public List<UCService> getAllUCServices() throws ServiceException {
-    throw new UnsupportedOperationException();
-  }
-
-  public void renameUCService(String zimbraId, String newName) throws ServiceException {
-    throw new UnsupportedOperationException();
-  }
-
   public void searchAccountsOnServer(Server server, SearchAccountsOptions options, NamedEntry.Visitor visitor) throws ServiceException
   {
     for( Account account : getAllAccounts(null))

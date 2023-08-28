@@ -196,9 +196,6 @@ public interface Provisioning
   Config getConfig()
     throws ZimbraException;
 
-  List<UCService> getAllUCServices()
-      throws ZimbraException;
-
   @Nullable
   CalendarResource getCalendarResourceByName(String resourceName)
     throws ZimbraException;
@@ -421,8 +418,6 @@ public interface Provisioning
   int rawCountQuery(String base, String query);
 
   void registerChangePasswordListener(ChangePasswordListener listener);
-
-  void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener);
 
   long getLastLogonTimestampFrequency();
 

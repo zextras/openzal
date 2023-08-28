@@ -231,24 +231,6 @@ public class ZimbraListWrapper
   }
 
   @Nonnull
-  public static List<UCService> wrapUCServices(@Nullable List ucServices)
-  {
-    if (ucServices == null || ucServices.size() == 0)
-    {
-      return Collections.emptyList();
-    }
-
-    List<UCService> list = new ArrayList<UCService>(ucServices.size());
-    for (Object ucService : ucServices)
-    {
-      list.add(new UCService(ucService));
-    }
-
-    return list;
-  }
-
-
-  @Nonnull
   public static List<MPartInfo> wrapMPartInfos(@Nullable List<com.zimbra.cs.mime.MPartInfo> mPartInfos)
   {
     if (mPartInfos == null || mPartInfos.size() == 0)
