@@ -438,38 +438,6 @@ public class ProvisioningKey
     }
   }
 
-//  static class ByUCService
-//  {
-//    private final UCServiceBy mUCServiceBy;
-//
-//    @Nonnull public static ByUCService id   = new ByUCService(UCServiceBy.id);
-//    @Nonnull public static ByUCService name = new ByUCService(UCServiceBy.name);
-//
-//    ByUCService(UCServiceBy identityBy)
-//    {
-//      mUCServiceBy = identityBy;
-//    }
-//
-//    UCServiceBy toZimbra()
-//    {
-//      return mUCServiceBy;
-//    }
-//
-//    @Nonnull
-//    public static ByUCService fromString(String s)
-//      throws ServiceException
-//    {
-//      try
-//      {
-//        return new ByUCService(UCServiceBy.valueOf(s));
-//      }
-//      catch (IllegalArgumentException e)
-//      {
-//        throw ExceptionWrapper.wrap(ServiceException.INVALID_REQUEST("unknown key: " + s, e));
-//      }
-//    }
-//  }
-
   static class ByShareLocator
   {
     private final ShareLocatorBy mShareLocatorBy;
