@@ -191,7 +191,7 @@ pipeline {
               }
           }
       }
-      stage('Publish jdk 17 repos') {
+      stage('Upload & Promotion Config') {
           when {
               anyOf {
                   branch 'release/*'
@@ -214,12 +214,25 @@ pipeline {
                       "files": [
                           {
                               "pattern": "artifacts/carbonio-zal*.deb",
-                              "target": "ubuntu-rc-jdk17/pool/",
+                              "target": "ubuntu-rc/pool/",
                               "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
                           }
                       ]
                   }"""
                   server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
+                  config = [
+                          'buildName'          : buildInfo.name,
+                          'buildNumber'        : buildInfo.number,
+                          'sourceRepo'         : 'ubuntu-rc',
+                          'targetRepo'         : 'ubuntu-release',
+                          'comment'            : 'Do not change anything! Just press the button',
+                          'status'             : 'Released',
+                          'includeDependencies': false,
+                          'copy'               : true,
+                          'failFast'           : true
+                  ]
+                  Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Ubuntu Promotion to Release"
+                  server.publishBuildInfo buildInfo
 
                   //centos8
                   buildInfo = Artifactory.newBuildInfo()
@@ -228,88 +241,28 @@ pipeline {
                       "files": [
                           {
                               "pattern": "artifacts/(carbonio-zal)-(*).rpm",
-                              "target": "centos8-rc-jdk17/zextras/{1}/{1}-{2}.rpm",
+                              "target": "centos8-rc/zextras/{1}/{1}-{2}.rpm",
                               "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""
                   server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
+                  config = [
+                          'buildName'          : buildInfo.name,
+                          'buildNumber'        : buildInfo.number,
+                          'sourceRepo'         : 'centos8-rc',
+                          'targetRepo'         : 'centos8-release',
+                          'comment'            : 'Do not change anything! Just press the button',
+                          'status'             : 'Released',
+                          'includeDependencies': false,
+                          'copy'               : true,
+                          'failFast'           : true
+                  ]
+                  Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Centos8 Promotion to Release"
+                  server.publishBuildInfo buildInfo
+
               }
           }
-      }
-
-      //stage('Upload & Promotion Config') {
-      //    when {
-      //        anyOf {
-      //            branch 'release/*'
-      //            buildingTag()
-      //        }
-      //    }
-      //    steps {
-      //        unstash 'artifacts-deb'
-      //        unstash 'artifacts-rpm'
-      //        script {
-      //            def server = Artifactory.server 'zextras-artifactory'
-      //            def buildInfo
-      //            def uploadSpec
-      //            def config
-//
-      //            //ubuntu
-      //            buildInfo = Artifactory.newBuildInfo()
-      //            buildInfo.name += "-ubuntu"
-      //            uploadSpec= """{
-      //                "files": [
-      //                    {
-      //                        "pattern": "artifacts/carbonio-zal*.deb",
-      //                        "target": "ubuntu-rc/pool/",
-      //                        "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
-      //                    }
-      //                ]
-      //            }"""
-      //            server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
-      //            config = [
-      //                    'buildName'          : buildInfo.name,
-      //                    'buildNumber'        : buildInfo.number,
-      //                    'sourceRepo'         : 'ubuntu-rc',
-      //                    'targetRepo'         : 'ubuntu-release',
-      //                    'comment'            : 'Do not change anything! Just press the button',
-      //                    'status'             : 'Released',
-      //                    'includeDependencies': false,
-      //                    'copy'               : true,
-      //                    'failFast'           : true
-      //            ]
-      //            Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Ubuntu Promotion to Release"
-      //            server.publishBuildInfo buildInfo
-//
-      //            //centos8
-      //            buildInfo = Artifactory.newBuildInfo()
-      //            buildInfo.name += "-centos8"
-      //            uploadSpec= """{
-      //                "files": [
-      //                    {
-      //                        "pattern": "artifacts/(carbonio-zal)-(*).rpm",
-      //                        "target": "centos8-rc/zextras/{1}/{1}-{2}.rpm",
-      //                        "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
-      //                    }
-      //                ]
-      //            }"""
-      //            server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
-      //            config = [
-      //                    'buildName'          : buildInfo.name,
-      //                    'buildNumber'        : buildInfo.number,
-      //                    'sourceRepo'         : 'centos8-rc',
-      //                    'targetRepo'         : 'centos8-release',
-      //                    'comment'            : 'Do not change anything! Just press the button',
-      //                    'status'             : 'Released',
-      //                    'includeDependencies': false,
-      //                    'copy'               : true,
-      //                    'failFast'           : true
-      //            ]
-      //            Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Centos8 Promotion to Release"
-      //            server.publishBuildInfo buildInfo
-//
-      //        }
-      //    }
-      //}
+       }
     }
 }
