@@ -54,17 +54,11 @@ public class Item implements Comparable<Item>
   public static final byte TYPE_CONVERSATION         = 4;
   public static final byte TYPE_MESSAGE              = 5;
   public static final byte TYPE_CONTACT              = 6;
-  public static final byte TYPE_DOCUMENT             = 8;
-  public static final byte TYPE_NOTE                 = 9;
   public static final byte TYPE_FLAG                 = 10;
   public static final byte TYPE_APPOINTMENT          = 11;
   public static final byte TYPE_VIRTUAL_CONVERSATION = 12;
   public static final byte TYPE_MOUNTPOINT           = 13;
-  public static final byte TYPE_WIKI                 = 14; //DEPRECATED
-  public static final byte TYPE_TASK                 = 15;
   public static final byte TYPE_CHAT                 = 16;
-  public static final byte TYPE_COMMENT              = 17;
-  public static final byte TYPE_LINK                 = 18;
 
   // FIXME clone of Item.UnderlyingData.FIELD_INDEX_ID
   public static final String FN_INDEX_ID = "idx";
@@ -223,12 +217,6 @@ public class Item implements Comparable<Item>
   }
 
   @Nonnull
-  public org.openzal.zal.Document toDocument()
-  {
-    return new org.openzal.zal.Document(mMailItem);
-  }
-
-  @Nonnull
   public Task toTask()
   {
     return new Task(mMailItem);
@@ -244,12 +232,6 @@ public class Item implements Comparable<Item>
   public Flag toFlag()
   {
     return new Flag(mMailItem);
-  }
-
-  @Nonnull
-  public Note toNote()
-  {
-    return new Note(mMailItem);
   }
 
   @Nonnull
@@ -274,18 +256,6 @@ public class Item implements Comparable<Item>
   public Mountpoint toMountpoint()
   {
     return new Mountpoint(mMailItem);
-  }
-
-  @Nonnull
-  public Comment toComment()
-  {
-    return new Comment(mMailItem);
-  }
-
-  @Nonnull
-  public Link toLink()
-  {
-    return new Link(mMailItem);
   }
 
   @Nullable

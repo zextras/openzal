@@ -1381,20 +1381,6 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public List<UCService> getAllUCServices()
-    throws ZimbraException
-  {
-    try
-    {
-      return ZimbraListWrapper.wrapUCServices(mProvisioning.getAllUCServices());
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
   @Nullable
   public CalendarResource getCalendarResourceByName(String resourceName)
     throws ZimbraException
@@ -3212,12 +3198,6 @@ public class ProvisioningImp implements Provisioning
   public void registerChangePasswordListener(ChangePasswordListener listener)
   {
     com.zimbra.cs.account.ldap.ChangePasswordListener.registerInternal(com.zimbra.cs.account.ldap.ChangePasswordListener.InternalChangePasswordListenerId.CPL_SYNC, new ChangePasswordListenerWrapper(listener));
-  }
-
-  @Override
-  public void registerTwoFactorChangeListener(String name, TwoFactorAuthChangeListener listener)
-  {
-    TwoFactorAuthChangeListenerWrapper.wrap(listener).register(name);
   }
 
   public boolean doExternalLdapAuth(

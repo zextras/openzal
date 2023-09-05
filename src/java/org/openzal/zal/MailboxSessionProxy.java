@@ -104,7 +104,6 @@ public class MailboxSessionProxy
       case Item.TYPE_MESSAGE:
       case Item.TYPE_CONTACT:
       case Item.TYPE_APPOINTMENT:
-      case Item.TYPE_TASK:
         isRelevant = true;
     }
 

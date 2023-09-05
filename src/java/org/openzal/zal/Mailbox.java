@@ -114,10 +114,8 @@ public class Mailbox
   public static final int ID_FOLDER_CALENDAR      = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_CALENDAR;
   public static final int ID_FOLDER_ROOT          = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_ROOT;
   @Deprecated
-  public static final int ID_FOLDER_NOTEBOOK      = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_NOTEBOOK;
   public static final int ID_FOLDER_AUTO_CONTACTS = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_AUTO_CONTACTS;
   public static final int ID_FOLDER_IM_LOGS       = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_IM_LOGS;
-  public static final int ID_FOLDER_TASKS         = com.zimbra.cs.mailbox.Mailbox.ID_FOLDER_TASKS;
   public static final int ID_FOLDER_COMMENTS      = 17;
   public static final int ID_FOLDER_PROFILE       = 18;
 
@@ -162,23 +160,6 @@ public class Mailbox
     try
     {
       mMbox.emptyFolder(zContext.getOperationContext(), folderId, withDeleteSubFolders);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  public void deleteRevision(@Nonnull OperationContext zContext, int itemId, int revision)
-  {
-    try
-    {
-      mMbox.purgeRevision(
-        zContext.getOperationContext(),
-        itemId,
-        revision,
-        false
-      );
     }
     catch (ServiceException e)
     {
@@ -430,39 +411,6 @@ public class Mailbox
     }
     return new Item(item);
   }
-
-  @Nonnull
-  public Document getDocumentById(@Nonnull OperationContext zContext, int id)
-    throws NoSuchItemException
-  {
-    MailItem item;
-    try
-    {
-      item = mMbox.getDocumentById(zContext.getOperationContext(), id);
-    }
-    catch (com.zimbra.common.service.ServiceException serviceException)
-    {
-      throw ExceptionWrapper.wrap(serviceException);
-    }
-    return new Document(item);
-  }
-
-  @Nonnull
-  public Document getDocumentByUuid(@Nonnull OperationContext zContext, String uuid)
-    throws NoSuchItemException
-  {
-    MailItem item;
-    try
-    {
-      item = mMbox.getDocumentByUuid(zContext.getOperationContext(), uuid);
-    }
-    catch (com.zimbra.common.service.ServiceException serviceException)
-    {
-      throw ExceptionWrapper.wrap(serviceException);
-    }
-    return new Document(item);
-  }
-
 
   @Nonnull
   public Item getItemByIdFromDumpster(@Nonnull OperationContext zContext, int id, byte type)
@@ -1828,7 +1776,7 @@ public class Mailbox
         name,
         parentId,
         attrs,
-        Item.convertType(defaultView == Item.TYPE_WIKI ? Item.TYPE_DOCUMENT : defaultView),
+        Item.convertType(defaultView),
         flags,
         color.toZimbra(com.zimbra.common.mailbox.Color.class),
         url
@@ -2094,179 +2042,6 @@ public class Mailbox
 
     return new Contact(contact);
   }
-
-  @Nonnull
-  public Document createDocument(
-    @Nonnull OperationContext octxt,
-    int folderId,
-    @Nonnull ParsedDocument pd,
-    byte type, int flags
-  )
-    throws IOException, ZimbraException
-  {
-    MailItem document;
-    try
-    {
-      document = mMbox.createDocument(
-        octxt.getOperationContext(),
-        folderId,
-        pd.toZimbra(com.zimbra.cs.mime.ParsedDocument.class),
-        Item.convertType(type),
-        flags
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Document(document);
-  }
-
-  @Nonnull
-  public Document simpleCreateDocument(
-    @Nonnull OperationContext octxt,
-    int folderId,
-    FileInputStream fileInputStream,
-    String filename,
-    String mimetype,
-    long timestamp
-  )
-    throws IOException, ZimbraException
-  {
-    ParsedDocument document = new ParsedDocument(
-      fileInputStream,
-      filename,
-      mimetype,
-      System.currentTimeMillis(),
-      "",
-      ""
-    );
-
-    return createDocument(
-      octxt,
-      folderId,
-      document,
-      Item.TYPE_DOCUMENT,
-      0
-    );
-  }
-
-  @Nonnull
-  public Document addDocumentRevision(
-    @Nonnull OperationContext octxt,
-    int docId,
-    String author,
-    String name,
-    String description,
-    InputStream data
-  )
-    throws ZimbraException
-  {
-    MailItem document;
-    try
-    {
-      document = mMbox.addDocumentRevision(
-        octxt.getOperationContext(),
-        docId,
-        author,
-        name,
-        description,
-        data
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Document(document);
-  }
-
-  @Nonnull
-  public Document addDocumentRevision(
-    @Nonnull OperationContext octxt,
-    int docId,
-    ParsedDocument parsedDocument
-  )
-    throws ZimbraException, IOException
-  {
-    MailItem document;
-    try
-    {
-      document = mMbox.addDocumentRevision(
-        octxt.getOperationContext(),
-        docId,
-        parsedDocument.toZimbra(com.zimbra.cs.mime.ParsedDocument.class)
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Document(document);
-  }
-
-  @Nonnull
-  public Document createDocument(
-    @Nonnull OperationContext octxt, int folderId,
-                                 String filename, String mimeType,
-                                 String author, String description,
-                                 boolean descEnabled,
-                                 InputStream data, byte type
-  )
-    throws ZimbraException
-  {
-    MailItem document;
-    try
-    {
-      document = mMbox.createDocument(
-        octxt.getOperationContext(),
-        folderId,
-        filename,
-        mimeType,
-        author,
-        description,
-        descEnabled,
-        data,
-        Item.convertType(Item.TYPE_DOCUMENT)
-      );
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Document(document);
-  }
-
-  @Nonnull
-  public Note createNote(
-    @Nonnull OperationContext octxt, String content,
-                         @Nonnull Note.Rectangle rectangle, @Nonnull Item.Color color,
-                         int folderId
-  )
-    throws ZimbraException
-  {
-    MailItem note;
-    try
-    {
-      note = mMbox.createNote(
-        octxt.getOperationContext(),
-        content,
-        rectangle.toZimbra(com.zimbra.cs.mailbox.Note.Rectangle.class),
-        color.toZimbra(com.zimbra.common.mailbox.Color.class),
-        folderId);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Note(note);
-  }
-
   public int addInvite(
     @Nonnull OperationContext octxt, @Nonnull Invite inv,
                        int folderId, @Nullable ParsedMessage pm,
@@ -2427,51 +2202,6 @@ public class Mailbox
     }
 
     return new Chat(chat);
-  }
-
-  @Nonnull
-  public Comment createComment(
-    @Nonnull OperationContext octxt,
-                               int parentId,
-                               String text,
-                               String creator
-  )
-    throws ZimbraException
-  {
-    MailItem comment;
-    try
-    {
-      comment = mMbox.createComment(octxt.getOperationContext(), parentId, text, creator);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Comment(comment);
-  }
-
-  @Nonnull
-  public Link createLink(
-    @Nonnull OperationContext octxt,
-                         int parentId,
-                         String name,
-                         String ownerId,
-                         int remoteId
-  )
-    throws ZimbraException
-  {
-    MailItem link;
-    try
-    {
-      link = mMbox.createLink(octxt.getOperationContext(), parentId, name, ownerId, remoteId);
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-
-    return new Link(link);
   }
 
   @Nullable private static Method sEndTransactionMethod = null;

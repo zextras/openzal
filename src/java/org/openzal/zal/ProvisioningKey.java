@@ -34,7 +34,6 @@ import com.zimbra.common.account.Key.IdentityBy;
 import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.account.Key.ShareLocatorBy;
 import com.zimbra.common.account.Key.SignatureBy;
-import com.zimbra.common.account.Key.UCServiceBy;
 import com.zimbra.common.account.Key.XMPPComponentBy;
 import com.zimbra.common.account.Key.ZimletBy;
 
@@ -431,38 +430,6 @@ public class ProvisioningKey
       try
       {
         return new ByDistributionList(DistributionListBy.valueOf(s));
-      }
-      catch (IllegalArgumentException e)
-      {
-        throw ExceptionWrapper.wrap(ServiceException.INVALID_REQUEST("unknown key: " + s, e));
-      }
-    }
-  }
-
-  static class ByUCService
-  {
-    private final UCServiceBy mUCServiceBy;
-
-    @Nonnull public static ByUCService id   = new ByUCService(UCServiceBy.id);
-    @Nonnull public static ByUCService name = new ByUCService(UCServiceBy.name);
-
-    ByUCService(UCServiceBy identityBy)
-    {
-      mUCServiceBy = identityBy;
-    }
-
-    UCServiceBy toZimbra()
-    {
-      return mUCServiceBy;
-    }
-
-    @Nonnull
-    public static ByUCService fromString(String s)
-      throws ServiceException
-    {
-      try
-      {
-        return new ByUCService(UCServiceBy.valueOf(s));
       }
       catch (IllegalArgumentException e)
       {

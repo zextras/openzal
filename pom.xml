@@ -6,7 +6,7 @@
 
   <groupId>org.openzal</groupId>
   <artifactId>zal</artifactId>
-  <version>23.7.1</version>
+  <version>23.9.0</version>
   <packaging>jar</packaging>
 
   <repositories>
@@ -22,8 +22,8 @@
     </repository>
     <repository>
       <id>zextras-public-snapshots</id>
-      <name>Zextras public snaposhots</name>
-      <url>https://repo.zextras.io/maven/snapshot</url>
+      <name>Zextras public maven snapshot repository</name>
+      <url>https://zextras.jfrog.io/artifactory/maven-snapshot</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -34,7 +34,7 @@
     <repository>
       <id>zextras-public-release</id>
       <name>Zextras public releases</name>
-      <url>https://repo.zextras.io/maven/release</url>
+      <url>https://zextras.jfrog.io/artifactory/public-maven-repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -42,6 +42,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+
   </repositories>
 
   <pluginRepositories>
@@ -93,16 +94,18 @@
   </distributionManagement>
 
   <properties>
-    <carbonio.version>23.7.1</carbonio.version>
+    <carbonio.version>23.9.0</carbonio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.8.11</jackson.version>
     <jfreechart.version>1.0.15</jfreechart.version>
+    <log4j.version>2.20.0</log4j.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <commit.id>1.1.1</commit.id>
     <jetty.version>9.3.5.v20151012</jetty.version>
     <servlet.version>3.1.0</servlet.version>
     <junit.version>4.13.1</junit.version>
+    <httpcomponents.version>4.5.13</httpcomponents.version>
     <maven-s3-storage.version>3.0.1</maven-s3-storage.version>
     <zextras-public-repo.url>s3://zextras-public-repositories</zextras-public-repo.url>
     <execute.fast.compatibility>true</execute.fast.compatibility>
@@ -202,7 +205,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>25.1-jre</version>
+      <version>28.1-jre</version>
     </dependency>
 
     <dependency>
@@ -221,6 +224,11 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
       <version>4.4.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>${httpcomponents.version}</version>
     </dependency>
 
     <dependency>
@@ -290,7 +298,7 @@
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>javax.mail-api</artifactId>
-      <version>1.4.5</version>
+      <version>1.4.7</version>
       <scope>provided</scope>
     </dependency>
 
@@ -301,9 +309,9 @@
     </dependency>
 
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
 
     <dependency>
@@ -485,6 +493,55 @@
           <artifactId>junixsocket</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+      <artifactId>concurrentlinkedhashmap-lru</artifactId>
+      <version>1.3.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.7</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.freeutils</groupId>
+      <artifactId>jtnef</artifactId>
+      <version>1.9.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ical4j</groupId>
+      <artifactId>ical4j</artifactId>
+      <version>0.9.16-patched</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.spy</groupId>
+      <artifactId>spymemcached</artifactId>
+      <version>2.12.1</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
