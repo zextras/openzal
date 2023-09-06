@@ -174,6 +174,7 @@ public interface Provisioning
   List<Server> getAllServers()
     throws ZimbraException;
 
+  List<Server> getAllReachableMailboxes() throws ZimbraException;
   List<Server> getAllServers(String service)
     throws ZimbraException;
 
