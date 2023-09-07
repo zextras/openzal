@@ -56,7 +56,7 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv(credentialsId: 'sonarqube-user-token', installationName: 'SonarQube instance') {
-                    mvnCmd('-Dsonar.sources=src/java sonar:sonar')
+                    mvnCmd('-Dsonar.sources=src/main/java sonar:sonar')
                 }
             }
         }
