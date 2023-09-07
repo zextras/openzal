@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -1224,12 +1225,14 @@ public class ProvisioningImp implements Provisioning
     }
   }
 
-  public static final int HEALTH_CHECK_PORT = 8743;
+  private static final int HEALTH_CHECK_PORT = 8743;
+  private static final int HEALTH_CHECK_TIMEOUT = 10000;
   private static boolean isReachable(com.zimbra.cs.account.Server server) {
     Socket socket = null;
     try {
       String ipAddress = server.getIPAddress();
-      socket = new Socket(ipAddress, HEALTH_CHECK_PORT);
+      socket = new Socket();
+      socket.connect(new InetSocketAddress(ipAddress, HEALTH_CHECK_PORT), HEALTH_CHECK_TIMEOUT);
       return true;
     } catch (Exception e) {
       ZimbraLog.extensions.warn(String.format("Address %s:%s is not reachable", server.getHostname(), HEALTH_CHECK_PORT));
