@@ -911,20 +911,6 @@ public class ProvisioningImp implements Provisioning
   }
 
   @Override
-  public Zimlet assertZimlet(String zimletName)
-  {
-    Zimlet zimlet = getZimlet(zimletName);
-    if( zimlet == null )
-    {
-      throw new NoSuchZimletException(zimletName);
-    }
-    else
-    {
-      return zimlet;
-    }
-  }
-
-  @Override
   public List<Domain> getAllDomains()
     throws ZimbraException
   {
@@ -951,29 +937,6 @@ public class ProvisioningImp implements Provisioning
     }
     catch (com.zimbra.common.service.ServiceException e) {
       throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  @Nonnull
-  public Zimlet getZimlet(String zimletName)
-    throws ZimbraException
-  {
-    try
-    {
-      com.zimbra.cs.account.Zimlet zimlet = mProvisioning.getZimlet(zimletName);
-      if (zimlet == null)
-      {
-        throw ExceptionWrapper.createNoSuchZimletException("Zimlet " + zimletName + " not found.");
-      }
-      else
-      {
-        return new Zimlet(zimlet);
-      }
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.createNoSuchZimletException(e);
     }
   }
 
@@ -1304,20 +1267,6 @@ public class ProvisioningImp implements Provisioning
       );
     }
     catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  public List<Zimlet> listAllZimlets()
-    throws ZimbraException
-  {
-    try
-    {
-      return ZimbraListWrapper.wrapZimlets(mProvisioning.listAllZimlets());
-    }
-    catch (com.zimbra.common.service.ServiceException e)
     {
       throw ExceptionWrapper.wrap(e);
     }
@@ -2413,28 +2362,6 @@ public class ProvisioningImp implements Provisioning
     try
     {
       return mProvisioning.onLocalServer(userAccount.toZimbra(com.zimbra.cs.account.Account.class));
-    }
-    catch (com.zimbra.common.service.ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-  }
-
-  @Override
-  @Nullable
-  public Zimlet createZimlet(String name, Map<String, Object> attrs) throws org.openzal.zal.exceptions.ZimbraException
-  {
-    try
-    {
-      com.zimbra.cs.account.Zimlet zimlet = mProvisioning.createZimlet(name, attrs);
-      if (zimlet == null)
-      {
-        return null;
-      }
-      else
-      {
-        return new Zimlet(zimlet);
-      }
     }
     catch (com.zimbra.common.service.ServiceException e)
     {

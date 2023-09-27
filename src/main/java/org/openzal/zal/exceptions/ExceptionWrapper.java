@@ -46,6 +46,7 @@ public class ExceptionWrapper
   private static final String DEFAULT                  = "unknownException";
   private static final String LDAP_EXCEPTION           = "ldapException";
   private static final String EXTENSION_EXCEPTION      = "extensionException";
+  // FIXME it seems ZIMLET_EXCEPTION is non useful anymore
   private static final String ZIMLET_EXCEPTION         = "zimletException";
   private static final String AUTH_TOKEN_EXCEPTION     = "authTokenException";
 
@@ -383,10 +384,6 @@ public class ExceptionWrapper
     {
       return mExceptionMap.get(EXTENSION_EXCEPTION).create(extensionException);
     }
-    catch(com.zimbra.cs.zimlet.ZimletException zimletException)
-    {
-      return mExceptionMap.get(ZIMLET_EXCEPTION).create(zimletException);
-    }
     catch(com.zimbra.cs.account.AuthTokenException authTokenException)
     {
       return mExceptionMap.get(AUTH_TOKEN_EXCEPTION).create(authTokenException);
@@ -433,19 +430,5 @@ public class ExceptionWrapper
   )
   {
     throw new UnableToObtainDBConnectionException(e);
-  }
-
-  public static NoSuchZimletException createNoSuchZimletException(
-    com.zimbra.common.service.ServiceException e
-  )
-  {
-    throw new NoSuchZimletException(e);
-  }
-
-  public static NoSuchZimletException createNoSuchZimletException(
-    String msg
-  )
-  {
-    throw new NoSuchZimletException(msg);
   }
 }
