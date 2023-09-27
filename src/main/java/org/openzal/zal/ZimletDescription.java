@@ -45,6 +45,6 @@ public class ZimletDescription
   public Version getVersion()
   {
     String version = mZimletDescription.getVersion().toString();
-    return new Version(version);
+    return Version.parse(version);
   }
 }

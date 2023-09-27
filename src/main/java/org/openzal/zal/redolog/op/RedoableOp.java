@@ -98,7 +98,7 @@ public class RedoableOp
   public Version getVersion()
     throws Exception
   {
-    return new Version(sGetVersionMethod.invoke(mRedoableOp).toString());
+    return Version.parse(sGetVersionMethod.invoke(mRedoableOp).toString());
   }
 
   public String toString()

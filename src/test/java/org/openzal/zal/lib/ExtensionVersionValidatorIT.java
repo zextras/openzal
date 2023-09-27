@@ -24,7 +24,7 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(1,2,3));
+    mValidator.validate(mJar, Version.of(1,2,3));
   }
 
   @Test
@@ -32,7 +32,7 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(1,2,4));
+    mValidator.validate(mJar, Version.of(1,2,4));
   }
 
   @Test
@@ -40,7 +40,7 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(1,2,2));
+    mValidator.validate(mJar, Version.of(1,2,2));
   }
 
   @Test
@@ -48,7 +48,7 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(1,3,3));
+    mValidator.validate(mJar, Version.of(1,3,3));
   }
 
   @Test
@@ -56,7 +56,7 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(2,2,3));
+    mValidator.validate(mJar, Version.of(2,2,3));
   }
 
   @Test
@@ -64,6 +64,6 @@ public class ExtensionVersionValidatorIT
   {
     when(mJar.getAttributeInManifest("ZAL-Required-Version")).thenReturn("1.2.3");
 
-    mValidator.validate(mJar, new Version(2,3,3));
+    mValidator.validate(mJar, Version.of(2,3,3));
   }
 }
