@@ -1,160 +1,125 @@
-/*
- * ZAL - The abstraction layer for Zimbra.
- * Copyright (C) 2016 ZeXtras S.r.l.
- *
- * This file is part of ZAL.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, version 2 of
- * the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with ZAL. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.openzal.zal.lib;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.Optional;
 
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+public class Version implements Comparable<Version> {
 
-public class Version implements Comparable<Version>
-{
-  private final int[] mVersionParts;
+  private final int major;
+  private final Optional<Integer> minor;
+  private final Optional<String> patch;
 
-  public Version(int ... versionParts)
-  {
-    if(versionParts.length == 0) {
-      throw new InvalidParameterException();
-    }
-    mVersionParts = Arrays.copyOf(versionParts,versionParts.length);
+  public static Version of(int major) {
+    return new Version(major, Optional.empty(), Optional.empty());
   }
 
-  public Version(@Nonnull String v)
-    throws NumberFormatException
-  {
-    int snapshotIndex = v.indexOf("-SNAPSHOT");
+  public static Version of(int major, int minor) {
+    return new Version(major, Optional.of(minor), Optional.empty());
+  }
 
-    String version = (snapshotIndex > 0) ? v.substring(0, snapshotIndex) : v;
-    final List<Integer> versionParts = new ArrayList<Integer>(3);
+  public static Version of(int major, int minor, int patch) {
+    return new Version(major, Optional.of(minor), Optional.of(String.valueOf(patch)));
+  }
 
-    for(String part : version.split("\\."))
-    {
-      versionParts.add(Integer.valueOf(part));
+  public static Version of(int major, int minor, int patch, String releaseType) {
+    return new Version(major, Optional.of(minor), Optional.of(String.format("%s-%s", patch, releaseType)));
+  }
+
+  public static Version parse(String v) {
+    int i0 = v.indexOf('.');
+    if (i0 == -1) {
+      return new Version(Integer.parseInt(v), Optional.empty(), Optional.empty());
+    } else {
+      int i1 = v.indexOf('.', i0+1);
+      int major = Integer.parseInt(v.substring(0, i0));
+      if (i1 == -1) {
+        return new Version(major, Optional.of(Integer.parseInt(v.substring(i0+1))), Optional.empty());
+      } else {
+        String patch = v.substring(i1 + 1);
+        return new Version(major, Optional.of(Integer.parseInt(v.substring(i0+1, i1))), patch.length() > 0 ? Optional.of(patch) : Optional.empty());
+      }
     }
+  }
 
-    final int size = versionParts.size();
+  protected Version(int major, Optional<Integer> minor, Optional<String> patch) {
+    this.major = major;
+    this.minor = minor;
+    this.patch = patch;
+  }
 
-    mVersionParts = new int[versionParts.size()];
+  public int getMajor() {
+    return major;
+  }
 
-    for(int i = 0 ; i < size ; i++)
-    {
-      mVersionParts[i] = versionParts.get(i);
+  public int getMinor() {
+    return minor.orElse(0);
+  }
+
+  public Optional<String> getPatch() {
+    return patch;
+  }
+
+  public int getPatchAsNumber() {
+    if (!patch.isPresent()) return 0;
+    String ps = patch.get();
+    StringBuilder digits = new StringBuilder();
+    for (int i = 0; i < ps.length(); i++) {
+      char ch = ps.charAt(i);
+      if (Character.isDigit(ch)) {
+        digits.append(ch);
+      }
+    }
+    if (digits.length() == 0) {
+      return 0;
+    } else {
+      return Integer.valueOf(digits.toString());
+    }
+  }
+
+  public Version withPatch(Optional<String> p) {
+    return new Version(major, minor, p);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Version)) {
+      return false;
+    }
+    Version version = (Version) o;
+    return getMajor() == version.getMajor() && Objects.equals(getMinor(), version.getMinor()) && Objects.equals(getPatch(),
+        version.getPatch());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getMajor(), getMinor(), getPatch());
+  }
+
+  static <A extends Comparable<A>> int compareOpt(Optional<A> a1, Optional<A> a2) {
+    if (a1.isPresent() && a2.isPresent()) {
+      return a1.get().compareTo(a2.get());
+    } else if (!a1.isPresent() && !a2.isPresent()) {
+      return 0;
+    } else if (a1.isPresent()) {
+      return 1;
+    } else {
+      return -1;
     }
   }
 
   @Override
-  public int compareTo(@Nonnull Version version)
-  {
-    int maxSize = Math.max(mVersionParts.length, version.mVersionParts.length);
-
-    for (int i = 0 ; i < maxSize ; i++)
-    {
-      int thisPart  = getPartValue(i);
-      int otherPart = version.getPartValue(i);
-
-      if (otherPart > thisPart)
-      {
-        return -1;
-      }
-
-      if (otherPart < thisPart)
-      {
-        return 1;
+  public int compareTo(Version o) {
+    int r = Integer.compare(major, o.getMajor());
+    if (r == 0) {
+      r = Integer.compare(getMinor(), o.getMinor());
+      if (r == 0) {
+        r = compareOpt(getPatch(), o.getPatch());
       }
     }
-
-    return 0;
-  }
-
-  public int getPartCount()
-  {
-    return mVersionParts.length;
-  }
-
-  private int getPartValue(int partIndex)
-  {
-    return partIndex < mVersionParts.length ? mVersionParts[partIndex] : 0;
-  }
-
-  public String toString()
-  {
-    StringBuilder sb = new StringBuilder(8);
-
-    for(int i = 0 ; i < mVersionParts.length - 1 ; i++)
-    {
-      sb.append(mVersionParts[i]);
-      sb.append('.');
-    }
-
-    sb.append(mVersionParts[mVersionParts.length-1]);
-
-    return sb.toString();
-  }
-
-  public int getMajor()
-  {
-    return getPartValue(0);
-  }
-
-  public int getMinor()
-  {
-    return getPartValue(1);
-  }
-
-  public int getMicro()
-  {
-    return getPartValue(2);
-  }
-
-  public boolean is(int major)
-  {
-    return getPartValue(0) == major;
-  }
-
-  public boolean is(int major, int minor)
-  {
-    return is(major) && getPartValue(1) == minor;
-  }
-
-  public boolean is(int major, int minor, int micro)
-  {
-    return is(major, minor) && getPartValue(2) == micro;
-  }
-
-  public boolean isAtLeast(int major)
-  {
-    return compareTo(new Version(major)) >= 0;
-  }
-
-  public boolean isAtLeast(int major, int minor)
-  {
-    return compareTo(new Version(major, minor)) >= 0;
-  }
-
-  public boolean isAtLeast(int major, int minor, int micro)
-  {
-    return compareTo(new Version(major, minor, micro)) >= 0;
+    return r;
   }
 
   public boolean isAtLeast(Version version)
@@ -163,73 +128,19 @@ public class Version implements Comparable<Version>
   }
 
   @Override
-  public boolean equals(@Nullable Object o)
-  {
-    if (this == o)
-    {
-      return true;
+  public String toString() {
+    if (!minor.isPresent()) {
+        return String.valueOf(major);
+    } else {
+      if (patch.isPresent()) {
+        return String.format("%s.%s.%s", getMajor(), getMinor(), getPatch().get());
+      } else {
+        return String.format("%s.%s", getMajor(), getMinor());
+      }
     }
-    if (o == null || !(o instanceof Version))
-    {
-      return false;
-    }
-
-    Version version = (Version) o;
-
-    return compareTo(version) == 0;
   }
 
-  @Override
-  public int hashCode()
-  {
-    return Arrays.hashCode(mVersionParts);
-  }
-
-  public boolean isAtMost(int major)
-  {
-    return compareTo(new Version(major)) <= 0;
-  }
-
-  public boolean isAtMost(int major, int minor)
-  {
-    return compareTo(new Version(major, minor)) <= 0;
-  }
-
-  public boolean isAtMost(int major, int minor, int micro)
-  {
-    return compareTo(new Version(major, minor, micro)) <= 0;
-  }
-
-  public boolean isAtMost(Version version)
-  {
-    return compareTo(version) <= 0;
-  }
-
-
-  public boolean lessThan(int major)
-  {
-    return compareTo(new Version(major)) < 0;
-  }
-
-  public boolean lessThan(int major, int minor)
-  {
-    return compareTo(new Version(major, minor)) < 0;
-  }
-
-  public boolean lessThan(int major, int minor, int micro)
-  {
-    return compareTo(new Version(major, minor, micro)) < 0;
-  }
-
-  public boolean lessThan(Version version)
-  {
+  public boolean lessThan(Version version) {
     return compareTo(version) < 0;
-  }
-
-  public Version truncate(int maxParts)
-  {
-    final int howManyParts = Math.min(maxParts, mVersionParts.length);
-    int[] versionParts = Arrays.copyOf(mVersionParts, howManyParts);
-    return new Version(versionParts);
   }
 }

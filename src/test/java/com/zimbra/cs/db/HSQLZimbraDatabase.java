@@ -4,12 +4,7 @@ package com.zimbra.cs.db;
  * Zimbra Collaboration Suite Server
  */
 
-import org.junit.Rule;
-import org.junit.rules.TestName;
-import org.openzal.zal.lib.ZimbraVersion;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.Mailbox;
-
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +13,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-
 import org.hsqldb.cmdline.SqlFile;
 
 public final class HSQLZimbraDatabase extends Db
@@ -61,11 +55,7 @@ public final class HSQLZimbraDatabase extends Db
 
   public static String getBaseSqlPath()
   {
-    if( ZimbraVersion.current.getMajor() >= 20 ) {
-      return "it/data/carbonio/sql/";
-    } else {
-      return "it/data/zimbra-sql/hsqldb-" + ZimbraVersion.current.getMajor() + "." + ZimbraVersion.current.getMinor() + "/";
-    }
+    return "it/data/carbonio/sql/";
   }
 
   //

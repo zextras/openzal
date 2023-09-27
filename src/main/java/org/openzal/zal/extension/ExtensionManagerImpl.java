@@ -173,8 +173,12 @@ class ExtensionManagerImpl implements ExtensionManager
 
     public boolean isCompatible(Version currentVersion)
     {
-      return currentVersion.truncate(2).equals(mRequiredVersion.truncate(2)) &&
+      return withoutPatch(currentVersion).equals(withoutPatch(mRequiredVersion)) &&
              currentVersion.isAtLeast(mRequiredVersion);
+    }
+
+    static Version withoutPatch(Version v) {
+      return Version.of(v.getMajor(), v.getMinor(), 0);
     }
   }
 
@@ -236,7 +240,7 @@ class ExtensionManagerImpl implements ExtensionManager
           ExtensionInfo extensionInfo = new ExtensionInfo(
             zalExtensionClass,
             zalExtensionName,
-            new Version(zalRequiredVersion)
+            Version.parse(zalRequiredVersion)
           );
           extensionInfoList.add(extensionInfo);
         }
