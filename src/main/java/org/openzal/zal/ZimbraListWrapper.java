@@ -199,22 +199,6 @@ public class ZimbraListWrapper
   }
 
   @Nonnull
-  public static List<Zimlet> wrapZimlets(@Nullable List zimlets)
-  {
-    if (zimlets == null || zimlets.size() == 0)
-    {
-      return Collections.emptyList();
-    }
-    List<Zimlet> list = new ArrayList<Zimlet>(zimlets.size());
-    for (Object calendarResource : zimlets)
-    {
-      list.add(new Zimlet((com.zimbra.cs.account.Zimlet) calendarResource));
-    }
-
-    return list;
-  }
-
-  @Nonnull
   public static List<XMPPComponent> wrapXmppComponents(@Nullable List<com.zimbra.cs.account.XMPPComponent> xmppComponents)
   {
     if (xmppComponents == null || xmppComponents.size() == 0)

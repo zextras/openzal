@@ -352,13 +352,6 @@ public class ProvisioningSimulator extends ProvisioningImp
     throw new RuntimeException("Provisioning method not implemented");
   }
 
-  @Nonnull
-  public Zimlet getZimlet(String zimletName)
-      throws ZimbraException
-  {
-    throw new RuntimeException("Provisioning method not implemented");
-  }
-
   public Domain getDomainById(String domainId)
       throws ZimbraException
   {
@@ -437,12 +430,6 @@ public class ProvisioningSimulator extends ProvisioningImp
       throws ZimbraException
   {
     throw new RuntimeException("Provisioning method not implemented");
-  }
-
-  public List<Zimlet> listAllZimlets()
-      throws ZimbraException
-  {
-    return Collections.emptyList();
   }
 
   public List<XMPPComponent> getAllXMPPComponents()

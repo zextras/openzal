@@ -33,8 +33,6 @@ import com.zimbra.cs.mailbox.MessageCache;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.WindowsSystemTime;
 import com.zimbra.cs.util.JMSession;
-import com.zimbra.cs.zimlet.ZimletException;
-import com.zimbra.cs.zimlet.ZimletUtil;
 import com.zimbra.soap.admin.message.FlushCacheRequest;
 import com.zimbra.soap.admin.type.CacheEntrySelector;
 import com.zimbra.soap.admin.type.CacheEntrySelector.CacheEntryBy;
@@ -132,26 +130,6 @@ public abstract class Utils
     return BEncoding.encode(attrs);
   }
 
-  @Nullable
-  public static List<Zimlet> orderZimletsByPriority(List<Zimlet> zimlets)
-  {
-    List<com.zimbra.cs.account.Zimlet> zimbraZimletList =
-      new ArrayList<com.zimbra.cs.account.Zimlet>(zimlets.size());
-
-    for (Zimlet zimlet : zimlets)
-    {
-      zimbraZimletList.add(zimlet.toZimbra());
-    }
-
-    List<Zimlet> orderedZimletList = new ArrayList<Zimlet>(zimlets.size());
-    for (com.zimbra.cs.account.Zimlet zimlet : ZimletUtil.orderZimletsByPriority(zimbraZimletList))
-    {
-      orderedZimletList.add(new Zimlet(zimlet));
-    }
-
-    return orderedZimletList;
-  }
-
   public static String getPublicURLForDomain(
     @Nonnull Server server,
     @Nullable Domain domain,
@@ -186,49 +164,6 @@ public abstract class Utils
   public static void addToMultiMap(Map<String, Object> result, String name, String value)
   {
     StringUtil.addToMultiMap(result, name, value);
-  }
-
-  public static void deployZimlet(Provisioning provisioning, ZimletFile zimlet) throws IOException
-  {
-    try
-    {
-      provisioning.flushCache(CacheEntryType.zimlet, null);
-      ZimletUtil.deployZimletLocally(zimlet.toZimbra(com.zimbra.cs.zimlet.ZimletFile.class));
-
-      FileInputStream in = new FileInputStream(new File(zimlet.getZimletPath()));
-      ZimletFile rawZimlet = new ZimletFile(zimlet.getName(), in);
-
-      ZimletUtil.ZimletSoapUtil zimletSoapUtil = new ZimletUtil.ZimletSoapUtil();
-      for (Server server : provisioning.getAllServers())
-      {
-        if (!server.toZimbra(com.zimbra.cs.account.Server.class).isLocalServer())
-        {
-          if( !server.hasMailboxService() )
-          {
-            continue;
-          }
-
-          zimletSoapUtil.deployZimletRemotely(
-              server.toZimbra(com.zimbra.cs.account.Server.class),
-              rawZimlet.getName(),
-              rawZimlet.getZimletContent(),
-              null,
-              true
-            );
-          }
-      }
-      // In Zimbra 8.5 the Zimlet cache may not be consistent. Better flush it again after the deploy.
-      provisioning.flushCache(CacheEntryType.zimlet, null);
-    }
-    catch (ServiceException e)
-    {
-      throw ExceptionWrapper.wrap(e);
-    }
-    catch (ZimletException e)
-    {
-      provisioning.flushCache(CacheEntryType.zimlet, null);
-      throw ExceptionWrapper.wrap(e);
-    }
   }
 
   public static boolean isGzipped(File file) throws IOException

@@ -521,11 +521,6 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
   }
 
   @Override
-  public ZLdapFilter allZimlets() {
-     ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
-  }
-
-  @Override
   public ZLdapFilter memberOf(String dnOfGroup) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
   }
