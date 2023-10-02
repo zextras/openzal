@@ -88,9 +88,7 @@ public class Version implements Comparable<Version> {
     if (!(o instanceof Version)) {
       return false;
     }
-    Version version = (Version) o;
-    return getMajor() == version.getMajor() && Objects.equals(getMinor(), version.getMinor()) && Objects.equals(getPatch(),
-        version.getPatch());
+    return compareTo((Version) o) == 0;
   }
 
   @Override
@@ -116,7 +114,7 @@ public class Version implements Comparable<Version> {
     if (r == 0) {
       r = Integer.compare(getMinor(), o.getMinor());
       if (r == 0) {
-        r = compareOpt(getPatch(), o.getPatch());
+        r = getPatch().orElse("0").compareTo(o.getPatch().orElse("0"));
       }
     }
     return r;
@@ -132,10 +130,14 @@ public class Version implements Comparable<Version> {
     return compareTo(version) <= 0;
   }
 
+  public boolean lessThan(Version version) {
+    return compareTo(version) < 0;
+  }
+
   @Override
   public String toString() {
     if (!minor.isPresent()) {
-        return String.valueOf(major);
+      return String.valueOf(major);
     } else {
       if (patch.isPresent()) {
         return String.format("%s.%s.%s", getMajor(), getMinor(), getPatch().get());
@@ -143,9 +145,5 @@ public class Version implements Comparable<Version> {
         return String.format("%s.%s", getMajor(), getMinor());
       }
     }
-  }
-
-  public boolean lessThan(Version version) {
-    return compareTo(version) < 0;
   }
 }

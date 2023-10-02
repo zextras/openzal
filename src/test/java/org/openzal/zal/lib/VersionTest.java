@@ -78,11 +78,11 @@ public class VersionTest {
 
     assertTrue(version1.equals(version1));
     assertTrue(version1.equals(version10));
-    assertFalse(version1.equals(version100));
+    assertTrue(version1.equals(version100));
     assertFalse(version1.equals(version1000));
 
     assertTrue(version10.equals(version1));
-    assertFalse(version100.equals(version1));
+    assertTrue(version100.equals(version1));
     assertFalse(version1000.equals(version1));
 
     assertFalse(version1000.equals(version100));
@@ -203,5 +203,13 @@ public class VersionTest {
 
     assertTrue(version1.lessThan(version11));
     assertFalse(version11.lessThan(version1));
+  }
+
+  @Test
+  public void whenPatchIsMissingItIsDefaultedTo0() {
+    Version version1 = Version.parse("2.16.0");
+    Version version2 = Version.of(2, 16);
+    assertTrue(version1.equals(version2));
+    assertTrue(version1.isAtMost(version2));
   }
 }
