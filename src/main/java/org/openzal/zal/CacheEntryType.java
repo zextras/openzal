@@ -38,10 +38,8 @@ public class CacheEntryType
   public static CacheEntryType domain  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.domain);
   public static CacheEntryType group   = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.group);
   public static CacheEntryType server  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.server);
-  public static CacheEntryType zimlet  = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.zimlet);
 
   public static CacheEntryType acl         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.acl);
-  public static CacheEntryType uistrings   = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.uistrings);
   public static CacheEntryType all         = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.all);
   public static CacheEntryType globalgrant = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.globalgrant);
   public static CacheEntryType mime        = new CacheEntryType(com.zimbra.soap.admin.type.CacheEntryType.mime);

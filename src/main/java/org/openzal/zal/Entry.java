@@ -160,8 +160,6 @@ public abstract class Entry
     EntryType SERVER                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.SERVER);
     EntryType SIGNATURE                 = new EntryType(com.zimbra.cs.account.Entry.EntryType.SIGNATURE);
     EntryType XMPPCOMPONENT             = new EntryType(com.zimbra.cs.account.Entry.EntryType.XMPPCOMPONENT);
-    EntryType ZIMLET                    = new EntryType(com.zimbra.cs.account.Entry.EntryType.ZIMLET);
-
     private final com.zimbra.cs.account.Entry.EntryType mEntryType;
 
     private EntryType(com.zimbra.cs.account.Entry.EntryType entryType)

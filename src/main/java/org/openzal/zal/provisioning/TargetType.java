@@ -34,7 +34,6 @@ public enum TargetType
   domain("domain"),
   server("server"),
   xmppcomponent("xmppcomponent"),
-  zimlet("zimlet"),
   config("config"),
   group("group"),
   global("global");
@@ -49,7 +48,6 @@ public enum TargetType
       put("domain", domain);
       put("server", server);
       put("xmppcomponent", xmppcomponent);
-      put("zimlet", zimlet);
       put("config", config);
       put("group", group);
       put("global", global);

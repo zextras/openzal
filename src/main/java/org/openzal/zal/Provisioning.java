@@ -108,10 +108,6 @@ public interface Provisioning
   List<Domain> getAllDomains()
       throws ZimbraException;
 
-  @Nonnull
-  Zimlet getZimlet(String zimletName)
-    throws ZimbraException;
-
   void modifyAttrs(@Nonnull Entry entry, Map<String, Object> attrs)
       throws ZimbraException;
 
@@ -180,9 +176,6 @@ public interface Provisioning
   List<Server> getAllReachableMailboxes() throws ZimbraException;;
 
   List<CalendarResource> getAllCalendarResources(@Nonnull Domain domain)
-    throws ZimbraException;
-
-  List<Zimlet> listAllZimlets()
     throws ZimbraException;
 
   List<XMPPComponent> getAllXMPPComponents()
@@ -339,9 +332,6 @@ public interface Provisioning
   boolean onLocalServer(@Nonnull Account userAccount)
       throws ZimbraException;
 
-  @Nullable
-  Zimlet createZimlet(String name, Map<String, Object> attrs) throws ZimbraException;
-
   long getEffectiveQuota(@Nonnull Account account);
 
   List<Account> getAllDelegatedAdminAccounts() throws ZimbraException;
@@ -387,9 +377,6 @@ public interface Provisioning
 
   @Nonnull
   Domain assertDomainByName(String domainId);
-
-  @Nonnull
-  Zimlet assertZimlet(String com_zextras_zextras);
 
   @Nonnull
   DistributionList assertDistributionListById(String targetId);
