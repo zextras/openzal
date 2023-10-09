@@ -18,6 +18,7 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
   };
 
   int counter;
+  List<Object> content = new ArrayList<>();
 
   public RedoLogOutput() {
     super((RandomAccessFile) null);
@@ -52,7 +53,10 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
 
   private void callReader(Object o) {
     if( counter < readers.size() ) {
-      readers.get(counter).read(counter, o);
+      Reader reader = readers.get(counter);
+      if (reader != null) {
+        reader.read(counter, o);
+      }
       counter++;
     }
   }
@@ -60,40 +64,52 @@ public class RedoLogOutput extends com.zimbra.cs.redolog.RedoLogOutput {
   @Override
   public void writeBoolean(boolean v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeByte(byte v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeShort(short v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeInt(int v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeLong(long v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeDouble(double v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeUTF(String v) throws IOException {
     callReader(v);
+    content.add(v);
   }
 
   @Override
   public void writeUTFArray(String[] v) throws IOException {
     callReader(v);
+    content.add(v);
+  }
+
+  public List<Object> getContent() {
+    return new ArrayList<>(content);
   }
 }
