@@ -1189,7 +1189,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   private static final int HEALTH_CHECK_PORT = 8743;
-  private static final int HEALTH_CHECK_TIMEOUT = 10000;
+  private static final int HEALTH_CHECK_TIMEOUT = 1000;
   private static boolean isReachable(com.zimbra.cs.account.Server server) {
     Socket socket = null;
     try {
