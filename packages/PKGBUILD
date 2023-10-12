@@ -1,29 +1,20 @@
-targets=(
-  "centos"
-  "ubuntu"
-)
 pkgname="carbonio-zal"
-pkgver="23.10.4"
+epoch="1"
+pkgver="4.0.0"
 pkgrel="1"
-pkgdesc="Carbonio extras"
-pkgdesclong=(
-  "Abstraction Layer for Carbonio"
-)
+pkgdesc="Abstraction Layer for Carbonio"
 maintainer="Zextras <packages@zextras.com>"
-arch="all"
+arch=('any')
 license=("GPLv2")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
-sources=(
+source=(
   "zal.jar"
 )
-hashsums=(
-  "skip"
+sha256sums=(
+  "SKIP"
 )
-
-build() {
-}
 
 package() {
   install -Dm 744 "${srcdir}/zal.jar" \
@@ -37,7 +28,4 @@ postinst() {
   echo "======================================================"
   echo "Carbonio ZAL installed successfully!"
   echo "======================================================"
-}
-
-prerm() {
 }

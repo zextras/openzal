@@ -88,20 +88,20 @@ pipeline {
               stage('Stash') {
                   steps {
                       sh 'cp target/zal.jar packages/'
-                      stash includes: "pacur.json,packages/**", name: 'binaries'
+                      stash includes: "yap.json,packages/**", name: 'binaries'
                   }
               }
-              stage('pacur') {
+              stage('yap') {
                   parallel {
-                      stage('Ubuntu 20.04') {
+                      stage('Ubuntu') {
                           agent {
                               node {
-                                  label 'pacur-agent-ubuntu-20.04-v1'
+                                  label 'yap-agent-ubuntu-20.04-v2'
                               }
                           }
                           steps {
                               unstash 'binaries'
-                              sh 'sudo pacur build ubuntu'
+                              sh 'sudo yap build ubuntu .'
                               stash includes: 'artifacts/', name: 'artifacts-deb'
                           }
                           post {
@@ -111,20 +111,20 @@ pipeline {
                           }
                       }
 
-                      stage('Rocky 8') {
+                      stage('Rocky') {
                           agent {
                               node {
-                                  label 'pacur-agent-rocky-8-v1'
+                                  label 'yap-agent-rocky-8-v2'
                               }
                           }
                           steps {
                               unstash 'binaries'
-                              sh 'sudo pacur build centos'
-                              stash includes: 'artifacts/', name: 'artifacts-rpm'
+                              sh 'sudo yap build rocky .'
+                              stash includes: 'artifacts/noarch/', name: 'artifacts-rpm'
                           }
                           post {
                               always {
-                                  archiveArtifacts artifacts: "artifacts/*.rpm", fingerprint: true
+                                  archiveArtifacts artifacts: "artifacts/noarch/*.rpm", fingerprint: true
                               }
                           }
                       }
@@ -153,11 +153,16 @@ pipeline {
                           {
                               "pattern": "artifacts/carbonio-zal*.deb",
                               "target": "ubuntu-playground/pool/",
-                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
+                              "props": "deb.distribution=focal;deb.distribution=jammy;deb.component=main;deb.architecture=all"
                           },
                           {
-                              "pattern": "artifacts/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
                               "target": "centos8-playground/zextras/{1}/{1}-{2}.rpm",
+                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                          },
+                          {
+                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "target": "rhel9-playground/zextras/{1}/{1}-{2}.rpm",
                               "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
                           }
                       ]
@@ -215,7 +220,7 @@ pipeline {
                           {
                               "pattern": "artifacts/carbonio-zal*.deb",
                               "target": "ubuntu-rc/pool/",
-                              "props": "deb.distribution=bionic;deb.distribution=focal;deb.component=main;deb.architecture=all"
+                              "props": "deb.distribution=focal;deb.distribution=jammy;deb.component=main;deb.architecture=all"
                           }
                       ]
                   }"""
@@ -234,13 +239,13 @@ pipeline {
                   Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Ubuntu Promotion to Release"
                   server.publishBuildInfo buildInfo
 
-                  //centos8
+                  //rhel8
                   buildInfo = Artifactory.newBuildInfo()
                   buildInfo.name += "-centos8"
                   uploadSpec= """{
                       "files": [
                           {
-                              "pattern": "artifacts/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
                               "target": "centos8-rc/zextras/{1}/{1}-{2}.rpm",
                               "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
                           }
@@ -261,6 +266,32 @@ pipeline {
                   Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Centos8 Promotion to Release"
                   server.publishBuildInfo buildInfo
 
+                  //rhel9
+                  buildInfo = Artifactory.newBuildInfo()
+                  buildInfo.name += "-rhel9"
+                  uploadSpec= """{
+                      "files": [
+                          {
+                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "target": "rhel9-rc/zextras/{1}/{1}-{2}.rpm",
+                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                          }
+                      ]
+                  }"""
+                  server.upload spec: uploadSpec, buildInfo: buildInfo, failNoOp: false
+                  config = [
+                          'buildName'          : buildInfo.name,
+                          'buildNumber'        : buildInfo.number,
+                          'sourceRepo'         : 'rhel9-rc',
+                          'targetRepo'         : 'rhel9-release',
+                          'comment'            : 'Do not change anything! Just press the button',
+                          'status'             : 'Released',
+                          'includeDependencies': false,
+                          'copy'               : true,
+                          'failFast'           : true
+                  ]
+                  Artifactory.addInteractivePromotion server: server, promotionConfig: config, displayName: "Centos8 Promotion to Release"
+                  server.publishBuildInfo buildInfo
               }
           }
        }
