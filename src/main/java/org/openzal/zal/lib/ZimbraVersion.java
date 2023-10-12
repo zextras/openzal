@@ -21,6 +21,7 @@
 package org.openzal.zal.lib;
 
 import com.zimbra.cs.util.BuildInfo;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 
 public class ZimbraVersion extends Version
@@ -31,9 +32,14 @@ public class ZimbraVersion extends Version
   public static String PLATFORM = BuildInfo.PLATFORM;
   public static String FULL_VERSION = BuildInfo.FULL_VERSION;
 
+
+  private ZimbraVersion(Version v) {
+    super(v.getMajor(), Optional.of(v.getMinor()), v.getPatch());
+  }
+
   public ZimbraVersion(int major, int minor, int micro)
   {
-    super(major, minor, micro);
+    super(major, Optional.of(minor), Optional.of(String.valueOf(micro)));
   }
 
   public static ZimbraVersion current = new ZimbraVersion(
@@ -51,8 +57,7 @@ public class ZimbraVersion extends Version
     );
   }
 
-  public ZimbraVersion(@Nonnull String zimbraVersion)
-  {
-    super(zimbraVersion);
+  public static ZimbraVersion parse(String v) throws NumberFormatException {
+    return new ZimbraVersion(Version.parse(v));
   }
 }

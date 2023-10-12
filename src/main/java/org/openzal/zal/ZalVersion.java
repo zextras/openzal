@@ -27,7 +27,7 @@ import org.openzal.zal.log.ZimbraLog;
 
 public class ZalVersion
 {
-  public static final    Version current = new Version(BuildProperties.getProjectVersion());
+  public static final    Version current = Version.parse(BuildProperties.getProjectVersion());
   @Nonnull public static Version target;
 
   static
@@ -35,7 +35,7 @@ public class ZalVersion
     String implementationVersion = ZalVersion.class.getPackage().getImplementationVersion();
     if (implementationVersion != null && !implementationVersion.isEmpty())
     {
-      target = new Version(implementationVersion);
+      target = Version.parse(implementationVersion);
     }
   }
 

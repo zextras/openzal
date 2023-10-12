@@ -30,7 +30,7 @@ public class ZalVersionValidator
 
   public Version validate(JarAccessor jar, ZimbraVersion zimbraVersion) throws IOException, NoSuchAlgorithmException
   {
-    return new Version(jar.getAttributeInManifest(ATTR_VERSION));
+    return Version.parse(jar.getAttributeInManifest(ATTR_VERSION));
   }
 
   private void validateVersion(JarAccessor jar, ZimbraVersion zalVersion) throws IOException
