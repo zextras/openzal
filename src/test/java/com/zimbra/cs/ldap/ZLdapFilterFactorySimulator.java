@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+
 public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
   public static void setInstance()
   {
@@ -518,6 +519,14 @@ public class ZLdapFilterFactorySimulator extends ZLdapFilterFactory {
   @Override
   public ZLdapFilter xmppComponentById(String id) {
      ZLdapFilter filter = Mockito.mock(ZLdapFilter.class); when(filter.toFilterString()).thenReturn(""); return filter;
+  }
+
+  @Override
+  public ZLdapFilter allZimlets() {
+    ZLdapFilter filter = Mockito.mock(ZLdapFilter.class);
+    when(filter.toFilterString()).thenReturn("");
+
+    return filter;
   }
 
   @Override

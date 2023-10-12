@@ -308,6 +308,9 @@ public class ProvisioningImp implements Provisioning
 
   public static final String A_carbonioAdminUiLogoutURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraAdminConsoleLogoutURL;
   public static final String A_carbonioWebUiLogoutURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraWebClientLogoutURL;
+  public static final String A_carbonioAdminUiLoginURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraAdminConsoleLoginURL;
+  public static final String A_carbonioWebUiLoginURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraWebClientLoginURL;
+
 
   @Nonnull
   public final com.zimbra.cs.account.Provisioning mProvisioning;
@@ -1189,7 +1192,7 @@ public class ProvisioningImp implements Provisioning
   }
 
   private static final int HEALTH_CHECK_PORT = 8743;
-  private static final int HEALTH_CHECK_TIMEOUT = 10000;
+  private static final int HEALTH_CHECK_TIMEOUT = 1000;
   private static boolean isReachable(com.zimbra.cs.account.Server server) {
     Socket socket = null;
     try {

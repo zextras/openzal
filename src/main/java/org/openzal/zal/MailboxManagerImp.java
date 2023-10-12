@@ -71,7 +71,6 @@ public class MailboxManagerImp implements MailboxManager
                                            "revision_dumpster",
                                            "zimbra.mailbox",
                                            "zimbra.mailbox_metadata",
-                                           "zimbra.mobile_devices",
                                            "zimbra.out_of_office",
                                            "zimbra.pending_acl_push",
                                            "zimbra.scheduled_task"
