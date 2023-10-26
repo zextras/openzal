@@ -20,8 +20,6 @@
 
 package org.openzal.zal;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import javax.annotation.Nonnull;
 
 public class FreeBusy {
@@ -82,28 +80,6 @@ public class FreeBusy {
   private static final String NL = "\r\n";
   private static final String MAILTO = "mailto:";
   private static final String HTTP = "http:";
-
-  /*
-   * attendee is required for METHOD == REQUEST || METHOD == REPLY
-   * url is required for METHOD == PUBLISH || METHOD == REPLY
-   *
-   */
-  public String toVCalendar(Method m, String organizer, String attendee, String url) {
-    com.zimbra.cs.fb.FreeBusy.Method zm = null;
-
-    switch (m) {
-      case PUBLISH:
-        zm = com.zimbra.cs.fb.FreeBusy.Method.PUBLISH;
-        break;
-      case REQUEST:
-        zm = com.zimbra.cs.fb.FreeBusy.Method.REQUEST;
-        break;
-      case REPLY:
-        zm = com.zimbra.cs.fb.FreeBusy.Method.REPLY;
-    }
-
-    return mFreeBusy.toVCalendar(zm, organizer, attendee, url);
-  }
 
   public String toString() {
     return mFreeBusy.toString();
