@@ -849,6 +849,16 @@ public class Invite
     return CalendarMailSender.getCancelSubject(getSubject(), getLocaleForAccount(account));
   }
 
+  public String setReply(Account account, String partStat)
+  {
+    mInvite.setMethod(ZCalendar.ICalTok.REPLY.toString());
+    return CalendarMailSender.getReplySubject(
+            CalendarMailSender.VERB_ACCEPT.getXmlPartStat().equals(partStat) ? CalendarMailSender.VERB_ACCEPT :
+                    CalendarMailSender.VERB_TENTATIVE.getXmlPartStat().equals(partStat) ? CalendarMailSender.VERB_TENTATIVE :
+                            CalendarMailSender.VERB_DECLINE,
+            getSubject(), getLocaleForAccount(account));
+  }
+
   private void formatAttendeeStatus(Provisioning provisioning, Account account, String partStat)
   {
     List<ZAttendee> attendees = mInvite.getAttendees();
