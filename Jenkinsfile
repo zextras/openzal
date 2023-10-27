@@ -120,11 +120,11 @@ pipeline {
                           steps {
                               unstash 'binaries'
                               sh 'sudo yap build rocky .'
-                              stash includes: 'artifacts/noarch/', name: 'artifacts-rpm'
+                              stash includes: 'artifacts/x86_64/', name: 'artifacts-rpm'
                           }
                           post {
                               always {
-                                  archiveArtifacts artifacts: "artifacts/noarch/*.rpm", fingerprint: true
+                                  archiveArtifacts artifacts: "artifacts/x86_64/*.rpm", fingerprint: true
                               }
                           }
                       }
@@ -156,14 +156,14 @@ pipeline {
                               "props": "deb.distribution=focal;deb.distribution=jammy;deb.component=main;deb.architecture=all"
                           },
                           {
-                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/x86_64/(carbonio-zal)-(*).rpm",
                               "target": "centos8-playground/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
                           },
                           {
-                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/x86_64/(carbonio-zal)-(*).rpm",
                               "target": "rhel9-playground/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""
@@ -245,9 +245,9 @@ pipeline {
                   uploadSpec= """{
                       "files": [
                           {
-                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/x86_64/(carbonio-zal)-(*).rpm",
                               "target": "centos8-rc/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""
@@ -272,9 +272,9 @@ pipeline {
                   uploadSpec= """{
                       "files": [
                           {
-                              "pattern": "artifacts/noarch/(carbonio-zal)-(*).rpm",
+                              "pattern": "artifacts/x86_64/(carbonio-zal)-(*).rpm",
                               "target": "rhel9-rc/zextras/{1}/{1}-{2}.rpm",
-                              "props": "rpm.metadata.arch=noarch;rpm.metadata.vendor=zextras"
+                              "props": "rpm.metadata.arch=x86_64;rpm.metadata.vendor=zextras"
                           }
                       ]
                   }"""

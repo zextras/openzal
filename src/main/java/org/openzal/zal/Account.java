@@ -1166,7 +1166,10 @@ public class Account extends Entry
   {
     try
     {
-      return com.zimbra.cs.account.Provisioning.onLocalServer(mAccount);
+      String target = mAccount.getAttr("zimbraMailHost");
+      String localhost = mAccount.getProvisioning().getLocalServer().getAttr("zimbraServiceHostname");
+      boolean isLocal = target != null && target.equalsIgnoreCase(localhost);
+      return isLocal;
     }
     catch (ServiceException e)
     {
