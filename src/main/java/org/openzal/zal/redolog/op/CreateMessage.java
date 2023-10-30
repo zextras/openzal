@@ -34,4 +34,18 @@ public class CreateMessage
   {
     return ((com.zimbra.cs.redolog.op.CreateMessage) mOp.getProxiedObject()).getMessageId();
   }
+  public int getCalendarItemId()
+  {
+    return ((com.zimbra.cs.redolog.op.CreateMessage) mOp.getProxiedObject()).getCalendarItemId();
+  }
+
+  public int getConvId()
+  {
+    return ((com.zimbra.cs.redolog.op.CreateMessage) mOp.getProxiedObject()).getConvId();
+  }
+
+  public int getConvFirstMsgId()
+  {
+    return ((com.zimbra.cs.redolog.op.CreateMessage) mOp.getProxiedObject()).getConvFirstMsgId();
+  }
 }
