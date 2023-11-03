@@ -306,10 +306,10 @@ public class ProvisioningImp implements Provisioning
   public static final String A_carbonioNotificationFrom    = com.zimbra.cs.account.Provisioning.A_carbonioNotificationFrom;
   public static final String A_carbonioNotificationRecipients    = com.zimbra.cs.account.Provisioning.A_carbonioNotificationRecipients;
 
-  public static final String A_carbonioAdminUiLogoutURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraAdminConsoleLogoutURL;
-  public static final String A_carbonioWebUiLogoutURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraWebClientLogoutURL;
-  public static final String A_carbonioAdminUiLoginURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraAdminConsoleLoginURL;
-  public static final String A_carbonioWebUiLoginURL = com.zimbra.common.account.ZAttrProvisioning.A_zimbraWebClientLoginURL;
+  public static final String A_carbonioAdminUiLogoutURL = "carbonioAdminUILogoutURL";
+  public static final String A_carbonioWebUiLogoutURL = "carbonioWebUILogoutURL";
+  public static final String A_carbonioAdminUiLoginURL = "carbonioAdminUILoginURL";
+  public static final String A_carbonioWebUiLoginURL = "carbonioWebUILoginURL";
 
 
   @Nonnull
