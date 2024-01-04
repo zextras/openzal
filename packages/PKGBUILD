@@ -1,6 +1,6 @@
 pkgname="carbonio-zal"
 epoch="1"
-pkgver="4.11.1"
+pkgver="4.12.0"
 pkgrel="1"
 pkgdesc="Abstraction Layer for Carbonio"
 maintainer="Zextras <packages@zextras.com>"
