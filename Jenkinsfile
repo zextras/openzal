@@ -73,17 +73,6 @@ pipeline {
             }
         }
         stage('Build deb/rpm') {
-          when {
-              anyOf {
-                  branch 'release/*'
-                  branch 'custom/*'
-                  branch 'beta/*'
-                  branch 'playground/*'
-                  branch 'main'
-                  expression { params.PLAYGROUND == true }
-                  buildingTag()
-              }
-          }
           stages {
               stage('Stash') {
                   steps {
