@@ -5,6 +5,7 @@ pkgrel="1"
 pkgdesc="Abstraction Layer for Carbonio"
 maintainer="Zextras <packages@zextras.com>"
 arch=('x86_64')
+license=("GPL-2.0-only")
 section="admin"
 priority="optional"
 url="https://www.zextras.com/"
