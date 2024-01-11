@@ -138,7 +138,6 @@ public class ZalZimbraSimulator extends ExternalResource
     System.setProperty("zimbra.config", "it/data/carbonio/config/localconfig-test.xml");
 
     LC.zimbra_attrs_directory.setDefault("it/data/carbonio/attrs/");
-    LC.zimbra_rights_directory.setDefault("it/data/carbonio/rights/");
     ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j2-test.properties");
 
     mTmpDir = createTmpDir("junit_tmp_");
