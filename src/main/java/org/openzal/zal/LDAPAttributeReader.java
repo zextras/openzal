@@ -45,4 +45,8 @@ public class LDAPAttributeReader<S, A> {
     return new LDAPAttributeReader<>(attributeName, defaultValue, readFunction.andThen(this.readFunction));
   }
 
+  public <B> LDAPAttributeReader<S, B> map(Function<A, B> func) {
+    return new LDAPAttributeReader<>(attributeName, func.apply(defaultValue), readFunction.andThen(func));
+  }
+
 }

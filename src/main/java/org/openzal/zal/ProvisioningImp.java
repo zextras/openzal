@@ -95,6 +95,7 @@ import org.openzal.zal.provisioning.DirectQueryFilterBuilder;
 
 public class ProvisioningImp implements Provisioning
 {
+  public static String A_zimbraFeatureResetPasswordStatus                     = com.zimbra.cs.account.Provisioning.A_zimbraFeatureResetPasswordStatus;
   public static String A_zimbraMaxAppSpecificPasswords                        = com.zimbra.cs.account.Provisioning.A_zimbraMaxAppSpecificPasswords;
   public static String A_zimbraTwoFactorAuthEnabled                           = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthEnabled;
   public static String A_zimbraTwoFactorAuthScratchCodes                      = com.zimbra.cs.account.Provisioning.A_zimbraTwoFactorAuthScratchCodes;
