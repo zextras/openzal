@@ -9,15 +9,16 @@ import com.zimbra.cs.db.HSQLZimbraDatabase;
 import com.zimbra.cs.ephemeral.EphemeralStore;
 import com.zimbra.cs.ldap.ZLdapFilterFactorySimulator;
 import com.zimbra.cs.util.JMSession;
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.rules.ExternalResource;
 import org.openzal.zal.MailboxManagerImp;
 import org.openzal.zal.Provisioning;
 import org.openzal.zal.extension.Zimbra;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 // for testing purpose only
 public class ZalZimbraSimulator extends ExternalResource
@@ -137,7 +138,6 @@ public class ZalZimbraSimulator extends ExternalResource
     System.setProperty("log4j.configurationFile", "it/data/carbonio/config/log4j2-test.properties");
     System.setProperty("zimbra.config", "it/data/carbonio/config/localconfig-test.xml");
 
-    LC.zimbra_attrs_directory.setDefault("it/data/carbonio/attrs/");
     ZimbraLog.toolSetupLog4j("INFO", "it/data/carbonio/config/log4j2-test.properties");
 
     mTmpDir = createTmpDir("junit_tmp_");
