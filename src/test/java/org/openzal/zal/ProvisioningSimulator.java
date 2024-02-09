@@ -1,27 +1,29 @@
 package org.openzal.zal;
 
-import java.util.*;
-
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
-import com.zimbra.common.localconfig.LC;
-import javax.annotation.Nonnull;
-import org.openzal.zal.exceptions.ZimbraException;
-import com.zimbra.cs.account.*;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.SearchAccountsOptions;
+import com.zimbra.cs.account.SearchDirectoryOptions;
 import com.zimbra.cs.account.accesscontrol.RightModifier;
 import com.zimbra.cs.account.auth.AuthContext;
-import com.zimbra.common.service.ServiceException;
-
-/* $if ZimbraVersion >= 8.0.6 $*/
-import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
-/* $else$
- import com.zimbra.common.account.Key.GranteeBy;
-/* $endif$ */
-
-import com.zimbra.common.account.Key;
 import com.zimbra.soap.admin.type.CacheEntryType;
+import com.zimbra.soap.admin.type.GranteeSelector.GranteeBy;
 import com.zimbra.soap.type.TargetBy;
 import org.mockito.Mockito;
-import org.openzal.zal.lib.ZimbraVersion;
+import org.openzal.zal.exceptions.ZimbraException;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class ProvisioningSimulator extends ProvisioningImp
 {
@@ -66,7 +68,6 @@ public class ProvisioningSimulator extends ProvisioningImp
   public ProvisioningSimulator()
   {
     super(null);
-    LC.zimbra_attrs_directory.setDefault("it/data/carbonio/attrs/");
     mDomainMap = new HashMap<String, Domain>();
     mAccountMap = new HashMap<String, Account>();
     mAccountIdMap = new HashMap<String, Account>();
